@@ -1,1 +1,4 @@
-# gi-en-jul
+# Gi en jul
+### ER-diagram
+
+![](assets/ERDiagram.png)
