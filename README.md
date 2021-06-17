@@ -1,4 +1,4 @@
 # Gi en jul
-### ER-diagram
+### Table Storage diagram
 
-![](assets/ERDiagram.png)
+![](assets/TableStorageDiagram.png)
