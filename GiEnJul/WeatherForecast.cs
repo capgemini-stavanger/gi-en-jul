@@ -1,6 +1,6 @@
 using System;
 
-namespace gi_en_jul
+namespace GiEnJul
 {
     public class WeatherForecast
     {

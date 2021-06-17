@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace gi_en_jul.Controllers
+namespace GiEnJul.Controllers
 {
     [ApiController]
     [Route("[controller]")]
