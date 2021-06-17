@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace gi_en_jul
+namespace GiEnJul
 {
     public class Program
     {
