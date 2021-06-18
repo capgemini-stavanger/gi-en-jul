@@ -1,3 +1,4 @@
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,11 @@ namespace GiEnJul
             {
                 configuration.RootPath = "ClientApp/build";
             });
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            Infrastructure.AutofacConfiguration.Configure(builder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
