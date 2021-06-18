@@ -11,7 +11,7 @@ namespace GiEnJul.Models
         public string Email { get; set; }
         public int PhoneNumber { get; set; }
 
-        public Recipient Reiciver { get; set; }
+        public Recipient Receiver { get; set; }
 
 
     }
