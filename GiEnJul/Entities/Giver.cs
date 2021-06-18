@@ -22,8 +22,13 @@ namespace GiEnJul
         public int MaxRecievers { get; set; }
         public string Location { get; set; }
 
+        [ProtectedPersonalData]
         public string FullName { get; set; }
+        [ProtectedPersonalData]
+        [EmailAddress]
         public string Email { get; set; }
+        [ProtectedPersonalData]
+        [Phone]
         public int PhoneNumber { get; set; }
     }
 }
