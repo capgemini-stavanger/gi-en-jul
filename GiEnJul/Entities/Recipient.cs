@@ -14,7 +14,7 @@ namespace GiEnJul.Entities
         // PartitionKey = loc_{location}
         public Recipient(string location, string refId) : base(location, refId)
         {
-            PartitionKey = $"{location}";
+            PartitionKey = $"loc_{location}";
             RowKey = refId;
         }
 
