@@ -6,10 +6,15 @@ namespace GiEnJul.Models
     {
         public string Wish { get; set; }
         public int Age { get; set; }
-        //public char Gender { get; set; } ?
-        public int Gender { get; set; }
-
+        public Gender Gender { get; set; }
 
         public Recipient Family { get; set; }
+    }
+
+    public enum Gender
+    {
+        Male,
+        Female,
+        Unspecified
     }
 }
