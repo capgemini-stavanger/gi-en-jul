@@ -1,0 +1,17 @@
+.button-to-top {
+  position: fixed;
+  bottom: 5px;
+  right: 5px; 
+  padding: 10px;
+
+  height: 60px;
+  width: 60px;  
+  font-size: 0.8em;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #CCE6E8;
+  box-shadow: 0.1em 0.1em 0.1em #888888;
+  color: grey;
+  text-align: center;
+  cursor: pointer;
+}
