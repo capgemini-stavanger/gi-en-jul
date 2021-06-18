@@ -10,11 +10,11 @@ namespace GiEnJul.Entities
 {
     public class Recipient : TableEntity 
     {
-        // RowKey = {ReferenceId} (PID from NAV/Barnevernet)
-        // PartitionKey = Loc_{Location}
+        // RowKey = Guid
+        // PartitionKey = loc_{location}
         public Recipient(string location, string refId) : base(location, refId)
         {
-            PartitionKey = $"loc_{location}";
+            PartitionKey = $"{location}";
             RowKey = refId;
         }
 

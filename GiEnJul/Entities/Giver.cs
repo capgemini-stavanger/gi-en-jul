@@ -11,11 +11,11 @@ namespace GiEnJul
 {
     public class Giver : TableEntity
     {
-        // RowKey = new Guid
-        // PartitionKey = Loc_{Location
+        // RowKey = Guid
+        // PartitionKey = loc_{location}
         public Giver(string location, string rowKey) : base(location, rowKey)
         {
-            PartitionKey = $"Loc_{location}";
+            PartitionKey = $"{location}";
         }
 
         public int MaxRecievers { get; set; }

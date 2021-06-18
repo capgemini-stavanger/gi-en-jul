@@ -9,11 +9,11 @@ namespace GiEnJul.Entities
     public class Person : TableEntity
     {
         // RowKey = Guid
-        // PartitionKey = RefId_{ReferenceId} (PID from NAV/Barnevernet)
-        public Person(string referenceId, string rowKey) : base(referenceId, rowKey)
+        // PartitionKey = {recipientId} (PID from NAV/Barnevernet)
+        public Person(string recipientId, string rowKey) : base(recipientId, rowKey)
         {
             RowKey = rowKey;
-            PartitionKey = $"RefId_{referenceId}";
+            PartitionKey = $"{recipientId}";
         }
 
         public string Wish { get; set; }
