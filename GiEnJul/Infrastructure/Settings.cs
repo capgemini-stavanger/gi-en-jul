@@ -16,6 +16,6 @@ namespace GiEnJul.Infrastructure
             _configuration = configuration;
         }
 
-        public string TableConnectionString => _configuration.GetValue<string>("LocalTableConnection");
+        public string TableConnectionString => _configuration.GetValue<string>("TableConnection");
     }
 }

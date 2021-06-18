@@ -2,7 +2,7 @@
 using Microsoft.Azure.Cosmos.Table;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Models
+namespace GiEnJul.Features
 {
     public interface IGenericRepository<T> where T : TableEntity
     {
@@ -24,6 +24,7 @@ namespace GiEnJul.Models
             var tableClient = storageAccount.CreateCloudTableClient();
 
             _table = tableClient.GetTableReference(tableName);
+            _table.CreateIfNotExists();
         }
 
         public async Task<T> DeleteAsync(T entity)
