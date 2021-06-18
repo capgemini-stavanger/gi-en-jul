@@ -33,6 +33,9 @@ namespace GiEnJul
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
+            var settings = new Settings(Configuration);
+            builder.Register(c => settings).As<ISettings>().InstancePerLifetimeScope();
+
             AutofacConfiguration.Configure(builder);
         }
 
