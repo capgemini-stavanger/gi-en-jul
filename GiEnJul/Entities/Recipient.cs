@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GiEnJul.Entities
 {
@@ -27,8 +23,13 @@ namespace GiEnJul.Entities
         public string Location { get; set; }
 
         //Submitter info
+        [ProtectedPersonalData]
         public string FullName { get; set; }        
+        [ProtectedPersonalData]
+        [EmailAddress]
         public string Email { get; set; }
+        [ProtectedPersonalData]
+        [Phone]
         public int PhoneNumber { get; set; }
 
         //Submitter references

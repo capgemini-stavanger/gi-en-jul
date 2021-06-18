@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
 {
@@ -17,6 +16,7 @@ namespace GiEnJul.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
@@ -34,6 +34,7 @@ namespace GiEnJul.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+
         }
     }
 }

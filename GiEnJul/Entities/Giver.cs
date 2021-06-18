@@ -1,11 +1,6 @@
-﻿using GiEnJul.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GiEnJul
 {
@@ -22,8 +17,13 @@ namespace GiEnJul
         public int MaxRecievers { get; set; }
         public string Location { get; set; }
 
+        [ProtectedPersonalData]
         public string FullName { get; set; }
+        [ProtectedPersonalData]
+        [EmailAddress]
         public string Email { get; set; }
+        [ProtectedPersonalData]
+        [Phone]
         public int PhoneNumber { get; set; }
     }
 }
