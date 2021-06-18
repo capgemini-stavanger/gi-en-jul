@@ -1,4 +1,6 @@
 import * as React from 'react';
+import ReactDOM from 'react-dom';
+import PersonField from './PersonField';
 
 
 class RegistrationForm extends React.Component <any, any>{
@@ -15,7 +17,8 @@ class RegistrationForm extends React.Component <any, any>{
             Alder: 0,
             Kjonn: '',
             Gaveonske: '',
-            AlderTilpass: false
+            AlderTilpass: false,
+            Persons: 2
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -34,21 +37,29 @@ class RegistrationForm extends React.Component <any, any>{
         this.setState({
             [name]: value,
             });
-        // this.setState({
-        //     Lokasjon.Sandnes : true,
-        //     });
         console.log(this.state)
     }
     // handleSubmit(event) {
     //     alert('En familie ble sendt inn: ' + this.state.value);
     //     event.preventDefault();
     // }
+    handleClick() {
+        // let nrPersons = this.state.Persons; 
+        console.log("yea mate")
+        const elem = <PersonField personid={40} />
+        // this.setState({Persons: nrPersons+1})
+        ReactDOM.render(elem,document.getElementById("persons"));
+        // return( <PersonField personid={40} />);
+    }
+
+
+
     render() {
         return ( 
             <form>
                 <label>
                     <h3>Hvor ønsker du å registrere familie (velg en)</h3>
-                        <div>
+                        <div className= "form-group">
                             <input
                             name="Lokasjon"
                             type="checkbox"
@@ -86,9 +97,44 @@ class RegistrationForm extends React.Component <any, any>{
                             Nittedal
                         </div>
                         <br />
-                        Families here
+                        <div className="form-group" id="persons">
+                            <PersonField personid={1} />
+                            <PersonField personid={2} />
+                        </div>
+                        <div>
+                            <button onClick={this.handleClick}>
+                                Legg til personer
+                            </button>
+                        </div>
+                        <br />
+                        <div className="form-group">
+                            <h3>Matønsker</h3>
+                            <h4>Middag</h4>
+                            <input type="radio" id="ribbe" name="middag" value="ribbe"/>
+                            <label>Ribbe</label><br/>
+                            <input type="radio" id="pinnekjøtt" name="middag" value="pinnekjøtt"/>
+                            <label>Pinnekjøtt</label><br/>
+                            <input type="radio" id="annet" name="middag" value="annet"/>
+                            <label>annet (ikke fisk)</label><input type="textfield" />
+                            <h4>Dessert</h4>
+                            <input type="radio" id="riskrem" name="dessert" value="riskrem"/>
+                            <label>Riskrem</label><br/>
+                            <input type="radio" id="sjokoladepudding" name="dessert" value="sjokoladepudding"/>
+                            <label>Sjokoladepudding</label><br/>
+                            <input type="radio" id="annet" name="dessert" value="annet"/>
+                            <label>Annet</label><br/>
+                            <input type="texarea" placeholder="Spesielle behov (hala, vegetar, allergier)"/>
+                        </div>
+                        <div className="form-group">
+                            <label>ID</label><br/>
+                            <input type="textarea" id="PID" placeholder="PID eller annen ID dere bruker for å godkjenne familien" /><br/>
+                            <label>Kontaktperson</label><br/>
+                            <input type="textarea" id="kontaktnavn" placeholder="Navn" /> <input type="textarea" id="kontaktperson" placeholder="Telefon" /><br/>
+                            <input type="textarea" id="kontaktepost" placeholder="Epost" /><br/>
+
+                        </div>
                 </label>
-                <input type="submit" />
+                <input type="submit" value="Send" />
             </form>
         );
     }
