@@ -12,10 +12,10 @@ namespace GiEnJul.Entities
     {
         // RowKey = Guid
         // PartitionKey = loc_{location}
-        public Recipient(string location, string refId) : base(location, refId)
+        public Recipient(string location, string rowKey) : base(location, rowKey)
         {
             PartitionKey = $"loc_{location}";
-            RowKey = refId;
+            RowKey = rowKey;
         }
 
         //Family info

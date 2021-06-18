@@ -16,6 +16,7 @@ namespace GiEnJul
         public Giver(string location, string rowKey) : base(location, rowKey)
         {
             PartitionKey = $"loc_{location}";
+            RowKey = rowKey;
         }
 
         public int MaxRecievers { get; set; }
