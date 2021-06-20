@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
+import {Route} from 'react-router-dom'
 import { Link, animateScroll as scroll } from "react-scroll";
 
 import  How  from './How';
@@ -12,7 +13,10 @@ import Tab from '../components/Tab';
 const Home = () => (
   <div>
     <h1>Gi en jul</h1>
-    <p><Button onClick = {() => {scroll.scrollToBottom()}}>Bli Giver</Button></p> 
+    <p><Route render={({ history}) => (
+    <Button onClick={() => { history.push('./registerGiver/ContactInfo') }}>Bli Giver
+    </Button>)}/>
+    </p>
       <div>
         <p><Button>
           <Link to='how'spy={true} smooth={true} >
@@ -35,8 +39,8 @@ const Home = () => (
       <How/>
       <Questions/>
       <Companies/>
-      <Tab maxPagePosition= {140} textField="Bli giver" styling ='button-giver'/>
-      <Tab maxPagePosition= {300} textField="Tilbake" styling = 'button-to-top'/>
+      <Tab maxPagePosition= {140} textField="Bli giver" styling ='button-giver' path='/registerGiver/ContactInfo'/>
+      <Tab maxPagePosition= {300} textField="Tilbake" styling = 'button-to-top' path='top'/>
   </div>
   );
 
