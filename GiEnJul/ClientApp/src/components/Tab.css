@@ -1,6 +1,5 @@
 
 .button-to-top {
-  width: 20%;
   overflow:auto;
   position: fixed;
   right:    2%;
@@ -8,7 +7,6 @@
 }
 
 .button-giver{
-  width: 20%;
   overflow:auto;
   position: fixed;
   right:    40%;
