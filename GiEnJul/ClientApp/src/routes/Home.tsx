@@ -31,11 +31,11 @@ const Home = () => (
         </Button></p>
         <p><Button>Kontakt</Button></p>
         <p><Button>Start "Gi en jul" der hor du bor</Button></p>
-        <Tab/>
       </div>
       <How/>
       <Questions/>
       <Companies/>
+      <Tab/>
   </div>
   );
 
