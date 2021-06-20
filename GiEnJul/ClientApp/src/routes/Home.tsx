@@ -35,7 +35,8 @@ const Home = () => (
       <How/>
       <Questions/>
       <Companies/>
-      <Tab/>
+      <Tab maxPagePosition= {140} textField="Bli giver" styling ='button-giver'/>
+      <Tab maxPagePosition= {300} textField="Tilbake" styling = 'button-to-top'/>
   </div>
   );
 
