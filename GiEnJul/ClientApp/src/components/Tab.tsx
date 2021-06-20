@@ -1,10 +1,13 @@
+import { ENOTEMPTY } from 'constants';
 import * as React from 'react';
 import { Link, animateScroll as scroll } from "react-scroll";
+import { Button } from 'reactstrap';
 import './Tab.css';
 
 interface ITabState{
     isVisible: boolean,
     isGiverVisible: boolean
+
 }
 class Tab extends React.PureComponent<{}, ITabState> {
     constructor(props: boolean){
@@ -35,33 +38,28 @@ class Tab extends React.PureComponent<{}, ITabState> {
             this.setState({isGiverVisible: false});
             this.setState({isVisible: false});
         }
-        // else{
-        //       this.setState({ isGiverVisible: false});
-        //       this.setState({isVisible: false});
-        // }
     }
     
     render(){
         if (this.state.isVisible && this.state.isGiverVisible){
             return(
                 <div>
-                <div className='button-giver' onClick = {() => {scroll.scrollToTop()}}>Bli giver</div>
-                <div className='button-to-top' onClick = {() => {scroll.scrollToTop()}}>Til toppen</div>
+                    <Button className = 'button-to-top' onClick = {() => {scroll.scrollToTop()}}>Tilbake</Button>
+                    <Button className='button-giver' onClick = {() => {scroll.scrollToTop()}}>Bli giver</Button>
                 </div>
 
             )
         }
         if(this.state.isVisible){
             return(
-                <div className='button-to-top' onClick = {() => {scroll.scrollToTop()}}>Til toppen</div>
+                <Button className = 'button-to-top' onClick = {() => {scroll.scrollToTop()}}>Tilbake</Button>
             )
         }
         if(this.state.isGiverVisible){
             return(
-                <div className='button-giver' onClick = {() => {scroll.scrollToTop()}}>Bli giver</div>
+                <Button className='button-giver' onClick = {() => {scroll.scrollToTop()}}>Bli giver</Button>
             )
         }
-
         else{
             return(
                 null

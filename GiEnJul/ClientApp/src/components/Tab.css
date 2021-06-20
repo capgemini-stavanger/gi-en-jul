@@ -1,38 +1,16 @@
 
 .button-to-top {
+  width: 20%;
+  overflow:auto;
   position: fixed;
-  bottom: 5px;
-  padding: 13px;
-  font-weight: bold;
-  border-radius: 50%;
-  background-color: #CCE6E8;
-  box-shadow: 0.1em 0.1em 0.1em #888888;
-  color: grey;
-  text-align: center;
-  cursor: pointer;
-
-  right: 5px; 
-  height: 60px;
-  width: 60px;  
-  font-size: 0.8em;
+  right:    2%;
+  bottom:   2%;
 }
 
 .button-giver{
+  width: 20%;
+  overflow:auto;
   position: fixed;
-  bottom: 5px;
-  padding: 15px;
-  font-weight: bold;
-  border-radius:2em;
-  background-color: #CCE6E8;
-  box-shadow: 0.1em 0.1em 0.1em #888888;
-  color: grey;
-  text-align: center;
-  cursor: pointer;
-  align-items: center;
-
-  height: 60px;
-  width: 200px; 
-  right: 95px; 
-  font-size: 1.5em;
-
+  right:    40%;
+  bottom:   2%;
 }
