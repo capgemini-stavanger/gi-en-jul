@@ -21,9 +21,9 @@ namespace GiEnJul.Entities
         public string ReceiverLocation { get; set; }
 
 		// Submitter contact info
-        public string ReceiverFullName { get; set; }
-        public string ReceiverEmail { get; set; }
-        public string ReceiverPhoneNumber { get; set; }
+        public string SubmitterFullName { get; set; }
+        public string SubmitterEmail { get; set; }
+        public string SubmitterPhoneNumber { get; set; }
 
 		// Submitter references
         public string Institution { get; set; }
