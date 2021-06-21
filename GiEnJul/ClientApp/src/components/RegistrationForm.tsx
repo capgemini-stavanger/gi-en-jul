@@ -1,113 +1,55 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import PersonField from './PersonField';
+import { useState } from 'react';
+import Location from './Location';
+
+interface LocationProps {
+    name:string
+    check: boolean
+    onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+let prelokasjon: {[name: string]: boolean} = {
+    'Stavanger': false,
+    'Sandnes': false,
+    'Bodø': false,
+    'Sola': false,
+    'Nittedal': false,
+};
+
+function RegistrationForm() {
+    const [formpersons, setPersons] = useState([1]);
+    const [Lokasjon, setLokasjon] = useState(prelokasjon);
 
 
-class RegistrationForm extends React.Component <any, any>{
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            value: '',
-            Lokasjon: {
-                'Stavanger':false, 
-                'Sandnes':false,
-                'Bodø':false,
-                'Sola':false,
-                'Nittedal':false},
-            Alder: 0,
-            Kjonn: '',
-            Gaveonske: '',
-            AlderTilpass: false,
-            Persons: 2
-        };
-
-        this.handleInputChange = this.handleInputChange.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    handleInputChange(event: { target: any; }) {
-        const target = event.target;
-        let value = target.type === 'checkbox' ? target.checked : target.value;
-        let name = target.name
-        if (name === "Lokasjon") {
-            let LokasjonList = this.state.Lokasjon;
-            LokasjonList[target.id] = value;
-            value = LokasjonList;
+        function addPerson(){
+            setPersons(formpersons => [...formpersons,setPersons.length+1]);
         }
-        
-        this.setState({
-            [name]: value,
-            });
-        console.log(this.state)
-    }
-    // handleSubmit(event) {
-    //     alert('En familie ble sendt inn: ' + this.state.value);
-    //     event.preventDefault();
-    // }
-    handleClick() {
-        // let nrPersons = this.state.Persons; 
-        console.log("yea mate")
-        const elem = <PersonField personid={40} />
-        // this.setState({Persons: nrPersons+1})
-        ReactDOM.render(elem,document.getElementById("persons"));
-        // return( <PersonField personid={40} />);
-    }
 
+        const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            const name = event.target.id;
+            const val = event.target.checked
+            setLokasjon(prevLoc => ({...prevLoc,[name]:val}))
+        }
 
-
-    render() {
-        return ( 
-            <form>
-                <label>
+        return(
+            <form className="thisclass">
+                <div>
                     <h3>Hvor ønsker du å registrere familie (velg en)</h3>
-                        <div className= "form-group">
-                            <input
-                            name="Lokasjon"
-                            type="checkbox"
-                            id="Stavanger"
-                            checked={this.state.Lokasjon["Stavanger"]}
-                            onChange={this.handleInputChange} />
-                            Stavanger
-                            <input
-                            name="Lokasjon"
-                            type="checkbox"
-                            id="Sandnes"
-                            checked={this.state.Lokasjon["Sandnes"]}
-                            onChange={this.handleInputChange} />
-                            Sandnes
-                            <input
-                            name="Lokasjon"
-                            type="checkbox"
-                            id="Bodø"
-                            checked={this.state.Lokasjon["Bodø"]}
-                            onChange={this.handleInputChange} />
-                            Bodø
-                            <input
-                            name="Lokasjon"
-                            type="checkbox"
-                            id="Sola"
-                            checked={this.state.Lokasjon["Sola"]}
-                            onChange={this.handleInputChange} />
-                            Sola
-                            <input
-                            name="Lokasjon"
-                            type="checkbox"
-                            id="Nittedal"
-                            checked={this.state.Lokasjon["Nittedal"]}
-                            onChange={this.handleInputChange} />
-                            Nittedal
-                        </div>
-                        <br />
-                        <div className="form-group" id="persons">
-                            <PersonField personid={1} />
-                            <PersonField personid={2} />
-                        </div>
-                        <div>
-                            <button onClick={this.handleClick}>
-                                Legg til personer
-                            </button>
-                        </div>
-                        <br />
-                        <div className="form-group">
+                    <div>
+                        {
+                        Object.keys(Lokasjon).map((k1, i1) => (
+                            <Location key={k1+i1} check={Lokasjon[k1]} onchange={(e) => handleChange(e)} name={k1}/>
+                        ))}
+                    </div>         
+                </div>
+                <div>
+                    {formpersons.map(p =>
+                        <PersonField key={p} personid={p} />)}
+                </div>
+                <button onClick= {() => addPerson()}>Legg til flere</button>
+                <div className="form-group">
                             <h3>Matønsker</h3>
                             <h4>Middag</h4>
                             <input type="radio" id="ribbe" name="middag" value="ribbe"/>
@@ -131,14 +73,10 @@ class RegistrationForm extends React.Component <any, any>{
                             <label>Kontaktperson</label><br/>
                             <input type="textarea" id="kontaktnavn" placeholder="Navn" /> <input type="textarea" id="kontaktperson" placeholder="Telefon" /><br/>
                             <input type="textarea" id="kontaktepost" placeholder="Epost" /><br/>
-
                         </div>
-                </label>
-                <input type="submit" value="Send" />
+                        <input type="submit" value="Send" />
             </form>
         );
     }
-
-}
 
 export default RegistrationForm;
