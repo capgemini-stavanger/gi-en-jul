@@ -41,7 +41,7 @@ namespace GiEnJul.Features
             return (T)result.Result;
         }
 
-        public async Task<T> DeleteAsync(string rowKey, string partitionKey)
+        public async Task<T> DeleteAsync(string partitionKey, string rowKey)
         {
             var operation = TableOperation.Retrieve(rowKey, partitionKey);
             var result = await _table.ExecuteAsync(operation);
