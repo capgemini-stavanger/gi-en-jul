@@ -11,7 +11,6 @@ namespace GiEnJul.Infrastructure
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
             builder.RegisterType<GenericRepository<TableEntity>>().As<IGenericRepository<TableEntity>>().InstancePerLifetimeScope();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
-
         }
     }
 }
