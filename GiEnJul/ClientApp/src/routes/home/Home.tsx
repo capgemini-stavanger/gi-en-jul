@@ -7,7 +7,7 @@ import { Link, animateScroll as scroll } from "react-scroll";
 import  How  from './How';
 import Questions from './Questions';
 import Companies from './Companies';
-import Tab from '../components/Tab';
+import Tab from '../../components/Tab';
 
 
 const Home = () => (
@@ -40,7 +40,7 @@ const Home = () => (
       <Questions/>
       <Companies/>
       <Tab maxPagePosition= {140} textField="Bli giver" styling ='button-giver' path='/registerGiver/ContactInfo'/>
-      <Tab maxPagePosition= {300} textField="Tilbake" styling = 'button-to-top' path='top'/>
+      <Tab maxPagePosition= {300} textField="Til toppen" styling = 'button-to-top' path='top'/>
   </div>
   );
 

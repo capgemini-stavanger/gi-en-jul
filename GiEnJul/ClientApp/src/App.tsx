@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Route } from 'react-router';
 import Layout from './components/Layout';
-import Home from './routes/Home';
+import Home from './routes/home/Home';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 import Registration from './components/Registration';
-import ContactInfo from './routes/registerGiver/ContactInfo'
+import ContactInfo from './routes/registerGiver/LocationGiver'
 
 import './custom.css'
 
