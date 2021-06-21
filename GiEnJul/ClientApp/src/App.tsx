@@ -5,6 +5,7 @@ import Home from './routes/Home';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 import Registration from './components/Registration';
+import ContactInfo from './routes/registerGiver/ContactInfo'
 
 import './custom.css'
 
@@ -14,5 +15,6 @@ export default () => (
         <Route path='/counter' component={Counter} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
         <Route path='/registration' component={ Registration } />
+        <Route path='/registerGiver/ContactInfo' component={ ContactInfo }></Route>
     </Layout>
 );
