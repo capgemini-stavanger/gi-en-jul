@@ -46,7 +46,7 @@ namespace GiEnJul.Features
             var operation = TableOperation.Retrieve(rowKey, partitionKey);
             var result = await _table.ExecuteAsync(operation);
 
-            //Er dette greit
+            //TODO Ta ut i egen funksjon ?
             await DeleteAsync((T)result.Result);
 
             return (T)result.Result;
@@ -62,8 +62,7 @@ namespace GiEnJul.Features
 
         public async Task<T> InsertOrReplaceAsync(T entity)
         {
-            //entity må konverteres fra Model til Entity her
-            //eller være ferdig konvertert hit
+
 
             var operation = TableOperation.InsertOrReplace(entity);
             var result = await _table.ExecuteAsync(operation);

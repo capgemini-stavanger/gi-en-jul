@@ -1,10 +1,9 @@
-﻿using GiEnJul.Features;
+﻿using AutoMapper;
+using GiEnJul.Features;
 using GiEnJul.Models;
-using Microsoft.AspNetCore.Http;
+using GiEnJul.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -14,23 +13,28 @@ namespace GiEnJul.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IPersonRepository _personRepository;
+        private IMapper _mapper;
 
 
-        public PersonController(IPersonRepository personRepository)
+        public PersonController(IPersonRepository personRepository, IMapper mapper)
         {
             _personRepository = personRepository;
+            _mapper = mapper;
         }
 
 
         [HttpGet]
-        public async Task<Person> AddAsync()
+        public async Task<ActionResult<Model eller Entity>> Add(Models.Person person)
         {
-            // Send inn Model til repository, konverter Model til Entity i det operasjonen skal gjennomføres
+            
+            
+            person = new Models.Person(Guid.NewGuid().ToString(), "ID FROM NAV") { Age = 5, Wish = "Leke", Gender = Gender.Male, };
 
-            var person = new Person(Guid.NewGuid().ToString(), "ID FROM NAV") { Age = 5, Wish = "Leke", Gender = Gender.Male,  };
 
-            return await _personRepository.InsertOrReplaceAsync(person);
+            var addedPerson = await _personRepository.InsertOrReplaceAsync(_mapper.Map<Entities.Person>(person));
 
+            //TODO Return type Model eller Entity ? Map til den det skal være om nødvendig
+            return CreatedAtAction(nameof(addedPerson), addedPerson);
         }
     }
 }

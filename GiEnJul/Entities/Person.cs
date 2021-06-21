@@ -4,6 +4,10 @@ namespace GiEnJul.Entities
 {
     public class Person : TableEntity
     {
+        public Person() : base()
+        {
+        }
+
         // RowKey = Guid
         // PartitionKey = {recipientId}
         public Person(string recipientId, string rowKey) : base(recipientId, rowKey)

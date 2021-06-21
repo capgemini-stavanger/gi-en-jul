@@ -6,6 +6,7 @@ namespace GiEnJul.Infrastructure
     {
         public AutoMapperProfile()
         {
+            
             // Add automapper profiles
         }
     }
