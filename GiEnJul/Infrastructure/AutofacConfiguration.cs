@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using GiEnJul.Features;
 using Microsoft.Azure.Cosmos.Table;
+using GiEnJul.Models;
 
 namespace GiEnJul.Infrastructure
 {
