@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
 using GiEnJul.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GiEnJul.Entities;
 
@@ -12,15 +9,12 @@ namespace GiEnJul.Features
     {
         Task<Person> DeleteAsync(Models.Person model);
         Task<Person> InsertOrReplaceAsync(Models.Person model);
-
     }
 
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
         public PersonRepository(ISettings settings, IMapper mapper, string tableName = "Person") : base(settings, tableName, mapper)
-        {
-
-        }
+        { }
 
         public async Task<Person> InsertOrReplaceAsync(Models.Person model)
         {

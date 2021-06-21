@@ -11,7 +11,7 @@ namespace GiEnJul.Features
         public IMapper _mapper { get; set; }
 
 
-        Task<T> GetAsync(string rowKey, string partitionKey); 
+        Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
         Task<T> DeleteAsync(T entity);
     }
@@ -34,7 +34,7 @@ namespace GiEnJul.Features
 
         public async Task<T> DeleteAsync(T entity)
         {
-
+            entity.ETag = "*";
             var operation = TableOperation.Delete(entity);
             var result = await _table.ExecuteAsync(operation);
 
@@ -49,10 +49,11 @@ namespace GiEnJul.Features
             return await DeleteAsync((T)result.Result);
         }
 
-        public async Task<T> GetAsync(string rowKey, string partitionKey)
+        public async Task<T> GetAsync(string partitionKey, string rowKey)
         {
-            var operation = TableOperation.Retrieve(partitionKey, rowKey);
+            var operation = TableOperation.Retrieve<T>(partitionKey, rowKey);
             var result = await _table.ExecuteAsync(operation);
+
 
             return (T)result.Result;
         }
