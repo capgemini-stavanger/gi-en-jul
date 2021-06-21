@@ -5,10 +5,8 @@ type PersonProps = {
     personid: number
 }
 
-
 const PersonField = ({ personid }: PersonProps) => {
     return(
-        console.log("what is this: "+personid),
         <div >
             <input
             type="number"
@@ -34,19 +32,4 @@ const PersonField = ({ personid }: PersonProps) => {
 };
 
 export default PersonField;
-
-// export default PersonField;
-
-// export default function PersonField( [identification] ) {
-    
-//     return (
-//         <div>
-//             <input
-//             type="number"
-//             name="age"
-//             id="person"+{this.props.id }
-//             />
-//         </div>
-//     );
-// }
 
