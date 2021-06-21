@@ -34,11 +34,11 @@ namespace GiEnJul.Features
 
         public async Task<T> DeleteAsync(T entity)
         {
+
             var operation = TableOperation.Delete(entity);
             var result = await _table.ExecuteAsync(operation);
 
             return (T)result.Result;
-
         }
 
         public async Task<T> DeleteAsync(string rowKey, string partitionKey)
@@ -46,10 +46,7 @@ namespace GiEnJul.Features
             var operation = TableOperation.Retrieve(rowKey, partitionKey);
             var result = await _table.ExecuteAsync(operation);
 
-            //TODO Ta ut i egen funksjon ?
-            await DeleteAsync((T)result.Result);
-
-            return (T)result.Result;
+            return await DeleteAsync((T)result.Result);
         }
 
         public async Task<T> GetAsync(string rowKey, string partitionKey)
@@ -62,8 +59,6 @@ namespace GiEnJul.Features
 
         public async Task<T> InsertOrReplaceAsync(T entity)
         {
-
-
             var operation = TableOperation.InsertOrReplace(entity);
             var result = await _table.ExecuteAsync(operation);
 

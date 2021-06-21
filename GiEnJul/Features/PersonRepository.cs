@@ -10,6 +10,8 @@ namespace GiEnJul.Features
 {
     public interface IPersonRepository : IGenericRepository<Person>
     {
+        Task<Person> DeleteAsync(Models.Person model);
+        Task<Person> InsertOrReplaceAsync(Models.Person model);
 
     }
 
@@ -20,8 +22,14 @@ namespace GiEnJul.Features
 
         }
 
-        
-        
+        public async Task<Person> InsertOrReplaceAsync(Models.Person model)
+        {
+            return await InsertOrReplaceAsync(_mapper.Map<Person>(model));
+        }
 
+        public async Task<Person> DeleteAsync(Models.Person model)
+        {
+            return await DeleteAsync(_mapper.Map<Person>(model));
+        }
     }
 }

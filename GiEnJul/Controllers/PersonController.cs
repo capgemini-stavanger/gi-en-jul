@@ -13,28 +13,31 @@ namespace GiEnJul.Controllers
     public class PersonController : ControllerBase
     {
         private readonly IPersonRepository _personRepository;
-        private IMapper _mapper;
+        //private IMapper _mapper;
 
 
-        public PersonController(IPersonRepository personRepository, IMapper mapper)
+        public PersonController(IPersonRepository personRepository)//, IMapper mapper)
         {
             _personRepository = personRepository;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<Model eller Entity>> Add(Models.Person person)
+        public async Task<ActionResult<Models.Person>> Test()
         {
+            var person = new Models.Person(Guid.NewGuid().ToString(), "ID FROM NAV") { Age = 5, Wish = "Leke", Gender = Gender.Male, };
             
-            
-            person = new Models.Person(Guid.NewGuid().ToString(), "ID FROM NAV") { Age = 5, Wish = "Leke", Gender = Gender.Male, };
-
-
-            var addedPerson = await _personRepository.InsertOrReplaceAsync(_mapper.Map<Entities.Person>(person));
+            var addedPerson = await _personRepository.InsertOrReplaceAsync(person);
 
             //TODO Return type Model eller Entity ? Map til den det skal være om nødvendig
             return CreatedAtAction(nameof(addedPerson), addedPerson);
         }
+
+
+
+        
+
+
     }
 }
