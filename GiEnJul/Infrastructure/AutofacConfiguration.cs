@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using GiEnJul.Models;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace GiEnJul.Infrastructure
 {
@@ -11,6 +9,7 @@ namespace GiEnJul.Infrastructure
         public static void Configure(ContainerBuilder builder)
         {
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
+            builder.RegisterType<GenericRepository<TableEntity>>().As<IGenericRepository<TableEntity>>().InstancePerLifetimeScope();
         }
     }
 }

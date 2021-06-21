@@ -1,8 +1,7 @@
 using Autofac;
+using GiEnJul.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +17,7 @@ namespace GiEnJul
         }
 
         public IConfiguration Configuration { get; }
+        public ILifetimeScope AutofacContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,7 +33,7 @@ namespace GiEnJul
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            Infrastructure.AutofacConfiguration.Configure(builder);
+            AutofacConfiguration.Configure(builder);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
