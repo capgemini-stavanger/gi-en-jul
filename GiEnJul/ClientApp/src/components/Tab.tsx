@@ -13,7 +13,6 @@ interface TabProps {
     textField: string,
     styling: string,
     path: string,
-
 }
 
 class Tab extends React.PureComponent<TabProps, TabState> {

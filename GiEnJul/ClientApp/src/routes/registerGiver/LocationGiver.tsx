@@ -3,12 +3,13 @@ import { Button } from 'reactstrap';
 import {Route} from 'react-router-dom'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import ContactInfo from './ContactInfo';
 
 const options = [
     'Stavanger', 'Sola', 'Sandnes'
   ];
 
-const ContactInfo: React.FC = () => {
+const LocationGiver: React.FC = () => {
     const [location, setLocation] = React.useState<string>('hei');
     console.log(location);
 
@@ -24,8 +25,9 @@ const ContactInfo: React.FC = () => {
     <p><Route render={({ history}) => (
          <Button onClick={() => { history.push('/') }}>tilbake</Button>)}/>
     </p>
-</div>
+    <ContactInfo location={location}></ContactInfo>
+    </div>
     )
 }
 
-export default ContactInfo
+export default LocationGiver

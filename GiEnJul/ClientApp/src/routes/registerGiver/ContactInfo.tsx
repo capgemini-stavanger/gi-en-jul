@@ -11,27 +11,34 @@ interface State {
     tlf: number;
 }
 class ContactInfo extends React.PureComponent<Props, State>{
-    
-    // state: State = {
-    //     name: '',
-    //     email: '',
-    //     tlf: 0,
 
-    // }
-
-    // const handleChange = (newValue: string, category: string ) => {
-    //     this.setState({category: newValue})
-    // }
+    handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({name: event.target.value})
+    }
+    handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({email: event.target.value})
+    }
+    handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({tlf: parseInt(event.target.value)})
+    }
     
-    // render(){
-    //     return (
-    //         <div>
-    //             <h1>Bli giver</h1>
-    //             <h3>Kontaktinformasjon</h3>
-    //             <input type="text" onChange= () />
-    //         </div>
-    //     )
-    // }
+    render(){
+        return (
+            <div>
+                <h1>Bli giver</h1>
+                <h3>Kontaktinformasjon</h3>
+                <label> Navn 
+                    <input type="text" onChange={this.handleNameChange}/>
+                </label>
+                <label> Epost 
+                    <input type="text" onChange={this.handleEmailChange}/>
+                </label>
+                <label> Mobilnummer 
+                    <input type="text" onChange={this.handleTlfChange}/>
+                </label>
+            </div>
+        )
+    }
 }
 
 export default ContactInfo;
