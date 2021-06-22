@@ -4,22 +4,22 @@ import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
 
 interface State {
-    step: number
-    location: string,
-    name: string,
-    email: string,
-    tlf: number,
-    familiyType: string,
+    step: number,
+    location: string | undefined,
+    name: string | undefined,
+    email: string | undefined,
+    tlf: number | undefined,
+    familiyType: string | undefined,
 }
 
 class SignUp extends React.PureComponent< {}, State>{
     state: State= {
         step: 1,
-        location: '',
-        name: '',
-        email: '',
-        tlf: 0,
-        familiyType: '',
+        location: undefined,
+        name: undefined,
+        email: undefined,
+        tlf: undefined,
+        familiyType: undefined,
     };
 
     // go back to previous step
@@ -47,22 +47,38 @@ class SignUp extends React.PureComponent< {}, State>{
     handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({tlf: parseInt(event.target.value)})
     }
-    handleLocationChange = (value: any) => (newLocation: React.SetStateAction<string>) => {
-        this.setState({location: String(newLocation)})}
+
+    handleLocationChange = (newLocation: Object) => {
+        this.setState({location: Object.values(newLocation)[0]})
+    }
+
+    handleFamilyChange = (newLocation: Object) => {
+        this.setState({familiyType: Object.values(newLocation)[0]})
+    }
+
+
     
         render(){
             // const { step } = this.state;
             const { location, name, email, tlf, familiyType } = this.state;
             const values = { location, name, email, tlf, familiyType }
             console.log(this.state)
+
+            const locationOptions = ['Stavanger', 'Sola', 'Sandnes'];
+            const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
         
             switch(this.state.step){
                 case 1:
                     return(
-                        <div><LocationGiver
+                        <div>
+                            <h2>Bli giver</h2>
+                            <h3>Hvor vil du gi?</h3>
+                        <LocationGiver
                         nextStep = {this.nextStep}
                         handleLocationChange = {this.handleLocationChange}
                         values = {values}
+                        options = {locationOptions}
+                        placeHolder = {'Velg et sted...'}
                         ></LocationGiver></div>
                     )
                 case 2: 
@@ -76,7 +92,20 @@ class SignUp extends React.PureComponent< {}, State>{
                         values = {values}
                         ></ContactInfo></div>
                     )
-                case 3: 
+                case 3:
+                    return(
+                    <div>
+                            <h2>Bli giver</h2>
+                            <h3>Ønsket familiesammensetning</h3>
+                    <LocationGiver
+                    nextStep = {this.nextStep}
+                    prevStep = {this.prevStep}
+                    handleLocationChange = {this.handleFamilyChange}
+                    values = {values}
+                    options = {familiyOptions}
+                    placeHolder = {'Familiestørrlse'}
+                    ></LocationGiver></div>
+                    )
                 case 4:
                 case 5:
                 default:
