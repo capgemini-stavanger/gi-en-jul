@@ -9,9 +9,9 @@ interface InputValidatorProps {
     setIsValid: (isValid: boolean) => void,
     value: string,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    type?: string,
-    name?: string,
-    placeholder?: string, 
+    type: string,
+    name: string,
+    placeholder: string, 
 }
 
 const InputValidator: FC<InputValidatorProps> = (
