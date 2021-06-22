@@ -2,7 +2,7 @@
 using Microsoft.Azure.Cosmos.Table;
 using System.ComponentModel.DataAnnotations;
 
-namespace GiEnJul
+namespace GiEnJul.Entities
 {
     public class Giver : TableEntity
     {

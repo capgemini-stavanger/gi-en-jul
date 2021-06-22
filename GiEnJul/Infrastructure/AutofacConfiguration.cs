@@ -16,6 +16,7 @@ namespace GiEnJul.Infrastructure
 
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
             builder.Register(c => new LoggerConfiguration()
                                 .MinimumLevel.Debug()
                                 .WriteTo.Console()
