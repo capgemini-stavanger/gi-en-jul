@@ -10,8 +10,7 @@ const options = [
   ];
 
 const LocationGiver: React.FC = () => {
-    const [location, setLocation] = React.useState<string>('hei');
-    console.log(location);
+    const [location, setLocation] = React.useState<string>('');
 
     const handleChange = (newLocation: React.SetStateAction<string>) => {
         setLocation(newLocation)
@@ -25,7 +24,6 @@ const LocationGiver: React.FC = () => {
     <p><Route render={({ history}) => (
          <Button onClick={() => { history.push('/') }}>tilbake</Button>)}/>
     </p>
-    <ContactInfo location={location}></ContactInfo>
     </div>
     )
 }
