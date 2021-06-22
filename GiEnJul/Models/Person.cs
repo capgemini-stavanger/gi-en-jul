@@ -1,5 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace GiEnJul.Models
 {
