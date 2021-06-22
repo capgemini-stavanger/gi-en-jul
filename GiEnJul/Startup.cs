@@ -33,7 +33,7 @@ namespace GiEnJul
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            AutofacConfiguration.Configure(builder);
+            AutofacConfiguration.Configure(builder, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

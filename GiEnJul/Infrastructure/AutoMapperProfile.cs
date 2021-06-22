@@ -1,8 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GiEnJul.Infrastructure
 {
@@ -10,7 +6,8 @@ namespace GiEnJul.Infrastructure
     {
         public AutoMapperProfile()
         {
-            // Add automapper profiles
+            CreateMap<Entities.Person, Models.Person>();
+            CreateMap<Models.Person, Entities.Person>();
         }
     }
 }
