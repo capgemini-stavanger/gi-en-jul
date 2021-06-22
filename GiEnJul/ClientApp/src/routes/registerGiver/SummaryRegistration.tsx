@@ -6,21 +6,21 @@ type Props = {
     prevStep: () => void,
 
     values: { location: string | undefined; name: string | undefined; email: string | undefined; tlf: number | undefined; familiyType: string | undefined; }
-    }
+}
 
-const SummaryRegistration: React.FC<Props> = ({nextStep, prevStep, values}) => {
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, values }) => {
 
     const Continue = (e: any) => {
         e.preventDefault();
         nextStep();
-      }
+    }
 
-      const Previous = (e: any) => {
+    const Previous = (e: any) => {
         e.preventDefault();
         prevStep();
-      }    
+    }
 
-    return(
+    return (
         <div>
             <h5>Sted:</h5>
             <h6>{values.location}</h6>
@@ -34,8 +34,8 @@ const SummaryRegistration: React.FC<Props> = ({nextStep, prevStep, values}) => {
             <h6>{values.familiyType}</h6>
 
             <ButtonToolbar>
-                <Button onClick = { Previous }>Tilbake</Button>
-                <Button onClick = { Continue } >Neste</Button>
+                <Button onClick={Previous}>Tilbake</Button>
+                <Button onClick={Continue} >Neste</Button>
             </ButtonToolbar>
         </div>
     )
