@@ -5,7 +5,7 @@ type Props = {
     nextStep: () => void,
     prevStep: () => void,
 
-    values: { location: string | undefined; name: string | undefined; email: string | undefined; tlf: number | undefined; familiyType: string | undefined; }
+    values: { location: string | undefined; name: string | undefined; email: string | undefined; phone: number | undefined; familiyType: string | undefined; }
 }
 
 const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, values }) => {
@@ -29,7 +29,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, values }) =>
             <h5>Epostadresse:</h5>
             <h6>{values.email}</h6>
             <h5>Telefonnummer:</h5>
-            <h6>{values.tlf}</h6>
+            <h6>{values.phone}</h6>
             <h5>Ønsket familiesammensetning:</h5>
             <h6>{values.familiyType}</h6>
 

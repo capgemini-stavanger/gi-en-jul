@@ -7,7 +7,7 @@ type Props = {
     handleNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    values: { location: string | undefined; name: string | undefined; email: string | undefined; tlf: number | undefined; familiyType: string | undefined; }
+    values: { location: string | undefined; name: string | undefined; email: string | undefined; phone: number | undefined; familiyType: string | undefined; }
 }
 
 const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handleNameChange, handleEmailChange, handleTlfChange, values }) => {
@@ -33,7 +33,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handleNameChange, ha
                 <input type="text" onChange={handleEmailChange} value={values.email} />
             </label>
             <label> Mobilnummer
-                <input type="text" onChange={handleTlfChange} value={values.tlf} />
+                <input type="text" onChange={handleTlfChange} value={values.phone} />
             </label>
             <ButtonToolbar>
                 <Button onClick={Previous}>Tilbake</Button>

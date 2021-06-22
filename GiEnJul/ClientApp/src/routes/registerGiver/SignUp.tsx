@@ -10,7 +10,7 @@ interface State {
     location: string | undefined,
     name: string | undefined,
     email: string | undefined,
-    tlf: number | undefined,
+    phone: number | undefined,
     familiyType: string | undefined,
 }
 
@@ -20,7 +20,7 @@ class SignUp extends React.PureComponent<{}, State>{
         location: undefined,
         name: undefined,
         email: undefined,
-        tlf: undefined,
+        phone: undefined,
         familiyType: undefined,
     };
 
@@ -47,7 +47,7 @@ class SignUp extends React.PureComponent<{}, State>{
         this.setState({ email: event.target.value })
     }
     handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ tlf: parseInt(event.target.value) })
+        this.setState({ phone: parseInt(event.target.value) })
     }
 
     handleLocationChange = (newLocation: Object) => {
@@ -62,10 +62,8 @@ class SignUp extends React.PureComponent<{}, State>{
 
     render() {
         // const { step } = this.state;
-        const { location, name, email, tlf, familiyType } = this.state;
-        const values = { location, name, email, tlf, familiyType }
-        console.log(this.state)
-
+        const { location, name, email, phone, familiyType } = this.state;
+        const values = { location, name, email, phone, familiyType }
         const locationOptions = ['Stavanger', 'Sola', 'Sandnes'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
@@ -113,7 +111,7 @@ class SignUp extends React.PureComponent<{}, State>{
                     <div>
                         <h1>Bli giver</h1>
                         <h3>Oppsummering</h3>
-                        <p>Du er snart et fantastsik menneske :D</p>
+                        <p>Du er snart et fantastisk menneske :D</p>
                         <SummaryRegistration
                             nextStep={this.nextStep}
                             prevStep={this.prevStep}

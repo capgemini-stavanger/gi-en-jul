@@ -8,7 +8,7 @@ type Props = {
   nextStep: () => void,
   prevStep?: () => void,
   handleLocationChange: (newLocation: Object) => void,
-  values: { location: string | undefined; name: string | undefined; email: string | undefined; tlf: number | undefined; familiyType: string | undefined; }
+  values: { location: string | undefined; name: string | undefined; email: string | undefined; phone: number | undefined; familiyType: string | undefined; }
   options: string[],
   placeHolder: string,
 }
@@ -41,7 +41,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
       <Dropdown options={options} value={values.location} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
       <ButtonToolbar>
         <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/') }}>tilbake</Button>)} />
+          <Button onClick={() => { history.push('/') }}>Tilbake</Button>)} />
         <Button onClick={Continue} >Neste</Button>
       </ButtonToolbar>
     </div>
