@@ -2,8 +2,8 @@ import * as React from 'react';
 const Companies = () => (
     <div id='companies'>
         <h3>For Bedrifter</h3>
+        <p><strong>Slik kan bedriften din bidra til Gi en jul!</strong></p>
         <ul>
-            <strong>Slik kan bedriften din bidra til Gi en jul!</strong>
             <li>Få med kolleger og Gi en jul.</li>
             <li>Gi et pengebeløp som kan benyttes til gavekort på en opplevelse for barna.</li>
             <li>Gi gavekort på opplevelser som vi putter oppi som ekstragave i juleeskene.</li>
