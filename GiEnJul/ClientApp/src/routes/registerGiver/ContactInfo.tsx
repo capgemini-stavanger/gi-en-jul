@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'reactstrap';
+import { Button, ButtonGroup, ButtonToolbar } from 'reactstrap';
 
 type Props = {
 nextStep: () => void,
@@ -35,8 +35,11 @@ return (
                 <label> Mobilnummer 
                     <input type="text" onChange={handleTlfChange} value = {values.tlf}/>
                 </label>
+                <ButtonToolbar>
                 <Button onClick = { Previous }>Tilbake</Button>
                 <Button onClick = { Continue } >Neste</Button>
+                </ButtonToolbar>
+                
         
     </div>
 )
