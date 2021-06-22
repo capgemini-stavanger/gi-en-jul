@@ -9,9 +9,7 @@ namespace GiEnJul.Infrastructure
         public static void Configure(ContainerBuilder builder)
         {
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
-            builder.RegisterType<GenericRepository<TableEntity>>().As<IGenericRepository<TableEntity>>().InstancePerLifetimeScope();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
-
         }
     }
 }

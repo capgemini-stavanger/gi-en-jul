@@ -6,8 +6,8 @@ namespace GiEnJul.Infrastructure
     {
         public AutoMapperProfile()
         {
-            
-            // Add automapper profiles
+            CreateMap<Entities.Person, Models.Person>();
+            CreateMap<Models.Person, Entities.Person>();
         }
     }
 }

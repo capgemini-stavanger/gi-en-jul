@@ -8,8 +8,6 @@ namespace GiEnJul.Infrastructure
         {
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                mc.CreateMap<Entities.Person, Models.Person>();
-                mc.CreateMap<Models.Person, Entities.Person>();
                 mc.AddProfile(new AutoMapperProfile());
             });
             return mapperConfig.CreateMapper();
