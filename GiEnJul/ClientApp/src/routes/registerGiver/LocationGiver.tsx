@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'reactstrap';
+import { Button, ButtonToolbar } from 'reactstrap';
 import {Route} from 'react-router-dom'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
@@ -21,9 +21,25 @@ const LocationGiver: React.FC<Props> = ({nextStep, prevStep, handleLocationChang
     nextStep();
   }
 
+  if (prevStep){
+    const Previous = (e: any) => {
+      e.preventDefault();
+      prevStep();
+    }
+    return(
+      <div>
+      <Dropdown  options={options} value = {values.familiyType} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
+      <ButtonToolbar>
+                <Button onClick = { Previous }>Tilbake</Button>
+                <Button onClick = { Continue } >Neste</Button>
+                </ButtonToolbar>
+      </div>
+  )
+  }
+
     return(
         <div>
-        <Dropdown  options={options}  onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
+        <Dropdown  options={options} value = {values.location} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
         <p><Route render={({ history}) => (
              <Button onClick={() => { history.push('/') }}>tilbake</Button>)}/>
         </p>

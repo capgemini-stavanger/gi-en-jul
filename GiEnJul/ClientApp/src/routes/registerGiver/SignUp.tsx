@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import Confirmation from './Confirmation';
 import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
+import SummaryRegistration from './SummaryRegistration';
 
 interface State {
     step: number,
@@ -71,7 +73,7 @@ class SignUp extends React.PureComponent< {}, State>{
                 case 1:
                     return(
                         <div>
-                            <h2>Bli giver</h2>
+                            <h1>Bli giver</h1>
                             <h3>Hvor vil du gi?</h3>
                         <LocationGiver
                         nextStep = {this.nextStep}
@@ -95,7 +97,7 @@ class SignUp extends React.PureComponent< {}, State>{
                 case 3:
                     return(
                     <div>
-                            <h2>Bli giver</h2>
+                            <h1>Bli giver</h1>
                             <h3>Ønsket familiesammensetning</h3>
                     <LocationGiver
                     nextStep = {this.nextStep}
@@ -107,7 +109,24 @@ class SignUp extends React.PureComponent< {}, State>{
                     ></LocationGiver></div>
                     )
                 case 4:
+                    return(
+                    <div>
+                        <h1>Bli giver</h1>
+                        <h3>Oppsummering</h3>
+                        <p>Du er snart et fantastsik menneske :D</p>
+                        <SummaryRegistration
+                        nextStep = {this.nextStep}
+                        prevStep = {this.prevStep}
+                        values = {values}
+                        ></SummaryRegistration>
+                    </div>
+                    )
                 case 5:
+                    return(
+                        <div>
+                            <Confirmation></Confirmation>
+                        </div>
+                    )
                 default:
             };
         };
