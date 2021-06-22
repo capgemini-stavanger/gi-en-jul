@@ -2,7 +2,6 @@
 using Serilog;
 using GiEnJul.Models;
 using GiEnJul.Features;
-
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Configuration;
 
