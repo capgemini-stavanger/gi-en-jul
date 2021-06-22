@@ -14,6 +14,7 @@ namespace GiEnJul.Features
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
         Task<T> DeleteAsync(T entity);
+        Task<T> DeleteAsync(string partitionKey, string rowKey);
     }
 
     public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity

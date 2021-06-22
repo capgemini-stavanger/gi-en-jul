@@ -33,10 +33,7 @@ namespace GiEnJul
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
-            var settings = new Settings(Configuration);
-            builder.Register(c => settings).As<ISettings>().InstancePerLifetimeScope();
-
-            AutofacConfiguration.Configure(builder);
+            AutofacConfiguration.Configure(builder, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
