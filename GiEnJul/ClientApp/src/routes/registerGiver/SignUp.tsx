@@ -7,11 +7,11 @@ import SummaryRegistration from './SummaryRegistration';
 
 interface State {
     step: number,
-    location: string | undefined,
-    name: string | undefined,
-    email: string | undefined,
-    phone: number | undefined,
-    familiyType: string | undefined,
+    location?: string,
+    name?: string,
+    email?: string,
+    phone?: number,
+    familiyType?: string,
 }
 
 class SignUp extends React.PureComponent<{}, State>{

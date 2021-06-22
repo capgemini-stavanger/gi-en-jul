@@ -8,7 +8,7 @@ type Props = {
   nextStep: () => void,
   prevStep?: () => void,
   handleLocationChange: (newLocation: Object) => void,
-  values: { location: string | undefined; name: string | undefined; email: string | undefined; phone: number | undefined; familiyType: string | undefined; }
+  values: { location?: string; name?: string; email?: string; phone?: number; familiyType?: string; }
   options: string[],
   placeHolder: string,
 }
