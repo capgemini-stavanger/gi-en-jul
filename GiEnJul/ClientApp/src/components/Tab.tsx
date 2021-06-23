@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
-import { Link, animateScroll as scroll } from "react-scroll";
+import { animateScroll as scroll } from "react-scroll";
 import { Button } from 'reactstrap';
 import './Tab.css'
 
@@ -40,7 +40,7 @@ class Tab extends React.PureComponent<TabProps, TabState> {
     
     render(){
         if(this.state.isVisible){
-            if(this.props.path == 'top'){
+            if(this.props.path === 'top'){
                 return(
 
                     <Button className={this.props.styling} onClick = {() => {scroll.scrollToTop()}}> {this.props.textField} </Button>

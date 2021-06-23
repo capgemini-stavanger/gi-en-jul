@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ButtonGroup, ButtonToolbar } from 'reactstrap';
+import { Button, ButtonToolbar } from 'reactstrap';
 
 type Props = {
     nextStep: () => void,

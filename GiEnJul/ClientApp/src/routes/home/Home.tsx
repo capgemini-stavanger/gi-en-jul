@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import {Route} from 'react-router-dom'
-import { Link, animateScroll as scroll } from "react-scroll";
+import { Link } from "react-scroll";
 
 import  How  from './How';
 import Questions from './Questions';
