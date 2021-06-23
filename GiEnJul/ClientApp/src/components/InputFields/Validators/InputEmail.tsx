@@ -5,7 +5,7 @@ import IValidator from './IValidator';
 import ValidatorFlags from './ValidatorFlags';
 
 const InputEmail: FC<IValidator> = (
-    { setIsValid, value, onChange, type, name, placeholder, id, className },
+    { setIsValid, value, onChange, type, name, placeholder, id, className, disabled },
 ) => {
     return (
         <InputValidator 
@@ -17,7 +17,8 @@ const InputEmail: FC<IValidator> = (
         onChange={onChange} 
         placeholder={placeholder} 
         id={id} 
-        className={className} />
+        className={className}
+        disabled={disabled}/>
     )
 }
 

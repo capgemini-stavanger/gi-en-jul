@@ -4,12 +4,12 @@ import InputValidator from './InputValidator';
 import IValidator from './IValidator';
 import ValidatorFlags from './ValidatorFlags';
 
-const InputPhoneNumber: FC<IValidator> = (
+const InputNotNull: FC<IValidator> = (
     { setIsValid, value, onChange, type, name, placeholder, id, className, disabled },
 ) => {
     return (
         <InputValidator 
-        validatorFlag={ValidatorFlags.PhoneNumber} 
+        validatorFlag={ValidatorFlags.NotNull} 
         setIsValid={setIsValid} 
         type={type} 
         name={name} 
@@ -22,4 +22,4 @@ const InputPhoneNumber: FC<IValidator> = (
     )
 }
 
-export default InputPhoneNumber;
+export default InputNotNull;

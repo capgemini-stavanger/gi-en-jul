@@ -14,10 +14,21 @@ interface InputValidatorProps {
     placeholder?: string, 
     id?: string,
     className?: string,
+    disabled?: boolean,
 }
 
 const InputValidator: FC<InputValidatorProps> = (
-    { validatorFlag, setIsValid, value, onChange, type, name, placeholder, id, className },
+    { validatorFlag, 
+        setIsValid, 
+        value, 
+        onChange, 
+        type, 
+        name, 
+        placeholder, 
+        id, 
+        className, 
+        disabled,
+     },
 ) => {
 
     function isNotNull(inputValue: string) {
@@ -54,7 +65,8 @@ const InputValidator: FC<InputValidatorProps> = (
         onChange={onChange} 
         placeholder={placeholder} 
         id={id} 
-        className={className} />
+        className={className} 
+        disabled={disabled}/>
     )
 }
 

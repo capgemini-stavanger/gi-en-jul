@@ -7,6 +7,7 @@
     placeholder?: string,
     id?: string,
     className?: string,
+    disabled?: boolean,
 }
 
 export default IValidator;
