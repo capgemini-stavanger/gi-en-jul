@@ -52,21 +52,24 @@ class SignUp extends React.PureComponent<{}, State>{
     handleFamilyChange = (newFamilyType: Object) => {
         var value = Object.values(newFamilyType)[0]
         this.setState({ familyType: value})
-        if (value == 'Liten familie') {
+        if (value === 'Liten familie') {
             this.setState({ maxRecievers: 2 })
         }
-        if (value== 'Vanlig familie'){
+        if (value === 'Vanlig familie'){
             this.setState({ maxRecievers: 5 })
         }
-        if (value == 'Stor familie') {
+        if (value === 'Stor familie') {
             this.setState({ maxRecievers: 100 })
         }
     }
+
+    
 
     render() {
         // const { step } = this.state;
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
+        const submit = { location, fullname, email, phoneNumber, maxRecievers}
         const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
@@ -118,6 +121,7 @@ class SignUp extends React.PureComponent<{}, State>{
                         <SummaryRegistration
                             nextStep={this.nextStep}
                             prevStep={this.prevStep}
+                            submit={submit}
                             values={values}
                         ></SummaryRegistration>
                     </div>
@@ -125,7 +129,7 @@ class SignUp extends React.PureComponent<{}, State>{
             case 5:
                 return (
                     <div>
-                        <Confirmation></Confirmation>
+                        <Confirmation values={ values }></Confirmation>
                     </div>
                 )
             default:

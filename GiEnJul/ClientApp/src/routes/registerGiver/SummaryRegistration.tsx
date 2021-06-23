@@ -4,14 +4,21 @@ import { Button, ButtonToolbar } from 'reactstrap';
 type Props = {
     nextStep: () => void,
     prevStep: () => void,
-
+    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number };
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string}
 }
 
-const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, values }) => {
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, values }) => {
 
-    const Continue = (e: any) => {
+    const Submit = (e: any) => {
         e.preventDefault();
+        fetch('https://localhost:5001/api/giver', {
+            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submit)
+        })
         nextStep();
     }
 
@@ -35,7 +42,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, values }) =>
 
             <ButtonToolbar>
                 <Button onClick={Previous}>Tilbake</Button>
-                <Button onClick={Continue} >Bli giver</Button>
+                <Button onClick={Submit} >Bli giver</Button>
             </ButtonToolbar>
         </div>
     )
