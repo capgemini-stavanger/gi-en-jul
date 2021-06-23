@@ -1,4 +1,4 @@
-name: Build backend service ASP.NET CORE 3.1 APP
+name: Build and Test .NET API
 
 on:
   push:
@@ -12,21 +12,26 @@ on:
   workflow_dispatch:
   
 env:
-  DOTNET_VERSION: '3.1.409'
+  DOTNET_VERSION: '3.1.x'
 
 jobs:
   build:
     runs-on: ubuntu-latest    
 
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Set up . NET Core
-        uses: actions/setup-dotnet@1
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: dotnet build
-        run: |
-              dotnet restore
-              dotnet build
+      - name: Install dependencies
+        run: dotnet restore
+      
+      - name: Build
+        run: dotnet build
+      
+      - name: Test
+        run: dotnet test
