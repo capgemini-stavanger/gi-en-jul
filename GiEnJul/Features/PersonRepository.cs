@@ -2,6 +2,7 @@
 using GiEnJul.Infrastructure;
 using System.Threading.Tasks;
 using GiEnJul.Entities;
+using Serilog;
 
 namespace GiEnJul.Features
 {
@@ -13,7 +14,7 @@ namespace GiEnJul.Features
 
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
     {
-        public PersonRepository(ISettings settings, IMapper mapper, string tableName = "Person") : base(settings, tableName, mapper)
+        public PersonRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Person") : base(settings, tableName, mapper, log)
         { }
 
         public async Task<Person> InsertOrReplaceAsync(Models.Person model)
