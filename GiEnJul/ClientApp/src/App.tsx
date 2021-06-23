@@ -6,6 +6,7 @@ import FetchData from './components/FetchData';
 import SignUp from './routes/registerGiver/SignUp';
 
 import './custom.css'
+import Registration from './components/Registration';
 
 
 export default () => (
@@ -13,5 +14,6 @@ export default () => (
         <Route exact path='/' component={Home} />
         <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
         <Route path='/bli-giver' component={ SignUp }></Route>
+        <Route path='/registration' component={Registration} />
     </Layout>
 );
