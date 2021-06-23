@@ -1,6 +1,4 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { useState } from 'react';
 import './style.css'
 
 function AdminMenu() {

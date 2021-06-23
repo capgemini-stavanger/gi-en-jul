@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
 import { useState } from 'react';
 import AdminMenu from '../common/AdminMenu';
 import Suggested from './Suggested';
