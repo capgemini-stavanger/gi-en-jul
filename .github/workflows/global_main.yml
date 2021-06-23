@@ -37,4 +37,4 @@ jobs:
 
       - name: Build React app
         run: npm run build
-        working-directory: /GiEnJul/ClientApp
+        working-directory: ./GiEnJul/ClientApp
