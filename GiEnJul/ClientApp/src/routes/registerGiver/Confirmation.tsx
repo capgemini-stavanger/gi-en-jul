@@ -2,7 +2,12 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { Button } from 'reactstrap';
 
+type Props = {
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string; }
+}
+
 const Confirmation = () => {
+
     return (
         <div>
             <h1>Takk for at du gir en jul</h1>
