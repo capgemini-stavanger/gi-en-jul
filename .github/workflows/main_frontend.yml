@@ -1,4 +1,4 @@
-name: Build frontend - React App
+name: Build frontend - React App and run tests
 
 on:
   push:
@@ -16,13 +16,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Install Dependencies
         run: npm install
+        working-directory: ./GiEnJul/ClientApp
 
       - name: Build
-        run: npm start
+        run: npm run build
+        working-directory: ./GiEnJul/ClientApp
         
       - name: Test
         run: npm test --watchAll=false
+        working-directory: ./GiEnJul/ClientApp
