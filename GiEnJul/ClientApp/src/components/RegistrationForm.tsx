@@ -40,7 +40,7 @@ function RegistrationForm() {
                     <div>
                         {
                         Object.keys(Lokasjon).map((k1, i1) => (
-                            <Location key={k1+i1} check={Lokasjon[k1]} onchange={(e) => handleChange(e)} name={k1}/>
+                            <Location key={k1+i1} check={Lokasjon[k1]} onchange={handleChange} name={k1}/>
                         ))}
                     </div>         
                 </div>
@@ -48,7 +48,7 @@ function RegistrationForm() {
                     {formpersons.map(p =>
                         <PersonField key={p} personid={p} />)}
                 </div>
-                <button onClick= {() => addPerson()}>Legg til flere</button>
+                <input type="button" onClick={addPerson} value="Legg til flere" />
                 <div className="form-group">
                             <h3>Matønsker</h3>
                             <h4>Middag</h4>
