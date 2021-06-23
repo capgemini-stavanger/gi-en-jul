@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Table;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
 {
     public class Giver : TableEntity
     {
-        // RowKey = Guid
-        // PartitionKey = loc_{location}
-        public Giver(string location, string rowKey) : base(location, rowKey)
+        public Giver(string location)
         {
+            RowKey = Guid.NewGuid().ToString();
             PartitionKey = $"loc_{location}";
-            RowKey = rowKey;
+            Location = location;
         }
+
+
 
         public int MaxRecievers { get; set; }
         public string Location { get; set; }
-
         [ProtectedPersonalData]
         public string FullName { get; set; }
         [ProtectedPersonalData]
