@@ -1,14 +1,17 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
+using System;
 
 namespace GiEnJul.Models
 {
     public class Giver : TableEntity
     {
-        public Giver(string location, string rowKey) : base(location, rowKey)
+
+        public Giver(string location)
         {
+            RowKey = Guid.NewGuid().ToString();
             PartitionKey = $"loc_{location}";
-            RowKey = rowKey;
+            Location = location;
         }
 
         public int MaxRecievers { get; set; }
