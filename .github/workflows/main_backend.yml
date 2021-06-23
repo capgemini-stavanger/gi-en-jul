@@ -4,10 +4,12 @@ on:
   push:
     branches: [ master ]
     paths: 'GiEnJul/**'
+    paths-ignore: 'GiEnJul/ClientApp/**'
       
   pull_request:
     branches: [ master ]
     paths: 'GiEnJul/**'
+    paths-ignore: 'GiEnJul/ClientApp/**'
 
   workflow_dispatch:
   
