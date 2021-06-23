@@ -1,0 +1,32 @@
+name: Build backend service ASP.NET CORE 3.1 APP
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore: 'GiEnJul/ClientApp/**'
+      
+  pull_request:
+    branches: [ master ]
+    paths-ignore: 'GiEnJul/ClientApp/**'
+
+  workflow_dispatch:
+  
+env:
+  DOTNET_VERSION: '3.1.409'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up . NET Core
+        uses: actions/setup-dotnet@1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: dotnet build
+        run: |
+              dotnet restore
+              dotnet build
