@@ -1,0 +1,28 @@
+name: Build and deploy frontend - React App
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'GiEnJul/ClientApp/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'GiEnJul/ClientApp/**'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build
+        run: npm start
+        
+      - name: Test
+        run: npm test --watchAll=false
