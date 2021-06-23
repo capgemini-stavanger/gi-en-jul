@@ -7,10 +7,6 @@ type Props = {
 }
 
 const Confirmation: React.FC<Props> = ({ values }) => {
-    console.log(values.fullname)
-    console.log(values.email)
-
-
     return (
         <div>
             <h1>Takk for at du gir en jul {values.fullname}</h1>

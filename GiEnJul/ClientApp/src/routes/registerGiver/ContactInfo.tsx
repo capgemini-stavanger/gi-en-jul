@@ -39,8 +39,6 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                 <Button onClick={Previous}>Tilbake</Button>
                 <Button onClick={Continue} >Neste</Button>
             </ButtonToolbar>
-
-
         </div>
     )
 }
