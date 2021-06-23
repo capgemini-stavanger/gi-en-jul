@@ -40,7 +40,6 @@ function RegistrationForm() {
     const [contactEmail, setContactEmail] = useState("");
     const [isValidContactEmail, setIsValidContactEmail] = useState(false);
 
-
         function addPerson(){
             setPersons(formpersons => [...formpersons,setPersons.length+1]);
         }
@@ -125,6 +124,7 @@ function RegistrationForm() {
                             <InputEmail setIsValid={setIsValidContactEmail} onChange={(e) => setContactEmail(e.target.value)} value={contactEmail} 
                             className={isValidContactEmail ? "bg-success" : "bg-danger"} type="textarea" id="kontaktepost" placeholder="Epost" />
                             <br/>
+
                         </div>
                         <input type="submit" value="Send" />
             </form>
