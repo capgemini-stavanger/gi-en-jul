@@ -1,0 +1,40 @@
+name: Build and Test .NET API and Build Reactapp solution
+
+on:
+  push:
+    branches: [ master, task6/added-ci-workflows ]
+    paths: 'GiEnJul/**'
+      
+  pull_request:
+    branches: [ master, task6/added-ci-workflows ]
+    paths: 'GiEnJul/**'
+
+  workflow_dispatch:
+  
+env:
+  DOTNET_VERSION: '3.1.x'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up . NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install dependencies
+        run: dotnet restore
+      
+      - name: Build
+        run: dotnet build
+      
+      - name: Test
+        run: dotnet test
+
+      - name: Build React app
+        run: npm run build
+        working-directory: /GiEnJul/ClientApp
