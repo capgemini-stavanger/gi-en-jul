@@ -1,10 +1,49 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
+import { Button, ButtonToolbar } from 'reactstrap';
 
-const ContactInfo = () => (
-    <div>
-        <h2>Registrer deg som giver</h2>
-    </div>
-)
+type Props = {
+    nextStep: () => void,
+    prevStep: () => void,
+    handleNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    values: { location: string | undefined; name: string | undefined; email: string | undefined; phone: number | undefined; familiyType: string | undefined; }
+}
 
-export default connect()(ContactInfo);
+const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handleNameChange, handleEmailChange, handleTlfChange, values }) => {
+
+    const Continue = (e: any) => {
+        e.preventDefault();
+        nextStep();
+    }
+
+    const Previous = (e: any) => {
+        e.preventDefault();
+        prevStep();
+    }
+
+    return (
+        <div>
+            <h1>Bli giver</h1>
+            <h3>Kontaktinformasjon</h3>
+            <label> Navn
+                <input type="text" onChange={handleNameChange} value={values.name} />
+            </label>
+            <label> Epost
+                <input type="text" onChange={handleEmailChange} value={values.email} />
+            </label>
+            <label> Mobilnummer
+                <input type="text" onChange={handleTlfChange} value={values.phone} />
+            </label>
+            <ButtonToolbar>
+                <Button onClick={Previous}>Tilbake</Button>
+                <Button onClick={Continue} >Neste</Button>
+            </ButtonToolbar>
+
+
+        </div>
+    )
+}
+export default ContactInfo
+
+

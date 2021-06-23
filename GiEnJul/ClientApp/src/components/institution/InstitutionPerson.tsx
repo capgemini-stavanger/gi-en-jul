@@ -5,7 +5,7 @@ type PersonProps = {
     personid: number
 }
 
-const PersonField = ({ personid }: PersonProps) => {
+const InstitutionPerson = ({ personid }: PersonProps) => {
     return(
         <div >
             <input
@@ -31,5 +31,5 @@ const PersonField = ({ personid }: PersonProps) => {
     );
 };
 
-export default PersonField;
+export default InstitutionPerson;
 

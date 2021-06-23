@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using Newtonsoft.Json;
 
 namespace GiEnJul.Models
 {
@@ -18,6 +19,7 @@ namespace GiEnJul.Models
         public int Age { get; set; }
         public Gender Gender { get; set; }
 
+        [JsonIgnore]
         public Recipient Family { get; set; }
     }
 
