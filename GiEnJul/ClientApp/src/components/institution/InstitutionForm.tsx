@@ -1,14 +1,9 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import PersonField from './PersonField';
 import { useState } from 'react';
-import Location from './Location';
+import Location from './InstitutionLocation';
+import InstitutionPerson from './InstitutionPerson';
 
-interface LocationProps {
-    name:string
-    check: boolean
-    onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+
 
 let prelokasjon: {[name: string]: boolean} = {
     'Stavanger': false,
@@ -46,7 +41,7 @@ function RegistrationForm() {
                 </div>
                 <div>
                     {formpersons.map(p =>
-                        <PersonField key={p} personid={p} />)}
+                        <InstitutionPerson key={p} personid={p} />)}
                 </div>
                 <input type="button" onClick={addPerson} value="Legg til flere" />
                 <div className="form-group">
