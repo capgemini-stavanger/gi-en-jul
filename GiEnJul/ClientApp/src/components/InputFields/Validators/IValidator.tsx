@@ -5,6 +5,8 @@
     type?: string,
     name?: string,
     placeholder?: string,
+    id?: string,
+    className?: string,
 }
 
 export default IValidator;
