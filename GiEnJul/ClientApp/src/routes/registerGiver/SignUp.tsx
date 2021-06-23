@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { render } from 'react-dom';
 import Confirmation from './Confirmation';
 import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';

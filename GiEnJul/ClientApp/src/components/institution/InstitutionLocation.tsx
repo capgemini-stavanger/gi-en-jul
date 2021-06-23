@@ -1,7 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
 import { FC } from 'react';
-
 
 interface LocationProps {
     name:string
@@ -14,13 +12,6 @@ const Location:FC<LocationProps> = ({
     check,
     onchange,
 }) => {
-    // const [Check, setCheck] = useState(false);
-
-    // function handleChange(event: React.ChangeEvent<HTMLInputElement>){
-    //     setCheck(event.target.checked);
-    // }
-
-
 
     return(
         <div >
