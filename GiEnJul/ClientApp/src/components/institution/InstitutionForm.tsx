@@ -4,11 +4,11 @@ import InputEmail from '../InputFields/Validators/InputEmail';
 import InputNotNull from '../InputFields/Validators/InputNotNull';
 import InputPhoneNumber from '../InputFields/Validators/InputPhoneNumber';
 import Location from './InstitutionLocation';
-import InstitutionPerson from './InstitutionPerson';
-import InstitutionPersonInterface from './InstitutionPersonInterface';
+import FormPerson from './FormPerson';
+import IFormPerson from './IFormPerson';
 
 
-let prelokasjon: string[] = [
+let preLocation: string[] = [
     'Stavanger',
     'Sandnes',
     'Bodø',
@@ -17,7 +17,7 @@ let prelokasjon: string[] = [
 ];
 
 const RegistrationForm = () => {
-    const [persons, setPersons] = useState([{} as InstitutionPersonInterface]);
+    const [persons, setPersons] = useState([{} as IFormPerson]);
     const [location, setLocation] = useState("");
     
     const [dinnerRadio, setDinnerRadio] = useState("");
@@ -43,11 +43,11 @@ const RegistrationForm = () => {
     const [isValidContactEmail, setIsValidContactEmail] = useState(false);
 
     const addPerson = () => {
-        setPersons(formpersons => [...formpersons, {} as InstitutionPersonInterface]);
+        setPersons(formpersons => [...formpersons, {} as IFormPerson]);
         console.log(persons);
     }
 
-    const updatePerson = (newPerson: InstitutionPersonInterface, index: number) => {
+    const updatePerson = (newPerson: IFormPerson, index: number) => {
         setPersons(formpersons => {
             formpersons[index] = newPerson;
             return formpersons;
@@ -74,7 +74,7 @@ const RegistrationForm = () => {
                 <h3>Hvor ønsker du å registrere familie (velg en)</h3>
                 <div>
                     {
-                    prelokasjon.map(l => (
+                    preLocation.map(l => (
                         <Location key={l} onChange={onLocationChange} value={l}/>
                     ))}
                 </div>
@@ -82,7 +82,7 @@ const RegistrationForm = () => {
             </div>
             <div>
                 {persons.map((p, i) =>
-                    <InstitutionPerson key={"person" + i} person={p} updatePerson={(newPerson: InstitutionPersonInterface) => updatePerson(newPerson, i)} />)}
+                    <FormPerson key={"person" + i} person={p} updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} />)}
             </div>
             <input type="button" onClick={addPerson} value="Legg til flere" />
             <div className="form-group">

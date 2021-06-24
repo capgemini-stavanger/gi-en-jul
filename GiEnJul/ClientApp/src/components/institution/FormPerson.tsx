@@ -2,12 +2,12 @@ import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import Gender from '../../common/enums/Gender';
 import InputNotNull from '../InputFields/Validators/InputNotNull';
-import InstitutionPersonInterface from './InstitutionPersonInterface';
+import IFormPerson from './IFormPerson';
 
 
 interface PersonProps {
-    updatePerson: (newPerson: InstitutionPersonInterface) => void,
-    person: InstitutionPersonInterface,
+    updatePerson: (newPerson: IFormPerson) => void,
+    person: IFormPerson,
 }
 
 const InstitutionPerson: FC<PersonProps> = (
