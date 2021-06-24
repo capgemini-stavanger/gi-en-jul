@@ -11,6 +11,8 @@ namespace GiEnJul.Infrastructure
             CreateMap<Models.Person, Entities.Person>();
             CreateMap<Entities.Giver, Models.Giver>();
             CreateMap<Models.Giver, Entities.Giver>();
+            CreateMap<Entities.Recipient, Models.Recipient>();
+            CreateMap<Models.Recipient, Entities.Recipient>();
         }
     }
 }
