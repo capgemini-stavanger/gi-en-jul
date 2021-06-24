@@ -14,7 +14,7 @@ const Confirmation: React.FC<Props> = ({ values }) => {
     return (
         <div>
             <h1>Takk for at du gir en jul {values.fullname}</h1>
-            <p>Vi har nå registret deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  { values.email}. Når det nermer seg jul vil vi sende deg mer informasjon. </p>
+            <p>Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  { values.email}. Når det nærmer seg jul vil vi sende deg mer informasjon. </p>
             <p><Route render={({ history }) => (
                 <Button onClick={() => { history.push('/') }}>Til forsiden</Button>)} />
             </p>
