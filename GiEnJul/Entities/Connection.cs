@@ -4,6 +4,10 @@ namespace GiEnJul.Entities
 {
     public class Connection : TableEntity
     {
+        public Connection()
+        {
+        }
+
         // RowKey = Guid
         // PartitionKey = loc_{receiverLocation}
         public Connection(string receiverLocation, string rowKey) : base(receiverLocation, rowKey)

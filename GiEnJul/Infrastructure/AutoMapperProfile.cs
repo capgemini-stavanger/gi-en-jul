@@ -11,7 +11,7 @@ namespace GiEnJul.Infrastructure
             CreateMap<Models.Person, Entities.Person>();
             CreateMap<Entities.Giver, Models.Giver>();
             CreateMap<Models.Giver, Entities.Giver>();
-            CreateMap<Models.Giver,Entities.Connection >();
+            CreateMap<Models.Giver, Entities.Connection>();
             CreateMap<Models.Recipient, Entities.Connection>();
             CreateMap<Models.Giver, Entities.Connection>()
                 .ForMember(dest => dest.GiverEmail, opt => opt.MapFrom(src => src.Email))
