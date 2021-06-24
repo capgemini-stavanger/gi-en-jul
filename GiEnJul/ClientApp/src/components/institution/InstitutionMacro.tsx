@@ -7,6 +7,4 @@ export default () => (
         <RegistrationInfo/>
         <RegistrationForm/>
     </React.Fragment>
-
-
 );
