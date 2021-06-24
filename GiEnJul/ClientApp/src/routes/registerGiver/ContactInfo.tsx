@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ButtonToolbar } from 'reactstrap';
+import { Button, Grid, TextField} from '@material-ui/core';
 
 type Props = {
     nextStep: () => void,
@@ -24,21 +24,54 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
 
     return (
         <div>
-            <h1>Bli giver</h1>
-            <h3>Kontaktinformasjon</h3>
-            <label> Navn
-                <input type="text" onChange={handlefullnameChange} value={values.fullname} />
-            </label>
-            <label> Epost
-                <input type="text" onChange={handleEmailChange} value={values.email} />
-            </label>
-            <label> Mobilnummer
-                <input type="text" onChange={handleTlfChange} value={values.phoneNumber} />
-            </label>
-            <ButtonToolbar>
-                <Button onClick={Previous}>Tilbake</Button>
-                <Button onClick={Continue} >Neste</Button>
-            </ButtonToolbar>
+            <form className="form" noValidate>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="fullname"
+                    label="Fult navn"
+                    name="fullname"
+                    autoComplete="name"
+                    autoFocus
+                    value={values.fullname}
+                    onChange={handlefullnameChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Epost"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={values.email}
+                    onChange={handleEmailChange} 
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="phoneNumber"
+                    label="Telefonnummer"
+                    id="phoneNumber"
+                    autoComplete="tel"
+                    value={values.phoneNumber}
+                    onChange={handleTlfChange} 
+                />
+            </form>
+            <Grid container spacing={2} justify="center">
+                <Grid item>
+                    <Button variant="contained" onClick={Previous}>Tilbake</Button>
+                    </Grid>
+                <Grid item>
+                    <Button variant="contained" onClick={Continue}>Neste</Button>
+                </Grid>
+            </Grid>
         </div>
     )
 }

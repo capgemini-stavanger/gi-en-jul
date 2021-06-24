@@ -1,17 +1,7 @@
 import * as React from 'react';
-/*import { Button, ButtonToolbar } from 'reactstrap';*/
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+
+import { Button, Grid, TextField} from '@material-ui/core';
+
 
 type Props = {
     nextStep: () => void,
@@ -41,19 +31,83 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
 
     return (
         <div>
-            <h5>Sted:</h5>
-            <h6>{values.location}</h6>
-            <h5>Navn:</h5>
-            <h6>{values.fullname}</h6>
-            <h5>Epostadresse:</h5>
-            <h6>{values.email}</h6>
-            <h5>Telefonnummer:</h5>
-            <h6>{values.phoneNumber}</h6>
-            <h5>Ønsket familiesammensetning:</h5>
-            <h6>{values.familyType}</h6>
-
-                <Button onClick={Previous}>Tilbake</Button>
-                <Button onClick={Continue} >Neste</Button>
+            <form className="form" noValidate>
+                <TextField
+                    disabled
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="location"
+                    label="Lokasjon"
+                    name="location"
+                    autoFocus
+                    value={values.location}
+                //onChange={handlefullnameChange}
+                />
+                <TextField
+                    disabled
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="fullname"
+                    label="Fult navn"
+                    name="fullname"
+                    autoComplete="name"
+                    autoFocus
+                    value={values.fullname}
+                    //onChange={handlefullnameChange}
+                />
+                <TextField
+                    disabled
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Epost"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    value={values.email}
+                   // onChange={handleEmailChange}
+                />
+                <TextField
+                    disabled
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="phoneNumber"
+                    label="Telefonnummer"
+                    id="phoneNumber"
+                    autoComplete="tel"
+                    value={values.phoneNumber}
+                    // onChange={handleTlfChange}
+                />
+            </form>
+            <TextField
+                disabled
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="maxRecievers"
+                label="Familiesammensetning"
+                id="maxRecieverse"
+                autoComplete="tel"
+                value={values.familyType}
+            // onChange={handleTlfChange}
+            />
+             <Grid container spacing={2} justify="center">
+                <Grid item>
+                    <Button variant="contained" onClick={Previous}>Tilbake</Button>
+                    </Grid>
+                <Grid item>
+                    <Button variant="contained" onClick={Submit}>Bli giver</Button>
+                </Grid>
+            </Grid>
         </div>
     )
 

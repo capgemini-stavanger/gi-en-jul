@@ -5,18 +5,13 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
 
-//Material ui
-import Avatar from '@material-ui/core/Avatar';
-import { Button, ButtonGroup, CssBaseline, Typography, Container } from '@material-ui/core';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import { Button, Grid,  Select, MenuItem, Container} from '@material-ui/core';
+
 
 type Props = {
   nextStep: () => void,
   prevStep?: () => void,
-  handleLocationChange: (newLocation: Object) => void,
+    handleLocationChange: (event: any) => void,
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string }
   options: string[],
   placeHolder: string,
@@ -35,26 +30,52 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
     const Previous = (e: any) => {
       e.preventDefault();
       prevStep();
-    }
-    return (
-      <div className = "form">
-            <Dropdown options={options} value={values.familiyType} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
+      }
+      
+      return (
+          <Container>
+            <form className="form" noValidate>
+                <Select
+                    variant="outlined"
+                    margin="dense"
+                    required
+                    fullWidth
+                    id="familyType-input"
+                    placeholder={placeHolder}
+                    onChange={handleLocationChange}
+                >
+                    {options.map(x =>
+                        <MenuItem value={x}>{x}</MenuItem>)}
+                </Select>
+            </form>
             <Grid container spacing={2} justify="center">
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" onClick={Continue} >Neste</Button>
+                    <Button variant="contained" onClick={Continue}>Neste</Button>
                 </Grid>
             </Grid>
-                
-                
-      </div>
+          </Container>
     )
   }
   return (
-    <div>
-          <Dropdown options={options} value={values.location} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
+      <Container>
+          <form className="form" noValidate>
+              <Select
+                  variant="outlined"
+                  margin="dense"
+                  required
+                  fullWidth
+                  id="location-input"
+                  placeholder={placeHolder}
+                  onChange={handleLocationChange}
+                  value={values.location}
+              >
+                  {options.map(x =>
+                      <MenuItem value={x}>{x}</MenuItem>)}
+              </Select>
+          </form>
           <Grid container spacing={2} justify="center">
               <Grid item>
               <Route render={({ history }) => (
@@ -64,7 +85,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                   <Button variant="contained" onClick={Continue}>Neste</Button>
               </Grid>
           </Grid>
-    </div>
+      </Container>
   )
 
 }

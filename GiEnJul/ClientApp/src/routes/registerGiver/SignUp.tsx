@@ -5,18 +5,7 @@ import LocationGiver from './LocationGiver';
 import SummaryRegistration from './SummaryRegistration';
 
 //Material ui
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { CssBaseline, Typography, Container } from '@material-ui/core';
 
 interface State {
     step: number,
@@ -33,25 +22,25 @@ class SignUp extends React.PureComponent<{}, State>{
         step: 1,
     };
 
-    useStyles = makeStyles((theme) => ({
-        paper: {
-            marginTop: theme.spacing(8),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-        },
-        avatar: {
-            margin: theme.spacing(1),
-            backgroundColor: theme.palette.secondary.main,
-        },
-        form: {
-            width: '100%', // Fix IE 11 issue.
-            marginTop: theme.spacing(1),
-        },
-        submit: {
-            margin: theme.spacing(3, 0, 2),
-        },
-    }));
+    //useStyles = makeStyles((theme) => ({
+    //    paper: {
+    //        marginTop: theme.spacing(8),
+    //        display: 'flex',
+    //        flexDirection: 'column',
+    //        alignItems: 'center',
+    //    },
+    //    avatar: {
+    //        margin: theme.spacing(1),
+    //        backgroundColor: theme.palette.secondary.main,
+    //    },
+    //    form: {
+    //        width: '100%', // Fix IE 11 issue.
+    //        marginTop: theme.spacing(1),
+    //    },
+    //    submit: {
+    //        margin: theme.spacing(3, 0, 2),
+    //    },
+    //}));
 
     // go back to previous step
     prevStep = () => {
@@ -79,12 +68,12 @@ class SignUp extends React.PureComponent<{}, State>{
         this.setState({ phoneNumber: parseInt(event.target.value) })
     }
 
-    handleLocationChange = (newLocation: Object) => {
-        this.setState({ location: Object.values(newLocation)[0] })
+    handleLocationChange = (event: any) => {
+        this.setState({ location: event.target.value })
     }
 
-    handleFamilyChange = (newFamilyType: Object) => {
-        var value = Object.values(newFamilyType)[0]
+    handleFamilyChange = (event: any) => {
+        var value = event.target.value;
         this.setState({ familyType: value})
         if (value === 'Liten familie') {
             this.setState({ maxRecievers: 2 })
@@ -100,14 +89,12 @@ class SignUp extends React.PureComponent<{}, State>{
     
 
     render() {
-        // const { step } = this.state;
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
         const submit = { location, fullname, email, phoneNumber, maxRecievers}
         const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
-/*        const classes = this.useStyles();*/
         
 
         switch (this.state.step) {
@@ -116,7 +103,7 @@ class SignUp extends React.PureComponent<{}, State>{
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <div className = 'paper'>
-                            <Typography component="h1" variant="h5">
+                            <Typography component="h1" variant="h4">
                                 Bli giver
                             </Typography>
                             <Typography component="h2">
@@ -134,20 +121,37 @@ class SignUp extends React.PureComponent<{}, State>{
                 )
             case 2:
                 return (
-                    <div><ContactInfo
-                        nextStep={this.nextStep}
-                        prevStep={this.prevStep}
-                        handlefullnameChange={this.handlefullnameChange}
-                        handleEmailChange={this.handleEmailChange}
-                        handleTlfChange={this.handleTlfChange}
-                        values={values}
-                    ></ContactInfo></div>
+                       <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className = 'paper'>
+                            <Typography component="h1" variant="h4">
+                                Bli giver
+                            </Typography>
+                            <Typography component="h2">
+                                Kontaktinformasjon
+                            </Typography>
+                            <ContactInfo
+                                nextStep={this.nextStep}
+                                prevStep={this.prevStep}
+                                handlefullnameChange={this.handlefullnameChange}
+                                handleEmailChange={this.handleEmailChange}
+                                handleTlfChange={this.handleTlfChange}
+                                values={values}
+                            ></ContactInfo>
+                        </div>
+                    </Container>
                 )
             case 3:
                 return (
-                    <div>
-                        <h1>Bli giver</h1>
-                        <h3>Ønsket familiesammensetning</h3>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className='paper'>
+                            <Typography component="h1" variant="h4">
+                                Bli giver
+                            </Typography>
+                            <Typography component="h2">
+                                Familiesammensetning
+                            </Typography>
                         <LocationGiver
                             nextStep={this.nextStep}
                             prevStep={this.prevStep}
@@ -155,27 +159,38 @@ class SignUp extends React.PureComponent<{}, State>{
                             values={values}
                             options={familiyOptions}
                             placeHolder={'Familiestørrelse'}
-                        ></LocationGiver></div>
+                            ></LocationGiver>
+                        </div>
+                    </Container>
                 )
             case 4:
                 return (
-                    <div>
-                        <h1>Bli giver</h1>
-                        <h3>Oppsummering</h3>
-                        <p>Du er snart et fantastisk menneske :D</p>
-                        <SummaryRegistration
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className='paper'>
+                            <Typography component="h1" variant="h4">
+                                Bli giver
+                            </Typography>
+                            <Typography component="h2">
+                                Oppsummering
+                            </Typography>
+                          <SummaryRegistration
                             nextStep={this.nextStep}
                             prevStep={this.prevStep}
                             submit={submit}
                             values={values}
                         ></SummaryRegistration>
-                    </div>
+                        </div>
+                    </Container>
                 )
             case 5:
                 return (
-                    <div>
-                        <Confirmation values={ values }></Confirmation>
-                    </div>
+                       <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className='paper'>
+                                <Confirmation values={ values }></Confirmation>
+                        </div>
+                    </Container>
                 )
             default:
         };
