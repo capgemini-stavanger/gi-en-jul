@@ -5,7 +5,7 @@ import IValidator from './IValidator';
 import ValidatorFlags from './ValidatorFlags';
 
 const InputNotNull: FC<IValidator> = (
-    { setIsValid, value, onChange, type, name, placeholder, id, className, disabled },
+    { setIsValid, value, onChange, type, name, placeholder, id, className, disabled, min, max },
 ) => {
     return (
         <InputValidator 
@@ -18,7 +18,10 @@ const InputNotNull: FC<IValidator> = (
         placeholder={placeholder} 
         id={id} 
         className={className} 
-        disabled={disabled}/>
+        disabled={disabled}
+        min={min}
+        max={max}
+        />
     )
 }
 

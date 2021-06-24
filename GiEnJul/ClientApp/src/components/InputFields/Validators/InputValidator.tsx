@@ -1,20 +1,12 @@
 ﻿import * as React from 'react';
 import { FC, useEffect } from 'react';
 import validator from 'validator';
+import IValidator from './IValidator';
 import ValidatorFlags from './ValidatorFlags';
 
 
-interface InputValidatorProps {
+interface InputValidatorProps extends IValidator {
     validatorFlag: ValidatorFlags,   // Flag. Can use multiple with bitwise or: Flag1 | Flag2
-    setIsValid: (isValid: boolean) => void,
-    value: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    type?: string,
-    name?: string,
-    placeholder?: string, 
-    id?: string,
-    className?: string,
-    disabled?: boolean,
 }
 
 const InputValidator: FC<InputValidatorProps> = (
@@ -28,6 +20,8 @@ const InputValidator: FC<InputValidatorProps> = (
         id, 
         className, 
         disabled,
+        min,
+        max,
      },
 ) => {
 
@@ -66,7 +60,10 @@ const InputValidator: FC<InputValidatorProps> = (
         placeholder={placeholder} 
         id={id} 
         className={className} 
-        disabled={disabled}/>
+        disabled={disabled}
+        min={min}
+        max={max}
+        />
     )
 }
 
