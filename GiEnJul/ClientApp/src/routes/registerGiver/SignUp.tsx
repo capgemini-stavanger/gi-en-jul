@@ -4,6 +4,20 @@ import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
 import SummaryRegistration from './SummaryRegistration';
 
+//Material ui
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+
 interface State {
     step: number,
     location?: string,
@@ -18,6 +32,26 @@ class SignUp extends React.PureComponent<{}, State>{
     state: State = {
         step: 1,
     };
+
+    useStyles = makeStyles((theme) => ({
+        paper: {
+            marginTop: theme.spacing(8),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+        avatar: {
+            margin: theme.spacing(1),
+            backgroundColor: theme.palette.secondary.main,
+        },
+        form: {
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(1),
+        },
+        submit: {
+            margin: theme.spacing(3, 0, 2),
+        },
+    }));
 
     // go back to previous step
     prevStep = () => {
@@ -73,19 +107,30 @@ class SignUp extends React.PureComponent<{}, State>{
         const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
+/*        const classes = this.useStyles();*/
+        
+
         switch (this.state.step) {
             case 1:
                 return (
-                    <div>
-                        <h1>Bli giver</h1>
-                        <h3>Hvor vil du gi?</h3>
-                        <LocationGiver
-                            nextStep={this.nextStep}
-                            handleLocationChange={this.handleLocationChange}
-                            values={values}
-                            options={locationOptions}
-                            placeHolder={'Velg et sted...'}
-                        ></LocationGiver></div>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className = 'paper'>
+                            <Typography component="h1" variant="h5">
+                                Bli giver
+                            </Typography>
+                            <Typography component="h2">
+                                Hvor vil du gi?
+                            </Typography>
+                            <LocationGiver
+                                nextStep={this.nextStep}
+                                handleLocationChange={this.handleLocationChange}
+                                values={values}
+                                options={locationOptions}
+                                placeHolder={'Velg et sted...'}
+                            ></LocationGiver>
+                        </div>
+                    </Container>
                 )
             case 2:
                 return (
