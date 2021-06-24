@@ -8,13 +8,14 @@ type Props = {
   nextStep: () => void,
   prevStep?: () => void,
   handleLocationChange: (newLocation: Object) => void,
-  values: { location?: string; name?: string; email?: string; phone?: number; familiyType?: string; }
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string }
   options: string[],
   placeHolder: string,
 }
 
 
 const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, values, options, placeHolder }) => {
+
 
   const Continue = (e: any) => {
     e.preventDefault();
@@ -27,8 +28,8 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
       prevStep();
     }
     return (
-      <div>
-        <Dropdown options={options} value={values.familiyType} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
+        <div>
+            <Dropdown options={options} value={values.familyType} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
         <ButtonToolbar>
           <Button onClick={Previous}>Tilbake</Button>
           <Button onClick={Continue} >Neste</Button>

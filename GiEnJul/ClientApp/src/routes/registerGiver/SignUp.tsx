@@ -7,20 +7,16 @@ import SummaryRegistration from './SummaryRegistration';
 interface State {
     step: number,
     location?: string,
-    name?: string,
+    fullname?: string,
     email?: string,
-    phone?: number,
-    familiyType?: string,
+    phoneNumber?: number,
+    maxRecievers?: number,
+    familyType?: string, 
 }
 
 class SignUp extends React.PureComponent<{}, State>{
     state: State = {
         step: 1,
-        location: undefined,
-        name: undefined,
-        email: undefined,
-        phone: undefined,
-        familiyType: undefined,
     };
 
     // go back to previous step
@@ -39,31 +35,42 @@ class SignUp extends React.PureComponent<{}, State>{
     handleChange = (input: any) => (event: React.ChangeEvent<HTMLInputElement>) => {
         // this.setState({input}: event.target.value);
     }
-    handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ name: event.target.value })
+    handlefullnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ fullname: event.target.value })
     }
     handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ email: event.target.value })
     }
     handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ phone: parseInt(event.target.value) })
+        this.setState({ phoneNumber: parseInt(event.target.value) })
     }
 
     handleLocationChange = (newLocation: Object) => {
         this.setState({ location: Object.values(newLocation)[0] })
     }
 
-    handleFamilyChange = (newLocation: Object) => {
-        this.setState({ familiyType: Object.values(newLocation)[0] })
+    handleFamilyChange = (newFamilyType: Object) => {
+        var value = Object.values(newFamilyType)[0]
+        this.setState({ familyType: value})
+        if (value === 'Liten familie') {
+            this.setState({ maxRecievers: 2 })
+        }
+        if (value === 'Vanlig familie'){
+            this.setState({ maxRecievers: 5 })
+        }
+        if (value === 'Stor familie') {
+            this.setState({ maxRecievers: 100 })
+        }
     }
 
-
+    
 
     render() {
         // const { step } = this.state;
-        const { location, name, email, phone, familiyType } = this.state;
-        const values = { location, name, email, phone, familiyType }
-        const locationOptions = ['Stavanger', 'Sola', 'Sandnes'];
+        const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
+        const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
+        const submit = { location, fullname, email, phoneNumber, maxRecievers}
+        const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
         switch (this.state.step) {
@@ -85,7 +92,7 @@ class SignUp extends React.PureComponent<{}, State>{
                     <div><ContactInfo
                         nextStep={this.nextStep}
                         prevStep={this.prevStep}
-                        handleNameChange={this.handleNameChange}
+                        handlefullnameChange={this.handlefullnameChange}
                         handleEmailChange={this.handleEmailChange}
                         handleTlfChange={this.handleTlfChange}
                         values={values}
@@ -102,7 +109,7 @@ class SignUp extends React.PureComponent<{}, State>{
                             handleLocationChange={this.handleFamilyChange}
                             values={values}
                             options={familiyOptions}
-                            placeHolder={'Familiestørrlse'}
+                            placeHolder={'Familiestørrelse'}
                         ></LocationGiver></div>
                 )
             case 4:
@@ -114,6 +121,7 @@ class SignUp extends React.PureComponent<{}, State>{
                         <SummaryRegistration
                             nextStep={this.nextStep}
                             prevStep={this.prevStep}
+                            submit={submit}
                             values={values}
                         ></SummaryRegistration>
                     </div>
@@ -121,12 +129,11 @@ class SignUp extends React.PureComponent<{}, State>{
             case 5:
                 return (
                     <div>
-                        <Confirmation></Confirmation>
+                        <Confirmation values={ values }></Confirmation>
                     </div>
                 )
             default:
         };
     };
 }
-
 export default SignUp
