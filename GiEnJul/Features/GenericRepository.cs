@@ -46,13 +46,13 @@ namespace GiEnJul.Features
                 entity.ETag = "*";
                 var operation = TableOperation.Delete(entity);
                 var result = await _table.ExecuteAsync(operation);
-                _log.Debug("Deleted Entity:{@entity}, in table:@{tablename}.", entity, _table.Name);
+                _log.Debug("Deleted Entity:{@entity}, in table:{@tablename}.", entity, _table.Name);
 
                 return (T)result.Result;
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to delete Entity:{@entity}, in table:@{tablename}. \n{@Exception}", entity, _table.Name, e);
+                _log.Error("Exception while trying to delete Entity:{@entity}, in table:{@tablename}. \n{@Exception}", entity, _table.Name, e);
                 throw e;
             }
         }
@@ -86,10 +86,10 @@ namespace GiEnJul.Features
         {
             try
             {
-                _log.Verbose("Trying to add Entity:{@entity}, into table:@{tablename}", entity, _table.Name);
+                _log.Verbose("Trying to add Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
                 var operation = TableOperation.InsertOrReplace(entity);
                 var result = await _table.ExecuteAsync(operation);
-                _log.Debug("Added Entity:{@entity}, into table:@{tablename}", entity, _table.Name);
+                _log.Debug("Added Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
 
                 return (T)result.Result;
             }

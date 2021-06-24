@@ -31,6 +31,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.ReceiverLocation, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.SubmitterFullName, opt => opt.MapFrom(src => src.ContactFullName))
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+            CreateMap<Entities.Recipient, Models.Recipient>();
+            CreateMap<Models.Recipient, Entities.Recipient>();
         }
     }
 }
