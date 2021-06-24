@@ -25,7 +25,7 @@ const InstitutionPerson: FC<PersonProps> = (
 
     useEffect(() => {
         setIsValidWish(isValidWishInput || isAgeWish);
-    })
+    }, [isValidWishInput, isAgeWish])
 
     useEffect(() => {
         let tmpPerson = person;

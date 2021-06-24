@@ -78,6 +78,7 @@ const RegistrationForm = () => {
                         <Location key={l} onChange={onLocationChange} value={l}/>
                     ))}
                 </div>
+                {location}
             </div>
             <div>
                 {persons.map((p, i) =>
