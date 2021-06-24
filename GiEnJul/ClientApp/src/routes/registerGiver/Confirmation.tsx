@@ -9,11 +9,9 @@ type Props = {
 const Confirmation: React.FC<Props> = ({ values }) => {
     return (
         <Container>
-            <Typography component="h1" variant="h4">
-                Takk for at du gir en jul {values.fullname}!
+            <Typography component="h1" variant="h4">Takk for at du gir en jul {values.fullname}!
                             </Typography>
-            <Typography component="p" >
-                Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  {values.email}. Når det nærmer seg jul vil vi sende deg mer informasjon.
+            <Typography component="p" >Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  {values.email}. Når det nærmer seg jul vil vi sende deg mer informasjon.
                             </Typography>
             <Grid item >
                 <Route render={({ history }) => (

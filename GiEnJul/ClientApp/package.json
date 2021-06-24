@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "@types/react-scroll": "^1.8.2",
     "@types/validator": "^13.1.4",
     "bootstrap": "^4.3.1",

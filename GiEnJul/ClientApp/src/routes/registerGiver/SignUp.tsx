@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { CssBaseline, Typography, Container } from '@material-ui/core';
+import useStyles from './Styles';
+
+// Components
 import Confirmation from './Confirmation';
 import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
 import SummaryRegistration from './SummaryRegistration';
 
-//Material ui
-import { CssBaseline, Typography, Container } from '@material-ui/core';
 
 interface State {
     step: number,
@@ -21,26 +23,6 @@ class SignUp extends React.PureComponent<{}, State>{
     state: State = {
         step: 1,
     };
-
-    //useStyles = makeStyles((theme) => ({
-    //    paper: {
-    //        marginTop: theme.spacing(8),
-    //        display: 'flex',
-    //        flexDirection: 'column',
-    //        alignItems: 'center',
-    //    },
-    //    avatar: {
-    //        margin: theme.spacing(1),
-    //        backgroundColor: theme.palette.secondary.main,
-    //    },
-    //    form: {
-    //        width: '100%', // Fix IE 11 issue.
-    //        marginTop: theme.spacing(1),
-    //    },
-    //    submit: {
-    //        margin: theme.spacing(3, 0, 2),
-    //    },
-    //}));
 
     // go back to previous step
     prevStep = () => {
@@ -86,14 +68,13 @@ class SignUp extends React.PureComponent<{}, State>{
         }
     }
 
-    
-
     render() {
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
         const submit = { location, fullname, email, phoneNumber, maxRecievers}
         const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
+        // const classes = useStyles();
 
         
 

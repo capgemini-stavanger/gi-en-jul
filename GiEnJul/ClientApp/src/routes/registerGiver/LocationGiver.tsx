@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { ButtonToolbar } from 'reactstrap';
 import { Route } from 'react-router-dom'
-import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
 
-import { Button, Grid,  Select, MenuItem, Container} from '@material-ui/core';
+import { Button, Grid,  Select, MenuItem, Container, FormControl, InputLabel} from '@material-ui/core';
 
 
 type Props = {
@@ -34,20 +32,27 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
       
       return (
           <Container>
-            <form className="form" noValidate>
+            <FormControl 
+          variant="outlined" 
+          fullWidth
+          required
+          margin = "normal"
+          
+          >
+            <InputLabel id="familiType">Familiesammensetning</InputLabel>
                 <Select
+                    label ="Familiesammensetning"
                     variant="outlined"
-                    margin="dense"
-                    required
                     fullWidth
                     id="familyType-input"
+                    autoFocus
                     placeholder={placeHolder}
                     onChange={handleLocationChange}
                 >
                     {options.map(x =>
                         <MenuItem value={x}>{x}</MenuItem>)}
                 </Select>
-            </form>
+                </FormControl>
             <Grid container spacing={2} justify="center">
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
@@ -61,13 +66,17 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
   }
   return (
       <Container>
-          <form className="form" noValidate>
+          <FormControl 
+                    variant="outlined" 
+                    fullWidth
+                    required
+                    margin = "normal" 
+          >
+            <InputLabel id="location">Lokasjon</InputLabel>
               <Select
-                  variant="outlined"
-                  margin="dense"
-                  required
-                  fullWidth
+                label = "Lokasjon"
                   id="location-input"
+                  autoFocus
                   placeholder={placeHolder}
                   onChange={handleLocationChange}
                   value={values.location}
@@ -75,7 +84,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                   {options.map(x =>
                       <MenuItem value={x}>{x}</MenuItem>)}
               </Select>
-          </form>
+              </FormControl>
           <Grid container spacing={2} justify="center">
               <Grid item>
               <Route render={({ history }) => (
