@@ -27,11 +27,12 @@ namespace GiEnJul.Controllers
         
         // POST api/<GiverController>
         [HttpPost]
-        public async Task PostAsync([FromBody] Models.Giver giver)
+        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] Models.Giver giver)
         {   
             _log.Debug("Adding giver object: {@giver}", giver);
             var result = await _giverRepository.InsertOrReplaceAsync(giver);
             _log.Debug("Succesfully added giver: {@0}", result);
+            return CreatedAtAction(nameof(result), result);
         }
         
     }
