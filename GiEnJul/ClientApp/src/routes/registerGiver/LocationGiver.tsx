@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom'
 import useStyles from './Styles';
+import { ValidatorForm, SelectValidator} from 'react-material-ui-form-validator';
 
 
 
@@ -35,68 +36,79 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
       
       return (
           <Container>
-            <FormControl 
-          variant="outlined" 
-          fullWidth
-          required
-          margin = "normal"
-          style={{width: '100%', marginTop: '20px'}}>
-            <InputLabel id="familiType">Familiesammensetning</InputLabel>
-                <Select
-                    label ="Familiesammensetning"
+            <ValidatorForm
+            onSubmit={Continue}
+            variant="outlined"     
+            fullWidth
+            required
+            margin = "normal"
+            style={{width: '100%', marginTop: '5px'}}
+            onError={errors => console.log(errors)}
+            >
+                <SelectValidator
                     variant="outlined"
                     fullWidth
-                    id="familyType-input"
                     autoFocus
                     placeholder={placeHolder}
+                    validators={['required']}
+                    name="familyType-input"
+                    id="familyType-input"
+                    value = {values.familyType}
                     onChange={handleLocationChange}
+                    label ="Familiesammensetning"
+                    errorMessages={['Vennligst velg familiesammensetning']}
                 >
                     {options.map(x =>
                         <MenuItem value={x}>{x}</MenuItem>)}
-                </Select>
-                </FormControl>
+                </SelectValidator>
             <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item >
                     <Button variant="contained" onClick={Previous} >Tilbake</Button>
                 </Grid>
                 <Grid item>
-                    <Button variant="contained" onClick={Continue}>Neste</Button>
+                    <Button variant="contained" type="submit">Neste</Button>
                 </Grid>
             </Grid>
+            </ValidatorForm>
           </Container>
     )
   }
   return (
       <Container>
-          <FormControl 
+          <ValidatorForm 
+                    onSubmit={Continue}
+                    onError={errors => console.log(errors)}
                     variant="outlined" 
                     fullWidth
                     required
                     margin = "normal"
                     style={{width: '100%', marginTop: '20px'}}>
-
-            <InputLabel id="location">Lokasjon</InputLabel>
-              <Select
-                label = "Lokasjon"
-                  id="location-input"
+              <SelectValidator
+                  variant="outlined"
+                  fullWidth
                   autoFocus
                   placeholder={placeHolder}
+                  validators={['required']}
+                  label = "Lokasjon"
+                  name="location-input"
+                  value = {values.location}
+                  id="location-input"
                   onChange={handleLocationChange}
-                  value={values.location}
+                  errorMessages={['Vennligst velg lokasjon']}
               >
                   {options.map(x =>
                       <MenuItem value={x}>{x}</MenuItem>)}
-              </Select>
-              </FormControl>
+              </SelectValidator>
           <Grid container spacing={2} justify="center" className={classes.submit}>
               <Grid item>
               <Route render={({ history }) => (
                       <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
               </Grid>
               <Grid item>
-                  <Button variant="contained" onClick={Continue}>Neste</Button>
+                  <Button variant="contained" type="submit">Neste</Button>
               </Grid>
           </Grid>
+          </ValidatorForm>
       </Container>
   )
 

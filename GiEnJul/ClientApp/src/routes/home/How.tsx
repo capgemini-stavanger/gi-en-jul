@@ -6,7 +6,7 @@ const How = () => (
         <CssBaseline/>
         <Grid >
             <Typography variant="h5">
-                Hvordan fungerer gi en jul
+                Hvordan fungerer gi en jul?
                 </Typography >
                 <List>
                 <ListItemText primary="Alene, eller sammen med vennegjengen, kolleger, familie eller naboer bestemmer du deg for at du vil bli med på Gi en jul.">
