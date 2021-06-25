@@ -24,13 +24,13 @@ namespace GiEnJul.Entities
 
         //Submitter info
         [ProtectedPersonalData]
-        public string FullName { get; set; }        
+        public string ContactFullName { get; set; }
         [ProtectedPersonalData]
         [EmailAddress]
-        public string Email { get; set; }
+        public string ContactEmail { get; set; }
         [ProtectedPersonalData]
         [Phone]
-        public int PhoneNumber { get; set; }
+        public int ContactPhoneNumber { get; set; }
 
         //Submitter references
         public string Institution { get; set; }
