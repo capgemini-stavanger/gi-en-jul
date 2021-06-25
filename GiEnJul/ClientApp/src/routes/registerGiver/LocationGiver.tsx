@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom'
-import 'react-dropdown/style.css';
+import useStyles from './Styles';
+
 
 
 import { Button, Grid,  Select, MenuItem, Container, FormControl, InputLabel} from '@material-ui/core';
@@ -24,6 +25,8 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
     nextStep();
   }
 
+  const classes = useStyles();
+
   if (prevStep) {
     const Previous = (e: any) => {
       e.preventDefault();
@@ -37,8 +40,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
           fullWidth
           required
           margin = "normal"
-          
-          >
+          style={{width: '100%', marginTop: '20px'}}>
             <InputLabel id="familiType">Familiesammensetning</InputLabel>
                 <Select
                     label ="Familiesammensetning"
@@ -53,9 +55,9 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                         <MenuItem value={x}>{x}</MenuItem>)}
                 </Select>
                 </FormControl>
-            <Grid container spacing={2} justify="center">
-                <Grid item>
-                    <Button variant="contained" onClick={Previous}>Tilbake</Button>
+            <Grid container spacing={2} justify="center" className={classes.submit}>
+                <Grid item >
+                    <Button variant="contained" onClick={Previous} >Tilbake</Button>
                 </Grid>
                 <Grid item>
                     <Button variant="contained" onClick={Continue}>Neste</Button>
@@ -70,8 +72,9 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                     variant="outlined" 
                     fullWidth
                     required
-                    margin = "normal" 
-          >
+                    margin = "normal"
+                    style={{width: '100%', marginTop: '20px'}}>
+
             <InputLabel id="location">Lokasjon</InputLabel>
               <Select
                 label = "Lokasjon"
@@ -85,7 +88,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                       <MenuItem value={x}>{x}</MenuItem>)}
               </Select>
               </FormControl>
-          <Grid container spacing={2} justify="center">
+          <Grid container spacing={2} justify="center" className={classes.submit}>
               <Grid item>
               <Route render={({ history }) => (
                       <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />

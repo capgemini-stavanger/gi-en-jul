@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import { Button, Grid, TextField} from '@material-ui/core';
+import { Button, Grid, TextField, FormControl} from '@material-ui/core';
+import useStyles from './Styles';
 
 
 type Props = {
@@ -29,9 +30,16 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
         prevStep();
     }
 
+    const classes = useStyles();
+
     return (
         <div>
-            <form className="form" noValidate>
+            <FormControl 
+          variant="outlined" 
+          fullWidth
+          required
+          margin = "normal"
+          style={{width: '100%', marginTop: '20px'}}>
                 <TextField
                     disabled
                     variant="outlined"
@@ -86,7 +94,6 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                     value={values.phoneNumber}
                     // onChange={handleTlfChange}
                 />
-            </form>
             <TextField
                 disabled
                 variant="outlined"
@@ -100,7 +107,8 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                 value={values.familyType}
             // onChange={handleTlfChange}
             />
-             <Grid container spacing={2} justify="center">
+            </FormControl>
+             <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
                     </Grid>

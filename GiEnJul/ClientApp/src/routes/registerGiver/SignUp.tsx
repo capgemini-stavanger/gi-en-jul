@@ -68,13 +68,15 @@ class SignUp extends React.PureComponent<{}, State>{
         }
     }
 
+    
+
     render() {
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
         const submit = { location, fullname, email, phoneNumber, maxRecievers}
         const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
-        // const classes = useStyles();
+        
 
         
 

@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Button, Grid, TextField} from '@material-ui/core';
+import { Button, Grid, TextField, FormControl} from '@material-ui/core';
+import { Container } from '@material-ui/core';
+import useStyles from './Styles';
 
 type Props = {
     nextStep: () => void,
@@ -22,9 +24,16 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
         prevStep();
     }
 
+    const classes = useStyles();
+
     return (
-        <div>
-            <form className="form" noValidate>
+        <Container>
+            <FormControl 
+             variant="outlined"     
+             fullWidth
+             required
+             margin = "normal"
+            style={{width: '100%', marginTop: '5px'}}>
                 <TextField
                     variant="outlined"
                     margin="normal"
@@ -63,8 +72,8 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     value={values.phoneNumber}
                     onChange={handleTlfChange} 
                 />
-            </form>
-            <Grid container spacing={2} justify="center">
+            </FormControl>
+            <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
                     </Grid>
@@ -72,7 +81,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     <Button variant="contained" onClick={Continue}>Neste</Button>
                 </Grid>
             </Grid>
-        </div>
+            </Container>
     )
 }
 export default ContactInfo
