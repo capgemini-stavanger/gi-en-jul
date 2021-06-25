@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { CssBaseline, Typography, Container } from '@material-ui/core';
-import useStyles from './Styles';
-
-// Components
+import LOCATIONS from '../../common/constants/Locations';
 import Confirmation from './Confirmation';
 import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
@@ -74,7 +72,6 @@ class SignUp extends React.PureComponent<{}, State>{
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
         const submit = { location, fullname, email, phoneNumber, maxRecievers}
-        const locationOptions = ['Bodø', 'Nittedal', 'Sandnes','Stavanger'];
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
         
 
@@ -96,7 +93,7 @@ class SignUp extends React.PureComponent<{}, State>{
                                 nextStep={this.nextStep}
                                 handleLocationChange={this.handleLocationChange}
                                 values={values}
-                                options={locationOptions}
+                                options={LOCATIONS}
                                 placeHolder={'Velg et sted...'}
                             ></LocationGiver>
                         </div>
