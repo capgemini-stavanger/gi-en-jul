@@ -84,7 +84,7 @@ const RegistrationForm = () => {
         if (e.target.value !== "annet") setDessertInput("");
     } 
 
-    const onSubmit1 = (e : React.FormEvent<HTMLFormElement>) => {
+    const onSubmitForm = (e : React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         let personsList = Array<PersonType>();
         persons.forEach(p => {
@@ -119,7 +119,7 @@ const RegistrationForm = () => {
     }
 
     return(
-        <form className="thisclass" onSubmit={onSubmit1}>
+        <form className="thisclass" onSubmit={onSubmitForm}>
             <div>
                 <h3>Hvor ønsker du å registrere familie (velg en)</h3>
                 <div>
