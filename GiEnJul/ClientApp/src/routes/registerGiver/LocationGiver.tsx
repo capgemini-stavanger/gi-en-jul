@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Button, ButtonToolbar } from 'reactstrap';
 import { Route } from 'react-router-dom'
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
+import useStyles from './Styles';
+
+
+
+import { Button, Grid,  Select, MenuItem, Container, FormControl, InputLabel} from '@material-ui/core';
+
 
 type Props = {
   nextStep: () => void,
   prevStep?: () => void,
-  handleLocationChange: (newLocation: Object) => void,
+    handleLocationChange: (event: any) => void,
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string }
   options: string[],
   placeHolder: string,
@@ -22,30 +25,79 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
     nextStep();
   }
 
+  const classes = useStyles();
+
   if (prevStep) {
     const Previous = (e: any) => {
       e.preventDefault();
       prevStep();
-    }
-    return (
-        <div>
-            <Dropdown options={options} value={values.familyType} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
-        <ButtonToolbar>
-          <Button onClick={Previous}>Tilbake</Button>
-          <Button onClick={Continue} >Neste</Button>
-        </ButtonToolbar>
-      </div>
+      }
+      
+      return (
+          <Container>
+            <FormControl 
+          variant="outlined" 
+          fullWidth
+          required
+          margin = "normal"
+          style={{width: '100%', marginTop: '20px'}}>
+            <InputLabel id="familiType">Familiesammensetning</InputLabel>
+                <Select
+                    label ="Familiesammensetning"
+                    variant="outlined"
+                    fullWidth
+                    id="familyType-input"
+                    autoFocus
+                    placeholder={placeHolder}
+                    onChange={handleLocationChange}
+                >
+                    {options.map(x =>
+                        <MenuItem value={x}>{x}</MenuItem>)}
+                </Select>
+                </FormControl>
+            <Grid container spacing={2} justify="center" className={classes.submit}>
+                <Grid item >
+                    <Button variant="contained" onClick={Previous} >Tilbake</Button>
+                </Grid>
+                <Grid item>
+                    <Button variant="contained" onClick={Continue}>Neste</Button>
+                </Grid>
+            </Grid>
+          </Container>
     )
   }
   return (
-    <div>
-      <Dropdown options={options} value={values.location} onChange={handleLocationChange} placeholder={placeHolder}></Dropdown>
-      <ButtonToolbar>
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/') }}>Tilbake</Button>)} />
-        <Button onClick={Continue} >Neste</Button>
-      </ButtonToolbar>
-    </div>
+      <Container>
+          <FormControl 
+                    variant="outlined" 
+                    fullWidth
+                    required
+                    margin = "normal"
+                    style={{width: '100%', marginTop: '20px'}}>
+
+            <InputLabel id="location">Lokasjon</InputLabel>
+              <Select
+                label = "Lokasjon"
+                  id="location-input"
+                  autoFocus
+                  placeholder={placeHolder}
+                  onChange={handleLocationChange}
+                  value={values.location}
+              >
+                  {options.map(x =>
+                      <MenuItem value={x}>{x}</MenuItem>)}
+              </Select>
+              </FormControl>
+          <Grid container spacing={2} justify="center" className={classes.submit}>
+              <Grid item>
+              <Route render={({ history }) => (
+                      <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
+              </Grid>
+              <Grid item>
+                  <Button variant="contained" onClick={Continue}>Neste</Button>
+              </Grid>
+          </Grid>
+      </Container>
   )
 
 }
