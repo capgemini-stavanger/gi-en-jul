@@ -1,18 +1,15 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
+using System;
 
 namespace GiEnJul.Models
 {
     public class Person : TableEntity
     {
-        public Person() : base()
+        public Person(string partitionKey)
         {
-        }
-
-        public Person(string recipientId, string rowKey) : base(recipientId, rowKey)
-        {
-            PartitionKey = $"{recipientId}";
-            RowKey = rowKey;
+            PartitionKey = partitionKey;
+            RowKey = Guid.NewGuid().ToString();
         }
 
         public string Wish { get; set; }

@@ -1,19 +1,25 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 using System.Collections.Generic;
 
 namespace GiEnJul.Models
 {
     public class Recipient : TableEntity
     {
+        public Recipient(string location)
+        {
+            RowKey = Guid.NewGuid().ToString();
+            PartitionKey = $"loc_{location}";
+            Location = location;
+        }
 
-   
 
         public string Dinner { get; set; }
         public string Dessert { get; set; }
         public string Note { get; set; }
         public string Event { get; set; }
         public string Location { get; set; }
-
+        
         public string ContactFullName { get; set; }
         public string ContactEmail { get; set; }
         public int ContactPhoneNumber { get; set; }
