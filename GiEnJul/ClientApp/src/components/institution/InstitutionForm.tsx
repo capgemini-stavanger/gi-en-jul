@@ -6,15 +6,8 @@ import InputPhoneNumber from '../InputFields/Validators/InputPhoneNumber';
 import Location from './InstitutionLocation';
 import FormPerson from './FormPerson';
 import IFormPerson from './IFormPerson';
+import LOCATIONS from '../../common/constants/Locations';
 
-
-let preLocation: string[] = [
-    'Stavanger',
-    'Sandnes',
-    'Bodø',
-    'Sola',
-    'Nittedal'
-];
 
 const RegistrationForm = () => {
     const [persons, setPersons] = useState([{} as IFormPerson]);
@@ -74,7 +67,7 @@ const RegistrationForm = () => {
                 <h3>Hvor ønsker du å registrere familie (velg en)</h3>
                 <div>
                     {
-                    preLocation.map(l => (
+                    LOCATIONS.map(l => (
                         <Location key={l} onChange={onLocationChange} value={l}/>
                     ))}
                 </div>
