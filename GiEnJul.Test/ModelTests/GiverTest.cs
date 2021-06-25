@@ -7,9 +7,9 @@ namespace GiEnJul.Test.ModelTests
     {
         public ModelValidator Validator { get; set; }
         
-        public GiverTest(ModelValidator validator)
+        public GiverTest()
         {
-            Validator = validator;
+            Validator = new ModelValidator();
         }
 
 
