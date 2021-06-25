@@ -1,11 +1,8 @@
 ﻿using GiEnJul.Features;
-using GiEnJul.Test;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Xunit;
 

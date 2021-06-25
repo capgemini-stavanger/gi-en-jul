@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using GiEnJul.Features;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Xunit;
 
 namespace GiEnJul.Test.ModelTests
