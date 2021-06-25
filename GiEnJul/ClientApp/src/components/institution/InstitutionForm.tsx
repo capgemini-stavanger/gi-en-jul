@@ -28,7 +28,7 @@ type submittype = {
     ContactPhoneNumber?: string,
     Institution?: string,
     ReferenceId?: string,
-    Persons?: PersonType[],
+    FamilyMembers?: PersonType[],
 }
 
 const RegistrationForm = () => {
@@ -107,7 +107,7 @@ const RegistrationForm = () => {
             ContactPhoneNumber: contactPhoneNumber,
             Institution:"NAV",
             ReferenceId:pid,
-            Persons: personsList
+            FamilyMembers: personsList
         }
         fetch('https://localhost:5001/api/recipent', {
             method: 'POST',
