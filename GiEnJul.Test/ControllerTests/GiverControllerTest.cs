@@ -25,42 +25,6 @@ namespace GiEnJul.Controllers.Tests
             _controller = new GiverController(mockGiverRepo.Object, mockLog.Object);
         }
 
-
-        /// <summary>
-        /// Validate model using DataAnnotations such as [Required] etc.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns>List of ValidationErrors or empty list</returns>
-        private IList<ValidationResult> ValidateModel(object model)
-        {
-            var validationResults = new List<ValidationResult>();
-            var ctx = new ValidationContext(model, null, null);
-            Validator.TryValidateObject(model, ctx, validationResults, true);
-            return validationResults;
-        }
-
-        public static IEnumerable<object[]> GetInvalidGivers()
-        {
-            yield return new object[] { new Models.Giver("Location") }; //Missing members
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com",    PhoneNumber = "12345678", MaxRecievers = 0 } }; //Invalid MaxRecivers
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "",              Email = "Test@Testesen.com",    PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Name
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Invalid Mail",         PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Mail
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com",    PhoneNumber = "Invalid ", MaxRecievers = 5 } }; //Invalid PhoneNumber
-        }
-
-        [Theory]
-        [MemberData(nameof(GetInvalidGivers))]
-        public void ValidateInvalidGiverModels(Models.Giver model)
-        {
-            Assert.NotEmpty(ValidateModel(model));
-        }
-
-        [Fact]
-        public void ValidateValidGiverModel()
-        {
-            Assert.Empty(ValidateModel(new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 1 }));
-        }
-
         [Fact]
         public async Task PostAsync_RepositoryThrowsError_ControllerThrowsErrorAsync()
         {
