@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+
 
 namespace GiEnJul.Controllers
 {
@@ -26,17 +28,50 @@ namespace GiEnJul.Controllers
         {
             _log.Debug("Adding recipient object: {@recipient}", recipient);
             var recipientId = recipient.RowKey;
+            List<Entities.Person> addedPeople = new List<Entities.Person>();
 
-            foreach (var person in recipient.FamilyMembers)
+            for (var i = 0; i < recipient.FamilyMembers.Count; i++)
             {
+                var person = recipient.FamilyMembers[i];
                 person.PartitionKey = recipientId;
-                var presult = await _personRepository.InsertOrReplaceAsync(person);
-                _log.Debug("Succesfully added person: {@0}", presult);
+                try
+                {
+                    var presult = await _personRepository.InsertOrReplaceAsync(person);
+                    _log.Debug("Succesfully added person: {@0}", presult);
+                    addedPeople.Add(presult);
+                }
+                catch (Exception e)
+                {
+                    _log.Error("Exception while trying to add Person:{@person}", person);
+                    try
+                    {
+                        await _personRepository.DeleteAsyncMultiple(addedPeople);
+                    }
+                    finally
+                    {
+                        throw e;
+                    }
+                }
             }
 
-            var result = await _recipientRepository.InsertOrReplaceAsync(recipient);
-            _log.Debug("Succesfully added recipient: {@0}", result);
-            return CreatedAtAction(nameof(result), result);
+            try
+            {
+                var result = await _recipientRepository.InsertOrReplaceAsync(recipient);
+                _log.Debug("Succesfully added recipient: {@0}", result);
+                return CreatedAtAction(nameof(result), result);
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception while trying to add Recipent:{@recipient}", recipient);
+                try
+                {
+                    await _personRepository.DeleteAsyncMultiple(addedPeople);
+                }
+                finally
+                {
+                    throw e;
+                }
+            }
         }
     }
 }

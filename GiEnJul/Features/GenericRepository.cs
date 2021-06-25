@@ -3,6 +3,7 @@ using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Features
@@ -18,6 +19,8 @@ namespace GiEnJul.Features
         Task<T> InsertOrReplaceAsync(T entity);
         Task<T> DeleteAsync(T entity);
         Task<T> DeleteAsync(string partitionKey, string rowKey);
+        Task<List<T>> DeleteAsyncMultiple(List<T> entities);
+
     }
 
     public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity
@@ -62,6 +65,28 @@ namespace GiEnJul.Features
             var entity = await GetAsync(partitionKey, rowKey);
 
             return await DeleteAsync(entity);
+        }
+
+        public async Task<List<T>> DeleteAsyncMultiple(List<T> entities)
+        {
+            List<T> deletedEntities = new List<T>();
+            foreach (var addedPerson in entities)
+            {
+                try
+                {
+                    var result = await DeleteAsync(addedPerson);
+                    deletedEntities.Add(result);
+                }
+                catch (Exception) { }
+            }
+            var errorCount = entities.Count - deletedEntities.Count;
+            if (errorCount != 0)
+            {
+                var e = string.Format("{0} exception occurred while trying to delete multiple entities, in table:{1}.", errorCount, _table.Name);
+                _log.Error(e);
+                throw (new Exception(e));
+            }
+            return deletedEntities;
         }
 
         public async Task<T> GetAsync(string partitionKey, string rowKey)
