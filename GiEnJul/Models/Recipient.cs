@@ -5,6 +5,9 @@ namespace GiEnJul.Models
 {
     public class Recipient : TableEntity
     {
+
+   
+
         public string Dinner { get; set; }
         public string Dessert { get; set; }
         public string Note { get; set; }
