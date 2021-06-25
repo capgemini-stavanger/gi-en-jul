@@ -1,21 +1,28 @@
 ﻿import * as React from 'react';
 import { FC, useEffect } from 'react';
-import isMobilePhone from 'validator/lib/isMobilePhone';
-import Validator from './ValidatorFlags';
+import validator from 'validator';
+import IValidator from './IValidator';
+import ValidatorFlags from './ValidatorFlags';
 
 
-interface InputValidatorProps {
-    validator: Validator,   // Flag. Can use multiple with bitwise or: Flag1 | Flag2
-    setIsValid: (isValid: boolean) => void,
-    value: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    type?: string,
-    name?: string,
-    placeholder?: string, 
+interface InputValidatorProps extends IValidator {
+    validatorFlag: ValidatorFlags,   // Flag. Can use multiple with bitwise or: Flag1 | Flag2
 }
 
 const InputValidator: FC<InputValidatorProps> = (
-    { validator, setIsValid, value, onChange, type, name, placeholder },
+    { validatorFlag, 
+        setIsValid, 
+        value, 
+        onChange, 
+        type, 
+        name, 
+        placeholder, 
+        id, 
+        className, 
+        disabled,
+        min,
+        max,
+     },
 ) => {
 
     function isNotNull(inputValue: string) {
@@ -24,14 +31,19 @@ const InputValidator: FC<InputValidatorProps> = (
 
     function isPhoneNumber(inputValue: string) {
         // Returns true if norwegian number or foreign number starting with +{countryCode}
-        return !!(isMobilePhone(value, ["nb-NO", "nn-NO"]) ||
-            (inputValue && inputValue.startsWith("+") && isMobilePhone(value)));
+        return !!(validator.isMobilePhone(value, ["nb-NO", "nn-NO"]) ||
+            (inputValue && inputValue.startsWith("+") && validator.isMobilePhone(value)));
+    }
+
+    function isEmail(inputValue: string) {
+        return validator.isEmail(inputValue);
     }
 
     function validate(inputValue: string) {
         setIsValid(
-            (!(validator & Validator.NotNull) || isNotNull(inputValue)) &&
-            (!(validator & Validator.PhoneNumber) || isPhoneNumber(inputValue))
+            (!(validatorFlag & ValidatorFlags.NotNull) || isNotNull(inputValue)) &&
+            (!(validatorFlag & ValidatorFlags.PhoneNumber) || isPhoneNumber(inputValue)) && 
+            (!(validatorFlag & ValidatorFlags.Email) || isEmail(inputValue))
         )
     }
 
@@ -40,9 +52,18 @@ const InputValidator: FC<InputValidatorProps> = (
     })
 
     return (
-        <div>
-            <input type={type} name={name} value={value} onChange={onChange} placeholder={placeholder} />
-        </div>
+        <input 
+        type={type} 
+        name={name} 
+        value={value} 
+        onChange={onChange} 
+        placeholder={placeholder} 
+        id={id} 
+        className={className} 
+        disabled={disabled}
+        min={min}
+        max={max}
+        />
     )
 }
 

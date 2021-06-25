@@ -5,6 +5,11 @@
     type?: string,
     name?: string,
     placeholder?: string,
+    id?: string,
+    className?: string,
+    disabled?: boolean,
+    min?: number,
+    max?: number,
 }
 
 export default IValidator;
