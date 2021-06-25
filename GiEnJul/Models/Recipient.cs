@@ -6,11 +6,7 @@ namespace GiEnJul.Models
     public class Recipient : TableEntity
     {
 
-        public Recipient(string location, string rowKey) : base(location, rowKey)
-        {
-            PartitionKey = $"loc_{location}";
-            RowKey = rowKey;
-        }
+   
 
         public string Dinner { get; set; }
         public string Dessert { get; set; }
