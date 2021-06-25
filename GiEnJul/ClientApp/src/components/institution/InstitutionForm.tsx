@@ -97,8 +97,8 @@ const RegistrationForm = () => {
         });
 
         let submit:submittype = {
-            Dinner:dinnerRadio,
-            Dessert:dessertRadio,
+            Dinner:(dinnerRadio !== "annet") ? dinnerRadio : dinnerInput ,
+            Dessert:(dessertRadio !== "annet") ? dessertRadio : dessertInput ,
             Note:specialNeeds,
             Event:"JUL2021",
             Location:location,
