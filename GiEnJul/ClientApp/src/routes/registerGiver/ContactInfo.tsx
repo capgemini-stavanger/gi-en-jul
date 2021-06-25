@@ -13,6 +13,8 @@ type Props = {
 }
 
 const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
+    // const [state, setState] = React.useState<string>();
+    // const [errors, setErrors] = React.useState<{ state: string}>();
 
     const Continue = (e: any) => {
         e.preventDefault();
