@@ -25,6 +25,6 @@ namespace GiEnJul.Entities
         public string Email { get; set; }
         [ProtectedPersonalData]
         [Phone]
-        public int PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
