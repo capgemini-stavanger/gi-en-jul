@@ -37,7 +37,7 @@ namespace GiEnJul.Controllers.Tests
         public async Task PostAsync_RepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
-            var entity = new Entities.Giver("zzz") { RowKey = "RowKey", MaxRecievers = 5, PhoneNumber = 12312312, FullName = "FullName", Email = "Email" };
+            var entity = new Entities.Giver("zzz") { RowKey = "RowKey", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(entity);
 
             //Act
