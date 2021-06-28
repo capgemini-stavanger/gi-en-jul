@@ -27,24 +27,16 @@ namespace GiEnJul.Controllers
         {
             _log.Debug("Adding recipient object: {@recipient}", recipient);
             recipient.FamilyMembers.ForEach(person => person.PartitionKey = recipient.RowKey);
+            await _personRepository.InsertOrReplaceBatchAsync(recipient.FamilyMembers);
             try
             {
-                await _personRepository.InsertOrReplaceBatchAsync(recipient.FamilyMembers);
-                try
-                {
-                    var result = await _recipientRepository.InsertOrReplaceAsync(recipient);
-                    _log.Debug("Succesfully added recipient: {@0}", result);
-                    return CreatedAtAction(nameof(result), result);
-                }
-                catch (Exception e)
-                {
-                    await _personRepository.DeleteBatchAsync(recipient.FamilyMembers);
-                    throw e;
-                }
+                var result = await _recipientRepository.InsertOrReplaceAsync(recipient);
+                _log.Debug("Succesfully added recipient: {@0}", result);
+                return CreatedAtAction(nameof(result), result);
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to add Recipent:{@recipient}", recipient);
+                await _personRepository.DeleteBatchAsync(recipient.FamilyMembers);
                 throw e;
             }
         }

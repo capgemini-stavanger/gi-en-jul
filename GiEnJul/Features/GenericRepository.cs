@@ -34,7 +34,7 @@ namespace GiEnJul.Features
         {
             var storageAccount = CloudStorageAccount.Parse(settings.TableConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
-            tableClient.DefaultRequestOptions.RetryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(1), 5);
+            tableClient.DefaultRequestOptions.RetryPolicy = new LinearRetry(TimeSpan.FromSeconds(1), 5);
             _table = tableClient.GetTableReference(tableName);
             _table.CreateIfNotExists();
 
@@ -70,7 +70,7 @@ namespace GiEnJul.Features
 
         public async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities)
         {
-            TableBatchOperation batchOperation = new TableBatchOperation();
+            var batchOperation = new TableBatchOperation();
             try
             {
                 _log.Verbose("Trying to delete multiple entities, in table:{@tablename}", _table.Name);
@@ -126,7 +126,7 @@ namespace GiEnJul.Features
         }
         public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
-            TableBatchOperation batchOperation = new TableBatchOperation();
+            var batchOperation = new TableBatchOperation();
             try
             {
                 _log.Verbose("Trying to add multiple entities, into table:{@tablename}", _table.Name);
