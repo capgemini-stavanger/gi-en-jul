@@ -14,12 +14,14 @@ interface State {
     email?: string,
     phoneNumber?: number,
     maxRecievers?: number,
-    familyType?: string, 
+    familyType?: string,
+    confirmationOK: boolean, 
 }
 
 class SignUp extends React.PureComponent<{}, State>{
     state: State = {
         step: 1,
+        confirmationOK: false,
     };
 
     // go back to previous step
@@ -66,12 +68,14 @@ class SignUp extends React.PureComponent<{}, State>{
         }
     }
 
-    
+    handleConfirm = (submitOK: boolean) => {
+        this.setState({confirmationOK: submitOK})
+    }
 
     render() {
-        const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
-        const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
-        const submit = { location, fullname, email, phoneNumber, maxRecievers}
+        const { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK } = this.state;
+        const values = { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK }
+        const submit = { location, fullname, email, phoneNumber, maxRecievers, confirmationOK}
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
         
 
@@ -159,6 +163,7 @@ class SignUp extends React.PureComponent<{}, State>{
                             prevStep={this.prevStep}
                             submit={submit}
                             values={values}
+                            callingback={this.handleConfirm}
                         ></SummaryRegistration>
                         </div>
                     </Container>
@@ -168,7 +173,7 @@ class SignUp extends React.PureComponent<{}, State>{
                        <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <div className='paper'>
-                                <Confirmation values={ values }></Confirmation>
+                                <Confirmation values={ values } confirmationOK={this.state.confirmationOK}></Confirmation>
                         </div>
                     </Container>
                 )

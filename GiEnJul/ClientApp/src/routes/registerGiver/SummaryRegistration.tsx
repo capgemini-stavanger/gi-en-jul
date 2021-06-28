@@ -3,24 +3,37 @@ import * as React from 'react';
 import { Button, Grid, TextField, FormControl} from '@material-ui/core';
 import useStyles from './Styles';
 
-
 type Props = {
     nextStep: () => void,
     prevStep: () => void,
-    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number };
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string}
+    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; confirmationOK: boolean},
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string, confirmationOK: boolean},
+    callingback: (e: boolean) => void
+    
 }
 
-const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, values }) => {
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, values, callingback }) => {
 
-    const Submit = (e: any) => {
+    const trigger = (b: boolean) => {
+        callingback(b);
+    }
+
+    const Submit = async( e: any) => {
         e.preventDefault();
-        fetch('https://localhost:5001/api/giver', {
+        await fetch('https://localhost:5001/api/giver', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(submit)
+        })
+        .then((response) => {
+            if (response.status === 201) {
+                trigger(true);
+            }
+        })
+        .catch((errorStack) => {
+            console.log(errorStack);
         })
         nextStep();
     }
@@ -118,6 +131,5 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
             </Grid>
         </div>
     )
-
 }
 export default SummaryRegistration
