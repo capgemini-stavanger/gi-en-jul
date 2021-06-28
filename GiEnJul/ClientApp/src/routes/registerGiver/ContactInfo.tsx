@@ -56,7 +56,6 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     label="Epost"
                     name="email"
                     autoComplete="email"
-                    autoFocus
                     value={values.email}
                     onChange={handleEmailChange} 
                 />
