@@ -3,6 +3,7 @@ import { Button, Grid, Container} from '@material-ui/core';
 import useStyles from './Styles';
 import validator from 'validator';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import { useEffect } from 'react';
 
 
 type Props = {
@@ -15,6 +16,7 @@ type Props = {
 }
 
 const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
+    let errorMessage; 
 
     const Continue = (e: any) => {
         e.preventDefault();
@@ -28,39 +30,59 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
 
     const classes = useStyles();
 
-   
-    ValidatorForm.addValidationRule('isName', (value) => {
-            if (validator.isAscii(value)) {
+    useEffect( ()=> {
+        ValidatorForm.addValidationRule('isTlf', (value) => {
+            if (validator.isMobilePhone(value, ["nb-NO", "nn-NO"])){
                 return true;
             }
-            return false;
+            else {
+                return false;
+            }   
     });
 
-    ValidatorForm.addValidationRule('isTlf', (value) => {
-        if (validator.isMobilePhone(value, ["nb-NO", "nn-NO"])) {
-            return true;
-        }
-        return false;
-});
+        ValidatorForm.addValidationRule('isValid', (value) => {
+            if (value === ("")){
+                console.log('andre gang')
+                return false;
+            }
+            else if (value === undefined) {
+                console.log('første gang')
+                return false;
+            }
+            else {
+                return true;
+            }
+
+        })
+    return () => {
+        ValidatorForm.removeValidationRule('isTlf')
+        ValidatorForm.removeValidationRule('isValid')
+
+    }
+
+    }, [])
+    
 
     return (
+        
+        
         <Container>
             <ValidatorForm 
             style={{width: '100%', marginTop: '5px'}}
             onSubmit={Continue}
             >
                 <TextValidator
+                autoFocus
                     label="Fult navn*"
                     variant="outlined"
                     margin="normal"
                     fullWidth
                     name="fullname"
                     autoComplete="name"
-                    autoFocus
                     value={values.fullname}
                     onChange={handlefullnameChange}
-                    validators={['required', 'isName']}
-                    errorMessages={['Vennligst skriv inn ditt navn', 'Navnet er ikke gyldig']}
+                    validators={['required']}
+                    errorMessages={['Vennligst skriv inn ditt navn']}
                 />
                 <TextValidator
                 label="Epost*"
@@ -70,23 +92,22 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                 validators={['required', 'isEmail']}
                 errorMessages={['Vennligst skriv inn din epost', 'Eposten er ikke gyldig']}
                 autoComplete="email"
-                autoFocus
                 variant="outlined"
                 margin="normal"
                 fullWidth
                 />
                 <TextValidator
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="phoneNumber"
-                    label="Telefonnummer*"
-                    autoComplete="tel"
-                    value={values.phoneNumber}
-                    onChange={handleTlfChange} 
-                    validators={['required', 'isTlf']}
-                    errorMessages={['Vennligst skriv inn ditt telefonnummer', 'Telefonnummer er ikke gyldig']} 
-                />
+                label="Telefonnummer*"
+                onChange={handleTlfChange}
+                name="phoneNumber"
+                value={values.phoneNumber}
+                validators={['required']}
+                errorMessages={['Vennligst skriv inn ditt telefonnummer']}
+                autoComplete="tel"
+                variant="outlined"
+                margin="normal"
+                fullWidth>
+                </TextValidator>
             <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
