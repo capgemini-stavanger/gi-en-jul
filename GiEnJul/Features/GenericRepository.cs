@@ -17,9 +17,10 @@ namespace GiEnJul.Features
 
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
+        Task<TableBatchResult> InsertOrReplaceBatchAsync(List<T> entities);
         Task<T> DeleteAsync(T entity);
         Task<T> DeleteAsync(string partitionKey, string rowKey);
-        Task<List<T>> DeleteAsyncMultiple(List<T> entities);
+        Task<TableBatchResult> DeleteBatchAsync(List<T> entities);
 
     }
 
@@ -33,7 +34,7 @@ namespace GiEnJul.Features
         {
             var storageAccount = CloudStorageAccount.Parse(settings.TableConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
-
+            tableClient.DefaultRequestOptions.RetryPolicy = new ExponentialRetry(TimeSpan.FromSeconds(1), 5);
             _table = tableClient.GetTableReference(tableName);
             _table.CreateIfNotExists();
 
@@ -67,26 +68,25 @@ namespace GiEnJul.Features
             return await DeleteAsync(entity);
         }
 
-        public async Task<List<T>> DeleteAsyncMultiple(List<T> entities)
+        public async Task<TableBatchResult> DeleteBatchAsync(List<T> entities)
         {
-            List<T> deletedEntities = new List<T>();
-            foreach (var addedPerson in entities)
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            try
             {
-                try
+                _log.Verbose("Trying to delete multiple entities, in table:{@tablename}", _table.Name);
+                foreach (var entity in entities)
                 {
-                    var result = await DeleteAsync(addedPerson);
-                    deletedEntities.Add(result);
+                    batchOperation.Delete(entity);
                 }
-                catch (Exception) { }
+                var result = await _table.ExecuteBatchAsync(batchOperation);
+                _log.Debug("Deleted multiple entities, in table:{@tablename}", _table.Name);
+                return result;
             }
-            var errorCount = entities.Count - deletedEntities.Count;
-            if (errorCount != 0)
+            catch (Exception e)
             {
-                var e = string.Format("{0} exception occurred while trying to delete multiple entities, in table:{1}.", errorCount, _table.Name);
-                _log.Error(e);
-                throw (new Exception(e));
+                _log.Error("Exception occurred while trying to delete multiple entities, in table:{0}. \n{@Exception}", _table.Name, e);
+                throw e;
             }
-            return deletedEntities;
         }
 
         public async Task<T> GetAsync(string partitionKey, string rowKey)
@@ -124,6 +124,27 @@ namespace GiEnJul.Features
                 throw e;
             }
         }
+        public async Task<TableBatchResult> InsertOrReplaceBatchAsync(List<T> entities)
+        {
+            TableBatchOperation batchOperation = new TableBatchOperation();
+            try
+            {
+                _log.Verbose("Trying to add multiple entities, into table:{@tablename}", _table.Name);
+                foreach (var entity in entities)
+                {
+                    batchOperation.InsertOrReplace(entity);
+                }
+                var result = await _table.ExecuteBatchAsync(batchOperation);
+                _log.Debug("Added multiple entities, into table:{@tablename}", _table.Name);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception while trying to add or update multiple entities, into table:{0}. \n{@Exception}", _table.Name, e);
+                throw e;
+            }
+        }
+
     }
 
 }
