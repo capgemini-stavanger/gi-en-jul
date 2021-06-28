@@ -26,7 +26,7 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult<Entities.Recipient>> PostAsync([FromBody] Models.Recipient recipient)
         {
             _log.Debug("Adding recipient object: {@recipient}", recipient);
-            foreach (var person in recipient.FamilyMembers) person.PartitionKey = recipient.RowKey;
+            recipient.FamilyMembers.ForEach(person => person.PartitionKey = recipient.RowKey);
             try
             {
                 await _personRepository.InsertOrReplaceBatchAsync(recipient.FamilyMembers);
