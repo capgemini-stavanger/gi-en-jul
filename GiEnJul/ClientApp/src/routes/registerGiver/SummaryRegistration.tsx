@@ -20,7 +20,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
 
     const Submit = async( e: any) => {
         e.preventDefault();
-        await fetch('https://localhost:5001/api/giver', {
+        await fetch('api/giver', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             headers: {
                 'Content-Type': 'application/json',
