@@ -1,6 +1,5 @@
 using AutoMapper;
 using GiEnJul.Infrastructure;
-using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System.Threading.Tasks;
 using GiEnJul.Entities;

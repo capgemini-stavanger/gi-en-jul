@@ -7,7 +7,29 @@ import Location from './InstitutionLocation';
 import FormPerson from './FormPerson';
 import IFormPerson from './IFormPerson';
 import LOCATIONS from '../../common/constants/Locations';
+import Gender from '../../common/enums/Gender';
 
+
+type PersonType = {
+    Wish?: string,
+    Age?: number,
+    Gender?: Gender,
+    Family?: string,
+}
+
+type submittype = {
+    Dinner?: string,
+    Dessert?: string,
+    Note?: string,
+    Event?: string,
+    Location?: string,
+    ContactFullName?: string,
+    ContactEmail?: string,
+    ContactPhoneNumber?: string,
+    Institution?: string,
+    ReferenceId?: string,
+    FamilyMembers?: PersonType[],
+}
 
 const RegistrationForm = () => {
     const [persons, setPersons] = useState([{} as IFormPerson]);
@@ -35,6 +57,7 @@ const RegistrationForm = () => {
     const [contactEmail, setContactEmail] = useState("");
     const [isValidContactEmail, setIsValidContactEmail] = useState(false);
 
+
     const addPerson = () => {
         setPersons(formpersons => [...formpersons, {} as IFormPerson]);
         console.log(persons);
@@ -61,8 +84,42 @@ const RegistrationForm = () => {
         if (e.target.value !== "annet") setDessertInput("");
     } 
 
+    const onSubmitForm = (e : React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        let personsList = Array<PersonType>();
+        persons.forEach(p => {
+            const p1:PersonType = {
+                Wish: p.wish,
+                Age: parseInt(p.age),
+                Gender: p.gender,
+            };
+            personsList.push(p1);
+        });
+
+        let submit:submittype = {
+            Dinner:(dinnerRadio !== "annet") ? dinnerRadio : dinnerInput ,
+            Dessert:(dessertRadio !== "annet") ? dessertRadio : dessertInput ,
+            Note:specialNeeds,
+            Event:"JUL2021",
+            Location:location,
+            ContactFullName:contactName,
+            ContactEmail:contactEmail,
+            ContactPhoneNumber: contactPhoneNumber,
+            Institution:"NAV",
+            ReferenceId:pid,
+            FamilyMembers: personsList
+        }
+        fetch('https://localhost:5001/api/recipent', {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(submit)
+        })
+    }
+
     return(
-        <form className="thisclass">
+        <form className="thisclass" onSubmit={onSubmitForm}>
             <div>
                 <h3>Hvor ønsker du å registrere familie (velg en)</h3>
                 <div>
