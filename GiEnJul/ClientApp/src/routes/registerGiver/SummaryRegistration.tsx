@@ -8,7 +8,7 @@ type Props = {
     nextStep: () => void,
     prevStep: () => void,
     submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number };
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string}
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string}
 }
 
 const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, values }) => {

@@ -12,7 +12,7 @@ interface State {
     location?: string,
     fullname?: string,
     email?: string,
-    phoneNumber?: number,
+    phoneNumber?: string,
     maxRecievers?: number,
     familyType?: string, 
 }
@@ -45,7 +45,7 @@ class SignUp extends React.PureComponent<{}, State>{
         this.setState({ email: event.target.value })
     }
     handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ phoneNumber: parseInt(event.target.value) })
+        this.setState({ phoneNumber: event.target.value })
     }
 
     handleLocationChange = (event: any) => {
@@ -71,7 +71,8 @@ class SignUp extends React.PureComponent<{}, State>{
     render() {
         const { location, fullname, email, phoneNumber, maxRecievers, familyType } = this.state;
         const values = { location, fullname, email, phoneNumber, maxRecievers, familyType }
-        const submit = { location, fullname, email, phoneNumber, maxRecievers}
+        const tlf = Number(phoneNumber);
+        const submit = { location, fullname, email, tlf, maxRecievers}
         const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
         
 

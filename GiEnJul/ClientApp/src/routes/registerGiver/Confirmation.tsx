@@ -4,7 +4,7 @@ import { Button, Container, Grid, Typography} from '@material-ui/core';
 import useStyles from './Styles';
 
 type Props = {
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string }
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string }
 }
 
 const Confirmation: React.FC<Props> = ({ values }) => {

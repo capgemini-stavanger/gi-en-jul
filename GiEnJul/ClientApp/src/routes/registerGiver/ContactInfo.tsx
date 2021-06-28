@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Button, Grid, TextField, FormControl} from '@material-ui/core';
-import { Container } from '@material-ui/core';
+import { Button, Grid, Container} from '@material-ui/core';
 import useStyles from './Styles';
+import validator from 'validator';
+import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+
 
 type Props = {
     nextStep: () => void,
@@ -9,12 +11,10 @@ type Props = {
     handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string; }
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; }
 }
 
 const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
-    // const [state, setState] = React.useState<string>();
-    // const [errors, setErrors] = React.useState<{ state: string}>();
 
     const Continue = (e: any) => {
         e.preventDefault();
@@ -28,61 +28,74 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
 
     const classes = useStyles();
 
+   
+    ValidatorForm.addValidationRule('isName', (value) => {
+            if (validator.isAscii(value)) {
+                return true;
+            }
+            return false;
+    });
+
+    ValidatorForm.addValidationRule('isTlf', (value) => {
+        if (validator.isMobilePhone(value, ["nb-NO", "nn-NO"])) {
+            return true;
+        }
+        return false;
+});
+
     return (
         <Container>
-            <FormControl 
-             variant="outlined"     
-             fullWidth
-             required
-             margin = "normal"
-            style={{width: '100%', marginTop: '5px'}}>
-                <TextField
+            <ValidatorForm 
+            style={{width: '100%', marginTop: '5px'}}
+            onSubmit={Continue}
+            >
+                <TextValidator
+                    label="Fult navn*"
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
-                    id="fullname"
-                    label="Fult navn"
                     name="fullname"
                     autoComplete="name"
                     autoFocus
                     value={values.fullname}
                     onChange={handlefullnameChange}
+                    validators={['required', 'isName']}
+                    errorMessages={['Vennligst skriv inn ditt navn', 'Navnet er ikke gyldig']}
                 />
-                <TextField
+                <TextValidator
+                label="Epost*"
+                onChange={handleEmailChange}
+                name="email"
+                value={values.email}
+                validators={['required', 'isEmail']}
+                errorMessages={['Vennligst skriv inn din epost', 'Eposten er ikke gyldig']}
+                autoComplete="email"
+                autoFocus
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                />
+                <TextValidator
                     variant="outlined"
                     margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Epost"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    value={values.email}
-                    onChange={handleEmailChange} 
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
                     fullWidth
                     name="phoneNumber"
-                    label="Telefonnummer"
-                    id="phoneNumber"
+                    label="Telefonnummer*"
                     autoComplete="tel"
                     value={values.phoneNumber}
                     onChange={handleTlfChange} 
+                    validators={['required', 'isTlf']}
+                    errorMessages={['Vennligst skriv inn ditt telefonnummer', 'Telefonnummer er ikke gyldig']} 
                 />
-            </FormControl>
             <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
                     </Grid>
                 <Grid item>
-                    <Button variant="contained" onClick={Continue}>Neste</Button>
+                    <Button variant="contained" type="submit">Neste</Button>
                 </Grid>
             </Grid>
+            </ValidatorForm>
             </Container>
     )
 }
