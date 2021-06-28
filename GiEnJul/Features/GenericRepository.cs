@@ -17,10 +17,10 @@ namespace GiEnJul.Features
 
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
-        Task<TableBatchResult> InsertOrReplaceBatchAsync(List<T> entities);
+        Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities);
         Task<T> DeleteAsync(T entity);
         Task<T> DeleteAsync(string partitionKey, string rowKey);
-        Task<TableBatchResult> DeleteBatchAsync(List<T> entities);
+        Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
 
     }
 
@@ -68,7 +68,7 @@ namespace GiEnJul.Features
             return await DeleteAsync(entity);
         }
 
-        public async Task<TableBatchResult> DeleteBatchAsync(List<T> entities)
+        public async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             try
@@ -124,7 +124,7 @@ namespace GiEnJul.Features
                 throw e;
             }
         }
-        public async Task<TableBatchResult> InsertOrReplaceBatchAsync(List<T> entities)
+        public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
             TableBatchOperation batchOperation = new TableBatchOperation();
             try
