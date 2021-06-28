@@ -3,6 +3,7 @@ using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Features
@@ -16,8 +17,11 @@ namespace GiEnJul.Features
 
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
+        Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities);
         Task<T> DeleteAsync(T entity);
         Task<T> DeleteAsync(string partitionKey, string rowKey);
+        Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
+
     }
 
     public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity
@@ -33,7 +37,7 @@ namespace GiEnJul.Features
 
             var storageAccount = CloudStorageAccount.Parse(settings.TableConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
-
+            tableClient.DefaultRequestOptions.RetryPolicy = new LinearRetry(TimeSpan.FromSeconds(1), 5);
             _table = tableClient.GetTableReference(tableName);
 
             try
@@ -74,6 +78,27 @@ namespace GiEnJul.Features
             return await DeleteAsync(entity);
         }
 
+        public async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities)
+        {
+            var batchOperation = new TableBatchOperation();
+            try
+            {
+                _log.Verbose("Trying to delete multiple entities, in table:{@tablename}", _table.Name);
+                foreach (var entity in entities)
+                {
+                    batchOperation.Delete(entity);
+                }
+                var result = await _table.ExecuteBatchAsync(batchOperation);
+                _log.Debug("Deleted multiple entities, in table:{@tablename}", _table.Name);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception occurred while trying to delete multiple entities, in table:{0}. \n{@Exception}", _table.Name, e);
+                throw e;
+            }
+        }
+
         public async Task<T> GetAsync(string partitionKey, string rowKey)
         {
             try
@@ -109,6 +134,27 @@ namespace GiEnJul.Features
                 throw e;
             }
         }
+        public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
+        {
+            var batchOperation = new TableBatchOperation();
+            try
+            {
+                _log.Verbose("Trying to add multiple entities, into table:{@tablename}", _table.Name);
+                foreach (var entity in entities)
+                {
+                    batchOperation.InsertOrReplace(entity);
+                }
+                var result = await _table.ExecuteBatchAsync(batchOperation);
+                _log.Debug("Added multiple entities, into table:{@tablename}", _table.Name);
+                return result;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception while trying to add or update multiple entities, into table:{0}. \n{@Exception}", _table.Name, e);
+                throw e;
+            }
+        }
+
     }
 
 }
