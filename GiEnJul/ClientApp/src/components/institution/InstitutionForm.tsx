@@ -109,7 +109,7 @@ const RegistrationForm = () => {
             ReferenceId:pid,
             FamilyMembers: personsList
         }
-        fetch('https://localhost:5001/api/recipent', {
+        fetch('https://localhost:5001/api/recipient', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
