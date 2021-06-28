@@ -28,14 +28,24 @@ namespace GiEnJul.Features
 
         public GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
         {
+            _mapper = mapper;
+            _log = log;
+
             var storageAccount = CloudStorageAccount.Parse(settings.TableConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
 
             _table = tableClient.GetTableReference(tableName);
-            _table.CreateIfNotExists();
 
-            _mapper = mapper;
-            _log = log;
+            try
+            {
+                _table.CreateIfNotExists();
+
+            }
+            catch (StorageException e)
+            {
+                _log.Fatal("Could not create or connect to Azure Table Storage.\n{@0}", e.ToString());
+                throw e;
+            }
         }
 
         public async Task<T> DeleteAsync(T entity)
