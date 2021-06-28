@@ -9,8 +9,6 @@ namespace GiEnJul.Infrastructure
         {
             CreateMap<Entities.Person, Models.Person>();
             CreateMap<Models.Person, Entities.Person>();
-            CreateMap<List<Entities.Person>, List<Models.Person>>();
-            CreateMap<List<Models.Person>, List<Entities.Person>>();
             CreateMap<Entities.Giver, Models.Giver>();
             CreateMap<Models.Giver, Entities.Giver>();
             CreateMap<Models.Giver, Entities.Connection>();
