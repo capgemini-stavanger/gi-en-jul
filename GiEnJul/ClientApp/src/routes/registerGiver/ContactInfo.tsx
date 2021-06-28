@@ -3,7 +3,7 @@ import { Button, Grid, Container} from '@material-ui/core';
 import useStyles from './Styles';
 import validator from 'validator';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 type Props = {
@@ -16,11 +16,30 @@ type Props = {
 }
 
 const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
-    let errorMessage; 
+    const [errorPhone, setErrorPhone]= useState(false);
+    const [errorPhoneText, setErrorPhoneText] = useState('');
+    const [errorEmail, setErrorEmail] = useState(false);
+    const [errorEmailText, setErrorEmailText] = useState('');
 
     const Continue = (e: any) => {
         e.preventDefault();
-        nextStep();
+        if(values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])){
+                setErrorPhone(true);
+                setErrorPhoneText('Telefonnummeret er ikke gyldig')
+                return;
+        }
+        if (values.email !== undefined && !!!validator.isEmail(values.email)){
+                setErrorEmail(true);
+                setErrorEmailText('Eposten er ikke gyldig')
+                return;
+        }
+        else {
+            setErrorEmail(false);
+            setErrorEmailText('');
+            setErrorPhone(false);
+            setErrorPhoneText('')
+            nextStep();
+        }
     }
 
     const Previous = (e: any) => {
@@ -29,43 +48,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
     }
 
     const classes = useStyles();
-
-    useEffect( ()=> {
-        ValidatorForm.addValidationRule('isTlf', (value) => {
-            if (validator.isMobilePhone(value, ["nb-NO", "nn-NO"])){
-                return true;
-            }
-            else {
-                return false;
-            }   
-    });
-
-        ValidatorForm.addValidationRule('isValid', (value) => {
-            if (value === ("")){
-                console.log('andre gang')
-                return false;
-            }
-            else if (value === undefined) {
-                console.log('første gang')
-                return false;
-            }
-            else {
-                return true;
-            }
-
-        })
-    return () => {
-        ValidatorForm.removeValidationRule('isTlf')
-        ValidatorForm.removeValidationRule('isValid')
-
-    }
-
-    }, [])
-    
-
     return (
-        
-        
         <Container>
             <ValidatorForm 
             style={{width: '100%', marginTop: '5px'}}
@@ -85,18 +68,22 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     errorMessages={['Vennligst skriv inn ditt navn']}
                 />
                 <TextValidator
+                error = {errorEmail}
+                helperText= {errorEmailText}
                 label="Epost*"
                 onChange={handleEmailChange}
                 name="email"
                 value={values.email}
-                validators={['required', 'isEmail']}
-                errorMessages={['Vennligst skriv inn din epost', 'Eposten er ikke gyldig']}
+                validators={['required']}
+                errorMessages={['Vennligst skriv inn din epost']}
                 autoComplete="email"
                 variant="outlined"
                 margin="normal"
                 fullWidth
                 />
                 <TextValidator
+                error = {errorPhone}
+                helperText= {errorPhoneText}
                 label="Telefonnummer*"
                 onChange={handleTlfChange}
                 name="phoneNumber"
