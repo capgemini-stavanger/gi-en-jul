@@ -3,8 +3,6 @@ import { Button, Grid, Container} from '@material-ui/core';
 import useStyles from './Styles';
 import validator from 'validator';
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
-import { useEffect, useState } from 'react';
-
 
 type Props = {
     nextStep: () => void,
@@ -12,32 +10,39 @@ type Props = {
     handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; }
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; },
+
+    errors: {errorPhone: boolean ; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
+            errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;}
 }
 
-const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
-    const [errorPhone, setErrorPhone]= useState(false);
-    const [errorPhoneText, setErrorPhoneText] = useState('');
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorEmailText, setErrorEmailText] = useState('');
+const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values, errors }) => {
 
     const Continue = (e: any) => {
         e.preventDefault();
-        if(values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])){
-                setErrorPhone(true);
-                setErrorPhoneText('Telefonnummeret er ikke gyldig')
+        if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) && 
+        values.email !== undefined && !!!validator.isEmail(values.email)){
+                errors.setErrorPhone(true);
+                errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+                errors.setErrorEmail(true);
+                errors.setErrorEmailText('Eposten er ikke gyldig')
                 return;
         }
-        if (values.email !== undefined && !!!validator.isEmail(values.email)){
-                setErrorEmail(true);
-                setErrorEmailText('Eposten er ikke gyldig')
+        else if(values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])){
+                errors.setErrorPhone(true);
+                errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+                return;
+        }
+        else if (values.email !== undefined && !!!validator.isEmail(values.email)){
+                errors.setErrorEmail(true);
+                errors.setErrorEmailText('Eposten er ikke gyldig')
                 return;
         }
         else {
-            setErrorEmail(false);
-            setErrorEmailText('');
-            setErrorPhone(false);
-            setErrorPhoneText('')
+            errors.setErrorEmail(false);
+            errors.setErrorEmailText('');
+            errors.setErrorPhone(false);
+            errors.setErrorPhoneText('')
             nextStep();
         }
     }
@@ -68,8 +73,8 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     errorMessages={['Vennligst skriv inn ditt navn']}
                 />
                 <TextValidator
-                error = {errorEmail}
-                helperText= {errorEmailText}
+                error = {errors.errorEmail}
+                helperText= {errors.errorEmailText}
                 label="Epost*"
                 onChange={handleEmailChange}
                 name="email"
@@ -82,8 +87,8 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                 fullWidth
                 />
                 <TextValidator
-                error = {errorPhone}
-                helperText= {errorPhoneText}
+                error = {errors.errorPhone}
+                helperText= {errors.errorPhoneText}
                 label="Telefonnummer*"
                 onChange={handleTlfChange}
                 name="phoneNumber"
