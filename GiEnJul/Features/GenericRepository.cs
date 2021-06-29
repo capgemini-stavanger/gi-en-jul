@@ -14,7 +14,6 @@ namespace GiEnJul.Features
         public IMapper _mapper { get; set; }
         public ILogger _log { get; set; }
 
-
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
         Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities);
@@ -22,6 +21,10 @@ namespace GiEnJul.Features
         Task<T> DeleteAsync(string partitionKey, string rowKey);
         Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
 
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        Task<IEnumerable<T>> GetAllAsync<T>() where T : ITableEntity, new();
+        Task<IEnumerable<T>> GetAllByQueryAsync<T>(TableQuery<T> query) where T : ITableEntity, new();
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
     }
 
     public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity
@@ -134,6 +137,7 @@ namespace GiEnJul.Features
                 throw e;
             }
         }
+
         public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
             var batchOperation = new TableBatchOperation();
@@ -152,6 +156,45 @@ namespace GiEnJul.Features
             {
                 _log.Error("Exception while trying to add or update multiple entities, into table:{0}. \n{@Exception}", _table.Name, e);
                 throw e;
+            }
+        }
+
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : ITableEntity, new()
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            return await GetAllByQueryAsync(new TableQuery<T>());
+        }
+
+
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public async Task<IEnumerable<T>> GetAllByQueryAsync<T>(TableQuery<T> query) where T : ITableEntity, new()
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        {
+            try
+            {
+                _log.Verbose("Trying to fetch entities in table:{0} with Query: {@query}", _table.Name, query);
+
+                TableContinuationToken token = null;
+                var entities = new List<T>();
+
+                do
+                {
+                    TableQuerySegment<T> queryResult = await _table.ExecuteQuerySegmentedAsync(query, token);
+                    entities.AddRange(queryResult.Results);
+                    token = queryResult.ContinuationToken;
+
+                } while (token != null);
+
+                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _table.Name);
+
+                return entities;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception while fetching entities, in table:{0}. \n{@Exception}", _table.Name, e);
+                throw;
             }
         }
 
