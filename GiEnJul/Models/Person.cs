@@ -16,8 +16,6 @@ namespace GiEnJul.Models
         public int Age { get; set; }
         public Gender Gender { get; set; }
 
-        [JsonIgnore]
-        public Recipient Family { get; set; }
     }
 
 

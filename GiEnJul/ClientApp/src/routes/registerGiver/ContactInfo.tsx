@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Button, Grid, TextField, FormControl} from '@material-ui/core';
-import { Container } from '@material-ui/core';
+import { Button, Grid, Container } from '@material-ui/core';
 import useStyles from './Styles';
+import validator from 'validator';
+import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 
 type Props = {
     nextStep: () => void,
@@ -9,14 +10,43 @@ type Props = {
     handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; familyType?: string; }
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; },
+
+    errors: {
+        errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
+        errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;
+    }
 }
 
-const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
+const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values, errors }) => {
 
     const Continue = (e: any) => {
         e.preventDefault();
-        nextStep();
+        if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
+            values.email !== undefined && !!!validator.isEmail(values.email)) {
+            errors.setErrorPhone(true);
+            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+            errors.setErrorEmail(true);
+            errors.setErrorEmailText('Eposten er ikke gyldig')
+            return;
+        }
+        else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
+            errors.setErrorPhone(true);
+            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+            return;
+        }
+        else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
+            errors.setErrorEmail(true);
+            errors.setErrorEmailText('Eposten er ikke gyldig')
+            return;
+        }
+        else {
+            errors.setErrorEmail(false);
+            errors.setErrorEmailText('');
+            errors.setErrorPhone(false);
+            errors.setErrorPhoneText('')
+            nextStep();
+        }
     }
 
     const Previous = (e: any) => {
@@ -25,64 +55,63 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
     }
 
     const classes = useStyles();
-
     return (
         <Container>
-            <FormControl 
-             variant="outlined"     
-             fullWidth
-             required
-             margin = "normal"
-            style={{width: '100%', marginTop: '5px'}}>
-                <TextField
+            <ValidatorForm
+                style={{ width: '100%', marginTop: '5px' }}
+                onSubmit={Continue}
+            >
+                <TextValidator
+                    autoFocus
+                    label="Fult navn*"
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
-                    id="fullname"
-                    label="Fult navn"
                     name="fullname"
                     autoComplete="name"
-                    autoFocus
-                    value={values.fullname}
+                    value={values.fullname ? values.fullname: ""}
                     onChange={handlefullnameChange}
+                    validators={['required']}
+                    errorMessages={['Vennligst skriv inn ditt navn']}
                 />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Epost"
+                <TextValidator
+                    error={errors.errorEmail}
+                    helperText={errors.errorEmailText}
+                    label="Epost*"
+                    onChange={handleEmailChange}
                     name="email"
+                    value={values.email ? values.email: ""}
+                    validators={['required']}
+                    errorMessages={['Vennligst skriv inn din epost']}
                     autoComplete="email"
-                    value={values.email}
-                    onChange={handleEmailChange} 
-                />
-                <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
-                    name="phoneNumber"
-                    label="Telefonnummer"
-                    id="phoneNumber"
-                    autoComplete="tel"
-                    value={values.phoneNumber}
-                    onChange={handleTlfChange} 
                 />
-            </FormControl>
-            <Grid container spacing={2} justify="center" className={classes.submit}>
-                <Grid item>
-                    <Button variant="contained" onClick={Previous}>Tilbake</Button>
+                <TextValidator
+                    error={errors.errorPhone}
+                    helperText={errors.errorPhoneText}
+                    label="Telefonnummer*"
+                    onChange={handleTlfChange}
+                    name="phoneNumber"
+                    value={values.phoneNumber ? values.phoneNumber: ""}
+                    validators={['required']}
+                    errorMessages={['Vennligst skriv inn ditt telefonnummer']}
+                    autoComplete="tel"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth>
+                </TextValidator>
+                <Grid container spacing={2} justify="center" className={classes.submit}>
+                    <Grid item>
+                        <Button variant="contained" onClick={Previous}>Tilbake</Button>
                     </Grid>
-                <Grid item>
-                    <Button variant="contained" onClick={Continue}>Neste</Button>
+                    <Grid item>
+                        <Button variant="contained" type="submit">Neste</Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-            </Container>
+            </ValidatorForm>
+        </Container>
     )
 }
 export default ContactInfo
-
-
