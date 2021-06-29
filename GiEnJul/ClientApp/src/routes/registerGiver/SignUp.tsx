@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 const SignUp = () => {
     const [step, setStep] = useState(1);
+    const [confirmationOK, setConfirmationOK] = useState(false);
 
     const [location, setLocation] = useState<string | undefined>(undefined);
     const [fullname, setFullname] = useState<string | undefined>(undefined);
@@ -59,10 +60,14 @@ const SignUp = () => {
             setMaxRecievers(100)
         }
     }
-    const values = { location, fullname, email, phoneNumber, maxRecievers, familyType };
+    const handleConfirm = (submitOK: boolean) => {
+        setConfirmationOK(submitOK)
+    }
+
+    const values = { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK  };
     const errors = { errorPhone, setErrorPhone, errorPhoneText, setErrorPhoneText, errorEmail, setErrorEmail, errorEmailText, setErrorEmailText };
     const tlf = Number(phoneNumber);
-    const submit = { location, fullname, email, tlf, maxRecievers }
+    const submit = { location, fullname, email, tlf, maxRecievers, confirmationOK  }
     const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
     switch (step) {
@@ -148,6 +153,7 @@ const SignUp = () => {
                             prevStep={prevStep}
                             submit={submit}
                             values={values}
+                            callingback={handleConfirm}
                         ></SummaryRegistration>
                     </div>
                 </Container>
@@ -157,15 +163,16 @@ const SignUp = () => {
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <div className='paper'>
-                        <Confirmation values={values}></Confirmation>
+                        <Confirmation values={values} confirmationOK= {confirmationOK}></Confirmation>
                     </div>
                 </Container>
             )
         default:
-            return (
+            return(
                 <Container>
-                </Container>
+
+            </Container>
             )
+        };
     };
-};
 export default SignUp
