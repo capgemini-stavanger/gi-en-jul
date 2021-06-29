@@ -174,7 +174,7 @@ namespace GiEnJul.Features
         {
             try
             {
-                _log.Verbose("Trying to fetch entities in table:{0} with Query: {@query}", _table.Name, query);
+                _log.Verbose("Fetching entities in table:{0} with Query: {@query}", _table.Name, query.FilterString);
 
                 TableContinuationToken token = null;
                 var entities = new List<T>();

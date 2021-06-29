@@ -6,6 +6,11 @@ namespace GiEnJul.Entities
 {
     public class Recipient : TableEntity 
     {
+        public Recipient()
+        {
+        }
+
+
         // RowKey = Guid
         // PartitionKey = loc_{location}
         public Recipient(string location, string rowKey) : base(location, rowKey)

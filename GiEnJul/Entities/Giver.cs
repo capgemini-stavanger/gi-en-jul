@@ -7,6 +7,10 @@ namespace GiEnJul.Entities
 {
     public class Giver : TableEntity
     {
+        public Giver() : base()
+        {
+        }
+
         public Giver(string location)
         {
             RowKey = Guid.NewGuid().ToString();
