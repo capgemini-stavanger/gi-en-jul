@@ -27,7 +27,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
     }
 
     return (
-      <Container>
+      <Container key={values.familyType}>
         <ValidatorForm
           onSubmit={Continue}
           onError={errors => console.log(errors)}
@@ -40,13 +40,13 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
             placeholder={placeHolder}
             validators={['required']}
             name="familyType-input"
-            value={values.familyType}
+            value={values.familyType ? values.familyType: ""}
             onChange={handleLocationChange}
             label="Familiesammensetning*"
             errorMessages={['Vennligst velg familiesammensetning']}
           >
             {options.map(x =>
-              <MenuItem value={x}>{x}</MenuItem>)}
+              <MenuItem key={x} value={x}>{x}</MenuItem>)}
           </SelectValidator>
           <Grid container spacing={2} justify="center" className={classes.submit}>
             <Grid item >
@@ -75,13 +75,13 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
           validators={['required']}
           label="Lokasjon*"
           name="location-input"
-          value={values.location}
+          value={values.location ?  values.location: ""}
           id="location-input"
           onChange={handleLocationChange}
           errorMessages={['Vennligst velg lokasjon']}
         >
           {options.map(x =>
-            <MenuItem value={x}>{x}</MenuItem>)}
+            <MenuItem key={x} value={x}>{x}</MenuItem>)}
         </SelectValidator>
         <Grid container spacing={2} justify="center" className={classes.submit}>
           <Grid item>
