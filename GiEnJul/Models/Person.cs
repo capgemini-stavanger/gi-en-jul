@@ -16,7 +16,6 @@ namespace GiEnJul.Models
         public int Age { get; set; }
         public Gender Gender { get; set; }
 
-
     }
 
 
