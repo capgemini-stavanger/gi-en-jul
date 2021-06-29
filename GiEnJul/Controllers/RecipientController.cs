@@ -26,11 +26,6 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult<Entities.Recipient>> PostAsync([FromBody] Models.Recipient recipient)
         {
             _log.Debug("Adding recipient object: {@recipient}", recipient);
-            if (string.IsNullOrEmpty(recipient.Location)) {
-                var e = new Exception("Cannot add recipient with no location.");
-                _log.Error("Exception occurred while trying to add recipient: {@0}. \n{@1}", recipient, e);
-                throw e;
-            }
             recipient.FamilyMembers.ForEach(person => person.PartitionKey = recipient.RowKey);
             await _personRepository.InsertOrReplaceBatchAsync(recipient.FamilyMembers);
             try

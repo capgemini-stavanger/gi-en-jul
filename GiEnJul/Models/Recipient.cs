@@ -1,6 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Models
 {
@@ -13,11 +14,11 @@ namespace GiEnJul.Models
             Location = location;
         }
 
-
         public string Dinner { get; set; }
         public string Dessert { get; set; }
         public string Note { get; set; }
         public string Event { get; set; }
+        [Required]
         public string Location { get; set; }
         
         public string ContactFullName { get; set; }

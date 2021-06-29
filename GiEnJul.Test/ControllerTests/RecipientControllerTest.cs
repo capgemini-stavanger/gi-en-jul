@@ -27,7 +27,7 @@ namespace GiEnJul.Controllers.Tests
 
         public Entities.Recipient ArrangeOkRecipientRepositoryInsertResult()
         {
-            var recipient = new Entities.Recipient("stavanger", "qwerty")
+            var recipient = new Entities.Recipient("Stavanger", "qwerty")
             {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
@@ -38,7 +38,6 @@ namespace GiEnJul.Controllers.Tests
                 Dessert = "sjokoladepudding",
                 Note = "",
                 Event = "JUL2021",
-                Location = "Bodø",
                 PersonCount = 3
             };
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(recipient);
@@ -80,17 +79,6 @@ namespace GiEnJul.Controllers.Tests
 
             // Action & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new Models.Recipient("Test")));
-        }
-
-        [Fact]
-        public async Task PostAsync_NoRecipientRowkey_ControllerThrowsErrorAsync()
-        {
-            // Arrange
-            var recipient = ArrangeOkRecipientRepositoryInsertResult();
-            ArrangeOkPeopleRepositoryInsertResult();
-
-            // Action & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new Models.Recipient(null)));
         }
 
         [Fact]
