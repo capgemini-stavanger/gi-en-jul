@@ -22,7 +22,7 @@ namespace GiEnJul.Models
         
         public string ContactFullName { get; set; }
         public string ContactEmail { get; set; }
-        public int ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber { get; set; }
         public string Institution { get; set; }
         public string ReferenceId { get; set; }
 
