@@ -1,16 +1,13 @@
 import * as React from 'react';
-
-import { Button, Grid, TextField, FormControl} from '@material-ui/core';
+import { Container, Button, Grid, TextField, FormControl } from '@material-ui/core';
 import useStyles from './Styles';
-
 
 type Props = {
     nextStep: () => void,
     prevStep: () => void,
     submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number };
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string}
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string }
 }
-
 const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, values }) => {
 
     const Submit = (e: any) => {
@@ -24,7 +21,6 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
         })
         nextStep();
     }
-
     const Previous = (e: any) => {
         e.preventDefault();
         prevStep();
@@ -33,13 +29,13 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
     const classes = useStyles();
 
     return (
-        <div>
-            <FormControl 
-          variant="outlined" 
-          fullWidth
-          required
-          margin = "normal"
-          style={{width: '100%', marginTop: '20px'}}>
+        <Container>
+            <FormControl
+                variant="outlined"
+                fullWidth
+                required
+                margin="normal"
+                style={{ width: '100%', marginTop: '20px' }}>
                 <TextField
                     disabled
                     variant="outlined"
@@ -65,7 +61,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                     autoComplete="name"
                     autoFocus
                     value={values.fullname}
-                    //onChange={handlefullnameChange}
+                //onChange={handlefullnameChange}
                 />
                 <TextField
                     disabled
@@ -79,7 +75,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                     autoComplete="email"
                     autoFocus
                     value={values.email}
-                   // onChange={handleEmailChange}
+                // onChange={handleEmailChange}
                 />
                 <TextField
                     disabled
@@ -92,32 +88,31 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                     id="phoneNumber"
                     autoComplete="tel"
                     value={values.phoneNumber}
-                    // onChange={handleTlfChange}
+                // onChange={handleTlfChange}
                 />
-            <TextField
-                disabled
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="maxRecievers"
-                label="Familiesammensetning"
-                id="maxRecieverse"
-                autoComplete="tel"
-                value={values.familyType}
-            // onChange={handleTlfChange}
-            />
+                <TextField
+                    disabled
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="maxRecievers"
+                    label="Familiesammensetning"
+                    id="maxRecieverse"
+                    autoComplete="tel"
+                    value={values.familyType}
+                // onChange={handleTlfChange}
+                />
             </FormControl>
-             <Grid container spacing={2} justify="center" className={classes.submit}>
+            <Grid container spacing={2} justify="center" className={classes.submit}>
                 <Grid item>
                     <Button variant="contained" onClick={Previous}>Tilbake</Button>
-                    </Grid>
+                </Grid>
                 <Grid item>
                     <Button variant="contained" onClick={Submit}>Bli giver</Button>
                 </Grid>
             </Grid>
-        </div>
+        </Container>
     )
-
 }
 export default SummaryRegistration
