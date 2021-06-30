@@ -25,19 +25,19 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
         if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
             values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, har du skrevet det riktig?')
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten er ikke gyldig')
+            errors.setErrorEmailText('Eposten din ser litt rar ut, har du skrevet den riktig?')
             return;
         }
         else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, har du skrevet det riktig?')
             return;
         }
         else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten er ikke gyldig')
+            errors.setErrorEmailText('Eposten din ser litt rar ut, har du skrevet den riktig?')
             return;
         }
         else {
@@ -72,7 +72,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     value={values.fullname ? values.fullname: ""}
                     onChange={handlefullnameChange}
                     validators={['required']}
-                    errorMessages={['Vennligst skriv inn ditt navn']}
+                    errorMessages={['Vi vil gjerne vite hvem som gir en jul']}
                 />
                 <TextValidator
                     error={errors.errorEmail}
@@ -82,7 +82,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     name="email"
                     value={values.email ? values.email: ""}
                     validators={['required']}
-                    errorMessages={['Vennligst skriv inn din epost']}
+                    errorMessages={['Vi trenger din epost for å sende deg viktig informasjon']}
                     autoComplete="email"
                     variant="outlined"
                     margin="normal"
@@ -96,7 +96,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     name="phoneNumber"
                     value={values.phoneNumber ? values.phoneNumber: ""}
                     validators={['required']}
-                    errorMessages={['Vennligst skriv inn ditt telefonnummer']}
+                    errorMessages={['Vi trenger ditt telefonnummer for å kunne kontakte deg']}
                     autoComplete="tel"
                     variant="outlined"
                     margin="normal"
