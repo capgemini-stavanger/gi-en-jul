@@ -122,7 +122,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
                 required
                 margin="normal"
                 style={{ width: '100%', marginTop: '20px' }}>
-                <Grid container spacing={3} >
+                <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
                         <SelectValidator
                             disabled={changeLocation}
@@ -146,7 +146,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid container spacing={3} >
+                <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
                         <TextValidator
                             disabled={changeFullName}
@@ -168,7 +168,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid container spacing={3} >
+                <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
                         <TextValidator
                             disabled={changeEmail}
@@ -191,7 +191,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid container spacing={3} >
+                <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
                         <TextValidator
                             disabled={changePhone}
@@ -214,7 +214,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
                         </Button>
                     </Grid>
                 </Grid>
-                <Grid container spacing={3} >
+                <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
                         <SelectValidator
                             disabled={changeFamily}
