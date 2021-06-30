@@ -49,12 +49,12 @@ const Completed: React.FC<ICompletedProps> = (props) => {
                         </Box>
                         <Box display="flex" className={classes.root}>
                             <Box className={classes.searchBoxL} display="flex">
-                                <Typography className={classes.filterItem}>Familie nummer</Typography>
-                                <Typography className={classes.filterItem}>Antall</Typography>
+                                <Typography id="filterText" className={classes.filterItem}>Familie nummer</Typography>
+                                <Typography id="filterText" className={classes.filterItem}>Antall</Typography>
                             </Box>
                             <Box className={classes.searchBoxR} display="flex">
-                                <Typography className={classes.filterItem}>Navn</Typography>
-                                <Typography className={classes.filterItem}>Status</Typography>
+                                <Typography id="filterText" className={classes.filterItem}>Navn</Typography>
+                                <Typography id="filterText" className={classes.filterItem}>Status</Typography>
                             </Box>
                         </Box>
                         <ConnectionsField personcount={5} recipientnumber={"NAV2ET"} giverfullname={"Olav Hansen"} status={false} />

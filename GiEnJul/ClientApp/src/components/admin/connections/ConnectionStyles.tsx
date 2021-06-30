@@ -9,6 +9,10 @@ const ConnectionStyle = makeStyles((theme: Theme) =>
             "& .MuiTypography-body1": {
                 color: "000000",
             },
+            "& #filterText":{
+                borderBottom: "0.2em solid",
+                borderBottomColor: "#e6e6e6",
+            },
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
