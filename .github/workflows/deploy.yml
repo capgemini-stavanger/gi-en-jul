@@ -1,1 +1,38 @@
+name: Deploy Application to Azure
 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'GiEnJul/**'
+  workflow_dispatch:
+  
+env:
+  DOTNET_VERSION: '3.1.x'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - name: Checkout Github Action
+      uses: actions/checkout@master
+      
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Install BackEnd Dependencies
+      run: dotnet restore
+      
+    - name: Run Tests
+      run: dotnet test
+      
+    - name: Build Release Config
+      run: dotnet build --configuration Release
+    
+    - name: Deploy
+      run: dotnet publish #Rest of cli args and the path
