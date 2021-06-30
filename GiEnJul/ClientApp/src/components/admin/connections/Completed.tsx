@@ -1,8 +1,7 @@
-import { Accordion, AccordionDetails, AccordionSummary, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Box, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as React from 'react';
 import Circle from '../common/Circle';
-import { Box } from '@material-ui/core';
 import ConnectionsField from './ConnectionsField';
 
 const useStyles = makeStyles((theme: Theme) =>
