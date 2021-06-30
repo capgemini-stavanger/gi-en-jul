@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems:'center',
     margin: theme.spacing(1,0,1,0),
     justify: 'center'
+  }, 
+  inputRow: {
+    margin: theme.spacing(2,2,0,0),
   }
 }));
 export default useStyles;
