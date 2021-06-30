@@ -44,6 +44,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Giver, act => act.Ignore());
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+
+
+            CreateMap<Models.PostGiverDto, Entities.Giver>().ConstructUsing(from => new Entities.Giver(from.Location));
         }
     }
 }
