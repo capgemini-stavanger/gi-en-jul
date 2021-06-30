@@ -151,6 +151,13 @@ const SignUp = () => {
                         <SummaryRegistration
                             nextStep={nextStep}
                             prevStep={prevStep}
+                            handleLocationChange={handleLocationChange}
+                            handlefullnameChange={handlefullnameChange}
+                            handleEmailChange={handleEmailChange}
+                            handleTlfChange={handleTlfChange}
+                            handleFamilyChange={handleFamilyChange}
+                            options={familiyOptions}
+                            errors={errors}
                             submit={submit}
                             values={values}
                             callingback={handleConfirm}
