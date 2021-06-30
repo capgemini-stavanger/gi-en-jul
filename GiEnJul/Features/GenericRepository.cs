@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
@@ -8,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IGenericRepository<T> where T : TableEntity
+    public interface IGenericRepository<T> where T : EntityBase, new()
     {
         public CloudTable _table { get; }
         public IMapper _mapper { get; set; }
         public ILogger _log { get; set; }
-
 
         Task<T> GetAsync(string partitionKey, string rowKey);
         Task<T> InsertOrReplaceAsync(T entity);
@@ -22,9 +22,11 @@ namespace GiEnJul.Features
         Task<T> DeleteAsync(string partitionKey, string rowKey);
         Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
 
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query);
     }
 
-    public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : EntityBase, new()
     {
         public CloudTable _table { get; private set; }
         public IMapper _mapper { get; set; }
@@ -134,6 +136,7 @@ namespace GiEnJul.Features
                 throw e;
             }
         }
+
         public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
             var batchOperation = new TableBatchOperation();
@@ -152,6 +155,40 @@ namespace GiEnJul.Features
             {
                 _log.Error("Exception while trying to add or update multiple entities, into table:{0}. \n{@Exception}", _table.Name, e);
                 throw e;
+            }
+        }
+
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await GetAllByQueryAsync(new TableQuery<T>());
+        }
+
+
+        public async Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query)
+        {
+            try
+            {
+                _log.Verbose("Fetching entities in table:{0} with Query: {@query}", _table.Name, query.FilterString);
+
+                TableContinuationToken token = null;
+                var entities = new List<T>();
+                
+                do
+                {
+                    var queryResult = await _table.ExecuteQuerySegmentedAsync(query, token);
+                    entities.AddRange(queryResult.Results);
+                    token = queryResult.ContinuationToken;
+
+                } while (token != null);
+
+                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _table.Name);
+                return entities;
+            }
+            catch (Exception e)
+            {
+                _log.Error("Exception while fetching entities, in table:{0}", _table.Name, e);
+                throw;
             }
         }
 

@@ -2,11 +2,10 @@
 
 namespace GiEnJul.Entities
 {
-    public class Person : TableEntity
+    public class Person : EntityBase
     {
-        public Person() : base()
-        {
-        }
+        public Person()
+        { }
 
         // RowKey = Guid
         // PartitionKey = {recipientId}
