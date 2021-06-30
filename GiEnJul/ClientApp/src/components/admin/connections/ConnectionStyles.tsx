@@ -16,13 +16,14 @@ const ConnectionStyle = makeStyles((theme: Theme) =>
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
-            flexBasis: '33.33%',
+            flexBasis: '50%',
             flexShrink: 0,
             alignItems:"center",
         },
-        secondaryHeading: {
+        confirmedBox: {
             fontSize: theme.typography.pxToRem(15),
-            color: theme.palette.text.secondary,
+            flexBasis: '50%',
+            alignItems: "center",
         },
         items: {
             margin:"1em",

@@ -23,13 +23,15 @@ const Completed: React.FC<ICompletedProps> = (props) => {
                     <Box display="flex" className={classes.heading} align-items="center">
                         <Typography component="h4" className={classes.items} >FULLFØRTE KOBLINGER</Typography>
                     </Box>
-                    <Box display="flex" className={classes.heading} align-items="center">
-                        <Circle prop1={"green"}/>
-                        <Typography component="h5" className={classes.items}>Bekreftet</Typography>
-                    </Box>
-                    <Box display="flex" className={classes.heading} align-items="center" justifyContent="flex-start">
-                        <Circle prop1={"yellow"}/>
-                        <Typography className={classes.items}>Ikke Bekreftet</Typography>
+                    <Box display="flex" className={classes.heading} justifyContent="center">
+                        <Box display="flex"  className={classes.confirmedBox}>
+                            <Circle prop1={"green"}/>
+                            <Typography component="h5" className={classes.items}>Bekreftet</Typography>
+                        </Box>
+                        <Box display="flex"  className={classes.confirmedBox}>
+                            <Circle prop1={"yellow"}/>
+                            <Typography className={classes.items}>Ikke Bekreftet</Typography>
+                        </Box>
                     </Box>
                 </AccordionSummary>
                 <AccordionDetails>
