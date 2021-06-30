@@ -1,53 +1,9 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as React from 'react';
 import Circle from '../common/Circle';
 import ConnectionsField from './ConnectionsField';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles
-    ({
-        root: {
-            width: '100%',
-        },
-        heading: {
-            fontSize: theme.typography.pxToRem(15),
-            flexBasis: '33.33%',
-            flexShrink: 0,
-            alignItems:"center",
-        },
-        secondaryHeading: {
-            fontSize: theme.typography.pxToRem(15),
-            color: theme.palette.text.secondary,
-        },
-        items: {
-            margin:"1em",
-        },
-        downwardsContainer: {
-            display: "flex",
-            width: "100%",
-            flexDirection: "row",
-            flexWrap: "wrap",
-        },
-        downwardHeader: {
-            display: "flex",
-            width: "100%",
-            justifyContent:"space-between",
-        },
-        headerItems: {
-            marginRight: "65%",
-            marginLeft: "2em",
-        
-        },
-        container: {
-            display: "flex",
-            width: "100%",
-        },
-        headerGrid: {
-
-        },
-    }),
-);
+import ConnectionStyle from './ConnectionStyles';
 
 interface ICompletedProps {
     //Need to implement connections dict
@@ -55,22 +11,21 @@ interface ICompletedProps {
 }
 
 const Completed: React.FC<ICompletedProps> = (props) => {
-    const classes = useStyles();
+    const classes = ConnectionStyle();
     return(
         <div className={classes.root}>
-            <Accordion defaultExpanded>
+            <Accordion defaultExpanded className={classes.accordion}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1c-content"
-                id="panel1c-header"
-                justify-content="space between"
+                id="ConnectionsAccord"
                 >   
                     <Box display="flex" className={classes.heading} align-items="center">
                         <Typography component="h4" className={classes.items} >FULLFØRTE KOBLINGER</Typography>
                     </Box>
                     <Box display="flex" className={classes.heading} align-items="center">
                         <Circle prop1={"green"}/>
-                        <Typography className={classes.items}>Bekreftet</Typography>
+                        <Typography component="h5" className={classes.items}>Bekreftet</Typography>
                     </Box>
                     <Box display="flex" className={classes.heading} align-items="center" justifyContent="flex-start">
                         <Circle prop1={"yellow"}/>
@@ -82,18 +37,28 @@ const Completed: React.FC<ICompletedProps> = (props) => {
                         <Box className={classes.container} justifyContent="flex-end">
                             <Grid container spacing={2}>
                                 <Grid item xs>
-                                    <Typography component="h2" className={classes.items} >Familie</Typography>
+                                    <Typography component="h1" className={classes.items} >Familie</Typography>
                                 </Grid>
                                 <Grid item xs></Grid>
                                 <Grid item xs></Grid>
                                 <Grid item xs></Grid>
                                 <Grid item xs>    
-                                    <Typography component="h2" className={classes.items} >Giver</Typography>
+                                    <Typography component="h1" className={classes.items} >Giver</Typography>
                                 </Grid>
                             </Grid>
                         </Box>
-                        <ConnectionsField personcount={5} recipientnumber={"NAV2ET"} giverfullname={"Johann Boi"} status={false} />
-                        <ConnectionsField personcount={3} recipientnumber={"BARNQS"} giverfullname={"Johann Boi"} status={true} />
+                        <Box display="flex" className={classes.root}>
+                            <Box className={classes.searchBoxL} display="flex">
+                                <Typography className={classes.filterItem}>Familie nummer</Typography>
+                                <Typography className={classes.filterItem}>Antall</Typography>
+                            </Box>
+                            <Box className={classes.searchBoxR} display="flex">
+                                <Typography className={classes.filterItem}>Navn</Typography>
+                                <Typography className={classes.filterItem}>Status</Typography>
+                            </Box>
+                        </Box>
+                        <ConnectionsField personcount={5} recipientnumber={"NAV2ET"} giverfullname={"Olav Hansen"} status={false} />
+                        <ConnectionsField personcount={3} recipientnumber={"BARNQS"} giverfullname={"Johann Refsnes"} status={true} />
                     </Box>
                 </AccordionDetails>
             </Accordion>

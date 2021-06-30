@@ -1,6 +1,7 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, createStyles, makeStyles, Theme, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import * as React from 'react';
+import Circle from '../common/Circle';
 
 interface IConnectionsFieldProps {
     personcount: number,
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     ({
         root: {
             width: '100%',
+            marginTop: '1em',
         },
         heading: {
             fontSize: theme.typography.pxToRem(15),
@@ -29,6 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         items: {
             margin: "1em",
+            flexBasis: "33,33%",
+        },
+        colorBox: {
+            alignItems:"center",
+            justifyContent: "flex-end", 
+            flexBasis: "33,33%",
         },
     }),
 );
@@ -49,7 +57,10 @@ const ConnectionsField: React.FC<IConnectionsFieldProps> = (props) => {
                 </Box>
                 <Box className={classes.secondaryHeading} display="flex" >
                     <Typography className={classes.items} >{props.giverfullname}</Typography>
-                    <Typography className={classes.items}>{props.status ? "Bekreftet" : "Ikke Bekreftet"}</Typography>
+                    <Box className={classes.colorBox} display="flex">
+                        {props.status ? <Circle prop1={"green"}/> : <Circle prop1={"yellow"}/> }
+                        <Typography className={classes.items}>{props.status ? "Bekreftet" : "Ikke Bekreftet"}</Typography>
+                    </Box>
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
