@@ -5,10 +5,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
 {
-    public class Giver : TableEntity
+    public class Giver : EntityBase
     {
-        public Giver() : base()
+        public Giver()
+        { }
+
+        public Giver(string location, string rowKey)
         {
+            PartitionKey = $"loc_{location}";
+            RowKey = rowKey;
         }
 
         public Giver(string location)
@@ -17,8 +22,6 @@ namespace GiEnJul.Entities
             PartitionKey = $"loc_{location}";
             Location = location;
         }
-
-
 
         public int MaxRecievers { get; set; }
         public string Location { get; set; }

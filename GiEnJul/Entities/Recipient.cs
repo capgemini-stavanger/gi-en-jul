@@ -4,16 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
 {
-    public class Recipient : TableEntity 
+    public class Recipient : EntityBase 
     {
         public Recipient()
-        {
-        }
-
+        { }
 
         // RowKey = Guid
         // PartitionKey = loc_{location}
-        public Recipient(string location, string rowKey) : base(location, rowKey)
+        public Recipient(string location, string rowKey)
         {
             PartitionKey = $"loc_{location}";
             RowKey = rowKey;

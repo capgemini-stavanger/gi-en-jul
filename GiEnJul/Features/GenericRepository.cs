@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IGenericRepository<T> where T : TableEntity
+    public interface IGenericRepository<T> where T : EntityBase, new()
     {
         public CloudTable _table { get; }
         public IMapper _mapper { get; set; }
@@ -21,13 +22,11 @@ namespace GiEnJul.Features
         Task<T> DeleteAsync(string partitionKey, string rowKey);
         Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
 
-#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
-        Task<IEnumerable<T>> GetAllAsync<T>() where T : ITableEntity, new();
-        Task<IEnumerable<T>> GetAllByQueryAsync<T>(TableQuery<T> query) where T : ITableEntity, new();
-#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query);
     }
 
-    public class GenericRepository<T> : IGenericRepository<T> where T : TableEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : EntityBase, new()
     {
         public CloudTable _table { get; private set; }
         public IMapper _mapper { get; set; }
@@ -160,17 +159,13 @@ namespace GiEnJul.Features
         }
 
 
-#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
-        public async Task<IEnumerable<T>> GetAllAsync<T>() where T : ITableEntity, new()
-#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await GetAllByQueryAsync(new TableQuery<T>());
         }
 
 
-#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
-        public async Task<IEnumerable<T>> GetAllByQueryAsync<T>(TableQuery<T> query) where T : ITableEntity, new()
-#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
+        public async Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query)
         {
             try
             {
@@ -178,22 +173,21 @@ namespace GiEnJul.Features
 
                 TableContinuationToken token = null;
                 var entities = new List<T>();
-
+                
                 do
                 {
-                    TableQuerySegment<T> queryResult = await _table.ExecuteQuerySegmentedAsync(query, token);
+                    var queryResult = await _table.ExecuteQuerySegmentedAsync(query, token);
                     entities.AddRange(queryResult.Results);
                     token = queryResult.ContinuationToken;
 
                 } while (token != null);
 
                 _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _table.Name);
-
                 return entities;
             }
             catch (Exception e)
             {
-                _log.Error("Exception while fetching entities, in table:{0}. \n{@Exception}", _table.Name, e);
+                _log.Error("Exception while fetching entities, in table:{0}", _table.Name, e);
                 throw;
             }
         }
