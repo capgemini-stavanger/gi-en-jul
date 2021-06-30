@@ -65,8 +65,7 @@ const ConnectionsField: React.FC<IConnectionsFieldProps> = (props) => {
             </AccordionSummary>
             <AccordionDetails>
                 <Box width="100%" display="flex" flex-grow="1">
-                    <div >Familie</div>
-                    <div margin-left="100px">Giver</div>
+                   <Typography>Information should go here when we know how we will store it in the frontend</Typography>
                 </Box>
             </AccordionDetails>
         </Accordion>
