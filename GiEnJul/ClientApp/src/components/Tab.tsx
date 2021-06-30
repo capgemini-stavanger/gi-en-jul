@@ -1,66 +1,53 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { animateScroll as scroll } from "react-scroll";
-import { Button } from 'reactstrap';
-import './Tab.css'
+import { Button } from '@material-ui/core';
+import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded';
+import useStyles from './StylesTab';
 
-interface TabState{
-    isVisible: boolean, 
-
-};
 interface TabProps {
-    maxPagePosition: number, 
-    textField: string,
-    styling: string,
+    maxPagePosition: number,
     path: string,
 }
 
-class Tab extends React.PureComponent<TabProps, TabState> {
-    state: TabState = {
-        // optional second annotation for better type inference
-        isVisible: false,
-      };
+const Tab: React.FC<TabProps> = ({ maxPagePosition, path }) => {
+    const [isVisible, setIsVisible] = useState(false);
 
-    componentDidMount() {
-        window.addEventListener("scroll", this.handleScroll);
-      }
-    
-      componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
-      };
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+    })
 
-    handleScroll= () => {
-        if (window.pageYOffset > this.props.maxPagePosition) {
-            this.setState({isVisible: true});
+    const handleScroll = () => {
+        if (window.pageYOffset > maxPagePosition) {
+            setIsVisible(true);
         }
-        else{
-            this.setState({isVisible: false});
+        else {
+            setIsVisible(false);
         }
     }
-    
-    render(){
-        if(this.state.isVisible){
-            if(this.props.path === 'top'){
-                return(
+    const classes = useStyles();
 
-                    <Button className={this.props.styling} onClick = {() => {scroll.scrollToTop()}}> {this.props.textField} </Button>
-                )
-            }
-            else{
-                return(
-                    <Route render={({ history}) => (
-                        <Button className={this.props.styling} onClick={() => { history.push(this.props.path) }}>{this.props.textField}
-                        </Button>)}/>
-                )
-            }
-            
-        }
-        else{
-            return(
-                null
+    if (isVisible) {
+        if (path === 'top') {
+            return (
+                <Button className={classes.topButton} onClick={() => { scroll.scrollToTop() }}>
+                    <ExpandLessRoundedIcon></ExpandLessRoundedIcon>
+                </Button>
             )
         }
+        else {
+            return (
+                <Route render={({ history }) => (
+                    <Button size='large' variant='contained' className={classes.giverButton} onClick={() => { history.push(path) }}>Bli giver
+                    </Button>)} />
+            )
         }
     }
-
+    else {
+        return (
+            null
+        )
+    }
+}
 export default Tab

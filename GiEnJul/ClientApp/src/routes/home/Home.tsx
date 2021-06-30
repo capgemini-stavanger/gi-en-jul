@@ -28,17 +28,24 @@ const Home = () => {
     alignItems="center">
     <Route render={({ history}) => (
     <Button size='large' variant='contained' className={classes.submit}  onClick={() => { history.push('/bli-giver') }}>Bli Giver
-    </Button>)}/>
-    </Grid>
-    </Grid>
-      <How/>
-      <Questions/>
-      <Companies/>
-      <Tab maxPagePosition= {140} textField="Bli giver" styling ='button-giver' path='/bli-giver'/>
-      <Tab maxPagePosition= {300} textField="Til toppen" styling = 'button-to-top' path='top'/>
-  </Container>
+            </Button>)} />
+        </Grid>
+      </Grid>
+      <How />
+      <Questions />
+      <Companies />
+      <Grid item xs={1} >
+          <Tab maxPagePosition={300} path='top' />
+        </Grid>
+      <Grid
+      container
+      direction="row"
+      justify="center"
+      alignItems="center">
+          <Tab maxPagePosition={140} path='/bli-giver' />
+      </Grid>
+    </Container>
   )
- 
     };
 
 export default connect()(Home);
