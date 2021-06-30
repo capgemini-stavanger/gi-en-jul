@@ -4,11 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
 {
-    public class Recipient : TableEntity 
+    public class Recipient : EntityBase 
     {
+        public Recipient()
+        { }
+
         // RowKey = Guid
         // PartitionKey = loc_{location}
-        public Recipient(string location, string rowKey) : base(location, rowKey)
+        public Recipient(string location, string rowKey)
         {
             PartitionKey = $"loc_{location}";
             RowKey = rowKey;
@@ -30,7 +33,7 @@ namespace GiEnJul.Entities
         public string ContactEmail { get; set; }
         [ProtectedPersonalData]
         [Phone]
-        public int ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber { get; set; }
 
         //Submitter references
         public string Institution { get; set; }

@@ -2,19 +2,13 @@
 
 namespace GiEnJul.Entities
 {
-    public class Connection : TableEntity
+    public class Connection : EntityBase
     {
         public Connection()
-        {
-        }
+        { }
 
-        // RowKey = Guid
-        // PartitionKey = loc_{receiverLocation}
         public Connection(string receiverLocation, string rowKey) : base(receiverLocation, rowKey)
-        {
-            PartitionKey = $"loc_{receiverLocation}";
-            RowKey = rowKey;
-        }
+        { }
 
 		// Family info
         public string Dinner { get; set; }
