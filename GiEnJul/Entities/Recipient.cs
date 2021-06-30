@@ -33,7 +33,7 @@ namespace GiEnJul.Entities
         public string ContactEmail { get; set; }
         [ProtectedPersonalData]
         [Phone]
-        public int ContactPhoneNumber { get; set; }
+        public string ContactPhoneNumber { get; set; }
 
         //Submitter references
         public string Institution { get; set; }
