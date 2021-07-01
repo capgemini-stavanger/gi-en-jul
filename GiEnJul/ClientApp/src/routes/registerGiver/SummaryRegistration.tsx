@@ -54,7 +54,6 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, submit, valu
                 <TextField
                     disabled
                     variant="outlined"
-                    margin="normal"
                     required
                     fullWidth
                     id="location"

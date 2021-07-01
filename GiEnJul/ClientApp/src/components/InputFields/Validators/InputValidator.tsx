@@ -1,68 +1,125 @@
-﻿import * as React from 'react';
-import { FC, useEffect } from 'react';
-import validator from 'validator';
-import IValidator from './IValidator';
-import ValidatorFlags from './ValidatorFlags';
+﻿import { TextField } from '@material-ui/core';
+import * as React from 'react';
+import { FC, useEffect, useState } from 'react';
 
 
-interface InputValidatorProps extends IValidator {
-    validatorFlag: ValidatorFlags,   // Flag. Can use multiple with bitwise or: Flag1 | Flag2
+interface InputValidatorProps {
+    // List of methods to use for validation. 
+    // Ascending prioritation.
+    validators: ((input: string) => boolean)[],
+
+    // List of methods that updates any setValid value.
+    // (undefined | set value function | list same length as validators prop with set value functions)
+    setIsValids?: ((isValid: boolean) => void) | ((isValid: boolean) => void)[],
+
+    // List of error that should occur, depending on which validator fails. 
+    // Has no error message if undefined.
+    // (undefined | list same length as validators prop)
+    errorMessages?: string[],   
+
+    // Increment to view any validation errors. 
+    // Initialize to 0 if errors shouldn't start active.
+    viewErrorTrigger?: number,
+    
+    value: string,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    label: string,
+    name: string,
+    type?: string,
+    id?: string,
+    className?: string,
+    disabled?: boolean,
+    margin?: any,
+    variant?: any,
+    autoComplete?: string,
+    fullWidth?: boolean,
+    autoFocus?: boolean
 }
 
 const InputValidator: FC<InputValidatorProps> = (
-    { validatorFlag, 
-        setIsValid, 
+    {   setIsValids, 
+        validators,
+        errorMessages,  // Ascending prioritation
+        viewErrorTrigger,
         value, 
         onChange, 
         type, 
+        label,
         name, 
-        placeholder, 
         id, 
         className, 
         disabled,
-        min,
-        max,
+        margin,
+        variant,
+        autoComplete,
+        fullWidth,
+        autoFocus,
      },
 ) => {
 
-    function isNotNull(inputValue: string) {
-        return !!value;
+    const [error, setError] = useState("");
+    const [viewError, setViewError] = useState(false);
+
+    const checkArgs = () => {
+        let validatorCount = validators.length;
+        function isInvalidOptionalArg(arg?: Array<any> | Function) {
+            return typeof arg === "object" && arg.length !== validatorCount;
+        }
+        if (isInvalidOptionalArg(setIsValids) || isInvalidOptionalArg(errorMessages)) {
+            throw Error("An argument in InputValidator is invalid.");
+        }
     }
 
-    function isPhoneNumber(inputValue: string) {
-        // Returns true if norwegian number or foreign number starting with +{countryCode}
-        return !!(validator.isMobilePhone(value, ["nb-NO", "nn-NO"]) ||
-            (inputValue && inputValue.startsWith("+") && validator.isMobilePhone(value)));
+    const validate = () => {
+        let errorMsg = "";
+        for (let i = 0; i < validators.length; i++) {
+            let isValid = validators[i](value);
+            switch (typeof setIsValids) {
+                case "object":
+                    setIsValids[i](isValid);
+                    break;
+                case "function":
+                    setIsValids(isValid);
+                    break;
+            } 
+            if (!isValid && viewError) {
+                errorMsg = errorMessages !== undefined ? errorMessages[i] : "dummy";
+            }
+        }
+        setError(errorMsg);
     }
 
-    function isEmail(inputValue: string) {
-        return validator.isEmail(inputValue);
-    }
-
-    function validate(inputValue: string) {
-        setIsValid(
-            (!(validatorFlag & ValidatorFlags.NotNull) || isNotNull(inputValue)) &&
-            (!(validatorFlag & ValidatorFlags.PhoneNumber) || isPhoneNumber(inputValue)) && 
-            (!(validatorFlag & ValidatorFlags.Email) || isEmail(inputValue))
-        )
+    const extendedOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(e);
+        setViewError(false);
     }
 
     useEffect(() => {
-        validate(value);
+        if (viewErrorTrigger || viewErrorTrigger === undefined) setViewError(true);
+    }, [viewErrorTrigger])
+
+    useEffect(() => {
+        checkArgs();
+        validate();
     })
 
     return (
-        <input 
-        type={type} 
-        name={name} 
-        value={value} 
-        onChange={onChange} 
-        placeholder={placeholder} 
-        id={id} 
-        className={className} 
-        disabled={disabled}
-        min={min}
-        max={max}
+        <TextField
+            error={!!error}
+            helperText={errorMessages === undefined ? undefined : error}
+            label={label}
+            type={type} 
+            name={name} 
+            value={value} 
+            onChange={extendedOnChange} 
+            id={id} 
+            className={className} 
+            disabled={disabled}
+            margin={margin}
+            variant={variant ? variant : "outlined"}
+            autoComplete={autoComplete}
+            fullWidth={fullWidth}
+            autoFocus={autoFocus}
         />
     )
 }

@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { useState } from 'react';
-import InputEmail from '../InputFields/Validators/InputEmail';
-import InputNotNull from '../InputFields/Validators/InputNotNull';
-import InputPhoneNumber from '../InputFields/Validators/InputPhoneNumber';
 import Location from './InstitutionLocation';
 import FormPerson from './FormPerson';
 import IFormPerson from './IFormPerson';
 import LOCATIONS from '../../common/constants/Locations';
 import Gender from '../../common/enums/Gender';
+import InputValidator from '../InputFields/Validators/InputValidator';
+import { isEmail, isNotNull, isPhoneNumber } from '../InputFields/Validators/Validators';
 
 
 type PersonType = {
@@ -32,16 +31,16 @@ type submittype = {
 }
 
 const RegistrationForm = () => {
+    const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
+
     const [persons, setPersons] = useState([{} as IFormPerson]);
     const [location, setLocation] = useState("");
     
     const [dinnerRadio, setDinnerRadio] = useState("");
     const [dinnerInput, setDinnerInput] = useState("");
-    const [isValidDinnerInput, setIsValidDinnerInput] = useState(false);
 
     const [dessertRadio, setDessertRadio] = useState("");
     const [dessertInput, setDessertInput] = useState("");
-    const [isValidDessertInput, setIsValidDessertInput] = useState(false);
 
     const [specialNeeds, setSpecialNeeds] = useState("");
 
@@ -84,8 +83,33 @@ const RegistrationForm = () => {
         if (e.target.value !== "annet") setDessertInput("");
     } 
 
-    const onSubmitForm = (e : React.FormEvent<HTMLFormElement>) => {
+    const getDinner = () => {
+        return dinnerRadio === "annet" ? dinnerInput : dinnerRadio;
+    }
+
+    const getDessert = () => {
+        return dessertRadio === "annet" ? dessertInput : dessertRadio;
+    }
+
+    const allIsValid = () => {
+        return getDinner() &&
+            getDessert() &&
+            isValidPid &&
+            isValidContactName &&
+            isValidContactPhoneNumber &&
+            isValidContactEmail &&
+            persons.every(p => {
+                return p.isValidAge && p.isValidGender && p.isValidWish;
+            })
+    }
+
+    const onSubmitForm = (e : any) => {
         e.preventDefault();
+        if (!allIsValid()) {
+            setViewErrorTrigger(v => v + 1);
+            return;
+        }
+
         let personsList = Array<PersonType>();
         persons.forEach(p => {
             const p1:PersonType = {
@@ -97,8 +121,8 @@ const RegistrationForm = () => {
         });
 
         let submit:submittype = {
-            Dinner:(dinnerRadio !== "annet") ? dinnerRadio : dinnerInput ,
-            Dessert:(dessertRadio !== "annet") ? dessertRadio : dessertInput ,
+            Dinner:getDinner() ,
+            Dessert:getDessert() ,
             Note:specialNeeds,
             Event:"JUL2021",
             Location:location,
@@ -132,7 +156,12 @@ const RegistrationForm = () => {
             </div>
             <div>
                 {persons.map((p, i) =>
-                    <FormPerson key={"person" + i} person={p} updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} />)}
+                    <FormPerson 
+                        key={"person" + i} 
+                        person={p} 
+                        viewErrorTrigger={viewErrorTrigger}
+                        updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
+                    />)}
             </div>
             <input type="button" onClick={addPerson} value="Legg til flere" />
             <div className="form-group">
@@ -144,8 +173,16 @@ const RegistrationForm = () => {
                 <label>Pinnekjøtt</label><br/>
                 <input type="radio" id="annet" name="middag" value="annet" onChange={onDinnerRadioChange}/>
                 <label>Annet (ikke fisk)</label>
-                <InputNotNull setIsValid={setIsValidDinnerInput} onChange={(e) => setDinnerInput(e.target.value)} value={dinnerInput} 
-                className={isValidDinnerInput ? "bg-success" : "bg-danger"} disabled={dinnerRadio !== "annet"} type="textfield" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[(input) => {return dinnerRadio !== "annet" || isNotNull(input)}]}
+                    errorMessages={['Vennligst velg en middag']}
+                    onChange={(e) => setDinnerInput(e.target.value)} 
+                    value={dinnerInput} 
+                    name="dinner" 
+                    disabled={dinnerRadio !== "annet"} 
+                    label="Annen middag"
+                />
 
                 <h4>Dessert</h4>
                 <input type="radio" id="riskrem" name="dessert" value="riskrem" onChange={onDessertRadioChange}/>
@@ -154,28 +191,74 @@ const RegistrationForm = () => {
                 <label>Sjokoladepudding</label><br/>
                 <input type="radio" id="annet" name="dessert" value="annet" onChange={onDessertRadioChange}/>
                 <label>Annet</label>
-                <InputNotNull setIsValid={setIsValidDessertInput} onChange={(e) => setDessertInput(e.target.value)} value={dessertInput} 
-                className={isValidDessertInput ? "bg-success" : "bg-danger"} disabled={dessertRadio !== "annet"} type="textfield" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[(input) => {return dessertRadio !== "annet" || isNotNull(input)}]}
+                    errorMessages={['Vennligst velg en dessert']}
+                    onChange={(e) => setDessertInput(e.target.value)} 
+                    value={dessertInput} 
+                    name="dessert" 
+                    disabled={dessertRadio !== "annet"} 
+                    label="Annen dessert"
+                />
 
                 <br/>
                 <input value={specialNeeds} onChange={(e) => setSpecialNeeds(e.target.value)} type="texarea" placeholder="Spesielle behov (hala, vegetar, allergier)"/>
             </div>
             <div className="form-group">
                 <label>ID</label><br/>
-                <InputNotNull setIsValid={setIsValidPid} onChange={(e) => setPid(e.target.value)} value={pid} 
-                className={isValidPid ? "bg-success" : "bg-danger"} type="textarea" id="PID" placeholder="PID eller annen ID dere bruker for å godkjenne familien" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isNotNull]}
+                    errorMessages={['Vennligst skriv inn en pid']}
+                    setIsValids={setIsValidPid}
+                    onChange={(e) => setPid(e.target.value)} 
+                    value={pid} 
+                    name="pid" 
+                    id="PID" 
+                    label="PID" 
+                />
                 <br/>
 
                 <label>Kontaktperson</label><br/>
-                <InputNotNull setIsValid={setIsValidContactName} onChange={(e) => setContactName(e.target.value)} value={contactName} 
-                className={isValidContactName ? "bg-success" : "bg-danger"} type="textarea" id="kontaktnavn" placeholder="Navn" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isNotNull]}
+                    setIsValids={setIsValidContactName} 
+                    errorMessages={['Vennligst skriv inn et navn']}
+                    onChange={(e) => setContactName(e.target.value)} 
+                    value={contactName} 
+                    name="cname" 
+                    id="kontaktnavn" 
+                    label="Navn" 
+                />
 
-                <InputPhoneNumber setIsValid={setIsValidContactPhoneNumber} onChange={(e) => setContactPhoneNumber(e.target.value)} value={contactPhoneNumber} 
-                className={isValidContactPhoneNumber ? "bg-success" : "bg-danger"} type="textarea" id="kontaktperson" placeholder="Telefon" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isPhoneNumber, isNotNull]}
+                    setIsValids={setIsValidContactPhoneNumber} 
+                    errorMessages={['Telefonnummeret er ikke gyldig', 'Vennligst skriv inn et telefonnummer']}
+                    onChange={(e) => setContactPhoneNumber(e.target.value)} 
+                    value={contactPhoneNumber} 
+                    name="cphone" 
+                    id="kontaktperson" 
+                    label="Telefon" 
+                    autoComplete="tel"
+                />
                 <br/>
 
-                <InputEmail setIsValid={setIsValidContactEmail} onChange={(e) => setContactEmail(e.target.value)} value={contactEmail} 
-                className={isValidContactEmail ? "bg-success" : "bg-danger"} type="textarea" id="kontaktepost" placeholder="Epost" />
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isEmail, isNotNull]}
+                    setIsValids={setIsValidContactEmail} 
+                    errorMessages={['Eposten er ikke gyldig', 'Vennligst skriv inn en epost']}
+                    onChange={(e) => setContactEmail(e.target.value)} 
+                    value={contactEmail} 
+                    name="cemail" 
+                    id="kontaktepost" 
+                    label="Epost" 
+                    autoComplete="email"
+                />
                 <br/>
 
             </div>
