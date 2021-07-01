@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Grid, Container } from '@material-ui/core';
+import { Button, Grid, Container, FormControl } from '@material-ui/core';
 import useStyles from './Styles';
 import { ValidatorForm } from 'react-material-ui-form-validator';
 import InputValidator from '../../components/InputFields/Validators/InputValidator';
@@ -47,7 +47,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
     const classes = useStyles();
     return (
         <Container>
-            <ValidatorForm
+            <form
                 style={{ width: '100%', marginTop: '5px' }}
                 onSubmit={Continue}
             >
@@ -57,7 +57,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     setIsValids={[setIsNotEmptyFullName]}
                     label="Fullt navn*"
                     variant="outlined"
-                    margin={undefined}
+                    margin="normal"
                     fullWidth
                     name="fullname"
                     autoComplete="name"
@@ -77,7 +77,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     errorMessages={['Eposten er ikke gyldig', 'Vennligst skriv inn din epost']}
                     autoComplete="email"
                     variant="outlined"
-                    margin={undefined}
+                    margin="normal"
                     fullWidth
                 />
                 <InputValidator
@@ -91,7 +91,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     errorMessages={['Telefonnummeret er ikke gyldig', 'Vennligst skriv inn ditt telefonnummer']}
                     autoComplete="tel"
                     variant="outlined"
-                    margin={undefined}
+                    margin="normal"
                     fullWidth
                 />
                 <Grid container spacing={2} justify="center" className={classes.submit}>
@@ -102,7 +102,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                         <Button variant="contained" type="submit">Neste</Button>
                     </Grid>
                 </Grid>
-            </ValidatorForm>
+            </form>
         </Container>
     )
 }

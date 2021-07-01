@@ -95,8 +95,8 @@ const RegistrationForm = () => {
     }
 
     const allIsValid = () => {
-        return (isValidDinnerInput || dinnerRadio) &&
-            (isValidDessertInput || dessertRadio) &&
+        return getDinner() &&
+            getDessert() &&
             isValidPid &&
             isValidContactName &&
             isValidContactPhoneNumber &&
@@ -170,7 +170,7 @@ const RegistrationForm = () => {
             <div className="form-group">
                 <h3>Matønsker</h3>
                 <h4>Middag</h4>
-                <input type="radio" id="ribbe" name="middag" value="ribbe" onChange={onDinnerRadioChange} defaultChecked/>
+                <input type="radio" id="ribbe" name="middag" value="ribbe" onChange={onDinnerRadioChange}/>
                 <label>Ribbe</label><br/>
                 <input type="radio" id="pinnekjøtt" name="middag" value="pinnekjøtt" onChange={onDinnerRadioChange}/>
                 <label>Pinnekjøtt</label><br/>
@@ -189,7 +189,7 @@ const RegistrationForm = () => {
                 />
 
                 <h4>Dessert</h4>
-                <input type="radio" id="riskrem" name="dessert" value="riskrem" onChange={onDessertRadioChange} defaultChecked/>
+                <input type="radio" id="riskrem" name="dessert" value="riskrem" onChange={onDessertRadioChange}/>
                 <label>Riskrem</label><br/>
                 <input type="radio" id="sjokoladepudding" name="dessert" value="sjokoladepudding" onChange={onDessertRadioChange}/>
                 <label>Sjokoladepudding</label><br/>
