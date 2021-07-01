@@ -17,6 +17,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
             builder.Register(c => new LoggerConfiguration()
                                 .MinimumLevel.Debug()
                                 .WriteTo.Console()

@@ -15,16 +15,17 @@ namespace GiEnJul.Test.ModelTests
 
         public static IEnumerable<object[]> GetInvalidGivers()
         {
-            yield return new object[] { new Models.Giver("Location") }; //Missing members
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 0 } }; //Invalid MaxRecivers
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Name
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Invalid Mail", PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Mail
-            yield return new object[] { new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "Invalid ", MaxRecievers = 5 } }; //Invalid PhoneNumber
+            yield return new object[] { new Models.PostGiverDto() }; //Missing members
+            yield return new object[] { new Models.PostGiverDto() { Location = "Stavanger", FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 0 } }; //Invalid MaxRecivers
+            yield return new object[] { new Models.PostGiverDto() { Location = "Stavanger", FullName = "",              Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Name
+            yield return new object[] { new Models.PostGiverDto() { Location = "Stavanger", FullName = "Test Testesen", Email = "Invalid Mail",      PhoneNumber = "12345678", MaxRecievers = 5 } }; //Invalid Mail
+            yield return new object[] { new Models.PostGiverDto() { Location = "Stavanger", FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "Invalid ", MaxRecievers = 5 } }; //Invalid PhoneNumber
+            yield return new object[] { new Models.PostGiverDto() { Location = "",          FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "Invalid ", MaxRecievers = 5 } }; //Invalid Location
         }
 
         [Theory]
         [MemberData(nameof(GetInvalidGivers))]
-        public void ValidateInvalidGiverModels(Models.Giver model)
+        public void ValidateInvalidGiverModels(Models.PostGiverDto model)
         {
             Assert.NotEmpty(Validator.ValidateModel(model));
         }
@@ -32,7 +33,7 @@ namespace GiEnJul.Test.ModelTests
         [Fact]
         public void ValidateValidGiverModel()
         {
-            Assert.Empty(Validator.ValidateModel(new Models.Giver("Stavanger") { FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 1 }));
+            Assert.Empty(Validator.ValidateModel(new Models.PostGiverDto() { Location = "Stavanger", FullName = "Test Testesen", Email = "Test@Testesen.com", PhoneNumber = "12345678", MaxRecievers = 1 }));
         }
 
     }

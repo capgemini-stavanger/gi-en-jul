@@ -8,10 +8,11 @@ namespace GiEnJul.Models
     public class Giver : TableEntity
     {
 
-        public Giver(string location)
+        public Giver(string eventName, string location)
         {
             RowKey = Guid.NewGuid().ToString();
-            PartitionKey = $"loc_{location}";
+            PartitionKey = $"{eventName}_{location}";
+            Event = eventName;
             Location = location;
         }
 
@@ -28,6 +29,7 @@ namespace GiEnJul.Models
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
+        public string Event { get; set; }
 
         public Recipient Receiver { get; set; }
 

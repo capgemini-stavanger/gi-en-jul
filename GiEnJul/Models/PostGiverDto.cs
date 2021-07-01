@@ -20,5 +20,8 @@ namespace GiEnJul.Models
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
+
+        public string EventName { get; set; }
+
     }
 }

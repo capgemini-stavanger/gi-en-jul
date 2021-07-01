@@ -8,9 +8,6 @@ namespace GiEnJul.Infrastructure
         {
             CreateMap<Entities.Person, Models.Person>();
             CreateMap<Models.Person, Entities.Person>();
-            CreateMap<Entities.Giver, Models.Giver>()
-                .ForMember(dest => dest.Receiver, act => act.Ignore());
-            CreateMap<Models.Giver, Entities.Giver>();
             CreateMap<Models.Giver, Entities.Connection>()
                 .ForMember(dest => dest.GiverEmail, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.GiverFullName, opt => opt.MapFrom(src => src.FullName))
@@ -46,7 +43,12 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
 
-            CreateMap<Models.PostGiverDto, Entities.Giver>().ConstructUsing(from => new Entities.Giver(from.Location));
+            CreateMap<Models.PostGiverDto, Entities.Giver>()
+                .ConstructUsing(x => new Entities.Giver(x.Location, x.EventName))
+                .ForMember(x => x.PartitionKey, opt => opt.Ignore())
+                .ForMember(x => x.RowKey, opt => opt.Ignore())
+                .ForMember(x => x.Timestamp, opt => opt.Ignore())
+                .ForMember(x => x.ETag, opt => opt.Ignore());
         }
     }
 }
