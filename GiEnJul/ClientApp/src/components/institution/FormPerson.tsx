@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import Gender from '../../common/enums/Gender';
-import InputNotNull from '../InputFields/Validators/InputNotNull';
+import InputValidator from '../InputFields/Validators/InputValidator';
+import { isNotNull } from '../InputFields/Validators/Validators';
 import IFormPerson from './IFormPerson';
 
 
 interface PersonProps {
     updatePerson: (newPerson: IFormPerson) => void,
+    viewErrorTrigger: number,
     person: IFormPerson,
 }
 
 const InstitutionPerson: FC<PersonProps> = (
-    { updatePerson, person }
+    { updatePerson, viewErrorTrigger, person }
     ) => {
 
     const [age, setAge] = useState("");
@@ -61,15 +63,15 @@ const InstitutionPerson: FC<PersonProps> = (
 
     return(
         <div>
-            <InputNotNull
-            setIsValid={setIsValidAge}
-            className={isValidAge ? "bg-success" : "bg-danger"}
-            type="number"
-            name="age"
-            value={age}
-            onChange={onAgeChange}
-            min={0}
-            max={130}
+            <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isNotNull]}
+                setIsValids={setIsValidAge}
+                name="age"
+                type="number"
+                label="Age"
+                value={age}
+                onChange={onAgeChange}
             />
             <select value={gender} onChange={onGenderChange} className={isValidGender ? "bg-success" : "bg-danger"}>
                 {gender === Gender.Unspecified && <option value={Gender.Unspecified}>-- Kjønn --</option>}
@@ -77,14 +79,15 @@ const InstitutionPerson: FC<PersonProps> = (
                 <option value={Gender.Female}>Kvinne</option>
                 <option value={Gender.Other}>Andre</option>
             </select>
-            <InputNotNull
-            setIsValid={setIsValidWishInput}
-            className={isValidWish ? "bg-success" : "bg-danger"}
-            type="text"
-            placeholder="Gaveønske (husk størrelse)"
-            disabled={isAgeWish}
-            value={wish}
-            onChange={e => setWish(e.target.value)}
+            <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[(input) => {return isAgeWish || isNotNull(input)}]}
+                setIsValids={setIsValidWishInput}
+                name="wish"
+                label="Gaveønske (husk størrelse)"
+                disabled={isAgeWish}
+                value={wish}
+                onChange={e => setWish(e.target.value)}
             />
             <input
             type="checkbox"
