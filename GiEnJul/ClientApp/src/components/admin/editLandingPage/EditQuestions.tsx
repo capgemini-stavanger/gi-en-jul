@@ -12,23 +12,27 @@ import draftToHtml from 'draftjs-to-html';
 
 
 const EditQuestions = () => {
-    const [ editorState, setEditorState ] = useState<EditorState>(EditorState.createEmpty());
-    const [ content, setContent ] = useState<String>('');
 
-    const handleSave = (data: string) => {
-        // setEditorState(data)
-        // console.log(data);
+    return(
+        <div></div>
+    )
+    // const [ editorState, setEditorState ] = useState<EditorState>(EditorState.createEmpty());
+    // const [ content, setContent ] = useState<String>('');
 
-    }
+    // const handleSave = (data: string) => {
+    //     // setEditorState(data)
+    //     // console.log(data);
 
-    return (
-            <MUIRichTextEditor
-            value ={editorState}
-            >
+    // }
 
-            </MUIRichTextEditor>
+    // return (
+    //         <MUIRichTextEditor
+    //         value ={editorState}
+    //         >
 
-    );
+    //         </MUIRichTextEditor>
+
+    // );
 
 
         
