@@ -66,8 +66,7 @@ const SignUp = () => {
 
     const values = { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK  };
     const errors = { errorPhone, setErrorPhone, errorPhoneText, setErrorPhoneText, errorEmail, setErrorEmail, errorEmailText, setErrorEmailText };
-    const tlf = Number(phoneNumber);
-    const submit = { location, fullname, email, tlf, maxRecievers, confirmationOK  }
+    const submit = { location, fullname, email, phoneNumber, maxRecievers, confirmationOK }
     const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
     switch (step) {

@@ -5,7 +5,7 @@ import useStyles from './Styles';
 type Props = {
     nextStep: () => void,
     prevStep: () => void,
-    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; confirmationOK: boolean},
+    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; confirmationOK: boolean},
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string, confirmationOK: boolean},
     callingback: (e: boolean) => void
     
