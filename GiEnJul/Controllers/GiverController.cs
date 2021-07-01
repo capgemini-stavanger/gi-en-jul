@@ -35,9 +35,7 @@ namespace GiEnJul.Controllers
             {
                 giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giver.Location);
 
-                _log.Debug("Adding giver object: {@giver}", giver);
                 var result = await _giverRepository.InsertOrReplaceAsync(giver);
-                _log.Debug("Succesfully added giver: {@0}", result);
 
                 return CreatedAtAction(nameof(result), result);
             }
@@ -49,7 +47,7 @@ namespace GiEnJul.Controllers
             catch (KeyNotFoundException ex)
             {
                 _log.Error("Could not find any active event for given location", ex);
-                return BadRequest(ex.Message);
+                return BadRequest("The given location does not have an active event");
             }
             catch (Exception ex)
             {
