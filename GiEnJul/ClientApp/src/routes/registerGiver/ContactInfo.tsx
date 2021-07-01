@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Button, Grid, Container, FormControl } from '@material-ui/core';
+import { Button, Grid, Container } from '@material-ui/core';
 import useStyles from './Styles';
-import { ValidatorForm } from 'react-material-ui-form-validator';
 import InputValidator from '../../components/InputFields/Validators/InputValidator';
 import { isNotNull, isPhoneNumber, isEmail } from '../../components/InputFields/Validators/Validators';
 import { useState } from 'react';
