@@ -25,19 +25,19 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
         if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
             values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, har du skrevet det riktig?')
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, har du skrevet den riktig?')
+            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
             return;
         }
         else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, har du skrevet det riktig?')
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
             return;
         }
         else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, har du skrevet den riktig?')
+            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
             return;
         }
         else {

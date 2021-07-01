@@ -16,23 +16,23 @@ type Props = {
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleFamilyChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    options: string[],    
+    options: string[],
     errors: {
         errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
         errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;
     }
-    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; confirmationOK: boolean},
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string, confirmationOK: boolean},
+    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; confirmationOK: boolean },
+    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string, confirmationOK: boolean },
     callingback: (e: boolean) => void
-    
+
 }
 
-const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options,  submit, values, errors, callingback }) => {
-const [changeLocation, setChangeLocation ] = useState<boolean>(true);
-const [changeFullName, setChangeFullName ] = useState(true);
-const [changeEmail, setChangeEmail ] = useState(true);
-const [changePhone, setChangePhone ] = useState(true);
-const [changeFamily, setChangeFamily ] = useState(true);
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options, submit, values, errors, callingback }) => {
+    const [changeLocation, setChangeLocation] = useState<boolean>(true);
+    const [changeFullName, setChangeFullName] = useState(true);
+    const [changeEmail, setChangeEmail] = useState(true);
+    const [changePhone, setChangePhone] = useState(true);
+    const [changeFamily, setChangeFamily] = useState(true);
 
     const trigger = (b: boolean) => {
         callingback(b);
@@ -43,23 +43,19 @@ const [changeFamily, setChangeFamily ] = useState(true);
         if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
             values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
-            setChangePhone(false);
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten er ikke gyldig')
-            setChangeEmail(false);
+            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
             return;
         }
         else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
             errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret er ikke gyldig')
-            setChangePhone(false);
+            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
             return;
         }
         else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
             errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten er ikke gyldig')
-            setChangeEmail(false);
+            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
             return;
         }
         else {
@@ -71,7 +67,7 @@ const [changeFamily, setChangeFamily ] = useState(true);
         }
     }
 
-    const Submit = async( e: any) => {
+    const Submit = async ( e: any) => {
         e.preventDefault();
         await fetch('api/giver', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
