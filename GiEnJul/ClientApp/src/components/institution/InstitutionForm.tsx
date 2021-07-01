@@ -7,7 +7,6 @@ import LOCATIONS from '../../common/constants/Locations';
 import Gender from '../../common/enums/Gender';
 import InputValidator from '../InputFields/Validators/InputValidator';
 import { isEmail, isNotNull, isPhoneNumber } from '../InputFields/Validators/Validators';
-import { ValidatorForm } from 'react-material-ui-form-validator';
 
 
 type PersonType = {
@@ -39,11 +38,9 @@ const RegistrationForm = () => {
     
     const [dinnerRadio, setDinnerRadio] = useState("");
     const [dinnerInput, setDinnerInput] = useState("");
-    const [isValidDinnerInput, setIsValidDinnerInput] = useState(false);
 
     const [dessertRadio, setDessertRadio] = useState("");
     const [dessertInput, setDessertInput] = useState("");
-    const [isValidDessertInput, setIsValidDessertInput] = useState(false);
 
     const [specialNeeds, setSpecialNeeds] = useState("");
 
@@ -180,7 +177,6 @@ const RegistrationForm = () => {
                     viewErrorTrigger={viewErrorTrigger}
                     validators={[(input) => {return dinnerRadio !== "annet" || isNotNull(input)}]}
                     errorMessages={['Vennligst velg en middag']}
-                    setIsValids={setIsValidDinnerInput} 
                     onChange={(e) => setDinnerInput(e.target.value)} 
                     value={dinnerInput} 
                     name="dinner" 
@@ -199,7 +195,6 @@ const RegistrationForm = () => {
                     viewErrorTrigger={viewErrorTrigger}
                     validators={[(input) => {return dessertRadio !== "annet" || isNotNull(input)}]}
                     errorMessages={['Vennligst velg en dessert']}
-                    setIsValids={setIsValidDessertInput} 
                     onChange={(e) => setDessertInput(e.target.value)} 
                     value={dessertInput} 
                     name="dessert" 
