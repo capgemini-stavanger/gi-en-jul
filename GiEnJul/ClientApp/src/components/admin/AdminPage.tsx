@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AdminMenu from './common/AdminMenu';
 import Completed from './connections/Completed';
 import Suggested from './connections/Suggested';
+import EditQuestions from './editLandingPage/EditQuestions';
 
 
 function AdminPage() {
@@ -14,6 +15,7 @@ function AdminPage() {
                     <Suggested/>
                     <Suggested />
                     <Completed />
+                    <EditQuestions/>
                 </Container> 
             </React.Fragment>
         );
