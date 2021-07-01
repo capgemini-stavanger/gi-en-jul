@@ -34,5 +34,13 @@ jobs:
     - name: Build Release Config
       run: dotnet build --configuration Release
     
-    - name: Deploy
-      run: dotnet publish #Rest of cli args and the path
+    - name: Publish
+      run: dotnet publish #Rest of cli args and the path to pack -o ${{pack_path}}
+      working-directory: ./GiEnJul
+      
+    - name: Deploy with Azure webapp creds
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: GiEnJulApp
+        publish-profile: ${{ secrets.GITHUB_TOKEN }} #ask ronny for what the secret is named
+        package: ./GiEnJul #ask Ronny for where pack should be located
