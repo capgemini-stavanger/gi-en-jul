@@ -143,7 +143,7 @@ const RegistrationForm = () => {
     }
 
     return(
-        <ValidatorForm className="thisclass" onSubmit={onSubmitForm}>
+        <form className="thisclass" onSubmit={onSubmitForm}>
             <div>
                 <h3>Hvor ønsker du å registrere familie (velg en)</h3>
                 <div>
@@ -263,7 +263,7 @@ const RegistrationForm = () => {
 
             </div>
             <input type="submit" value="Send" />
-        </ValidatorForm>
+        </form>
     );
 }
 
