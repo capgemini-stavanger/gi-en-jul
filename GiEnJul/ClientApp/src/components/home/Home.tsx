@@ -4,7 +4,7 @@ import {Route} from 'react-router-dom'
 import  How  from './How';
 import Questions from './Questions';
 import Companies from './Companies';
-import Tab from '../../components/Tab';
+import Tab from '../../common/components/Tab';
 import {Typography, Container, Button, Grid} from '@material-ui/core';
 import useStyles from './Styles';
 
