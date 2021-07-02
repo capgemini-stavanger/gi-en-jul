@@ -15,3 +15,5 @@ html { font-size: 14px; }
 .pointer {
     cursor: pointer;
 }
+
+.item {margin: 0.5em;}
