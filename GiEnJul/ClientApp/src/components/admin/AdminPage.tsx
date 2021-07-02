@@ -13,7 +13,6 @@ function AdminPage() {
                 <Container maxWidth="xl">
                     <AdminMenu />
                     <Suggested/>
-                    <Suggested />
                     <Completed />
                     <EditQuestions/>
                 </Container> 

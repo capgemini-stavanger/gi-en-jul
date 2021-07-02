@@ -6,9 +6,6 @@ import { convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { FormGroup } from '@material-ui/core';
 
-
-
-
 const EditQuestions = () => {
     const [title, setTitle] = useState<string>('');
     const [picture, setPicture] = useState<string>('');

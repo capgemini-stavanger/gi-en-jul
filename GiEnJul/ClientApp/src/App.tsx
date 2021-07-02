@@ -8,6 +8,7 @@ import './custom.css'
 import NavMenu from './common/components/NavMenu';
 import { Container } from '@material-ui/core';
 import NavMenuAdmin from './common/components/NavMenuAdmin';
+import Edit from './components/admin/editLandingPage/EditMacro';
 
 const App = () => {
     if (window.location.pathname === '/admin') {
@@ -19,6 +20,7 @@ const App = () => {
                     <Route exact path='/' component={Home} />
                     <Route path='/registrer-familie' component={Institution} />
                     <Route path='/bli-giver' component={SignUp} />
+                    <Route path='/rediger' component={Edit} />
                 </Container>
             </React.Fragment>
         )
