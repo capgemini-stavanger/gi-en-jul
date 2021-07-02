@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Button, Grid, Container } from '@material-ui/core';
 import useStyles from './Styles';
-import validator from 'validator';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
+import InputValidator from '../../components/InputFields/Validators/InputValidator';
+import { isNotNull, isPhoneNumber, isEmail } from '../../components/InputFields/Validators/Validators';
+import { useState } from 'react';
 
 type Props = {
     nextStep: () => void,
@@ -11,42 +12,25 @@ type Props = {
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; },
-
-    errors: {
-        errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
-        errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;
-    }
 }
 
-const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values, errors }) => {
+const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
+
+    const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
+
+    const [isNotEmptyFullName, setIsNotEmptyFullName] = useState(false);
+    const [isNotEmptyEmail, setIsNotEmptyEmail] = useState(false);
+    const [isValidEmail, setIsValidEmail] = useState(false);
+    const [isNotEmptyPhone, setIsNotEmptyPhone] = useState(false);
+    const [isValidPhone, setIsValidPhone] = useState(false);
 
     const Continue = (e: any) => {
         e.preventDefault();
-        if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
-            values.email !== undefined && !!!validator.isEmail(values.email)) {
-            errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
-            errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
+        if (!(isNotEmptyFullName && isNotEmptyEmail && isValidEmail && isNotEmptyPhone && isValidPhone)) {
+            setViewErrorTrigger(v => v + 1);
             return;
         }
-        else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
-            errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
-            return;
-        }
-        else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
-            errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
-            return;
-        }
-        else {
-            errors.setErrorEmail(false);
-            errors.setErrorEmailText('');
-            errors.setErrorPhone(false);
-            errors.setErrorPhoneText('')
-            nextStep();
-        }
+        nextStep();
     }
 
     const Previous = (e: any) => {
@@ -57,13 +41,15 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
     const classes = useStyles();
     return (
         <Container>
-            <ValidatorForm
+            <form
                 style={{ width: '100%', marginTop: '5px' }}
                 onSubmit={Continue}
             >
-                <TextValidator
+                <InputValidator
                     autoFocus
-                    label="Fult navn*"
+                    viewErrorTrigger={viewErrorTrigger}
+                    setIsValids={[setIsNotEmptyFullName]}
+                    label="Fullt navn*"
                     variant="outlined"
                     margin="normal"
                     fullWidth
@@ -71,37 +57,37 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     autoComplete="name"
                     value={values.fullname ? values.fullname: ""}
                     onChange={handlefullnameChange}
-                    validators={['required']}
+                    validators={[isNotNull]}
                     errorMessages={['Vi vil gjerne vite hvem som gir en jul']}
                 />
-                <TextValidator
-                    error={errors.errorEmail}
-                    helperText={errors.errorEmailText}
+                <InputValidator
+                    viewErrorTrigger={viewErrorTrigger}
+                    setIsValids={[setIsNotEmptyEmail, setIsValidEmail]}                
                     label="Epost*"
                     onChange={handleEmailChange}
                     name="email"
                     value={values.email ? values.email: ""}
-                    validators={['required']}
-                    errorMessages={['Vi trenger din epost for å sende deg viktig informasjon']}
+                    validators={[isEmail, isNotNull]}
+                    errorMessages={['Eposten din ser litt rar ut, er den skrevet riktig?', 'Vi trenger din epost for å sende deg viktig informasjon']}
                     autoComplete="email"
                     variant="outlined"
                     margin="normal"
                     fullWidth
                 />
-                <TextValidator
-                    error={errors.errorPhone}
-                    helperText={errors.errorPhoneText}
+                <InputValidator
+                    viewErrorTrigger={viewErrorTrigger}
+                    setIsValids={[setIsNotEmptyPhone, setIsValidPhone]}                
                     label="Telefonnummer*"
                     onChange={handleTlfChange}
                     name="phoneNumber"
                     value={values.phoneNumber ? values.phoneNumber: ""}
-                    validators={['required']}
-                    errorMessages={['Vi trenger ditt telefonnummer for å kunne kontakte deg']}
+                    validators={[isPhoneNumber, isNotNull]}
+                    errorMessages={['Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?', 'Vi trenger ditt telefonnummer for å kunne kontakte deg']}
                     autoComplete="tel"
                     variant="outlined"
                     margin="normal"
-                    fullWidth>
-                </TextValidator>
+                    fullWidth
+                />
                 <Grid container spacing={2} justify="center" className={classes.submit}>
                     <Grid item>
                         <Button variant="contained" onClick={Previous}>Tilbake</Button>
@@ -110,7 +96,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                         <Button variant="contained" type="submit">Neste</Button>
                     </Grid>
                 </Grid>
-            </ValidatorForm>
+            </form>
         </Container>
     )
 }

@@ -36,18 +36,14 @@ const SignUp = () => {
     };
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
-        setErrorEmail(false);
-        setErrorEmailText('');
     };
     const handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPhoneNumber(event.target.value)
-        setErrorPhone(false);
-        setErrorPhoneText('')
     };
     const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLocation(event.target.value)
     }
-    const handleFamilyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFamilyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         var value = event.target.value;
         setFamilyType(value)
         if (value === 'Liten familie') {
@@ -110,7 +106,6 @@ const SignUp = () => {
                             handleEmailChange={handleEmailChange}
                             handleTlfChange={handleTlfChange}
                             values={values}
-                            errors={errors}
                         ></ContactInfo>
                     </div>
                 </Container>

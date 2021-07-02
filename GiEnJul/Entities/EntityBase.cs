@@ -48,9 +48,7 @@ namespace GiEnJul.Entities
 
         public IDictionary<string, EntityProperty> WriteEntity(OperationContext operationContext)
         {
-
-
-            throw new NotImplementedException();
+            return TableEntity.Flatten(this, operationContext);
         }
     }
 }

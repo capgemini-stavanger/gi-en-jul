@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Container, Button, Grid, MenuItem } from '@material-ui/core';
+import { Container, Button, Grid } from '@material-ui/core';
 import LOCATIONS from '../../common/constants/Locations';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import useStyles from './Styles';
 import { useState } from 'react';
-import { SelectValidator, TextValidator, ValidatorForm } from 'react-material-ui-form-validator';
-import validator from 'validator';
+import InputValidator from '../../components/InputFields/Validators/InputValidator';
+import { isEmail, isNotNull, isPhoneNumber } from '../../components/InputFields/Validators/Validators';
 
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
     handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    handleFamilyChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
     options: string[],
     errors: {
         errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
@@ -34,41 +34,37 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
     const [changePhone, setChangePhone] = useState(true);
     const [changeFamily, setChangeFamily] = useState(true);
 
+    const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
+
+    const [isValidLocation, setIsValidLocation] = useState(true);
+    const [isValidFullName, setIsValidFullName] = useState(true);
+    const [isValidEmail, setIsValidEmail] = useState(true);
+    const [isNotNullEmail, setIsNotNullEmail] = useState(true);
+    const [isValidPhone, setIsValidPhone] = useState(true);
+    const [isNotNullPhone, setIsNotNullPhone] = useState(true);
+    const [isValidFamily, setIsValidFamily] = useState(true);
+
     const trigger = (b: boolean) => {
         callingback(b);
     }
 
     const Continue = (e: any) => {
         e.preventDefault();
-        if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"]) &&
-            values.email !== undefined && !!!validator.isEmail(values.email)) {
-            errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
-            errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
+        if (!(isValidLocation &&
+              isValidFullName &&
+              isNotNullEmail &&
+              isValidEmail &&
+              isValidPhone &&
+              isNotNullPhone &&
+              isValidFamily)) 
+        {
+            setViewErrorTrigger(v => v + 1);
             return;
         }
-        else if (values.phoneNumber !== undefined && !!!validator.isMobilePhone(values.phoneNumber, ["nb-NO", "nn-NO"])) {
-            errors.setErrorPhone(true);
-            errors.setErrorPhoneText('Telefonnummeret ditt ser litt rart ut, er den skrevet riktig?')
-            return;
-        }
-        else if (values.email !== undefined && !!!validator.isEmail(values.email)) {
-            errors.setErrorEmail(true);
-            errors.setErrorEmailText('Eposten din ser litt rar ut, er den skrevet riktig?')
-            return;
-        }
-        else {
-            errors.setErrorEmail(false);
-            errors.setErrorEmailText('');
-            errors.setErrorPhone(false);
-            errors.setErrorPhoneText('')
-            Submit(e);
-        }
+        Submit();
     }
 
-    const Submit = async ( e: any) => {
-        e.preventDefault();
+    const Submit = async () => {
         await fetch('api/giver', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             headers: {
@@ -111,30 +107,29 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
 
     return (
         <Container>
-            <ValidatorForm
+            <form
                 onSubmit={Continue}
-                variant="outlined"
-                fullWidth
-                required
-                margin="normal"
                 style={{ width: '100%', marginTop: '20px' }}>
                 <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
-                        <SelectValidator
+                        <InputValidator
+                            viewErrorTrigger={viewErrorTrigger}
+                            type="select"
                             disabled={changeLocation}
                             variant="outlined"
                             fullWidth
-                            placeholder={values.location}
                             label="Lokasjon*"
                             name="location-input"
                             value={values.location ? values.location : ""}
                             id="location-input"
-                            onChange={handleChangeLocation}
+                            onChange={handleLocationChange}
                             errorMessages={['Vennligst velg lokasjon']}
-                        >
-                            {LOCATIONS.map(x =>
-                                <MenuItem key={x} value={x}>{x}</MenuItem>)}
-                        </SelectValidator>
+                            validators={[isNotNull]}
+                            setIsValids={setIsValidLocation}
+                            options={LOCATIONS.map(x => 
+                                {return {value: x, text: x};})}
+                            isMobile={false}
+                        />
                     </Grid>
                     <Grid item xs={3}>
                         <Button onClick={handleChangeLocation}>
@@ -144,18 +139,19 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                 </Grid>
                 <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
-                        <TextValidator
+                        <InputValidator
+                            viewErrorTrigger={viewErrorTrigger}
                             disabled={changeFullName}
-                            placeholder={values.fullname}
-                            label="Fult navn*"
+                            label="Fullt navn*"
                             variant="outlined"
                             fullWidth
                             name="fullname"
                             autoComplete="name"
                             value={values.fullname ? values.fullname : ""}
                             onChange={handlefullnameChange}
-                            validators={['required']}
+                            validators={[isNotNull]}
                             errorMessages={['Vennligst skriv inn ditt navn']}
+                            setIsValids={setIsValidFullName}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -166,16 +162,16 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                 </Grid>
                 <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
-                        <TextValidator
+                        <InputValidator
+                            viewErrorTrigger={viewErrorTrigger}
                             disabled={changeEmail}
-                            placeholder={values.email}
-                            error={errors.errorEmail}
-                            helperText={errors.errorEmailText}
+                            label="Email"
                             onChange={handleEmailChange}
                             name="email"
                             value={values.email ? values.email : ""}
-                            validators={['required']}
-                            errorMessages={['Vennligst skriv inn din epost']}
+                            validators={[isEmail, isNotNull]}
+                            errorMessages={['Eposten din ser litt rar ut, er den skrevet riktig?', 'Vennligst skriv inn din epost']}
+                            setIsValids={[setIsValidEmail, setIsNotNullEmail]}
                             autoComplete="email"
                             variant="outlined"
                             fullWidth
@@ -189,16 +185,16 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                 </Grid>
                 <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
-                        <TextValidator
+                        <InputValidator
+                            viewErrorTrigger={viewErrorTrigger}
                             disabled={changePhone}
-                            placeholder={values.phoneNumber}
-                            error={errors.errorPhone}
-                            helperText={errors.errorPhoneText}
+                            label="telefon"
                             onChange={handleTlfChange}
                             name="phoneNumber"
                             value={values.phoneNumber ? values.phoneNumber : ""}
-                            validators={['required']}
-                            errorMessages={['Vennligst skriv inn ditt telefonnummer']}
+                            validators={[isPhoneNumber, isNotNull]}
+                            errorMessages={['Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?', 'Vennligst skriv inn ditt telefonnummer']}
+                            setIsValids={[setIsValidPhone, setIsNotNullPhone]}
                             autoComplete="tel"
                             variant="outlined"
                             fullWidth
@@ -212,22 +208,21 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                 </Grid>
                 <Grid container className={classes.inputRow} >
                     <Grid item xs={9}>
-                        <SelectValidator
+                        <InputValidator
+                            viewErrorTrigger={viewErrorTrigger}
+                            type="select"
                             disabled={changeFamily}
                             variant="outlined"
                             fullWidth
-                            autoFocus
-                            placeholder={values.familyType}
-                            validators={['required']}
                             name="familyType-input"
                             value={values.familyType ? values.familyType : ""}
                             onChange={handleFamilyChange}
                             label="Familiesammensetning*"
-                            errorMessages={['Vennligst velg familiesammensetning']}
-                        >
-                            {options.map(x =>
-                                <MenuItem key={x} value={x}>{x}</MenuItem>)}
-                        </SelectValidator>
+                            validators={[isNotNull]}
+                            setIsValids={setIsValidFamily}
+                            options={options.map(x => 
+                                {return {value: x, text: x};})}
+                        />
                     </Grid>
                     <Grid item xs={3}>
                         <Button onClick={handleChangeFamily}>
@@ -237,14 +232,14 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                 </Grid>
 
                 <Grid container spacing={2} justify="center" className={classes.submit}>
-                <Grid item>
-                    <Button variant="contained" onClick={Previous}>Tilbake</Button>
+                    <Grid item>
+                        <Button variant="contained" onClick={Previous}>Tilbake</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" type="submit">Bli Giver</Button>
+                    </Grid>
                 </Grid>
-                <Grid item>
-                <Button variant="contained" type="submit">Bli Giver</Button>
-                </Grid>
-            </Grid>
-            </ValidatorForm>
+            </form>
         </Container>
     )
 }
