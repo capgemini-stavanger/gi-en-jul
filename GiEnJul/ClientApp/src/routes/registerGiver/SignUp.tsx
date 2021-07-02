@@ -18,11 +18,6 @@ const SignUp = () => {
     const [maxRecievers, setMaxRecievers] = useState<number | undefined>(undefined);
     const [familyType, setFamilyType] = useState<string | undefined>(undefined);
 
-    const [errorPhone, setErrorPhone] = useState(false);
-    const [errorPhoneText, setErrorPhoneText] = useState('');
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorEmailText, setErrorEmailText] = useState('');
-
     // go back to previous step
     const prevStep = () => {
         setStep(step - 1);
@@ -61,7 +56,6 @@ const SignUp = () => {
     }
 
     const values = { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK  };
-    const errors = { errorPhone, setErrorPhone, errorPhoneText, setErrorPhoneText, errorEmail, setErrorEmail, errorEmailText, setErrorEmailText };
     const tlf = Number(phoneNumber);
     const submit = { location, fullname, email, tlf, maxRecievers, confirmationOK  }
     const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
@@ -152,7 +146,6 @@ const SignUp = () => {
                             handleTlfChange={handleTlfChange}
                             handleFamilyChange={handleFamilyChange}
                             options={familiyOptions}
-                            errors={errors}
                             submit={submit}
                             values={values}
                             callingback={handleConfirm}
