@@ -159,7 +159,7 @@ const RegistrationForm = () => {
             FamilyMembers: personsList
         }
         setIsLoading(true);
-        await fetch('https://localhost:5001/api/recipient', {
+        await fetch('/api/recipient', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
