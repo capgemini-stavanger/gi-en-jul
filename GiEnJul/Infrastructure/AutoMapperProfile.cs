@@ -20,11 +20,11 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.SubmitterPhoneNumber, opt => opt.MapFrom(src => src.ContactPhoneNumber))
                 .ForMember(dest => dest.ReceiverLocation, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
-            
+
             CreateMap<Entities.Recipient, Models.Recipient>()
                 .ForMember(dest => dest.FamilyMembers, act => act.Ignore())
                 .ForMember(dest => dest.Giver, act => act.Ignore());
-            
+
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 

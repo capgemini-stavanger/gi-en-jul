@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Serilog;
 using GiEnJul.Features;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace GiEnJul.Infrastructure
 {

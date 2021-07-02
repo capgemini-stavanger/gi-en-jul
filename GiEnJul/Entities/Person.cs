@@ -1,6 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-
-namespace GiEnJul.Entities
+﻿namespace GiEnJul.Entities
 {
     public class Person : EntityBase
     {
