@@ -1,4 +1,5 @@
-﻿using GiEnJul.Features;
+﻿using GiEnJul.Controllers;
+using GiEnJul.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos.Table;
 using Moq;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace GiEnJul.Controllers.Tests
+namespace GiEnJul.Test.ControllerTests
 {
     public class RecipientControllerTest
     {
