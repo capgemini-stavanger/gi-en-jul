@@ -33,6 +33,7 @@ const App = () => {
                     <Route exact path='/' component={Home} />
                     <Route path='/registrer-familie' component={Institution} />
                     <Route path='/bli-giver' component={SignUp} />
+                    <Route path='/rediger' component={Edit} />
                 </Container>
             </React.Fragment>
         );

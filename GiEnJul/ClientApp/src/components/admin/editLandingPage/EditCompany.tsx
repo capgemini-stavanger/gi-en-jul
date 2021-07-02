@@ -8,35 +8,35 @@ import { Typography, FormGroup, TextField } from '@material-ui/core';
 
 type Props = {
     step: Number,
-    howState: EditorState
-    setHowState: (input: EditorState) => void,
-    howTitleState: string,
-    setHowTitleState: (input: string) => void,
+    companyState: EditorState
+    setCompanyState: (input: EditorState) => void,
+    companyTitleState: string,
+    setCompanyTitleState: (input: string) => void,
 }
 
 
-const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, setHowTitleState }) => {
+const EditCompany: React.FC<Props> = ({ step, companyState, setCompanyState, companyTitleState, setCompanyTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 1) {
+    if (step === 3) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
                 <TextField
                     label="Skriv tittel her..."
                     variant="outlined"
-                    value={howTitleState}
+                    value={companyTitleState}
                     margin="normal"
                     onChange={(newState => {
-                        setHowTitleState(newState.target.value)
+                        setCompanyTitleState(newState.target.value)
                     })} />
                 <Typography variant='h6'>Innhold:</Typography>
                 <Editor
-                    editorState={howState}
+                    editorState={companyState}
                     wrapperClassName="card"
                     editorClassName="card-body"
                     onEditorStateChange={newState => {
-                        setHowState(newState);
+                        setCompanyState(newState);
                         setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
                             ;
                     }}
@@ -60,4 +60,4 @@ const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, 
         )
     }
 }
-export default EditHow;
+export default EditCompany;

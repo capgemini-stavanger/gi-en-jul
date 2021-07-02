@@ -8,35 +8,35 @@ import { Typography, FormGroup, TextField } from '@material-ui/core';
 
 type Props = {
     step: Number,
-    howState: EditorState
-    setHowState: (input: EditorState) => void,
-    howTitleState: string,
-    setHowTitleState: (input: string) => void,
+    contactState: EditorState
+    setContactState: (input: EditorState) => void,
+    contactTitleState: string,
+    setContactTitleState: (input: string) => void,
 }
 
 
-const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, setHowTitleState }) => {
+const EditContact: React.FC<Props> = ({ step, contactState, setContactState, contactTitleState, setContactTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 1) {
+    if (step === 4) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
                 <TextField
                     label="Skriv tittel her..."
                     variant="outlined"
-                    value={howTitleState}
+                    value={contactTitleState}
                     margin="normal"
                     onChange={(newState => {
-                        setHowTitleState(newState.target.value)
+                        setContactTitleState(newState.target.value)
                     })} />
                 <Typography variant='h6'>Innhold:</Typography>
                 <Editor
-                    editorState={howState}
+                    editorState={contactState}
                     wrapperClassName="card"
                     editorClassName="card-body"
                     onEditorStateChange={newState => {
-                        setHowState(newState);
+                        setContactState(newState);
                         setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
                             ;
                     }}
@@ -60,4 +60,4 @@ const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, 
         )
     }
 }
-export default EditHow;
+export default EditContact;

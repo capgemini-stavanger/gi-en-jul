@@ -5,14 +5,28 @@ import { useState } from 'react';
 import EditHow from './EditHow';
 import EditQuestions from './EditQuestions';
 import {  EditorState } from 'draft-js';
+import EditCompany from './EditCompany';
+import EditContact from './EditContact';
+import EditStart from './EditStart';
 
 export default () => {
     const [step, setStep] = useState<Number>(1);
+    
     const [howState, setHowState] = useState<EditorState>(EditorState.createEmpty());
+    const [howTitleState, setHowTitleState] = useState<string>("");
+
     const [questionState, setQuestionState] = useState<EditorState>(EditorState.createEmpty());
+    const [questionTitleState, setQuestionTitleState] = useState<string>("");
+
     const [companyState, setCompanyState] = useState<EditorState>(EditorState.createEmpty());
+    const [companyTitleState, setCompanyTitleState] = useState<string>("");
+
     const [contactState, setContactState] = useState<EditorState>(EditorState.createEmpty());
+    const [contactTitleState, setContactTitleState] = useState<string>("");
+
     const [startState, setStartState] = useState<EditorState>(EditorState.createEmpty());
+    const [startTitleState, setStartTitleState] = useState<string>("");
+
     const [saving, setSaving] = useState<boolean>(false);
 
     
@@ -54,12 +68,34 @@ export default () => {
                     <EditHow
                     step = {step}
                     howState = {howState}
-                    setHowState = {setHowState}/>
+                    setHowState = {setHowState}
+                    howTitleState = {howTitleState}
+                    setHowTitleState ={setHowTitleState}/>
                     <EditQuestions
                     step = {step}
                     questionState ={questionState}
                     setQuestionState ={setQuestionState}
-                    />
+                    questionTitleState = {questionTitleState}
+                    setQuestionTitleState ={setHowTitleState}/>
+                    <EditCompany
+                    step = {step}
+                    companyState ={companyState}
+                    setCompanyState ={setCompanyState}
+                    companyTitleState = {companyTitleState}
+                    setCompanyTitleState ={setCompanyTitleState}/>
+                    <EditContact
+                    step = {step}
+                    contactState ={contactState}
+                    setContactState ={setContactState}
+                    contactTitleState = {contactTitleState}
+                    setContactTitleState ={setContactTitleState}/>
+                    <EditStart
+                    step = {step}
+                    startState ={startState}
+                    setStartState ={setStartState}
+                    startTitleState = {startTitleState}
+                    setStartTitleState ={setStartTitleState}/>
+
         </Container>
     )
 

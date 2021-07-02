@@ -8,35 +8,35 @@ import { Typography, FormGroup, TextField } from '@material-ui/core';
 
 type Props = {
     step: Number,
-    howState: EditorState
-    setHowState: (input: EditorState) => void,
-    howTitleState: string,
-    setHowTitleState: (input: string) => void,
+    startState: EditorState
+    setStartState: (input: EditorState) => void,
+    startTitleState: string,
+    setStartTitleState: (input: string) => void,
 }
 
 
-const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, setHowTitleState }) => {
+const EditStart: React.FC<Props> = ({ step, startState, setStartState, startTitleState, setStartTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 1) {
+    if (step === 5) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
                 <TextField
                     label="Skriv tittel her..."
                     variant="outlined"
-                    value={howTitleState}
+                    value={startTitleState}
                     margin="normal"
                     onChange={(newState => {
-                        setHowTitleState(newState.target.value)
+                        setStartTitleState(newState.target.value)
                     })} />
                 <Typography variant='h6'>Innhold:</Typography>
                 <Editor
-                    editorState={howState}
+                    editorState={startState}
                     wrapperClassName="card"
                     editorClassName="card-body"
                     onEditorStateChange={newState => {
-                        setHowState(newState);
+                        setStartState(newState);
                         setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
                             ;
                     }}
@@ -60,4 +60,4 @@ const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, 
         )
     }
 }
-export default EditHow;
+export default EditStart;
