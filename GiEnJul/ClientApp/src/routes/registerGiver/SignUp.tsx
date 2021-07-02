@@ -18,11 +18,6 @@ const SignUp = () => {
     const [maxRecievers, setMaxRecievers] = useState<number | undefined>(undefined);
     const [familyType, setFamilyType] = useState<string | undefined>(undefined);
 
-    const [errorPhone, setErrorPhone] = useState(false);
-    const [errorPhoneText, setErrorPhoneText] = useState('');
-    const [errorEmail, setErrorEmail] = useState(false);
-    const [errorEmailText, setErrorEmailText] = useState('');
-
     // go back to previous step
     const prevStep = () => {
         setStep(step - 1);
@@ -36,18 +31,14 @@ const SignUp = () => {
     };
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
-        setErrorEmail(false);
-        setErrorEmailText('');
     };
     const handleTlfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPhoneNumber(event.target.value)
-        setErrorPhone(false);
-        setErrorPhoneText('')
     };
     const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setLocation(event.target.value)
     }
-    const handleFamilyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFamilyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         var value = event.target.value;
         setFamilyType(value)
         if (value === 'Liten familie') {
@@ -65,7 +56,6 @@ const SignUp = () => {
     }
 
     const values = { location, fullname, email, phoneNumber, maxRecievers, familyType, confirmationOK  };
-    const errors = { errorPhone, setErrorPhone, errorPhoneText, setErrorPhoneText, errorEmail, setErrorEmail, errorEmailText, setErrorEmailText };
     const submit = { location, fullname, email, phoneNumber, maxRecievers, confirmationOK }
     const familiyOptions = ['Liten familie', 'Vanlig familie', 'Stor familie'];
 
@@ -109,7 +99,6 @@ const SignUp = () => {
                             handleEmailChange={handleEmailChange}
                             handleTlfChange={handleTlfChange}
                             values={values}
-                            errors={errors}
                         ></ContactInfo>
                     </div>
                 </Container>
@@ -150,6 +139,12 @@ const SignUp = () => {
                         <SummaryRegistration
                             nextStep={nextStep}
                             prevStep={prevStep}
+                            handleLocationChange={handleLocationChange}
+                            handlefullnameChange={handlefullnameChange}
+                            handleEmailChange={handleEmailChange}
+                            handleTlfChange={handleTlfChange}
+                            handleFamilyChange={handleFamilyChange}
+                            options={familiyOptions}
                             submit={submit}
                             values={values}
                             callingback={handleConfirm}
