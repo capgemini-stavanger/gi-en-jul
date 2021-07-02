@@ -23,19 +23,13 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                 </NavItem> */}
                                 
                                 <NavItem>
-                                    <NavLink>
-                                    <Scroll to='how' spy={true} smooth={true}>Hvordan</Scroll>
-                                    </NavLink>
+                                    <Scroll className="nav-link pointer" to='how' spy={true} smooth={true}>Hvordan</Scroll>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink>
-                                    <Scroll to='questions' spy={true} smooth={true}>Spørsmål</Scroll>
-                                    </NavLink>
+                                    <Scroll className="nav-link pointer" to='questions' spy={true} smooth={true}>Spørsmål</Scroll>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink>
-                                    <Scroll to='companies' spy={true} smooth={true}>For bedrift</Scroll>
-                                    </NavLink>
+                                    <Scroll className="nav-link pointer" to='companies' spy={true} smooth={true}>For bedrift</Scroll>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/registrer-familie">Registrer familie</NavLink>
