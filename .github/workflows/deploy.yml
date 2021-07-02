@@ -10,6 +10,7 @@ on:
   
 env:
   DOTNET_VERSION: '3.1.x'
+  PACKAGE_PATH: 'Deploy'
 
 jobs:
   build-and-deploy:
@@ -35,12 +36,11 @@ jobs:
       run: dotnet build --configuration Release
     
     - name: Publish
-      run: dotnet publish #Rest of cli args and the path to pack -o ${{pack_path}}
-      working-directory: ./GiEnJul
+      run: dotnet publish GiEnJul -c Release -o ${{env.PACKAGE_PATH}}
       
     - name: Deploy with Azure webapp creds
       uses: azure/webapps-deploy@v2
       with:
-        app-name: GiEnJulApp
-        publish-profile: ${{ secrets.GITHUB_TOKEN }} #ask ronny for what the secret is named
-        package: ./GiEnJul #ask Ronny for where pack should be located
+        app-name: gienjultestapi
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_TEST }}
+        package: ./{{env.PACKAGE_PATH}}
