@@ -9,7 +9,7 @@ namespace GiEnJul.Features
     public interface IGiverRepository : IGenericRepository<Giver>
     {
         Task<Giver> DeleteAsync(Models.Giver model);
-        Task<Giver> InsertOrReplaceAsync(Models.PostGiverDto model);
+        Task<Giver> InsertOrReplaceAsync(Models.Giver model);
     }
 
     public class GiverRepository : GenericRepository<Giver>, IGiverRepository
@@ -22,7 +22,7 @@ namespace GiEnJul.Features
             return await DeleteAsync(_mapper.Map<Giver>(model));
         }
 
-        public async Task<Giver> InsertOrReplaceAsync(Models.PostGiverDto model)
+        public async Task<Giver> InsertOrReplaceAsync(Models.Giver model)
         {
             return await InsertOrReplaceAsync(_mapper.Map<Giver>(model));
         }

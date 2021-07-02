@@ -19,13 +19,8 @@ namespace GiEnJul.Entities
         public int MaxRecievers { get; set; }
         public string Location { get; set; }
         public string EventName { get; set; }
-        [ProtectedPersonalData]
         public string FullName { get; set; }
-        [ProtectedPersonalData]
-        [EmailAddress]
         public string Email { get; set; }
-        [ProtectedPersonalData]
-        [Phone]
         public string PhoneNumber { get; set; }
     }
 }

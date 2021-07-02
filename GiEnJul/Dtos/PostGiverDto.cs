@@ -1,9 +1,8 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GiEnJul.Models
+namespace GiEnJul.Dtos
 {
     public class PostGiverDto
     {
@@ -20,8 +19,5 @@ namespace GiEnJul.Models
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
-
-        public string EventName { get; set; }
-
     }
 }

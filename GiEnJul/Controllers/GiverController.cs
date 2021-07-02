@@ -1,13 +1,10 @@
-﻿using GiEnJul.Features;
+﻿using AutoMapper;
+using GiEnJul.Dtos;
+using GiEnJul.Features;
+using GiEnJul.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos.Table;
 using Serilog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GiEnJul.Controllers
 {
@@ -18,45 +15,26 @@ namespace GiEnJul.Controllers
         private readonly IGiverRepository _giverRepository;
         private readonly IEventRepository _eventRepository;
         private readonly ILogger _log;
+        private readonly IMapper _mapper;
 
-        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, ILogger log)
+        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, ILogger log, IMapper mapper)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
             _log = log;
+            _mapper = mapper;
         }
-
         
         // POST api/<GiverController>
         [HttpPost]
-        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] Models.PostGiverDto giver)
+        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] PostGiverDto giverDto)
         {
-            try
-            {
-                giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giver.Location);
+            var giver = _mapper.Map<Giver>(giverDto);    
+            giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
 
-                var result = await _giverRepository.InsertOrReplaceAsync(giver);
-
-                return CreatedAtAction(nameof(result), result);
-            }
-            catch (ArgumentException ex)
-            {
-                _log.Error("Location was not specified", ex);
-                return BadRequest(ex.Message);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _log.Error("Could not find any active event for given location", ex);
-                return BadRequest("The given location does not have an active event");
-            }
-            catch (Exception ex)
-            {
-                _log.Error("An exception was thrown", ex);
-                return StatusCode(500, ex.Message);
-            }
+            var result = await _giverRepository.InsertOrReplaceAsync(giver);
+            return CreatedAtAction(nameof(result), result);
+            
         }
-
-
-        
     }
 }
