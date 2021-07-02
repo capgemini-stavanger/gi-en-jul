@@ -6,44 +6,51 @@ import { convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { FormGroup } from '@material-ui/core';
 
-const EditQuestions = () => {
+type Props = {
+    step: Number,
+    questionState: EditorState
+    setQuestionState: (input: EditorState) => void,
+}
+
+const EditQuestions: React.FC<Props> =({step, questionState, setQuestionState}) => {
     // const [title, setTitle] = useState<string>('');
     // const [picture, setPicture] = useState<string>('');
     const [content, setContent] = useState<string>('');
-    // const [headline, setHeadline] = useState<string>('');
-    const [editorState, setEditorState] = useState<EditorState>(EditorState.createEmpty());
 
-    // const [saving, setSaving] = useState<boolean>(false);
-    // const [loading, setLoading] = useState<boolean>(true);
-    // const [success, setSuccess] = useState<string>('');
-    // const [error, setError] = useState<string>('');
+    
 
-    return(
-        <FormGroup>
-                        <Editor
-                            editorState={editorState}
-                            wrapperClassName="card"
-                            editorClassName="card-body"
-                            onEditorStateChange={newState => {
-                                console.log(newState)
-                                setEditorState(newState);
-                                setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
-                                console.log(content)
-                                ;
-                            }}
-                            toolbar={{
-                                options: ['inline', 'list',  'embedded'],
-                                inline: { inDropdown: true },
-                                list: { inDropdown: true },
-                            }}
-                        />
-                        <div 
-                                dangerouslySetInnerHTML={{ 
-                                    __html: content
-                                }} 
+    if (step === 2){
+        return(
+            <FormGroup>
+                            <Editor
+                                editorState={questionState}
+                                wrapperClassName="card"
+                                editorClassName="card-body"
+                                onEditorStateChange={newState => {
+                                    setQuestionState(newState);
+                                    setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
+                                    ;
+                                }}
+                                toolbar={{
+                                    options: ['inline', 'list',  'embedded'],
+                                    inline: { inDropdown: true },
+                                    list: { inDropdown: true },
+                                }}
                             />
-                    </FormGroup>
-    )
+                            <div
+                                    dangerouslySetInnerHTML={{ 
+                                        __html: content
+                                    }} 
+                                />
+                        </FormGroup>
+        )
+    }
+    else {
+        return(
+            <div></div>
+        )
+    }
+    
 }
 
 export default EditQuestions;
