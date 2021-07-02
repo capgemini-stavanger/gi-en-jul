@@ -7,12 +7,13 @@ import SignUp from './components/registerGiver/SignUp';
 import './custom.css'
 import NavMenu from './common/components/NavMenu';
 import { Container } from '@material-ui/core';
+import NavMenuAdmin from './common/components/NavMenuAdmin';
 
 const App = () => {
     if (window.location.pathname === '/admin') {
         return (
             <React.Fragment>
-                <NavMenu />
+                <NavMenuAdmin />
                 <Container>
                     <Route path ='/admin' component={AdminPage} />
                     <Route exact path='/' component={Home} />

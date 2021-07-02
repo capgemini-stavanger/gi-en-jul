@@ -18,11 +18,10 @@ export default class NavMenuAdmin extends React.PureComponent<{}, { isOpen: bool
                         <NavbarToggler onClick={this.toggle} className="mr-2"/>
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
-                                {/* <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/">Hjem</NavLink>
-                                </NavItem> */}
-                                
                                 <NavItem>
+                                    <NavLink tag={Link} className="text-dark" to="/">Hjem</NavLink>
+                                </NavItem>
+                                {/* <NavItem>
                                     <NavLink>
                                     <Scroll to='how' spy={true} smooth={true}>Hvordan</Scroll>
                                     </NavLink>
@@ -36,7 +35,7 @@ export default class NavMenuAdmin extends React.PureComponent<{}, { isOpen: bool
                                     <NavLink>
                                     <Scroll to='companies' spy={true} smooth={true}>For bedrift</Scroll>
                                     </NavLink>
-                                </NavItem>
+                                </NavItem> */}
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/registrer-familie">Registrer familie</NavLink>
                                 </NavItem>
