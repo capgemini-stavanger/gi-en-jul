@@ -17,17 +17,13 @@ type Props = {
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
     options: string[],
-    errors: {
-        errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
-        errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;
-    }
-    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: number; maxRecievers?: number; confirmationOK: boolean },
+    submit: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; confirmationOK: boolean },
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string, confirmationOK: boolean },
     callingback: (e: boolean) => void
 
 }
 
-const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options, submit, values, errors, callingback }) => {
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options, submit, values, callingback }) => {
     const [changeLocation, setChangeLocation] = useState<boolean>(true);
     const [changeFullName, setChangeFullName] = useState(true);
     const [changeEmail, setChangeEmail] = useState(true);
