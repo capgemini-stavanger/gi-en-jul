@@ -7,6 +7,8 @@ import Companies from './Companies';
 import Tab from '../../common/components/Tab';
 import {Typography, Container, Button, Grid} from '@material-ui/core';
 import useStyles from './Styles';
+import LoginButton from '../../components/login/LoginButton';
+import LogOutButton from '../../components/login/LogOutButton';
 
 const Home = () => {
   const classes = useStyles();
@@ -29,6 +31,8 @@ const Home = () => {
     <Route render={({ history}) => (
     <Button size='large' variant='contained' className={classes.submit}  onClick={() => { history.push('/bli-giver') }}>Bli Giver
             </Button>)} />
+    <LoginButton />
+    <LogOutButton />
         </Grid>
       </Grid>
       <How />
