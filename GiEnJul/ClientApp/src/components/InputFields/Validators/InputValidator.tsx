@@ -1,4 +1,5 @@
-﻿import { TextField } from '@material-ui/core';
+﻿import { MenuItem } from '@material-ui/core';
+import { FormControl, FormHelperText, InputLabel, Select, TextField } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 
@@ -14,6 +15,7 @@ interface InputValidatorProps {
 
     // List of error that should occur, depending on which validator fails. 
     // Has no error message if undefined.
+    // Ascending prioritation.
     // (undefined | list same length as validators prop)
     errorMessages?: string[],   
 
@@ -22,7 +24,7 @@ interface InputValidatorProps {
     viewErrorTrigger?: number,
     
     value: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onChange: ((e: any) => void), 
     label: string,
     name: string,
     type?: string,
@@ -33,13 +35,16 @@ interface InputValidatorProps {
     variant?: any,
     autoComplete?: string,
     fullWidth?: boolean,
-    autoFocus?: boolean
+    autoFocus?: boolean,
+
+    options?: {value: any, text: string}[],  // Only for "type=select".
+    isMobile?: boolean,   // Only for "type=select". If true: select dropdown uses native dropdown, which is better for mobile.
 }
 
 const InputValidator: FC<InputValidatorProps> = (
     {   setIsValids, 
         validators,
-        errorMessages,  // Ascending prioritation
+        errorMessages,
         viewErrorTrigger,
         value, 
         onChange, 
@@ -54,9 +59,10 @@ const InputValidator: FC<InputValidatorProps> = (
         autoComplete,
         fullWidth,
         autoFocus,
+        options,
+        isMobile,
      },
 ) => {
-
     const [error, setError] = useState("");
     const [viewError, setViewError] = useState(false);
 
@@ -65,7 +71,9 @@ const InputValidator: FC<InputValidatorProps> = (
         function isInvalidOptionalArg(arg?: Array<any> | Function) {
             return typeof arg === "object" && arg.length !== validatorCount;
         }
-        if (isInvalidOptionalArg(setIsValids) || isInvalidOptionalArg(errorMessages)) {
+        if (isInvalidOptionalArg(setIsValids) || 
+            isInvalidOptionalArg(errorMessages) ||
+            (type === "select" && (!options || !name))) {
             throw Error("An argument in InputValidator is invalid.");
         }
     }
@@ -89,7 +97,7 @@ const InputValidator: FC<InputValidatorProps> = (
         setError(errorMsg);
     }
 
-    const extendedOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const extendedOnChange = (e: any) => {
         onChange(e);
         setViewError(false);
     }
@@ -103,25 +111,59 @@ const InputValidator: FC<InputValidatorProps> = (
         validate();
     })
 
-    return (
-        <TextField
-            error={!!error}
-            helperText={errorMessages === undefined ? undefined : error}
-            label={label}
-            type={type} 
-            name={name} 
-            value={value} 
-            onChange={extendedOnChange} 
-            id={id} 
-            className={className} 
-            disabled={disabled}
-            margin={margin}
-            variant={variant ? variant : "outlined"}
-            autoComplete={autoComplete}
-            fullWidth={fullWidth}
-            autoFocus={autoFocus}
-        />
-    )
+    switch (type) {
+        case "select":
+            return (
+                <FormControl 
+                    variant={variant} 
+                    error={!!error}
+                    disabled={disabled}
+                    fullWidth={fullWidth}
+                    margin={margin}
+                >
+                    <InputLabel htmlFor={id}>{label}</InputLabel>
+                    <Select 
+                        native={isMobile}
+                        error={!!error}
+                        value={value}
+                        onChange={extendedOnChange}
+                        autoFocus={autoFocus}
+                        label={label}
+                        inputProps={{
+                            name: name,
+                            id: id
+                        }}
+                        autoComplete={autoComplete}
+                    >
+                    {options && options.map(o => 
+                        {return isMobile ? 
+                        <option key={`n_${name}_${o.text}`} value={o.value}>{o.text}</option> : 
+                        <MenuItem key={`${name}_${o.text}`} value={o.value}>{o.text}</MenuItem>})}
+                    </Select>
+                    {errorMessages !== undefined && <FormHelperText>{error}</FormHelperText>}
+                </FormControl>
+            )
+        default:
+            return (
+                <TextField
+                    error={!!error}
+                    helperText={errorMessages === undefined ? undefined : error}
+                    label={label}
+                    type={type} 
+                    name={name} 
+                    value={value} 
+                    onChange={extendedOnChange} 
+                    id={id} 
+                    className={className} 
+                    disabled={disabled}
+                    margin={margin}
+                    variant={variant ? variant : "outlined"}
+                    autoComplete={autoComplete}
+                    fullWidth={fullWidth}
+                    autoFocus={autoFocus}
+                />
+            )
+    }
 }
 
 export default InputValidator;

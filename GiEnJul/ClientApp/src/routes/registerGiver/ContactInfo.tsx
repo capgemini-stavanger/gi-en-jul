@@ -12,14 +12,9 @@ type Props = {
     handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string; },
-
-    errors: {
-        errorPhone: boolean; errorPhoneText: string; setErrorPhone: (e: boolean) => void; setErrorPhoneText: (e: string) => void;
-        errorEmail: boolean; errorEmailText: string; setErrorEmail: (e: boolean) => void; setErrorEmailText: (e: string) => void;
-    }
 }
 
-const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values, errors }) => {
+const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange, handleEmailChange, handleTlfChange, values }) => {
 
     const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
 
@@ -63,7 +58,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     value={values.fullname ? values.fullname: ""}
                     onChange={handlefullnameChange}
                     validators={[isNotNull]}
-                    errorMessages={['Vennligst skriv inn ditt navn']}
+                    errorMessages={['Vi vil gjerne vite hvem som gir en jul']}
                 />
                 <InputValidator
                     viewErrorTrigger={viewErrorTrigger}
@@ -73,7 +68,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     name="email"
                     value={values.email ? values.email: ""}
                     validators={[isEmail, isNotNull]}
-                    errorMessages={['Eposten er ikke gyldig', 'Vennligst skriv inn din epost']}
+                    errorMessages={['Eposten din ser litt rar ut, er den skrevet riktig?', 'Vi trenger din epost for å sende deg viktig informasjon']}
                     autoComplete="email"
                     variant="outlined"
                     margin="normal"
@@ -87,7 +82,7 @@ const ContactInfo: React.FC<Props> = ({ nextStep, prevStep, handlefullnameChange
                     name="phoneNumber"
                     value={values.phoneNumber ? values.phoneNumber: ""}
                     validators={[isPhoneNumber, isNotNull]}
-                    errorMessages={['Telefonnummeret er ikke gyldig', 'Vennligst skriv inn ditt telefonnummer']}
+                    errorMessages={['Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?', 'Vi trenger ditt telefonnummer for å kunne kontakte deg']}
                     autoComplete="tel"
                     variant="outlined"
                     margin="normal"

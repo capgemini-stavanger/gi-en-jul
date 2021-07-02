@@ -43,7 +43,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
             value={values.familyType ? values.familyType: ""}
             onChange={handleLocationChange}
             label="Familiesammensetning*"
-            errorMessages={['Vennligst velg familiesammensetning']}
+            errorMessages={['Hvilken familie venter på din gave?']}
           >
             {options.map(x =>
               <MenuItem key={x} value={x}>{x}</MenuItem>)}
@@ -78,7 +78,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
           value={values.location ?  values.location: ""}
           id="location-input"
           onChange={handleLocationChange}
-          errorMessages={['Vennligst velg lokasjon']}
+          errorMessages={['Hvor vil du spre glede?']}
         >
           {options.map(x =>
             <MenuItem key={x} value={x}>{x}</MenuItem>)}
