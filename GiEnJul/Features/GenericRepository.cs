@@ -158,12 +158,10 @@ namespace GiEnJul.Features
             }
         }
 
-
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await GetAllByQueryAsync(new TableQuery<T>());
         }
-
 
         public async Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query)
         {
@@ -173,7 +171,7 @@ namespace GiEnJul.Features
 
                 TableContinuationToken token = null;
                 var entities = new List<T>();
-                
+
                 do
                 {
                     var queryResult = await _table.ExecuteQuerySegmentedAsync(query, token);
@@ -191,7 +189,5 @@ namespace GiEnJul.Features
                 throw;
             }
         }
-
     }
-
 }

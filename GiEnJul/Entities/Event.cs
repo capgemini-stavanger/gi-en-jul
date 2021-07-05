@@ -11,8 +11,5 @@ namespace GiEnJul.Entities
         public DateTime? EndDate { get; set; }
 
         public string DeliveryAdress { get; set; }
-
-
-
     }
 }

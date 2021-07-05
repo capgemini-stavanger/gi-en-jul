@@ -1,8 +1,8 @@
 using AutoMapper;
-using GiEnJul.Infrastructure;
-using System.Threading.Tasks;
 using GiEnJul.Entities;
+using GiEnJul.Infrastructure;
 using Serilog;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
@@ -14,7 +14,7 @@ namespace GiEnJul.Features
 
     public class GiverRepository : GenericRepository<Giver>, IGiverRepository
     {
-        public GiverRepository(ISettings settings, IMapper mapper, ILogger logger,string tableName = "Giver") : base(settings, tableName, mapper, logger)
+        public GiverRepository(ISettings settings, IMapper mapper, ILogger logger, string tableName = "Giver") : base(settings, tableName, mapper, logger)
         { }
 
         public async Task<Giver> DeleteAsync(Models.Giver model)
