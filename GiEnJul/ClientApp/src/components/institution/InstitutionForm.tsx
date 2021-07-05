@@ -6,7 +6,7 @@ import IFormPerson from './IFormPerson';
 import Gender from '../../common/enums/Gender';
 import InputValidator from '../InputFields/Validators/InputValidator';
 import { isEmail, isNotNull, isPhoneNumber } from '../InputFields/Validators/Validators';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import FormFood from './FormFood';
 import { DINNERS } from '../../common/constants/Dinners';
 import { DESSERTS } from '../../common/constants/Desserts';
@@ -52,7 +52,6 @@ const RegistrationForm = () => {
     const [specialNeeds, setSpecialNeeds] = useState("");
 
     const [pid, setPid] = useState("");
-    const [isValidPid, setIsValidPid] = useState(false);
 
     const [contactName, setContactName] = useState("");
     const [isValidContactName, setIsValidContactName] = useState(false);
@@ -63,10 +62,10 @@ const RegistrationForm = () => {
     const [contactEmail, setContactEmail] = useState("");
     const [isValidContactEmail, setIsValidContactEmail] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
 
     const addPerson = () => {
         setPersons(formpersons => [...formpersons, {} as IFormPerson]);
-        console.log(persons);
     }
 
     const updatePerson = (newPerson: IFormPerson, index: number) => {
@@ -102,7 +101,6 @@ const RegistrationForm = () => {
         return isValidDinner &&
             isValidDessert &&
             isValidLocation &&
-            isValidPid &&
             isValidContactName &&
             isValidContactPhoneNumber &&
             isValidContactEmail &&
@@ -111,7 +109,33 @@ const RegistrationForm = () => {
             })
     }
 
-    const onSubmitForm = (e : any) => {
+    const resetForm = () => {
+        setViewErrorTrigger(0);
+
+        setIsValidContactName(false);
+        setIsValidContactPhoneNumber(false);
+        setIsValidContactEmail(false);
+
+        setPersons([]);
+        addPerson();
+        setLocation("");
+        setDinnerRadio("");
+        setDinnerInput("");
+        setDessertRadio("");
+        setDessertInput("");
+        setSpecialNeeds("");
+        setPid("");
+        setContactName("");
+        setContactEmail("");
+        setContactPhoneNumber("");
+    }
+
+    const onSuccessSubmit = () => {
+        alert("Familie registrert!");
+        resetForm();
+    }
+
+    const onSubmitForm = async (e : any) => {
         e.preventDefault();
         if (!allIsValid()) {
             setViewErrorTrigger(v => v + 1);
@@ -141,13 +165,26 @@ const RegistrationForm = () => {
             ReferenceId:pid,
             FamilyMembers: personsList
         }
-        fetch('https://localhost:5001/api/recipient', {
+        setIsLoading(true);
+        await fetch('/api/recipient', {
             method: 'POST',
             headers:{
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(submit)
         })
+        .then((response) => {
+            if (response.status === 201) {
+                setIsLoading(false);
+                setTimeout(onSuccessSubmit, 10);
+                return;
+            }
+        })
+        .catch((errorStack) => {
+            console.error(errorStack);
+        })
+        setIsLoading(false);
+        setTimeout(() => alert("En feil oppsto. Vennligst prøv på nytt."), 10);
     }
 
     return(
@@ -198,15 +235,19 @@ const RegistrationForm = () => {
                     setIsValid={setIsValidDessert}
                 />
                 <br/>
-                <input value={specialNeeds} onChange={(e) => setSpecialNeeds(e.target.value)} type="texarea" placeholder="Spesielle behov (hala, vegetar, allergier)"/>
+                <label>Spesielle behov (hala, vegetar, allergier)</label><br/>
+                <TextField
+                    variant="outlined"
+                    value={specialNeeds} 
+                    onChange={(e) => setSpecialNeeds(e.target.value)} 
+                    type="texarea" 
+                    label="Spesielle behov"
+                />
             </div>
             <div className="form-group">
                 <label>ID</label><br/>
-                <InputValidator 
-                    viewErrorTrigger={viewErrorTrigger}
-                    validators={[isNotNull]}
-                    errorMessages={['Vennligst skriv inn en pid']}
-                    setIsValids={setIsValidPid}
+                <TextField
+                    variant="outlined"
                     onChange={(e) => setPid(e.target.value)} 
                     value={pid} 
                     name="pid" 
@@ -258,6 +299,9 @@ const RegistrationForm = () => {
 
             </div>
             <input type="submit" value="Send" />
+            {isLoading && <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>}
         </form>
     );
 }

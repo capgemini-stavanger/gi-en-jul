@@ -23,7 +23,7 @@ namespace GiEnJul.Models
         public string Event { get; set; }
         [Required]
         public string Location { get; set; }
-        
+
         [Required]
         public string ContactFullName { get; set; }
         [Required]

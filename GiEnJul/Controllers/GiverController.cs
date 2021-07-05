@@ -1,9 +1,10 @@
-﻿using GiEnJul.Features;
+﻿using AutoMapper;
+using GiEnJul.Dtos;
+using GiEnJul.Features;
+using GiEnJul.Models;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GiEnJul.Controllers
 {
@@ -12,24 +13,27 @@ namespace GiEnJul.Controllers
     public class GiverController : ControllerBase
     {
         private readonly IGiverRepository _giverRepository;
+        private readonly IEventRepository _eventRepository;
         private readonly ILogger _log;
+        private readonly IMapper _mapper;
 
-        public GiverController(IGiverRepository giverRepository, ILogger log)
+        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, ILogger log, IMapper mapper)
         {
             _giverRepository = giverRepository;
+            _eventRepository = eventRepository;
             _log = log;
+            _mapper = mapper;
         }
 
-        
         // POST api/<GiverController>
         [HttpPost]
-        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] Models.Giver giver)
-        {   
-            _log.Debug("Adding giver object: {@giver}", giver);
+        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] PostGiverDto giverDto)
+        {
+            var giver = _mapper.Map<Giver>(giverDto);
+            giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
+
             var result = await _giverRepository.InsertOrReplaceAsync(giver);
-            _log.Debug("Succesfully added giver: {@0}", result);
             return CreatedAtAction(nameof(result), result);
         }
-        
     }
 }

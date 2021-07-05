@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace GiEnJul.Entities
 {
@@ -10,28 +7,17 @@ namespace GiEnJul.Entities
         public Giver()
         { }
 
-        public Giver(string location, string rowKey)
+        public Giver(string location, string eventName) : base($"{eventName}_{location}", Guid.NewGuid().ToString())
         {
-            PartitionKey = $"loc_{location}";
-            RowKey = rowKey;
-        }
-
-        public Giver(string location)
-        {
-            RowKey = Guid.NewGuid().ToString();
-            PartitionKey = $"loc_{location}";
-            Location = location;
+            Location = location ?? throw new ArgumentNullException(nameof(location));
+            EventName = eventName ?? throw new ArgumentNullException(nameof(eventName));
         }
 
         public int MaxRecievers { get; set; }
         public string Location { get; set; }
-        [ProtectedPersonalData]
+        public string EventName { get; set; }
         public string FullName { get; set; }
-        [ProtectedPersonalData]
-        [EmailAddress]
         public string Email { get; set; }
-        [ProtectedPersonalData]
-        [Phone]
         public string PhoneNumber { get; set; }
     }
 }

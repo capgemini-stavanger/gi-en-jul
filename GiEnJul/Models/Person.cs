@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
-using Newtonsoft.Json;
 using System;
 
 namespace GiEnJul.Models
@@ -17,7 +16,6 @@ namespace GiEnJul.Models
         public Gender Gender { get; set; }
 
     }
-
 
     // Following ISO/IEC 5218:2004 gender is stored as:
     // 0 = Not known;
