@@ -8,7 +8,7 @@ namespace GiEnJul.Entities
         { }
 
         // RowKey = Guid
-        // PartitionKey = loc_{location}
+        // PartitionKey = {eventName}_{location}
         public Recipient(string location, string eventName) : base($"{eventName}_{location}", Guid.NewGuid().ToString())
         {
             Location = location ?? throw new ArgumentNullException(nameof(location));

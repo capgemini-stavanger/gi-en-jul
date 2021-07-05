@@ -9,7 +9,7 @@ namespace GiEnJul.Entities
 
         // RowKey = Guid
         // PartitionKey = {recipientId}
-        public Person(string recipientId) : base(recipientId ?? throw new ArgumentNullException(nameof(recipientId)), Guid.NewGuid().ToString())
+        public Person(string recipientId) : base(recipientId, Guid.NewGuid().ToString())
         { }
 
         public string Wish { get; set; }
