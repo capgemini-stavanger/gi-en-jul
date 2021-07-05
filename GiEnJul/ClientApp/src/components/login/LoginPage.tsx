@@ -1,4 +1,8 @@
-import * as React from 'react';
-import App from "../../App";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { Typography } from "@material-ui/core";
+import * as React from "react";
 
+const LoginPage = () => {
+  <Typography>You need to be logged in to access this page</Typography>;
+};
+
+export default LoginPage;
