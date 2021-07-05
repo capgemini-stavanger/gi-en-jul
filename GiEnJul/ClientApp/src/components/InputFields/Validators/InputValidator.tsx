@@ -36,7 +36,9 @@ interface InputValidatorProps {
     autoComplete?: string,
     fullWidth?: boolean,
     autoFocus?: boolean,
-    size?: any
+    size?: any,
+    multiline?: boolean,
+    rowsMax?: number | string
 
     options?: {value: any, text: string}[],  // Only for "type=select".
     isMobile?: boolean,   // Only for "type=select". If true: select dropdown uses native dropdown, which is better for mobile.
@@ -61,6 +63,8 @@ const InputValidator: FC<InputValidatorProps> = (
         fullWidth,
         autoFocus,
         size,
+        multiline,
+        rowsMax,
         options,
         isMobile,
      },
@@ -164,6 +168,8 @@ const InputValidator: FC<InputValidatorProps> = (
                     fullWidth={fullWidth}
                     autoFocus={autoFocus}
                     size={size}
+                    multiline={multiline}
+                    rowsMax={rowsMax}
                 />
             )
     }

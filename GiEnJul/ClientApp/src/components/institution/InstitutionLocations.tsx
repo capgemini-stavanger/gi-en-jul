@@ -41,7 +41,7 @@ const Location:FC<LocationProps> = ({
             {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
             <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
                 {LOCATIONS.map(l => 
-                    <FormControlLabel value={l} control={<Radio />} label={l} />)}
+                    <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
             </RadioGroup>
         </div>
     );

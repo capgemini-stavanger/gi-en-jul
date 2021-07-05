@@ -6,7 +6,7 @@ import IFormPerson from './IFormPerson';
 import Gender from '../../common/enums/Gender';
 import InputValidator from '../InputFields/Validators/InputValidator';
 import { isEmail, isNotNull, isPhoneNumber } from '../InputFields/Validators/Validators';
-import { Button, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import FormFood from './FormFood';
 import { DINNERS } from '../../common/constants/Dinners';
 import { DESSERTS } from '../../common/constants/Desserts';
@@ -112,6 +112,9 @@ const RegistrationForm = () => {
     const resetForm = () => {
         setViewErrorTrigger(0);
 
+        setIsValidDinner(false);
+        setIsValidDessert(false);
+        setIsValidLocation(false);
         setIsValidContactName(false);
         setIsValidContactPhoneNumber(false);
         setIsValidContactEmail(false);
@@ -189,119 +192,158 @@ const RegistrationForm = () => {
 
     return(
         <form className="thisclass" onSubmit={onSubmitForm}>
-            <Locations
-                value={location}
-                onChange={onLocationChange}
-                viewErrorTrigger={viewErrorTrigger}
-                setIsValidLocation={setIsValidLocation}
-                include_header
-            />
-            {persons.map((p, i) =>
-                <FormPerson 
-                    key={"person" + i} 
-                    person={p} 
-                    viewErrorTrigger={viewErrorTrigger}
-                    updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
-                />)}
-            <Button 
-            startIcon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
-                           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                       </svg>} 
-            variant="contained" color="primary" onClick={addPerson}>Legg til flere</Button>
-            <div className="form-group">
-                <h3>Matønsker</h3>
-                <FormFood
-                    viewErrorTrigger={viewErrorTrigger}
-                    setInput={setDinnerInput}
-                    input={dinnerInput}
-                    radio={dinnerRadio}
-                    onRadioChange={onDinnerRadioChange}
-                    foods={DINNERS}
-                    required
-                    header={"Middag"}
-                    inputLabel="Annen middag"
-                    setIsValid={setIsValidDinner}
-                />
-                <FormFood
-                    viewErrorTrigger={viewErrorTrigger}
-                    setInput={setDessertInput}
-                    input={dessertInput}
-                    radio={dessertRadio}
-                    onRadioChange={onDessertRadioChange}
-                    foods={DESSERTS}
-                    required
-                    header={"Dessert"}
-                    inputLabel="Annen dessert"
-                    setIsValid={setIsValidDessert}
-                />
-                <br/>
-                <label>Spesielle behov (hala, vegetar, allergier)</label><br/>
-                <TextField
-                    variant="outlined"
-                    value={specialNeeds} 
-                    onChange={(e) => setSpecialNeeds(e.target.value)} 
-                    type="texarea" 
-                    label="Spesielle behov"
-                />
-            </div>
-            <div className="form-group">
-                <label>ID</label><br/>
-                <TextField
-                    variant="outlined"
-                    onChange={(e) => setPid(e.target.value)} 
-                    value={pid} 
-                    name="pid" 
-                    id="PID" 
-                    label="PID" 
-                />
-                <br/>
-
-                <label>Kontaktperson</label><br/>
-                <InputValidator 
-                    viewErrorTrigger={viewErrorTrigger}
-                    validators={[isNotNull]}
-                    setIsValids={setIsValidContactName} 
-                    errorMessages={['Vennligst skriv inn et navn']}
-                    onChange={(e) => setContactName(e.target.value)} 
-                    value={contactName} 
-                    name="cname" 
-                    id="kontaktnavn" 
-                    label="Navn" 
-                />
-
-                <InputValidator 
-                    viewErrorTrigger={viewErrorTrigger}
-                    validators={[isPhoneNumber, isNotNull]}
-                    setIsValids={setIsValidContactPhoneNumber} 
-                    errorMessages={['Telefonnummeret er ikke gyldig', 'Vennligst skriv inn et telefonnummer']}
-                    onChange={(e) => setContactPhoneNumber(e.target.value)} 
-                    value={contactPhoneNumber} 
-                    name="cphone" 
-                    id="kontaktperson" 
-                    label="Telefon" 
-                    autoComplete="tel"
-                />
-                <br/>
-
-                <InputValidator 
-                    viewErrorTrigger={viewErrorTrigger}
-                    validators={[isEmail, isNotNull]}
-                    setIsValids={setIsValidContactEmail} 
-                    errorMessages={['Eposten er ikke gyldig', 'Vennligst skriv inn en epost']}
-                    onChange={(e) => setContactEmail(e.target.value)} 
-                    value={contactEmail} 
-                    name="cemail" 
-                    id="kontaktepost" 
-                    label="Epost" 
-                    autoComplete="email"
-                />
-                <br/>
-
-            </div>
-            <input type="submit" value="Send" />
-            {isLoading && <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>}
+            <Grid container spacing={4} direction="column">
+                <Grid item>
+                    <Locations
+                        value={location}
+                        onChange={onLocationChange}
+                        viewErrorTrigger={viewErrorTrigger}
+                        setIsValidLocation={setIsValidLocation}
+                        include_header
+                    />
+                </Grid>
+                <Grid item>
+                    <Grid container spacing={1} direction="column">
+                        <Grid item>
+                            <Typography variant="h5">Familie</Typography>
+                        </Grid>
+                        <Grid item>
+                            {persons.map((p, i) =>
+                                <FormPerson 
+                                    key={"person" + i} 
+                                    person={p} 
+                                    viewErrorTrigger={viewErrorTrigger}
+                                    updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
+                                />)}
+                        </Grid>
+                        <Grid item>
+                            <Button 
+                                startIcon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                        </svg>} 
+                                variant="contained" color="primary" onClick={addPerson}>Legg til flere</Button>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container spacing={1} direction="column">
+                        <Grid item>
+                            <Typography variant="h5">Matønsker</Typography>
+                        </Grid>
+                        <Grid item>
+                            <FormFood
+                                viewErrorTrigger={viewErrorTrigger}
+                                setInput={setDinnerInput}
+                                input={dinnerInput}
+                                radio={dinnerRadio}
+                                onRadioChange={onDinnerRadioChange}
+                                foods={DINNERS}
+                                required
+                                header={"Middag"}
+                                inputLabel="Annen middag"
+                                setIsValid={setIsValidDinner}
+                                name="dinner"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <FormFood
+                                viewErrorTrigger={viewErrorTrigger}
+                                setInput={setDessertInput}
+                                input={dessertInput}
+                                radio={dessertRadio}
+                                onRadioChange={onDessertRadioChange}
+                                foods={DESSERTS}
+                                required
+                                header={"Dessert"}
+                                inputLabel="Annen dessert"
+                                setIsValid={setIsValidDessert}
+                                name="dessert"
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TextField
+                                variant="outlined"
+                                value={specialNeeds} 
+                                onChange={(e) => setSpecialNeeds(e.target.value)} 
+                                type="textarea" 
+                                fullWidth
+                                label="Spesielle behov"
+                                multiline
+                                placeholder="Halal, vegetar, allergier"
+                                rowsMax="24"
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Typography variant="h5">ID</Typography>
+                    <TextField
+                        variant="outlined"
+                        onChange={(e) => setPid(e.target.value)} 
+                        value={pid} 
+                        name="pid" 
+                        id="PID" 
+                        label="PID" 
+                        placeholder="PID eller annen ID dere bruker for å gjenkjenne familien"
+                    />
+                </Grid>
+                <Grid item container spacing={1} direction="column">
+                    <Grid item>
+                        <Typography variant="h5">Kontaktperson</Typography>
+                    </Grid>
+                    <Grid item>
+                        <Grid container spacing={1}>
+                            <Grid item>
+                                <InputValidator 
+                                    viewErrorTrigger={viewErrorTrigger}
+                                    validators={[isNotNull]}
+                                    setIsValids={setIsValidContactName} 
+                                    errorMessages={['Vennligst skriv inn et navn']}
+                                    onChange={(e) => setContactName(e.target.value)} 
+                                    value={contactName} 
+                                    name="cname" 
+                                    id="kontaktnavn" 
+                                    label="Navn" 
+                                />
+                            </Grid>
+                            <Grid item>
+                                <InputValidator 
+                                    viewErrorTrigger={viewErrorTrigger}
+                                    validators={[isPhoneNumber, isNotNull]}
+                                    setIsValids={setIsValidContactPhoneNumber} 
+                                    errorMessages={['Telefonnummeret er ikke gyldig', 'Vennligst skriv inn et telefonnummer']}
+                                    onChange={(e) => setContactPhoneNumber(e.target.value)} 
+                                    value={contactPhoneNumber} 
+                                    name="cphone" 
+                                    id="kontaktperson" 
+                                    label="Telefon" 
+                                    autoComplete="tel"
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        <InputValidator 
+                            viewErrorTrigger={viewErrorTrigger}
+                            validators={[isEmail, isNotNull]}
+                            setIsValids={setIsValidContactEmail} 
+                            errorMessages={['Eposten er ikke gyldig', 'Vennligst skriv inn en epost']}
+                            onChange={(e) => setContactEmail(e.target.value)} 
+                            value={contactEmail} 
+                            name="cemail" 
+                            id="kontaktepost" 
+                            label="Epost" 
+                            autoComplete="email"
+                        />
+                    </Grid>
+                </Grid>
+                <Grid item className="mx-5">
+                    <Button variant="contained" type="submit" color="primary">Send</Button>
+                    {isLoading && <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>}
+                </Grid>
+            </Grid>
         </form>
     );
 }

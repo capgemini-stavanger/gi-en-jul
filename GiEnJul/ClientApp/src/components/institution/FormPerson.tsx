@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, Grid } from '@material-ui/core';
+import { capitalize, Checkbox, FormControlLabel, Grid } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import { GENDERS } from '../../common/constants/Genders';
@@ -86,9 +86,11 @@ const InstitutionPerson: FC<PersonProps> = (
                     type="select"
                     label="Kjønn"
                     variant={"outlined"}
-                    value={gender ? gender : undefined} 
+                    value={gender ? gender : ""} 
                     onChange={onGenderChange} 
-                    options={GENDERS}
+                    options={GENDERS.map(o => {
+                        return {value: o.value, text: capitalize(o.text)}
+                    })}
                     fullWidth
                 />
             </Grid>
@@ -115,6 +117,7 @@ const InstitutionPerson: FC<PersonProps> = (
                             color="primary"
                         />
                     }
+                    className="my-0"
                     label="Giver kjøper alderstilpasset gave"
                 />
             </Grid>

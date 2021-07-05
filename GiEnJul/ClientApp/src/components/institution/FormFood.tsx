@@ -1,4 +1,4 @@
-import { FormControlLabel, FormLabel, Grid, Radio, RadioGroup } from "@material-ui/core"
+import { capitalize, FormControlLabel, FormLabel, Grid, Radio, RadioGroup } from "@material-ui/core"
 import React, { useState } from "react"
 import { useEffect } from "react"
 import { FC } from "react"
@@ -13,6 +13,7 @@ interface IFormDinner {
     onRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     foods: string[];
     inputLabel: string;
+    name: string;
     setIsValid?: (isValid: boolean) => void;
     header?: string;
     required?: boolean;
@@ -26,6 +27,7 @@ const FormDinner: FC<IFormDinner> = ({
     onRadioChange,
     foods,
     inputLabel,
+    name,
     setIsValid,
     header,
     required,
@@ -52,9 +54,11 @@ const FormDinner: FC<IFormDinner> = ({
     return (
         <div>
             {header && <FormLabel required={required} error={isErr}>{header}</FormLabel>}
-            <RadioGroup name="locations" value={radio} onChange={extendedOnRadioChange}>
+            <RadioGroup name={name} value={radio} onChange={extendedOnRadioChange}>
                 {foods.map(f => 
-                    <FormControlLabel key={`fd_${f}`} value={f} control={<Radio />} label={<span className="text-capitalize">{f}</span>} />
+                    {  
+                        return <FormControlLabel key={`fd_${f}`} value={f} control={<Radio />} label={capitalize(f)} />;
+                    }
                 )}
                 <FormControlLabel value={"annet"} control={<Radio />} label={
                     <Grid container spacing={1} alignItems={"center"}>
@@ -67,9 +71,11 @@ const FormDinner: FC<IFormDinner> = ({
                                 validators={[input => {return !required || (radio !== "annet" || isNotNull(input))}]}
                                 onChange={(e) => setInput(e.target.value)} 
                                 value={input} 
-                                name="dinner" 
+                                name={`${name}_input`} 
                                 disabled={radio !== "annet"} 
                                 label={inputLabel}
+                                multiline
+                                rowsMax="8"
                             />
                         </Grid>
                     </Grid>
