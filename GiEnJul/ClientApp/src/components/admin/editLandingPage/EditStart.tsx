@@ -18,7 +18,6 @@ type Props = {
 const EditStart: React.FC<Props> = ({ step, startState, setStartState, startTitleState, setStartTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 5) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
@@ -54,10 +53,4 @@ const EditStart: React.FC<Props> = ({ step, startState, setStartState, startTitl
             </FormGroup>
         )
     }
-    else {
-        return (
-            <div></div>
-        )
-    }
-}
 export default EditStart;

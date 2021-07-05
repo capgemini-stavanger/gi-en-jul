@@ -18,7 +18,6 @@ type Props = {
 const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, setHowTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 1) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
@@ -53,11 +52,5 @@ const EditHow: React.FC<Props> = ({ step, howState, setHowState, howTitleState, 
                 />
             </FormGroup>
         )
-    }
-    else {
-        return (
-            <div></div>
-        )
-    }
 }
 export default EditHow;

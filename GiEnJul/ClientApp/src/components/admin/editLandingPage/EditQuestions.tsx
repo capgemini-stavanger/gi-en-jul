@@ -20,9 +20,6 @@ const EditQuestions: React.FC<Props> = ({ step, questionState, setQuestionState,
     // const [picture, setPicture] = useState<string>('');
     const [content, setContent] = useState<string>('');
 
-
-
-    if (step === 2) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
@@ -58,12 +55,4 @@ const EditQuestions: React.FC<Props> = ({ step, questionState, setQuestionState,
             </FormGroup>
         )
     }
-    else {
-        return (
-            <div></div>
-        )
-    }
-
-}
-
 export default EditQuestions;

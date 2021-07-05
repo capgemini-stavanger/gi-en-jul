@@ -18,7 +18,6 @@ type Props = {
 const EditCompany: React.FC<Props> = ({ step, companyState, setCompanyState, companyTitleState, setCompanyTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 3) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
@@ -53,11 +52,5 @@ const EditCompany: React.FC<Props> = ({ step, companyState, setCompanyState, com
                 />
             </FormGroup>
         )
-    }
-    else {
-        return (
-            <div></div>
-        )
-    }
 }
 export default EditCompany;

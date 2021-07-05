@@ -4,14 +4,15 @@ import * as React from 'react';
 import { useState } from 'react';
 import EditHow from './EditHow';
 import EditQuestions from './EditQuestions';
-import {  EditorState } from 'draft-js';
+import { convertToRaw, EditorState } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import EditCompany from './EditCompany';
 import EditContact from './EditContact';
 import EditStart from './EditStart';
 
 export default () => {
-    const [step, setStep] = useState<Number>(1);
-    
+    const [step, setStep] = useState<Number>(0);
+
     const [howState, setHowState] = useState<EditorState>(EditorState.createEmpty());
     const [howTitleState, setHowTitleState] = useState<string>("");
 
@@ -29,74 +30,67 @@ export default () => {
     //these states will be implemented later
     // const [saving, setSaving] = useState<boolean>(false);
 
-    
+    const save = () => {
+        localStorage.setItem('how', draftToHtml(convertToRaw(howState.getCurrentContent())));
+        console.log(localStorage.getItem('how'))
+        // localStorage.setItem('howTitle', draftToHtml(convertToRaw(howTitleState.getCurrentContent())));
+    }
+    const sections = ['Hvordan', 'Spørsmål', 'Bedrift', 'Kontakt', 'Start Gi en jul']
+
+
     return (
         <Container>
-            <Typography align="center" variant='h4' >Rediger gienjul.no</Typography>
+            <Typography align="center" variant='h4'>Rediger gienjul.no</Typography>
             <Grid
                 container
                 direction="row"
                 justify="center"
                 alignItems="center">
-                <Grid item xs={2}>
-                    <Button variant='outlined' fullWidth={true} onClick={() => {
-                        setStep(1)
-                    }}>HVordan</Button>
-                </Grid>
-                <Grid item xs={2} >
-                    <Button variant='outlined' fullWidth={true} onClick={() => {
-                        setStep(2)
-                    }}>Spørsmål</Button>
-                </Grid>
-                <Grid item xs={2}>
-                    <Button variant='outlined' fullWidth={true} onClick={() => {
-                        setStep(3)
-                    }}>Bedrifter</Button>
-                </Grid>
-                <Grid item xs={2}>
-                    <Button variant='outlined' fullWidth={true} onClick={() => {
-                        setStep(4)
-                    }}>Kontakt</Button>
-                </Grid>
-                <Grid item xs={2}>
-                    <Button variant='outlined' fullWidth={true} onClick={() => {
-                        setStep(5)
-                    }}>Start "Gi en jul"</Button>
-                </Grid>
+                {sections.map((key, index) =>
+                    <Grid item xs={2}>
+                        <Button variant='outlined' fullWidth={true} onClick={() => {
+                            setStep(index)
+                        }}>{key}</Button>
+                    </Grid>)}
             </Grid>
-                    
-                    <EditHow
-                    step = {step}
-                    howState = {howState}
-                    setHowState = {setHowState}
-                    howTitleState = {howTitleState}
-                    setHowTitleState ={setHowTitleState}/>
-                    <EditQuestions
-                    step = {step}
-                    questionState ={questionState}
-                    setQuestionState ={setQuestionState}
-                    questionTitleState = {questionTitleState}
-                    setQuestionTitleState ={setQuestionTitleState}/>
-                    <EditCompany
-                    step = {step}
-                    companyState ={companyState}
-                    setCompanyState ={setCompanyState}
-                    companyTitleState = {companyTitleState}
-                    setCompanyTitleState ={setCompanyTitleState}/>
-                    <EditContact
-                    step = {step}
-                    contactState ={contactState}
-                    setContactState ={setContactState}
-                    contactTitleState = {contactTitleState}
-                    setContactTitleState ={setContactTitleState}/>
-                    <EditStart
-                    step = {step}
-                    startState ={startState}
-                    setStartState ={setStartState}
-                    startTitleState = {startTitleState}
-                    setStartTitleState ={setStartTitleState}/>
-
+            {(step === 0 &&
+                <EditHow
+                    step={step}
+                    howState={howState}
+                    setHowState={setHowState}
+                    howTitleState={howTitleState}
+                    setHowTitleState={setHowTitleState} />)
+            }
+            {(step === 1 &&
+                <EditQuestions
+                    step={step}
+                    questionState={questionState}
+                    setQuestionState={setQuestionState}
+                    questionTitleState={questionTitleState}
+                    setQuestionTitleState={setQuestionTitleState} />
+            )}
+            {(step === 3 &&
+                <EditCompany
+                    step={step}
+                    companyState={companyState}
+                    setCompanyState={setCompanyState}
+                    companyTitleState={companyTitleState}
+                    setCompanyTitleState={setCompanyTitleState} />)}
+            {(step === 4 &&
+                <EditContact
+                    step={step}
+                    contactState={contactState}
+                    setContactState={setContactState}
+                    contactTitleState={contactTitleState}
+                    setContactTitleState={setContactTitleState} />)}
+            {(step === 5 &&
+                <EditStart
+                    step={step}
+                    startState={startState}
+                    setStartState={setStartState}
+                    startTitleState={startTitleState}
+                    setStartTitleState={setStartTitleState} />)}
+            <Button variant='contained' onClick={save}>Lagre</Button>
         </Container>
     )
-
 };

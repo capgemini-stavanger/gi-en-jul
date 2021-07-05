@@ -18,7 +18,6 @@ type Props = {
 const EditContact: React.FC<Props> = ({ step, contactState, setContactState, contactTitleState, setContactTitleState }) => {
     const [content, setContent] = useState<string>('');
 
-    if (step === 4) {
         return (
             <FormGroup>
                 <Typography variant='h6'>Tittel:</Typography>
@@ -54,10 +53,4 @@ const EditContact: React.FC<Props> = ({ step, contactState, setContactState, con
             </FormGroup>
         )
     }
-    else {
-        return (
-            <div></div>
-        )
-    }
-}
 export default EditContact;
