@@ -26,8 +26,8 @@ export default () => {
 
     const [startState, setStartState] = useState<EditorState>(EditorState.createEmpty());
     const [startTitleState, setStartTitleState] = useState<string>("");
-
-    const [saving, setSaving] = useState<boolean>(false);
+    //these states will be implemented later
+    // const [saving, setSaving] = useState<boolean>(false);
 
     
     return (
@@ -76,7 +76,7 @@ export default () => {
                     questionState ={questionState}
                     setQuestionState ={setQuestionState}
                     questionTitleState = {questionTitleState}
-                    setQuestionTitleState ={setHowTitleState}/>
+                    setQuestionTitleState ={setQuestionTitleState}/>
                     <EditCompany
                     step = {step}
                     companyState ={companyState}

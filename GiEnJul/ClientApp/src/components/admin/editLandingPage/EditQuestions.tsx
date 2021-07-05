@@ -15,6 +15,7 @@ type Props = {
 }
 
 const EditQuestions: React.FC<Props> = ({ step, questionState, setQuestionState, questionTitleState, setQuestionTitleState }) => {
+    //these states will be implemented later
     // const [title, setTitle] = useState<string>('');
     // const [picture, setPicture] = useState<string>('');
     const [content, setContent] = useState<string>('');
