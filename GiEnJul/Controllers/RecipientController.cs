@@ -41,13 +41,11 @@ namespace GiEnJul.Controllers
             try
             {
                 //Add familymembers to Table Storage
-                recipient.FamilyMembers = _mapper.Map<List<Person>>(recipientDto.FamilyMembers);
-                recipient.FamilyMembers.ForEach(person =>
-                {
-                    person.PartitionKey = entity.RowKey;
-                    person.RowKey = Guid.NewGuid().ToString();
-                });
-                await _personRepository.InsertOrReplaceBatchAsync(recipient.FamilyMembers);
+                var family = _mapper.Map<List<Person>>(recipientDto.FamilyMembers);
+                family.ForEach(person => person.PartitionKey = entity.RowKey);
+
+                await _personRepository.InsertOrReplaceBatchAsync(family);
+
                 return CreatedAtAction(nameof(entity), entity);
             }
             catch (Exception ex)

@@ -1,7 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
-
-namespace GiEnJul.Models
+﻿namespace GiEnJul.Models
 {
     public class Person
     {

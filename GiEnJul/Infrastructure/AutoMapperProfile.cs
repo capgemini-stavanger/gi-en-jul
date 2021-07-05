@@ -11,23 +11,27 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore());
 
-            CreateMap<Models.Person, Entities.Person>();
-                //.ConstructUsing(x => new Entities.Person(x.PartitionKey));
+            CreateMap<Models.Person, Entities.Person>()
+                .ConstructUsing(src => new Entities.Person(src.PartitionKey))
+                .ForMember(dest => dest.RowKey, act => act.Ignore())
+                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
+                .ForMember(x => x.Timestamp, opt => opt.Ignore())
+                .ForMember(x => x.ETag, opt => opt.Ignore());
 
             //Recipient mapping
             CreateMap<Dtos.PostRecipientDto, Models.Recipient>()
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore())
-                .ForMember(dest => dest.FamilyMembers, act => act.Ignore());
+                .ForMember(dest => dest.EventName, act => act.Ignore())
+                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers));
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ConstructUsing(x => new Entities.Recipient(x.Location, x.EventName))
-                .ForMember(x => x.PartitionKey, opt => opt.Ignore())
-                .ForMember(x => x.RowKey, opt => opt.Ignore())
+                .ForMember(dest => dest.RowKey, act => act.Ignore())
+                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
-
 
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()

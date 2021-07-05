@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace GiEnJul.Entities
 {
@@ -20,9 +19,9 @@ namespace GiEnJul.Entities
         public string Dinner { get; set; }
         public string Dessert { get; set; }
         public string Note { get; set; }
-        public string Event { get; set; }
-        public int PersonCount { get; set; }
+        public string EventName { get; set; }
         public string Location { get; set; }
+        public int PersonCount { get; set; }
 
         //Submitter info
         public string ContactFullName { get; set; }
