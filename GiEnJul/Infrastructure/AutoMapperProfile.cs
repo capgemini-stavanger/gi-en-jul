@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System;
 
 namespace GiEnJul.Infrastructure
 {

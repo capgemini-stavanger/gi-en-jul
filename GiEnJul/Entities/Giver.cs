@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace GiEnJul.Entities
 {

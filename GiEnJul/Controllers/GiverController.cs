@@ -24,7 +24,7 @@ namespace GiEnJul.Controllers
             _log = log;
             _mapper = mapper;
         }
-        
+
         // POST api/<GiverController>
         [HttpPost]
         public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] PostGiverDto giverDto)

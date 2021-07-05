@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Cosmos.Table;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
 {
-    public class Recipient : EntityBase 
+    public class Recipient : EntityBase
     {
         public Recipient()
         { }
@@ -21,8 +19,8 @@ namespace GiEnJul.Entities
         //Family info
         public string Dinner { get; set; }
         public string Dessert { get; set; }
-        public string Note { get; set; } 
-        public string EventName { get; set; }
+        public string Note { get; set; }
+        public string Event { get; set; }
         public int PersonCount { get; set; }
         public string Location { get; set; }
 
@@ -34,6 +32,5 @@ namespace GiEnJul.Entities
         //Submitter references
         public string Institution { get; set; }
         public string ReferenceId { get; set; }
-
     }
 }

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using GiEnJul.Infrastructure;
-using System.Threading.Tasks;
 using GiEnJul.Entities;
-using Serilog;
+using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
+using Serilog;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
