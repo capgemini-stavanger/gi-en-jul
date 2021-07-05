@@ -1,5 +1,7 @@
+import { Checkbox, FormControlLabel, Grid } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
+import { GENDERS } from '../../common/constants/Genders';
 import Gender from '../../common/enums/Gender';
 import InputValidator from '../InputFields/Validators/InputValidator';
 import { isNotNull } from '../InputFields/Validators/Validators';
@@ -62,40 +64,61 @@ const InstitutionPerson: FC<PersonProps> = (
     }
 
     return(
-        <div>
-            <InputValidator
-                viewErrorTrigger={viewErrorTrigger}
-                validators={[isNotNull]}
-                setIsValids={setIsValidAge}
-                name="age"
-                type="number"
-                label="Age"
-                value={age}
-                onChange={onAgeChange}
-            />
-            <select value={gender} onChange={onGenderChange} className={isValidGender ? "bg-success" : "bg-danger"}>
-                {gender === Gender.Unspecified && <option value={Gender.Unspecified}>-- Kjønn --</option>}
-                <option value={Gender.Male}>Mann</option>
-                <option value={Gender.Female}>Kvinne</option>
-                <option value={Gender.Other}>Andre</option>
-            </select>
-            <InputValidator
-                viewErrorTrigger={viewErrorTrigger}
-                validators={[(input) => {return isAgeWish || isNotNull(input)}]}
-                setIsValids={setIsValidWishInput}
-                name="wish"
-                label="Gaveønske (husk størrelse)"
-                disabled={isAgeWish}
-                value={wish}
-                onChange={e => setWish(e.target.value)}
-            />
-            <input
-            type="checkbox"
-            checked={isAgeWish}
-            onChange={e => setIsAgeWish(e.target.checked)}
-            />
-            <span>Giver kjøper alderstilpasset gave</span>
-        </div>
+        <Grid container spacing={1} alignItems="center">
+            <Grid item xs={2}>
+                <InputValidator
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isNotNull]}
+                    setIsValids={setIsValidAge}
+                    name="age"
+                    type="number"
+                    label="Alder"
+                    value={age}
+                    onChange={onAgeChange}
+                />
+            </Grid>
+            <Grid item xs={2}>
+                <InputValidator 
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[isNotNull]}
+                    setIsValids={setIsValidAge}
+                    name="gender"
+                    type="select"
+                    label="Kjønn"
+                    variant={"outlined"}
+                    value={gender ? gender : undefined} 
+                    onChange={onGenderChange} 
+                    options={GENDERS}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs>
+                <InputValidator
+                    viewErrorTrigger={viewErrorTrigger}
+                    validators={[(input) => {return isAgeWish || isNotNull(input)}]}
+                    setIsValids={setIsValidWishInput}
+                    name="wish"
+                    label="Gaveønske (husk størrelse)"
+                    disabled={isAgeWish}
+                    value={wish}
+                    onChange={e => setWish(e.target.value)}
+                    fullWidth
+                />
+            </Grid>
+            <Grid item xs>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={isAgeWish}
+                            onChange={e => setIsAgeWish(e.target.checked)}
+                            name="isAgeWish"
+                            color="primary"
+                        />
+                    }
+                    label="Giver kjøper alderstilpasset gave"
+                />
+            </Grid>
+        </Grid>
     );
 };
 

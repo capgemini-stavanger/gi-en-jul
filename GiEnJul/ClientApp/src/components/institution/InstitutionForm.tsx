@@ -1,12 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
-import Location from './InstitutionLocation';
+import Locations from './InstitutionLocations';
 import FormPerson from './FormPerson';
 import IFormPerson from './IFormPerson';
-import LOCATIONS from '../../common/constants/Locations';
 import Gender from '../../common/enums/Gender';
 import InputValidator from '../InputFields/Validators/InputValidator';
 import { isEmail, isNotNull, isPhoneNumber } from '../InputFields/Validators/Validators';
+import { Button } from '@material-ui/core';
+import FormFood from './FormFood';
+import { DINNERS } from '../../common/constants/Dinners';
+import { DESSERTS } from '../../common/constants/Desserts';
 
 
 type PersonType = {
@@ -34,13 +37,17 @@ const RegistrationForm = () => {
     const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
 
     const [persons, setPersons] = useState([{} as IFormPerson]);
+
     const [location, setLocation] = useState("");
+    const [isValidLocation, setIsValidLocation] = useState(false);
     
     const [dinnerRadio, setDinnerRadio] = useState("");
     const [dinnerInput, setDinnerInput] = useState("");
+    const [isValidDinner, setIsValidDinner] = useState(false);
 
     const [dessertRadio, setDessertRadio] = useState("");
     const [dessertInput, setDessertInput] = useState("");
+    const [isValidDessert, setIsValidDessert] = useState(false);
 
     const [specialNeeds, setSpecialNeeds] = useState("");
 
@@ -92,8 +99,9 @@ const RegistrationForm = () => {
     }
 
     const allIsValid = () => {
-        return getDinner() &&
-            getDessert() &&
+        return isValidDinner &&
+            isValidDessert &&
+            isValidLocation &&
             isValidPid &&
             isValidContactName &&
             isValidContactPhoneNumber &&
@@ -144,64 +152,51 @@ const RegistrationForm = () => {
 
     return(
         <form className="thisclass" onSubmit={onSubmitForm}>
-            <div>
-                <h3>Hvor ønsker du å registrere familie (velg en)</h3>
-                <div>
-                    {
-                    LOCATIONS.map(l => (
-                        <Location key={l} onChange={onLocationChange} value={l}/>
-                    ))}
-                </div>
-                {location}
-            </div>
-            <div>
-                {persons.map((p, i) =>
-                    <FormPerson 
-                        key={"person" + i} 
-                        person={p} 
-                        viewErrorTrigger={viewErrorTrigger}
-                        updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
-                    />)}
-            </div>
-            <input type="button" onClick={addPerson} value="Legg til flere" />
+            <Locations
+                value={location}
+                onChange={onLocationChange}
+                viewErrorTrigger={viewErrorTrigger}
+                setIsValidLocation={setIsValidLocation}
+                include_header
+            />
+            {persons.map((p, i) =>
+                <FormPerson 
+                    key={"person" + i} 
+                    person={p} 
+                    viewErrorTrigger={viewErrorTrigger}
+                    updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
+                />)}
+            <Button 
+            startIcon={<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
+                           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                       </svg>} 
+            variant="contained" color="primary" onClick={addPerson}>Legg til flere</Button>
             <div className="form-group">
                 <h3>Matønsker</h3>
-                <h4>Middag</h4>
-                <input type="radio" id="ribbe" name="middag" value="ribbe" onChange={onDinnerRadioChange}/>
-                <label>Ribbe</label><br/>
-                <input type="radio" id="pinnekjøtt" name="middag" value="pinnekjøtt" onChange={onDinnerRadioChange}/>
-                <label>Pinnekjøtt</label><br/>
-                <input type="radio" id="annet" name="middag" value="annet" onChange={onDinnerRadioChange}/>
-                <label>Annet (ikke fisk)</label>
-                <InputValidator 
+                <FormFood
                     viewErrorTrigger={viewErrorTrigger}
-                    validators={[(input) => {return dinnerRadio !== "annet" || isNotNull(input)}]}
-                    errorMessages={['Vennligst velg en middag']}
-                    onChange={(e) => setDinnerInput(e.target.value)} 
-                    value={dinnerInput} 
-                    name="dinner" 
-                    disabled={dinnerRadio !== "annet"} 
-                    label="Annen middag"
+                    setInput={setDinnerInput}
+                    input={dinnerInput}
+                    radio={dinnerRadio}
+                    onRadioChange={onDinnerRadioChange}
+                    foods={DINNERS}
+                    required
+                    header={"Middag"}
+                    inputLabel="Annen middag"
+                    setIsValid={setIsValidDinner}
                 />
-
-                <h4>Dessert</h4>
-                <input type="radio" id="riskrem" name="dessert" value="riskrem" onChange={onDessertRadioChange}/>
-                <label>Riskrem</label><br/>
-                <input type="radio" id="sjokoladepudding" name="dessert" value="sjokoladepudding" onChange={onDessertRadioChange}/>
-                <label>Sjokoladepudding</label><br/>
-                <input type="radio" id="annet" name="dessert" value="annet" onChange={onDessertRadioChange}/>
-                <label>Annet</label>
-                <InputValidator 
+                <FormFood
                     viewErrorTrigger={viewErrorTrigger}
-                    validators={[(input) => {return dessertRadio !== "annet" || isNotNull(input)}]}
-                    errorMessages={['Vennligst velg en dessert']}
-                    onChange={(e) => setDessertInput(e.target.value)} 
-                    value={dessertInput} 
-                    name="dessert" 
-                    disabled={dessertRadio !== "annet"} 
-                    label="Annen dessert"
+                    setInput={setDessertInput}
+                    input={dessertInput}
+                    radio={dessertRadio}
+                    onRadioChange={onDessertRadioChange}
+                    foods={DESSERTS}
+                    required
+                    header={"Dessert"}
+                    inputLabel="Annen dessert"
+                    setIsValid={setIsValidDessert}
                 />
-
                 <br/>
                 <input value={specialNeeds} onChange={(e) => setSpecialNeeds(e.target.value)} type="texarea" placeholder="Spesielle behov (hala, vegetar, allergier)"/>
             </div>

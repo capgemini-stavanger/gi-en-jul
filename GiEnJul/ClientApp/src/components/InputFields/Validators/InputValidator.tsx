@@ -23,7 +23,7 @@ interface InputValidatorProps {
     // Initialize to 0 if errors shouldn't start active.
     viewErrorTrigger?: number,
     
-    value: string,
+    value: any,
     onChange: ((e: any) => void), 
     label: string,
     name: string,
@@ -36,6 +36,7 @@ interface InputValidatorProps {
     autoComplete?: string,
     fullWidth?: boolean,
     autoFocus?: boolean,
+    size?: any
 
     options?: {value: any, text: string}[],  // Only for "type=select".
     isMobile?: boolean,   // Only for "type=select". If true: select dropdown uses native dropdown, which is better for mobile.
@@ -59,6 +60,7 @@ const InputValidator: FC<InputValidatorProps> = (
         autoComplete,
         fullWidth,
         autoFocus,
+        size,
         options,
         isMobile,
      },
@@ -137,8 +139,8 @@ const InputValidator: FC<InputValidatorProps> = (
                     >
                     {options && options.map(o => 
                         {return isMobile ? 
-                        <option key={`n_${name}_${o.text}`} value={o.value}>{o.text}</option> : 
-                        <MenuItem key={`${name}_${o.text}`} value={o.value}>{o.text}</MenuItem>})}
+                        <option key={`n_${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</option> : 
+                        <MenuItem key={`${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</MenuItem>})}
                     </Select>
                     {errorMessages !== undefined && <FormHelperText>{error}</FormHelperText>}
                 </FormControl>
@@ -161,6 +163,7 @@ const InputValidator: FC<InputValidatorProps> = (
                     autoComplete={autoComplete}
                     fullWidth={fullWidth}
                     autoFocus={autoFocus}
+                    size={size}
                 />
             )
     }
