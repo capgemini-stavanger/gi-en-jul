@@ -15,13 +15,14 @@ const history = createBrowserHistory({ basename: baseUrl });
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const store = configureStore(history);
-console.log(window.location.origin);
+const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
+const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 
 ReactDOM.render(
     <Provider store={store}>
         <Auth0Provider
-        domain="dev-r7fmessb.eu.auth0.com"
-        clientId="sxpa9h7p3UnlhP2aIttZHlLVr41rU0RR"
+        domain={domainEnv}
+        clientId={clientidEnv}
         redirectUri={window.location.origin+"/admin"}
         >
             <ConnectedRouter history={history}>
