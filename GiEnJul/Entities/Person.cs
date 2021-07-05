@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos.Table;
+using System;
 
 namespace GiEnJul.Entities
 {
@@ -9,10 +10,10 @@ namespace GiEnJul.Entities
 
         // RowKey = Guid
         // PartitionKey = {recipientId}
-        public Person(string recipientId, string rowKey) : base(recipientId, rowKey)
+        public Person(string recipientId) // : base(recipientId ?? throw new ArgumentNullException(nameof(recipientId)), Guid.NewGuid().ToString())
         {
-            PartitionKey = $"{recipientId}";
-            RowKey = rowKey;
+            PartitionKey = recipientId;
+            RowKey = Guid.NewGuid().ToString();
         }
 
         public string Wish { get; set; }

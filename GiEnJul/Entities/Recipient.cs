@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Table;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace GiEnJul.Entities
@@ -11,28 +12,23 @@ namespace GiEnJul.Entities
 
         // RowKey = Guid
         // PartitionKey = loc_{location}
-        public Recipient(string location, string rowKey)
+        public Recipient(string location, string eventName) : base($"{eventName}_{location}", Guid.NewGuid().ToString())
         {
-            PartitionKey = $"loc_{location}";
-            RowKey = rowKey;
+            Location = location ?? throw new ArgumentNullException(nameof(location));
+            EventName = eventName ?? throw new ArgumentNullException(nameof(eventName));
         }
 
         //Family info
         public string Dinner { get; set; }
         public string Dessert { get; set; }
         public string Note { get; set; } 
-        public string Event { get; set; }
+        public string EventName { get; set; }
         public int PersonCount { get; set; }
         public string Location { get; set; }
 
         //Submitter info
-        [ProtectedPersonalData]
         public string ContactFullName { get; set; }
-        [ProtectedPersonalData]
-        [EmailAddress]
         public string ContactEmail { get; set; }
-        [ProtectedPersonalData]
-        [Phone]
         public string ContactPhoneNumber { get; set; }
 
         //Submitter references
