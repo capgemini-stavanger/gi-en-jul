@@ -30,9 +30,8 @@ namespace GiEnJul.Features
 
             var query = new TableQuery<Event>()
             {
-                FilterString = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location),
-                TakeCount = 1
-            };
+                FilterString = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location)
+            }.Take(1);
 
             var activeEvent = await GetAllByQueryAsync(query);
 
@@ -40,7 +39,7 @@ namespace GiEnJul.Features
             {
                 throw new KeyNotFoundException();
             }
-            _log.Debug("Found active event: {0} for location: {1}", activeEvent, location);
+            _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
             return activeEvent.First().PartitionKey;
         }

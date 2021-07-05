@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GiEnJul.Dtos;
+using System.Collections.Generic;
 using Xunit;
 
 namespace GiEnJul.Test.ModelTests
@@ -15,8 +16,8 @@ namespace GiEnJul.Test.ModelTests
 
         public static IEnumerable<object[]> GetInvalidRecipients()
         {
-            yield return new object[] { new Models.Recipient("Stavanger") };
-            yield return new object[] { new Models.Recipient("") {
+            yield return new object[] { new PostRecipientDto() };
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -25,15 +26,14 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; //Missing location
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -41,15 +41,14 @@ namespace GiEnJul.Test.ModelTests
                 ReferenceId = "2",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing dinner
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -57,17 +56,15 @@ namespace GiEnJul.Test.ModelTests
                 ReferenceId = "2",
                 Dinner = "pinnekjøtt",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing dessert
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
-                ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
                 Institution = "NAV",
                 ReferenceId = "2",
@@ -76,28 +73,12 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
-                }
-            }}; // Missing event
-            yield return new object[] { new Models.Recipient("Stavanger") {
-                ContactEmail = "o@v.no",
-                ContactPhoneNumber = "99944999",
-                Institution = "NAV",
-                ReferenceId = "2",
-                Dinner = "pinnekjøtt",
-                Dessert = "sjokoladepudding",
-                Note = "",
-                Event = "JUL2021",
-                FamilyMembers =
-                {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing contact full name
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "feil",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -106,15 +87,14 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Invalid contact email
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "abc",
@@ -123,15 +103,14 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Invalid contact phone number
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -139,15 +118,14 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing institution
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -156,12 +134,11 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers = {}
             }}; // No familyMembers
-            var fm1000 = new List<Models.Person>();
-            for (var i = 1; i <= 1000; i++) fm1000.Add(new Models.Person("Stavanger"));
-            yield return new object[] { new Models.Recipient("Stavanger") {
+            var fm1000 = new List<PostPersonDto>();
+            for (var i = 1; i <= 1000; i++) fm1000.Add(new PostPersonDto());
+            yield return new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -170,14 +147,13 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers = fm1000
             }}; // Too many familyMembers
         }
 
         [Theory]
         [MemberData(nameof(GetInvalidRecipients))]
-        public void ValidateInvalidRecipientModels(Models.Recipient model)
+        public void ValidateInvalidRecipientModels(PostRecipientDto model)
         {
             Assert.NotEmpty(Validator.ValidateModel(model));
         }
@@ -185,7 +161,7 @@ namespace GiEnJul.Test.ModelTests
         [Fact]
         public void ValidateValidRecipientModel()
         {
-            Assert.Empty(Validator.ValidateModel(new object[] { new Models.Recipient("Stavanger") {
+            Assert.Empty(Validator.ValidateModel(new object[] { new PostRecipientDto() {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
                 ContactPhoneNumber = "99944999",
@@ -194,12 +170,11 @@ namespace GiEnJul.Test.ModelTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                Event = "JUL2021",
                 FamilyMembers =
                 {
-                    new Models.Person("Stavanger") { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
-                    new Models.Person("Stavanger") { Age = 47, Gender = Models.Gender.Male },
-                    new Models.Person("Stavanger") { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
+                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
                 }
             }}));
         }
