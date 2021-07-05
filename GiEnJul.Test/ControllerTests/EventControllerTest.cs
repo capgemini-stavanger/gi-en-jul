@@ -38,7 +38,7 @@ namespace GiEnJul.Test.ControllerTests
         }
 
         [Fact]
-        public async Task GetActiveLocationsAsync_ReturnsLocationList()
+        public async Task GetActiveLocationsAsync_RepositoryThrowsException_ControllerThrowsException()
         {
             mockEventRepo.Setup(x => x.GetLocationsWithActiveEventAsync()).ThrowsAsync(new Exception());
 
