@@ -90,17 +90,17 @@ namespace GiEnJul.Test.ControllerTests
             var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAdress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
 
-            var entity = new Entities.Giver(fakeEvent.RowKey, fakeEvent.PartitionKey) { MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
-            mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(entity);
+            var fakeModel = new Models.Giver {RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
+            mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
 
             //Act
             var result = await _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
 
             //Assert
-            var actionResult = Assert.IsType<ActionResult<Entities.Giver>>(result);
+            var actionResult = Assert.IsType<ActionResult<PostGiverResultDto>>(result);
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
-            var returnValue = Assert.IsType<Entities.Giver>(createdAtActionResult.Value);
-            Assert.Equal((entity.RowKey, entity.PartitionKey), (returnValue.RowKey, returnValue.PartitionKey));
+            var returnValue = Assert.IsType<PostGiverResultDto>(createdAtActionResult.Value);
+            Assert.Equal((fakeModel.FullName, fakeModel.Email), (returnValue.FullName, returnValue.Email));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
