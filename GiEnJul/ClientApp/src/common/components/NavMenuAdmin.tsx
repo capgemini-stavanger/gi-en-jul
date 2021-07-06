@@ -23,7 +23,7 @@ export default class NavMenuAdmin extends React.PureComponent<{}, { isOpen: bool
                                     <NavLink tag={Link} className="text-dark" to="/registrer-familie">Registrer familie</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/rediger">Registrer nettside</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/rediger">Rediger nettside</NavLink>
                                 </NavItem>
                             </ul>
                         </Collapse>

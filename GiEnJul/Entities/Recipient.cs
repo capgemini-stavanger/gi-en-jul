@@ -31,5 +31,12 @@ namespace GiEnJul.Entities
         //Submitter references
         public string Institution { get; set; }
         public string ReferenceId { get; set; }
+
+         //Is the Rowkey to the giver
+        public string MatchedGiver { get; set; }
+        
+        //Match with family, default is false
+        public Boolean IsSuggestedMatch { get; set; } = false;
+        public Boolean HasConfirmedMatch { get; set; } = false;
     }
 }
