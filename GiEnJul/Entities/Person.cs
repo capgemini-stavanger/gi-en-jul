@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Entities
+﻿using System;
+
+namespace GiEnJul.Entities
 {
     public class Person : EntityBase
     {
@@ -7,11 +9,8 @@
 
         // RowKey = Guid
         // PartitionKey = {recipientId}
-        public Person(string recipientId, string rowKey) : base(recipientId, rowKey)
-        {
-            PartitionKey = $"{recipientId}";
-            RowKey = rowKey;
-        }
+        public Person(string recipientId) : base(recipientId, Guid.NewGuid().ToString())
+        { }
 
         public string Wish { get; set; }
         public int Age { get; set; }

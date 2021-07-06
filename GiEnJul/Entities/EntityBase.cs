@@ -12,8 +12,8 @@ namespace GiEnJul.Entities
 
         public EntityBase(string partitionKey, string rowKey)
         {
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
+            PartitionKey = partitionKey ?? throw new ArgumentNullException(nameof(partitionKey));
+            RowKey = rowKey ?? throw new ArgumentNullException(nameof(rowKey));
         }
 
         public string PartitionKey { get; set; }
