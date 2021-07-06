@@ -4,19 +4,17 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useState } from 'react';
 import { convertToRaw, EditorState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import { FormGroup, TextField, Typography } from '@material-ui/core';
+import { Typography, FormGroup, TextField } from '@material-ui/core';
 
 type Props = {
-    questionState: EditorState
-    setQuestionState: (input: EditorState) => void,
-    questionTitleState: string,
-    setQuestionTitleState: (input: string) => void,
+    howState: EditorState
+    setHowState: (input: EditorState) => void,
+    howTitleState: string,
+    setHowTitleState: (input: string) => void,
 }
 
-const EditQuestions: React.FC<Props> = ({ questionState, setQuestionState, questionTitleState, setQuestionTitleState }) => {
-    //these states will be implemented later
-    // const [title, setTitle] = useState<string>('');
-    // const [picture, setPicture] = useState<string>('');
+
+const EditHow: React.FC<Props> = ({ howState, setHowState, howTitleState, setHowTitleState }) => {
     const [content, setContent] = useState<string>('');
 
         return (
@@ -25,18 +23,18 @@ const EditQuestions: React.FC<Props> = ({ questionState, setQuestionState, quest
                 <TextField
                     label="Skriv tittel her..."
                     variant="outlined"
-                    value={questionTitleState}
+                    value={howTitleState}
                     margin="normal"
                     onChange={(newState => {
-                        setQuestionTitleState(newState.target.value)
+                        setHowTitleState(newState.target.value)
                     })} />
                 <Typography variant='h6'>Innhold:</Typography>
                 <Editor
-                    editorState={questionState}
+                    editorState={howState}
                     wrapperClassName="card"
                     editorClassName="card-body"
                     onEditorStateChange={newState => {
-                        setQuestionState(newState);
+                        setHowState(newState);
                         setContent(draftToHtml(convertToRaw(newState.getCurrentContent())))
                             ;
                     }}
@@ -53,5 +51,5 @@ const EditQuestions: React.FC<Props> = ({ questionState, setQuestionState, quest
                 />
             </FormGroup>
         )
-    }
-export default EditQuestions;
+}
+export default EditHow;
