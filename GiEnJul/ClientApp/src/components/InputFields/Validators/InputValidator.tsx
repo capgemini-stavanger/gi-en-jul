@@ -1,7 +1,7 @@
-﻿import { MenuItem } from '@material-ui/core';
-import { FormControl, FormHelperText, InputLabel, Select, TextField } from '@material-ui/core';
+﻿import { TextField } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
+import SelectInput from '../SelectInput';
 
 
 interface InputValidatorProps {
@@ -38,10 +38,10 @@ interface InputValidatorProps {
     autoFocus?: boolean,
     size?: any,
     multiline?: boolean,
-    rowsMax?: number | string
+    rowsMax?: number | string,
+    placeholder?: string,
 
     options?: {value: any, text: string}[],  // Only for "type=select".
-    isMobile?: boolean,   // Only for "type=select". If true: select dropdown uses native dropdown, which is better for mobile.
 }
 
 const InputValidator: FC<InputValidatorProps> = (
@@ -65,11 +65,12 @@ const InputValidator: FC<InputValidatorProps> = (
         size,
         multiline,
         rowsMax,
+        placeholder,
         options,
-        isMobile,
      },
 ) => {
-    const [error, setError] = useState("");
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>("");
     const [viewError, setViewError] = useState(false);
 
     const checkArgs = () => {
@@ -85,7 +86,8 @@ const InputValidator: FC<InputValidatorProps> = (
     }
 
     const validate = () => {
-        let errorMsg = "";
+        let errorMsg: string | undefined = undefined;
+        let isAnyError = false;
         for (let i = 0; i < validators.length; i++) {
             let isValid = validators[i](value);
             switch (typeof setIsValids) {
@@ -97,10 +99,12 @@ const InputValidator: FC<InputValidatorProps> = (
                     break;
             } 
             if (!isValid && viewError) {
-                errorMsg = errorMessages !== undefined ? errorMessages[i] : "dummy";
+                errorMsg = errorMessages !== undefined ? errorMessages[i] : undefined;
+                isAnyError = true;
             }
         }
-        setError(errorMsg);
+        setIsError(isAnyError);
+        setErrorMessage(errorMsg);
     }
 
     const extendedOnChange = (e: any) => {
@@ -119,41 +123,32 @@ const InputValidator: FC<InputValidatorProps> = (
 
     switch (type) {
         case "select":
+            if (!options) throw Error("Options must be defined in select input");
             return (
-                <FormControl 
-                    variant={variant} 
-                    error={!!error}
+                <SelectInput
+                    name={name}
+                    options={options}
+                    value={value}
+                    onChange={onChange}
+                    variant={variant}
                     disabled={disabled}
                     fullWidth={fullWidth}
                     margin={margin}
-                >
-                    <InputLabel htmlFor={id}>{label}</InputLabel>
-                    <Select 
-                        native={isMobile}
-                        error={!!error}
-                        value={value}
-                        onChange={extendedOnChange}
-                        autoFocus={autoFocus}
-                        label={label}
-                        inputProps={{
-                            name: name,
-                            id: id
-                        }}
-                        autoComplete={autoComplete}
-                    >
-                    {options && options.map(o => 
-                        {return isMobile ? 
-                        <option key={`n_${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</option> : 
-                        <MenuItem key={`${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</MenuItem>})}
-                    </Select>
-                    {errorMessages !== undefined && <FormHelperText>{error}</FormHelperText>}
-                </FormControl>
+                    id={id}
+                    className={className}
+                    label={label}
+                    placeholder={placeholder}
+                    autoComplete={autoComplete}
+                    errorMessage={errorMessage}
+                    error={isError}
+                    autoFocus={autoFocus}
+                />
             )
         default:
             return (
                 <TextField
-                    error={!!error}
-                    helperText={errorMessages === undefined ? undefined : error}
+                    error={isError}
+                    helperText={errorMessage}
                     label={label}
                     type={type} 
                     name={name} 
@@ -170,6 +165,7 @@ const InputValidator: FC<InputValidatorProps> = (
                     size={size}
                     multiline={multiline}
                     rowsMax={rowsMax}
+                    placeholder={placeholder}
                 />
             )
     }
