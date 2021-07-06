@@ -49,7 +49,10 @@ namespace GiEnJul.Controllers
 
             return recipients;
         }
-        // [HttpGet]
-        // public async Task<IEnumerable<Models.Giver>>
+        
+        [HttpGet("allgivers")]
+        public async Task<List<Models.Giver>> GetGiversAsync() {
+            return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
+        }
     }
 }
