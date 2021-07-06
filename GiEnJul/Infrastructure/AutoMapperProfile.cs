@@ -36,6 +36,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
+            CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
+
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
