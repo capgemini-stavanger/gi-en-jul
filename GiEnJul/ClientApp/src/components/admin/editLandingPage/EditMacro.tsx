@@ -67,19 +67,19 @@ export default () => {
                     questionTitleState={questionTitleState}
                     setQuestionTitleState={setQuestionTitleState} />
             )}
-            {(step === 3 &&
+            {(step === 2 &&
                 <EditCompany
                     companyState={companyState}
                     setCompanyState={setCompanyState}
                     companyTitleState={companyTitleState}
                     setCompanyTitleState={setCompanyTitleState} />)}
-            {(step === 4 &&
+            {(step === 3 &&
                 <EditContact
                     contactState={contactState}
                     setContactState={setContactState}
                     contactTitleState={contactTitleState}
                     setContactTitleState={setContactTitleState} />)}
-            {(step === 5 &&
+            {(step === 4 &&
                 <EditStart
                     startState={startState}
                     setStartState={setStartState}
