@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.5.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@types/draft-js": "^0.11.3",
@@ -16,6 +17,7 @@
     "draftjs-to-html": "^0.9.1",
     "history": "4.10.1",
     "html-to-draftjs": "^1.5.0",
+    "joi": "^17.4.0",
     "jquery": "^3.6.0",
     "merge": "1.2.1",
     "mui-rte": "^1.29.0",
@@ -56,7 +58,7 @@
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-react": "7.16.0",
     "nan": "^2.14.1",
-    "typescript": "3.6.4"
+    "typescript": "4.3.5"
   },
   "scripts": {
     "start": "react-scripts start",

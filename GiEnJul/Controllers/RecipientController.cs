@@ -30,27 +30,27 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Entities.Recipient>> PostAsync([FromBody] PostRecipientDto recipientDto)
+        public async Task<ActionResult> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
-
-            //Add Recipient to Table Storage
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
-            var entity = await _recipientRepository.InsertOrReplaceAsync(recipient);
+            
+            //Add Recipient to Table Storage
+            var insertedRecipient = await _recipientRepository.InsertOrReplaceAsync(recipient);
 
             try
             {
                 //Add familymembers to Table Storage
                 var family = _mapper.Map<List<Person>>(recipientDto.FamilyMembers);
-                family.ForEach(person => person.PartitionKey = entity.RowKey);
+                family.ForEach(person => person.PartitionKey = insertedRecipient.RowKey);
 
                 await _personRepository.InsertOrReplaceBatchAsync(family);
 
-                return CreatedAtAction(nameof(entity), entity);
+                return Ok();
             }
             catch (Exception ex)
             {
-                await _recipientRepository.DeleteAsync(entity);
+                await _recipientRepository.DeleteAsync(insertedRecipient);
                 throw ex;
             }
         }

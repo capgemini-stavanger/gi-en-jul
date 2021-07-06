@@ -19,5 +19,12 @@ namespace GiEnJul.Entities
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        
+        //Is the Rowkey to the recipient
+        public string MatchedRecipient { get; set; }
+
+        //Match with family, default is false
+        public Boolean IsSuggestedMatch { get; set; } = false;
+        public Boolean HasConfirmedMatch { get; set; } = false;
     }
 }

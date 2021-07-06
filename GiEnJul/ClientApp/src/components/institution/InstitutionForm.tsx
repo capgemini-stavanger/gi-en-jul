@@ -177,7 +177,7 @@ const RegistrationForm = () => {
             body: JSON.stringify(submit)
         })
         .then((response) => {
-            if (response.status === 201) {
+            if (response.status === 200) {
                 setIsLoading(false);
                 setTimeout(onSuccessSubmit, 10);
                 return;
