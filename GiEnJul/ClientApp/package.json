@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "@types/draft-js": "^0.11.3",
     "@types/html-to-draftjs": "^1.4.0",
     "@types/react": "^17.0.11",
