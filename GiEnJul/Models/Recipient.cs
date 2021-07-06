@@ -20,6 +20,13 @@ namespace GiEnJul.Models
         public string Institution { get; set; }
         public string ReferenceId { get; set; }
 
+         //Is the Rowkey to the giver
+        public string MatchedGiver { get; set; }
+        
+        //Match with family, default is false
+        public bool IsSuggestedMatch { get; set; } = false;
+        public bool HasConfirmedMatch { get; set; } = false;
+
         public List<Person> FamilyMembers { get; set; } = new List<Person>();
     }
 }
