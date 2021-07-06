@@ -45,6 +45,11 @@ namespace GiEnJul.Infrastructure
                 .ForMember(x => x.RowKey, opt => opt.Ignore())
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Giver, Models.Giver>();
+
+            CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
+
         }
     }
 }
