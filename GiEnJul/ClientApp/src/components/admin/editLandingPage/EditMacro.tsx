@@ -55,7 +55,6 @@ export default () => {
             </Grid>
             {(step === 0 &&
                 <EditHow
-                    step={step}
                     howState={howState}
                     setHowState={setHowState}
                     howTitleState={howTitleState}
@@ -63,7 +62,6 @@ export default () => {
             }
             {(step === 1 &&
                 <EditQuestions
-                    step={step}
                     questionState={questionState}
                     setQuestionState={setQuestionState}
                     questionTitleState={questionTitleState}
@@ -71,21 +69,18 @@ export default () => {
             )}
             {(step === 3 &&
                 <EditCompany
-                    step={step}
                     companyState={companyState}
                     setCompanyState={setCompanyState}
                     companyTitleState={companyTitleState}
                     setCompanyTitleState={setCompanyTitleState} />)}
             {(step === 4 &&
                 <EditContact
-                    step={step}
                     contactState={contactState}
                     setContactState={setContactState}
                     contactTitleState={contactTitleState}
                     setContactTitleState={setContactTitleState} />)}
             {(step === 5 &&
                 <EditStart
-                    step={step}
                     startState={startState}
                     setStartState={setStartState}
                     startTitleState={startTitleState}

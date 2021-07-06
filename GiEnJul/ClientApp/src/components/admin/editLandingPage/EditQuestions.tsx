@@ -7,14 +7,13 @@ import draftToHtml from 'draftjs-to-html';
 import { FormGroup, TextField, Typography } from '@material-ui/core';
 
 type Props = {
-    step: Number,
     questionState: EditorState
     setQuestionState: (input: EditorState) => void,
     questionTitleState: string,
     setQuestionTitleState: (input: string) => void,
 }
 
-const EditQuestions: React.FC<Props> = ({ step, questionState, setQuestionState, questionTitleState, setQuestionTitleState }) => {
+const EditQuestions: React.FC<Props> = ({ questionState, setQuestionState, questionTitleState, setQuestionTitleState }) => {
     //these states will be implemented later
     // const [title, setTitle] = useState<string>('');
     // const [picture, setPicture] = useState<string>('');

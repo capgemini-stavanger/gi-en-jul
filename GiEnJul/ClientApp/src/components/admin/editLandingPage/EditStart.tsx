@@ -7,7 +7,6 @@ import draftToHtml from 'draftjs-to-html';
 import { Typography, FormGroup, TextField } from '@material-ui/core';
 
 type Props = {
-    step: Number,
     startState: EditorState
     setStartState: (input: EditorState) => void,
     startTitleState: string,
@@ -15,7 +14,7 @@ type Props = {
 }
 
 
-const EditStart: React.FC<Props> = ({ step, startState, setStartState, startTitleState, setStartTitleState }) => {
+const EditStart: React.FC<Props> = ({ startState, setStartState, startTitleState, setStartTitleState }) => {
     const [content, setContent] = useState<string>('');
 
         return (
