@@ -13,6 +13,7 @@ namespace GiEnJul.Features
     public interface IEventRepository : IGenericRepository<Event>
     {
         Task<string> GetActiveEventForLocationAsync(string location);
+        Task<string[]> GetLocationsWithActiveEventAsync();
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -30,9 +31,8 @@ namespace GiEnJul.Features
 
             var query = new TableQuery<Event>()
             {
-                FilterString = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location),
-                TakeCount = 1
-            };
+                FilterString = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location)
+            }.Take(1);
 
             var activeEvent = await GetAllByQueryAsync(query);
 
@@ -40,9 +40,23 @@ namespace GiEnJul.Features
             {
                 throw new KeyNotFoundException();
             }
-            _log.Debug("Found active event: {0} for location: {1}", activeEvent, location);
+            _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
             return activeEvent.First().PartitionKey;
+        }
+
+        public async Task<string[]> GetLocationsWithActiveEventAsync()
+        {
+            var query = new TableQuery<Event>()
+            {
+                FilterString = TableQuery.CombineFilters(
+                    TableQuery.GenerateFilterConditionForDate("StartDate", QueryComparisons.LessThan, DateTimeOffset.UtcNow),
+                    TableOperators.And,
+                    TableQuery.GenerateFilterConditionForDate("EndDate", QueryComparisons.GreaterThan, DateTimeOffset.UtcNow))
+            };
+            var events = await GetAllByQueryAsync(query);
+
+            return events.Select(x => x.RowKey).ToArray();
         }
     }
 }
