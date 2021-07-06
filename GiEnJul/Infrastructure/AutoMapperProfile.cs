@@ -23,7 +23,10 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore())
                 .ForMember(dest => dest.EventName, act => act.Ignore())
-                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers));
+                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
+                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
+                .ForMember(dest => dest.MatchedGiver, act => act.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ConstructUsing(x => new Entities.Recipient(x.Location, x.EventName))
@@ -37,8 +40,11 @@ namespace GiEnJul.Infrastructure
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
                 .ForMember(x => x.RowKey, opt => opt.Ignore())
-                .ForMember(x => x.EventName, opt => opt.Ignore());
-            
+                .ForMember(x => x.EventName, opt => opt.Ignore())
+                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
+                .ForMember(dest => dest.MatchedRecipient, act => act.Ignore());
+
             CreateMap<Models.Giver, Entities.Giver>()
                 .ConstructUsing(x => new Entities.Giver(x.Location, x.EventName))
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
