@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Locations from './InstitutionLocations';
 import FormPerson from './FormPerson';
 import IFormPerson from './IFormPerson';
@@ -36,7 +36,7 @@ type submittype = {
 const RegistrationForm = () => {
     const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
 
-    const [persons, setPersons] = useState([{} as IFormPerson]);
+    const [persons, setPersons] = useState<(IFormPerson | undefined)[]>([{} as IFormPerson]);
 
     const [location, setLocation] = useState("");
     const [isValidLocation, setIsValidLocation] = useState(false);
@@ -65,13 +65,22 @@ const RegistrationForm = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const addPerson = () => {
-        setPersons(formpersons => [...formpersons, {} as IFormPerson]);
+        setPersons(formpersons => {
+            return [...formpersons, {} as IFormPerson];
+        });
     }
 
-    const updatePerson = (newPerson: IFormPerson, index: number) => {
+    const updatePerson = (index: number, newPerson: IFormPerson) => {
         setPersons(formpersons => {
             formpersons[index] = newPerson;
             return formpersons;
+        });
+    }
+
+    const deletePerson = (index: number) => {
+        setPersons(formpersons => {
+            formpersons[index] = undefined;
+            return [...formpersons];
         });
     }
 
@@ -105,7 +114,7 @@ const RegistrationForm = () => {
             isValidContactPhoneNumber &&
             isValidContactEmail &&
             persons.every(p => {
-                return p.isValidAge && p.isValidGender && p.isValidWish;
+                return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
             })
     }
 
@@ -147,7 +156,8 @@ const RegistrationForm = () => {
 
         let personsList = Array<PersonType>();
         persons.forEach(p => {
-            const p1:PersonType = {
+            if (!p) return;
+            const p1: PersonType = {
                 Wish: p.wish,
                 Age: parseInt(p.age),
                 Gender: p.gender,
@@ -208,13 +218,16 @@ const RegistrationForm = () => {
                             <Typography variant="h5">Familie</Typography>
                         </Grid>
                         <Grid item>
-                            {persons.map((p, i) =>
-                                <FormPerson 
+                            {persons.map((p, i) => {
+                                return p &&
+                                    <FormPerson 
                                     key={"person" + i} 
                                     person={p} 
                                     viewErrorTrigger={viewErrorTrigger}
-                                    updatePerson={(newPerson: IFormPerson) => updatePerson(newPerson, i)} 
-                                />)}
+                                    updatePerson={(newPerson: IFormPerson) => updatePerson(i, newPerson)} 
+                                    deletePerson={() => deletePerson(i)}
+                                    />
+                            })}
                         </Grid>
                         <Grid item>
                             <Button 

@@ -1,4 +1,6 @@
-import { capitalize, Checkbox, FormControlLabel, Grid } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import { capitalize, Checkbox, FormControlLabel, Grid, SvgIcon } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
 import { GENDERS } from '../../common/constants/Genders';
@@ -10,13 +12,17 @@ import IFormPerson from './IFormPerson';
 
 interface PersonProps {
     updatePerson: (newPerson: IFormPerson) => void,
+    deletePerson: () => void,
     viewErrorTrigger: number,
     person: IFormPerson,
 }
 
 const InstitutionPerson: FC<PersonProps> = (
-    { updatePerson, viewErrorTrigger, person }
-    ) => {
+    {   updatePerson, 
+        deletePerson,
+        viewErrorTrigger, 
+        person 
+    }) => {
 
     const [age, setAge] = useState("");
     const [gender, setGender] = useState(Gender.Unspecified);
@@ -65,6 +71,11 @@ const InstitutionPerson: FC<PersonProps> = (
 
     return(
         <Grid container spacing={1} alignItems="center">
+            <Grid item>
+                <IconButton color="secondary" onClick={deletePerson}>
+                    <SvgIcon component={ClearIcon} />
+                </IconButton>
+            </Grid>
             <Grid item xs={2}>
                 <InputValidator
                     viewErrorTrigger={viewErrorTrigger}
