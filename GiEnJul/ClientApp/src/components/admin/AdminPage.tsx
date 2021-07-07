@@ -19,28 +19,22 @@ function AdminPage() {
       const domain = "dev-r7fmessb.eu.auth0.com";
 
       try {
-        console.log("accessing token");
         const accessToken = await getAccessTokenSilently({
           audience: `https://${domain}/api/v2/`,
           scope: "read:current_user",
         });
-        console.log(accessToken);
 
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${
           user!.sub
         }`;
-        console.log("url: " + userDetailsByIdUrl);
 
         const metadataResponse = await fetch(userDetailsByIdUrl, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        console.log("response: ");
-        console.log(metadataResponse);
 
         const user_appMetadata = await metadataResponse.json();
-        console.log(user_appMetadata.app_metadata);
         const userMETA = user_appMetadata.app_metadata;
         setappMetadata(userMETA);
         setIsLoaded(true);
@@ -51,13 +45,13 @@ function AdminPage() {
     };
 
     getappMetadata();
-  }, [user,getAccessTokenSilently]);
+  }, [user, getAccessTokenSilently]);
 
   if (!isLoaded) {
     return <LoadingPage />;
-  }else if(isLoaded && appMetadata == null){
-    return <LoadingPage/>
-}else {
+  } else if (isLoaded && appMetadata == null) {
+    return <LoadingPage />;
+  } else {
     if (appMetadata!["role"] === "institution") {
       return <InstitutionMacro />;
     } else if (appMetadata!["role"] === "admin") {
