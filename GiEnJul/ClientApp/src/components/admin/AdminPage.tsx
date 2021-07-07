@@ -16,7 +16,7 @@ function AdminPage() {
 
   useEffect(() => {
     const getappMetadata = async () => {
-      const domain = "dev-r7fmessb.eu.auth0.com";
+      const domain = process.env.REACT_APP_DEV_TENANT_AUTH0!;
 
       try {
         const accessToken = await getAccessTokenSilently({
@@ -57,7 +57,7 @@ function AdminPage() {
     } else if (appMetadata!["role"] === "admin") {
       return (
         <>
-          <LogOutButton></LogOutButton>
+          <LogOutButton />
           <Container maxWidth="xl">
             <AdminMenu />
             <Suggested />
