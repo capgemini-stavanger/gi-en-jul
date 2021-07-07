@@ -1,23 +1,23 @@
-import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from "@material-ui/core";
-import React from "react";
+import { FormControl, FormControlTypeMap, FormHelperText, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { OverridableComponent } from "@material-ui/core/OverridableComponent";
+import React, { useState } from "react";
 import { FC } from "react";
 import { isMobile } from "../../common/functions/IsMobile";
 
-interface ISelect {
+interface ISelect extends OverridableComponent<FormControlTypeMap<{}, "div">> {
     name: string,
-    options: {value: any, text: string}[],
-    value: any,
-    onChange: (e: any) => void,
+    options: {value: string | number | readonly string[] | undefined, text: string}[],
+    value: string | number | readonly string[] | undefined,
+    onChange:   ((event: React.ChangeEvent<{
+                    name?: string;
+                    value: unknown;
+                }>, child: React.ReactNode) => void),
 
-    variant?: any,
-    disabled?: boolean,
-    fullWidth?: boolean,
-    margin?: any,
     id?: string,
     className?: string,
     label?: string,
     placeholder?: string,
-    autoComplete?: any,
+    autoComplete?: string,
     errorMessage?: string,
     error?: boolean,
     autoFocus?: boolean
@@ -30,10 +30,6 @@ const SelectInput: FC<ISelect> = (
         value,
         onChange,
 
-        variant,
-        disabled,
-        fullWidth,
-        margin,
         id,
         className,
         label,
@@ -42,15 +38,14 @@ const SelectInput: FC<ISelect> = (
         errorMessage,
         error,
         autoFocus,
+        ...rest
     },
 ) => {
+    const [isMob,] = useState(isMobile());
     return (
         <FormControl 
-            variant={variant} 
             error={!!errorMessage}
-            disabled={disabled}
-            fullWidth={fullWidth}
-            margin={margin}
+            {...rest}
         >
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select 
@@ -69,7 +64,7 @@ const SelectInput: FC<ISelect> = (
                 className={className}
             >
             {options && options.map(o => 
-                {return isMobile() ? 
+                {return isMob ? 
                 <option key={`n_${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</option> : 
                 <MenuItem key={`${name}_${o.text}`} value={o.value} className="text-capitalize">{o.text}</MenuItem>})}
             </Select>
