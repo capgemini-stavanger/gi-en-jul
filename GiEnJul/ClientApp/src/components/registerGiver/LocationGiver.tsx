@@ -26,7 +26,6 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
             prevStep();
         }
 
-
         return (
             <Container key={values.familyType}>
                 <ValidatorForm
@@ -61,7 +60,6 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
             </Container>
         )
     }
-
     return (
         <Container>
             <ValidatorForm
