@@ -18,11 +18,11 @@ const SignUp = () => {
     const [maxRecievers, setMaxRecievers] = useState<number | undefined>(undefined);
     const [familyType, setFamilyType] = useState<string | undefined>(undefined);
 
-    const [locationList, setLocationList] = useState<string[]>(['Ingen lokasjoner']);
+    const [locationOptions, setLocationOptions] = useState<string[]>([]);
 
     useEffect(() => {
-        getLocations().then((data) => setLocationList(data));
-    }, [])
+        getLocations().then((locationArray) => setLocationOptions(locationArray))
+     }, []);
 
     // go back to previous step
     const prevStep = () => {
@@ -81,7 +81,7 @@ const SignUp = () => {
                             nextStep={nextStep}
                             handleLocationChange={handleLocationChange}
                             values={values}
-                            options={locationList}
+                            options={locationOptions}
                             placeHolder={'Velg et sted...'}
                         ></LocationGiver>
                     </div>
@@ -151,7 +151,7 @@ const SignUp = () => {
                             handleTlfChange={handleTlfChange}
                             handleFamilyChange={handleFamilyChange}
                             options={familiyOptions}
-                            locationOptions={locationList}
+                            locationOptions={locationOptions}
                             submit={submit}
                             values={values}
                             callingback={handleConfirm}
@@ -172,8 +172,8 @@ const SignUp = () => {
             return(
                 <Container>
 
-            </Container>
+                </Container>
             )
-        };
     };
+};
 export default SignUp

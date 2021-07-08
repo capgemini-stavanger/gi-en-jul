@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom'
 import useStyles from './Styles';
 import { ValidatorForm, SelectValidator } from 'react-material-ui-form-validator';
 import { Button, Grid, MenuItem, Container } from '@material-ui/core';
+import { Spinner } from 'reactstrap';
 
 type Props = {
     nextStep: () => void,
@@ -80,8 +81,8 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                     onChange={handleLocationChange}
                     errorMessages={['Hvor vil du spre glede?']}
                 >
-                    {options.map(x =>
-                        <MenuItem key={x} value={x}>{x}</MenuItem>)}
+                    {options.length !== 0 ?options.map(x =>
+                        <MenuItem key={x} value={x}>{x}</MenuItem>) : <Spinner />}
                 </SelectValidator>
                 <Grid container spacing={2} justify="center" className={classes.submit}>
                     <Grid item>

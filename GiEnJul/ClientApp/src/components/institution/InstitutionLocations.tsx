@@ -36,20 +36,25 @@ const Location:FC<LocationProps> = ({
         setIsErr(viewError && !isValid);
     }, [value, setIsValidLocation, setIsErr, viewError])
 
-    const [locationList, setLocationList] = useState<string[]>(['Ingen lokasjoner']);
+    const [locationList, setLocationList] = useState<string[]>([]);
 
     useEffect(() => {
-        getLocations().then((data) => setLocationList(data));
+        getLocations().then((data) => {
+            if (data.length > 0) setLocationList(data);
+            else setLocationList([]);            
+        });
     }, [])
 
-    return (
-        <div>
-            {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
-            <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
-                {locationList.map(l => <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
-            </RadioGroup>
-        </div>
-    );
+    if (locationList.length > 0)
+        return (
+            <div>
+                {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
+                <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
+                    {locationList.map(l => <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
+                </RadioGroup>
+            </div>
+        );
+    else return <div>Ingen aktive lokasjoner, prøv igjen senere</div>;
 };
 
 export default Location;
