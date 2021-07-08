@@ -5,10 +5,7 @@ import {
   AccordionSummary,
   Avatar,
   Container,
-  createStyles,
   Divider,
-  makeStyles,
-  Theme,
   Typography,
 } from "@material-ui/core";
 import {
@@ -19,39 +16,12 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { green, red } from "@material-ui/core/colors";
 import { GiverType } from "../overview/Giver";
+import useStyles from "./Styles";
 
 type Props = {
   data: [GiverType] | [];
 };
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      width: "100%",
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      flexBasis: "33.33%",
-      flexShrink: 0,
-    },
-    secondaryHeading: {
-      fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary,
-      flexBasis: "33.33%",
-      flexShrink: 0,
-    },
-    matched: {
-      color: "#fff",
-      backgroundColor: green[500],
-    },
-    notMatched: {
-      color: "#FF0000",
-      backgroundColor: red[500],
-    },
-  })
-);
 
 const Datatable: React.FC<Props> = ({ data }) => {
   const classes = useStyles();

@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using GiEnJul.Features;
-using GiEnJul.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos.Table;
 using Serilog;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
@@ -33,21 +27,10 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<Entities.Recipient>> GetUnmatchedRecipientsAsync(string location)
-        {
+        [HttpGet("querygivers")]
+        public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
             var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-
-            var query = new TableQuery<Entities.Recipient>() { FilterString = 
-                TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{currentEvent}_{location}"), 
-                    TableOperators.And, 
-                    TableQuery.GenerateFilterConditionForBool("IsMatched", QueryComparisons.Equal, false))
-            };
-
-            var recipients = await _recipientRepository.GetAllByQueryAsync(query);
-
-            return recipients;
+        return _mapper.Map<List<Models.Recipient>>(await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent));
         }
         
         [HttpGet("allgivers")]
