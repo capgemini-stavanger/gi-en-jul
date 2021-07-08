@@ -35,9 +35,9 @@ namespace GiEnJul.Test.ControllerTests
             mockRecipientRepo.VerifyNoOtherCalls();
         }
 
-        public Entities.Recipient ArrangeOkRecipientRepositoryInsertResult()
+        public Models.Recipient ArrangeOkRecipientRepositoryInsertResult()
         {
-            var recipient = new Entities.Recipient("Stavanger", "Jul21")
+            var recipient = new Models.Recipient()
             {
                 ContactEmail = "o@v.no",
                 ContactFullName = "daniel",
@@ -47,7 +47,10 @@ namespace GiEnJul.Test.ControllerTests
                 Dinner = "pinnekjøtt",
                 Dessert = "sjokoladepudding",
                 Note = "",
-                PersonCount = 3
+                EventName = "Jul21",
+                Location = "Stavanger",
+                PartitionKey = "Jul21_Stavanger",
+                RowKey = Guid.NewGuid().ToString()
             };
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(recipient);
             return recipient;
@@ -101,17 +104,16 @@ namespace GiEnJul.Test.ControllerTests
             // Arrange
             ArrangeOkRecipientRepositoryInsertResult();
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync("Jul21");
-            mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(new Entities.Recipient());
+            mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(new Models.Recipient());
             mockPersonRepo.Setup(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>())).Throws(new Exception("An error"));
-            mockRecipientRepo.Setup(x => x.DeleteAsync(It.IsAny<Entities.Recipient>())).ReturnsAsync(new Entities.Recipient());
+            mockRecipientRepo.Setup(x => x.DeleteAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(new Models.Recipient());
 
             // Action & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockPersonRepo.Verify(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>()), Times.Once());
-            mockRecipientRepo.Verify(x => x.DeleteAsync(It.IsAny<Entities.Recipient>()), Times.Once());
-
+            mockRecipientRepo.Verify(x => x.DeleteAsync(It.IsAny<Models.Recipient>()), Times.Once());
         }
 
         [Fact]
@@ -122,20 +124,14 @@ namespace GiEnJul.Test.ControllerTests
             ArrangeOkPeopleRepositoryInsertResult();
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync("Jul21");
 
-
             // Act
             var result = await _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } });
 
             //Assert
-            var actionResult = Assert.IsType<ActionResult<Entities.Recipient>>(result);
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
-            var returnValue = Assert.IsType<Entities.Recipient>(createdAtActionResult.Value);
-
+            Assert.IsType<OkResult>(result);
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockPersonRepo.Verify(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>()), Times.Once());
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
-
-            Assert.Equal((recipient.RowKey, recipient.PartitionKey), (returnValue.RowKey, returnValue.PartitionKey));
         }
     }
 }

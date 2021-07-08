@@ -23,7 +23,10 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore())
                 .ForMember(dest => dest.EventName, act => act.Ignore())
-                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers));
+                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
+                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
+                .ForMember(dest => dest.MatchedGiver, act => act.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ConstructUsing(x => new Entities.Recipient(x.Location, x.EventName))
@@ -33,18 +36,28 @@ namespace GiEnJul.Infrastructure
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
+            CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
+
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
                 .ForMember(x => x.RowKey, opt => opt.Ignore())
-                .ForMember(x => x.EventName, opt => opt.Ignore());
-            
+                .ForMember(x => x.EventName, opt => opt.Ignore())
+                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
+                .ForMember(dest => dest.MatchedRecipient, act => act.Ignore());
+
             CreateMap<Models.Giver, Entities.Giver>()
                 .ConstructUsing(x => new Entities.Giver(x.Location, x.EventName))
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
                 .ForMember(x => x.RowKey, opt => opt.Ignore())
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Giver, Models.Giver>();
+
+            CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
+
         }
     }
 }

@@ -27,13 +27,14 @@ namespace GiEnJul.Controllers
 
         // POST api/<GiverController>
         [HttpPost]
-        public async Task<ActionResult<Entities.Giver>> PostAsync([FromBody] PostGiverDto giverDto)
+        public async Task<ActionResult<PostGiverResultDto>> PostAsync([FromBody] PostGiverDto giverDto)
         {
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
 
-            var result = await _giverRepository.InsertOrReplaceAsync(giver);
-            return CreatedAtAction(nameof(result), result);
+            var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
+
+            return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
     }
 }
