@@ -1,10 +1,4 @@
-﻿import {
-	BaseTextFieldProps,
-	FormControlTypeMap,
-	InputBaseProps,
-	TextField,
-} from "@material-ui/core";
-import { SelectInputProps } from "@material-ui/core/Select/SelectInput";
+﻿import { TextField } from "@material-ui/core";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import SelectInput from "../SelectInput";
@@ -29,7 +23,7 @@ interface InputValidatorProps {
 	viewErrorTrigger?: number;
 
 	value: any;
-	onChange: any;
+	onChange: (e: any) => void;
 	label: string;
 	name: string;
 	type?: string;
@@ -50,11 +44,11 @@ interface InputValidatorProps {
 }
 
 const initState: {
-	isError: boolean;
+	isInvalid: boolean;
 	errorMessage: string | undefined;
 	viewError: boolean;
 } = {
-	isError: false,
+	isInvalid: false,
 	errorMessage: "",
 	viewError: false,
 };
@@ -101,9 +95,10 @@ const InputValidator: FC<InputValidatorProps> = ({
 
 	const validate = () => {
 		let errorMsg: string | undefined = undefined;
-		let isAnyError = false;
-		for (let i = 0; i < validators.length; i++) {
-			let isValid = validators[i](value);
+		let isAnyInvalid = false;
+
+		validators.forEach((item, i) => {
+			let isValid = item(value);
 			switch (typeof setIsValids) {
 				case "object":
 					setIsValids[i](isValid);
@@ -114,11 +109,11 @@ const InputValidator: FC<InputValidatorProps> = ({
 			}
 			if (!isValid && state.viewError) {
 				errorMsg = errorMessages !== undefined ? errorMessages[i] : undefined;
-				isAnyError = true;
+				isAnyInvalid = true;
 			}
-		}
+		});
 		setState((prev) => {
-			return { ...prev, isError: isAnyError, errorMessage: errorMsg };
+			return { ...prev, isInvalid: isAnyInvalid, errorMessage: errorMsg };
 		});
 	};
 
@@ -143,11 +138,14 @@ const InputValidator: FC<InputValidatorProps> = ({
 
 	switch (type) {
 		case "select":
-			if (!options) throw Error("Options must be defined in select input");
 			return (
 				<SelectInput
 					name={name}
-					options={options}
+					options={
+						options
+							? options
+							: [{ value: "", text: "Ingen alternativer tilgjengelige" }]
+					}
 					value={value}
 					onChange={onChange}
 					variant={variant}
@@ -160,14 +158,14 @@ const InputValidator: FC<InputValidatorProps> = ({
 					placeholder={placeholder}
 					autoComplete={autoComplete}
 					errorMessage={state.errorMessage}
-					error={state.isError}
+					error={state.isInvalid}
 					autoFocus={autoFocus}
 				/>
 			);
 		default:
 			return (
 				<TextField
-					error={state.isError}
+					error={state.isInvalid}
 					helperText={state.errorMessage}
 					label={label}
 					type={type}

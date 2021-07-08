@@ -1,54 +1,37 @@
 import {
 	FormControl,
-	FormControlTypeMap,
 	FormHelperText,
 	InputLabel,
 	MenuItem,
 	Select,
+	SelectProps,
 } from "@material-ui/core";
-import { OverridableComponent } from "@material-ui/core/OverridableComponent";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { FC } from "react";
 import { isMobile } from "../../common/functions/IsMobile";
 
-export interface ISelect
-	extends OverridableComponent<FormControlTypeMap<{}, "div">> {
+interface ISelect extends SelectProps {
 	name: string;
 	options: {
 		value: string | number | readonly string[] | undefined;
 		text: string;
 	}[];
-	value: string | number | readonly string[] | undefined;
-	onChange: (
-		event: React.ChangeEvent<{ name?: string; value: unknown }>,
-		child: React.ReactNode
-	) => void;
-
-	id?: string;
-	className?: string;
-	label?: string;
-	placeholder?: string;
-	autoComplete?: string;
 	errorMessage?: string;
-	error?: boolean;
-	autoFocus?: boolean;
 }
 
 const SelectInput: FC<ISelect> = ({
 	name,
 	options,
-	value,
-	onChange,
 
-	id,
-	className,
-	label,
-	placeholder,
-	autoComplete,
 	errorMessage,
+	id,
+	label,
 	error,
-	autoFocus,
+	variant,
+	disabled,
+	fullWidth,
+	margin,
 	...rest
 }) => {
 	const [isMob, setIsMob] = useState(false);
@@ -58,22 +41,21 @@ const SelectInput: FC<ISelect> = ({
 	});
 
 	return (
-		<FormControl error={!!errorMessage} {...rest}>
+		<FormControl
+			variant={variant}
+			error={!!errorMessage}
+			disabled={disabled}
+			fullWidth={fullWidth}
+			margin={margin}
+		>
 			<InputLabel htmlFor={id}>{label}</InputLabel>
 			<Select
 				native={isMobile()}
-				error={!!error}
-				value={value}
-				onChange={onChange}
-				autoFocus={autoFocus}
-				label={label}
 				inputProps={{
 					name: name,
 					id: id,
 				}}
-				autoComplete={autoComplete}
-				placeholder={placeholder}
-				className={className}
+				{...rest}
 			>
 				{options &&
 					options.map((o) => {
