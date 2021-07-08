@@ -2,9 +2,10 @@ import { Container } from "@material-ui/core";
 import * as React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import Datatable from "../common/Datatable";
 
 const Giver = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([JSON]);
 
     useEffect(() => {
         fetch('api/admin/allgivers', {
@@ -30,6 +31,8 @@ const Giver = () => {
 
     return (
         <Container>
+            <Datatable
+            data = {data}></Datatable>
             
         </Container>
     )
