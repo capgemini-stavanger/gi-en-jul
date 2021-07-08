@@ -43,18 +43,19 @@ const SelectInput: FC<ISelect> = ({
 	return (
 		<FormControl
 			variant={variant}
-			error={!!errorMessage}
+			error={error}
 			disabled={disabled}
 			fullWidth={fullWidth}
 			margin={margin}
 		>
 			<InputLabel htmlFor={id}>{label}</InputLabel>
 			<Select
-				native={isMobile()}
+				native={isMob}
 				inputProps={{
 					name: name,
 					id: id,
 				}}
+				label={label}
 				{...rest}
 			>
 				{options &&

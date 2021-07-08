@@ -43,7 +43,7 @@ interface InputValidatorProps {
 	options?: { value: any; text: string }[]; // Only for "type=select".
 }
 
-const initState: {
+const initErrorState: {
 	isInvalid: boolean;
 	errorMessage: string | undefined;
 	viewError: boolean;
@@ -77,7 +77,7 @@ const InputValidator: FC<InputValidatorProps> = ({
 	placeholder,
 	options,
 }) => {
-	const [state, setState] = useState(initState);
+	const [errorState, setErrorState] = useState(initErrorState);
 
 	const checkArgs = () => {
 		let validatorCount = validators.length;
@@ -107,34 +107,35 @@ const InputValidator: FC<InputValidatorProps> = ({
 					setIsValids(isValid);
 					break;
 			}
-			if (!isValid && state.viewError) {
+			if (!isValid && errorState.viewError) {
 				errorMsg = errorMessages !== undefined ? errorMessages[i] : undefined;
 				isAnyInvalid = true;
 			}
 		});
-		setState((prev) => {
+		setErrorState((prev) => {
 			return { ...prev, isInvalid: isAnyInvalid, errorMessage: errorMsg };
 		});
 	};
 
 	const extendedOnChange = (e: any) => {
 		onChange(e);
-		setState((prev) => {
+		setErrorState((prev) => {
 			return { ...prev, viewError: false };
 		});
 	};
 
 	useEffect(() => {
-		if (viewErrorTrigger || viewErrorTrigger === undefined)
-			setState((prev) => {
+		if (viewErrorTrigger || viewErrorTrigger === undefined) {
+			setErrorState((prev) => {
 				return { ...prev, viewError: true };
 			});
+		}
 	}, [viewErrorTrigger]);
 
 	useEffect(() => {
 		checkArgs();
 		validate();
-	});
+	}, [errorState.viewError, validators, errorMessages, setIsValids]);
 
 	switch (type) {
 		case "select":
@@ -157,16 +158,16 @@ const InputValidator: FC<InputValidatorProps> = ({
 					label={label}
 					placeholder={placeholder}
 					autoComplete={autoComplete}
-					errorMessage={state.errorMessage}
-					error={state.isInvalid}
+					errorMessage={errorState.errorMessage}
+					error={errorState.isInvalid}
 					autoFocus={autoFocus}
 				/>
 			);
 		default:
 			return (
 				<TextField
-					error={state.isInvalid}
-					helperText={state.errorMessage}
+					error={errorState.isInvalid}
+					helperText={errorState.errorMessage}
 					label={label}
 					type={type}
 					name={name}
