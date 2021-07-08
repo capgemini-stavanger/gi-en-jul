@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { CssBaseline, Typography, Container } from '@material-ui/core';
-import LOCATIONS from '../../common/constants/Locations';
 import Confirmation from './Confirmation';
 import ContactInfo from './ContactInfo';
 import LocationGiver from './LocationGiver';
 import SummaryRegistration from './SummaryRegistration';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import getLocations from '../../common/constants/Locations';
 
 const SignUp = () => {
     const [step, setStep] = useState(1);
@@ -17,6 +17,12 @@ const SignUp = () => {
     const [phoneNumber, setPhoneNumber] = useState<string | undefined>(undefined);
     const [maxRecievers, setMaxRecievers] = useState<number | undefined>(undefined);
     const [familyType, setFamilyType] = useState<string | undefined>(undefined);
+
+    const [locationList, setLocationList] = useState<string[]>(['Ingen lokasjoner']);
+
+    useEffect(() => {
+        getLocations().then((data) => setLocationList(data));
+    }, [])
 
     // go back to previous step
     const prevStep = () => {
@@ -75,7 +81,7 @@ const SignUp = () => {
                             nextStep={nextStep}
                             handleLocationChange={handleLocationChange}
                             values={values}
-                            options={LOCATIONS}
+                            options={locationList}
                             placeHolder={'Velg et sted...'}
                         ></LocationGiver>
                     </div>
@@ -145,6 +151,7 @@ const SignUp = () => {
                             handleTlfChange={handleTlfChange}
                             handleFamilyChange={handleFamilyChange}
                             options={familiyOptions}
+                            locationOptions={locationList}
                             submit={submit}
                             values={values}
                             callingback={handleConfirm}

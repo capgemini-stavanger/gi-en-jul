@@ -1,7 +1,7 @@
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
-import LOCATIONS from '../../common/constants/Locations';
+import getLocations from '../../common/constants/Locations';
 
 interface LocationProps {
     value: string;
@@ -36,12 +36,18 @@ const Location:FC<LocationProps> = ({
         setIsErr(viewError && !isValid);
     }, [value, setIsValidLocation, setIsErr, viewError])
 
-    return(
+    const [locationList, setLocationList] = useState<string[]>(['Ingen lokasjoner']);
+
+    useEffect(() => {
+        getLocations().then((data) => setLocationList(data));
+    }, [])
+
+
+    return (
         <div>
             {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
             <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
-                {LOCATIONS.map(l => 
-                    <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
+                {locationList.map(l => <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
             </RadioGroup>
         </div>
     );
