@@ -9,16 +9,34 @@ import AdminMenu from "./common/AdminMenu";
 import Completed from "./connections/Completed";
 import Suggested from "./connections/Suggested";
 
+type UserDataType = {
+  app_metadata?: {role:string},
+  email?: string,
+  email_verified?: boolean,
+  identities?: [{}],
+  last_ip?: number,
+  last_login?: string,
+  logins_count?: number,
+  name?: string,
+  nickname?: string,
+  picture?: string,
+  updated_at?: string,
+  user_metadata?: {string:string}
+}
+
+
 function AdminPage() {
   const { user, getAccessTokenSilently } = useAuth0();
-  const [appMetadata, setappMetadata] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    const getappMetadata = async () => {
-      const domain = process.env.REACT_APP_DEV_TENANT_AUTH0!;
+  const [userData, setUserData] = useState<UserDataType | undefined>(undefined);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
-      try {
+
+
+  async function getUserInformation(): Promise<UserDataType> {
+    
+    const domain = process.env.REACT_APP_DEV_TENANT_AUTH0!;
+
         const accessToken = await getAccessTokenSilently({
           audience: `https://${domain}/api/v2/`,
           scope: "read:current_user",
@@ -28,33 +46,30 @@ function AdminPage() {
           user!.sub
         }`;
 
-        const metadataResponse = await fetch(userDetailsByIdUrl, {
+        const  response  = await fetch(userDetailsByIdUrl, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        });
+        });        
+        const userInformation: UserDataType = await response.json();
+        return userInformation;
 
-        const user_appMetadata = await metadataResponse.json();
-        const userMETA = user_appMetadata.app_metadata;
-        setappMetadata(userMETA);
-        setIsLoaded(true);
-      } catch (e) {
-        console.log(e.message);
-        setIsLoaded(true);
-      }
-    };
+  }
+  useEffect(() => {
+      getUserInformation().then((response: UserDataType) => setUserData(response)),
+      setIsLoaded(true)
+  },[]);
 
-    getappMetadata();
-  }, [user, getAccessTokenSilently]);
+
 
   if (!isLoaded) {
     return <LoadingPage />;
-  } else if (isLoaded && appMetadata == null) {
+  } else if (isLoaded && userData == null) {
     return <LoadingPage />;
   } else {
-    if (appMetadata!["role"] === "institution") {
+    if (userData!.app_metadata!.role === "institution") {
       return <InstitutionMacro />;
-    } else if (appMetadata!["role"] === "admin") {
+    } else if (userData!.app_metadata!.role === "admin") {
       return (
         <>
           <LogOutButton />
