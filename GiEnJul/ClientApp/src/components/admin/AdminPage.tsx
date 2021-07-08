@@ -1,5 +1,5 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { Container } from "@material-ui/core";
+import { Container, Typography } from "@material-ui/core";
 import * as React from "react";
 import LoadingPage from "../../common/components/LoadingPage";
 import LogOutButton from "../login/LogOutButton";
@@ -16,7 +16,11 @@ function AdminPage() {
         <AdminMenu />
         <Suggested />
         <Completed />
-        <Giver/>
+        {/* Remove this comment if you want to display Givers
+         <Typography variant='h4'>
+          Givere
+        </Typography>
+        <Giver/> */}
       </Container>
     </>
   );
