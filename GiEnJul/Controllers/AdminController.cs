@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GiEnJul.Models;
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
@@ -30,7 +31,7 @@ namespace GiEnJul.Controllers
         [HttpGet("querygivers")]
         public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
             var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-        return _mapper.Map<List<Models.Recipient>>(await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent));
+        return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
         }
         
         [HttpGet("allgivers")]
