@@ -15,7 +15,7 @@ namespace GiEnJul.Features
         protected IMapper _mapper { get; set; }
         protected ILogger _log { get; set; }
 
-        public GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
+        protected GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
         {
             _mapper = mapper;
             _log = log;
