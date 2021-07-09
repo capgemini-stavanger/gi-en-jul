@@ -24,7 +24,7 @@ const Giver = () => {
 
   useEffect(() => {
     async function fetchGivers() {
-      await fetch("api/admin/allgivers", {
+      await fetch("api/admin/givers", {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         headers: {
           "Content-Type": "application/json",
