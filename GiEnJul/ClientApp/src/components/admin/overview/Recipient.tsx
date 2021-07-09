@@ -2,9 +2,8 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import {Search} from '@material-ui/icons';
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Datatable from "../common/Datatable";
 
-export interface GiverType {
+export interface RecipientType {
   email: string;
   eventName: string;
   fullName: string;
@@ -18,28 +17,29 @@ export interface GiverType {
   phoneNumber: string;
 }
 
-const Giver = () => {
-  const [data, setData] = useState<[GiverType] | []>([]);
+const Recipient = () => {
+  const [data, setData] = useState([]);
   const [q, setQ] = useState("");
 
   useEffect(() => {
-    async function fetchGivers() {
-      await fetch("api/admin/allgivers", {
+    async function fetchRecipients() {
+      await fetch('./api/admin/allrecipients', {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers : { 
+            'Content-Type': 'application/json'
+           },
       })
-        .then((response) => response.json())
+        .then((response) =>  {console.log(response.json()) 
+        return response.json()} )
         .then((json) => setData(json))
         .catch((errorStack) => {
           console.log(errorStack);
         });
     }
-    fetchGivers();
+    fetchRecipients();
   }, []);
 
-  const search = (input: [GiverType] | []) => {
+  const search = (input: [RecipientType] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
@@ -64,8 +64,8 @@ const Giver = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <Datatable data={search(data)}></Datatable>
+      {/* <Datatable data={search(data)}></Datatable> */}
     </Container>
   );
 };
-export default Giver;
+export default Recipient;

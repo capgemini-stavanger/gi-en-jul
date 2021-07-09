@@ -7,19 +7,21 @@ import AdminMenu from "./common/AdminMenu";
 import Completed from "./connections/Completed";
 import Suggested from "./connections/Suggested";
 import Giver from "./overview/Giver";
+import Recipient from "./overview/Recipient";
 
 function AdminPage() {
   return (
     <>
       <LogOutButton></LogOutButton>
       <Container maxWidth="xl">
-        <AdminMenu />
-        <Suggested />
+        {/* <AdminMenu /> */}
+        {/* <Suggested /> */}
         <Completed />
          <Typography variant='h4'>
           Givere
         </Typography>
         <Giver/>
+        <Recipient/>
       </Container>
     </>
   );

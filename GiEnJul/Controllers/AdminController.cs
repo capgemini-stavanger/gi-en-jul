@@ -28,15 +28,21 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("recipients?filter=unmatched")]
+        [HttpGet("recipients/filter=unmatched")]
         public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
             var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
         return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
         }
         
-        [HttpGet("givers")]
+        [HttpGet("allgivers")]
         public async Task<List<Models.Giver>> GetGiversAsync() {
             return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync());
+            // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
+        }
+
+        [HttpGet("allrecipients")]
+        public async Task<List<Models.Recipient>> GetRecipientsAsync() {
+            return _mapper.Map<List<Models.Recipient>>(await _recipientRepository.GetAllAsync());
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
     }
