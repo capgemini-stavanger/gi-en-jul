@@ -29,7 +29,6 @@ function AdminPage() {
   const { user, getAccessTokenSilently } = useAuth0();
   const [userData, setUserData] = useState<UserDataType | undefined>(undefined);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  // const [userData]
 
   async function getUserInformation(): Promise<UserDataType> {
     const domain = process.env.REACT_APP_DEV_TENANT_AUTH0!;
@@ -50,11 +49,10 @@ function AdminPage() {
     return userInformation;
   }
   useEffect(() => {
-     getUserInformation().then( (response: UserDataType) => {
-       setUserData(response)
-       setIsLoaded(true)
-     }
-    );
+    getUserInformation().then((response: UserDataType) => {
+      setUserData(response);
+      setIsLoaded(true);
+    });
   }, []);
 
   if (!isLoaded) {
@@ -69,15 +67,19 @@ function AdminPage() {
         <>
           <LogOutButton />
           <Container maxWidth="xl">
-          <AdminMenu />
-          <Suggested />
-          <Completed />
-          <ErrorPage ErrorText={"Your Role has not yet been set"} ErrorCode={200}/>
-        </Container>
+            <AdminMenu />
+            <Suggested />
+            <Completed />
+          </Container>
         </>
       );
     } else {
-      return <ErrorPage ErrorText={"Your Role has not yet been set"} ErrorCode={200}/>;
+      return (
+        <ErrorPage
+          ErrorText={"Your Role has not yet been set"}
+          ErrorCode={200}
+        />
+      );
     }
   }
 }

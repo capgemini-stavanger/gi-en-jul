@@ -9,7 +9,9 @@ interface Props {
 function ErrorPage({ ErrorText, ErrorCode }: Props) {
   return (
     <Container className="page-container">
-      <Typography className="title" variant="h1">{ErrorCode}</Typography>
+      <Typography className="title" variant="h1">
+        {ErrorCode}
+      </Typography>
       <Typography className="errorText" variant="h2">
         {ErrorText}
       </Typography>
