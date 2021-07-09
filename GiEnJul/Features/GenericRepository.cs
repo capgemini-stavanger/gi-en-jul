@@ -9,28 +9,11 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IGenericRepository<T> where T : EntityBase, new()
+    public class GenericRepository<T> where T : EntityBase, new()
     {
-        public CloudTable _table { get; }
-        public IMapper _mapper { get; set; }
-        public ILogger _log { get; set; }
-
-        Task<T> GetAsync(string partitionKey, string rowKey);
-        Task<T> InsertOrReplaceAsync(T entity);
-        Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities);
-        Task<T> DeleteAsync(T entity);
-        Task<T> DeleteAsync(string partitionKey, string rowKey);
-        Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities);
-
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query);
-    }
-
-    public class GenericRepository<T> : IGenericRepository<T> where T : EntityBase, new()
-    {
-        public CloudTable _table { get; private set; }
-        public IMapper _mapper { get; set; }
-        public ILogger _log { get; set; }
+        private CloudTable _table { get; set; }
+        protected IMapper _mapper { get; set; }
+        protected ILogger _log { get; set; }
 
         public GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
         {
@@ -45,7 +28,6 @@ namespace GiEnJul.Features
             try
             {
                 _table.CreateIfNotExists();
-
             }
             catch (StorageException e)
             {
@@ -54,7 +36,7 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<T> DeleteAsync(T entity)
+        protected async Task<T> DeleteAsync(T entity)
         {
             try
             {
@@ -73,14 +55,14 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<T> DeleteAsync(string partitionKey, string rowKey)
+        protected async Task<T> DeleteAsync(string partitionKey, string rowKey)
         {
             var entity = await GetAsync(partitionKey, rowKey);
 
             return await DeleteAsync(entity);
         }
 
-        public async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities)
+        protected async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<T> entities)
         {
             var batchOperation = new TableBatchOperation();
             try
@@ -101,7 +83,7 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<T> GetAsync(string partitionKey, string rowKey)
+        protected async Task<T> GetAsync(string partitionKey, string rowKey)
         {
             try
             {
@@ -119,7 +101,7 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<T> InsertOrReplaceAsync(T entity)
+        protected async Task<T> InsertOrReplaceAsync(T entity)
         {
             try
             {
@@ -137,7 +119,7 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
+        protected async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
             var batchOperation = new TableBatchOperation();
             try
@@ -158,12 +140,12 @@ namespace GiEnJul.Features
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        protected async Task<IEnumerable<T>> GetAllAsync()
         {
             return await GetAllByQueryAsync(new TableQuery<T>());
         }
 
-        public async Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query)
+        protected async Task<IEnumerable<T>> GetAllByQueryAsync(TableQuery<T> query)
         {
             try
             {

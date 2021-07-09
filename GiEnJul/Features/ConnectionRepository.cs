@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IConnectionRepository : IGenericRepository<Connection>
+    public interface IConnectionRepository
     {
         Task<Connection> InsertOrReplaceAsync(Models.Giver giver);
         Task<Connection> InsertOrReplaceAsync(Models.Recipient recipient);

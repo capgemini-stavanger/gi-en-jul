@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IPersonRepository : IGenericRepository<Person>
+    public interface IPersonRepository
     {
         Task<Person> DeleteAsync(Models.Person model);
         Task<TableBatchResult> DeleteBatchAsync(IEnumerable<Models.Person> models);

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IGiverRepository : IGenericRepository<Entities.Giver>
+    public interface IGiverRepository
     {
         Task<Models.Giver> DeleteAsync(Models.Giver model);
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
