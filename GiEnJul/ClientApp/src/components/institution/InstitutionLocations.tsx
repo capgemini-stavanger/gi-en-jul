@@ -1,7 +1,7 @@
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core';
 import * as React from 'react';
 import { FC, useEffect, useState } from 'react';
-import LOCATIONS from '../../common/constants/Locations';
+import getLocations from '../../common/constants/Locations';
 
 interface LocationProps {
     value: string;
@@ -36,15 +36,25 @@ const Location:FC<LocationProps> = ({
         setIsErr(viewError && !isValid);
     }, [value, setIsValidLocation, setIsErr, viewError])
 
-    return(
-        <div>
-            {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
-            <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
-                {LOCATIONS.map(l => 
-                    <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
-            </RadioGroup>
-        </div>
-    );
+    const [locationList, setLocationList] = useState<string[]>([]);
+
+    useEffect(() => {
+        getLocations().then((data) => {
+            if (data.length > 0) setLocationList(data);
+            else setLocationList([]);            
+        });
+    }, [])
+
+    if (locationList.length > 0)
+        return (
+            <div>
+                {include_header && <FormLabel error={isErr} component="legend">Hvor ønsker du å registrere familie (velg en)</FormLabel>}
+                <RadioGroup row className="justify-content-around" name="locations" value={value} onChange={extendedOnChange}>
+                    {locationList.map(l => <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />)}
+                </RadioGroup>
+            </div>
+        );
+    else return <div>Ingen aktive lokasjoner, prøv igjen senere</div>;
 };
 
 export default Location;
