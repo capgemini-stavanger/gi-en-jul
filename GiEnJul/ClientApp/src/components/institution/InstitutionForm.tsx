@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Locations from "./InstitutionLocations";
 import FormPerson from "./FormPerson";
 import IFormPerson from "./IFormPerson";
@@ -14,7 +14,8 @@ import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import FormFood from "./FormFood";
 import { DINNERS } from "../../common/constants/Dinners";
 import { DESSERTS } from "../../common/constants/Desserts";
-import AlertHover from "../alert/AlertHover";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 
 type PersonType = {
 	Wish?: string;
@@ -72,6 +73,7 @@ const RegistrationForm = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [alertMsg, setAlertMsg] = useState<React.ReactNode>("");
 	const [alertSeverity, setAlertSeverity] = useState<any>();
+	const [alertOpen, setAlertOpen] = useState(false);
 
 	const addPerson = () => {
 		setPersons((formpersons) => {
@@ -156,6 +158,7 @@ const RegistrationForm = () => {
 	const onSuccessSubmit = () => {
 		setAlertMsg("Familie registrert!");
 		setAlertSeverity("success");
+		setAlertOpen(true);
 		resetForm();
 	};
 
@@ -213,14 +216,29 @@ const RegistrationForm = () => {
 		setTimeout(() => {
 			setAlertMsg("En feil oppsto. Vennligst prøv på nytt.");
 			setAlertSeverity("error");
+			setAlertOpen(true);
 		}, 10);
+	};
+
+	const handleAlertClose = (
+		e: React.SyntheticEvent | React.MouseEvent,
+		reason?: string
+	) => {
+		setAlertOpen(false);
 	};
 
 	return (
 		<>
-			<AlertHover severity={alertSeverity} setChildren={setAlertMsg}>
-				{alertMsg}
-			</AlertHover>
+			<Snackbar
+				anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+				open={alertOpen}
+				autoHideDuration={6000}
+				onClose={handleAlertClose}
+			>
+				<Alert severity={alertSeverity} onClose={handleAlertClose}>
+					{alertMsg}
+				</Alert>
+			</Snackbar>
 
 			<form className="thisclass" onSubmit={onSubmitForm}>
 				<Grid container spacing={4} direction="column">
