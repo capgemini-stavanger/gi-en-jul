@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { Container, Button, Grid } from '@material-ui/core';
-import LOCATIONS from '../../common/constants/Locations';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import useStyles from './Styles';
 import { useState } from 'react';
 import InputValidator from '../../components/InputFields/Validators/InputValidator';
 import { isEmail, isNotNull, isPhoneNumber } from '../../components/InputFields/Validators/Validators';
-
 
 type Props = {
     nextStep: () => void,
@@ -17,13 +15,14 @@ type Props = {
     handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
     options: string[],
+    locationOptions: string[],
     submit: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; confirmationOK: boolean },
     values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string, confirmationOK: boolean },
     callingback: (e: boolean) => void
 
 }
 
-const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options, submit, values, callingback }) => {
+const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, handlefullnameChange, handleEmailChange, handleTlfChange, handleFamilyChange, options, locationOptions, submit, values, callingback }) => {
     const [changeLocation, setChangeLocation] = useState<boolean>(true);
     const [changeFullName, setChangeFullName] = useState(true);
     const [changeEmail, setChangeEmail] = useState(true);
@@ -122,8 +121,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                             errorMessages={['Vennligst velg lokasjon']}
                             validators={[isNotNull]}
                             setIsValids={setIsValidLocation}
-                            options={LOCATIONS.map(x => 
-                                {return {value: x, text: x};})}
+                            options={locationOptions.map(x => { return { value: x, text: x }; })}
                         />
                     </Grid>
                     <Grid item xs={3}>
