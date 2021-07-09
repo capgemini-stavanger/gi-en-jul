@@ -16,11 +16,10 @@ function AdminPage() {
         <AdminMenu />
         <Suggested />
         <Completed />
-        {/* Remove this comment if you want to display Givers
          <Typography variant='h4'>
           Givere
         </Typography>
-        <Giver/> */}
+        <Giver/>
       </Container>
     </>
   );
