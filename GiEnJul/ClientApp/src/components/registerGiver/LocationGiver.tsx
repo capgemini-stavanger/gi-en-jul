@@ -1,99 +1,137 @@
-import * as React from 'react';
-import { Route } from 'react-router-dom'
-import useStyles from './Styles';
-import { ValidatorForm, SelectValidator } from 'react-material-ui-form-validator';
-import { Button, Grid, MenuItem, Container } from '@material-ui/core';
+import * as React from "react";
+import { Route } from "react-router-dom";
+import useStyles from "./Styles";
+import {
+  ValidatorForm,
+  SelectValidator,
+} from "react-material-ui-form-validator";
+import { Button, Grid, MenuItem, Container } from "@material-ui/core";
+import IGiverInputs from "./IGiverInputs";
+import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
+import LOCATIONS from "../../common/constants/Locations";
 
-type Props = {
-  nextStep: () => void,
-  prevStep?: () => void,
-  handleLocationChange: (event: any) => void,
-  values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string }
-  options: string[],
-  placeHolder: string,
+interface Props {
+  nextStep: () => void;
+  prevStep?: () => void;
+  values: IGiverInputs;
+  handleLocationChange: (event: any) => void;
+  placeHolder: string;
 }
-const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChange, values, options, placeHolder }) => {
 
+const LocationGiver: React.FC<Props> = ({
+  nextStep,
+  prevStep,
+  handleLocationChange,
+  values,
+  placeHolder,
+}) => {
   const Continue = (e: any) => {
     e.preventDefault();
     nextStep();
-  }
+  };
   const classes = useStyles();
 
   if (prevStep) {
     const Previous = (e: any) => {
       e.preventDefault();
       prevStep();
-    }
+    };
 
     return (
-      <Container key={values.familyType}>
+      <Container>
         <ValidatorForm
           onSubmit={Continue}
-          onError={errors => console.log(errors)}
-          style={{ width: '100%', marginTop: '20px' }}
+          onError={(errors) => console.log(errors)}
+          style={{ width: "100%", marginTop: "20px" }}
         >
           <SelectValidator
             variant="outlined"
             fullWidth
             autoFocus
             placeholder={placeHolder}
-            validators={['required']}
+            validators={["required"]}
             name="familyType-input"
-            value={values.familyType ? values.familyType: ""}
+            value={values.maxRecivers ? values.maxRecivers : ""}
             onChange={handleLocationChange}
             label="Familiesammensetning*"
-            errorMessages={['Hvilken familie venter på din gave?']}
+            errorMessages={["Hvilken familie venter på din gave?"]}
           >
-            {options.map(x =>
-              <MenuItem key={x} value={x}>{x}</MenuItem>)}
+            {FAMILY_SIZES.map((familySize) => (
+              <MenuItem key={familySize.text} value={familySize.value}>
+                {familySize.text}
+              </MenuItem>
+            ))}
           </SelectValidator>
-          <Grid container spacing={2} justify="center" className={classes.submit}>
-            <Grid item >
-              <Button variant="contained" onClick={Previous} >Tilbake</Button>
+          <Grid
+            container
+            spacing={2}
+            justify="center"
+            className={classes.submit}
+          >
+            <Grid item>
+              <Button variant="contained" onClick={Previous}>
+                Tilbake
+              </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" type="submit">Neste</Button>
+              <Button variant="contained" type="submit">
+                Neste
+              </Button>
             </Grid>
           </Grid>
         </ValidatorForm>
       </Container>
-    )
+    );
   }
   return (
     <Container>
       <ValidatorForm
         onSubmit={Continue}
-        onError={errors => console.log(errors)}
-        style={{ width: '100%', marginTop: '20px' }}
+        onError={(errors) => console.log(errors)}
+        style={{ width: "100%", marginTop: "20px" }}
       >
         <SelectValidator
           variant="outlined"
           fullWidth
           autoFocus
           placeholder={placeHolder}
-          validators={['required']}
+          validators={["required"]}
           label="Lokasjon*"
           name="location-input"
-          value={values.location ?  values.location: ""}
+          value={values.location ? values.location : ""}
           id="location-input"
           onChange={handleLocationChange}
-          errorMessages={['Hvor vil du spre glede?']}
+          errorMessages={["Hvor vil du spre glede?"]}
         >
-          {options.map(x =>
-            <MenuItem key={x} value={x}>{x}</MenuItem>)}
+          {LOCATIONS.map((location) => (
+            <MenuItem key={location} value={location}>
+              {location}
+            </MenuItem>
+          ))}
         </SelectValidator>
         <Grid container spacing={2} justify="center" className={classes.submit}>
           <Grid item>
-            <Route render={({ history }) => (
-              <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
+            <Route
+              render={({ history }) => (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    history.push("/");
+                  }}
+                >
+                  Tilbake
+                </Button>
+              )}
+            />
           </Grid>
           <Grid item>
-            <Button variant="contained" type="submit">Neste</Button>
+            <Button variant="contained" type="submit">
+              Neste
+            </Button>
           </Grid>
         </Grid>
       </ValidatorForm>
     </Container>
-  )
-}
-export default LocationGiver
+  );
+};
+export default LocationGiver;
