@@ -124,7 +124,6 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                             setIsValids={setIsValidLocation}
                             options={LOCATIONS.map(x => 
                                 {return {value: x, text: x};})}
-                            isMobile={false}
                         />
                     </Grid>
                     <Grid item xs={3}>
