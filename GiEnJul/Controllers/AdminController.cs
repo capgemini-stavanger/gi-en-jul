@@ -28,11 +28,13 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("recipients/filter=unmatched")]
-        public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
-            var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-        return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
-        }
+        //The function below is not in use now, but should be implemented later:
+        // Need to add an appropriate routing for the api call below. 
+        // [HttpGet]
+        // public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
+        //     var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+        // return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
+        // }
         
         [HttpGet("givers")]
         public async Task<List<Models.Giver>> GetGiversAsync() {
