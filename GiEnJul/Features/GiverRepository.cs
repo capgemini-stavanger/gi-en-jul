@@ -1,6 +1,7 @@
 using AutoMapper;
 using GiEnJul.Infrastructure;
 using Serilog;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Features
@@ -9,6 +10,7 @@ namespace GiEnJul.Features
     {
         Task<Models.Giver> DeleteAsync(Models.Giver model);
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
+        Task<IEnumerable<Models.Giver>> GetAllAsModelAsync();
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -26,6 +28,12 @@ namespace GiEnJul.Features
         {
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Giver>(model));
             return _mapper.Map<Models.Giver>(inserted);
+        }
+
+        public async Task<IEnumerable<Models.Giver>> GetAllAsModelAsync()
+        {
+            var allGivers = await GetAllAsync();
+            return _mapper.Map<IEnumerable<Models.Giver>>(allGivers);
         }
     }
 }
