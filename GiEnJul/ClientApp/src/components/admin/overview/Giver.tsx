@@ -22,17 +22,14 @@ const Giver = () => {
 
   useEffect(() => {
     async function fetchGivers() {
-      await fetch("api/admin/allgivers", {
+      await fetch("api/admin/giver", {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         headers: {
           "Content-Type": "application/json",
         },
       })
         .then((response) => response.json())
-        .then((json) => {
-          console.log(json);
-          return setData(json);
-        })
+        .then((json) => setData(json))
         .catch((errorStack) => {
           console.log(errorStack);
         });
