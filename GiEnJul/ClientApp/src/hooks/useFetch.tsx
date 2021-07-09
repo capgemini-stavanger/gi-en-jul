@@ -1,6 +1,7 @@
+import React from "react";
 import { useEffect, useState } from "react";
 
-//Example from Martin
+const backend = window.location.origin + "/api";
 
 const useFetch = <T extends any>(url: string, options: RequestInit) => {
   const [response, setResponse] = useState<T>();
@@ -8,10 +9,7 @@ const useFetch = <T extends any>(url: string, options: RequestInit) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_BASE_URL}/${url}`,
-          options
-        );
+        const res = await fetch(`${backend}/${url}`, options);
         if (!res.ok) {
           throw new Error(`${res.status} ${res.statusText}`);
         }

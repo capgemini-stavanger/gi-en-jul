@@ -6,9 +6,16 @@ import Companies from "./Companies";
 import Tab from "../../common/components/Tab";
 import { Typography, Container, Button, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
+import useFetch from "../../hooks/useFetch";
 
 const Home = () => {
   const classes = useStyles();
+  const { response, error } = useFetch("givers", {});
+  if (error == null) {
+    console.log("text: " + response);
+  } else {
+    console.log("error: " + error);
+  }
 
   return (
     <Container>
