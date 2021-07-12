@@ -10,13 +10,6 @@ import useFetch from "../../hooks/useFetch";
 
 const Home = () => {
   const classes = useStyles();
-  const { response, error } = useFetch("givers", {});
-  if (error == null) {
-    console.log("text: " + response);
-  } else {
-    console.log("error: " + error);
-  }
-
   return (
     <Container>
       <Grid container direction="row" justify="center" alignItems="center">
