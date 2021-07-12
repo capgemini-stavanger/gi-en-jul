@@ -1,5 +1,5 @@
 import { Container, Grid, TextField } from "@material-ui/core";
-import {Search} from '@material-ui/icons';
+import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Datatable from "../common/Datatable";
@@ -19,7 +19,7 @@ export interface GiverType {
 }
 
 const Giver = () => {
-  const [data, setData] = useState<[GiverType] | []>([]);
+  const [data, setData] = useState<GiverType[] | []>([]);
   const [q, setQ] = useState("");
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const Giver = () => {
     fetchGivers();
   }, []);
 
-  const search = (input: [GiverType] | []) => {
+  const search = (input: GiverType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
@@ -52,7 +52,7 @@ const Giver = () => {
 
   return (
     <Container>
-      <Grid container spacing={1} alignItems="flex-end">
+      <Grid container>
         <Grid item>
           <Search />
         </Grid>

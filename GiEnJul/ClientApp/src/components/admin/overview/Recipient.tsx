@@ -25,7 +25,7 @@ rowKey: string,
 }
 
 const Recipient = () => {
-  const [data, setData] = useState<[RecipientType] | []>([]);
+  const [data, setData] = useState<RecipientType[] | []>([]);
   const [q, setQ] = useState("");
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Recipient = () => {
     fetchRecipients();
   }, []);
 
-  const search = (input: [RecipientType] | []) => {
+  const search = (input: RecipientType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
@@ -60,7 +60,7 @@ const Recipient = () => {
 
   return (
     <Container>
-      <Grid container spacing={1} alignItems="flex-end">
+      <Grid container>
         <Grid item>
           <Search />
         </Grid>

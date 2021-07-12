@@ -20,7 +20,7 @@ import { GiverType } from "../overview/Giver";
 import useStyles from "./Styles";
 
 type Props = {
-  data: [GiverType] | [];
+  data: GiverType[] | [];
 };
 
 const Datatable: React.FC<Props> = ({ data }) => {

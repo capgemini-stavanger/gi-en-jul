@@ -1,28 +1,58 @@
 import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { Container, Typography } from "@material-ui/core";
+import { Grid, Tab,Typography } from "@material-ui/core";
+import TabContext from "@material-ui/lab/TabContext";
+import TabPanel from "@material-ui/lab/TabPanel";
+import TabList from "@material-ui/lab/TabList";
+
 import * as React from "react";
+import { useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
 import LogOutButton from "../login/LogOutButton";
-import AdminMenu from "./common/AdminMenu";
 import Completed from "./connections/Completed";
-import Suggested from "./connections/Suggested";
 import Giver from "./overview/Giver";
 import Recipient from "./overview/Recipient";
 
 function AdminPage() {
+  const [step, setStep] = useState<string>("1");
+
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+    setStep(newValue);
+  };
   return (
     <>
       <LogOutButton></LogOutButton>
-      <Container maxWidth="xl">
-        {/* <AdminMenu /> */}
-        {/* <Suggested /> */}
-        <Completed />
-         <Typography variant='h4'>
-          Givere
-        </Typography>
-        <Giver/>
-        <Recipient/>
-      </Container>
+      <TabContext value={step}>
+        <TabList onChange={handleChange} centered>
+          <Tab label="Oversikt" value="1" />
+          <Tab label="Foreslåtte koblinger" value="2" />
+          <Tab label="Fullførte koblinger" value="3" />
+        </TabList>
+        <TabPanel value="1">
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="flex-start"
+          >
+            <Grid item xs={6}>
+              <Typography variant="h4" align="center">
+                Givere
+              </Typography>
+              <Giver />
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h4" align="center">
+                Familier
+              </Typography>
+              <Recipient />
+            </Grid>
+          </Grid>
+        </TabPanel>
+        <TabPanel value="2"></TabPanel>
+        <TabPanel value="3">
+          <Completed />
+        </TabPanel>
+      </TabContext>
     </>
   );
 }

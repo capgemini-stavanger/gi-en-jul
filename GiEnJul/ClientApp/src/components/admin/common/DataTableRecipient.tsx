@@ -20,7 +20,7 @@ import { RecipientType } from "../overview/Recipient";
 import useStyles from "./Styles";
 
 type Props = {
-  data: [RecipientType] | [];
+  data: RecipientType[] | [];
 };
 
 const DatatableRecipient: React.FC<Props> = ({ data }) => {
