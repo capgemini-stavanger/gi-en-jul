@@ -56,7 +56,9 @@ namespace GiEnJul.Features
             };
             var events = await GetAllByQueryAsync(query);
 
-            return events.Select(x => x.RowKey).ToArray();
+            var locationArray = events.Select(x => x.RowKey).ToArray();
+            Array.Sort(locationArray);
+            return locationArray;
         }
     }
 }

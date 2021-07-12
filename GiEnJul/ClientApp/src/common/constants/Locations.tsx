@@ -1,9 +1,9 @@
-const LOCATIONS: string[] = [
-    'Stavanger',
-    'Sandnes',
-    'Bodø',
-    'Sola',
-    'Nittedal'
-].sort();
+async function getLocations() {
+    const locations = await fetch('/api/event/ActiveLocations')
+        .then(response => response.json())
+        .then(data => { return data });
 
-export default LOCATIONS;
+    return locations;
+}
+
+export default getLocations;

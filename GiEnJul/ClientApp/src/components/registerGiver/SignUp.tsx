@@ -4,9 +4,10 @@ import Confirmation from "./Confirmation";
 import ContactInfo from "./ContactInfo";
 import LocationGiver from "./LocationGiver";
 import SummaryRegistration from "./SummaryRegistration";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IGiverFormData from "./IGiverFormData";
 import FamilySizeGiver from "./FamilySizeGiver";
+import getLocations from "../../common/constants/Locations";
 
 const initInputsState: IGiverFormData = {
   location: "",
@@ -24,6 +25,12 @@ const initState = {
 const SignUp = () => {
   const [state, setState] = useState(initState);
   const [inputsState, setInputsState] = useState(initInputsState);
+
+  const [locationOptions, setLocationOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    getLocations().then((locationArray) => setLocationOptions(locationArray));
+  }, []);
 
   // go back to previous step
   const prevStep = (event: React.FormEvent) => {
@@ -94,6 +101,7 @@ const SignUp = () => {
               handleLocationChange={handleLocationChange}
               values={inputsState}
               placeHolder={"Velg et sted..."}
+              locationOptions={locationOptions}
             ></LocationGiver>
           </div>
         </Container>
@@ -155,6 +163,7 @@ const SignUp = () => {
               handleTlfChange={handleTlfChange}
               handleFamilyChange={handleFamilyChange}
               values={inputsState}
+              locationOptions={locationOptions}
               callingback={handleConfirm}
             ></SummaryRegistration>
           </div>
@@ -173,7 +182,7 @@ const SignUp = () => {
         </Container>
       );
     default:
-      return <></>;
+      return null;
   }
 };
 export default SignUp;

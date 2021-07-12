@@ -22,6 +22,7 @@ interface Props {
   handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   values: IGiverFormData;
+  locationOptions: string[];
   callingback: (e: boolean) => void;
 }
 
@@ -60,6 +61,7 @@ const SummaryRegistration: React.FC<Props> = ({
   handleTlfChange,
   handleFamilyChange,
   values,
+  locationOptions,
   callingback,
 }) => {
   const [state, setState] = useState(initState);
@@ -93,7 +95,7 @@ const SummaryRegistration: React.FC<Props> = ({
         fullname: values.fullname,
         email: values.email,
         phoneNumber: values.phoneNumber,
-        maxReciviers: values.maxRecivers,
+        maxRecievers: values.maxReceivers,
       }),
     })
       .then((response) => {
@@ -147,8 +149,8 @@ const SummaryRegistration: React.FC<Props> = ({
               errorMessages={["Vennligst velg lokasjon"]}
               validators={[isNotNull]}
               setIsValids={getValiditySetter("isValidLocation")}
-              options={LOCATIONS.map((x) => {
-                return { value: x, text: x };
+              options={locationOptions.map((loc) => {
+                return { value: loc, text: loc };
               })}
             />
           </Grid>
@@ -256,7 +258,7 @@ const SummaryRegistration: React.FC<Props> = ({
               variant="outlined"
               fullWidth
               name="familyType-input"
-              value={values.maxRecivers ? values.maxRecivers : ""}
+              value={values.maxReceivers ? values.maxReceivers : ""}
               onChange={handleFamilyChange}
               label="Familiesammensetning*"
               validators={[isNotNull]}

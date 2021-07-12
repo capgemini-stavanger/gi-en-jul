@@ -7,13 +7,14 @@ import {
 } from "react-material-ui-form-validator";
 import { Button, Grid, MenuItem, Container } from "@material-ui/core";
 import IGiverFormData from "./IGiverFormData";
-import LOCATIONS from "../../common/constants/Locations";
+import { Spinner } from "reactstrap";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
   values: IGiverFormData;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
+  locationOptions: string[];
 }
 
 const LocationGiver: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const LocationGiver: React.FC<Props> = ({
   values,
   handleLocationChange,
   placeHolder,
+  locationOptions,
 }) => {
   const classes = useStyles();
 
@@ -44,11 +46,15 @@ const LocationGiver: React.FC<Props> = ({
           onChange={handleLocationChange}
           errorMessages={["Hvor vil du spre glede?"]}
         >
-          {LOCATIONS.map((location) => (
-            <MenuItem key={location} value={location}>
-              {location}
-            </MenuItem>
-          ))}
+          {locationOptions.length !== 0 ? (
+            locationOptions.map((loc) => (
+              <MenuItem key={`loc_${loc}`} value={loc}>
+                {loc}
+              </MenuItem>
+            ))
+          ) : (
+            <Spinner />
+          )}
         </SelectValidator>
         <Grid
           container
