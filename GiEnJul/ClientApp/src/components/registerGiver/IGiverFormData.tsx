@@ -3,7 +3,7 @@ interface IGiverFormData {
   fullname: string;
   email: string;
   phoneNumber: string;
-  maxRecivers: string;
+  maxReceivers: string;
 }
 
 export default IGiverFormData;

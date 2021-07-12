@@ -14,7 +14,7 @@ const initInputsState: IGiverFormData = {
   fullname: "",
   email: "",
   phoneNumber: "",
-  maxRecivers: "",
+  maxReceivers: "",
 };
 
 const initState = {
@@ -76,7 +76,7 @@ const SignUp = () => {
 
   const handleFamilyChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setInputsState((prev) => {
-      return { ...prev, maxRecivers: event.target.value };
+      return { ...prev, maxReceivers: event.target.value };
     });
   };
 
