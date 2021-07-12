@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GiEnJul.Features
 {
-    public interface IEventRepository : IGenericRepository<Event>
+    public interface IEventRepository
     {
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();

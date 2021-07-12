@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace GiEnJul.Features
 {
-    public interface IRecipientRepository : IGenericRepository<Entities.Recipient>
+    public interface IRecipientRepository
     {
         Task<Models.Recipient> DeleteAsync(Models.Recipient model);
         Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model);
