@@ -2,35 +2,41 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import {Search} from '@material-ui/icons';
 import * as React from "react";
 import { useEffect, useState } from "react";
+import DatatableRecipient from "../common/DataTableRecipient";
+import { GiverType } from "./Giver";
 
 export interface RecipientType {
-  email: string;
-  eventName: string;
-  fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedRecipient?: string;
-  maxRecievers: Number;
-  partitionKey: string;
-  rowKey: string;
-  phoneNumber: string;
+contactEmail: string,
+contactFullName: string,
+contactPhoneNumber: string, 
+dessert: string,
+dinner: string,
+eventName: string,
+familyMembers: [],
+hasConfirmedMatch: Boolean, 
+institution: string,
+isSuggestedMatch: Boolean, 
+location: string,
+matchedGiver?: GiverType,
+note: string, 
+partitionKey: string, 
+referenceId: string, 
+rowKey: string, 
 }
 
 const Recipient = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<[RecipientType] | []>([]);
   const [q, setQ] = useState("");
 
   useEffect(() => {
     async function fetchRecipients() {
-      await fetch('./api/admin/allrecipients', {
+      await fetch('./api/admin/recipients', {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
         headers : { 
             'Content-Type': 'application/json'
            },
       })
-        .then((response) =>  {console.log(response.json()) 
-        return response.json()} )
+        .then((response) => response.json())
         .then((json) => setData(json))
         .catch((errorStack) => {
           console.log(errorStack);
@@ -44,9 +50,11 @@ const Recipient = () => {
 
     return input.filter(
       (input) =>
-        input.fullName.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.email.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.phoneNumber.toLocaleLowerCase().indexOf(q) > -1
+        input.contactEmail.toLocaleLowerCase().indexOf(q) > -1 ||
+        input.contactFullName.toLocaleLowerCase().indexOf(q) > -1 ||
+        input.contactPhoneNumber.toLocaleLowerCase().indexOf(q) > -1 ||
+        input.institution.toLocaleLowerCase().indexOf(q) > -1 ||
+        input.referenceId.toLocaleLowerCase().indexOf(q) > -1
     );
   };
 
@@ -58,13 +66,13 @@ const Recipient = () => {
         </Grid>
         <Grid item>
           <TextField
-            placeholder="Søk etter giver"
+            placeholder="Søk etter familie"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           ></TextField>
         </Grid>
       </Grid>
-      {/* <Datatable data={search(data)}></Datatable> */}
+      <DatatableRecipient data={search(data)}/>
     </Container>
   );
 };
