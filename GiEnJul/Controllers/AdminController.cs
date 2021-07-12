@@ -27,7 +27,6 @@ namespace GiEnJul.Controllers
             _log = log;
             _mapper = mapper;
         }
-
         //The function below is not in use now, but should be implemented later:
         // Need to add an appropriate routing for the api call below. 
         // [HttpGet]
@@ -35,11 +34,16 @@ namespace GiEnJul.Controllers
         //     var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
         // return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
         // }
-        
+
         [HttpGet("givers")]
-        public async Task<IEnumerable<Giver>> GetGiversAsync() {
+        public async Task<IEnumerable<Giver>> GetGiversAsync()
+        {
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
+        }
+        [HttpGet("recipients")]
+        public async Task<IEnumerable<Recipient>> GetRecipientsAsync() {
+            return await _recipientRepository.GetAllAsModelAsync();
         }
     }
 }

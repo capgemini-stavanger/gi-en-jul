@@ -22,8 +22,8 @@ import { green, red } from "@material-ui/core/colors";
       backgroundColor: green[500],
     },
     notMatched: {
-      color: "#FF0000",
-      backgroundColor: red[500],
+      color: "#FFFFFF",
+      backgroundColor: "#FFFFFF",
     },
   })
 );

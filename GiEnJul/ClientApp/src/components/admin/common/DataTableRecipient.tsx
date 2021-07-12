@@ -16,21 +16,21 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { GiverType } from "../overview/Giver";
+import { RecipientType } from "../overview/Recipient";
 import useStyles from "./Styles";
 
 type Props = {
-  data: GiverType[] | [];
+  data: RecipientType[] | [];
 };
 
-const Datatable: React.FC<Props> = ({ data }) => {
+const DatatableRecipient: React.FC<Props> = ({ data }) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
-    if (input === 2) {
+    if (input < 3) {
       return "< 3";
     }
-    if (input === 5) {
+    if (input < 5 && input > 3) {
       return "3 - 5";
     } else {
       return "> 5";
@@ -54,29 +54,29 @@ const Datatable: React.FC<Props> = ({ data }) => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography className={classes.heading}>{x.fullName}</Typography>
+            <Typography className={classes.heading}>{x.referenceId}</Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
-              {formatFamily(x.maxRecievers)}
+              {formatFamily(x.familyMembers.length)}
             </Typography>
-            <Avatar className={handleMatched(x.hasConfirmedMatch)}>
-              {x.hasConfirmedMatch ? (
-                <CheckRounded style={{ color: "#FFFFFF" }} />
-              ) : (
-                <CloseRounded style={{ color: "#F36161" }} />
-              )}
-            </Avatar>
+              <Avatar className={handleMatched(x.hasConfirmedMatch)}>
+                {x.hasConfirmedMatch ? (
+                  <CheckRounded style={{ color: "#FFFFFF" }} />
+                ) : (
+                  <CloseRounded style={{ color: "#F36161" }} />
+                )}
+              </Avatar>
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
             <Typography>
-              <Phone /> {x.phoneNumber}
+              <Phone /> {x.contactPhoneNumber}
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
             <Typography>
               <Mail />
-              {x.email}
+              {x.contactEmail}
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -85,4 +85,4 @@ const Datatable: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default Datatable;
+export default DatatableRecipient;
