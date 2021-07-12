@@ -1,8 +1,6 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { Container, Grid, Tab,Typography } from "@material-ui/core";
-import TabContext from "@material-ui/lab/TabContext";
-import TabPanel from "@material-ui/lab/TabPanel";
-import TabList from "@material-ui/lab/TabList";
+import { Grid, Tab, Typography } from "@material-ui/core";
+import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
@@ -41,10 +39,6 @@ function AdminPage() {
       audience: `https://${domain}/api/v2/`,
       scope: "read:current_user",
     });
-  
-   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
-    setStep(newValue);
-  };
 
     const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user!.sub}`;
 
@@ -63,6 +57,10 @@ function AdminPage() {
     });
   }, []);
 
+  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+    setStep(newValue);
+  };
+
   if (!isLoaded) {
     return <LoadingPage />;
   } else if (isLoaded && userData == null) {
@@ -72,41 +70,41 @@ function AdminPage() {
       return <InstitutionMacro />;
     } else if (userData!.app_metadata!.role === "admin") {
       return (
-<>
-      <LogOutButton></LogOutButton>
-      <TabContext value={step}>
-        <TabList onChange={handleChange} centered>
-          <Tab label="Oversikt" value="1" />
-          <Tab label="Foreslåtte koblinger" value="2" />
-          <Tab label="Fullførte koblinger" value="3" />
-        </TabList>
-        <TabPanel value="1">
-          <Grid
-            container
-            direction="row"
-            justify="center"
-            alignItems="flex-start"
-          >
-            <Grid item xs={6}>
-              <Typography variant="h4" align="center">
-                Givere
-              </Typography>
-              <Giver />
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h4" align="center">
+        <>
+          <LogOutButton />
+          <TabContext value={step}>
+            <TabList onChange={handleChange} centered>
+              <Tab label="Oversikt" value="1" />
+              <Tab label="Foreslåtte koblinger" value="2" />
+              <Tab label="Fullførte koblinger" value="3" />
+            </TabList>
+            <TabPanel value="1">
+              <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="flex-start"
+              >
+                <Grid item xs={6}>
+                  <Typography variant="h4" align="center">
+                    Givere
+                  </Typography>
+                  <Giver />
+                </Grid>
+                <Grid item xs={6}>
+                  {/* <Typography variant="h4" align="center">
                 Familier
               </Typography>
-              <Recipient />
-            </Grid>
-          </Grid>
-        </TabPanel>
-        <TabPanel value="2"></TabPanel>
-        <TabPanel value="3">
-          <Completed />
-        </TabPanel>
-      </TabContext>
-    </>
+              <Recipient /> */}
+                </Grid>
+              </Grid>
+            </TabPanel>
+            <TabPanel value="2"></TabPanel>
+            <TabPanel value="3">
+              <Completed />
+            </TabPanel>
+          </TabContext>
+        </>
       );
     } else {
       return (

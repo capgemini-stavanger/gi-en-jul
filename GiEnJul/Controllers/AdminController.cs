@@ -34,15 +34,17 @@ namespace GiEnJul.Controllers
         //     var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
         // return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
         // }
-        
+
         [HttpGet("givers")]
-        public async Task<IEnumerable<Giver>> GetGiversAsync() {
+        public async Task<IEnumerable<Giver>> GetGiversAsync()
+        {
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
-        
-        [HttpGet("recipients")]
-        public async Task<List<Models.Recipient>> GetRecipientsAsync() {
-            return _mapper.Map<List<Models.Recipient>>(await _recipientRepository.GetAllAsync());
+        //Need to create a function like the function above for givers only for recipients
+        // [HttpGet("recipients")]
+        // public async Task<IEnumerable<Recipient>> GetRecipientsAsync() {
+        //     return await _recipientRepository.GetAllAsModelAsync();
+        // }
     }
 }

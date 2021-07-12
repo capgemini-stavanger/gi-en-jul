@@ -1,27 +1,27 @@
 import { Container, Grid, TextField } from "@material-ui/core";
-import {Search} from '@material-ui/icons';
+import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import DatatableRecipient from "../common/DataTableRecipient";
 import { GiverType } from "./Giver";
 
 export interface RecipientType {
-contactEmail: string,
-contactFullName: string,
-contactPhoneNumber: string, 
-dessert: string,
-dinner: string,
-eventName: string,
-familyMembers: [],
-hasConfirmedMatch: Boolean, 
-institution: string,
-isSuggestedMatch: Boolean, 
-location: string,
-matchedGiver?: GiverType,
-note: string, 
-partitionKey: string, 
-referenceId: string, 
-rowKey: string, 
+  contactEmail: string;
+  contactFullName: string;
+  contactPhoneNumber: string;
+  dessert: string;
+  dinner: string;
+  eventName: string;
+  familyMembers: [];
+  hasConfirmedMatch: Boolean;
+  institution: string;
+  isSuggestedMatch: Boolean;
+  location: string;
+  matchedGiver?: GiverType;
+  note: string;
+  partitionKey: string;
+  referenceId: string;
+  rowKey: string;
 }
 
 const Recipient = () => {
@@ -30,11 +30,11 @@ const Recipient = () => {
 
   useEffect(() => {
     async function fetchRecipients() {
-      await fetch('./api/admin/recipients', {
+      await fetch("./api/admin/recipients", {
         method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers : { 
-            'Content-Type': 'application/json'
-           },
+        headers: {
+          "Content-Type": "application/json",
+        },
       })
         .then((response) => response.json())
         .then((json) => setData(json))
@@ -72,7 +72,7 @@ const Recipient = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <DatatableRecipient data={search(data)}/>
+      <DatatableRecipient data={search(data)} />
     </Container>
   );
 };

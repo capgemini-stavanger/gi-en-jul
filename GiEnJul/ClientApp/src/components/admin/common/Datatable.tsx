@@ -59,15 +59,13 @@ const Datatable: React.FC<Props> = ({ data }) => {
               <Group />
               {formatFamily(x.maxRecievers)}
             </Typography>
-            <Typography>
-              <Avatar className={handleMatched(x.hasConfirmedMatch)}>
-                {x.hasConfirmedMatch ? (
-                  <CheckRounded style={{ color: "#FFFFFF" }} />
-                ) : (
-                  <CloseRounded style={{ color: "#F36161" }} />
-                )}
-              </Avatar>
-            </Typography>
+            <Avatar className={handleMatched(x.hasConfirmedMatch)}>
+              {x.hasConfirmedMatch ? (
+                <CheckRounded style={{ color: "#FFFFFF" }} />
+              ) : (
+                <CloseRounded style={{ color: "#F36161" }} />
+              )}
+            </Avatar>
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
