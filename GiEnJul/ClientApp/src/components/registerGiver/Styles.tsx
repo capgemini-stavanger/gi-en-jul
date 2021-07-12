@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme) => ({
   iconSelector: {
     alignItems:'center',
     margin: theme.spacing(1,1,1,0),
-    justify: 'center'
+    justifyContent: 'center'
   },
   iconTexField: {
     alignItems:'center',
     margin: theme.spacing(1,0,1,0),
-    justify: 'center'
+    justifyContent: 'center'
   }, 
   inputRow: {
     margin: theme.spacing(2,2,0,0),

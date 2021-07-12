@@ -1,16 +1,18 @@
-import { Auth0Provider } from '@auth0/auth0-react';
-import 'bootstrap/dist/css/bootstrap.css';
-import { ConnectedRouter } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
-import configureStore from './store/configureStore';
+import { Auth0Provider } from "@auth0/auth0-react";
+import "bootstrap/dist/css/bootstrap.css";
+import { ConnectedRouter } from "connected-react-router";
+import { createBrowserHistory } from "history";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import App from "./App";
+import registerServiceWorker from "./registerServiceWorker";
+import configureStore from "./store/configureStore";
 
 // Create browser history to use in the Redux store
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
+const baseUrl = document
+  .getElementsByTagName("base")[0]
+  .getAttribute("href") as string;
 const history = createBrowserHistory({ basename: baseUrl });
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
@@ -19,19 +21,20 @@ const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
 const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Auth0Provider
-        domain={domainEnv}
-        clientId={clientidEnv}
-        redirectUri={window.location.origin+"/admin"}
-        audience="https://dev-r7fmessb.eu.auth0.com/api/v2/"
-        scope="read:current_user update:current_user_metadata read:users_app_metadata"
-        >
-            <ConnectedRouter history={history}>
-                <App />
-            </ConnectedRouter>
-        </Auth0Provider>
-    </Provider>,
-    document.getElementById('root'));
+  <Provider store={store}>
+    <Auth0Provider
+      domain={domainEnv}
+      clientId={clientidEnv}
+      redirectUri={window.location.origin + "/admin"}
+      audience={domainEnv + "/api/v2/"}
+      scope="read:current_user update:current_user_metadata read:users_app_metadata"
+    >
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </Auth0Provider>
+  </Provider>,
+  document.getElementById("root")
+);
 
 registerServiceWorker();
