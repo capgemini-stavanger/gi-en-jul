@@ -1,12 +1,11 @@
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import * as React from "react";
 import { Route } from "react-router-dom";
+import Tab from "../../common/components/Tab";
+import Companies from "./Companies";
 import How from "./How";
 import Questions from "./Questions";
-import Companies from "./Companies";
-import Tab from "../../common/components/Tab";
-import { Typography, Container, Button, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
-import useFetch from "../../hooks/useFetch";
 
 const Home = () => {
   const classes = useStyles();
