@@ -92,10 +92,10 @@ function AdminPage() {
                   <Giver />
                 </Grid>
                 <Grid item xs={6}>
-                  {/* <Typography variant="h4" align="center">
+                  <Typography variant="h4" align="center">
                 Familier
               </Typography>
-              <Recipient /> */}
+              <Recipient />
                 </Grid>
               </Grid>
             </TabPanel>

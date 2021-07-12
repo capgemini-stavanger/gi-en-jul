@@ -41,10 +41,9 @@ namespace GiEnJul.Controllers
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
-        //Need to create a function like the function above for givers only for recipients
-        // [HttpGet("recipients")]
-        // public async Task<IEnumerable<Recipient>> GetRecipientsAsync() {
-        //     return await _recipientRepository.GetAllAsModelAsync();
-        // }
+        [HttpGet("recipients")]
+        public async Task<IEnumerable<Recipient>> GetRecipientsAsync() {
+            return await _recipientRepository.GetAllAsModelAsync();
+        }
     }
 }
