@@ -3,15 +3,21 @@ import { useEffect, useState } from "react";
 
 const backend = window.location.origin + "/api";
 
+
 const useFetch = <T extends any>(url: string, options: RequestInit) => {
   const [response, setResponse] = useState<T>();
   const [error, setError] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${backend}/${url}`, options);
+        const res = await fetch(`${backend}/admin/${url}`,{
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            headers: {
+              "Content-Type": "application/json",
+            },
+        });
         if (!res.ok) {
-          throw new Error(`${res.status} ${res.statusText}`);
+          throw new Error(`${res.status}${res.statusText}`);
         }
         const json = await res.json();
         setResponse(json);
