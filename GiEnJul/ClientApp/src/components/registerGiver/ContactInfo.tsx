@@ -8,15 +8,15 @@ import {
   isEmail,
 } from "../../components/InputFields/Validators/Validators";
 import { useState } from "react";
-import IGiverInputs from "./IGiverInputs";
+import IGiverFormData from "./IGiverFormData";
 
 type Props = {
-  nextStep: () => void;
-  prevStep: () => void;
+  nextStep: (event: React.FormEvent) => void;
+  prevStep: (event: React.FormEvent) => void;
   handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  values: IGiverInputs;
+  values: IGiverFormData;
 };
 
 type keyValue = {
@@ -46,41 +46,38 @@ const ContactInfo: React.FC<Props> = ({
   const [state, setState] = useState(initState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
 
-  const Continue = (e: any) => {
-    e.preventDefault();
+  const extendedNextStep = (e: React.FormEvent) => {
     for (let isValid in isValidsState) {
       if (isValidsState[isValid]) continue;
       return setState((prev) => {
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
       });
     }
-    nextStep();
+    nextStep(e);
   };
 
-  const Previous = (e: any) => {
-    e.preventDefault();
-    prevStep();
-  };
-
-  const setValidity = (target: string, value: boolean) => {
-    setIsValidsState((prev) => {
-      {
-        prev[target] = value;
-        return prev;
-      }
-    });
+  const getValiditySetter = (target: string) => {
+    return (isValid: boolean) => {
+      setIsValidsState((prev) => {
+        {
+          prev[target] = isValid;
+          return prev;
+        }
+      });
+    };
   };
 
   const classes = useStyles();
   return (
     <Container>
-      <form style={{ width: "100%", marginTop: "5px" }} onSubmit={Continue}>
+      <form
+        style={{ width: "100%", marginTop: "5px" }}
+        onSubmit={extendedNextStep}
+      >
         <InputValidator
           autoFocus
           viewErrorTrigger={state.viewErrorTrigger}
-          setIsValids={[
-            (isValid) => setValidity("isNotEmptyFullName", isValid),
-          ]}
+          setIsValids={[getValiditySetter("isNotEmptyFullName")]}
           label="Fullt navn*"
           variant="outlined"
           margin="normal"
@@ -95,8 +92,8 @@ const ContactInfo: React.FC<Props> = ({
         <InputValidator
           viewErrorTrigger={state.viewErrorTrigger}
           setIsValids={[
-            (isValid) => setValidity("isNotEmptyEmail", isValid),
-            (isValid) => setValidity("isValidEmail", isValid),
+            getValiditySetter("isNotEmptyEmail"),
+            getValiditySetter("isValidEmail"),
           ]}
           label="Epost*"
           onChange={handleEmailChange}
@@ -115,8 +112,8 @@ const ContactInfo: React.FC<Props> = ({
         <InputValidator
           viewErrorTrigger={state.viewErrorTrigger}
           setIsValids={[
-            (isValid) => setValidity("isNotEmptyPhone", isValid),
-            (isValid) => setValidity("isValidPhone", isValid),
+            getValiditySetter("isNotEmptyPhone"),
+            getValiditySetter("isValidPhone"),
           ]}
           label="Telefonnummer*"
           onChange={handleTlfChange}
@@ -132,9 +129,14 @@ const ContactInfo: React.FC<Props> = ({
           margin="normal"
           fullWidth
         />
-        <Grid container spacing={2} justify="center" className={classes.submit}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          className={classes.submit}
+        >
           <Grid item>
-            <Button variant="contained" onClick={Previous}>
+            <Button variant="contained" onClick={prevStep}>
               Tilbake
             </Button>
           </Grid>

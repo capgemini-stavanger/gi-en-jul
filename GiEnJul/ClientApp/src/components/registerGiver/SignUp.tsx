@@ -5,14 +5,15 @@ import ContactInfo from "./ContactInfo";
 import LocationGiver from "./LocationGiver";
 import SummaryRegistration from "./SummaryRegistration";
 import { useState } from "react";
-import IGiverInputs from "./IGiverInputs";
+import IGiverFormData from "./IGiverFormData";
+import FamilySizeGiver from "./FamilySizeGiver";
 
-const initInputsState: IGiverInputs = {
-  location: undefined,
-  fullname: undefined,
-  email: undefined,
-  phoneNumber: undefined,
-  maxRecivers: undefined,
+const initInputsState: IGiverFormData = {
+  location: "",
+  fullname: "",
+  email: "",
+  phoneNumber: "",
+  maxRecivers: "",
 };
 
 const initState = {
@@ -25,14 +26,16 @@ const SignUp = () => {
   const [inputsState, setInputsState] = useState(initInputsState);
 
   // go back to previous step
-  const prevStep = () => {
+  const prevStep = (event: React.FormEvent) => {
+    event.preventDefault();
     setState((prev) => {
       return { ...prev, step: prev.step - 1 };
     });
   };
 
   // proceed to the next step
-  const nextStep = () => {
+  const nextStep = (event: React.FormEvent) => {
+    event.preventDefault();
     setState((prev) => {
       return { ...prev, step: prev.step + 1 };
     });
@@ -56,7 +59,9 @@ const SignUp = () => {
     });
   };
 
-  const handleLocationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLocationChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setInputsState((prev) => {
       return { ...prev, location: event.target.value };
     });
@@ -122,13 +127,13 @@ const SignUp = () => {
               Bli giver
             </Typography>
             <Typography component="h2">Familiesammensetning</Typography>
-            <LocationGiver
+            <FamilySizeGiver
               nextStep={nextStep}
               prevStep={prevStep}
-              handleLocationChange={handleFamilyChange}
+              handleFamilyChange={handleFamilyChange}
               values={inputsState}
               placeHolder={"Familiestørrelse"}
-            ></LocationGiver>
+            ></FamilySizeGiver>
           </div>
         </Container>
       );

@@ -10,18 +10,18 @@ import {
   isNotNull,
   isPhoneNumber,
 } from "../../components/InputFields/Validators/Validators";
-import IGiverInputs from "./IGiverInputs";
+import IGiverFormData from "./IGiverFormData";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 
 interface Props {
-  nextStep: () => void;
-  prevStep: () => void;
-  handleLocationChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  nextStep: (event: React.FormEvent) => void;
+  prevStep: (event: React.FormEvent) => void;
+  handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  values: IGiverInputs;
+  values: IGiverFormData;
   callingback: (e: boolean) => void;
 }
 
@@ -70,15 +70,16 @@ const SummaryRegistration: React.FC<Props> = ({
     callingback(b);
   };
 
-  const Continue = (e: any) => {
-    e.preventDefault();
+  const extendedNextStep = (e: any) => {
     for (let isValid in isValidsState) {
       if (isValidsState[isValid]) continue;
+      e.preventDefault();
       return setState((prev) => {
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
       });
     }
     Submit();
+    nextStep(e);
   };
 
   const Submit = async () => {
@@ -103,31 +104,33 @@ const SummaryRegistration: React.FC<Props> = ({
       .catch((errorStack) => {
         console.log(errorStack);
       });
-    nextStep();
-  };
-  const Previous = (e: any) => {
-    e.preventDefault();
-    prevStep();
   };
 
   const handleChange = (target: string) => {
-    setChangesState((prev) => ({ ...prev, [target]: !prev[target] }));
+    return () => {
+      setChangesState((prev) => ({ ...prev, [target]: !prev[target] }));
+    };
   };
 
-  const setValidity = (target: string, value: boolean) => {
-    setIsValidsState((prev) => {
-      {
-        prev[target] = value;
-        return prev;
-      }
-    });
+  const getValiditySetter = (target: string) => {
+    return (isValid: boolean) => {
+      setIsValidsState((prev) => {
+        {
+          prev[target] = isValid;
+          return prev;
+        }
+      });
+    };
   };
 
   const classes = useStyles();
 
   return (
     <Container>
-      <form onSubmit={Continue} style={{ width: "100%", marginTop: "20px" }}>
+      <form
+        onSubmit={extendedNextStep}
+        style={{ width: "100%", marginTop: "20px" }}
+      >
         <Grid container className={classes.inputRow}>
           <Grid item xs={9}>
             <InputValidator
@@ -143,14 +146,14 @@ const SummaryRegistration: React.FC<Props> = ({
               onChange={handleLocationChange}
               errorMessages={["Vennligst velg lokasjon"]}
               validators={[isNotNull]}
-              setIsValids={(isValid) => setValidity("isValidLocation", isValid)}
+              setIsValids={getValiditySetter("isValidLocation")}
               options={LOCATIONS.map((x) => {
                 return { value: x, text: x };
               })}
             />
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={() => handleChange("location")}>
+            <Button onClick={handleChange("location")}>
               <EditOutlinedIcon
                 className={classes.iconSelector}
               ></EditOutlinedIcon>
@@ -171,11 +174,11 @@ const SummaryRegistration: React.FC<Props> = ({
               onChange={handlefullnameChange}
               validators={[isNotNull]}
               errorMessages={["Vennligst skriv inn ditt navn"]}
-              setIsValids={(isValid) => setValidity("isValidFullName", isValid)}
+              setIsValids={getValiditySetter("isValidFullName")}
             />
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={() => handleChange("fullName")}>
+            <Button onClick={handleChange("fullName")}>
               <EditOutlinedIcon
                 className={classes.iconTexField}
               ></EditOutlinedIcon>
@@ -187,7 +190,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <InputValidator
               viewErrorTrigger={state.viewErrorTrigger}
               disabled={changesState.email}
-              label="Email"
+              label="Epost"
               onChange={handleEmailChange}
               name="email"
               value={values.email ? values.email : ""}
@@ -197,8 +200,8 @@ const SummaryRegistration: React.FC<Props> = ({
                 "Vennligst skriv inn din epost",
               ]}
               setIsValids={[
-                (isValid) => setValidity("isValidEmail", isValid),
-                (isValid) => setValidity("isNotNullEmail", isValid),
+                getValiditySetter("isValidEmail"),
+                getValiditySetter("isNotNullEmail"),
               ]}
               autoComplete="email"
               variant="outlined"
@@ -206,7 +209,7 @@ const SummaryRegistration: React.FC<Props> = ({
             />
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={() => handleChange("email")}>
+            <Button onClick={handleChange("email")}>
               <EditOutlinedIcon
                 className={classes.iconTexField}
               ></EditOutlinedIcon>
@@ -218,7 +221,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <InputValidator
               viewErrorTrigger={state.viewErrorTrigger}
               disabled={changesState.phone}
-              label="telefon"
+              label="Telefonnummer"
               onChange={handleTlfChange}
               name="phoneNumber"
               value={values.phoneNumber ? values.phoneNumber : ""}
@@ -228,8 +231,8 @@ const SummaryRegistration: React.FC<Props> = ({
                 "Vennligst skriv inn ditt telefonnummer",
               ]}
               setIsValids={[
-                (isValid) => setValidity("isValidPhone", isValid),
-                (isValid) => setValidity("isNotNullPhone", isValid),
+                getValiditySetter("isValidPhone"),
+                getValiditySetter("isNotNullPhone"),
               ]}
               autoComplete="tel"
               variant="outlined"
@@ -237,7 +240,7 @@ const SummaryRegistration: React.FC<Props> = ({
             />
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={() => handleChange("phone")}>
+            <Button onClick={handleChange("phone")}>
               <EditOutlinedIcon
                 className={classes.iconTexField}
               ></EditOutlinedIcon>
@@ -257,12 +260,12 @@ const SummaryRegistration: React.FC<Props> = ({
               onChange={handleFamilyChange}
               label="Familiesammensetning*"
               validators={[isNotNull]}
-              setIsValids={(isValid) => setValidity("isValidFamily", isValid)}
+              setIsValids={getValiditySetter("isValidFamily")}
               options={FAMILY_SIZES}
             />
           </Grid>
           <Grid item xs={3}>
-            <Button onClick={() => handleChange("family")}>
+            <Button onClick={handleChange("family")}>
               <EditOutlinedIcon
                 className={classes.iconSelector}
               ></EditOutlinedIcon>
@@ -270,9 +273,14 @@ const SummaryRegistration: React.FC<Props> = ({
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} justify="center" className={classes.submit}>
+        <Grid
+          container
+          spacing={2}
+          justifyContent="center"
+          className={classes.submit}
+        >
           <Grid item>
-            <Button variant="contained" onClick={Previous}>
+            <Button variant="contained" onClick={prevStep}>
               Tilbake
             </Button>
           </Grid>

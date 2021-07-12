@@ -1,29 +1,29 @@
+import { Button, Container, Grid, MenuItem } from "@material-ui/core";
 import * as React from "react";
-import { Route } from "react-router-dom";
-import useStyles from "./Styles";
 import {
-  ValidatorForm,
   SelectValidator,
+  ValidatorForm,
 } from "react-material-ui-form-validator";
-import { Button, Grid, MenuItem, Container } from "@material-ui/core";
+import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import IGiverFormData from "./IGiverFormData";
-import LOCATIONS from "../../common/constants/Locations";
+import useStyles from "./Styles";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
+  prevStep: (event: React.FormEvent) => void;
   values: IGiverFormData;
-  handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
 }
 
-const LocationGiver: React.FC<Props> = ({
+const FamilySizeGiver: React.FC<Props> = ({
   nextStep,
+  prevStep,
   values,
-  handleLocationChange,
+  handleFamilyChange,
   placeHolder,
 }) => {
   const classes = useStyles();
-
   return (
     <Container>
       <ValidatorForm
@@ -37,16 +37,15 @@ const LocationGiver: React.FC<Props> = ({
           autoFocus
           placeholder={placeHolder}
           validators={["required"]}
-          label="Lokasjon*"
-          name="location-input"
-          value={values.location ? values.location : ""}
-          id="location-input"
-          onChange={handleLocationChange}
-          errorMessages={["Hvor vil du spre glede?"]}
+          name="familyType-input"
+          value={values.maxRecivers ? values.maxRecivers : ""}
+          onChange={handleFamilyChange}
+          label="Familiesammensetning*"
+          errorMessages={["Hvilken familie venter på din gave?"]}
         >
-          {LOCATIONS.map((location) => (
-            <MenuItem key={location} value={location}>
-              {location}
+          {FAMILY_SIZES.map((familySize) => (
+            <MenuItem key={familySize.text} value={familySize.value}>
+              {familySize.text}
             </MenuItem>
           ))}
         </SelectValidator>
@@ -57,18 +56,9 @@ const LocationGiver: React.FC<Props> = ({
           className={classes.submit}
         >
           <Grid item>
-            <Route
-              render={({ history }) => (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    history.push("/");
-                  }}
-                >
-                  Tilbake
-                </Button>
-              )}
-            />
+            <Button variant="contained" onClick={prevStep}>
+              Tilbake
+            </Button>
           </Grid>
           <Grid item>
             <Button variant="contained" type="submit">
@@ -80,4 +70,4 @@ const LocationGiver: React.FC<Props> = ({
     </Container>
   );
 };
-export default LocationGiver;
+export default FamilySizeGiver;

@@ -2,10 +2,10 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import useStyles from "./Styles";
-import IGiverInputs from "./IGiverInputs";
+import IGiverFormData from "./IGiverFormData";
 
 type Props = {
-  values: IGiverInputs;
+  values: IGiverFormData;
   confirmationOK: boolean;
 };
 
@@ -24,7 +24,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
           item
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           className={classes.submit}
         >
           <Route
@@ -57,7 +57,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
           item
           container
           spacing={2}
-          justify="center"
+          justifyContent="center"
           className={classes.submit}
         >
           <Route
