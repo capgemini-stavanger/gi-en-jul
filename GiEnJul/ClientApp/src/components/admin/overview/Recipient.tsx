@@ -67,7 +67,6 @@ const Recipient = () => {
 
   return (
     <Container>
-      {console.log(data)}
       <Grid container>
         <Grid item>
           <Search />
