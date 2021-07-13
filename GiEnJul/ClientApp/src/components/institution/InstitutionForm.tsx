@@ -295,36 +295,42 @@ const RegistrationForm = () => {
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
     if (!allIsValid()) {
-      setViewErrorTrigger((v) => v + 1);
+      setState((prev) => ({
+        ...prev,
+        viewErrorTrigger: prev.viewErrorTrigger + 1,
+      }));
       return;
     }
 
     let personsList = Array<PersonType>();
-    persons.forEach((p) => {
-      if (!p) return;
-      const p1: PersonType = {
-        Wish: p.wish,
-        Age: parseInt(p.age),
-        Gender: p.gender,
+    formDataState.persons.forEach((person) => {
+      if (!person) return;
+      const person1: PersonType = {
+        Wish: person.wish,
+        Age: parseInt(person.age),
+        Gender: person.gender,
       };
-      personsList.push(p1);
+      personsList.push(person1);
     });
 
     let submit: submittype = {
       Dinner: getDinner(),
       Dessert: getDessert(),
-      Note: specialNeeds,
+      Note: formDataState.specialNeeds,
       Event: "JUL2021",
-      Location: location,
-      ContactFullName: contactName,
-      ContactEmail: contactEmail,
-      ContactPhoneNumber: contactPhoneNumber,
+      Location: formDataState.location,
+      ContactFullName: formDataState.contact.name,
+      ContactEmail: formDataState.contact.email,
+      ContactPhoneNumber: formDataState.contact.phoneNumber,
       Institution: "NAV",
-      ReferenceId: pid,
+      ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
 
-    setIsLoading(true);
+    setState((prev) => ({
+      ...prev,
+      alert: { ...prev.alert, isLoading: true },
+    }));
     await fetch("/api/recipient", {
       method: "POST",
       headers: {
