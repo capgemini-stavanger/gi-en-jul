@@ -26,7 +26,7 @@ ReactDOM.render(
       domain={domainEnv}
       clientId={clientidEnv}
       redirectUri={window.location.origin + "/admin"}
-      audience={domainEnv + "/api/v2/"}
+      audience={"https://" + domainEnv + "/api/v2/"}
       scope="read:current_user update:current_user_metadata read:users_app_metadata"
     >
       <ConnectedRouter history={history}>
