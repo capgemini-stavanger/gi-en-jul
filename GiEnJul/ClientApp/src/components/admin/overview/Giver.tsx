@@ -2,7 +2,7 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import Datatable from "../common/Datatable";
+import Datatable from "../common/GiverTable";
 
 export interface GiverType {
   email: string;
