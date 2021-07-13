@@ -7,7 +7,7 @@ import NavMenuAdmin from "./common/components/NavMenuAdmin";
 import Edit from "./components/admin/editLandingPage/EditMacro";
 import Home from "./components/home/Home";
 import Institution from "./components/institution/InstitutionMacro";
-import SignUp from "./components/registerGiver/SignUp";
+import SignUp from "./components/registerGiver/Macro";
 import "./custom.css";
 
 const App = () => {

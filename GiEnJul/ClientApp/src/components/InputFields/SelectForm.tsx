@@ -6,9 +6,7 @@ import {
   Select,
   SelectProps,
 } from "@material-ui/core";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { isMobile } from "../../common/functions/IsMobile";
 
 interface ISelect extends SelectProps {
@@ -20,7 +18,7 @@ interface ISelect extends SelectProps {
   errorMessage?: string;
 }
 
-const SelectInput: FC<ISelect> = ({
+const SelectForm: FC<ISelect> = ({
   name,
   options,
 
@@ -59,8 +57,8 @@ const SelectInput: FC<ISelect> = ({
         {...rest}
       >
         {options &&
-          options.map((o) => {
-            return isMob ? (
+          options.map((o) =>
+            isMob ? (
               <option
                 key={`n_${name}_${o.text}`}
                 value={o.value}
@@ -76,12 +74,12 @@ const SelectInput: FC<ISelect> = ({
               >
                 {o.text}
               </MenuItem>
-            );
-          })}
+            )
+          )}
       </Select>
       {error && errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
   );
 };
 
-export default SelectInput;
+export default SelectForm;

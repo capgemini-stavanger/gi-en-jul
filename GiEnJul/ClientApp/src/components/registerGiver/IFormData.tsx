@@ -1,4 +1,4 @@
-interface IGiverFormData {
+interface IFormData {
   location: string;
   fullname: string;
   email: string;
@@ -6,4 +6,4 @@ interface IGiverFormData {
   maxReceivers: string;
 }
 
-export default IGiverFormData;
+export default IFormData;

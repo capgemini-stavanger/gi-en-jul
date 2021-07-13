@@ -1,14 +1,15 @@
-import * as React from "react";
-import { Route } from "react-router-dom";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
+import React, { useCallback } from "react";
+import { useHistory } from "react-router-dom";
+import Tab from "../../common/components/Tab";
+import Companies from "./Companies";
 import How from "./How";
 import Questions from "./Questions";
-import Companies from "./Companies";
-import Tab from "../../common/components/Tab";
-import { Typography, Container, Button, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
 
 const Home = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Container>
@@ -25,20 +26,16 @@ const Home = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Route
-            render={({ history }) => (
-              <Button
-                size="large"
-                variant="contained"
-                className={classes.submit}
-                onClick={() => {
-                  history.push("/bli-giver");
-                }}
-              >
-                Bli Giver
-              </Button>
-            )}
-          />
+          <Button
+            size="large"
+            variant="contained"
+            className={classes.submit}
+            onClick={useCallback(() => {
+              history.push("/bli-giver");
+            }, [history])}
+          >
+            Bli Giver
+          </Button>
         </Grid>
       </Grid>
       <How />

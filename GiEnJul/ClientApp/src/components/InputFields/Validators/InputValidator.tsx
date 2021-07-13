@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useCallback } from "react";
 import { FC, useEffect, useState } from "react";
-import SelectInput from "../SelectInput";
+import SelectForm from "../SelectForm";
 
 interface InputValidatorProps {
   // List of methods to use for validation.
@@ -38,7 +38,7 @@ interface InputValidatorProps {
   autoFocus?: boolean;
   size?: any;
   multiline?: boolean;
-  rowsMax?: number | string;
+  maxRows?: number | string;
   placeholder?: string;
 
   options?: { value: any; text: string }[]; // Only for "type=select".
@@ -74,13 +74,13 @@ const InputValidator: FC<InputValidatorProps> = ({
   autoFocus,
   size,
   multiline,
-  rowsMax,
+  maxRows,
   placeholder,
   options,
 }) => {
   const [errorState, setErrorState] = useState(initErrorState);
 
-  const checkArgs = useCallback(() => {
+  const checkArgs = () => {
     let validatorCount = validators.length;
     function isInvalidOptionalArg(arg?: Array<any> | Function) {
       return typeof arg === "object" && arg.length !== validatorCount;
@@ -92,31 +92,36 @@ const InputValidator: FC<InputValidatorProps> = ({
     ) {
       throw Error("An argument in InputValidator is invalid.");
     }
-  }, [validators, setIsValids, errorMessages, type, options, name]);
+  };
 
-  const validate = useCallback(() => {
+  const validate = () => {
     let errorMsg: string | undefined = undefined;
     let isAnyInvalid = false;
 
     validators.forEach((item, i) => {
       let isValid = item(value);
-      switch (typeof setIsValids) {
-        case "object":
-          setIsValids[i](isValid);
-          break;
-        case "function":
-          setIsValids(isValid);
-          break;
+      if (typeof setIsValids === "object") {
+        setIsValids[i](isValid);
       }
-      if (!isValid && errorState.viewError) {
+      if (!isValid) {
         errorMsg = errorMessages !== undefined ? errorMessages[i] : undefined;
         isAnyInvalid = true;
       }
     });
+
+    if (typeof setIsValids == "function") {
+      setIsValids(!isAnyInvalid);
+    }
+
+    if (!errorState.viewError) {
+      errorMsg = undefined;
+      isAnyInvalid = false;
+    }
+
     setErrorState((prev) => {
       return { ...prev, isInvalid: isAnyInvalid, errorMessage: errorMsg };
     });
-  }, [value, validators, setIsValids, errorMessages, errorState.viewError]);
+  };
 
   const extendedOnChange = (e: any) => {
     onChange(e);
@@ -141,7 +146,7 @@ const InputValidator: FC<InputValidatorProps> = ({
   switch (type) {
     case "select":
       return (
-        <SelectInput
+        <SelectForm
           name={name}
           options={
             options
@@ -184,11 +189,15 @@ const InputValidator: FC<InputValidatorProps> = ({
           autoFocus={autoFocus}
           size={size}
           multiline={multiline}
-          rowsMax={rowsMax}
+          maxRows={maxRows}
           placeholder={placeholder}
         />
       );
   }
+};
+
+InputValidator.defaultProps = {
+  variant: "outlined",
 };
 
 export default InputValidator;
