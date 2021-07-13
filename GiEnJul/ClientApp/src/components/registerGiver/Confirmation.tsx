@@ -15,7 +15,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             <Container className={classes.paper}>
                 <Typography component="h1" variant="h4">Takk for at du prøver å gi en jul {values.fullname}!</Typography>
                 <Typography component="p" >Det har desverre skjedd en feil å vi har ikke greid å registrert deg</Typography>
-                <Grid item container spacing={2} justifyContent="center" className={classes.submit}>
+                <Grid item container spacing={2} justify="center" className={classes.submit}>
                 <Route render={({ history }) => (<Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
                 </Grid>
             </Container>
@@ -25,7 +25,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             <Container className={classes.paper}>
                 <Typography component="h1" variant="h4">Takk for at du gir en jul {values.fullname}!</Typography>
                 <Typography component="p" >Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  {values.email}. Når det nærmer seg jul vil vi sende deg mer informasjon.</Typography>
-                <Grid item container spacing={2} justifyContent="center" className={classes.submit}>
+                <Grid item container spacing={2} justify="center" className={classes.submit}>
                     <Route render={({ history }) => (
                         <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
                 </Grid>

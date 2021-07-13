@@ -49,7 +49,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                         {options.map(x =>
                             <MenuItem key={x} value={x}>{x}</MenuItem>)}
                     </SelectValidator>
-                    <Grid container spacing={2} justifyContent="center" className={classes.submit}>
+                    <Grid container spacing={2} justify="center" className={classes.submit}>
                         <Grid item >
                             <Button variant="contained" onClick={Previous} >Tilbake</Button>
                         </Grid>
@@ -84,7 +84,7 @@ const LocationGiver: React.FC<Props> = ({ nextStep, prevStep, handleLocationChan
                     {options.length !== 0 ?options.map(x =>
                         <MenuItem key={x} value={x}>{x}</MenuItem>) : <Spinner />}
                 </SelectValidator>
-                <Grid container spacing={2} justifyContent="center" className={classes.submit}>
+                <Grid container spacing={2} justify="center" className={classes.submit}>
                     <Grid item>
                         <Route render={({ history }) => (
                             <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
