@@ -1,36 +1,52 @@
-import * as React from 'react';
-import { Route } from 'react-router-dom';
-import { Button, Container, Grid, Typography } from '@material-ui/core';
-import useStyles from './Styles';
+import { Container, Typography } from "@material-ui/core";
+import React, { useCallback } from "react";
+import { useHistory } from "react-router-dom";
+import { Spinner } from "reactstrap";
+import IFormData from "./IFormData";
+import Pager from "./Pager";
+import useStyles from "./Styles";
 
 type Props = {
-    values: { location?: string; fullname?: string; email?: string; phoneNumber?: string; maxRecievers?: number; familyType?: string},
-    confirmationOK: boolean
-}
+  values: IFormData;
+  confirmationOK?: boolean;
+};
 
 const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
-    const classes = useStyles();
-    if(!confirmationOK){
-        return(
-            <Container className={classes.paper}>
-                <Typography component="h1" variant="h4">Takk for at du prøver å gi en jul {values.fullname}!</Typography>
-                <Typography component="p" >Det har desverre skjedd en feil å vi har ikke greid å registrert deg</Typography>
-                <Grid item container spacing={2} justify="center" className={classes.submit}>
-                <Route render={({ history }) => (<Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
-                </Grid>
-            </Container>
-        )
-    } else {
-        return (
-            <Container className={classes.paper}>
-                <Typography component="h1" variant="h4">Takk for at du gir en jul {values.fullname}!</Typography>
-                <Typography component="p" >Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en  oppsummering av din registrering i til  {values.email}. Når det nærmer seg jul vil vi sende deg mer informasjon.</Typography>
-                <Grid item container spacing={2} justify="center" className={classes.submit}>
-                    <Route render={({ history }) => (
-                        <Button variant="contained" onClick={() => { history.push('/') }}>Tilbake</Button>)} />
-                </Grid>
-            </Container>
-        )
-    }
-}
-export default Confirmation
+  const history = useHistory();
+  const classes = useStyles();
+
+  const getHeader = useCallback(
+    () =>
+      confirmationOK
+        ? `Takk for at du gir en jul ${values.fullname}!`
+        : `Takk for at du prøver å gi en jul ${values.fullname}!`,
+    [confirmationOK]
+  );
+
+  const getMessage = useCallback(
+    () =>
+      confirmationOK
+        ? `Vi har nå registrert deg som giver til årets Gi en Jul og har sendt en
+          oppsummering av din registrering i til ${values.email}. Når det nærmer
+          seg jul vil vi sende deg mer informasjon.`
+        : `Det har desverre skjedd en feil å vi har ikke greid å registrert deg.`,
+    [confirmationOK]
+  );
+
+  return (
+    <Container className={classes.paper}>
+      {confirmationOK !== undefined ? (
+        <>
+          <Typography component="h1" variant="h4">
+            {getHeader()}
+          </Typography>
+          <Typography component="p">{getMessage()}</Typography>
+        </>
+      ) : (
+        <Spinner />
+      )}
+      <Pager onBack={React.useCallback(() => history.push("/"), [history])} />
+    </Container>
+  );
+};
+export default Confirmation;
