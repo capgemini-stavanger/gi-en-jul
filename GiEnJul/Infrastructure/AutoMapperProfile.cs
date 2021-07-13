@@ -11,6 +11,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore());
 
+            CreateMap<Entities.Person, Models.Person>();
+
             CreateMap<Models.Person, Entities.Person>()
                 .ConstructUsing(src => new Entities.Person(src.PartitionKey))
                 .ForMember(dest => dest.RowKey, act => act.Ignore())

@@ -46,7 +46,8 @@ namespace GiEnJul.Controllers
             var recipients = await _recipientRepository.GetAllAsModelAsync();
             foreach (var family in recipients)
             {
-                family.FamilyMembers = await _personRepository.GetAllByRecipientId(family.RowKey);
+                var familyMembers = await _personRepository.GetAllByRecipientId(family.RowKey);
+                family.FamilyMembers.AddRange(familyMembers); 
             }
             return recipients;
         }
