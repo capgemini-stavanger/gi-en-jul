@@ -7,11 +7,12 @@ using System.Collections.Generic;
 
 namespace GiEnJul.Features
 {
-    public interface IRecipientRepository : IGenericRepository<Entities.Recipient>
+    public interface IRecipientRepository
     {
         Task<Models.Recipient> DeleteAsync(Models.Recipient model);
         Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model);
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
+        Task<IEnumerable<Models.Recipient>> GetAllAsModelAsync();
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -40,5 +41,11 @@ namespace GiEnJul.Features
 
             var recipients = await GetAllByQueryAsync(query);
             return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<IEnumerable<Models.Recipient>> GetAllAsModelAsync()
+        {
+            var allRecipients = await GetAllAsync();
+            return _mapper.Map<IEnumerable<Models.Recipient>>(allRecipients);
         }
 }}

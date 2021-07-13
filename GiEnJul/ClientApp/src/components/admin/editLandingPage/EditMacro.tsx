@@ -44,7 +44,7 @@ export default () => {
             <Grid
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="center">
                 {sections.map((key, index) =>
                     <Grid item xs={2}>
