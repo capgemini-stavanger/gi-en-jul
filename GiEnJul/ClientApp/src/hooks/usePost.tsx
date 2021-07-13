@@ -5,7 +5,7 @@ const backend = window.location.origin + "/api";
 /**
  * Returns a response from the backend as a json.
  * @param url which controller to access and where to POST "/admin/givers" etc.
- * @param reqOptions where to add headers, {method: POST, ...} etc
+ * @param data object or array to POST
  */
 const usePost = <T extends any>(url: string, data: any) => {
   const [response, setResponse] = useState<T>();
