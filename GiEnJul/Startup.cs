@@ -28,7 +28,17 @@ namespace GiEnJul
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            string domain = "https://whatever/";
+            services.AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+               options.Authority = domain;
+               options.Audience = domain;
+            }
+            );
+
         }
+        
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
