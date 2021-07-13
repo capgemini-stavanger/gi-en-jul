@@ -44,10 +44,10 @@ namespace GiEnJul.Controllers
         [HttpGet("recipients")]
         public async Task<List<Recipient>> GetRecipientsAsync() {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
-            foreach (var family in recipients)
+            foreach (var recipient in recipients)
             {
-                var familyMembers = await _personRepository.GetAllByRecipientId(family.RowKey);
-                family.FamilyMembers.AddRange(familyMembers); 
+                var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+                recipient.FamilyMembers = familyMembers; 
             }
             return recipients;
         }
