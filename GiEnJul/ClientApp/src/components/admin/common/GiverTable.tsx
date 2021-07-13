@@ -47,20 +47,21 @@ const Datatable: React.FC<Props> = ({ data }) => {
 
   return (
     <Container>
-      {data.map((x) => (
-        <Accordion>
+      {data.map((giver) => (
+        <Accordion
+        key={giver.partitionKey}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography className={classes.heading}>{x.fullName}</Typography>
+            <Typography className={classes.heading}>{giver.fullName}</Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
-              {formatFamily(x.maxRecievers)}
+              {formatFamily(giver.maxRecievers)}
             </Typography>
-            <Avatar className={handleMatched(x.hasConfirmedMatch)}>
-              {x.hasConfirmedMatch ? (
+            <Avatar className={handleMatched(giver.hasConfirmedMatch)}>
+              {giver.hasConfirmedMatch ? (
                 <CheckRounded style={{ color: "#FFFFFF" }} />
               ) : (
                 <CloseRounded style={{ color: "#F36161" }} />
@@ -70,13 +71,13 @@ const Datatable: React.FC<Props> = ({ data }) => {
           <Divider />
           <AccordionDetails>
             <Typography>
-              <Phone /> {x.phoneNumber}
+              <Phone /> {giver.phoneNumber}
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
             <Typography>
               <Mail />
-              {x.email}
+              {giver.email}
             </Typography>
           </AccordionDetails>
         </Accordion>

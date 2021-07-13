@@ -72,7 +72,8 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
   return (
     <Container>
       {data.map((recipient) => (
-        <Accordion>
+        <Accordion 
+        key={recipient.partitionKey}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
@@ -95,8 +96,9 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
             <AccordionDetails className={classes.largeColumn}>
               <Typography>Ønsker:</Typography></AccordionDetails>
             {recipient.familyMembers.map((person) => (
-              <div>
-              <AccordionDetails>
+              <div
+              key={person.rowKey}>
+              <AccordionDetails >
               <Typography className={classes.smallColumn}> 
                 {handleGender(person.gender, person.age)} 
               </Typography>

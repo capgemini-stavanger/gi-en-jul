@@ -11,9 +11,9 @@ const Home = () => {
   const classes = useStyles();
   return (
     <Container>
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid container direction="row" justifyContent="center" alignItems="center">
         <Typography variant="h2">Gi en jul</Typography>
-        <Grid container direction="row" justify="center" alignItems="center">
+        <Grid container direction="row" justifyContent="center" alignItems="center">
           <Route
             render={({ history }) => (
               <Button
@@ -36,7 +36,7 @@ const Home = () => {
       <Grid item xs={1}>
         <Tab maxPagePosition={300} path="top" />
       </Grid>
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid container direction="row" justifyContent="center" alignItems="center">
         <Tab maxPagePosition={140} path="/bli-giver" />
       </Grid>
     </Container>

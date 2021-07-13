@@ -224,7 +224,7 @@ const SummaryRegistration: React.FC<Props> = ({ nextStep, prevStep, handleLocati
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={2} justify="center" className={classes.submit}>
+                <Grid container spacing={2} justifyContent="center" className={classes.submit}>
                     <Grid item>
                         <Button variant="contained" onClick={Previous}>Tilbake</Button>
                     </Grid>
