@@ -1,8 +1,16 @@
+import {
+  Button,
+  Color,
+  Grid,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import * as React from "react";
 import { useState } from "react";
-import Locations from "./InstitutionLocations";
-import FormPerson from "./FormPerson";
-import IFormPerson from "./IFormPerson";
+import { DESSERTS } from "../../common/constants/Desserts";
+import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import {
@@ -10,12 +18,10 @@ import {
   isNotNull,
   isPhoneNumber,
 } from "../InputFields/Validators/Validators";
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import FormFood from "./FormFood";
-import { DINNERS } from "../../common/constants/Dinners";
-import { DESSERTS } from "../../common/constants/Desserts";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import FormPerson from "./FormPerson";
+import IFormPerson from "./IFormPerson";
+import Locations from "./InstitutionLocations";
 
 type PersonType = {
   Wish?: string;
@@ -38,8 +44,81 @@ type submittype = {
   FamilyMembers?: PersonType[];
 };
 
+interface IFoodFormData {
+  radio: string;
+  input: string;
+}
+
+const initFoodFormData: IFoodFormData = {
+  radio: "",
+  input: "",
+};
+
+interface IContact {
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
+const initState: {
+  viewErrorTrigger: number;
+  alert: {
+    isLoading: boolean;
+    msg: React.ReactNode;
+    severity?: "error" | "info" | "success" | "warning";
+    open: boolean;
+  };
+} = {
+  viewErrorTrigger: 0,
+  alert: {
+    isLoading: false,
+    msg: "",
+    severity: undefined,
+    open: false,
+  },
+};
+
+const initFormDataState: {
+  persons: (IFormPerson | undefined)[];
+  location: string;
+  dinner: IFoodFormData;
+  dessert: IFoodFormData;
+  specialNeeds: string;
+  pid: string;
+  contact: IContact;
+} = {
+  persons: [{} as IFormPerson],
+  location: "",
+  dinner: initFoodFormData,
+  dessert: initFoodFormData,
+  specialNeeds: "",
+  pid: "",
+  contact: {
+    name: "",
+    phoneNumber: "",
+    email: "",
+  },
+};
+
+type ValidFormEntry = {
+  [valid: string]: boolean;
+};
+
+const initValidFormState: ValidFormEntry = {
+  isValidLocation: false,
+  isValidDinner: false,
+  isValidDessert: false,
+  isValidContactName: false,
+  isValidContactPhoneNumber: false,
+  isValidContactEmail: false,
+};
+
 const RegistrationForm = () => {
-  const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
+  const [state, setState] = useState(initState);
+  const [formDataState, setFormDataState] = useState(initFormDataState);
+  const [validFormState, setValidFormState] = useState(initValidFormState);
+
+  /*const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
 
   const [persons, setPersons] = useState<(IFormPerson | undefined)[]>([
     {} as IFormPerson,
@@ -74,51 +153,85 @@ const RegistrationForm = () => {
   const [alertMsg, setAlertMsg] = useState<React.ReactNode>("");
   const [alertSeverity, setAlertSeverity] = useState<any>();
   const [alertOpen, setAlertOpen] = useState(false);
+  */
 
   const addPerson = () => {
-    setPersons((formpersons) => {
-      return [...formpersons, {} as IFormPerson];
-    });
+    setFormDataState((prev) => ({
+      ...prev,
+      persons: [...prev.persons, {} as IFormPerson],
+    }));
   };
 
-  const updatePerson = (index: number, newPerson: IFormPerson) => {
-    setPersons((formpersons) => {
-      formpersons[index] = newPerson;
-      return formpersons;
+  const updatePerson = (index: number, newPerson?: IFormPerson) => {
+    setFormDataState((prev) => {
+      prev.persons[index] = newPerson;
+      return { ...prev };
     });
   };
 
   const deletePerson = (index: number) => {
-    setPersons((formpersons) => {
-      formpersons[index] = undefined;
-      return [...formpersons];
-    });
+    updatePerson(index, undefined);
   };
 
   const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(e.target.value);
+    setFormDataState((prev) => ({
+      ...prev,
+      location: e.target.value,
+    }));
   };
 
   const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDinnerRadio(e.target.value);
-    if (e.target.value !== "annet") setDinnerInput("");
+    setFormDataState((prev) => ({
+      ...prev,
+      dinner: {
+        ...prev.dinner,
+        radio: e.target.value,
+      },
+    }));
+    if (e.target.value !== "annet") {
+      setFormDataState((prev) => ({
+        ...prev,
+        dinner: {
+          ...prev.dinner,
+          input: "",
+        },
+      }));
+    }
   };
 
   const onDessertRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDessertRadio(e.target.value);
-    if (e.target.value !== "annet") setDessertInput("");
+    setFormDataState((prev) => ({
+      ...prev,
+      dessert: {
+        ...prev.dessert,
+        radio: e.target.value,
+      },
+    }));
+    if (e.target.value !== "annet") {
+      setFormDataState((prev) => ({
+        ...prev,
+        dessert: {
+          ...prev.dessert,
+          input: "",
+        },
+      }));
+    }
   };
 
   const getDinner = () => {
-    return dinnerRadio === "annet" ? dinnerInput : dinnerRadio;
+    return formDataState.dinner.radio === "annet"
+      ? formDataState.dinner.input
+      : formDataState.dinner.radio;
   };
 
   const getDessert = () => {
-    return dessertRadio === "annet" ? dessertInput : dessertRadio;
+    return formDataState.dessert.radio === "annet"
+      ? formDataState.dessert.input
+      : formDataState.dessert.radio;
   };
 
   const allIsValid = () => {
-    return (
+    /*return (
       isValidDinner &&
       isValidDessert &&
       isValidLocation &&
@@ -128,11 +241,22 @@ const RegistrationForm = () => {
       persons.every((p) => {
         return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
       })
-    );
+    );*/
+
+    for (let isValid in validFormState) {
+      if (!validFormState[isValid]) return false;
+    }
+    return formDataState.persons.every((p) => {
+      return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
+    });
   };
 
   const resetForm = () => {
-    setViewErrorTrigger(0);
+    setState(initState);
+    setValidFormState(initValidFormState);
+    setFormDataState(formDataState);
+
+    /*setViewErrorTrigger(0);
 
     setIsValidDinner(false);
     setIsValidDessert(false);
@@ -152,13 +276,19 @@ const RegistrationForm = () => {
     setPid("");
     setContactName("");
     setContactEmail("");
-    setContactPhoneNumber("");
+    setContactPhoneNumber("");*/
   };
 
   const onSuccessSubmit = () => {
-    setAlertMsg("Familie registrert!");
-    setAlertSeverity("success");
-    setAlertOpen(true);
+    setState((prev) => ({
+      ...prev,
+      alert: {
+        ...prev.alert,
+        msg: "Familie registrert!",
+        severity: "success",
+        open: true,
+      },
+    }));
     resetForm();
   };
 
