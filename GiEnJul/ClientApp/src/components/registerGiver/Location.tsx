@@ -45,7 +45,6 @@ const Location: React.FC<Props> = ({
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             type="select"
-            variant="outlined"
             fullWidth
             autoFocus
             placeholder={placeHolder}

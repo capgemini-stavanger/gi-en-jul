@@ -39,7 +39,6 @@ const FamilySize: React.FC<Props> = ({
             viewErrorTrigger={viewErrorTrigger}
             setIsValids={setIsValid}
             type="select"
-            variant="outlined"
             fullWidth
             autoFocus
             placeholder={placeHolder}

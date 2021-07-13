@@ -138,7 +138,6 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 type="select"
                 disabled={changesState.location}
-                variant="outlined"
                 fullWidth
                 label="Lokasjon*"
                 name="location-input"
@@ -167,7 +166,6 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 disabled={changesState.fullName}
                 label="Fullt navn*"
-                variant="outlined"
                 fullWidth
                 name="fullname"
                 autoComplete="name"
@@ -205,7 +203,6 @@ const SummaryRegistration: React.FC<Props> = ({
                   getValiditySetter("isNotNullEmail"),
                 ]}
                 autoComplete="email"
-                variant="outlined"
                 fullWidth
               />
             </Grid>
@@ -236,7 +233,6 @@ const SummaryRegistration: React.FC<Props> = ({
                   getValiditySetter("isNotNullPhone"),
                 ]}
                 autoComplete="tel"
-                variant="outlined"
                 fullWidth
               />
             </Grid>
@@ -254,7 +250,6 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 type="select"
                 disabled={changesState.family}
-                variant="outlined"
                 fullWidth
                 name="familyType-input"
                 value={values.maxReceivers}
