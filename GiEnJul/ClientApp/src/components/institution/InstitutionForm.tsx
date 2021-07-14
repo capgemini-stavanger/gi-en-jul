@@ -153,6 +153,7 @@ const RegistrationForm = () => {
     setFormDataState((prev) => ({
       ...prev,
       dinner: {
+        ...prev.dinner,
         input: e.target.value !== "annet" ? "" : prev.dinner.input,
         radio: e.target.value,
       },
@@ -163,6 +164,7 @@ const RegistrationForm = () => {
     setFormDataState((prev) => ({
       ...prev,
       dessert: {
+        ...prev.dessert,
         input: e.target.value !== "annet" ? "" : prev.dessert.input,
         radio: e.target.value,
       },
