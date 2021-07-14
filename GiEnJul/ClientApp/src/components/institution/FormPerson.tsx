@@ -1,10 +1,10 @@
 import {
-	capitalize,
-	Checkbox,
-	FormControlLabel,
-	Grid,
-	SvgIcon,
-	IconButton,
+  capitalize,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  SvgIcon,
+  IconButton,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
@@ -16,132 +16,164 @@ import { isNotNull } from "../InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
 
 interface PersonProps {
-	updatePerson: (newPerson: IFormPerson) => void;
-	deletePerson: () => void;
-	viewErrorTrigger: number;
-	person: IFormPerson;
+  updatePerson: (newPerson: IFormPerson) => void;
+  deletePerson: () => void;
+  viewErrorTrigger: number;
+  person: IFormPerson;
 }
 
+const initFormDataState: { [data: string]: any } = {
+  age: "",
+  gender: Gender.Unspecified,
+  wish: "",
+  ageWish: false,
+};
+
+const initValidFormState: { [valid: string]: boolean } = {
+  age: false,
+  gender: false,
+  wishInput: false,
+  wish: false,
+};
+
 const InstitutionPerson: FC<PersonProps> = ({
-	updatePerson,
-	deletePerson,
-	viewErrorTrigger,
-	person,
+  updatePerson,
+  deletePerson,
+  viewErrorTrigger,
+  person,
 }) => {
-	const [age, setAge] = useState("");
-	const [gender, setGender] = useState(Gender.Unspecified);
-	const [wish, setWish] = useState("");
-	const [isAgeWish, setIsAgeWish] = useState(false);
-	const [isValidAge, setIsValidAge] = useState(false);
-	const [isValidGender, setIsValidGender] = useState(false);
-	const [isValidWishInput, setIsValidWishInput] = useState(false);
-	const [isValidWish, setIsValidWish] = useState(false);
+  const [formDataState, setFormDataState] = useState(initFormDataState);
+  const [validFormState, setValidFormState] = useState(initValidFormState);
 
-	useEffect(() => {
-		setIsValidWish(isValidWishInput || isAgeWish);
-	}, [isValidWishInput, isAgeWish]);
+  const getFormDataSetter = (target: keyof typeof formDataState) => {
+    return (value: unknown) => {
+      setFormDataState((prev) => {
+        {
+          prev[target] = value;
+          return { ...prev };
+        }
+      });
+    };
+  };
 
-	useEffect(() => {
-		let tmpPerson = person;
-		tmpPerson.age = age;
-		tmpPerson.gender = gender;
-		tmpPerson.wish = isAgeWish ? undefined : wish;
-		tmpPerson.isValidAge = isValidAge;
-		tmpPerson.isValidGender = isValidGender;
-		tmpPerson.isValidWish = isValidWish;
-		updatePerson(tmpPerson);
-	});
+  const getValiditySetter = (target: keyof typeof validFormState) => {
+    return (isValid: boolean) => {
+      setValidFormState((prev) => {
+        {
+          prev[target] = isValid;
+          return prev;
+        }
+      });
+    };
+  };
 
-	const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		let strAge = e.target.value;
-		let intAge = parseInt(strAge);
-		if (intAge) {
-			if (intAge > 130) {
-				strAge = "130";
-			} else if (intAge < 0) {
-				strAge = "0";
-			}
-		}
-		setAge(strAge);
-	};
+  useEffect(() => {
+    getValiditySetter("wish")(
+      validFormState.wishInput || formDataState.ageWish
+    );
+  }, [validFormState.wishInput, formDataState.ageWish]);
 
-	const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		let newGender = parseInt(e.target.value);
-		if (newGender !== Gender.Unspecified) {
-			setGender(newGender);
-			setIsValidGender(true);
-		}
-	};
+  useEffect(() => {
+    let tmpPerson = person as IFormPerson;
+    tmpPerson.age = formDataState.age;
+    tmpPerson.gender = formDataState.gender;
+    tmpPerson.wish = formDataState.ageWish ? undefined : formDataState.wish;
+    tmpPerson.isValidAge = validFormState.age;
+    tmpPerson.isValidGender = validFormState.gender;
+    tmpPerson.isValidWish = validFormState.wish;
+    updatePerson(tmpPerson);
+  });
 
-	return (
-		<Grid container spacing={1} alignItems="center">
-			<Grid item>
-				<IconButton color="secondary" onClick={deletePerson}>
-					<SvgIcon component={ClearIcon} />
-				</IconButton>
-			</Grid>
-			<Grid item xs={2}>
-				<InputValidator
-					viewErrorTrigger={viewErrorTrigger}
-					validators={[isNotNull]}
-					setIsValids={setIsValidAge}
-					name="age"
-					type="number"
-					label="Alder"
-					value={age}
-					onChange={onAgeChange}
-				/>
-			</Grid>
-			<Grid item xs={2}>
-				<InputValidator
-					viewErrorTrigger={viewErrorTrigger}
-					validators={[isNotNull]}
-					setIsValids={setIsValidAge}
-					name="gender"
-					type="select"
-					label="Kjønn"
-					variant={"outlined"}
-					value={gender ? gender : ""}
-					onChange={onGenderChange}
-					options={GENDERS.map((o) => {
-						return { value: o.value, text: capitalize(o.text) };
-					})}
-					fullWidth
-				/>
-			</Grid>
-			<Grid item xs>
-				<InputValidator
-					viewErrorTrigger={viewErrorTrigger}
-					validators={[
-						(input) => {
-							return isAgeWish || isNotNull(input);
-						},
-					]}
-					setIsValids={setIsValidWishInput}
-					name="wish"
-					label="Gaveønske (husk størrelse)"
-					disabled={isAgeWish}
-					value={wish}
-					onChange={(e) => setWish(e.target.value)}
-					fullWidth
-				/>
-			</Grid>
-			<Grid item xs>
-				<FormControlLabel
-					control={
-						<Checkbox
-							checked={isAgeWish}
-							onChange={(e) => setIsAgeWish(e.target.checked)}
-							name="isAgeWish"
-							color="primary"
-						/>
-					}
-					className="my-0"
-					label="Giver kjøper alderstilpasset gave"
-				/>
-			</Grid>
-		</Grid>
-	);
+  const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strAge = e.target.value;
+    let intAge = parseInt(strAge);
+    if (intAge) {
+      if (intAge > 130) {
+        strAge = "130";
+      } else if (intAge < 0) {
+        strAge = "0";
+      }
+    }
+    getFormDataSetter("age")(strAge);
+  };
+
+  const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newGender = parseInt(e.target.value);
+    if (newGender !== Gender.Unspecified) {
+      getFormDataSetter("gender")(newGender);
+      getValiditySetter("gender")(true);
+    }
+  };
+
+  return (
+    <Grid container spacing={1} alignItems="center">
+      <Grid item>
+        <IconButton color="secondary" onClick={deletePerson}>
+          <SvgIcon component={ClearIcon} />
+        </IconButton>
+      </Grid>
+      <Grid item xs={2}>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          setIsValids={getValiditySetter("age")}
+          name="age"
+          type="number"
+          label="Alder"
+          value={formDataState.age}
+          onChange={onAgeChange}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          setIsValids={getValiditySetter("age")}
+          name="gender"
+          type="select"
+          label="Kjønn"
+          variant={"outlined"}
+          value={formDataState.gender ? formDataState.gender : ""}
+          onChange={onGenderChange}
+          options={GENDERS.map((o) => {
+            return { value: o.value, text: capitalize(o.text) };
+          })}
+          fullWidth
+        />
+      </Grid>
+      <Grid item xs>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[
+            (input) => {
+              return formDataState.ageWish || isNotNull(input);
+            },
+          ]}
+          setIsValids={getValiditySetter("wishInput")}
+          name="wish"
+          label="Gaveønske (husk størrelse)"
+          disabled={formDataState.ageWish}
+          value={formDataState.wish}
+          onChange={(e) => getFormDataSetter("wish")(e.target.value)}
+          fullWidth
+        />
+      </Grid>
+      <Grid item xs>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formDataState.ageWish}
+              onChange={(e) => getFormDataSetter("ageWish")(e.target.checked)}
+              name="isAgeWish"
+              color="primary"
+            />
+          }
+          className="my-0"
+          label="Giver kjøper alderstilpasset gave"
+        />
+      </Grid>
+    </Grid>
+  );
 };
 
 export default InstitutionPerson;
