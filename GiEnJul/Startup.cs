@@ -28,17 +28,18 @@ namespace GiEnJul
             {
                 configuration.RootPath = "ClientApp/build";
             });
-            string domain = "https://whatever/";
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
+            System.Console.WriteLine(domain);
             services.AddAuthentication()
             .AddJwtBearer(options =>
             {
-               options.Authority = domain;
-               options.Audience = domain;
+                options.Authority = domain;
+                options.Audience = domain;
             }
             );
 
         }
-        
+
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -64,6 +65,15 @@ namespace GiEnJul
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //     name: "default",
+            //     template: "{controller=Home}/{action=Index}/{id?}");
+            // });
 
             app.UseEndpoints(endpoints =>
             {
