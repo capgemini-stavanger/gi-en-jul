@@ -13,6 +13,7 @@ namespace GiEnJul.Features
         Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model);
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
         Task<List<Models.Recipient>> GetAllAsModelAsync();
+        Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -48,4 +49,11 @@ namespace GiEnJul.Features
             var allRecipients = await GetAllAsync();
             return _mapper.Map<List<Models.Recipient>>(allRecipients);
         }
-}}
+
+        public async Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey)
+        {
+            var recipient = await GetAsync(partitionKey, rowKey);
+            return _mapper.Map<Models.Recipient>(recipient);
+        }
+    }
+}

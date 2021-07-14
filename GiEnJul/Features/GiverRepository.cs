@@ -11,6 +11,7 @@ namespace GiEnJul.Features
         Task<Models.Giver> DeleteAsync(Models.Giver model);
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
         Task<IEnumerable<Models.Giver>> GetAllAsModelAsync();
+        Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -35,5 +36,11 @@ namespace GiEnJul.Features
             var allGivers = await GetAllAsync();
             return _mapper.Map<IEnumerable<Models.Giver>>(allGivers);
         }
+        public async Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey)
+        {
+            var giver = await GetAsync(partitionKey, rowKey);
+            return _mapper.Map<Models.Giver>(giver);
+        }
+        
     }
 }
