@@ -82,7 +82,7 @@ function AdminPage() {
               <Grid
                 container
                 direction="row"
-                justify="center"
+                justifyContent="center"
                 alignItems="flex-start"
               >
                 <Grid item xs={6}>

@@ -74,7 +74,6 @@ const ContactInfo: React.FC<Props> = ({
             viewErrorTrigger={state.viewErrorTrigger}
             setIsValids={getValiditySetter("isValidFullName")}
             label="Fullt navn*"
-            variant="outlined"
             margin="normal"
             fullWidth
             name="fullname"
@@ -97,7 +96,6 @@ const ContactInfo: React.FC<Props> = ({
               "Vi trenger din epost for å sende deg viktig informasjon",
             ]}
             autoComplete="email"
-            variant="outlined"
             margin="normal"
             fullWidth
           />
@@ -114,7 +112,6 @@ const ContactInfo: React.FC<Props> = ({
               "Vi trenger ditt telefonnummer for å kunne kontakte deg",
             ]}
             autoComplete="tel"
-            variant="outlined"
             margin="normal"
             fullWidth
           />

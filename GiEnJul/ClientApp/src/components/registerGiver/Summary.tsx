@@ -138,7 +138,10 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 type="select"
                 disabled={changesState.location}
+<<<<<<< HEAD
                 variant="outlined"
+=======
+>>>>>>> c473aa7daf2e29a44e366166dd3302840d80b09b
                 fullWidth
                 label="Lokasjon*"
                 name="location-input"
@@ -167,7 +170,10 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 disabled={changesState.fullName}
                 label="Fullt navn*"
+<<<<<<< HEAD
                 variant="outlined"
+=======
+>>>>>>> c473aa7daf2e29a44e366166dd3302840d80b09b
                 fullWidth
                 name="fullname"
                 autoComplete="name"
@@ -205,7 +211,10 @@ const SummaryRegistration: React.FC<Props> = ({
                   getValiditySetter("isNotNullEmail"),
                 ]}
                 autoComplete="email"
+<<<<<<< HEAD
                 variant="outlined"
+=======
+>>>>>>> c473aa7daf2e29a44e366166dd3302840d80b09b
                 fullWidth
               />
             </Grid>
@@ -236,7 +245,10 @@ const SummaryRegistration: React.FC<Props> = ({
                   getValiditySetter("isNotNullPhone"),
                 ]}
                 autoComplete="tel"
+<<<<<<< HEAD
                 variant="outlined"
+=======
+>>>>>>> c473aa7daf2e29a44e366166dd3302840d80b09b
                 fullWidth
               />
             </Grid>
@@ -254,7 +266,10 @@ const SummaryRegistration: React.FC<Props> = ({
                 viewErrorTrigger={state.viewErrorTrigger}
                 type="select"
                 disabled={changesState.family}
+<<<<<<< HEAD
                 variant="outlined"
+=======
+>>>>>>> c473aa7daf2e29a44e366166dd3302840d80b09b
                 fullWidth
                 name="familyType-input"
                 value={values.maxReceivers}

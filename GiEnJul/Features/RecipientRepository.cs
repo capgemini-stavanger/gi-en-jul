@@ -12,7 +12,7 @@ namespace GiEnJul.Features
         Task<Models.Recipient> DeleteAsync(Models.Recipient model);
         Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model);
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
-        Task<IEnumerable<Models.Recipient>> GetAllAsModelAsync();
+        Task<List<Models.Recipient>> GetAllAsModelAsync();
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -43,9 +43,9 @@ namespace GiEnJul.Features
             return _mapper.Map<List<Models.Recipient>>(recipients);
         }
 
-        public async Task<IEnumerable<Models.Recipient>> GetAllAsModelAsync()
+        public async Task<List<Models.Recipient>> GetAllAsModelAsync()
         {
             var allRecipients = await GetAllAsync();
-            return _mapper.Map<IEnumerable<Models.Recipient>>(allRecipients);
+            return _mapper.Map<List<Models.Recipient>>(allRecipients);
         }
 }}

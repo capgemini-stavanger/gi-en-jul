@@ -14,6 +14,7 @@ namespace GiEnJul.Features
         Task<TableBatchResult> DeleteBatchAsync(IEnumerable<Models.Person> models);
         Task<Person> InsertOrReplaceAsync(Models.Person model);
         Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models);
+        Task<List<Models.Person>> GetAllByRecipientId(string rowKey);
     }
 
     public class PersonRepository : GenericRepository<Person>, IPersonRepository
@@ -38,6 +39,15 @@ namespace GiEnJul.Features
         public async Task<TableBatchResult> DeleteBatchAsync(IEnumerable<Models.Person> models)
         {
             return await DeleteBatchAsync(_mapper.Map<IEnumerable<Person>>(models));
+        }
+
+        public async Task<List<Models.Person>> GetAllByRecipientId(string partitionKey)
+        {
+            var query = new TableQuery<Entities.Person>() {FilterString =
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{partitionKey}")
+            };
+            var persons = await GetAllByQueryAsync(query);
+            return _mapper.Map<List<Models.Person>>(persons);
         }
     }
 }

@@ -42,8 +42,14 @@ namespace GiEnJul.Controllers
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
-        public async Task<IEnumerable<Recipient>> GetRecipientsAsync() {
-            return await _recipientRepository.GetAllAsModelAsync();
+        public async Task<List<Recipient>> GetRecipientsAsync() {
+            var recipients = await _recipientRepository.GetAllAsModelAsync();
+            foreach (var recipient in recipients)
+            {
+                var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+                recipient.FamilyMembers = familyMembers; 
+            }
+            return recipients;
         }
     }
 }

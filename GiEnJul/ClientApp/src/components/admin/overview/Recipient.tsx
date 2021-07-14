@@ -2,9 +2,16 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import DatatableRecipient from "../common/DataTableRecipient";
+import Datatable from "../common/RecipientTable";
 import { GiverType } from "./Giver";
 
+export interface PersonType {
+  partitionKey: string;
+  rowKey: string;
+  wish: string;
+  age: Number;
+  gender: Number;
+}
 export interface RecipientType {
   contactEmail: string;
   contactFullName: string;
@@ -12,7 +19,7 @@ export interface RecipientType {
   dessert: string;
   dinner: string;
   eventName: string;
-  familyMembers: [];
+  familyMembers: PersonType[];
   hasConfirmedMatch: Boolean;
   institution: string;
   isSuggestedMatch: Boolean;
@@ -72,7 +79,7 @@ const Recipient = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <DatatableRecipient data={search(data)} />
+      <Datatable data={search(data)} />
     </Container>
   );
 };

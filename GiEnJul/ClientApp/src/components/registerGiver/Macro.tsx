@@ -21,7 +21,7 @@ const initState: { step: number; confirmationOK?: boolean } = {
   confirmationOK: undefined,
 };
 
-const SignUp = () => {
+const RegistrationMacro = () => {
   const [state, setState] = useState(initState);
   const [formDataState, setFormDataState] = useState(initFormDataState);
 
@@ -148,4 +148,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default RegistrationMacro;

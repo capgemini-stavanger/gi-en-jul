@@ -17,6 +17,15 @@ import { green, red } from "@material-ui/core/colors";
       flexBasis: "33.33%",
       flexShrink: 0,
     },
+    mediumColumn: {
+      flexBasis: "30%",
+    }, 
+    largeColumn: {
+      flexBasis: "70%",
+    },
+    smallColumn: {
+      flexBasis: "15%",
+    },
     matched: {
       color: "#fff",
       backgroundColor: green[500],
