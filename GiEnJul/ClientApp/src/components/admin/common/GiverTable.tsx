@@ -1,11 +1,9 @@
 import * as React from "react";
 import {
   Accordion,
-  AccordionActions,
   AccordionDetails,
   AccordionSummary,
   Avatar,
-  Button,
   Container,
   Divider,
   Typography,
@@ -47,10 +45,6 @@ const Datatable: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const deleteGiver = () => {
-
-  }
-
   return (
     <Container>
       {data.map((giver) => (
@@ -61,7 +55,6 @@ const Datatable: React.FC<Props> = ({ data }) => {
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-
             <Typography className={classes.heading}>{giver.fullName}</Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
@@ -87,9 +80,6 @@ const Datatable: React.FC<Props> = ({ data }) => {
               {giver.email}
             </Typography>
           </AccordionDetails>
-          {/* <AccordionActions>
-            <Button size="small" onClick={deleteGiver}> Slett giver</Button>
-          </AccordionActions> */}
         </Accordion>
       ))}
     </Container>
