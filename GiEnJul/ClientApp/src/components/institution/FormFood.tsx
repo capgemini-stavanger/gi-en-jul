@@ -14,7 +14,7 @@ import { isNotNull } from "../InputFields/Validators/Validators";
 
 interface IFormDinner {
   viewErrorTrigger: number;
-  setInput: (value: string) => void;
+  onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   input: string;
   radio: any;
   onRadioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,7 +28,7 @@ interface IFormDinner {
 
 const FormDinner: FC<IFormDinner> = ({
   viewErrorTrigger,
-  setInput,
+  onInputChange,
   input,
   radio,
   onRadioChange,
@@ -92,7 +92,7 @@ const FormDinner: FC<IFormDinner> = ({
                       return !required || radio !== "annet" || isNotNull(input);
                     },
                   ]}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={onInputChange}
                   value={input}
                   name={`${name}_input`}
                   disabled={radio !== "annet"}
