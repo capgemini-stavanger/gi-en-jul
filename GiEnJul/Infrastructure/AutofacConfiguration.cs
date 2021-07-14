@@ -14,15 +14,18 @@ namespace GiEnJul.Infrastructure
             var settings = new Settings(configuration);
             builder.Register(c => settings).As<ISettings>().InstancePerLifetimeScope();
 
+            
+            
             //var emailClient = new EmailClient(settings, env);
             //builder.Register<EmailClient>(c => emailClient).As<IEmailClient>().InstancePerLifetimeScope();
-            
+                
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
             builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
             builder.Register(c => new LoggerConfiguration()
                                 .MinimumLevel.Debug()
                                 .WriteTo.Console()
