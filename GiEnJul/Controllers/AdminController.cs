@@ -56,6 +56,7 @@ namespace GiEnJul.Controllers
         [HttpPost]
         public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey) {
             var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
+            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
             var connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
             giver.IsSuggestedMatch = true;
