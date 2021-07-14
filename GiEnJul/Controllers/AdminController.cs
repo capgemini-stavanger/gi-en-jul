@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GiEnJul.Clients;
 using GiEnJul.Models;
 namespace GiEnJul.Controllers
 {
@@ -17,8 +18,9 @@ namespace GiEnJul.Controllers
         private readonly IPersonRepository _personRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
+        private readonly IEmailClient _emailClient;
 
-        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, ILogger log, IMapper mapper)
+        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, ILogger log, IMapper mapper, IEmailClient emailClient)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -26,6 +28,7 @@ namespace GiEnJul.Controllers
             _personRepository = personRepository;
             _log = log;
             _mapper = mapper;
+            _emailClient = emailClient;
         }
         //The function below is not in use now, but should be implemented later:
         // Need to add an appropriate routing for the api call below. 
@@ -50,6 +53,12 @@ namespace GiEnJul.Controllers
                 recipient.FamilyMembers = familyMembers; 
             }
             return recipients;
+        }
+
+        [HttpGet("SendMail")]
+        public async Task SendMail()
+        {
+            await _emailClient.SendEmailAsync(("martinsommerli@hotmail.com","Martin"), "This is a test", "Body bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody body");
         }
     }
 }
