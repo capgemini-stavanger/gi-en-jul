@@ -55,10 +55,5 @@ namespace GiEnJul.Controllers
             return recipients;
         }
 
-        [HttpGet("SendMail")]
-        public async Task SendMail()
-        {
-            await _emailClient.SendEmailAsync(("martinsommerli@hotmail.com","Martin"), "This is a test", "Body bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody bodyBody body");
-        }
     }
 }

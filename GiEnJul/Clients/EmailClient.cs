@@ -1,45 +1,39 @@
 ﻿using System.Threading.Tasks;
 using GiEnJul.Infrastructure;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MimeKit;
+using Serilog;
 
 namespace GiEnJul.Clients
 {
 	public interface IEmailClient
 	{
-		Task SendEmailAsync((string mail, string name) to, string subject, string html);
+		Task SendEmailAsync(string toMail, string toName, string subject, string html);
 	}
 
 	public class EmailClient : IEmailClient
 	{
-		/*private readonly Settings _settings;
+		private MailSettings _mailSettings { get; }
 		private readonly IWebHostEnvironment _env;
+		private readonly ILogger _log;
 
-		public EmailClient(Settings settings, IWebHostEnvironment env)
-		{
-			_settings = settings;
+        public EmailClient(ISettings settings, IWebHostEnvironment env, ILogger log)
+        {
+			_mailSettings = settings.MailSettings;
 			_env = env;
-		}
-		*/
+			_log = log;
+        }
 
-		public async Task SendEmailAsync((string mail, string name) to, string subject, string body)
+        public async Task SendEmailAsync(string toMail, string toName, string subject, string body)
 		{
-			var mailSettings = new MailSettings
-			{
-				Server = "127.0.0.1", Port = 465, SenderEmail = "martinsommerli@gmail.com",
-				SenderName = "Martin Sommerli", Username = "martinsommerli@gmail.com", Password = "Mm97177092"
-			};
-
 			var message = new MimeMessage();
-			message.From.Add(new MailboxAddress(mailSettings.SenderName, mailSettings.SenderEmail));
-			message.To.Add(new MailboxAddress(to.name, to.mail));
+			message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
+			message.To.Add(new MailboxAddress(toName, toMail));
 
-			//if (_env.IsDevelopment())
-				message.Subject = "DEVELOPMENT - GIENJUL: " + subject;
-			//else
-				message.Subject = subject;
+			message.Subject = _env.IsDevelopment() ? subject : "DEVELOPMENT - " + subject;
 
 			message.Body = new TextPart("html")
 			{
@@ -50,25 +44,13 @@ namespace GiEnJul.Clients
 			{
 				client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-				//if (_env.IsDevelopment())
-					await client.ConnectAsync(mailSettings.Server, mailSettings.Port, true);
-				//else
-				//	await client.ConnectAsync(mailSettings.Server);
+				await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
 
-				await client.AuthenticateAsync(mailSettings.Username, mailSettings.Password);
+				await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
 				await client.SendAsync(message);
+				_log.Debug($"Sent mail to {toMail} with subject {subject}");
 				await client.DisconnectAsync(true);
 			}
-		}
-
-		private class MailSettings
-		{
-			public string Server { get; set; }
-			public int Port { get; set; }
-			public string SenderName { get; set; }
-			public string SenderEmail { get; set; }
-			public string Username { get; set; }
-			public string Password { get; set; }
 		}
 	}
 }

@@ -14,11 +14,6 @@ namespace GiEnJul.Infrastructure
             var settings = new Settings(configuration);
             builder.Register(c => settings).As<ISettings>().InstancePerLifetimeScope();
 
-            
-            
-            //var emailClient = new EmailClient(settings, env);
-            //builder.Register<EmailClient>(c => emailClient).As<IEmailClient>().InstancePerLifetimeScope();
-                
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
             builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
