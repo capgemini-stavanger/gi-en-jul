@@ -21,9 +21,13 @@ import useStyles from "./Styles";
 
 type Props = {
   data: GiverType[] | [];
+  handleGiverChange: (newGiverRowKey: string,
+  newGiverPartitionKey: string) => void;
 };
 
-const Datatable: React.FC<Props> = ({ data }) => {
+
+
+const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -45,11 +49,13 @@ const Datatable: React.FC<Props> = ({ data }) => {
     }
   };
 
+
   return (
     <Container>
       {data.map((giver) => (
         <Accordion
-        key={giver.partitionKey}>
+        onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
+        key={giver.rowKey}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"

@@ -21,9 +21,16 @@ import useStyles from "./Styles";
 
 type Props = {
   data: RecipientType[] | [];
+  handleRecipientChange: (
+    newRecipientRowKey: string,
+    newRecipientPartitionKey: string
+  ) => void;
 };
 
-const DatatableRecipient: React.FC<Props> = ({ data }) => {
+const DatatableRecipient: React.FC<Props> = ({
+  data,
+  handleRecipientChange,
+}) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -46,85 +53,101 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
   };
 
   const handleGender = (gender: Number, age: Number) => {
-    if (age < 18){
-      switch (gender){
+    if (age < 18) {
+      switch (gender) {
         case 0:
-        return ("Ukjent")
+          return "Ukjent";
         case 1:
-          return("Gutt")
+          return "Gutt";
         case 2:
-          return("Jente")
+          return "Jente";
         default:
       }
     } else {
-      switch (gender){
+      switch (gender) {
         case 0:
-        return ("Ukjent")
+          return "Ukjent";
         case 1:
-          return("Mann")
+          return "Mann";
         case 2:
-          return("Kvinne")
+          return "Kvinne";
         default:
       }
     }
-  }
+  };
 
   return (
     <Container>
       {data.map((recipient) => (
-        <Accordion 
-        key={recipient.partitionKey}>
+        <Accordion
+          onChange={() =>
+            handleRecipientChange(recipient.rowKey, recipient.partitionKey)
+          }
+          key={recipient.rowKey}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography className={classes.heading}>{recipient.referenceId}</Typography>
+            <Typography className={classes.heading}>
+              {recipient.referenceId}
+            </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
-              <Avatar className={handleMatched(recipient.hasConfirmedMatch)}>
-                {recipient.hasConfirmedMatch ? (
-                  <CheckRounded style={{ color: "#FFFFFF" }} />
-                ) : (
-                  <CloseRounded style={{ color: "#F36161" }} />
-                )}
-              </Avatar>
+            <Avatar className={handleMatched(recipient.hasConfirmedMatch)}>
+              {recipient.hasConfirmedMatch ? (
+                <CheckRounded style={{ color: "#FFFFFF" }} />
+              ) : (
+                <CloseRounded style={{ color: "#F36161" }} />
+              )}
+            </Avatar>
           </AccordionSummary>
           <Divider />
-            <AccordionDetails className={classes.largeColumn}>
-              <Typography>Ønsker:</Typography></AccordionDetails>
-            {recipient.familyMembers.map((person) => (
-              <div
-              key={person.rowKey}>
-              <AccordionDetails >
-              <Typography className={classes.smallColumn}> 
-                {handleGender(person.gender, person.age)} 
-              </Typography>
-              <Typography className={classes.smallColumn}> {person.age} år </Typography>
-              <Typography className={classes.largeColumn}> {person.wish} </Typography>
-              </AccordionDetails>
-              <Divider/>
-              </div>
-            ))}
-            <AccordionDetails>
-              <Typography className={classes.mediumColumn}>Matønsker: </Typography>
-              <Typography className={classes.largeColumn}>{recipient.dinner}, {recipient.dessert} {recipient.note}</Typography>
-            </AccordionDetails>
-            <Divider/>
+          <AccordionDetails className={classes.largeColumn}>
+            <Typography>Ønsker:</Typography>
+          </AccordionDetails>
+          {recipient.familyMembers.map((person) => (
+            <div key={person.rowKey}>
               <AccordionDetails>
-                <Typography className={classes.mediumColumn}>
-                Kontaktperson:
+                <Typography className={classes.smallColumn}>
+                  {handleGender(person.gender, person.age)}
+                </Typography>
+                <Typography className={classes.smallColumn}>
+                  {" "}
+                  {person.age} år{" "}
                 </Typography>
                 <Typography className={classes.largeColumn}>
-                {recipient.contactFullName}
-                <br/>
-                <Phone /> {recipient.contactPhoneNumber}
-                <br/>
-                <Mail /> {recipient.contactEmail}
+                  {" "}
+                  {person.wish}{" "}
                 </Typography>
               </AccordionDetails>
+              <Divider />
+            </div>
+          ))}
+          <AccordionDetails>
+            <Typography className={classes.mediumColumn}>
+              Matønsker:{" "}
+            </Typography>
+            <Typography className={classes.largeColumn}>
+              {recipient.dinner}, {recipient.dessert} {recipient.note}
+            </Typography>
+          </AccordionDetails>
+          <Divider />
+          <AccordionDetails>
+            <Typography className={classes.mediumColumn}>
+              Kontaktperson:
+            </Typography>
+            <Typography className={classes.largeColumn}>
+              {recipient.contactFullName}
+              <br />
+              <Phone /> {recipient.contactPhoneNumber}
+              <br />
+              <Mail /> {recipient.contactEmail}
+            </Typography>
+          </AccordionDetails>
         </Accordion>
       ))}
     </Container>

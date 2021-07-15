@@ -3,6 +3,7 @@ import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Datatable from "../common/GiverTable";
+import { SelectedConnectionType } from "./OverviewMacro";
 
 export interface GiverType {
   email: string;
@@ -18,7 +19,14 @@ export interface GiverType {
   phoneNumber: string;
 }
 
-const Giver = () => {
+type Props = {
+  handleGiverChange: (
+    newGiverRowKey: string,
+    newGiverPartitionKey: string
+  ) => void;
+};
+
+const Giver: React.FC<Props> = ({ handleGiverChange }) => {
   const [data, setData] = useState<GiverType[] | []>([]);
   const [q, setQ] = useState("");
 
@@ -64,7 +72,10 @@ const Giver = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <Datatable data={search(data)}></Datatable>
+      <Datatable
+        data={search(data)}
+        handleGiverChange={handleGiverChange}
+      ></Datatable>
     </Container>
   );
 };

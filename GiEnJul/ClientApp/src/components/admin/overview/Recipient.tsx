@@ -12,6 +12,13 @@ export interface PersonType {
   age: Number;
   gender: Number;
 }
+
+type Props = {
+  handleRecipientChange: (
+    newRecipientRowKey: string,
+    newRecipientPartitionKey: string
+  ) => void;
+};
 export interface RecipientType {
   contactEmail: string;
   contactFullName: string;
@@ -31,7 +38,7 @@ export interface RecipientType {
   rowKey: string;
 }
 
-const Recipient = () => {
+const Recipient: React.FC<Props> = ({ handleRecipientChange }) => {
   const [data, setData] = useState<RecipientType[] | []>([]);
   const [q, setQ] = useState("");
 
@@ -79,7 +86,10 @@ const Recipient = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <Datatable data={search(data)} />
+      <Datatable
+        data={search(data)}
+        handleRecipientChange={handleRecipientChange}
+      />
     </Container>
   );
 };
