@@ -27,8 +27,8 @@ import { green, red } from "@material-ui/core/colors";
       flexBasis: "15%",
     },
     matched: {
-      color: "#fff",
-      backgroundColor: green[500],
+      color: "#FFFFFF",
+      backgroundColor: "#FFFFFF",
     },
     notMatched: {
       color: "#FFFFFF",

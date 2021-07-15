@@ -97,11 +97,11 @@ const DatatableRecipient: React.FC<Props> = ({
               <Group />
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
-            <Avatar className={handleMatched(recipient.hasConfirmedMatch)}>
-              {recipient.hasConfirmedMatch ? (
-                <CheckRounded style={{ color: "#FFFFFF" }} />
+            <Avatar className={handleMatched(recipient.isSuggestedMatch)}>
+              {recipient.isSuggestedMatch ? (
+                <CheckRounded style={{ color: "#49a591" }} />
               ) : (
-                <CloseRounded style={{ color: "#F36161" }} />
+                <CloseRounded style={{ color: "#ed8175" }} />
               )}
             </Avatar>
           </AccordionSummary>

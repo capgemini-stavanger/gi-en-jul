@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
-import { Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
+import usePost from "../../../hooks/usePost";
 
 export interface SelectedConnectionType {
   giverRowKey: string;
   giverPartitionKey: string;
   recipientRowKey: string;
   recipientPartitionKey: string;
-};
+}
 
-function OverviewMacro() {
+function OverviewMacro () {
   const [selectedConnection, setSelectedConnection] =
     useState<SelectedConnectionType>({
       giverRowKey: "",
@@ -44,8 +45,33 @@ function OverviewMacro() {
     }));
   };
 
+  const connectGiverRecipient = async () => {
+    console.log(selectedConnection.giverPartitionKey)
+    await fetch("api/admin", {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        giverRowKey: selectedConnection.giverRowKey,
+        giverPartitionKey: selectedConnection.recipientPartitionKey,
+        recipientRowKey: selectedConnection.recipientRowKey,
+        recipientPartitionKey: selectedConnection.recipientPartitionKey,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 201) {
+        }
+      })
+      .catch((errorStack) => {
+        console.log(errorStack);
+      });
+  };
+
   return (
-    <>{console.log(selectedConnection)}
+    <>
+      {console.log(selectedConnection)}
+      <Button onClick={connectGiverRecipient}>Koble sammen</Button>
       <Grid
         container
         direction="row"
@@ -56,13 +82,13 @@ function OverviewMacro() {
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <Giver handleGiverChange={handleGiverChange}/>
+          <Giver handleGiverChange={handleGiverChange} />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h4" align="center">
             Familier
           </Typography>
-          <Recipient handleRecipientChange={handleRecipientChange}/>
+          <Recipient handleRecipientChange={handleRecipientChange} />
         </Grid>
       </Grid>
     </>

@@ -5,6 +5,8 @@ using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Models;
+using GiEnJul.Dtos;
+
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
@@ -44,25 +46,27 @@ namespace GiEnJul.Controllers
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
-        public async Task<List<Recipient>> GetRecipientsAsync() {
+        public async Task<List<Recipient>> GetRecipientsAsync()
+        {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
             foreach (var recipient in recipients)
             {
                 var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-                recipient.FamilyMembers = familyMembers; 
+                recipient.FamilyMembers = familyMembers;
             }
             return recipients;
         }
         [HttpPost]
-        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey) {
-            var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
+        public async Task<ActionResult> PostConnectionAsyc([FromBody] PostConnectionDto connectionDto)
+        {
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
             var connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
             giver.IsSuggestedMatch = true;
-            giver.MatchedRecipient = recipientRowKey;
+            giver.MatchedRecipient = connectionDto.RecipientRowKey;
             recipient.IsSuggestedMatch = true;
-            recipient.MatchedGiver = giverRowKey;
+            recipient.MatchedGiver = connectionDto.GiverRowKey;
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
