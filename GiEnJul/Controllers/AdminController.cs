@@ -41,7 +41,6 @@ namespace GiEnJul.Controllers
         // [Authorize] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
-            System.Console.WriteLine("Im in");
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
