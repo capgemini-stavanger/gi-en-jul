@@ -33,8 +33,6 @@ namespace GiEnJul
                 configuration.RootPath = "ClientApp/build";
             });
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
-            string audience = $"https://{Configuration[(_env.IsDevelopment()) ? "Auth0:LocalAudience" : "Auth0:AzureAudience"]}/";
-            System.Console.WriteLine(audience);
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -42,8 +40,9 @@ namespace GiEnJul
             })
             .AddJwtBearer(options =>
             {
+                var section = Configuration.GetSection("Auth0");
                 options.Authority = domain;
-                options.Audience = audience;
+                options.Audience = section.GetValue<string>(_env.IsDevelopment() ? "LocalAudience" : "AzureAudience");
             }
             );
             services.AddAuthorization(options =>
