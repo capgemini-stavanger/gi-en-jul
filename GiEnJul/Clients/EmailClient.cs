@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GiEnJul.Infrastructure;
 using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using MimeKit;
@@ -9,7 +8,7 @@ using Serilog;
 
 namespace GiEnJul.Clients
 {
-	public interface IEmailClient
+    public interface IEmailClient
 	{
 		Task SendEmailAsync(string toMail, string toName, string subject, string html);
 	}
