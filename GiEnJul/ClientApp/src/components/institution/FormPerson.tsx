@@ -48,10 +48,8 @@ const InstitutionPerson: FC<PersonProps> = ({
   const getFormDataSetter = (target: keyof typeof formDataState) => {
     return (value: unknown) => {
       setFormDataState((prev) => {
-        {
-          prev[target] = value;
-          return { ...prev };
-        }
+        prev[target] = value;
+        return { ...prev };
       });
     };
   };
@@ -59,10 +57,8 @@ const InstitutionPerson: FC<PersonProps> = ({
   const getValiditySetter = (target: keyof typeof validFormState) => {
     return (isValid: boolean) => {
       setValidFormState((prev) => {
-        {
-          prev[target] = isValid;
-          return prev;
-        }
+        prev[target] = isValid;
+        return prev;
       });
     };
   };
