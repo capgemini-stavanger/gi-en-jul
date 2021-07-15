@@ -33,7 +33,7 @@ namespace GiEnJul
                 configuration.RootPath = "ClientApp/build";
             });
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
-            string audience = (_env.IsDevelopment()) ? $"https://{Configuration["Auth0:LocalAudience"]}/" : $"https://{Configuration["Auth0:AzureAudience"]}/";
+            string audience = $"https://{Configuration[(_env.IsDevelopment()) ? "Auth0:LocalAudience" : "Auth0:AzureAudience"]}/";
             System.Console.WriteLine(audience);
             services.AddAuthentication(options =>
             {
