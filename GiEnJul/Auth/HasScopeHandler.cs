@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-namespace GiEnJul
+namespace GiEnJul.Auth
 {
     public class HasScopeHandler : AuthorizationHandler<HasScopeRequirement>
     {

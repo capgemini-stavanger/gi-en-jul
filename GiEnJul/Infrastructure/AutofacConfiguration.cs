@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using GiEnJul.Features;
+using GiEnJul.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Serilog;

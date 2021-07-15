@@ -1,7 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Authorization;
 
-namespace GiEnJul
+namespace GiEnJul.Auth
 {
     public class HasScopeRequirement : IAuthorizationRequirement
     {

@@ -1,5 +1,6 @@
 using Autofac;
 using GiEnJul.Infrastructure;
+using GiEnJul.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
