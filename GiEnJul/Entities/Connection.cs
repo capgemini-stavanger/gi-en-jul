@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Entities
+﻿using GiEnJul.Exceptions;
+
+namespace GiEnJul.Entities
 {
     public class Connection : EntityBase
     {
@@ -10,7 +12,7 @@
         public Connection(Giver giver, Recipient recipient)
         { 
             if(giver.PartitionKey != recipient.PartitionKey){
-                throw new System.Exception();
+                throw new InvalidEventException("Locations/events must match for giver and recipient");
             }
             RowKey = $"{recipient.RowKey}_{giver.RowKey}"; 
             PartitionKey = giver.PartitionKey;
