@@ -32,7 +32,7 @@ namespace GiEnJul.Clients
 			message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
 			message.To.Add(new MailboxAddress(toName, toMail));
 
-			message.Subject = _env.IsDevelopment() ? subject : "DEVELOPMENT - " + subject;
+			message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + subject : subject;
 
 			message.Body = new TextPart("html")
 			{
