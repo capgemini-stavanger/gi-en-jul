@@ -1,5 +1,7 @@
 using Autofac;
 using GiEnJul.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -30,14 +32,22 @@ namespace GiEnJul
             });
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
             System.Console.WriteLine(domain);
-            services.AddAuthentication()
+            System.Console.WriteLine($"{Configuration["Auth0:Audience"]}");
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(options =>
             {
                 options.Authority = domain;
-                options.Audience = domain;
+                options.Audience = $"{Configuration["Auth0:Audience"]}";
             }
             );
-
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("read:givers", policy => policy.Requirements.Add(new HasScopeRequirement("read:givers", domain)));
+            });
         }
 
 

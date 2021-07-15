@@ -5,6 +5,8 @@ using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Models;
+using Microsoft.AspNetCore.Authorization;
+
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
@@ -36,18 +38,21 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
+        [Authorize]
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
+            System.Console.WriteLine("Im in");
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
-        public async Task<List<Recipient>> GetRecipientsAsync() {
+        public async Task<List<Recipient>> GetRecipientsAsync()
+        {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
             foreach (var recipient in recipients)
             {
                 var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-                recipient.FamilyMembers = familyMembers; 
+                recipient.FamilyMembers = familyMembers;
             }
             return recipients;
         }
