@@ -29,7 +29,7 @@ namespace GiEnJul.Clients
 			var mailSettings = new MailSettings
 			{
 				Server = "127.0.0.1", Port = 465, SenderEmail = "martinsommerli@gmail.com",
-				SenderName = "Martin Sommerli", Username = "martinsommerli@gmail.com", Password = "Mm97177092"
+				SenderName = "Martin Sommerli", Username = "martinsommerli@gmail.com", Password = ""
 			};
 
 			var message = new MimeMessage();
