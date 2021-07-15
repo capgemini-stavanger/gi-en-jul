@@ -15,15 +15,17 @@ namespace GiEnJul.Controllers
         private readonly IGiverRepository _giverRepository;
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IConnectionRepository _connectionRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
 
-        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, ILogger log, IMapper mapper)
+        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, IConnectionRepository connectionRepository, ILogger log, IMapper mapper)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
+            _connectionRepository = connectionRepository;
             _log = log;
             _mapper = mapper;
         }
@@ -50,6 +52,34 @@ namespace GiEnJul.Controllers
                 recipient.FamilyMembers = familyMembers; 
             }
             return recipients;
+        }
+        [HttpPost]
+        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey) {
+            var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
+            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+            var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
+            var connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            giver.IsSuggestedMatch = true;
+            giver.MatchedRecipient = recipientRowKey;
+            recipient.IsSuggestedMatch = true;
+            recipient.MatchedGiver = giverRowKey;
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+            }
+            catch (System.Exception e)
+            {
+                await _connectionRepository.DeleteConnectionAsync(connection);
+                giver.IsSuggestedMatch = false;
+                giver.MatchedRecipient = "";
+                recipient.IsSuggestedMatch = false;
+                recipient.MatchedGiver = "";
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                throw e;
+            }
+            return Ok();
         }
     }
 }
