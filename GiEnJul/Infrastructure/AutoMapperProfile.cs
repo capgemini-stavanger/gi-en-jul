@@ -31,9 +31,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.MatchedGiver, act => act.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
-                .ConstructUsing(x => new Entities.Recipient(x.Location, x.EventName))
-                .ForMember(dest => dest.RowKey, act => act.Ignore())
-                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
+                .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
+                .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
@@ -50,9 +49,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.MatchedRecipient, act => act.Ignore());
 
             CreateMap<Models.Giver, Entities.Giver>()
-                .ConstructUsing(x => new Entities.Giver(x.Location, x.EventName))
-                .ForMember(x => x.PartitionKey, opt => opt.Ignore())
-                .ForMember(x => x.RowKey, opt => opt.Ignore())
+                .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
+                .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
 

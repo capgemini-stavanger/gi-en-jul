@@ -2,7 +2,7 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import DatatableRecipient from "../common/DataTableRecipient";
+import Datatable from "../common/RecipientTable";
 import { GiverType } from "./Giver";
 
 export interface PersonType {
@@ -79,7 +79,7 @@ const Recipient = () => {
           ></TextField>
         </Grid>
       </Grid>
-      <DatatableRecipient data={search(data)} />
+      <Datatable data={search(data)} />
     </Container>
   );
 };
