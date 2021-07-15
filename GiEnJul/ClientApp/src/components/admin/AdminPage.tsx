@@ -2,7 +2,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { Grid, Tab, Typography } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
 import LogOutButton from "../login/LogOutButton";
 import Completed from "./connections/Completed";
@@ -14,10 +14,15 @@ function AdminPage() {
   const [userAccessToken, setUserAccessToken] = useState<string>("");
   const [step, setStep] = useState<string>("1");
 
-  (async () => {
+  async function getUserAccessToken(): Promise<string> {
     const accessToken = await getAccessTokenSilently();
-    setUserAccessToken(accessToken);
-  })();
+    return accessToken;
+  }
+  useEffect(() => {
+    getUserAccessToken().then((resp: string) => {
+      setUserAccessToken(resp);
+    });
+  });
   console.log(userAccessToken);
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
