@@ -12,13 +12,15 @@ namespace GiEnJul
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; private set; }
+        private readonly IWebHostEnvironment _env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -31,8 +33,8 @@ namespace GiEnJul
                 configuration.RootPath = "ClientApp/build";
             });
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
-            System.Console.WriteLine(domain);
-            System.Console.WriteLine($"{Configuration["Auth0:Audience"]}");
+            string audience = (_env.IsDevelopment()) ? $"https://{Configuration["Auth0:LocalAudience"]}/" : $"https://{Configuration["Auth0:AzureAudience"]}/";
+            System.Console.WriteLine(audience);
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,7 +43,7 @@ namespace GiEnJul
             .AddJwtBearer(options =>
             {
                 options.Authority = domain;
-                options.Audience = $"{Configuration["Auth0:Audience"]}";
+                options.Audience = audience;
             }
             );
             services.AddAuthorization(options =>
@@ -77,13 +79,6 @@ namespace GiEnJul
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // app.UseMvc(routes =>
-            // {
-            //     routes.MapRoute(
-            //     name: "default",
-            //     template: "{controller=Home}/{action=Index}/{id?}");
-            // });
 
             app.UseEndpoints(endpoints =>
             {

@@ -38,7 +38,7 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        [Authorize]
+        // [Authorize] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             System.Console.WriteLine("Im in");
