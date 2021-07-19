@@ -41,11 +41,16 @@ namespace GiEnJul.Clients
 
             using (var client = new SmtpClient())
             {
-                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                if (_env.IsDevelopment())
+                {
+                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
+                }
+                else
+                {
+                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
+                    await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
+                }
 
-                await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
-
-                await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
                 await client.SendAsync(message);
                 _log.Debug($"Sent mail to {toMail} with subject {subject}");
                 await client.DisconnectAsync(true);
