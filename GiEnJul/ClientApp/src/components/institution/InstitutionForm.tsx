@@ -1,8 +1,16 @@
+import {
+  Button,
+  Grid,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import * as React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
-import Locations from "./InstitutionLocations";
-import FormPerson from "./FormPerson";
-import IFormPerson from "./IFormPerson";
+import { DESSERTS } from "../../common/constants/Desserts";
+import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import {
@@ -10,18 +18,15 @@ import {
   isNotNull,
   isPhoneNumber,
 } from "../InputFields/Validators/Validators";
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import FormFood from "./FormFood";
-import { DINNERS } from "../../common/constants/Dinners";
-import { DESSERTS } from "../../common/constants/Desserts";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import FormPerson from "./FormPerson";
+import IFormPerson from "./IFormPerson";
+import Locations from "./InstitutionLocations";
 
 type PersonType = {
   Wish?: string;
-  Age?: number;
-  Gender?: Gender;
-  Family?: string;
+  Age: number;
+  Gender: Gender;
 };
 
 type submittype = {
@@ -38,163 +43,276 @@ type submittype = {
   FamilyMembers?: PersonType[];
 };
 
+interface IFoodFormData {
+  radio: string;
+  input: string;
+}
+
+const initFoodFormData: IFoodFormData = {
+  radio: "",
+  input: "",
+};
+
+interface IContact {
+  name: string;
+  phoneNumber: string;
+  email: string;
+}
+
+const initState: {
+  viewErrorTrigger: number;
+  alert: {
+    isLoading: boolean;
+    msg: React.ReactNode;
+    severity?: "error" | "info" | "success" | "warning";
+    open: boolean;
+  };
+} = {
+  viewErrorTrigger: 0,
+  alert: {
+    isLoading: false,
+    msg: "",
+    severity: undefined,
+    open: false,
+  },
+};
+
+const initFormDataState: {
+  persons: (IFormPerson | undefined)[];
+  location: string;
+  dinner: IFoodFormData;
+  dessert: IFoodFormData;
+  specialNeeds: string;
+  pid: string;
+  contact: IContact;
+} = {
+  persons: [],
+  location: "",
+  dinner: initFoodFormData,
+  dessert: initFoodFormData,
+  specialNeeds: "",
+  pid: "",
+  contact: {
+    name: "",
+    phoneNumber: "",
+    email: "",
+  },
+};
+
+type ValidFormEntry = {
+  [valid: string]: boolean;
+};
+
+const initValidFormState: ValidFormEntry = {
+  location: false,
+  dinner: false,
+  dessert: false,
+  contactName: false,
+  contactPhoneNumber: false,
+  contactEmail: false,
+};
+
 const RegistrationForm = () => {
-  const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
-
-  const [persons, setPersons] = useState<(IFormPerson | undefined)[]>([
-    {} as IFormPerson,
-  ]);
-
-  const [location, setLocation] = useState("");
-  const [isValidLocation, setIsValidLocation] = useState(false);
-
-  const [dinnerRadio, setDinnerRadio] = useState("");
-  const [dinnerInput, setDinnerInput] = useState("");
-  const [isValidDinner, setIsValidDinner] = useState(false);
-
-  const [dessertRadio, setDessertRadio] = useState("");
-  const [dessertInput, setDessertInput] = useState("");
-  const [isValidDessert, setIsValidDessert] = useState(false);
-
-  const [specialNeeds, setSpecialNeeds] = useState("");
-
-  const [pid, setPid] = useState("");
-
-  const [contactName, setContactName] = useState("");
-  const [isValidContactName, setIsValidContactName] = useState(false);
-
-  const [contactPhoneNumber, setContactPhoneNumber] = useState("");
-  const [isValidContactPhoneNumber, setIsValidContactPhoneNumber] =
-    useState(false);
-
-  const [contactEmail, setContactEmail] = useState("");
-  const [isValidContactEmail, setIsValidContactEmail] = useState(false);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [alertMsg, setAlertMsg] = useState<React.ReactNode>("");
-  const [alertSeverity, setAlertSeverity] = useState<any>();
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [state, setState] = useState(initState);
+  const [formDataState, setFormDataState] = useState(initFormDataState);
+  const [validFormState, setValidFormState] = useState(initValidFormState);
 
   const addPerson = () => {
-    setPersons((formpersons) => {
-      return [...formpersons, {} as IFormPerson];
-    });
+    setFormDataState((prev) => ({
+      ...prev,
+      persons: [...prev.persons, {} as IFormPerson],
+    }));
   };
 
-  const updatePerson = (index: number, newPerson: IFormPerson) => {
-    setPersons((formpersons) => {
-      formpersons[index] = newPerson;
-      return formpersons;
+  const updatePerson = (index: number, newPerson?: IFormPerson) => {
+    setFormDataState((prev) => {
+      prev.persons[index] = newPerson;
+      return prev;
     });
   };
 
   const deletePerson = (index: number) => {
-    setPersons((formpersons) => {
-      formpersons[index] = undefined;
-      return [...formpersons];
+    setFormDataState((prev) => {
+      prev.persons[index] = undefined;
+      return { ...prev };
     });
   };
 
+  useEffect(() => {
+    addPerson();
+  }, []);
+
   const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(e.target.value);
+    setFormDataState((prev) => ({
+      ...prev,
+      location: e.target.value,
+    }));
   };
 
   const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDinnerRadio(e.target.value);
-    if (e.target.value !== "annet") setDinnerInput("");
+    setFormDataState((prev) => ({
+      ...prev,
+      dinner: {
+        ...prev.dinner,
+        input: e.target.value !== "annet" ? "" : prev.dinner.input,
+        radio: e.target.value,
+      },
+    }));
   };
 
   const onDessertRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDessertRadio(e.target.value);
-    if (e.target.value !== "annet") setDessertInput("");
+    setFormDataState((prev) => ({
+      ...prev,
+      dessert: {
+        ...prev.dessert,
+        input: e.target.value !== "annet" ? "" : prev.dessert.input,
+        radio: e.target.value,
+      },
+    }));
+  };
+
+  const onDinnerInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      dinner: {
+        ...prev.dinner,
+        input: e.target.value,
+      },
+    }));
+  };
+
+  const onDessertInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      dessert: {
+        ...prev.dessert,
+        input: e.target.value,
+      },
+    }));
+  };
+
+  const onSpecialNeedsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      specialNeeds: e.target.value,
+    }));
+  };
+
+  const onPidChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormDataState((prev) => ({
+      ...prev,
+      pid: e.target.value,
+    }));
+
+  const getOnContactChange =
+    (attr: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        contact: {
+          ...prev.contact,
+          [attr]: e.target.value,
+        },
+      }));
+    };
+
+  const getValiditySetter = (target: string) => (isValid: boolean) => {
+    setValidFormState((prev) => {
+      {
+        prev[target] = isValid;
+        return prev;
+      }
+    });
+  };
+
+  const setAlert = (
+    open?: boolean,
+    message?: React.ReactNode,
+    severity?: "error" | "info" | "success" | "warning"
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      alert: {
+        ...prev.alert,
+        msg: message !== undefined ? message : prev.alert.msg,
+        severity: severity !== undefined ? severity : prev.alert.severity,
+        open: open !== undefined ? open : prev.alert.open,
+      },
+    }));
   };
 
   const getDinner = () => {
-    return dinnerRadio === "annet" ? dinnerInput : dinnerRadio;
+    return formDataState.dinner.radio === "annet"
+      ? formDataState.dinner.input
+      : formDataState.dinner.radio;
   };
 
   const getDessert = () => {
-    return dessertRadio === "annet" ? dessertInput : dessertRadio;
+    return formDataState.dessert.radio === "annet"
+      ? formDataState.dessert.input
+      : formDataState.dessert.radio;
   };
 
   const allIsValid = () => {
-    return (
-      isValidDinner &&
-      isValidDessert &&
-      isValidLocation &&
-      isValidContactName &&
-      isValidContactPhoneNumber &&
-      isValidContactEmail &&
-      persons.every((p) => {
-        return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
-      })
-    );
+    for (let isValid in validFormState) {
+      if (!validFormState[isValid]) return false;
+    }
+    return formDataState.persons.every((p) => {
+      return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
+    });
   };
 
   const resetForm = () => {
-    setViewErrorTrigger(0);
-
-    setIsValidDinner(false);
-    setIsValidDessert(false);
-    setIsValidLocation(false);
-    setIsValidContactName(false);
-    setIsValidContactPhoneNumber(false);
-    setIsValidContactEmail(false);
-
-    setPersons([]);
+    setValidFormState(initValidFormState);
+    setFormDataState(initFormDataState);
     addPerson();
-    setLocation("");
-    setDinnerRadio("");
-    setDinnerInput("");
-    setDessertRadio("");
-    setDessertInput("");
-    setSpecialNeeds("");
-    setPid("");
-    setContactName("");
-    setContactEmail("");
-    setContactPhoneNumber("");
   };
 
   const onSuccessSubmit = () => {
-    setAlertMsg("Familie registrert!");
-    setAlertSeverity("success");
-    setAlertOpen(true);
+    setAlert(true, "Familie registrert!", "success");
     resetForm();
   };
 
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
     if (!allIsValid()) {
-      setViewErrorTrigger((v) => v + 1);
+      setState((prev) => ({
+        ...prev,
+        viewErrorTrigger: prev.viewErrorTrigger + 1,
+      }));
       return;
     }
 
     let personsList = Array<PersonType>();
-    persons.forEach((p) => {
-      if (!p) return;
-      const p1: PersonType = {
-        Wish: p.wish,
-        Age: parseInt(p.age),
-        Gender: p.gender,
+    formDataState.persons.forEach((person) => {
+      if (!person) return;
+      const person1: PersonType = {
+        Wish: person.wish,
+        Age: parseInt(person.age),
+        Gender: person.gender,
       };
-      personsList.push(p1);
+      personsList.push(person1);
     });
 
     let submit: submittype = {
       Dinner: getDinner(),
       Dessert: getDessert(),
-      Note: specialNeeds,
+      Note: formDataState.specialNeeds,
       Event: "JUL2021",
-      Location: location,
-      ContactFullName: contactName,
-      ContactEmail: contactEmail,
-      ContactPhoneNumber: contactPhoneNumber,
+      Location: formDataState.location,
+      ContactFullName: formDataState.contact.name,
+      ContactEmail: formDataState.contact.email,
+      ContactPhoneNumber: formDataState.contact.phoneNumber,
       Institution: "NAV",
-      ReferenceId: pid,
+      ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
 
-    setIsLoading(true);
+    setState((prev) => ({
+      ...prev,
+      alert: { ...prev.alert, isLoading: true },
+    }));
+
+    let goodFetch = false;
     await fetch("/api/recipient", {
       method: "POST",
       headers: {
@@ -204,39 +322,44 @@ const RegistrationForm = () => {
     })
       .then((response) => {
         if (response.status === 200) {
-          setIsLoading(false);
-          setTimeout(onSuccessSubmit, 10);
-          return;
+          goodFetch = true;
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
-    setIsLoading(false);
-    setTimeout(() => {
-      setAlertMsg("En feil oppsto. Vennligst prøv på nytt.");
-      setAlertSeverity("error");
-      setAlertOpen(true);
-    }, 10);
+
+    setState((prev) => ({
+      ...prev,
+      alert: { ...prev.alert, isLoading: false },
+    }));
+
+    if (goodFetch) {
+      setTimeout(onSuccessSubmit, 10);
+    } else {
+      setTimeout(() => {
+        setAlert(true, "En feil oppsto. Vennligst prøv på nytt.", "error");
+      }, 10);
+    }
   };
 
   const handleAlertClose = (
     e: React.SyntheticEvent | React.MouseEvent,
     reason?: string
   ) => {
-    setAlertOpen(false);
+    setAlert(false);
   };
 
   return (
     <>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={alertOpen}
+        open={state.alert.open}
         autoHideDuration={6000}
         onClose={handleAlertClose}
       >
-        <Alert severity={alertSeverity} onClose={handleAlertClose}>
-          {alertMsg}
+        <Alert severity={state.alert.severity} onClose={handleAlertClose}>
+          {state.alert.msg}
         </Alert>
       </Snackbar>
 
@@ -244,10 +367,10 @@ const RegistrationForm = () => {
         <Grid container spacing={4} direction="column">
           <Grid item>
             <Locations
-              value={location}
+              value={formDataState.location}
               onChange={onLocationChange}
-              viewErrorTrigger={viewErrorTrigger}
-              setIsValidLocation={setIsValidLocation}
+              viewErrorTrigger={state.viewErrorTrigger}
+              setIsValidLocation={getValiditySetter("location")}
               include_header
             />
           </Grid>
@@ -257,13 +380,13 @@ const RegistrationForm = () => {
                 <Typography variant="h5">Familie</Typography>
               </Grid>
               <Grid item>
-                {persons.map((p, i) => {
+                {formDataState.persons.map((person, i) => {
                   return (
-                    p && (
+                    person && (
                       <FormPerson
                         key={"person" + i}
-                        person={p}
-                        viewErrorTrigger={viewErrorTrigger}
+                        person={person}
+                        viewErrorTrigger={state.viewErrorTrigger}
                         updatePerson={(newPerson: IFormPerson) =>
                           updatePerson(i, newPerson)
                         }
@@ -303,39 +426,39 @@ const RegistrationForm = () => {
               </Grid>
               <Grid item>
                 <FormFood
-                  viewErrorTrigger={viewErrorTrigger}
-                  setInput={setDinnerInput}
-                  input={dinnerInput}
-                  radio={dinnerRadio}
+                  viewErrorTrigger={state.viewErrorTrigger}
+                  onInputChange={onDinnerInputChange}
+                  input={formDataState.dinner.input}
+                  radio={formDataState.dinner.radio}
                   onRadioChange={onDinnerRadioChange}
                   foods={DINNERS}
                   required
                   header={"Middag"}
                   inputLabel="Annen middag"
-                  setIsValid={setIsValidDinner}
+                  setIsValid={getValiditySetter("dinner")}
                   name="dinner"
                 />
               </Grid>
               <Grid item>
                 <FormFood
-                  viewErrorTrigger={viewErrorTrigger}
-                  setInput={setDessertInput}
-                  input={dessertInput}
-                  radio={dessertRadio}
+                  viewErrorTrigger={state.viewErrorTrigger}
+                  onInputChange={onDessertInputChange}
+                  input={formDataState.dessert.input}
+                  radio={formDataState.dessert.radio}
                   onRadioChange={onDessertRadioChange}
                   foods={DESSERTS}
                   required
                   header={"Dessert"}
                   inputLabel="Annen dessert"
-                  setIsValid={setIsValidDessert}
+                  setIsValid={getValiditySetter("dessert")}
                   name="dessert"
                 />
               </Grid>
               <Grid item>
                 <TextField
                   variant="outlined"
-                  value={specialNeeds}
-                  onChange={(e) => setSpecialNeeds(e.target.value)}
+                  value={formDataState.specialNeeds}
+                  onChange={onSpecialNeedsChange}
                   type="textarea"
                   fullWidth
                   label="Spesielle behov"
@@ -350,8 +473,8 @@ const RegistrationForm = () => {
             <Typography variant="h5">ID</Typography>
             <TextField
               variant="outlined"
-              onChange={(e) => setPid(e.target.value)}
-              value={pid}
+              onChange={onPidChange}
+              value={formDataState.pid}
               name="pid"
               id="PID"
               label="PID"
@@ -366,12 +489,12 @@ const RegistrationForm = () => {
               <Grid container spacing={1}>
                 <Grid item>
                   <InputValidator
-                    viewErrorTrigger={viewErrorTrigger}
+                    viewErrorTrigger={state.viewErrorTrigger}
                     validators={[isNotNull]}
-                    setIsValids={setIsValidContactName}
+                    setIsValids={getValiditySetter("contactName")}
                     errorMessages={["Vennligst skriv inn et navn"]}
-                    onChange={(e) => setContactName(e.target.value)}
-                    value={contactName}
+                    onChange={getOnContactChange("name")}
+                    value={formDataState.contact.name}
                     name="cname"
                     id="kontaktnavn"
                     label="Navn"
@@ -379,15 +502,15 @@ const RegistrationForm = () => {
                 </Grid>
                 <Grid item>
                   <InputValidator
-                    viewErrorTrigger={viewErrorTrigger}
+                    viewErrorTrigger={state.viewErrorTrigger}
                     validators={[isPhoneNumber, isNotNull]}
-                    setIsValids={setIsValidContactPhoneNumber}
+                    setIsValids={getValiditySetter("contactPhoneNumber")}
                     errorMessages={[
                       "Telefonnummeret er ikke gyldig",
                       "Vennligst skriv inn et telefonnummer",
                     ]}
-                    onChange={(e) => setContactPhoneNumber(e.target.value)}
-                    value={contactPhoneNumber}
+                    onChange={getOnContactChange("phoneNumber")}
+                    value={formDataState.contact.phoneNumber}
                     name="cphone"
                     id="kontaktperson"
                     label="Telefon"
@@ -398,15 +521,15 @@ const RegistrationForm = () => {
             </Grid>
             <Grid item>
               <InputValidator
-                viewErrorTrigger={viewErrorTrigger}
+                viewErrorTrigger={state.viewErrorTrigger}
                 validators={[isEmail, isNotNull]}
-                setIsValids={setIsValidContactEmail}
+                setIsValids={getValiditySetter("contactEmail")}
                 errorMessages={[
                   "Eposten er ikke gyldig",
                   "Vennligst skriv inn en epost",
                 ]}
-                onChange={(e) => setContactEmail(e.target.value)}
-                value={contactEmail}
+                onChange={getOnContactChange("email")}
+                value={formDataState.contact.email}
                 name="cemail"
                 id="kontaktepost"
                 label="Epost"
@@ -418,7 +541,7 @@ const RegistrationForm = () => {
             <Button variant="contained" type="submit" color="primary">
               Send
             </Button>
-            {isLoading && (
+            {state.alert.isLoading && (
               <div className="spinner-border" role="status">
                 <span className="sr-only">Loading...</span>
               </div>

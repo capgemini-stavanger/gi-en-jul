@@ -12,7 +12,7 @@ export interface GiverType {
   isSuggestedMatch: Boolean;
   location: string;
   matchedRecipient?: string;
-  maxRecievers: Number;
+  maxReceivers: Number;
   partitionKey: string;
   rowKey: string;
   phoneNumber: string;
