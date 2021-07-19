@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GiEnJul.Clients;
 using GiEnJul.Models;
 using GiEnJul.Dtos;
 
@@ -20,8 +21,9 @@ namespace GiEnJul.Controllers
         private readonly IConnectionRepository _connectionRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
+        private readonly IEmailClient _emailClient;
 
-        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, IConnectionRepository connectionRepository, ILogger log, IMapper mapper)
+        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, IConnectionRepository connectionRepository, ILogger log, IMapper mapper, IEmailClient emailClient)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -30,6 +32,7 @@ namespace GiEnJul.Controllers
             _connectionRepository = connectionRepository;
             _log = log;
             _mapper = mapper;
+            _emailClient = emailClient;
         }
         //The function below is not in use now, but should be implemented later:
         // Need to add an appropriate routing for the api call below. 

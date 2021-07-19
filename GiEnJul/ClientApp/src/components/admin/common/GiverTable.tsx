@@ -18,7 +18,6 @@ import {
 } from "@material-ui/icons";
 import { GiverType } from "../overview/OverviewMacro";
 import useStyles from "./Styles";
-import shadows from "@material-ui/core/styles/shadows";
 
 type Props = {
   data: GiverType[] | [];
@@ -44,10 +43,10 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
 
   return (
     <Container>
-      {data.map((giver) => (
+      {data.map((giver, index) => (
         <Accordion
           onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
-          key={giver.rowKey}
+          key={`acc_giver_${index}`}
           style={
             giver.isSelected
               ? {
@@ -67,7 +66,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
             </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
-              {formatFamily(giver.maxRecievers)}
+              {formatFamily(giver.maxReceivers)}
             </Typography>
             {giver.isSuggestedMatch ? (
               <CheckRounded style={{ color: "#49a591" }} />

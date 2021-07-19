@@ -5,7 +5,7 @@
         public string RowKey { get; set; }
         public string PartitionKey { get; set; }
 
-        public int MaxRecievers { get; set; }
+        public int MaxReceivers { get; set; }
         public string Location { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }

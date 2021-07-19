@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Features;
 using GiEnJul.Models;
@@ -14,13 +15,15 @@ namespace GiEnJul.Controllers
     {
         private readonly IGiverRepository _giverRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly IEmailClient _emailClient;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
 
-        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, ILogger log, IMapper mapper)
+        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, IEmailClient emailClient, ILogger log, IMapper mapper)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
+            _emailClient = emailClient;
             _log = log;
             _mapper = mapper;
         }
@@ -33,6 +36,9 @@ namespace GiEnJul.Controllers
             giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
+
+            var messageContent = string.Format($"{insertedAsDto.FullName}, vi bekrefter å ha mottatt din registering for å gi en jul i {insertedAsDto.Location}");
+            await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Takk for din registrering!", messageContent);
 
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
