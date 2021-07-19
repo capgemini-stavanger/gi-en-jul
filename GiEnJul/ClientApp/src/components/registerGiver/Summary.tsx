@@ -95,7 +95,7 @@ const SummaryRegistration: React.FC<Props> = ({
         fullname: values.fullname,
         email: values.email,
         phoneNumber: values.phoneNumber,
-        maxRecievers: values.maxReceivers,
+        maxReceivers: values.maxReceivers,
       }),
     })
       .then((response) => {

@@ -8,7 +8,7 @@ namespace GiEnJul.Dtos
     {
         [Required]
         [Range(1, 999)]
-        public int MaxRecievers { get; set; }
+        public int MaxReceivers { get; set; }
         [Required]
         public string Location { get; set; }
         [Required]

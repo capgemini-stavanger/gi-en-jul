@@ -50,7 +50,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new KeyNotFoundException());
 
             //Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
         }
@@ -63,7 +63,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new Exception());
 
             //Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
         }
@@ -77,7 +77,7 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
             //Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
@@ -90,11 +90,11 @@ namespace GiEnJul.Test.ControllerTests
             var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAdress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
 
-            var fakeModel = new Models.Giver {RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
+            var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
 
             //Act
-            var result = await _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxRecievers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
+            var result = await _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
 
             //Assert
             var actionResult = Assert.IsType<ActionResult<PostGiverResultDto>>(result);
