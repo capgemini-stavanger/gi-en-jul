@@ -48,17 +48,18 @@ const Datatable: React.FC<Props> = ({ data }) => {
   return (
     <Container>
       {data.map((giver) => (
-        <Accordion
-        key={giver.partitionKey}>
+        <Accordion key={giver.partitionKey}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography className={classes.heading}>{giver.fullName}</Typography>
+            <Typography className={classes.heading}>
+              {giver.fullName}
+            </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
-              {formatFamily(giver.maxRecievers)}
+              {formatFamily(giver.maxReceivers)}
             </Typography>
             <Avatar className={handleMatched(giver.hasConfirmedMatch)}>
               {giver.hasConfirmedMatch ? (

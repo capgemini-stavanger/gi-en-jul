@@ -10,11 +10,12 @@ namespace GiEnJul.Entities
         public Connection(string receiverLocation, string rowKey) : base(receiverLocation, rowKey)
         { }
         public Connection(Giver giver, Recipient recipient)
-        { 
-            if(giver.PartitionKey != recipient.PartitionKey){
+        {
+            if (giver.PartitionKey != recipient.PartitionKey)
+            {
                 throw new InvalidEventException("Locations/events must match for giver and recipient");
             }
-            RowKey = $"{recipient.RowKey}_{giver.RowKey}"; 
+            RowKey = $"{recipient.RowKey}_{giver.RowKey}";
             PartitionKey = giver.PartitionKey;
 
             Dinner = recipient.Dinner;
@@ -31,7 +32,7 @@ namespace GiEnJul.Entities
             Institution = recipient.Institution;
             ReferenceId = recipient.ReferenceId;
 
-            MaxReceivers = giver.MaxRecievers;
+            MaxReceivers = giver.MaxReceivers;
             GiverLocation = giver.Location;
             GiverFullName = giver.FullName;
             GiverEmail = giver.Email;

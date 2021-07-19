@@ -13,13 +13,13 @@ namespace GiEnJul.Entities
             EventName = eventName ?? throw new ArgumentNullException(nameof(eventName));
         }
 
-        public int MaxRecievers { get; set; }
+        public int MaxReceivers { get; set; }
         public string Location { get; set; }
         public string EventName { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        
+
         //Is the Rowkey to the recipient
         public string MatchedRecipient { get; set; }
 
