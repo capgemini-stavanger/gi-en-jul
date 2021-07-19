@@ -47,9 +47,11 @@ namespace GiEnJul
             }
             );
             services.AddAuthorization(options =>
-            {
-                options.AddPolicy("read:givers", policy => policy.Requirements.Add(new HasScopeRequirement("read:givers", domain)));
-            });
+            Authconfig.SetPolicies(options)
+            // {options = new Settings(Configuration).AuthSettings;
+            // System.Console.WriteLine(options.GetPolicy("AddRecipient"));}
+            // {options.AddPolicy("AddRecipient",policy => policy.RequireClaim("permissons","add:recipient"));}
+            );
         }
 
 

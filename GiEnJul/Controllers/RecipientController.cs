@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GiEnJul.Controllers
 {
@@ -30,6 +32,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "AddRecipient")]
         public async Task<ActionResult> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
