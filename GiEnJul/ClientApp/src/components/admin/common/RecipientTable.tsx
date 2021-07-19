@@ -76,7 +76,14 @@ const DatatableRecipient: React.FC<Props> = ({
             handleRecipientChange(recipient.rowKey, recipient.partitionKey)
           }
           key={recipient.rowKey}
-          style = {recipient.isSelected ? ({background: 'linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)'}) : ({background: 'white'})}
+          style={
+            recipient.isSelected
+              ? {
+                  background:
+                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+                }
+              : { background: "white" }
+          }
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
@@ -90,11 +97,11 @@ const DatatableRecipient: React.FC<Props> = ({
               <Group />
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
-              {recipient.isSuggestedMatch ? (
-                <CheckRounded style={{ color: "#49a591" }} />
-              ) : (
-                <CloseRounded style={{ color: "#ed8175" }} />
-              )}
+            {recipient.isSuggestedMatch ? (
+              <CheckRounded style={{ color: "#49a591" }} />
+            ) : (
+              <CloseRounded style={{ color: "#ed8175" }} />
+            )}
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>

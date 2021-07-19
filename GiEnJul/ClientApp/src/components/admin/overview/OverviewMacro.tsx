@@ -53,7 +53,7 @@ export interface PersonType {
   gender: Number;
 }
 
-function OverviewMacro () {
+function OverviewMacro() {
   const [selectedConnection, setSelectedConnection] =
     useState<SelectedConnectionType>({
       giverRowKey: "",
@@ -63,38 +63,39 @@ function OverviewMacro () {
     });
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  
+
+  async function fetchGivers() {
+    await fetch("api/admin/givers", {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => setGiverData(json))
+      .catch((errorStack) => {
+        console.log(errorStack);
+      });
+  }
+  async function fetchRecipients() {
+    await fetch("./api/admin/recipients", {
+      method: "GET", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => setRecipientData(json))
+      .catch((errorStack) => {
+        console.log(errorStack);
+      });
+  }
+
   useEffect(() => {
-    async function fetchGivers() {
-      await fetch("api/admin/givers", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setGiverData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
-    async function fetchRecipients() {
-      await fetch("./api/admin/recipients", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setRecipientData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
     fetchRecipients();
     fetchGivers();
   }, []);
-  
+
   const handleGiverChange = (
     newGiverRowKey: string,
     newGiverPartitionKey: string
@@ -104,8 +105,13 @@ function OverviewMacro () {
       ...prev,
       giverPartitionKey: newGiverPartitionKey,
     }));
-    setGiverData(giverData.map(item =>
-      item.rowKey === newGiverRowKey ? { ...item, isSelected: true } : {...item, isSelected: false}));
+    setGiverData(
+      giverData.map((item) =>
+        item.rowKey === newGiverRowKey && item.isSuggestedMatch === false
+          ? { ...item, isSelected: true }
+          : { ...item, isSelected: false }
+      )
+    );
   };
 
   const handleRecipientChange = (
@@ -120,12 +126,17 @@ function OverviewMacro () {
       ...prev,
       recipientPartitionKey: newRecipientPartitionKey,
     }));
-    setRecipientData(recipientData.map(item =>
-      item.rowKey === newRecipientRowKey ? { ...item, isSelected: true } : {...item, isSelected: false}));
+    setRecipientData(
+      recipientData.map((item) =>
+        item.rowKey === newRecipientRowKey && item.isSuggestedMatch === false
+          ? { ...item, isSelected: true }
+          : { ...item, isSelected: false }
+      )
+    );
   };
 
   const connectGiverRecipient = async () => {
-    console.log(selectedConnection.giverPartitionKey)
+    console.log(selectedConnection.giverPartitionKey);
     await fetch("api/admin", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -145,13 +156,13 @@ function OverviewMacro () {
       .catch((errorStack) => {
         console.log(errorStack);
       });
+    fetchRecipients();
+    fetchGivers();
   };
 
   return (
     <>
-      {console.log(giverData)}
-      {console.log(recipientData)}
-      <Button onClick={connectGiverRecipient}>Koble sammen</Button>
+      <Button onClick={connectGiverRecipient} >Koble sammen</Button>
       <Grid
         container
         direction="row"
@@ -162,17 +173,16 @@ function OverviewMacro () {
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <Giver 
-          data = {giverData}
-          handleGiverChange={handleGiverChange} />
+          <Giver data={giverData} handleGiverChange={handleGiverChange} />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h4" align="center">
             Familier
           </Typography>
-          <Recipient 
-          data = {recipientData}
-          handleRecipientChange={handleRecipientChange} />
+          <Recipient
+            data={recipientData}
+            handleRecipientChange={handleRecipientChange}
+          />
         </Grid>
       </Grid>
     </>

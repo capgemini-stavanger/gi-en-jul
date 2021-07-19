@@ -14,7 +14,6 @@ type Props = {
 };
 
 const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
-
   const [q, setQ] = useState("");
 
   const search = (input: GiverType[] | []) => {

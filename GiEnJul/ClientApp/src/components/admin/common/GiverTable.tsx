@@ -22,8 +22,10 @@ import shadows from "@material-ui/core/styles/shadows";
 
 type Props = {
   data: GiverType[] | [];
-  handleGiverChange: (newGiverRowKey: string,
-  newGiverPartitionKey: string) => void;
+  handleGiverChange: (
+    newGiverRowKey: string,
+    newGiverPartitionKey: string
+  ) => void;
 };
 
 const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
@@ -44,25 +46,34 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
     <Container>
       {data.map((giver) => (
         <Accordion
-        onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
-        key={giver.rowKey}
-        style = {giver.isSelected ? ({background: 'linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)'}) : ({background: 'white'})}
+          onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
+          key={giver.rowKey}
+          style={
+            giver.isSelected
+              ? {
+                  background:
+                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+                }
+              : { background: "white" }
+          }
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
-            <Typography className={classes.heading}>{giver.fullName}</Typography>
+            <Typography className={classes.heading}>
+              {giver.fullName}
+            </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
               {formatFamily(giver.maxRecievers)}
             </Typography>
-              {giver.isSuggestedMatch ? (
-                <CheckRounded style={{ color: "#49a591" }} />
-              ) : (
-                <CloseRounded style={{ color: "#ed8175" }} />
-              )}
+            {giver.isSuggestedMatch ? (
+              <CheckRounded style={{ color: "#49a591" }} />
+            ) : (
+              <CloseRounded style={{ color: "#ed8175" }} />
+            )}
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
