@@ -1,4 +1,5 @@
-﻿using GiEnJul.Controllers;
+﻿using GiEnJul.Clients;
+using GiEnJul.Controllers;
 using GiEnJul.Dtos;
 using GiEnJul.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -14,14 +15,17 @@ namespace GiEnJul.Test.ControllerTests
     {
         private Mock<IGiverRepository> mockGiverRepo { get; set; }
         private Mock<IEventRepository> mockEventRepo { get; set; }
+        private Mock<IEmailClient> mockEmailClient { get; set; }
         private GiverController _controller;
+
 
         //Run before each test
         public GiverControllerTest()
         {
             mockGiverRepo = new Mock<IGiverRepository>();
             mockEventRepo = new Mock<IEventRepository>();
-            _controller = new GiverController(mockGiverRepo.Object, mockEventRepo.Object, _log, _mapper);
+            mockEmailClient = new Mock<IEmailClient>();
+            _controller = new GiverController(mockGiverRepo.Object, mockEventRepo.Object, mockEmailClient.Object, _log, _mapper);
         }
 
         //Runs after each test
@@ -29,6 +33,7 @@ namespace GiEnJul.Test.ControllerTests
         {
             mockEventRepo.VerifyNoOtherCalls();
             mockGiverRepo.VerifyNoOtherCalls();
+            mockEmailClient.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -104,6 +109,7 @@ namespace GiEnJul.Test.ControllerTests
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
+            mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
         }
     }
 }
