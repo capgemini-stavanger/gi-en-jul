@@ -3,61 +3,18 @@ import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Datatable from "../common/RecipientTable";
-import { GiverType } from "./Giver";
-
-export interface PersonType {
-  partitionKey: string;
-  rowKey: string;
-  wish: string;
-  age: Number;
-  gender: Number;
-}
+import { GiverType, RecipientType, PersonType } from "./OverviewMacro";
 
 type Props = {
+  data: RecipientType[] | [];
   handleRecipientChange: (
     newRecipientRowKey: string,
     newRecipientPartitionKey: string
   ) => void;
 };
-export interface RecipientType {
-  contactEmail: string;
-  contactFullName: string;
-  contactPhoneNumber: string;
-  dessert: string;
-  dinner: string;
-  eventName: string;
-  familyMembers: PersonType[];
-  hasConfirmedMatch: Boolean;
-  institution: string;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedGiver?: GiverType;
-  note: string;
-  partitionKey: string;
-  referenceId: string;
-  rowKey: string;
-}
 
-const Recipient: React.FC<Props> = ({ handleRecipientChange }) => {
-  const [data, setData] = useState<RecipientType[] | []>([]);
+const Recipient: React.FC<Props> = ({ data, handleRecipientChange }) => {
   const [q, setQ] = useState("");
-
-  useEffect(() => {
-    async function fetchRecipients() {
-      await fetch("./api/admin/recipients", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
-    fetchRecipients();
-  }, []);
 
   const search = (input: RecipientType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);

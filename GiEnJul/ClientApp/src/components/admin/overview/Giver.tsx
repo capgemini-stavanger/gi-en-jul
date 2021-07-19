@@ -3,49 +3,19 @@ import { Search } from "@material-ui/icons";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Datatable from "../common/GiverTable";
-import { SelectedConnectionType } from "./OverviewMacro";
-
-export interface GiverType {
-  email: string;
-  eventName: string;
-  fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedRecipient?: string;
-  maxRecievers: Number;
-  partitionKey: string;
-  rowKey: string;
-  phoneNumber: string;
-}
+import { GiverType } from "./OverviewMacro";
 
 type Props = {
+  data: GiverType[] | [];
   handleGiverChange: (
     newGiverRowKey: string,
     newGiverPartitionKey: string
   ) => void;
 };
 
-const Giver: React.FC<Props> = ({ handleGiverChange }) => {
-  const [data, setData] = useState<GiverType[] | []>([]);
-  const [q, setQ] = useState("");
+const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
 
-  useEffect(() => {
-    async function fetchGivers() {
-      await fetch("api/admin/givers", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
-    fetchGivers();
-  }, []);
+  const [q, setQ] = useState("");
 
   const search = (input: GiverType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { Button, Grid, Typography } from "@material-ui/core";
@@ -11,6 +11,48 @@ export interface SelectedConnectionType {
   recipientPartitionKey: string;
 }
 
+export interface GiverType {
+  email: string;
+  eventName: string;
+  fullName: string;
+  hasConfirmedMatch: Boolean;
+  isSuggestedMatch: Boolean;
+  location: string;
+  matchedRecipient?: string;
+  maxRecievers: Number;
+  partitionKey: string;
+  rowKey: string;
+  phoneNumber: string;
+  isSelected: Boolean;
+}
+
+export interface RecipientType {
+  contactEmail: string;
+  contactFullName: string;
+  contactPhoneNumber: string;
+  dessert: string;
+  dinner: string;
+  eventName: string;
+  familyMembers: PersonType[];
+  hasConfirmedMatch: Boolean;
+  institution: string;
+  isSuggestedMatch: Boolean;
+  location: string;
+  matchedGiver?: GiverType;
+  note: string;
+  partitionKey: string;
+  referenceId: string;
+  rowKey: string;
+  isSelected: Boolean;
+}
+export interface PersonType {
+  partitionKey: string;
+  rowKey: string;
+  wish: string;
+  age: Number;
+  gender: Number;
+}
+
 function OverviewMacro () {
   const [selectedConnection, setSelectedConnection] =
     useState<SelectedConnectionType>({
@@ -19,7 +61,40 @@ function OverviewMacro () {
       recipientRowKey: "",
       recipientPartitionKey: "",
     });
-
+  const [giverData, setGiverData] = useState<GiverType[] | []>([]);
+  const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  
+  useEffect(() => {
+    async function fetchGivers() {
+      await fetch("api/admin/givers", {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => setGiverData(json))
+        .catch((errorStack) => {
+          console.log(errorStack);
+        });
+    }
+    async function fetchRecipients() {
+      await fetch("./api/admin/recipients", {
+        method: "GET", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => setRecipientData(json))
+        .catch((errorStack) => {
+          console.log(errorStack);
+        });
+    }
+    fetchRecipients();
+    fetchGivers();
+  }, []);
+  
   const handleGiverChange = (
     newGiverRowKey: string,
     newGiverPartitionKey: string
@@ -29,6 +104,8 @@ function OverviewMacro () {
       ...prev,
       giverPartitionKey: newGiverPartitionKey,
     }));
+    setGiverData(giverData.map(item =>
+      item.rowKey === newGiverRowKey ? { ...item, isSelected: true } : {...item, isSelected: false}));
   };
 
   const handleRecipientChange = (
@@ -43,6 +120,8 @@ function OverviewMacro () {
       ...prev,
       recipientPartitionKey: newRecipientPartitionKey,
     }));
+    setRecipientData(recipientData.map(item =>
+      item.rowKey === newRecipientRowKey ? { ...item, isSelected: true } : {...item, isSelected: false}));
   };
 
   const connectGiverRecipient = async () => {
@@ -53,10 +132,10 @@ function OverviewMacro () {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        giverRowKey: selectedConnection.giverRowKey,
-        giverPartitionKey: selectedConnection.recipientPartitionKey,
-        recipientRowKey: selectedConnection.recipientRowKey,
-        recipientPartitionKey: selectedConnection.recipientPartitionKey,
+        GiverRowKey: selectedConnection.giverRowKey,
+        GiverPartitionKey: selectedConnection.giverPartitionKey,
+        RecipientRowKey: selectedConnection.recipientRowKey,
+        RecipientPartitionKey: selectedConnection.recipientPartitionKey,
       }),
     })
       .then((response) => {
@@ -70,7 +149,8 @@ function OverviewMacro () {
 
   return (
     <>
-      {console.log(selectedConnection)}
+      {console.log(giverData)}
+      {console.log(recipientData)}
       <Button onClick={connectGiverRecipient}>Koble sammen</Button>
       <Grid
         container
@@ -82,13 +162,17 @@ function OverviewMacro () {
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <Giver handleGiverChange={handleGiverChange} />
+          <Giver 
+          data = {giverData}
+          handleGiverChange={handleGiverChange} />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h4" align="center">
             Familier
           </Typography>
-          <Recipient handleRecipientChange={handleRecipientChange} />
+          <Recipient 
+          data = {recipientData}
+          handleRecipientChange={handleRecipientChange} />
         </Grid>
       </Grid>
     </>

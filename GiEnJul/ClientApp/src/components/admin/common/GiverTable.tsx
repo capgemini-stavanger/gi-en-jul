@@ -16,16 +16,15 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { GiverType } from "../overview/Giver";
+import { GiverType } from "../overview/OverviewMacro";
 import useStyles from "./Styles";
+import shadows from "@material-ui/core/styles/shadows";
 
 type Props = {
   data: GiverType[] | [];
   handleGiverChange: (newGiverRowKey: string,
   newGiverPartitionKey: string) => void;
 };
-
-
 
 const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
   const classes = useStyles();
@@ -41,21 +40,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
     }
   };
 
-  const handleMatched = (input: Boolean) => {
-    if (input) {
-      return classes.matched;
-    } else {
-      return classes.notMatched;
-    }
-  };
-
-
   return (
     <Container>
       {data.map((giver) => (
         <Accordion
         onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
-        key={giver.rowKey}>
+        key={giver.rowKey}
+        style = {giver.isSelected ? ({background: 'linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)'}) : ({background: 'white'})}
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
@@ -66,13 +58,11 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
               <Group />
               {formatFamily(giver.maxRecievers)}
             </Typography>
-            <Avatar className={handleMatched(giver.isSuggestedMatch)}>
               {giver.isSuggestedMatch ? (
                 <CheckRounded style={{ color: "#49a591" }} />
               ) : (
                 <CloseRounded style={{ color: "#ed8175" }} />
               )}
-            </Avatar>
           </AccordionSummary>
           <Divider />
           <AccordionDetails>

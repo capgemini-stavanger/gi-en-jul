@@ -16,7 +16,7 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { RecipientType } from "../overview/Recipient";
+import { RecipientType } from "../overview/OverviewMacro";
 import useStyles from "./Styles";
 
 type Props = {
@@ -41,14 +41,6 @@ const DatatableRecipient: React.FC<Props> = ({
       return "> 5";
     } else {
       return "3 - 5";
-    }
-  };
-
-  const handleMatched = (input: Boolean) => {
-    if (input) {
-      return classes.matched;
-    } else {
-      return classes.notMatched;
     }
   };
 
@@ -84,6 +76,7 @@ const DatatableRecipient: React.FC<Props> = ({
             handleRecipientChange(recipient.rowKey, recipient.partitionKey)
           }
           key={recipient.rowKey}
+          style = {recipient.isSelected ? ({background: 'linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)'}) : ({background: 'white'})}
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
@@ -97,13 +90,11 @@ const DatatableRecipient: React.FC<Props> = ({
               <Group />
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
-            <Avatar className={handleMatched(recipient.isSuggestedMatch)}>
               {recipient.isSuggestedMatch ? (
                 <CheckRounded style={{ color: "#49a591" }} />
               ) : (
                 <CloseRounded style={{ color: "#ed8175" }} />
               )}
-            </Avatar>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
