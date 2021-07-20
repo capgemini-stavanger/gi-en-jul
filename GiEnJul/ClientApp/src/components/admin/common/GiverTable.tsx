@@ -16,7 +16,7 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { GiverType } from "../overview/OverviewMacro";
+import { GiverType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {

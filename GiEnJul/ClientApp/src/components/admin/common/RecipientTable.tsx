@@ -16,7 +16,7 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { RecipientType } from "../overview/OverviewMacro";
+import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
 import Gender from "../../../common/enums/Gender";
 

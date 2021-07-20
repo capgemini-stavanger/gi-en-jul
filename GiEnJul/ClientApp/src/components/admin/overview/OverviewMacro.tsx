@@ -2,57 +2,7 @@ import React, { useEffect, useState } from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { Button, Grid, Typography } from "@material-ui/core";
-import usePost from "../../../hooks/usePost";
-import Gender from "../../../common/enums/Gender";
-
-export interface SelectedConnectionType {
-  giverRowKey: string;
-  giverPartitionKey: string;
-  recipientRowKey: string;
-  recipientPartitionKey: string;
-}
-
-export interface GiverType {
-  email: string;
-  eventName: string;
-  fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedRecipient?: string;
-  maxReceivers: Number;
-  partitionKey: string;
-  rowKey: string;
-  phoneNumber: string;
-  isSelected: Boolean;
-}
-
-export interface RecipientType {
-  contactEmail: string;
-  contactFullName: string;
-  contactPhoneNumber: string;
-  dessert: string;
-  dinner: string;
-  eventName: string;
-  familyMembers: PersonType[];
-  hasConfirmedMatch: Boolean;
-  institution: string;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedGiver?: GiverType;
-  note: string;
-  partitionKey: string;
-  referenceId: string;
-  rowKey: string;
-  isSelected: Boolean;
-}
-export interface PersonType {
-  partitionKey: string;
-  rowKey: string;
-  wish: string;
-  age: Number;
-  gender: Gender;
-}
+import { SelectedConnectionType, GiverType, RecipientType } from "./Types";
 
 function OverviewMacro() {
   const [selectedConnection, setSelectedConnection] =
@@ -75,7 +25,7 @@ function OverviewMacro() {
       .then((response) => response.json())
       .then((json) => setGiverData(json))
       .catch((errorStack) => {
-        console.log(errorStack);
+        console.error(errorStack);
       });
   }
   async function fetchRecipients() {
@@ -88,7 +38,7 @@ function OverviewMacro() {
       .then((response) => response.json())
       .then((json) => setRecipientData(json))
       .catch((errorStack) => {
-        console.log(errorStack);
+        console.error(errorStack);
       });
   }
 
