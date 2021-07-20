@@ -78,6 +78,7 @@ const DatatableRecipient: React.FC<Props> = ({
             handleRecipientChange(recipient.rowKey, recipient.partitionKey)
           }
           key={`acc_recipient_${index}`}
+          //Styling should be in a seperate file
           style={
             recipient.isSelected
               ? {
@@ -100,6 +101,7 @@ const DatatableRecipient: React.FC<Props> = ({
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
             {recipient.isSuggestedMatch ? (
+              //Styling should be in a seperate file
               <CheckRounded style={{ color: "#49a591" }} />
             ) : (
               <CloseRounded style={{ color: "#ed8175" }} />

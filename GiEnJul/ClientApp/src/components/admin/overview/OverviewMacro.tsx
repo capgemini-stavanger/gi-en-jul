@@ -58,9 +58,7 @@ function OverviewMacro() {
     }));
     setGiverData(
       giverData.map((item) =>
-        item.rowKey === newGiverRowKey && item.isSuggestedMatch === false
-          ? { ...item, isSelected: true }
-          : { ...item, isSelected: false }
+      ({ ...item, isSelected: (item.rowKey === newGiverRowKey && item.isSuggestedMatch === false)})
       )
     );
   };
@@ -79,9 +77,7 @@ function OverviewMacro() {
     }));
     setRecipientData(
       recipientData.map((item) =>
-        item.rowKey === newRecipientRowKey && item.isSuggestedMatch === false
-          ? { ...item, isSelected: true }
-          : { ...item, isSelected: false }
+      ({ ...item, isSelected: (item.rowKey === newRecipientRowKey && item.isSuggestedMatch === false)})
       )
     );
   };

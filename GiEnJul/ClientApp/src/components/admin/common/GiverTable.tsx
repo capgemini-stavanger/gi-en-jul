@@ -47,6 +47,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
         <Accordion
           onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
           key={`acc_giver_${index}`}
+          //Styling should be in a seperate file
           style={
             giver.isSelected
               ? {
@@ -69,6 +70,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
               {formatFamily(giver.maxReceivers)}
             </Typography>
             {giver.isSuggestedMatch ? (
+              //Styling should be in a seperate file
               <CheckRounded style={{ color: "#49a591" }} />
             ) : (
               <CloseRounded style={{ color: "#ed8175" }} />
