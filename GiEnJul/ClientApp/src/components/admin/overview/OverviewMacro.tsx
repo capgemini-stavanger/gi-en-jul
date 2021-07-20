@@ -3,6 +3,7 @@ import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { Button, Grid, Typography } from "@material-ui/core";
 import usePost from "../../../hooks/usePost";
+import Gender from "../../../common/enums/Gender";
 
 export interface SelectedConnectionType {
   giverRowKey: string;
@@ -50,7 +51,7 @@ export interface PersonType {
   rowKey: string;
   wish: string;
   age: Number;
-  gender: Number;
+  gender: Gender;
 }
 
 function OverviewMacro() {

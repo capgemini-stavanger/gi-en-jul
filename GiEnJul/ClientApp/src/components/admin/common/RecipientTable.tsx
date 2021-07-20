@@ -18,6 +18,8 @@ import {
 } from "@material-ui/icons";
 import { RecipientType } from "../overview/OverviewMacro";
 import useStyles from "./Styles";
+import Gender from "../../../common/enums/Gender";
+
 
 type Props = {
   data: RecipientType[] | [];
@@ -44,24 +46,24 @@ const DatatableRecipient: React.FC<Props> = ({
     }
   };
 
-  const handleGender = (gender: Number, age: Number) => {
+  const handleGender = (gender: Gender, age: Number) => {
     if (age < 18) {
       switch (gender) {
-        case 0:
+        case Gender.Other:
           return "Ukjent";
-        case 1:
+        case Gender.Male:
           return "Gutt";
-        case 2:
+        case Gender.Female:
           return "Jente";
         default:
       }
     } else {
       switch (gender) {
-        case 0:
+        case Gender.Other:
           return "Ukjent";
-        case 1:
+        case Gender.Male:
           return "Mann";
-        case 2:
+        case Gender.Female:
           return "Kvinne";
         default:
       }
