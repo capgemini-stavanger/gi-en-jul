@@ -56,10 +56,8 @@ const ContactInfo: React.FC<Props> = ({
   const getValiditySetter = (target: string) => {
     return (isValid: boolean) => {
       setValidFormState((prev) => {
-        {
-          prev[target] = isValid;
-          return prev;
-        }
+        prev[target] = isValid;
+        return prev;
       });
     };
   };

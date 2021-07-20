@@ -1,7 +1,12 @@
 ﻿using Autofac;
+using GiEnJul.Clients;
 using GiEnJul.Features;
+<<<<<<< HEAD
 using GiEnJul.Auth;
 using Microsoft.AspNetCore.Authorization;
+=======
+using Microsoft.AspNetCore.Hosting;
+>>>>>>> master
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
@@ -21,6 +26,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
             builder.Register(c => new LoggerConfiguration()
                                 .MinimumLevel.Debug()
                                 .WriteTo.Console()

@@ -4,27 +4,27 @@ using GiEnJul.Infrastructure;
 using Serilog;
 using System.Threading.Tasks;
 
-
 namespace GiEnJul.Features
 {
     public interface IConnectionRepository
     {
-        Task<Connection> InsertOrReplaceAsync(Models.Giver giver);
-        Task<Connection> InsertOrReplaceAsync(Models.Recipient recipient);
+        Task<Connection> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
+        Task<Connection> DeleteConnectionAsync(Entities.Connection connection);
     }
-
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
         public ConnectionRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Connection") : base(settings, tableName, mapper, log)
         { }
 
-        public async Task<Connection> InsertOrReplaceAsync(Models.Giver giver)
+        public async Task<Connection> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient)
         {
-            return await InsertOrReplaceAsync(_mapper.Map<Connection>(giver));
+            var connection = new Connection(_mapper.Map<Giver>(giver), _mapper.Map<Recipient>(recipient));
+            return await InsertOrReplaceAsync(connection);
         }
-        public async Task<Connection> InsertOrReplaceAsync(Models.Recipient recipient)
+
+        public async Task<Connection> DeleteConnectionAsync(Entities.Connection connection)
         {
-            return await InsertOrReplaceAsync(_mapper.Map<Connection>(recipient));
+            return await DeleteAsync(connection);
         }
     }
 }
