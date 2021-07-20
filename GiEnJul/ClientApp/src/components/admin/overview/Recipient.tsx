@@ -13,18 +13,18 @@ type Props = {
 };
 
 const Recipient: React.FC<Props> = ({ data, handleRecipientChange }) => {
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
 
   const search = (input: RecipientType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
       (input) =>
-        input.contactEmail.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.contactFullName.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.contactPhoneNumber.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.institution.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.referenceId.toLocaleLowerCase().indexOf(q) > -1
+        input.contactEmail.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactFullName.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactPhoneNumber.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.institution.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.referenceId.toLocaleLowerCase().indexOf(query) > -1
     );
   };
 
@@ -37,8 +37,8 @@ const Recipient: React.FC<Props> = ({ data, handleRecipientChange }) => {
         <Grid item>
           <TextField
             placeholder="Søk etter familie"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           ></TextField>
         </Grid>
       </Grid>

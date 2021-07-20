@@ -13,16 +13,16 @@ type Props = {
 };
 
 const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
 
   const search = (input: GiverType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
       (input) =>
-        input.fullName.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.email.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.phoneNumber.toLocaleLowerCase().indexOf(q) > -1
+        input.fullName.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.email.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.phoneNumber.toLocaleLowerCase().indexOf(query) > -1
     );
   };
 
@@ -35,8 +35,8 @@ const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
         <Grid item>
           <TextField
             placeholder="Søk etter giver"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           ></TextField>
         </Grid>
       </Grid>

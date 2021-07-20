@@ -102,10 +102,11 @@ function OverviewMacro() {
     })
       .then((response) => {
         if (response.status === 201) {
+          //use this for sending a response to the user
         }
       })
       .catch((errorStack) => {
-        console.log(errorStack);
+        console.error(errorStack);
       });
     fetchRecipients();
     fetchGivers();
