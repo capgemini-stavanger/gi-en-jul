@@ -61,7 +61,7 @@ namespace GiEnJul.Controllers
             var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
-            var connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
             giver.IsSuggestedMatch = true;
             giver.MatchedRecipient = recipientRowKey;
             recipient.IsSuggestedMatch = true;
@@ -73,7 +73,7 @@ namespace GiEnJul.Controllers
             }
             catch (System.Exception e)
             {
-                await _connectionRepository.DeleteConnectionAsync(connection);
+                await _connectionRepository.DeleteConnectionAsync(connection.partitionKey, connection.rowKey);
                 giver.IsSuggestedMatch = false;
                 giver.MatchedRecipient = "";
                 recipient.IsSuggestedMatch = false;
