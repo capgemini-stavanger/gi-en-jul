@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using GiEnJul.Clients;
 using GiEnJul.Features;
+using GiEnJul.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -15,6 +17,7 @@ namespace GiEnJul.Infrastructure
             builder.Register(c => settings).As<ISettings>().InstancePerLifetimeScope();
 
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
+            builder.RegisterType<HasScopeHandler>().As<IAuthorizationHandler>().SingleInstance();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
             builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();

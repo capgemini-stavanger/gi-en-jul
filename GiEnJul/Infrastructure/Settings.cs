@@ -36,7 +36,7 @@ namespace GiEnJul.Infrastructure
             }
         }
     }
-    
+
     public class MailSettings
     {
         public string Mail { get; set; }

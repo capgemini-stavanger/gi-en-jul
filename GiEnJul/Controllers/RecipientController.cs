@@ -7,6 +7,8 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GiEnJul.Controllers
 {
@@ -26,15 +28,16 @@ namespace GiEnJul.Controllers
             _personRepository = personRepository;
             _eventRepository = eventRepository;
             _log = log;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
         [HttpPost]
+        // [Authorize(Policy = "AddRecipient")]
         public async Task<ActionResult> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
-            
+
             //Add Recipient to Table Storage
             var insertedRecipient = await _recipientRepository.InsertOrReplaceAsync(recipient);
 
