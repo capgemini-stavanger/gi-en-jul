@@ -39,7 +39,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("givers")]
         // [Authorize] This will deny any unauthorized requests, but will break the application atm
-        [Authorize(Policy ="ReadGivers")]
+        [Authorize(Policy = "ReadGivers")]
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();

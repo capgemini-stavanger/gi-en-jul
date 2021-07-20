@@ -48,9 +48,7 @@ namespace GiEnJul
             );
             services.AddAuthorization(options =>
             Authconfig.SetPolicies(options)
-            // {options = new Settings(Configuration).AuthSettings;
-            // System.Console.WriteLine(options.GetPolicy("AddRecipient"));}
-            // {options.AddPolicy("AddRecipient",policy => policy.RequireClaim("permissons","add:recipient"));}
+            // { options.AddPolicy("ReadGivers", policy => policy.RequireClaim("permissions", "read:givers")); }
             );
         }
 
