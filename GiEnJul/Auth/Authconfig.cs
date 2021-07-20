@@ -1,9 +1,6 @@
-
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace GiEnJul.Auth
-
 {
     public static class Authconfig
     {

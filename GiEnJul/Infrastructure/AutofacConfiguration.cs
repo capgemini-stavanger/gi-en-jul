@@ -1,12 +1,9 @@
 ﻿using Autofac;
 using GiEnJul.Clients;
 using GiEnJul.Features;
-<<<<<<< HEAD
 using GiEnJul.Auth;
 using Microsoft.AspNetCore.Authorization;
-=======
 using Microsoft.AspNetCore.Hosting;
->>>>>>> master
 using Microsoft.Extensions.Configuration;
 using Serilog;
 

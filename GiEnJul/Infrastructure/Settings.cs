@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Authorization;
 
 namespace GiEnJul.Infrastructure
 {
@@ -19,9 +18,6 @@ namespace GiEnJul.Infrastructure
         }
 
         public string TableConnectionString => _configuration.GetValue<string>("TableConnectionString");
-<<<<<<< HEAD
-
-=======
         public MailSettings MailSettings
         {
             get
@@ -39,9 +35,8 @@ namespace GiEnJul.Infrastructure
                 return settings;
             }
         }
->>>>>>> master
     }
-    
+
     public class MailSettings
     {
         public string Mail { get; set; }
