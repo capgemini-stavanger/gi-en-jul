@@ -43,8 +43,7 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        // [Authorize] This will deny any unauthorized requests, but will break the application atm
-        [Authorize(Policy = "ReadGivers")]
+        // [Authorize(Policy = "ReadGivers")] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
@@ -62,7 +61,8 @@ namespace GiEnJul.Controllers
             return recipients;
         }
         [HttpPost]
-        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey) {
+        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey)
+        {
             var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
