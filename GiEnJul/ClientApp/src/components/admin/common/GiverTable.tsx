@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useRef} from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -48,14 +48,14 @@ const Datatable: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((giver, index) => (
+      {data.map((giver) => (
         <Accordion
           onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
-          key={`acc_giver_${index}`}
+          key={giver.rowKey}
           //Styling should be in a seperate file
           style={
-            giver.rowKey === selectedConnection.giverRowKey &&
-            !giver.isSuggestedMatch
+            (giver.rowKey === selectedConnection.giverRowKey &&
+            !giver.isSuggestedMatch)
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",

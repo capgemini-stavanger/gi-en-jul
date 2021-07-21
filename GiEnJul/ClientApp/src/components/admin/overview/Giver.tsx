@@ -25,9 +25,9 @@ const Giver: React.FC<Props> = ({
 
     return input.filter(
       (input) =>
-        input?.fullName.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.email.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.phoneNumber.toLocaleLowerCase().indexOf(query) > -1
+        input.fullName?.toLowerCase().indexOf(query) > -1 ||
+        input.email?.toLowerCase().indexOf(query) > -1 ||
+        input.phoneNumber?.toLowerCase().indexOf(query) > -1
     );
   };
 

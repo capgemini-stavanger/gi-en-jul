@@ -73,12 +73,12 @@ const DatatableRecipient: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((recipient, index) => (
+      {data.map((recipient) => (
         <Accordion
           onChange={() =>
             handleRecipientChange(recipient.rowKey, recipient.partitionKey)
           }
-          key={`acc_recipient_${index}`}
+          key={recipient.rowKey}
           //Styling should be in a seperate file
           style={
             recipient.rowKey === selectedConnection.recipientRowKey &&
@@ -113,8 +113,8 @@ const DatatableRecipient: React.FC<Props> = ({
           <AccordionDetails className={classes.largeColumn}>
             <Typography>Ønsker:</Typography>
           </AccordionDetails>
-          {recipient.familyMembers.map((person, personIndex) => (
-            <div key={`acc_person_${index}_${personIndex}`}>
+          {recipient.familyMembers.map((person) => (
+            <div key={person.rowKey}>
               <AccordionDetails>
                 <Typography className={classes.smallColumn}>
                   {handleGender(person.gender, person.age)}

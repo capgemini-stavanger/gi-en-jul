@@ -1,6 +1,6 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import React, { useState } from "react";
+import React, { useState, useRef} from "react";
 import Datatable from "../common/RecipientTable";
 import { RecipientType, SelectedConnectionType } from "./Types";
 
@@ -22,14 +22,13 @@ const Recipient: React.FC<Props> = ({
 
   const search = (input: RecipientType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
-
     return input.filter(
       (input) =>
-        input?.contactEmail.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.contactFullName.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.contactPhoneNumber.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.institution.toLocaleLowerCase().indexOf(query) > -1 ||
-        input?.referenceId.toLocaleLowerCase().indexOf(query) > -1
+        input.contactEmail?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactFullName?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactPhoneNumber?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.institution?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.referenceId?.toLocaleLowerCase().indexOf(query) > -1
     );
   };
 

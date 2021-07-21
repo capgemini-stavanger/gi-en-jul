@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState,  useRef} from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { Button, Grid, Typography } from "@material-ui/core";
@@ -12,8 +12,7 @@ const initState: SelectedConnectionType = {
 };
 
 function OverviewMacro() {
-  const [selectedConnection, setSelectedConnection] =
-    useState<SelectedConnectionType>(initState);
+  const selectedConnection = useRef<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
 
@@ -44,91 +43,63 @@ function OverviewMacro() {
       });
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchRecipients();
     fetchGivers();
   }, []);
 
-  const handleGiverChange = useCallback(
+  const handleGiverChange = 
     (newGiverRowKey: string, newGiverPartitionKey: string) => {
-      if (selectedConnection.giverRowKey === newGiverRowKey) {
-        setSelectedConnection((prev) => ({ ...prev, giverRowKey: "" }));
-        setSelectedConnection((prev) => ({
-          ...prev,
-          giverPartitionKey: "",
-        }));
+      if (selectedConnection.current.giverRowKey === newGiverRowKey) {
+        selectedConnection.current.giverRowKey = "";
+        selectedConnection.current.giverPartitionKey = "";
       } else {
-        setSelectedConnection((prev) => ({
-          ...prev,
-          giverRowKey: newGiverRowKey,
-        }));
-        setSelectedConnection((prev) => ({
-          ...prev,
-          giverPartitionKey: newGiverPartitionKey,
-        }));
+        selectedConnection.current.giverRowKey = newGiverRowKey;
+        selectedConnection.current.giverPartitionKey = newGiverPartitionKey;
       }
-    },
-    [selectedConnection.giverPartitionKey, selectedConnection.giverRowKey]
-  );
+    };
 
-  const handleRecipientChange = useCallback(
+  const handleRecipientChange = 
     (newRecipientRowKey: string, newRecipientPartitionKey: string) => {
-      if (selectedConnection.recipientRowKey === newRecipientRowKey) {
-        setSelectedConnection((prev) => ({
-          ...prev,
-          recipientRowKey: "",
-        }));
-        setSelectedConnection((prev) => ({
-          ...prev,
-          recipientPartitionKey: "",
-        }));
+      if (selectedConnection.current.recipientRowKey === newRecipientRowKey) {
+        selectedConnection.current.recipientRowKey = "";
+        selectedConnection.current.recipientPartitionKey = "";
       } else {
-        setSelectedConnection((prev) => ({
-          ...prev,
-          recipientRowKey: newRecipientRowKey,
-        }));
-        setSelectedConnection((prev) => ({
-          ...prev,
-          recipientPartitionKey: newRecipientPartitionKey,
-        }));
+        selectedConnection.current.recipientRowKey = newRecipientRowKey;
+        selectedConnection.current.recipientPartitionKey = newRecipientPartitionKey;        
       }
-    },
-    [
-      selectedConnection.recipientPartitionKey,
-      selectedConnection.recipientRowKey,
-    ]
-  );
+    };
 
   const connectGiverRecipient = async () => {
-    console.log(selectedConnection.giverPartitionKey);
     await fetch("api/admin", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        GiverRowKey: selectedConnection.giverRowKey,
-        GiverPartitionKey: selectedConnection.giverPartitionKey,
-        RecipientRowKey: selectedConnection.recipientRowKey,
-        RecipientPartitionKey: selectedConnection.recipientPartitionKey,
+        GiverRowKey: selectedConnection.current.giverRowKey,
+        GiverPartitionKey: selectedConnection.current.giverPartitionKey,
+        RecipientRowKey: selectedConnection.current.recipientRowKey,
+        RecipientPartitionKey: selectedConnection.current.recipientPartitionKey,
       }),
     })
       .then((response) => {
         //use this for sending a response to the user
-        if (response.status === 201) {
+        if (response.status === 200) {
+              fetchRecipients();
+    fetchGivers();
+    selectedConnection.current = initState;
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
-    fetchRecipients();
-    fetchGivers();
-    setSelectedConnection(initState);
   };
 
   return (
     <>
-      <Button onClick={connectGiverRecipient}>Koble sammen</Button>
+      <Button 
+      onClick={connectGiverRecipient}>Koble sammen</Button>
       <Grid
         container
         direction="row"
@@ -142,7 +113,7 @@ function OverviewMacro() {
           <Giver
             data={giverData}
             handleGiverChange={handleGiverChange}
-            selectedConnection={selectedConnection}
+            selectedConnection={selectedConnection.current}
           />
         </Grid>
         <Grid item xs={6}>
@@ -152,7 +123,7 @@ function OverviewMacro() {
           <Recipient
             data={recipientData}
             handleRecipientChange={handleRecipientChange}
-            selectedConnection={selectedConnection}
+            selectedConnection={selectedConnection.current}
           />
         </Grid>
       </Grid>
