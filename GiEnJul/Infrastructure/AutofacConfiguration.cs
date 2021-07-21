@@ -20,6 +20,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<AutoIncrementRepository>().As<IAutoIncrementRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
             builder.Register(c => new LoggerConfiguration()
                                 .MinimumLevel.Debug()

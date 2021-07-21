@@ -101,13 +101,13 @@ namespace GiEnJul.Features
             }
         }
 
-        protected async Task<T> InsertOrReplaceAsync(T entity)
+        protected async Task<T> InsertOrReplaceAsync(T entity, OperationContext context)
         {
             try
             {
                 _log.Verbose("Trying to add Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
                 var operation = TableOperation.InsertOrReplace(entity);
-                var result = await _table.ExecuteAsync(operation);
+                var result = await _table.ExecuteAsync(operation, null, context);
                 _log.Debug("Added Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
 
                 return (T)result.Result;
@@ -117,6 +117,11 @@ namespace GiEnJul.Features
                 _log.Error("Exception while trying to add or update Entity:{@entity}, into table:{@tablename}. \n{@Exception}", entity, _table.Name, e);
                 throw e;
             }
+        }
+
+        protected async Task<T> InsertOrReplaceAsync(T entity)
+        {
+            return await InsertOrReplaceAsync(entity, null);
         }
 
         protected async Task<TableBatchResult> InsertOrReplaceBatchAsync(IEnumerable<T> entities)

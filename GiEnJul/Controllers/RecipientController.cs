@@ -17,14 +17,23 @@ namespace GiEnJul.Controllers
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly IAutoIncrementRepository _autoIncrementRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
 
-        public RecipientController(IRecipientRepository recipientRepository, IPersonRepository personRepository, IEventRepository eventRepository, ILogger log, IMapper mapper)
+        public RecipientController(
+            IRecipientRepository recipientRepository, 
+            IPersonRepository personRepository, 
+            IEventRepository eventRepository, 
+            IAutoIncrementRepository autoIncrementRepository,
+            ILogger log, 
+            IMapper mapper
+            )
         {
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
             _eventRepository = eventRepository;
+            _autoIncrementRepository = autoIncrementRepository;
             _log = log;
             _mapper = mapper; 
         }
@@ -34,6 +43,7 @@ namespace GiEnJul.Controllers
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
+            recipient.InternalId = await _autoIncrementRepository.GetNext($"{recipient.EventName}_{recipient.Location}", "Recipient");
             
             //Add Recipient to Table Storage
             var insertedRecipient = await _recipientRepository.InsertOrReplaceAsync(recipient);
