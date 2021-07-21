@@ -1,21 +1,20 @@
-import React, {useRef} from "react";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Container,
   Divider,
   Typography,
 } from "@material-ui/core";
 import {
-  ExpandMore,
-  Group,
-  Phone,
-  Mail,
   CheckRounded,
   CloseRounded,
+  ExpandMore,
+  Group,
+  Mail,
+  Phone,
 } from "@material-ui/icons";
+import React from "react";
 import { GiverType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 
@@ -53,9 +52,10 @@ const Datatable: React.FC<Props> = ({
           onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
           key={giver.rowKey}
           //Styling should be in a seperate file
+          //This is not working atm because selectedConnection is a ref and will not rerender this component.
           style={
-            (giver.rowKey === selectedConnection.giverRowKey &&
-            !giver.isSuggestedMatch)
+            giver.rowKey === selectedConnection.giverRowKey &&
+            !giver.isSuggestedMatch
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",

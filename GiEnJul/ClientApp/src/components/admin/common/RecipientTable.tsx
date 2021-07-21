@@ -1,24 +1,23 @@
-import * as React from "react";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Container,
   Divider,
   Typography,
 } from "@material-ui/core";
 import {
-  ExpandMore,
-  Group,
-  Phone,
-  Mail,
   CheckRounded,
   CloseRounded,
+  ExpandMore,
+  Group,
+  Mail,
+  Phone,
 } from "@material-ui/icons";
+import * as React from "react";
+import Gender from "../../../common/enums/Gender";
 import { RecipientType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
-import Gender from "../../../common/enums/Gender";
 
 type Props = {
   data: RecipientType[] | [];
@@ -80,6 +79,7 @@ const DatatableRecipient: React.FC<Props> = ({
           }
           key={recipient.rowKey}
           //Styling should be in a seperate file
+          //This is not working atm because selectedConnection is a ref and will not rerender this component.
           style={
             recipient.rowKey === selectedConnection.recipientRowKey &&
             !recipient.isSuggestedMatch

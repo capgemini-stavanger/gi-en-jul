@@ -1,8 +1,8 @@
-import React, { useEffect, useState,  useRef} from "react";
+import { Button, Grid, Typography } from "@material-ui/core";
+import React, { useEffect, useRef, useState } from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
-import { Button, Grid, Typography } from "@material-ui/core";
-import { SelectedConnectionType, GiverType, RecipientType } from "./Types";
+import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
 
 const initState: SelectedConnectionType = {
   giverRowKey: "",
@@ -43,32 +43,37 @@ function OverviewMacro() {
       });
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchRecipients();
     fetchGivers();
   }, []);
 
-  const handleGiverChange = 
-    (newGiverRowKey: string, newGiverPartitionKey: string) => {
-      if (selectedConnection.current.giverRowKey === newGiverRowKey) {
-        selectedConnection.current.giverRowKey = "";
-        selectedConnection.current.giverPartitionKey = "";
-      } else {
-        selectedConnection.current.giverRowKey = newGiverRowKey;
-        selectedConnection.current.giverPartitionKey = newGiverPartitionKey;
-      }
-    };
+  const handleGiverChange = (
+    newGiverRowKey: string,
+    newGiverPartitionKey: string
+  ) => {
+    if (selectedConnection.current.giverRowKey === newGiverRowKey) {
+      selectedConnection.current.giverRowKey = "";
+      selectedConnection.current.giverPartitionKey = "";
+    } else {
+      selectedConnection.current.giverRowKey = newGiverRowKey;
+      selectedConnection.current.giverPartitionKey = newGiverPartitionKey;
+    }
+  };
 
-  const handleRecipientChange = 
-    (newRecipientRowKey: string, newRecipientPartitionKey: string) => {
-      if (selectedConnection.current.recipientRowKey === newRecipientRowKey) {
-        selectedConnection.current.recipientRowKey = "";
-        selectedConnection.current.recipientPartitionKey = "";
-      } else {
-        selectedConnection.current.recipientRowKey = newRecipientRowKey;
-        selectedConnection.current.recipientPartitionKey = newRecipientPartitionKey;        
-      }
-    };
+  const handleRecipientChange = (
+    newRecipientRowKey: string,
+    newRecipientPartitionKey: string
+  ) => {
+    if (selectedConnection.current.recipientRowKey === newRecipientRowKey) {
+      selectedConnection.current.recipientRowKey = "";
+      selectedConnection.current.recipientPartitionKey = "";
+    } else {
+      selectedConnection.current.recipientRowKey = newRecipientRowKey;
+      selectedConnection.current.recipientPartitionKey =
+        newRecipientPartitionKey;
+    }
+  };
 
   const connectGiverRecipient = async () => {
     await fetch("api/admin", {
@@ -86,9 +91,9 @@ function OverviewMacro() {
       .then((response) => {
         //use this for sending a response to the user
         if (response.status === 200) {
-              fetchRecipients();
-    fetchGivers();
-    selectedConnection.current = initState;
+          fetchRecipients();
+          fetchGivers();
+          selectedConnection.current = initState;
         }
       })
       .catch((errorStack) => {
@@ -98,8 +103,7 @@ function OverviewMacro() {
 
   return (
     <>
-      <Button 
-      onClick={connectGiverRecipient}>Koble sammen</Button>
+      <Button onClick={connectGiverRecipient}>Koble sammen</Button>
       <Grid
         container
         direction="row"

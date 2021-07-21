@@ -1,6 +1,6 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import React, { useState, useRef} from "react";
+import React, { useState } from "react";
 import Datatable from "../common/RecipientTable";
 import { RecipientType, SelectedConnectionType } from "./Types";
 
