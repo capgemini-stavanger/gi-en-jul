@@ -89,5 +89,21 @@ namespace GiEnJul.Controllers
             }
             return Ok();
         }
+        [HttpDelete("{giverid:string}")]
+        public async Task<ActionResult<Entities.Giver>> DeleteGiver(string giverid)
+        {
+            try
+            {
+                var giverToDelete = await _giverRepository.GetGiverAsync(giverid, giverid);
+                if (giverToDelete == null)
+                    return NotFound($"Giver with Id = {giverid} not found");
+                return await _giverRepository.DeleteAsync(giverToDelete);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Error deleting data");
+            }
+        }
     }
 }
