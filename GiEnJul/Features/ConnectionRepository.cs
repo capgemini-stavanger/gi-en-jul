@@ -8,23 +8,24 @@ namespace GiEnJul.Features
 {
     public interface IConnectionRepository
     {
-        Task<Connection> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
-        Task<Connection> DeleteConnectionAsync(Entities.Connection connection);
+        Task<(string,string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
+        Task DeleteConnectionAsync(string partitionKey, string rowKey);
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
         public ConnectionRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Connection") : base(settings, tableName, mapper, log)
         { }
 
-        public async Task<Connection> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient)
+        public async Task<(string,string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient)
         {
             var connection = new Connection(_mapper.Map<Giver>(giver), _mapper.Map<Recipient>(recipient));
-            return await InsertOrReplaceAsync(connection);
+            await InsertOrReplaceAsync(connection);
+            return (connection.PartitionKey, connection.RowKey);
         }
 
-        public async Task<Connection> DeleteConnectionAsync(Entities.Connection connection)
+        public async Task DeleteConnectionAsync(string partitionKey, string rowKey)
         {
-            return await DeleteAsync(connection);
+            await DeleteAsync(partitionKey, rowKey);
         }
     }
 }

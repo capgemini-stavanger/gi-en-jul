@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
+using Microsoft.AspNetCore.Authorization;
+
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
@@ -41,27 +43,30 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
+        // [Authorize(Policy = "ReadGivers")] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
             // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
-        public async Task<List<Recipient>> GetRecipientsAsync() {
+        public async Task<List<Recipient>> GetRecipientsAsync()
+        {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
             foreach (var recipient in recipients)
             {
                 var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-                recipient.FamilyMembers = familyMembers; 
+                recipient.FamilyMembers = familyMembers;
             }
             return recipients;
         }
         [HttpPost]
-        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey) {
+        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey)
+        {
             var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
-            var connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
             giver.IsSuggestedMatch = true;
             giver.MatchedRecipient = recipientRowKey;
             recipient.IsSuggestedMatch = true;
@@ -73,7 +78,7 @@ namespace GiEnJul.Controllers
             }
             catch (System.Exception e)
             {
-                await _connectionRepository.DeleteConnectionAsync(connection);
+                await _connectionRepository.DeleteConnectionAsync(connection.partitionKey, connection.rowKey);
                 giver.IsSuggestedMatch = false;
                 giver.MatchedRecipient = "";
                 recipient.IsSuggestedMatch = false;

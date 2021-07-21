@@ -1,5 +1,8 @@
 using Autofac;
 using GiEnJul.Infrastructure;
+using GiEnJul.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -10,13 +13,15 @@ namespace GiEnJul
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
         public ILifetimeScope AutofacContainer { get; private set; }
+        private readonly IWebHostEnvironment _env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,7 +33,24 @@ namespace GiEnJul
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            string domain = $"https://{Configuration["Auth0:Domain"]}/";
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                var section = Configuration.GetSection("Auth0");
+                options.Authority = domain;
+                options.Audience = section.GetValue<string>(_env.IsDevelopment() ? "LocalAudience" : "AzureAudience");
+            }
+            );
+            services.AddAuthorization(options =>
+                Authconfig.SetPolicies(options)
+            );
         }
+
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -54,6 +76,8 @@ namespace GiEnJul
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
