@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
+using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace GiEnJul.Controllers
 {
@@ -89,18 +91,23 @@ namespace GiEnJul.Controllers
             }
             return Ok();
         }
-        [HttpDelete("{giverid:string}")]
-        public async Task<ActionResult<Entities.Giver>> DeleteGiver(string giverid)
+        [HttpDelete("giver")]
+        public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
+
         {
+            System.Console.WriteLine("im here");
             try
             {
-                var giverToDelete = await _giverRepository.GetGiverAsync(giverid, giverid);
+                System.Console.WriteLine("Trying");
+                var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
                 if (giverToDelete == null)
-                    return NotFound($"Giver with Id = {giverid} not found");
-                return await _giverRepository.DeleteAsync(giverToDelete);
+                    return NotFound($"Giver with PK = {giverDto.PartitionKey} and RK = {giverDto.RowKey} not found");
+                var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
+                return Ok();
             }
-            catch (Exception)
+            catch (System.Exception err)
             {
+                System.Console.WriteLine(err);
                 return StatusCode(StatusCodes.Status500InternalServerError,
                 "Error deleting data");
             }
