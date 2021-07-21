@@ -1,10 +1,10 @@
 ﻿using Autofac;
+using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Features;
-using GiEnJul.Auth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
 using Serilog;
 
 namespace GiEnJul.Infrastructure
@@ -24,10 +24,14 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
-            builder.Register(c => new LoggerConfiguration()
+
+            var logger = new LoggerConfiguration()
                                 .MinimumLevel.Debug()
                                 .WriteTo.Console()
-                                .CreateLogger()).As<ILogger>().SingleInstance();
+                                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(settings.TableConnectionString), storageTableName: settings.LogTableName)
+                                .CreateLogger();
+
+            builder.Register(c => logger).As<ILogger>().SingleInstance();
         }
     }
 }
