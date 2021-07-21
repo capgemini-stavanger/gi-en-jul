@@ -18,6 +18,7 @@ namespace GiEnJul.Infrastructure
         }
 
         public string TableConnectionString => _configuration.GetValue<string>("TableConnectionString");
+        public string LogTableName => _configuration.GetValue("LogTableName", "Logs");
         public MailSettings MailSettings
         {
             get
