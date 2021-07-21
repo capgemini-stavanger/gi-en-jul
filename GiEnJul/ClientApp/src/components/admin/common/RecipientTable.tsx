@@ -16,7 +16,7 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { RecipientType } from "../overview/Types";
+import { RecipientType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 import Gender from "../../../common/enums/Gender";
 
@@ -27,11 +27,13 @@ type Props = {
     newRecipientRowKey: string,
     newRecipientPartitionKey: string
   ) => void;
+  selectedConnection: SelectedConnectionType;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
+  selectedConnection
 }) => {
   const classes = useStyles();
 
@@ -80,7 +82,7 @@ const DatatableRecipient: React.FC<Props> = ({
           key={`acc_recipient_${index}`}
           //Styling should be in a seperate file
           style={
-            recipient.isSelected
+            (recipient.rowKey===selectedConnection.recipientRowKey)
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",

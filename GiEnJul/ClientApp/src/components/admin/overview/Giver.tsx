@@ -2,7 +2,7 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import React, {useState } from "react";
 import Datatable from "../common/GiverTable";
-import { GiverType } from "./Types";
+import { GiverType, SelectedConnectionType} from "./Types";
 
 type Props = {
   data: GiverType[] | [];
@@ -10,9 +10,10 @@ type Props = {
     newGiverRowKey: string,
     newGiverPartitionKey: string
   ) => void;
+  selectedConnection: SelectedConnectionType;
 };
 
-const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
+const Giver: React.FC<Props> = ({ data, handleGiverChange, selectedConnection }) => {
   const [query, setQuery] = useState("");
 
   const search = (input: GiverType[] | []) => {
@@ -43,6 +44,7 @@ const Giver: React.FC<Props> = ({ data, handleGiverChange }) => {
       <Datatable
         data={search(data)}
         handleGiverChange={handleGiverChange}
+        selectedConnection = {selectedConnection}
       ></Datatable>
     </Container>
   );

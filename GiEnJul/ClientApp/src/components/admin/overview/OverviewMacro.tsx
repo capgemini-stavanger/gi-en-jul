@@ -56,11 +56,6 @@ function OverviewMacro() {
       ...prev,
       giverPartitionKey: newGiverPartitionKey,
     }));
-    setGiverData(
-      giverData.map((item) =>
-      ({ ...item, isSelected: (item.rowKey === newGiverRowKey && item.isSuggestedMatch === false)})
-      )
-    );
   };
 
   const handleRecipientChange = (
@@ -75,11 +70,6 @@ function OverviewMacro() {
       ...prev,
       recipientPartitionKey: newRecipientPartitionKey,
     }));
-    setRecipientData(
-      recipientData.map((item) =>
-      ({ ...item, isSelected: (item.rowKey === newRecipientRowKey && item.isSuggestedMatch === false)})
-      )
-    );
   };
 
   const connectGiverRecipient = async () => {
@@ -121,7 +111,10 @@ function OverviewMacro() {
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <Giver data={giverData} handleGiverChange={handleGiverChange} />
+          <Giver 
+          data={giverData} 
+          handleGiverChange={handleGiverChange}
+          selectedConnection = {selectedConnection} />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h4" align="center">
@@ -130,6 +123,7 @@ function OverviewMacro() {
           <Recipient
             data={recipientData}
             handleRecipientChange={handleRecipientChange}
+            selectedConnection = {selectedConnection}
           />
         </Grid>
       </Grid>

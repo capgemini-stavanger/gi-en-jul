@@ -19,7 +19,6 @@ export interface SelectedConnectionType {
     partitionKey: string;
     rowKey: string;
     phoneNumber: string;
-    isSelected: Boolean;
   }
   
   export interface RecipientType {
@@ -39,7 +38,6 @@ export interface SelectedConnectionType {
     partitionKey: string;
     referenceId: string;
     rowKey: string;
-    isSelected: Boolean;
   }
   export interface PersonType {
     partitionKey: string;

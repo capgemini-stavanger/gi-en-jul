@@ -16,7 +16,7 @@ import {
   CheckRounded,
   CloseRounded,
 } from "@material-ui/icons";
-import { GiverType } from "../overview/Types";
+import { GiverType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {
@@ -25,9 +25,10 @@ type Props = {
     newGiverRowKey: string,
     newGiverPartitionKey: string
   ) => void;
+  selectedConnection: SelectedConnectionType;
 };
 
-const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
+const Datatable: React.FC<Props> = ({ data, handleGiverChange, selectedConnection }) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -49,7 +50,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
           key={`acc_giver_${index}`}
           //Styling should be in a seperate file
           style={
-            giver.isSelected
+            (giver.rowKey=== selectedConnection.giverRowKey)
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
