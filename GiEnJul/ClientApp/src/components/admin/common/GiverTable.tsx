@@ -28,7 +28,11 @@ type Props = {
   selectedConnection: SelectedConnectionType;
 };
 
-const Datatable: React.FC<Props> = ({ data, handleGiverChange, selectedConnection }) => {
+const Datatable: React.FC<Props> = ({
+  data,
+  handleGiverChange,
+  selectedConnection,
+}) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -50,7 +54,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, selectedConnectio
           key={`acc_giver_${index}`}
           //Styling should be in a seperate file
           style={
-            (giver.rowKey=== selectedConnection.giverRowKey)
+            giver.rowKey === selectedConnection.giverRowKey &&
+            !giver.isSuggestedMatch
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
@@ -95,4 +100,4 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, selectedConnectio
   );
 };
 
-export default Datatable;
+export default React.memo(Datatable);

@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { SelectedConnectionType, GiverType, RecipientType } from "./Types";
 
+const initState: SelectedConnectionType = {
+  giverRowKey: "",
+  giverPartitionKey: "",
+  recipientRowKey: "",
+  recipientPartitionKey: "",
+};
+
 function OverviewMacro() {
   const [selectedConnection, setSelectedConnection] =
-    useState<SelectedConnectionType>({
-      giverRowKey: "",
-      giverPartitionKey: "",
-      recipientRowKey: "",
-      recipientPartitionKey: "",
-    });
+    useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
 
@@ -47,30 +49,55 @@ function OverviewMacro() {
     fetchGivers();
   }, []);
 
-  const handleGiverChange = (
-    newGiverRowKey: string,
-    newGiverPartitionKey: string
-  ) => {
-    setSelectedConnection((prev) => ({ ...prev, giverRowKey: newGiverRowKey }));
-    setSelectedConnection((prev) => ({
-      ...prev,
-      giverPartitionKey: newGiverPartitionKey,
-    }));
-  };
+  const handleGiverChange = useCallback(
+    (newGiverRowKey: string, newGiverPartitionKey: string) => {
+      if (selectedConnection.giverRowKey === newGiverRowKey) {
+        setSelectedConnection((prev) => ({ ...prev, giverRowKey: "" }));
+        setSelectedConnection((prev) => ({
+          ...prev,
+          giverPartitionKey: "",
+        }));
+      } else {
+        setSelectedConnection((prev) => ({
+          ...prev,
+          giverRowKey: newGiverRowKey,
+        }));
+        setSelectedConnection((prev) => ({
+          ...prev,
+          giverPartitionKey: newGiverPartitionKey,
+        }));
+      }
+    },
+    [selectedConnection.giverPartitionKey, selectedConnection.giverRowKey]
+  );
 
-  const handleRecipientChange = (
-    newRecipientRowKey: string,
-    newRecipientPartitionKey: string
-  ) => {
-    setSelectedConnection((prev) => ({
-      ...prev,
-      recipientRowKey: newRecipientRowKey,
-    }));
-    setSelectedConnection((prev) => ({
-      ...prev,
-      recipientPartitionKey: newRecipientPartitionKey,
-    }));
-  };
+  const handleRecipientChange = useCallback(
+    (newRecipientRowKey: string, newRecipientPartitionKey: string) => {
+      if (selectedConnection.recipientRowKey === newRecipientRowKey) {
+        setSelectedConnection((prev) => ({
+          ...prev,
+          recipientRowKey: "",
+        }));
+        setSelectedConnection((prev) => ({
+          ...prev,
+          recipientPartitionKey: "",
+        }));
+      } else {
+        setSelectedConnection((prev) => ({
+          ...prev,
+          recipientRowKey: newRecipientRowKey,
+        }));
+        setSelectedConnection((prev) => ({
+          ...prev,
+          recipientPartitionKey: newRecipientPartitionKey,
+        }));
+      }
+    },
+    [
+      selectedConnection.recipientPartitionKey,
+      selectedConnection.recipientRowKey,
+    ]
+  );
 
   const connectGiverRecipient = async () => {
     console.log(selectedConnection.giverPartitionKey);
@@ -87,8 +114,8 @@ function OverviewMacro() {
       }),
     })
       .then((response) => {
+        //use this for sending a response to the user
         if (response.status === 201) {
-          //use this for sending a response to the user
         }
       })
       .catch((errorStack) => {
@@ -96,11 +123,12 @@ function OverviewMacro() {
       });
     fetchRecipients();
     fetchGivers();
+    setSelectedConnection(initState);
   };
 
   return (
     <>
-      <Button onClick={connectGiverRecipient} >Koble sammen</Button>
+      <Button onClick={connectGiverRecipient}>Koble sammen</Button>
       <Grid
         container
         direction="row"
@@ -111,10 +139,11 @@ function OverviewMacro() {
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <Giver 
-          data={giverData} 
-          handleGiverChange={handleGiverChange}
-          selectedConnection = {selectedConnection} />
+          <Giver
+            data={giverData}
+            handleGiverChange={handleGiverChange}
+            selectedConnection={selectedConnection}
+          />
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h4" align="center">
@@ -123,7 +152,7 @@ function OverviewMacro() {
           <Recipient
             data={recipientData}
             handleRecipientChange={handleRecipientChange}
-            selectedConnection = {selectedConnection}
+            selectedConnection={selectedConnection}
           />
         </Grid>
       </Grid>

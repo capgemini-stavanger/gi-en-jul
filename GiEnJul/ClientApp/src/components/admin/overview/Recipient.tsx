@@ -1,6 +1,6 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import  React, { useState } from "react";
+import React, { useState } from "react";
 import Datatable from "../common/RecipientTable";
 import { RecipientType, SelectedConnectionType } from "./Types";
 
@@ -13,7 +13,11 @@ type Props = {
   selectedConnection: SelectedConnectionType;
 };
 
-const Recipient: React.FC<Props> = ({ data, handleRecipientChange, selectedConnection }) => {
+const Recipient: React.FC<Props> = ({
+  data,
+  handleRecipientChange,
+  selectedConnection,
+}) => {
   const [query, setQuery] = useState("");
 
   const search = (input: RecipientType[] | []) => {
@@ -46,9 +50,9 @@ const Recipient: React.FC<Props> = ({ data, handleRecipientChange, selectedConne
       <Datatable
         data={search(data)}
         handleRecipientChange={handleRecipientChange}
-        selectedConnection = {selectedConnection}
+        selectedConnection={selectedConnection}
       />
     </Container>
   );
 };
-export default Recipient;
+export default React.memo(Recipient);

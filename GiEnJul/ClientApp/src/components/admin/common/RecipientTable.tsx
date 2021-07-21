@@ -20,7 +20,6 @@ import { RecipientType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 import Gender from "../../../common/enums/Gender";
 
-
 type Props = {
   data: RecipientType[] | [];
   handleRecipientChange: (
@@ -33,7 +32,7 @@ type Props = {
 const DatatableRecipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
-  selectedConnection
+  selectedConnection,
 }) => {
   const classes = useStyles();
 
@@ -82,7 +81,8 @@ const DatatableRecipient: React.FC<Props> = ({
           key={`acc_recipient_${index}`}
           //Styling should be in a seperate file
           style={
-            (recipient.rowKey===selectedConnection.recipientRowKey)
+            recipient.rowKey === selectedConnection.recipientRowKey &&
+            !recipient.isSuggestedMatch
               ? {
                   background:
                     "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
@@ -158,4 +158,4 @@ const DatatableRecipient: React.FC<Props> = ({
   );
 };
 
-export default DatatableRecipient;
+export default React.memo(DatatableRecipient);
