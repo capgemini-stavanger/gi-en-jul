@@ -25,9 +25,8 @@ ReactDOM.render(
     <Auth0Provider
       domain={domainEnv}
       clientId={clientidEnv}
-      redirectUri={window.location.origin + "/admin"}
-      audience={"https://" + domainEnv + "/api/v2/"}
-      scope="read:current_user update:current_user_metadata read:users_app_metadata"
+      redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
+      audience={window.location.origin + "/api"} // this should be changed to a .env var when we have refactured the project and pipeline
     >
       <ConnectedRouter history={history}>
         <App />

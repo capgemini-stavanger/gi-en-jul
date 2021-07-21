@@ -50,7 +50,7 @@ MAX_AGE = 130
 
 FOLDER_PATH = f"{os.path.abspath(os.getcwd())}"
 
-FOLDER_PATH_DATA = f"{FOLDER_PATH}/.data"
+FOLDER_PATH_DATA = f"{FOLDER_PATH}/data"
 FILE_PATH_NAMES_MALE = f"{FOLDER_PATH_DATA}/names_male.txt"
 FILE_PATH_NAMES_FEMALE = f"{FOLDER_PATH_DATA}/names_female.txt"
 FILE_PATH_LASTNAMES = f"{FOLDER_PATH_DATA}/lastnames.txt"
