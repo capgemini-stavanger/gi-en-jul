@@ -13,9 +13,9 @@ TIME_TIMESTAMP = datetime.datetime.utcfromtimestamp(
 
 TABLE_HEADER_PERSON = ["Age", "Gender", "Wish"]
 TABLE_HEADER_GIVER = ["Email", "EventName", "FullName", "HasConfirmedMatch",
-                      "IsSuggestedMatch", "Location", "MaxRecievers", "PhoneNumber"]
+                      "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber"]
 TABLE_HEADER_RECIPIENT = ["ContactEmail", "ContactFullName", "ContactPhoneNumber", "Dessert", "Dinner", "EventName",
-                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount", "ReferenceId"]
+                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount", "ReferenceId", "InternalId"]
 
 PHONE_NUMBER_RANGES = ((40_00_00_00, 49_99_99_99), (90_00_00_00, 99_99_99_99))
 EMAIL_DOMAIN = ("gmail", "outlook", "live", "lyse", "hotmail")
@@ -257,9 +257,16 @@ def add_table_entry_person(recipient_id: str):
                   [age, gender, wish])
 
 
+internal_id_int = 0
+
+
 def add_table_entry_recipient_and_persons(location: str, event_name: str):
+    global internal_id_int
+    internal_id_int += 1
+
     event_name = event_name.capitalize()
     location = location.capitalize()
+    internal_id = str(internal_id_int)
     partition_key = get_event_location_str(event_name, location)
     row_key = get_uuid()
     contact_full_name = get_name(get_gender())
@@ -275,7 +282,8 @@ def add_table_entry_recipient_and_persons(location: str, event_name: str):
     is_suggested_match = False
     add_table_row(FILE_PATH_RECIPIENT, partition_key, row_key,
                   (contact_email, contact_full_name, contact_phone_number, dessert, dinner,
-                   event_name, has_confirmed_match, institution, is_suggested_match, location, note, personCount, reference_id))
+                   event_name, has_confirmed_match, institution, is_suggested_match, location,
+                   note, personCount, reference_id, internal_id))
 
     for p in range(personCount):
         add_table_entry_person(row_key)

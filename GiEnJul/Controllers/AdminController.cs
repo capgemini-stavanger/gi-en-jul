@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
 using GiEnJul.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GiEnJul.Controllers
 {
@@ -43,6 +44,7 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
+        // [Authorize(Policy = "ReadGivers")] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();

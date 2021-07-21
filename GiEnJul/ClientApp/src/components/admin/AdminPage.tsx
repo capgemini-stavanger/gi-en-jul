@@ -2,78 +2,32 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
-import ErrorPage from "../common/ErrorPage";
-import InstitutionMacro from "../institution/InstitutionMacro";
 import LogOutButton from "../login/LogOutButton";
 import AdminTab from "./AdminTab";
 
-type UserDataType = {
-  app_metadata?: { role: string };
-  email?: string;
-  email_verified?: boolean;
-  identities?: [{}];
-  last_ip?: number;
-  last_login?: string;
-  logins_count?: number;
-  name?: string;
-  nickname?: string;
-  picture?: string;
-  updated_at?: string;
-  user_metadata?: { string: string };
-};
-
 function AdminPage() {
   const { user, getAccessTokenSilently } = useAuth0();
-  const [userData, setUserData] = useState<UserDataType | undefined>(undefined);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [userAccessToken, setUserAccessToken] = useState<string>("");
 
-  async function getUserInformation(): Promise<UserDataType> {
-    const domain = process.env.REACT_APP_DEV_TENANT_AUTH0!;
-
-    const accessToken = await getAccessTokenSilently({
-      audience: `https://${domain}/api/v2/`,
-      scope: "read:current_user",
-    });
-
-    const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user!.sub}`;
-
-    const response = await fetch(userDetailsByIdUrl, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    const userInformation: UserDataType = await response.json();
-    return userInformation;
+  async function getUserAccessToken(): Promise<string> {
+    const accessToken = await getAccessTokenSilently();
+    return accessToken;
   }
   useEffect(() => {
-    getUserInformation().then((response: UserDataType) => {
-      setUserData(response);
-      setIsLoaded(true);
+    getUserAccessToken().then((resp: string) => {
+      setUserAccessToken(resp);
     });
   }, []);
 
-  if (!isLoaded) {
-    return <LoadingPage />;
-  } else if (isLoaded && userData == null) {
-    throw new Error("userData was not Loaded");
+  if (userAccessToken !== "") {
+    return (
+      <>
+        <LogOutButton />
+        <AdminTab />
+      </>
+    );
   } else {
-    if (userData!.app_metadata!.role === "institution") {
-      return <InstitutionMacro />;
-    } else if (userData!.app_metadata!.role === "admin") {
-      return (
-        <>
-          <LogOutButton />
-          <AdminTab />
-        </>
-      );
-    } else {
-      return (
-        <ErrorPage
-          ErrorText={"Your Role has not yet been set"}
-          ErrorCode={200}
-        />
-      );
-    }
+    return <LoadingPage />;
   }
 }
 export default withAuthenticationRequired(AdminPage, {
