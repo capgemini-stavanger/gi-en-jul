@@ -1,0 +1,30 @@
+﻿using GiEnJul.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace GiEnJul.Helpers
+{
+    public static class ConnectionHelper
+    {
+
+        public static bool CanConnect(Giver giver, Recipient recipient)
+        {
+            return
+                recipient.IsSuggestedMatch &&
+                giver.IsSuggestedMatch &&
+                giver.MatchedRecipient == recipient.RowKey &&
+                recipient.MatchedGiver == giver.RowKey &&
+                CanSuggestConnection(giver, recipient);
+        }
+
+        public static bool CanSuggestConnection(Giver giver, Recipient recipient)
+        {
+            return 
+                giver.PartitionKey == recipient.PartitionKey &&
+                giver.Location == recipient.Location &&
+                giver.EventName == recipient.EventName;
+        }
+    }
+}
