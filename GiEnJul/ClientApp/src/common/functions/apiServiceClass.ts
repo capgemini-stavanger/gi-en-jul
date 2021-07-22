@@ -17,7 +17,7 @@ class ApiService implements IApiService {
   config: any;
   constructor(token = "") {
     this.token = token;
-    this.baseUrl = process.env.REACT_APP_API_URL as string;
+    this.baseUrl = process.env.REACT_APP_API_URL + "/" as string;
     this.config = {
       headers: {
         "Content-Type": "application/json",
@@ -63,6 +63,10 @@ class ApiService implements IApiService {
   fetch = (fullPath: string, params = undefined) => {
     return axios.get(fullPath, params);
   };
+  delete = (path: string, deleteData: any) => {
+    const newConfig = { ...this.config, data:deleteData };
+    return axios.delete(this.baseUrl + path, newConfig)
+  }
   
 }
 export default ApiService;
