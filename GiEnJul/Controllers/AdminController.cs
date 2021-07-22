@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
-using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using GiEnJul.Repositories;
+using System;
+using GiEnJul.Exceptions;
+using GiEnJul.Helpers;
+using GiEnJul.Infrastructure;
 
 namespace GiEnJul.Controllers
 {
@@ -24,8 +27,18 @@ namespace GiEnJul.Controllers
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly IEmailClient _emailClient;
+        private readonly ISettings _settings;
 
-        public AdminController(IEventRepository eventRepository, IGiverRepository giverRepository, IRecipientRepository recipientRepository, IPersonRepository personRepository, IConnectionRepository connectionRepository, ILogger log, IMapper mapper, IEmailClient emailClient)
+        public AdminController(
+            IEventRepository eventRepository,
+            IGiverRepository giverRepository,
+            IRecipientRepository recipientRepository,
+            IPersonRepository personRepository,
+            IConnectionRepository connectionRepository,
+            ILogger log,
+            IMapper mapper,
+            IEmailClient emailClient,
+            ISettings settings)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -35,6 +48,7 @@ namespace GiEnJul.Controllers
             _log = log;
             _mapper = mapper;
             _emailClient = emailClient;
+            _settings = settings;
         }
         //The function below is not in use now, but should be implemented later:
         // Need to add an appropriate routing for the api call below. 
@@ -63,29 +77,43 @@ namespace GiEnJul.Controllers
             return recipients;
         }
         [HttpPost]
-        public async Task<ActionResult> PostConnectionAsyc([FromBody] PostConnectionDto connectionDto)
+        public async Task<ActionResult> SuggestConnectionAsyc([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
-            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
-            giver.IsSuggestedMatch = true;
-            giver.MatchedRecipient = connectionDto.RecipientRowKey;
-            recipient.IsSuggestedMatch = true;
-            recipient.MatchedGiver = connectionDto.GiverRowKey;
+
+            if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
+            {
+                throw new InvalidConnectionCreationException();
+            }
+
             try
             {
+                giver.IsSuggestedMatch = true;
+                giver.MatchedRecipient = connectionDto.RecipientRowKey;
                 await _giverRepository.InsertOrReplaceAsync(giver);
+
+                recipient.IsSuggestedMatch = true;
+                recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+
+                var title = "Du har blitt tildelt en familie!";
+                var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+                var body =
+                    $"Hei {giver.FullName}! " +
+                    $"Du har nå fått tildelt en familie på {recipient.FamilyMembers.Count}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet tïl å gi en jul. " +
+                    $"<a href=\"{verifyLink}\" Vennligst trykk her for å bekrefte tildelingen> ";
+
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                await _connectionRepository.DeleteConnectionAsync(connection.partitionKey, connection.rowKey);
                 giver.IsSuggestedMatch = false;
                 giver.MatchedRecipient = "";
+                await _giverRepository.InsertOrReplaceAsync(giver);
+
                 recipient.IsSuggestedMatch = false;
                 recipient.MatchedGiver = "";
-                await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
                 throw e;
             }
