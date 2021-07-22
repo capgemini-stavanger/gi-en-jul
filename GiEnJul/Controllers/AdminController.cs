@@ -45,7 +45,7 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        // [Authorize(Policy = "ReadGivers")] This will deny any unauthorized requests, but will break the application atm
+        // [Authorize(Policy = "ReadGiver")] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
@@ -92,6 +92,7 @@ namespace GiEnJul.Controllers
             return Ok();
         }
         [HttpDelete("giver")]
+        [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
             try
