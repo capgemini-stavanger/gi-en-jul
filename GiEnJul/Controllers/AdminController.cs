@@ -96,13 +96,14 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = true;
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
                 var title = "Du har blitt tildelt en familie!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var body =
                     $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {recipient.FamilyMembers.Count}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet tïl å gi en jul. " +
-                    $"<a href=\"{verifyLink}\" Vennligst trykk her for å bekrefte tildelingen> ";
+                    $"Du har nå fått tildelt en familie på {recipient.FamilyMembers.Count}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
+                    $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
             }
