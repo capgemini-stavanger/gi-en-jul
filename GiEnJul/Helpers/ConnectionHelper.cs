@@ -28,7 +28,6 @@ namespace GiEnJul.Helpers
             if (recipient is null)
                 throw new ArgumentNullException(nameof(recipient));
             
-
             return
                 giver.PartitionKey == recipient.PartitionKey &&
                 giver.Location == recipient.Location &&
