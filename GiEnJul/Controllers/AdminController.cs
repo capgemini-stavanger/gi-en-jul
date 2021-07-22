@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
+using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace GiEnJul.Controllers
@@ -43,7 +44,7 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        // [Authorize(Policy = "ReadGivers")] This will deny any unauthorized requests, but will break the application atm
+        // [Authorize(Policy = "ReadGiver")] This will deny any unauthorized requests, but will break the application atm
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
@@ -87,6 +88,14 @@ namespace GiEnJul.Controllers
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
                 throw e;
             }
+            return Ok();
+        }
+        [HttpDelete("giver")]
+        [Authorize(Policy = "DeleteGiver")]
+        public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
+        {
+            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
         }
     }
