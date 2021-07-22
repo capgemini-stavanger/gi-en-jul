@@ -1,29 +1,38 @@
-import * as React from "react";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Container,
   Divider,
   Typography,
 } from "@material-ui/core";
 import {
-  ExpandMore,
-  Group,
-  Phone,
-  Mail,
   CheckRounded,
   CloseRounded,
+  ExpandMore,
+  Group,
+  Mail,
+  Phone,
 } from "@material-ui/icons";
-import { RecipientType } from "../overview/Recipient";
+import * as React from "react";
+import Gender from "../../../common/enums/Gender";
+import { RecipientType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {
   data: RecipientType[] | [];
+  handleRecipientChange: (
+    newRecipientRowKey: string,
+    newRecipientPartitionKey: string
+  ) => void;
+  selectedConnection: SelectedConnectionType;
 };
 
-const DatatableRecipient: React.FC<Props> = ({ data }) => {
+const DatatableRecipient: React.FC<Props> = ({
+  data,
+  handleRecipientChange,
+  selectedConnection,
+}) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -37,32 +46,24 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const handleMatched = (input: Boolean) => {
-    if (input) {
-      return classes.matched;
-    } else {
-      return classes.notMatched;
-    }
-  };
-
-  const handleGender = (gender: Number, age: Number) => {
+  const handleGender = (gender: Gender, age: Number) => {
     if (age < 18) {
       switch (gender) {
-        case 0:
+        case Gender.Other:
           return "Ukjent";
-        case 1:
+        case Gender.Male:
           return "Gutt";
-        case 2:
+        case Gender.Female:
           return "Jente";
         default:
       }
     } else {
       switch (gender) {
-        case 0:
+        case Gender.Other:
           return "Ukjent";
-        case 1:
+        case Gender.Male:
           return "Mann";
-        case 2:
+        case Gender.Female:
           return "Kvinne";
         default:
       }
@@ -71,8 +72,24 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
 
   return (
     <Container>
-      {data.map((recipient, index) => (
-        <Accordion key={`acc_recipient_${index}`}>
+      {data.map((recipient) => (
+        <Accordion
+          onChange={() =>
+            handleRecipientChange(recipient.rowKey, recipient.partitionKey)
+          }
+          key={recipient.rowKey}
+          //Styling should be in a seperate file
+          //This is not working atm because selectedConnection is a ref and will not rerender this component.
+          style={
+            recipient.rowKey === selectedConnection.recipientRowKey &&
+            !recipient.isSuggestedMatch
+              ? {
+                  background:
+                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+                }
+              : { background: "white" }
+          }
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
@@ -85,20 +102,19 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
               <Group />
               {formatFamily(recipient.familyMembers.length)}
             </Typography>
-            <Avatar className={handleMatched(recipient.hasConfirmedMatch)}>
-              {recipient.hasConfirmedMatch ? (
-                <CheckRounded style={{ color: "#FFFFFF" }} />
-              ) : (
-                <CloseRounded style={{ color: "#F36161" }} />
-              )}
-            </Avatar>
+            {recipient.isSuggestedMatch ? (
+              //Styling should be in a seperate file
+              <CheckRounded style={{ color: "#49a591" }} />
+            ) : (
+              <CloseRounded style={{ color: "#ed8175" }} />
+            )}
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
             <Typography>Ønsker:</Typography>
           </AccordionDetails>
-          {recipient.familyMembers.map((person, personIndex) => (
-            <div key={`acc_person_${index}_${personIndex}`}>
+          {recipient.familyMembers.map((person) => (
+            <div key={person.rowKey}>
               <AccordionDetails>
                 <Typography className={classes.smallColumn}>
                   {handleGender(person.gender, person.age)}
@@ -142,4 +158,4 @@ const DatatableRecipient: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default DatatableRecipient;
+export default React.memo(DatatableRecipient);

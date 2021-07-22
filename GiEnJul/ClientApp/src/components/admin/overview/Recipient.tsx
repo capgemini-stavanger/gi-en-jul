@@ -1,67 +1,34 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Datatable from "../common/RecipientTable";
-import { GiverType } from "./Giver";
+import { RecipientType, SelectedConnectionType } from "./Types";
 
-export interface PersonType {
-  partitionKey: string;
-  rowKey: string;
-  wish: string;
-  age: Number;
-  gender: Number;
-}
-export interface RecipientType {
-  contactEmail: string;
-  contactFullName: string;
-  contactPhoneNumber: string;
-  dessert: string;
-  dinner: string;
-  eventName: string;
-  familyMembers: PersonType[];
-  hasConfirmedMatch: Boolean;
-  institution: string;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedGiver?: GiverType;
-  note: string;
-  partitionKey: string;
-  referenceId: string;
-  rowKey: string;
-}
+type Props = {
+  data: RecipientType[] | [];
+  handleRecipientChange: (
+    newRecipientRowKey: string,
+    newRecipientPartitionKey: string
+  ) => void;
+  selectedConnection: SelectedConnectionType;
+};
 
-const Recipient = () => {
-  const [data, setData] = useState<RecipientType[] | []>([]);
-  const [q, setQ] = useState("");
-
-  useEffect(() => {
-    async function fetchRecipients() {
-      await fetch("./api/admin/recipients", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
-    fetchRecipients();
-  }, []);
+const Recipient: React.FC<Props> = ({
+  data,
+  handleRecipientChange,
+  selectedConnection,
+}) => {
+  const [query, setQuery] = useState("");
 
   const search = (input: RecipientType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
-
     return input.filter(
       (input) =>
-        input.contactEmail.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.contactFullName.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.contactPhoneNumber.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.institution.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.referenceId.toLocaleLowerCase().indexOf(q) > -1
+        input.contactEmail?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactFullName?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.contactPhoneNumber?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.institution?.toLocaleLowerCase().indexOf(query) > -1 ||
+        input.referenceId?.toLocaleLowerCase().indexOf(query) > -1
     );
   };
 
@@ -74,13 +41,17 @@ const Recipient = () => {
         <Grid item>
           <TextField
             placeholder="Søk etter familie"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           ></TextField>
         </Grid>
       </Grid>
-      <Datatable data={search(data)} />
+      <Datatable
+        data={search(data)}
+        handleRecipientChange={handleRecipientChange}
+        selectedConnection={selectedConnection}
+      />
     </Container>
   );
 };
-export default Recipient;
+export default React.memo(Recipient);

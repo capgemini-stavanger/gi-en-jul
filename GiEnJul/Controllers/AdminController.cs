@@ -49,7 +49,7 @@ namespace GiEnJul.Controllers
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
-            // return _mapper.Map<List<Models.Giver>>(await _giverRepository.GetAllAsync()).OrderBy(x => x.FullName).ToList();
+            // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
         public async Task<List<Recipient>> GetRecipientsAsync()
@@ -63,16 +63,16 @@ namespace GiEnJul.Controllers
             return recipients;
         }
         [HttpPost]
-        public async Task<ActionResult> PostConnectionAsyc(string giverRowKey, string recipientRowKey, string partitonKey)
+        public async Task<ActionResult> PostConnectionAsyc([FromBody] PostConnectionDto connectionDto)
         {
-            var recipient = await _recipientRepository.GetRecipientAsync(partitonKey, recipientRowKey);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            var giver = await _giverRepository.GetGiverAsync(partitonKey, giverRowKey);
             (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
             giver.IsSuggestedMatch = true;
-            giver.MatchedRecipient = recipientRowKey;
+            giver.MatchedRecipient = connectionDto.RecipientRowKey;
             recipient.IsSuggestedMatch = true;
-            recipient.MatchedGiver = giverRowKey;
+            recipient.MatchedGiver = connectionDto.GiverRowKey;
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
