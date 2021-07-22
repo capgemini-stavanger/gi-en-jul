@@ -4,7 +4,7 @@ using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Features
+namespace GiEnJul.Repositories
 {
     public interface IGiverRepository
     {
@@ -41,6 +41,6 @@ namespace GiEnJul.Features
             var giver = await GetAsync(partitionKey, rowKey);
             return _mapper.Map<Models.Giver>(giver);
         }
-        
+
     }
 }

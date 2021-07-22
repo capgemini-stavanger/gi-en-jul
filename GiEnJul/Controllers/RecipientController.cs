@@ -1,6 +1,5 @@
 ﻿using GiEnJul.Dtos;
 using GiEnJul.Models;
-using GiEnJul.Features;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
@@ -8,7 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
-
+using GiEnJul.Repositories;
 
 namespace GiEnJul.Controllers
 {
