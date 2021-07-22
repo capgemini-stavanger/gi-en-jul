@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using GiEnJul.Clients;
 using GiEnJul.Models;
-using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace GiEnJul.Controllers
