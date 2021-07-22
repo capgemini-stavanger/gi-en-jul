@@ -93,12 +93,9 @@ namespace GiEnJul.Controllers
         }
         [HttpDelete("giver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
-
         {
-            System.Console.WriteLine("im here");
             try
             {
-                System.Console.WriteLine("Trying");
                 var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
                 if (giverToDelete == null)
                     return NotFound($"Giver with PK = {giverDto.PartitionKey} and RK = {giverDto.RowKey} not found");
