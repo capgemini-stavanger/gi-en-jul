@@ -19,6 +19,7 @@ const history = createBrowserHistory({ basename: baseUrl });
 const store = configureStore(history);
 const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
 const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
+const apiurl: string = process.env.REACT_APP_API_URL!;
 
 ReactDOM.render(
   <Provider store={store}>
@@ -26,7 +27,7 @@ ReactDOM.render(
       domain={domainEnv}
       clientId={clientidEnv}
       redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
-      audience={window.location.origin + "/api"} // this should be changed to a .env var when we have refactured the project and pipeline
+      audience={apiurl}
     >
       <ConnectedRouter history={history}>
         <App />
