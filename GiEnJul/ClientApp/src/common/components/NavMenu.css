@@ -17,3 +17,9 @@ html { font-size: 14px; }
 }
 
 .item {margin: 0.5em;}
+
+.logo-small {
+    height: 35px;
+    width: 35px;
+    display: block
+}

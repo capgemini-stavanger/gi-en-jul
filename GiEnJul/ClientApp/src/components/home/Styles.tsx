@@ -1,6 +1,32 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { isMobile } from '../../common/functions/IsMobile';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => (
+  {
+    root: {
+      backgroundColor: theme.palette.primary.light,
+    },
+    circle: {
+      height: '70%',
+      width: '40%', 
+      borderRadius: '50%',
+      margin:theme.spacing(2),
+      padding: theme.spacing(1,1),
+      backgroundColor: 'white',
+    },
+    logoLarge:{
+      height: '50%',
+      width: '60%', 
+      display: 'block',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      margin:theme.spacing(1),
+    }, 
+    logoText: {
+      color: theme.palette.secondary.main,
+      fontSize: '250%', 
+      fontWeight: 500,
+    },
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
