@@ -77,7 +77,7 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositoryThrowsException_ControllerReturnsBadRequest()
         {
             //Arrange
-            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAdress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
+            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
@@ -92,7 +92,7 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
-            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAdress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
+            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
 
             var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
