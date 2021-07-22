@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import configureStore from "./store/configureStore";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 
 // Create browser history to use in the Redux store
 const baseUrl = document
@@ -20,8 +21,23 @@ const store = configureStore(history);
 const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
 const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 
+const theme = createTheme({
+  palette: {
+     primary: {
+        main: "#d9f0f2" // Light blue
+               },
+     secondary: {
+        main: "#49a591" // Dark green
+                }
+           },
+  typography: {
+    fontFamily: 'Quicksand',
+  }, 
+});
+
 ReactDOM.render(
   <Provider store={store}>
+    <ThemeProvider theme={theme}>
     <Auth0Provider
       domain={domainEnv}
       clientId={clientidEnv}
@@ -32,6 +48,7 @@ ReactDOM.render(
         <App />
       </ConnectedRouter>
     </Auth0Provider>
+    </ThemeProvider>
   </Provider>,
   document.getElementById("root")
 );
