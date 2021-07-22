@@ -1,8 +1,6 @@
-
-
 namespace GiEnJul.Dtos
 {
-    public class DeleteReceiverDto
+    public class DeleteRecipientDto
     {
         public string PartitionKey { get; }
         public string RowKey { get; }
