@@ -8,7 +8,6 @@ using GiEnJul.Clients;
 using GiEnJul.Models;
 using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 
 namespace GiEnJul.Controllers
 {
@@ -95,20 +94,9 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
-            try
-            {
-                var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
-                if (giverToDelete == null)
-                    return NotFound($"Giver with PK = {giverDto.PartitionKey} and RK = {giverDto.RowKey} not found");
-                var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
-                return Ok();
-            }
-            catch (System.Exception err)
-            {
-                System.Console.WriteLine(err);
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Error deleting data");
-            }
+            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
+            return Ok();
         }
     }
 }
