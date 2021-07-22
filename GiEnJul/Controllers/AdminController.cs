@@ -96,6 +96,7 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = true;
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
                 var title = "Du har blitt tildelt en familie!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
