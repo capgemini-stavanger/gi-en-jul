@@ -5,6 +5,8 @@ namespace GiEnJul.Infrastructure
     public interface ISettings
     {
         public string TableConnectionString { get; }
+        public string LogTableName { get; }
+        public string ReactAppUri { get; }
         public MailSettings MailSettings { get; }
     }
 
@@ -19,6 +21,7 @@ namespace GiEnJul.Infrastructure
 
         public string TableConnectionString => _configuration.GetValue<string>("TableConnectionString");
         public string LogTableName => _configuration.GetValue("LogTableName", "Logs");
+        public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri");
         public MailSettings MailSettings
         {
             get
