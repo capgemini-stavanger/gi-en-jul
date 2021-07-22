@@ -21,7 +21,14 @@ namespace GiEnJul.Helpers
 
         public static bool CanSuggestConnection(Giver giver, Recipient recipient)
         {
-            return 
+            if (giver is null)
+                throw new ArgumentNullException(nameof(giver));
+            
+
+            if (recipient is null)
+                throw new ArgumentNullException(nameof(recipient));
+            
+            return
                 giver.PartitionKey == recipient.PartitionKey &&
                 giver.Location == recipient.Location &&
                 giver.EventName == recipient.EventName;
