@@ -4,13 +4,13 @@ import { isMobile } from '../../common/functions/IsMobile';
 const useStyles = makeStyles((theme) => (
   {
     root: {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.secondary.light,
     },
     circle: {
       height: '70%',
       width: '40%', 
       borderRadius: '50%',
-      margin:theme.spacing(2),
+      margin:theme.spacing(5,2,2,2),
       padding: theme.spacing(1,1),
       backgroundColor: 'white',
     },
@@ -23,9 +23,30 @@ const useStyles = makeStyles((theme) => (
       margin:theme.spacing(1),
     }, 
     logoText: {
-      color: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
       fontSize: '250%', 
       fontWeight: 500,
+    },
+    textHeadline:{
+      color: theme.palette.primary.main,
+      fontSize: '200%', 
+      fontWeight: 300,
+
+    },
+    howContainer: {
+      spacing: '2',
+
+    },
+    howItem: {
+      backgroundColor: 'white',
+      margin: theme.spacing(2),
+      padding: theme.spacing(1), 
+      borderRadius: '20px',
+
+    },
+    nextIcon: {
+      color: theme.palette.primary.main,
+      margin: 'auto'
     },
     submit: {
       margin: theme.spacing(3, 0, 2),

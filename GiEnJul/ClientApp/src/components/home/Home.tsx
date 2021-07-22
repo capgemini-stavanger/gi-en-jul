@@ -25,7 +25,7 @@ const Home = () => {
         <img className={classes.logoLarge}
          src={logo}></img>
         </Container>
-        <Typography className={classes.logoText} variant="h2">Gi en jul</Typography>
+        <Typography className={classes.logoText} >Gi en jul</Typography>
 
         <Grid
           container

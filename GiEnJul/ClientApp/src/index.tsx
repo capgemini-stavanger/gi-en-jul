@@ -24,10 +24,11 @@ const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 const theme = createTheme({
   palette: {
      primary: {
-        main: "#d9f0f2" // Light blue
+        main: "#49a591" // Dark green
+        
                },
      secondary: {
-        main: "#49a591" // Dark green
+        main:"#d9f0f2" // Light blue
                 }
            },
   typography: {
