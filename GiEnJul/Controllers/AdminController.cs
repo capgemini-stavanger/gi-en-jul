@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GiEnJul.Dtos;
 using GiEnJul.Features;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -90,6 +91,16 @@ namespace GiEnJul.Controllers
             }
             return Ok();
         }
+
+        [HttpDelete("recipient")]
+        [Authorize(Policy = "DeleteRecipient")]
+        public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
+        {
+            var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var deletedRecipient = await _recipientRepository.DeleteAsync(recipientToDelete);
+            return Ok();
+        }
+
         [HttpDelete("giver")]
         [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
