@@ -20,7 +20,7 @@ import {
 } from "../InputFields/Validators/Validators";
 import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
-import IFormPerson from "./IFormPerson";
+import IFormPerson, { getFormPerson } from "./IFormPerson";
 import Locations from "./InstitutionLocations";
 
 type PersonType = {
@@ -77,16 +77,16 @@ const initState: {
   },
 };
 
-const initFormDataState: {
-  persons: (IFormPerson | undefined)[];
+const initFormDataState: () => {
+  persons: IFormPerson[];
   location: string;
   dinner: IFoodFormData;
   dessert: IFoodFormData;
   specialNeeds: string;
   pid: string;
   contact: IContact;
-} = {
-  persons: [],
+} = () => ({
+  persons: [getFormPerson()],
   location: "",
   dinner: initFoodFormData,
   dessert: initFoodFormData,
@@ -97,7 +97,7 @@ const initFormDataState: {
     phoneNumber: "",
     email: "",
   },
-};
+});
 
 type ValidFormEntry = {
   [valid: string]: boolean;
@@ -114,33 +114,37 @@ const initValidFormState: ValidFormEntry = {
 
 const RegistrationForm = () => {
   const [state, setState] = useState(initState);
-  const [formDataState, setFormDataState] = useState(initFormDataState);
-  const [validFormState, setValidFormState] = useState(initValidFormState);
+  const [formDataState, setFormDataState] = useState(initFormDataState());
+  const [validFormState, setValidFormState] = useState({
+    ...initValidFormState,
+  });
 
   const addPerson = () => {
     setFormDataState((prev) => ({
       ...prev,
-      persons: [...prev.persons, {} as IFormPerson],
+      persons: [...prev.persons, getFormPerson()],
     }));
   };
 
-  const updatePerson = (index: number, newPerson?: IFormPerson) => {
+  const updatePerson = (
+    index: number,
+    newPersonData: { [target: string]: unknown }
+  ) => {
     setFormDataState((prev) => {
-      prev.persons[index] = newPerson;
-      return prev;
+      prev.persons[index] = {
+        ...prev.persons[index],
+        ...newPersonData,
+      } as IFormPerson;
+      return { ...prev };
     });
   };
 
   const deletePerson = (index: number) => {
     setFormDataState((prev) => {
-      prev.persons[index] = undefined;
+      prev.persons.splice(index, 1);
       return { ...prev };
     });
   };
-
-  useEffect(() => {
-    addPerson();
-  }, []);
 
   const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDataState((prev) => ({
@@ -217,10 +221,8 @@ const RegistrationForm = () => {
 
   const getValiditySetter = (target: string) => (isValid: boolean) => {
     setValidFormState((prev) => {
-      {
-        prev[target] = isValid;
-        return prev;
-      }
+      prev[target] = isValid;
+      return prev;
     });
   };
 
@@ -257,14 +259,14 @@ const RegistrationForm = () => {
       if (!validFormState[isValid]) return false;
     }
     return formDataState.persons.every((p) => {
-      return !p || (p.isValidAge && p.isValidGender && p.isValidWish);
+      return p.isValidAge && p.isValidGender && p.isValidWish;
     });
   };
 
   const resetForm = () => {
-    setValidFormState(initValidFormState);
-    setFormDataState(initFormDataState);
-    addPerson();
+    setState((prev) => ({ ...prev, viewErrorTrigger: 0 }));
+    setValidFormState({ ...initValidFormState });
+    setFormDataState(initFormDataState());
   };
 
   const onSuccessSubmit = () => {
@@ -284,7 +286,6 @@ const RegistrationForm = () => {
 
     let personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
-      if (!person) return;
       const person1: PersonType = {
         Wish: person.wish,
         Age: parseInt(person.age),
@@ -382,17 +383,15 @@ const RegistrationForm = () => {
               <Grid item>
                 {formDataState.persons.map((person, i) => {
                   return (
-                    person && (
-                      <FormPerson
-                        key={"person" + i}
-                        person={person}
-                        viewErrorTrigger={state.viewErrorTrigger}
-                        updatePerson={(newPerson: IFormPerson) =>
-                          updatePerson(i, newPerson)
-                        }
-                        deletePerson={() => deletePerson(i)}
-                      />
-                    )
+                    <FormPerson
+                      key={person.uuid}
+                      person={person}
+                      viewErrorTrigger={state.viewErrorTrigger}
+                      updatePerson={(newPersonData: {
+                        [target: string]: unknown;
+                      }) => updatePerson(i, newPersonData)}
+                      deletePerson={() => deletePerson(i)}
+                    />
                   );
                 })}
               </Grid>

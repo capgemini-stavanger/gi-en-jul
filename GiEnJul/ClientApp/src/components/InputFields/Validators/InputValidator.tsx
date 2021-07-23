@@ -131,11 +131,9 @@ const InputValidator: FC<InputValidatorProps> = ({
   };
 
   useEffect(() => {
-    if (viewErrorTrigger || viewErrorTrigger === undefined) {
-      setErrorState((prev) => {
-        return { ...prev, viewError: true };
-      });
-    }
+    setErrorState((prev) => {
+      return { ...prev, viewError: !!viewErrorTrigger };
+    });
   }, [viewErrorTrigger]);
 
   useEffect(() => {
