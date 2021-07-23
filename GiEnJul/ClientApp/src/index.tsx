@@ -30,11 +30,34 @@ const theme = createTheme({
                },
      secondary: {
         main:"#d9f0f2" // Light blue
-                }
+                }, 
+      error: {
+        main: "#ed8175" // Light red
+      }, 
+      warning: {
+        main: "#f4cf8a" //Yellow
+      }, 
+      info: {
+        main: "#d9f0f2" // Light blue
+      },
            },
   typography: {
     fontFamily: 'Quicksand',
+  },
+overrides: {
+  MuiSelect: {
+    select:{
+    "&:focus": {
+      borderRadius: '20px',
+    }
+  }
   }, 
+  MuiOutlinedInput: {
+    root: {
+      borderRadius: '20px',
+    },
+  },
+}
 });
 
 ReactDOM.render(

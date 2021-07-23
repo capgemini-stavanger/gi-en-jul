@@ -129,9 +129,8 @@ const SummaryRegistration: React.FC<Props> = ({
 
   return (
     <>
-      <Typography component="h2">Oppsummering</Typography>
-      <Container>
-        <form style={{ width: "100%", marginTop: "20px" }}>
+      <Typography className={classes.subHeading}>Oppsummering</Typography>
+      <Container className={classes.form}>
           <Grid container className={classes.inputRow}>
             <Grid item xs={9}>
               <InputValidator
@@ -156,7 +155,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <Grid item xs={3}>
               <Button onClick={handleChange("location")}>
                 <EditOutlinedIcon
-                  className={classes.iconSelector}
+                  className={classes.icon}
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
@@ -181,7 +180,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <Grid item xs={3}>
               <Button onClick={handleChange("fullName")}>
                 <EditOutlinedIcon
-                  className={classes.iconTexField}
+                  className={classes.icon}
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
@@ -212,7 +211,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <Grid item xs={3}>
               <Button onClick={handleChange("email")}>
                 <EditOutlinedIcon
-                  className={classes.iconTexField}
+                  className={classes.icon}
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
@@ -243,7 +242,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <Grid item xs={3}>
               <Button onClick={handleChange("phone")}>
                 <EditOutlinedIcon
-                  className={classes.iconTexField}
+                  className={classes.icon}
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
@@ -268,7 +267,7 @@ const SummaryRegistration: React.FC<Props> = ({
             <Grid item xs={3}>
               <Button onClick={handleChange("family")}>
                 <EditOutlinedIcon
-                  className={classes.iconSelector}
+                  className={classes.icon}
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
@@ -276,9 +275,8 @@ const SummaryRegistration: React.FC<Props> = ({
           <Pager
             onContinue={extendedNextStep}
             onBack={prevStep}
-            continueText="Bli Giver"
+            continueText="Fullfør registreringen"
           />
-        </form>
       </Container>
     </>
   );

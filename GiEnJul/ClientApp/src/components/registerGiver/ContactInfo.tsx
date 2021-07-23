@@ -8,6 +8,7 @@ import {
 } from "../../components/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
+import useStyles from "./Styles";
 
 type Props = {
   nextStep: (event: React.FormEvent) => void;
@@ -62,11 +63,11 @@ const ContactInfo: React.FC<Props> = ({
     };
   };
 
+  const classes = useStyles();
   return (
     <>
-      <Typography component="h2">Kontaktinformasjon</Typography>
-      <Container>
-        <form style={{ width: "100%", marginTop: "5px" }}>
+      <Typography className={classes.subHeading}>Kontaktinformasjon</Typography>
+      <Container className={classes.form}>
           <InputValidator
             autoFocus
             viewErrorTrigger={state.viewErrorTrigger}
@@ -113,8 +114,7 @@ const ContactInfo: React.FC<Props> = ({
             margin="normal"
             fullWidth
           />
-          <Pager onBack={prevStep} onContinue={extendedNextStep} />
-        </form>
+          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} />
       </Container>
     </>
   );
