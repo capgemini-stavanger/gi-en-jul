@@ -24,7 +24,6 @@ namespace GiEnJul.Features
         ) : base(settings, tableName, mapper, log)
         { }
 
-        public DateTimeOffset GetTimestamp { get; private set; }
 
         public async Task<string> GetNext(string name, string tableName)
         {
@@ -65,6 +64,7 @@ namespace GiEnJul.Features
                     {
                         throw(e);
                     }
+                    await Task.Delay(50);
                 }
             }
         }

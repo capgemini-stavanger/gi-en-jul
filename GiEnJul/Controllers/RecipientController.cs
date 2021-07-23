@@ -46,7 +46,7 @@ namespace GiEnJul.Controllers
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
-            recipient.InternalId = await _autoIncrementRepository.GetNext($"{recipient.EventName}_{recipient.Location}", "Recipient");
+            recipient.FamilyId = await _autoIncrementRepository.GetNext($"{recipient.EventName}_{recipient.Location}", "Recipient");
 
             //Add Recipient to Table Storage
             var insertedRecipient = await _recipientRepository.InsertOrReplaceAsync(recipient);
