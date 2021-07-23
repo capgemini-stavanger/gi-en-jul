@@ -15,7 +15,7 @@ TABLE_HEADER_PERSON = ["Age", "Gender", "Wish"]
 TABLE_HEADER_GIVER = ["Email", "EventName", "FullName", "HasConfirmedMatch",
                       "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber"]
 TABLE_HEADER_RECIPIENT = ["ContactEmail", "ContactFullName", "ContactPhoneNumber", "Dessert", "Dinner", "EventName",
-                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount", "ReferenceId", "InternalId"]
+                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount", "ReferenceId", "FamilyId"]
 
 PHONE_NUMBER_RANGES = ((40_00_00_00, 49_99_99_99), (90_00_00_00, 99_99_99_99))
 EMAIL_DOMAIN = ("gmail", "outlook", "live", "lyse", "hotmail")

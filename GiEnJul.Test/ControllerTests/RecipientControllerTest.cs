@@ -16,6 +16,7 @@ namespace GiEnJul.Test.ControllerTests
         private Mock<IRecipientRepository> mockRecipientRepo { get; set; }
         private Mock<IPersonRepository> mockPersonRepo { get; set; }
         private Mock<IEventRepository> mockEventRepo { get; set; }
+        private Mock<IAutoIncrementRepository> mockAutoIncrementRepo { get; set; }
         private RecipientController _controller;
 
         //Run before each test
@@ -24,7 +25,15 @@ namespace GiEnJul.Test.ControllerTests
             mockRecipientRepo = new Mock<IRecipientRepository>();
             mockPersonRepo = new Mock<IPersonRepository>();
             mockEventRepo = new Mock<IEventRepository>();
-            _controller = new RecipientController(mockRecipientRepo.Object, mockPersonRepo.Object, mockEventRepo.Object, _log, _mapper);
+            mockAutoIncrementRepo = new Mock<IAutoIncrementRepository>();
+            _controller = new RecipientController(
+                mockRecipientRepo.Object, 
+                mockPersonRepo.Object, 
+                mockEventRepo.Object, 
+                mockAutoIncrementRepo.Object, 
+                _log, 
+                _mapper
+            );
         }
 
         //Runs after each test
@@ -52,6 +61,7 @@ namespace GiEnJul.Test.ControllerTests
                 PartitionKey = "Jul21_Stavanger",
                 RowKey = Guid.NewGuid().ToString()
             };
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(recipient);
             return recipient;
         }
@@ -67,6 +77,7 @@ namespace GiEnJul.Test.ControllerTests
             var peopleTableBatchResult = new TableBatchResult();
             people.ForEach(p => peopleTableBatchResult.Add(new TableResult { Result = p }));
 
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
             mockPersonRepo.Setup(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>())).ReturnsAsync(peopleTableBatchResult);
             return peopleTableBatchResult;
         }
@@ -77,6 +88,7 @@ namespace GiEnJul.Test.ControllerTests
             // Arrange
             ArrangeOkPeopleRepositoryInsertResult();
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new Exception());
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
@@ -91,6 +103,7 @@ namespace GiEnJul.Test.ControllerTests
             ArrangeOkPeopleRepositoryInsertResult();
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync("Jul21");
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).Throws(new Exception("An error"));
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
@@ -107,6 +120,7 @@ namespace GiEnJul.Test.ControllerTests
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(new Models.Recipient());
             mockPersonRepo.Setup(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>())).Throws(new Exception("An error"));
             mockRecipientRepo.Setup(x => x.DeleteAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(new Models.Recipient());
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
@@ -123,6 +137,7 @@ namespace GiEnJul.Test.ControllerTests
             var recipient = ArrangeOkRecipientRepositoryInsertResult();
             ArrangeOkPeopleRepositoryInsertResult();
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync("Jul21");
+            mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Act
             var result = await _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } });
