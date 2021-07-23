@@ -139,6 +139,7 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
         public async Task<IList<GiverDataTableDto>> GetSuggestedGiversAsync([FromBody] string location, int quantity = 1)
         {
