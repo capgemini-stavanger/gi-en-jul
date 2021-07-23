@@ -22,6 +22,7 @@ namespace GiEnJul.Entities
         public string EventName { get; set; }
         public string Location { get; set; }
         public int PersonCount { get; set; }
+        public string FamilyId { get; set; }
 
         //Submitter info
         public string ContactFullName { get; set; }

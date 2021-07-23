@@ -12,7 +12,9 @@ namespace GiEnJul.Models
         public string Note { get; set; }
         public string EventName { get; set; }
         public string Location { get; set; }
-        
+        public string FamilyId { get; set; }
+
+
         public string ContactFullName { get; set; }
         public string ContactEmail { get; set; }
         public string ContactPhoneNumber { get; set; }

@@ -26,14 +26,6 @@ import { green, red } from "@material-ui/core/colors";
     smallColumn: {
       flexBasis: "15%",
     },
-    matched: {
-      color: "#fff",
-      backgroundColor: green[500],
-    },
-    notMatched: {
-      color: "#FFFFFF",
-      backgroundColor: "#FFFFFF",
-    },
   })
 );
 

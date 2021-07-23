@@ -1,29 +1,37 @@
-import * as React from "react";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Container,
   Divider,
   Typography,
 } from "@material-ui/core";
 import {
-  ExpandMore,
-  Group,
-  Phone,
-  Mail,
   CheckRounded,
   CloseRounded,
+  ExpandMore,
+  Group,
+  Mail,
+  Phone,
 } from "@material-ui/icons";
-import { GiverType } from "../overview/Giver";
+import React from "react";
+import { GiverType, SelectedConnectionType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {
   data: GiverType[] | [];
+  handleGiverChange: (
+    newGiverRowKey: string,
+    newGiverPartitionKey: string
+  ) => void;
+  selectedConnection: SelectedConnectionType;
 };
 
-const Datatable: React.FC<Props> = ({ data }) => {
+const Datatable: React.FC<Props> = ({
+  data,
+  handleGiverChange,
+  selectedConnection,
+}) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -37,18 +45,24 @@ const Datatable: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const handleMatched = (input: Boolean) => {
-    if (input) {
-      return classes.matched;
-    } else {
-      return classes.notMatched;
-    }
-  };
-
   return (
     <Container>
-      {data.map((giver, index) => (
-        <Accordion key={`acc_giver_${index}`}>
+      {data.map((giver) => (
+        <Accordion
+          onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
+          key={giver.rowKey}
+          //Styling should be in a seperate file
+          //This is not working atm because selectedConnection is a ref and will not rerender this component.
+          style={
+            giver.rowKey === selectedConnection.giverRowKey &&
+            !giver.isSuggestedMatch
+              ? {
+                  background:
+                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+                }
+              : { background: "white" }
+          }
+        >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
@@ -61,13 +75,12 @@ const Datatable: React.FC<Props> = ({ data }) => {
               <Group />
               {formatFamily(giver.maxReceivers)}
             </Typography>
-            <Avatar className={handleMatched(giver.hasConfirmedMatch)}>
-              {giver.hasConfirmedMatch ? (
-                <CheckRounded style={{ color: "#FFFFFF" }} />
-              ) : (
-                <CloseRounded style={{ color: "#F36161" }} />
-              )}
-            </Avatar>
+            {giver.isSuggestedMatch ? (
+              //Styling should be in a seperate file
+              <CheckRounded style={{ color: "#49a591" }} />
+            ) : (
+              <CloseRounded style={{ color: "#ed8175" }} />
+            )}
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
@@ -87,4 +100,4 @@ const Datatable: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default Datatable;
+export default React.memo(Datatable);

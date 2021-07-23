@@ -7,6 +7,7 @@ import Edit from "./components/admin/editLandingPage/EditMacro";
 import Home from "./components/home/Home";
 import Institution from "./components/institution/InstitutionMacro";
 import RegistrationMacro from "./components/registerGiver/Macro";
+import VerifyConnection from "./components/verifyConnection/verifyConnection";
 import "./custom.css";
 
 const App = () => {
@@ -19,6 +20,10 @@ const App = () => {
         <Route path="/bli-giver" component={RegistrationMacro} />
         <Route path="/rediger" component={Edit} />
         <Route path="/loading" component={LoadingPage} />
+        <Route
+          path="/:giverRowKey/:recipientRowKey/:partitionKey"
+          component={VerifyConnection}
+        />
     </>
   );
 };

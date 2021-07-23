@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
-using GiEnJul.Features;
+using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -23,6 +23,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();
             builder.RegisterType<RecipientRepository>().As<IRecipientRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<AutoIncrementRepository>().As<IAutoIncrementRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
 
             var logger = new LoggerConfiguration()
