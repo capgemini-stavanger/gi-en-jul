@@ -146,9 +146,7 @@ namespace GiEnJul.Controllers
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-            var givers = await _giverRepository.GetSuggestionsAsync(activeEvent, location);
-
-            var suggestions = SuggestionHelper.GetSuggestions(givers, quantity);
+            var suggestions = await _giverRepository.GetSuggestionsAsync(activeEvent, location, quantity);
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
