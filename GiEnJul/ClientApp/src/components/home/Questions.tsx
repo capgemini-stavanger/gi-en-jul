@@ -12,17 +12,15 @@ import useStyles from "./Styles";
 const Questions = () => {
   const classes = useStyles();
   return (
-    <Container id="questions" className={classes.section}>
-      <Typography variant="h4">Ofte stilte spørsmål</Typography>
-      <Accordion>
+    <Container id="questions" className={classes.howContainer}>
+      <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
+      <Accordion className={classes.questionBox}>
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="content-1"
-          id="header-1"
-        >
+          expandIcon={<ExpandMoreIcon/>}>
           <Typography>Hva koster det å Gi en jul?</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails
+        className={classes.questionBox}>
           <Typography>
             Juleeskene skal minimum inneholde ubrukte gaver til minimum 300 per
             person, og en julemiddag og dessert til hele familien. Hvis ønskelig
@@ -31,12 +29,65 @@ const Questions = () => {
           </Typography>
         </AccordionDetails>
       </Accordion>
-
-      {/* <CollapseContainer title='Når får jeg familie?' body='Familiene deles ut fortløpende, og vi prøver å gi deg familien din i god tid før jul.' ></CollapseContainer>
-        <CollapseContainer title='Kan jeg legge oppi noe ekstra?' body='Dersom du har noe pent brukt som passer til alderen, kan du legge det oppi. Merk: Dette erstatter ikke julegaven, og det må være i god stand.'></CollapseContainer>
-        <CollapseContainer title='Kan jeg velge familie selv?' body= 'Du kan komme med ønske for antall familiemedlemmer.'></CollapseContainer>
-        <CollapseContainer title='Hvordan vet jeg hva familien ønsker seg?' body='Når du får tildelt familie vil du også få vite hva de ønsker seg. Dersom de ikke har kommet med ønsker, er lue, skjerf, votter, lys, servietter, sjokolade og pledd noen tips.'></CollapseContainer>
- */}
+      <Accordion className={classes.questionBox}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon/>}>
+          <Typography>Når får jeg familie</Typography>
+        </AccordionSummary>
+        <AccordionDetails
+        className={classes.questionBox}>
+          <Typography>
+          Familiene deles ut fortløpende, og vi prøver å gi deg familien din i god tid før jul.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className={classes.questionBox}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon/>}>
+          <Typography>Kan jeg legge oppi noe ekstra?</Typography>
+        </AccordionSummary>
+        <AccordionDetails
+        className={classes.questionBox}>
+          <Typography>
+          Dersom du har noe pent brukt som passer til alderen, kan du legge det oppi. Merk: Dette erstatter ikke julegaven, og det må være i god stand.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className={classes.questionBox}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon/>}>
+          <Typography>Kan jeg legge oppi noe ekstra?</Typography>
+        </AccordionSummary>
+        <AccordionDetails
+        className={classes.questionBox}>
+          <Typography>
+          Dersom du har noe pent brukt som passer til alderen, kan du legge det oppi. Merk: Dette erstatter ikke julegaven, og det må være i god stand.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className={classes.questionBox}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon/>}>
+          <Typography>Kan jeg velge familie selv?</Typography>
+        </AccordionSummary>
+        <AccordionDetails
+        className={classes.questionBox}>
+          <Typography>
+          Du kan komme med ønske for antall familiemedlemmer.</Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className={classes.questionBox}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon/>}>
+          <Typography>Hvordan vet jeg hva familien ønsker seg?</Typography>
+        </AccordionSummary>
+        <AccordionDetails
+        className={classes.questionBox}>
+          <Typography>
+          Når du får tildelt familie vil du også få vite hva de ønsker seg. Dersom de ikke har kommet med ønsker, er lue, skjerf, votter, lys, servietter, sjokolade og pledd noen tips.</Typography>
+        </AccordionDetails>
+      </Accordion>
+      <div className={classes.questionBox}></div>
     </Container>
   );
 };

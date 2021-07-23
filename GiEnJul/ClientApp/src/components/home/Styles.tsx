@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => (
     textHeadline:{
       color: theme.palette.primary.main,
       fontSize: '200%', 
-      fontWeight: 300,
+      fontWeight: 400,
 
     },
     howContainer: {
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => (
     },
     howItem: {
       backgroundColor: 'white',
-      margin: theme.spacing(2),
+      margin: theme.spacing(1),
       padding: theme.spacing(1), 
       borderRadius: '20px',
 
@@ -47,6 +47,13 @@ const useStyles = makeStyles((theme) => (
     nextIcon: {
       color: theme.palette.primary.main,
       margin: 'auto'
+    },
+    questionBox: {
+      margin: theme.spacing(1),
+      borderRadius: '20px',
+      overflow: 'hidden',
+      borderColor: theme.palette.secondary.light,
+      
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
