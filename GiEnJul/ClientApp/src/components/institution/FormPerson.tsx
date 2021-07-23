@@ -16,24 +16,16 @@ import { isNotNull } from "../InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
 
 interface PersonProps {
-  updatePerson: (newPerson: IFormPerson) => void;
+  updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
   viewErrorTrigger: number;
   person: IFormPerson;
 }
 
-const initFormDataState: { [data: string]: any } = {
-  age: "",
-  gender: Gender.Unspecified,
-  wish: "",
+const initState: { [data: string]: any } = {
   ageWish: false,
-};
-
-const initValidFormState: { [valid: string]: boolean } = {
-  age: false,
-  gender: false,
-  wishInput: false,
-  wish: false,
+  wishInput: "",
+  validWishInput: false,
 };
 
 const InstitutionPerson: FC<PersonProps> = ({
@@ -42,63 +34,54 @@ const InstitutionPerson: FC<PersonProps> = ({
   viewErrorTrigger,
   person,
 }) => {
-  const [formDataState, setFormDataState] = useState(initFormDataState);
-  const [validFormState, setValidFormState] = useState(initValidFormState);
+  const [state, setState] = useState({ ...initState });
 
-  const getFormDataSetter = (target: keyof typeof formDataState) => {
-    return (value: unknown) => {
-      setFormDataState((prev) => {
+  const getSetter =
+    (target: keyof typeof state) => (value: typeof state[typeof target]) => {
+      setState((prev) => {
         prev[target] = value;
-        return { ...prev };
-      });
-    };
-  };
-
-  const getValiditySetter = (target: keyof typeof validFormState) => {
-    return (isValid: boolean) => {
-      setValidFormState((prev) => {
-        prev[target] = isValid;
         return prev;
       });
     };
-  };
 
   useEffect(() => {
-    getValiditySetter("wish")(
-      validFormState.wishInput || formDataState.ageWish
-    );
-  }, [validFormState.wishInput, formDataState.ageWish]);
-
-  useEffect(() => {
-    let tmpPerson = person as IFormPerson;
-    tmpPerson.age = formDataState.age;
-    tmpPerson.gender = formDataState.gender;
-    tmpPerson.wish = formDataState.ageWish ? undefined : formDataState.wish;
-    tmpPerson.isValidAge = validFormState.age;
-    tmpPerson.isValidGender = validFormState.gender;
-    tmpPerson.isValidWish = validFormState.wish;
-    updatePerson(tmpPerson);
-  });
+    updatePerson({
+      isValidWish: state.validWishInput || person.wish === undefined,
+    });
+  }, [state.validWishInput, person.wish]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
     let intAge = parseInt(strAge);
-    if (intAge) {
+    if (intAge !== NaN) {
       if (intAge > 130) {
         strAge = "130";
       } else if (intAge < 0) {
         strAge = "0";
       }
+    } else {
+      return;
     }
-    getFormDataSetter("age")(strAge);
+    updatePerson({ age: strAge, isValidAge: !!strAge });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     let newGender = parseInt(e.target.value);
-    if (newGender !== Gender.Unspecified) {
-      getFormDataSetter("gender")(newGender);
-      getValiditySetter("gender")(true);
+    if (newGender !== NaN && newGender !== Gender.Unspecified) {
+      updatePerson({ gender: newGender, isValidGender: true });
     }
+  };
+
+  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newInput = e.target.value;
+    getSetter("wishInput")(newInput);
+    updatePerson({ wish: newInput });
+  };
+
+  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newInput = e.target.checked;
+    getSetter("ageWish")(newInput);
+    updatePerson({ wish: undefined });
   };
 
   return (
@@ -112,11 +95,10 @@ const InstitutionPerson: FC<PersonProps> = ({
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          setIsValids={getValiditySetter("age")}
           name="age"
           type="number"
           label="Alder"
-          value={formDataState.age}
+          value={person.age}
           onChange={onAgeChange}
         />
       </Grid>
@@ -124,12 +106,11 @@ const InstitutionPerson: FC<PersonProps> = ({
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          setIsValids={getValiditySetter("age")}
           name="gender"
           type="select"
           label="Kjønn"
           variant={"outlined"}
-          value={formDataState.gender ? formDataState.gender : ""}
+          value={person.gender ? person.gender : ""}
           onChange={onGenderChange}
           options={GENDERS.map((o) => {
             return { value: o.value, text: capitalize(o.text) };
@@ -140,17 +121,13 @@ const InstitutionPerson: FC<PersonProps> = ({
       <Grid item xs>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
-          validators={[
-            (input) => {
-              return formDataState.ageWish || isNotNull(input);
-            },
-          ]}
-          setIsValids={getValiditySetter("wishInput")}
+          validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
+          setIsValids={getSetter("validWishInput")}
           name="wish"
           label="Gaveønske (husk størrelse)"
-          disabled={formDataState.ageWish}
-          value={formDataState.wish}
-          onChange={(e) => getFormDataSetter("wish")(e.target.value)}
+          disabled={state.ageWish}
+          value={state.wishInput}
+          onChange={onWishInputChange}
           fullWidth
         />
       </Grid>
@@ -158,8 +135,8 @@ const InstitutionPerson: FC<PersonProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={formDataState.ageWish}
-              onChange={(e) => getFormDataSetter("ageWish")(e.target.checked)}
+              checked={state.ageWish}
+              onChange={onAgeWishChange}
               name="isAgeWish"
               color="primary"
             />

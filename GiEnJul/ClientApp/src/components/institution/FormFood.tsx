@@ -49,7 +49,7 @@ const FormDinner: FC<IFormDinner> = ({
   };
 
   useEffect(() => {
-    if (viewErrorTrigger) setViewError(true);
+    setViewError(!!viewErrorTrigger);
   }, [viewErrorTrigger]);
 
   useEffect(() => {
