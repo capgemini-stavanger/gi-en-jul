@@ -35,7 +35,9 @@ const useStyles = makeStyles((theme) => (
     },
     howContainer: {
       spacing: '2',
-
+    },
+    companyContainer: {
+      spacing: '2',
     },
     howItem: {
       backgroundColor: 'white',
@@ -57,10 +59,6 @@ const useStyles = makeStyles((theme) => (
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
-    },
-    section: {
-      width: '100%', // Fix IE 11 issue.
-      marginTop: theme.spacing(4),
     },
   }));
 

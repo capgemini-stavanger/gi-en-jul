@@ -7,6 +7,7 @@ import How from "./How";
 import Questions from "./Questions";
 import useStyles from "./Styles";
 import logo from './../../styling/img/logo_gronn.svg';
+import Contact from "./Contact";
 
 const Home = () => {
   const classes = useStyles();
@@ -48,6 +49,7 @@ const Home = () => {
       <How />
       <Questions />
       <Companies />
+      <Contact/>
       <Grid item xs={1}>
         <Tab maxPagePosition={300} path="top" />
       </Grid>

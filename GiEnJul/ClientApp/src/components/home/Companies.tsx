@@ -6,8 +6,8 @@ const Companies = () => {
   const classes = useStyles();
 
   return (
-    <Container id="companies" className={classes.section}>
-      <Typography variant="h4">For Bedrifter</Typography>
+    <Container id="companies" className={classes.companyContainer}>
+      <Typography className={classes.textHeadline}>For Bedrifter</Typography>
       <Typography>
         Få med kolleger og Gi en jul, og registrer dere som givere. Gi et
         pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi
