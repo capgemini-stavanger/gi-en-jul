@@ -60,6 +60,7 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
 
+            CreateMap<Models.Giver, Dtos.GiverDataTableDto>();
         }
     }
 }

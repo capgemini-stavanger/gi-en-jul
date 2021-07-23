@@ -138,5 +138,18 @@ namespace GiEnJul.Controllers
             var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
         }
+
+        [HttpGet("Suggestions/Giver")]
+        public async Task<IList<GiverDataTableDto>> GetSuggestedGiversAsync([FromBody] string location, int quantity = 1)
+        {
+            if (quantity < 1) throw new ArgumentOutOfRangeException();
+
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var givers = await _giverRepository.GetSuggestionsAsync(activeEvent, location);
+
+            var suggestions = SuggestionHelper.GetSuggestions(givers, quantity);
+
+            return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
+        }
     }
 }
