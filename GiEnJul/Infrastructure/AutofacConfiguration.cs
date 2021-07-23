@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
-using GiEnJul.Features;
+using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;

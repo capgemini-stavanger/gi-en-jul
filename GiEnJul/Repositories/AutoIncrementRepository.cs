@@ -7,7 +7,7 @@ using GiEnJul.Infrastructure;
 using Serilog;
 using Microsoft.Azure.Cosmos.Table;
 
-namespace GiEnJul.Features
+namespace GiEnJul.Repositories
 {
     public interface IAutoIncrementRepository
     {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
-using GiEnJul.Features;
 using GiEnJul.Models;
+using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace GiEnJul.Controllers
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
-            var messageContent = string.Format($"{insertedAsDto.FullName}, vi bekrefter å ha mottatt din registering for å gi en jul i {insertedAsDto.Location}");
+            var messageContent = $"{insertedAsDto.FullName}, vi bekrefter å ha mottatt din registering for å gi en jul i {insertedAsDto.Location}";
             await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Takk for din registrering!", messageContent);
 
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);

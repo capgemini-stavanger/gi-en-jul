@@ -1,6 +1,6 @@
 ﻿using GiEnJul.Controllers;
 using GiEnJul.Dtos;
-using GiEnJul.Features;
+using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos.Table;
 using Moq;

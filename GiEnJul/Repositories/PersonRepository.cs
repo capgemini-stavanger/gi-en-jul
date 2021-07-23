@@ -6,7 +6,7 @@ using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Features
+namespace GiEnJul.Repositories
 {
     public interface IPersonRepository
     {
@@ -43,7 +43,9 @@ namespace GiEnJul.Features
 
         public async Task<List<Models.Person>> GetAllByRecipientId(string partitionKey)
         {
-            var query = new TableQuery<Entities.Person>() {FilterString =
+            var query = new TableQuery<Person>()
+            {
+                FilterString =
                 TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{partitionKey}")
             };
             var persons = await GetAllByQueryAsync(query);

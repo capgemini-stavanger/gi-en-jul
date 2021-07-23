@@ -1,52 +1,33 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Datatable from "../common/GiverTable";
+import { GiverType, SelectedConnectionType } from "./Types";
 
-export interface GiverType {
-  email: string;
-  eventName: string;
-  fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
-  location: string;
-  matchedRecipient?: string;
-  maxReceivers: Number;
-  partitionKey: string;
-  rowKey: string;
-  phoneNumber: string;
-}
+type Props = {
+  data: GiverType[] | [];
+  handleGiverChange: (
+    newGiverRowKey: string,
+    newGiverPartitionKey: string
+  ) => void;
+  selectedConnection: SelectedConnectionType;
+};
 
-const Giver = () => {
-  const [data, setData] = useState<GiverType[] | []>([]);
-  const [q, setQ] = useState("");
-
-  useEffect(() => {
-    async function fetchGivers() {
-      await fetch("api/admin/givers", {
-        method: "GET", // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((json) => setData(json))
-        .catch((errorStack) => {
-          console.log(errorStack);
-        });
-    }
-    fetchGivers();
-  }, []);
+const Giver: React.FC<Props> = ({
+  data,
+  handleGiverChange,
+  selectedConnection,
+}) => {
+  const [query, setQuery] = useState("");
 
   const search = (input: GiverType[] | []) => {
     const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
       (input) =>
-        input.fullName.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.email.toLocaleLowerCase().indexOf(q) > -1 ||
-        input.phoneNumber.toLocaleLowerCase().indexOf(q) > -1
+        input.fullName?.toLowerCase().indexOf(query) > -1 ||
+        input.email?.toLowerCase().indexOf(query) > -1 ||
+        input.phoneNumber?.toLowerCase().indexOf(query) > -1
     );
   };
 
@@ -59,13 +40,17 @@ const Giver = () => {
         <Grid item>
           <TextField
             placeholder="Søk etter giver"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           ></TextField>
         </Grid>
       </Grid>
-      <Datatable data={search(data)}></Datatable>
+      <Datatable
+        data={search(data)}
+        handleGiverChange={handleGiverChange}
+        selectedConnection={selectedConnection}
+      ></Datatable>
     </Container>
   );
 };
-export default Giver;
+export default React.memo(Giver);

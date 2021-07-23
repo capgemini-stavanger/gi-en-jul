@@ -8,12 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Features
+namespace GiEnJul.Repositories
 {
     public interface IEventRepository
     {
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();
+        Task<string> GetDeliveryAddressForLocationAsync(string location);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -24,15 +25,32 @@ namespace GiEnJul.Features
 
         public async Task<string> GetActiveEventForLocationAsync(string location)
         {
+            var eventByLocation = await GetEventByLocationAsync(location);
+            return eventByLocation.PartitionKey;
+        }
+
+        public async Task<string> GetDeliveryAddressForLocationAsync(string location)
+        {
+            var evnt = await GetEventByLocationAsync(location);
+            return evnt.DeliveryAddress;
+        }
+
+        private async Task<Event> GetEventByLocationAsync(string location)
+        {
             if (string.IsNullOrEmpty(location))
             {
                 throw new ArgumentException($"'{nameof(location)}' cannot be null or empty.", nameof(location));
             }
 
-            var query = new TableQuery<Event>()
-            {
-                FilterString = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location)
-            }.Take(1);
+            // RowKey == location
+            var rowKeyFilter = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location);
+
+            var query = new TableQuery<Event>().Where(
+                TableQuery.CombineFilters(
+                    rowKeyFilter,
+                    TableOperators.And,
+                    HasActiveDates()))
+                .Take(1);
 
             var activeEvent = await GetAllByQueryAsync(query);
 
@@ -42,23 +60,28 @@ namespace GiEnJul.Features
             }
             _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
-            return activeEvent.First().PartitionKey;
+            return activeEvent.First();
         }
 
         public async Task<string[]> GetLocationsWithActiveEventAsync()
         {
-            var query = new TableQuery<Event>()
-            {
-                FilterString = TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterConditionForDate("StartDate", QueryComparisons.LessThan, DateTimeOffset.UtcNow),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterConditionForDate("EndDate", QueryComparisons.GreaterThan, DateTimeOffset.UtcNow))
-            };
+            var query = new TableQuery<Event>().Where(HasActiveDates());
+
             var events = await GetAllByQueryAsync(query);
 
             var locationArray = events.Select(x => x.RowKey).ToArray();
             Array.Sort(locationArray);
             return locationArray;
+        }
+
+        private string HasActiveDates()
+        {
+            // StartDate <= DateTime.Now
+            var startDatePassed = TableQuery.GenerateFilterConditionForDate("StartDate", QueryComparisons.LessThanOrEqual, DateTime.Now);
+            // EndDate >= DateTime.Now
+            var endDateNotPassed = TableQuery.GenerateFilterConditionForDate("EndDate", QueryComparisons.GreaterThanOrEqual, DateTime.Now);
+
+            return TableQuery.CombineFilters(startDatePassed, TableOperators.And, endDateNotPassed);
         }
     }
 }
