@@ -152,5 +152,19 @@ namespace GiEnJul.Controllers
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
+
+        [HttpGet("Suggestions/Recipient/{quantity}")]
+        [HttpGet("Suggestions/Recipient")]
+        public async Task<IList<RecipientDataTableDto>> GetSuggestedRecipientsAsync([FromBody] string location, int quantity = 1)
+        {
+            if (quantity < 1) throw new ArgumentOutOfRangeException();
+
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var unmatchedRecipient = await _recipientRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
+
+            var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipient, quantity);
+
+            return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
+        }
     }
 }

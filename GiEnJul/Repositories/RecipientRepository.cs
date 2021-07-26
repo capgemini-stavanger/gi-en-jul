@@ -4,6 +4,7 @@ using Serilog;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
 using System.Collections.Generic;
+using GiEnJul.Helpers;
 
 namespace GiEnJul.Repositories
 {
@@ -14,6 +15,7 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
         Task<List<Models.Recipient>> GetAllAsModelAsync();
         Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey);
+        Task<List<Models.Recipient>> GetUnsuggestedAsync(string activeEvent, string location, int quantity);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -56,6 +58,16 @@ namespace GiEnJul.Repositories
         {
             var recipient = await GetAsync(partitionKey, rowKey);
             return _mapper.Map<Models.Recipient>(recipient);
+        }
+
+        public async Task<IList<Models.Recipient>> GetUnsuggestedAsync(string eventName, string location, int quantity)
+        {
+            var filter = TableQueryFilterHelper.GetUnsuggestedFilter(eventName, location);
+            var query = new TableQuery<Entities.Recipient>().Where(filter);
+
+            var unsuggestedRecipient = await GetAllByQueryAsync(query);
+
+            return _mapper.Map<IList<Models.Recipient>>(unsuggestedRecipient);
         }
     }
 }
