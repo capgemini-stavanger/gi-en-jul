@@ -46,14 +46,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     color: theme.palette.primary.main,
     padding: theme.spacing(1.1),
-    textTransform: 'capitalize'
+    textTransform: 'none'
   },
   buttonNext:{
     borderRadius: '20px',
     color: 'white',
     backgroundColor: theme.palette.primary.light,
     padding: theme.spacing(1.1),
-    textTransform: 'capitalize',
+    textTransform: 'none',
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
     }

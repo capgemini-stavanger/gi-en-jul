@@ -13,6 +13,7 @@ import {
   Group,
   Mail,
   Phone,
+  HourglassEmpty,
 } from "@material-ui/icons";
 import React from "react";
 import { GiverType, SelectedConnectionType } from "../overview/Types";
@@ -77,7 +78,11 @@ const Datatable: React.FC<Props> = ({
             </Typography>
             {giver.isSuggestedMatch ? (
               //Styling should be in a seperate file
-              <CheckRounded style={{ color: "#49a591" }} />
+              !giver.hasConfirmedMatch ? (
+                <HourglassEmpty style={{ color: "#f4cf8a" }}/>
+              ) : (
+                <CheckRounded style={{ color: "#49a591" }} />
+              )
             ) : (
               <CloseRounded style={{ color: "#ed8175" }} />
             )}
