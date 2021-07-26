@@ -40,7 +40,6 @@ const FamilySize: React.FC<Props> = ({
             setIsValids={setIsValid}
             type="select"
             fullWidth
-            autoFocus
             placeholder={placeHolder}
             validators={[isNotNull]}
             name="familyType-input"
