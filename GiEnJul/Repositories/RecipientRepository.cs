@@ -15,7 +15,7 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
         Task<List<Models.Recipient>> GetAllAsModelAsync();
         Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey);
-        Task<List<Models.Recipient>> GetUnsuggestedAsync(string activeEvent, string location, int quantity);
+        Task<IList<Models.Recipient>> GetUnsuggestedAsync(string activeEvent, string location, int quantity);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
