@@ -59,13 +59,14 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        // [Authorize(Policy = "ReadGiver")] This will deny any unauthorized requests, but will break the application atm
+        //[Authorize(Policy = "ReadGiver")] 
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
             // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
+        //[Authorize(Policy = "ReadRecipient")]
         public async Task<List<Recipient>> GetRecipientsAsync()
         {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
@@ -80,7 +81,7 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> SuggestConnectionAsyc([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
+            (var recipient, int familyCount) = await _recipientRepository.GetRecipientWithFamilyCountAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
 
             if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
             {
@@ -96,13 +97,12 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = true;
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
                 var title = "Du har blitt tildelt en familie!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var body =
                     $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {recipient.FamilyMembers.Count}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
+                    $"Du har nå fått tildelt en familie på {familyCount}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
                     $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
