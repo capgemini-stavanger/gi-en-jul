@@ -38,7 +38,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
 
   return (
     <>
-    <Container className={classes.form}>
+    <Container className={classes.giverForm}>
       {confirmationOK !== undefined ? (
             getMessage()
       ) : (

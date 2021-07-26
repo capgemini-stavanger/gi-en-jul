@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   giverForm: {
-    marginTop: theme.spacing(4),
+    paddingTop: theme.spacing(10),
     padding: theme.spacing(2),
     flexDirection: "column",
     alignItems: "center",
@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
+    maxWidth: 'none',
+    minHeight: '100vh',
     },
   heading: {
     color: theme.palette.primary.main,
@@ -44,12 +46,14 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '20px',
     color: theme.palette.primary.main,
     padding: theme.spacing(1.1),
+    textTransform: 'capitalize'
   },
   buttonNext:{
     borderRadius: '20px',
     color: 'white',
     backgroundColor: theme.palette.primary.light,
     padding: theme.spacing(1.1),
+    textTransform: 'capitalize',
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
     }

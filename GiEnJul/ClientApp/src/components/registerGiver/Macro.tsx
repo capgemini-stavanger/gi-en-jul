@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Typography, Container, Grid } from "@material-ui/core";
+import { Typography, Container, Grid } from "@material-ui/core";
 import Confirmation from "./Confirmation";
 import ContactInfo from "./ContactInfo";
 import Location from "./Location";
@@ -8,6 +8,7 @@ import IFormData from "./IFormData";
 import FamilySize from "./FamilySize";
 import getLocations from "../../common/constants/Locations";
 import useStyles from "./Styles";
+import NavMenu from "../../common/components/NavMenu";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -138,24 +139,20 @@ const RegistrationMacro = () => {
 
   return (
     <>
-        {state.step === 5 ? (
-          <Container className={classes.summaryDesign}>
-
-                      <Confirmation
+    <NavMenu/>
+      {state.step === 5 ? (
+        <Container className={classes.summaryDesign}>
+          <Confirmation
             values={formDataState}
             confirmationOK={state.confirmationOK}
           ></Confirmation>
-
-            </Container>
-        ): (
-          <Container className={classes.giverForm}>
-          <Typography className={classes.heading}>
-            Bli giver
-          </Typography>
+        </Container>
+      ) : (
+        <Container className={classes.giverForm}>
+          <Typography className={classes.heading}>Bli giver</Typography>
           {getStepPage()}
-          </Container>
-        )}
-        
+        </Container>
+      )}
     </>
   );
 };

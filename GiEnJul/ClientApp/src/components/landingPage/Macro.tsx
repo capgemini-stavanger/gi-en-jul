@@ -8,14 +8,18 @@ import Questions from "./Questions";
 import useStyles from "./Styles";
 import logo from './../../styling/img/logo_gronn.svg';
 import Contact from "./Contact";
+import NavMenu from "../../common/components/NavMenu";
+import {ArrowBackIos, ArrowForwardIos} from '@material-ui/icons';
 
 const Home = () => {
   const classes = useStyles();
   const history = useHistory();
 
   return (
+    <> 
+    <NavMenu/>
     <Container
-    className={classes.root}>
+    className={classes.root}  maxWidth={false}>
       <Grid
         container
         direction="column"
@@ -36,8 +40,8 @@ const Home = () => {
         >
           <Button
             size="large"
-            variant="contained"
-            className={classes.submit}
+            endIcon={<ArrowForwardIos/>}
+            className={classes.buttonNext}
             onClick={useCallback(() => {
               history.push("/bli-giver");
             }, [history])}
@@ -59,9 +63,10 @@ const Home = () => {
         justifyContent="center"
         alignItems="center"
       >
-        <Tab maxPagePosition={140} path="/bli-giver" />
+        {/* <Tab maxPagePosition={140} path="/bli-giver" /> */}
       </Grid>
     </Container>
+    </>
   );
 };
 

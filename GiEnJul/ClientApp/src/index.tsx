@@ -57,6 +57,11 @@ overrides: {
       borderRadius: '20px',
     },
   },
+  MuiContainer:{
+    root: {
+      maxWidth: '100%',
+    }
+  }
 }
 });
 

@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => (
       height: '70%',
       width: '40%', 
       borderRadius: '50%',
-      margin:theme.spacing(5,2,2,2),
+      margin:theme.spacing(9,2,2,2),
       padding: theme.spacing(1,1),
       backgroundColor: 'white',
     },
@@ -57,8 +57,15 @@ const useStyles = makeStyles((theme) => (
       borderColor: theme.palette.secondary.light,
       
     },
-    submit: {
-      margin: theme.spacing(3, 0, 2),
+    buttonNext:{
+      borderRadius: '20px',
+      color: 'white',
+      backgroundColor: theme.palette.primary.light,
+      margin: theme.spacing(4),
+      textTransform: 'capitalize',
+      "&:hover": {
+        backgroundColor: theme.palette.primary.main,
+      }
     },
   }));
 
