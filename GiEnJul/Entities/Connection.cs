@@ -24,6 +24,7 @@ namespace GiEnJul.Entities
             EventName = recipient.EventName;
             PersonCount = recipient.PersonCount;
             ReceiverLocation = recipient.Location;
+            FamilyId = recipient.FamilyId;
 
             SubmitterFullName = giver.FullName;
             SubmitterEmail = giver.Email;
@@ -46,6 +47,7 @@ namespace GiEnJul.Entities
         public string EventName { get; set; }
         public int PersonCount { get; set; }
         public string ReceiverLocation { get; set; }
+        public string FamilyId { get; set; }
 
         // Submitter contact info
         public string SubmitterFullName { get; set; }
@@ -65,4 +67,5 @@ namespace GiEnJul.Entities
         public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
     }
+
 }

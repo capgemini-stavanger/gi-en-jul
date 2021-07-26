@@ -60,6 +60,9 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
 
+            //Connection mapping
+            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
+                .ForMember(dest => dest.Check, opt => opt.Ignore());
         }
     }
 }

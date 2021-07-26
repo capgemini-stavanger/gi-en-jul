@@ -12,6 +12,10 @@ using System;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
+using GiEnJul.Utilities;
+using System.Net.Http;
+using GiEnJul.Utilities.ExcelClasses;
+using ClosedXML.Extensions;
 
 namespace GiEnJul.Controllers
 {
@@ -76,8 +80,16 @@ namespace GiEnJul.Controllers
             }
             return recipients;
         }
+        [HttpGet("excel/delivery/{location}")]
+        public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
+        {
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
+            using var wb = await ExcelGenerator.Generate(_mapper.Map<IList<DeliveryExcel>>(connections));
+            return wb.Deliver("delivery_list.xlsx");
+        }
         [HttpPost]
-        public async Task<ActionResult> SuggestConnectionAsyc([FromBody] PostConnectionDto connectionDto)
+        public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
