@@ -13,7 +13,7 @@ namespace GiEnJul.Repositories
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
         Task<IEnumerable<Models.Giver>> GetAllAsModelAsync();
         Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
-        Task<IList<Models.Giver>> GetSuggestionsAsync(string eventName, string location, int quantity);
+        Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -44,7 +44,7 @@ namespace GiEnJul.Repositories
             return _mapper.Map<Models.Giver>(giver);
         }
 
-        public async Task<IList<Models.Giver>> GetSuggestionsAsync(string eventName, string location, int quantity)
+        public async Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity)
         {
             var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
             var notSuggestedFilter = TableQuery.GenerateFilterConditionForBool("IsSuggestedMatch", QueryComparisons.Equal, false);
@@ -60,11 +60,9 @@ namespace GiEnJul.Repositories
 
             var query = new TableQuery<Entities.Giver>().Where(filter);
 
-            var givers = await GetAllByQueryAsync(query);
+            var unsuggestedGivers = await GetAllByQueryAsync(query);
 
-            var suggestions = Helpers.SuggestionHelper.GetSuggestions(givers, quantity);
-
-            return _mapper.Map<IList<Models.Giver>>(suggestions);
+            return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
         }
     }
 }
