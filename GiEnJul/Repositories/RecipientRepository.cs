@@ -14,7 +14,6 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
         Task<List<Models.Recipient>> GetAllAsModelAsync();
         Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey);
-        Task<(Models.Recipient, int)> GetRecipientWithFamilyCountAsync(string partitionKey, string rowKey);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -57,12 +56,6 @@ namespace GiEnJul.Repositories
         {
             var recipient = await GetAsync(partitionKey, rowKey);
             return _mapper.Map<Models.Recipient>(recipient);
-        }
-
-        public async Task<(Models.Recipient, int)> GetRecipientWithFamilyCountAsync(string partitionKey, string rowKey)
-        {
-            var recipient = await GetAsync(partitionKey, rowKey);
-            return (_mapper.Map<Models.Recipient>(recipient), recipient.PersonCount);
         }
     }
 }
