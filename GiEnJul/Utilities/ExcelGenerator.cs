@@ -2,6 +2,7 @@
 using GiEnJul.Utilities.ExcelClasses;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace GiEnJul.Utilities
 {
@@ -11,13 +12,11 @@ namespace GiEnJul.Utilities
         {
             var workbook = new XLWorkbook();
             var table = new DataTable();
-            foreach (var entry in excelEntries)
+            var headers = excelEntries?.FirstOrDefault().AsOrderedDictionary().Keys
+                ?? throw new InvalidExpressionException("Cannot generate excel sheet with no headers");
+            foreach (var header in headers)
             {
-                foreach (var header in entry.AsOrderedDictionary().Keys)
-                {
-                    table.Columns.Add(new DataColumn((string)header));
-                }
-                break;
+                table.Columns.Add(new DataColumn((string)header));
             }
             foreach (var entry in excelEntries)
             {
