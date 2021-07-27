@@ -133,7 +133,26 @@ const SummaryRegistration: React.FC<Props> = ({
       <Container>
         <form style={{ width: "100%", marginTop: "20px" }}>
           <Grid container className={classes.inputRow}>
-            <Grid item xs={9}></Grid>
+            <Grid item xs={9}>
+              <InputValidator
+                viewErrorTrigger={state.viewErrorTrigger}
+                type="select"
+                disabled={changesState.location}
+                variant="outlined"
+                fullWidth
+                label="Lokasjon*"
+                name="location-input"
+                value={values.location}
+                id="location-input"
+                onChange={handleLocationChange}
+                errorMessages={["Vennligst velg lokasjon"]}
+                validators={[isNotNull]}
+                setIsValids={getValiditySetter("isValidLocation")}
+                options={locationOptions.map((loc) => {
+                  return { value: loc, text: loc };
+                })}
+              />
+            </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("location")}>
                 <EditOutlinedIcon
@@ -230,7 +249,22 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
           </Grid>
           <Grid container className={classes.inputRow}>
-            <Grid item xs={9}></Grid>
+            <Grid item xs={9}>
+              <InputValidator
+                viewErrorTrigger={state.viewErrorTrigger}
+                type="select"
+                disabled={changesState.family}
+                variant="outlined"
+                fullWidth
+                name="familyType-input"
+                value={values.maxReceivers}
+                onChange={handleFamilyChange}
+                label="Familiesammensetning*"
+                validators={[isNotNull]}
+                setIsValids={getValiditySetter("isValidFamily")}
+                options={FAMILY_SIZES}
+              />
+            </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("family")}>
                 <EditOutlinedIcon

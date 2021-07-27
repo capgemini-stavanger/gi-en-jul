@@ -36,7 +36,7 @@ const SelectForm: FC<ISelect> = ({
 }) => {
   const [isMob, setIsMob] = useState(false);
 
-  const jsxOptions = useMemo(() => {
+  const jsxOptions = () => {
     if (isMob) {
       if (options && options.length !== 0) {
         return (
@@ -64,7 +64,7 @@ const SelectForm: FC<ISelect> = ({
         ))
       );
     }
-  }, [options, value, isMob]);
+  };
 
   useEffect(() => {
     setIsMob(isMobile());
@@ -77,7 +77,7 @@ const SelectForm: FC<ISelect> = ({
       disabled={disabled}
       fullWidth={fullWidth}
       margin={margin}
-      focused={isMob}
+      focused={!disabled && isMob}
     >
       <InputLabel variant={variant} htmlFor={id}>
         {label}
@@ -92,7 +92,7 @@ const SelectForm: FC<ISelect> = ({
         value={value}
         {...rest}
       >
-        {jsxOptions}
+        {jsxOptions()}
       </Select>
       {error && errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
