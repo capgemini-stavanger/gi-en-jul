@@ -8,16 +8,16 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import * as React from "react";
-import Circle from "../common/Circle";
-import ConnectionsField from "./ConnectionsField";
-import ConnectionStyle from "./ConnectionStyles";
+import Circle from "../../common/Circle";
+import ConnectionsField from "../ConnectionsField";
+import ConnectionStyle from "../ConnectionStyles";
 
 interface ICompletedProps {
   //Need to implement connections dict
   // The information should come from the macrocomponent
 }
 
-const Completed: React.FC<ICompletedProps> = (props) => {
+const Table: React.FC<ICompletedProps> = () => {
   const classes = ConnectionStyle();
   return (
     <div className={classes.root}>
@@ -104,4 +104,4 @@ const Completed: React.FC<ICompletedProps> = (props) => {
     </div>
   );
 };
-export default Completed;
+export default Table;
