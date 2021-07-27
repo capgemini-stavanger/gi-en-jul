@@ -46,7 +46,6 @@ const Location: React.FC<Props> = ({
             viewErrorTrigger={viewErrorTrigger}
             type="select"
             fullWidth
-            autoFocus
             placeholder={placeHolder}
             validators={[isNotNull]}
             label="Lokasjon*"
