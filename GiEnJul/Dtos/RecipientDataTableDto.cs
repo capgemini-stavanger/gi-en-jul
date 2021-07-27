@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace GiEnJul.Dtos
+﻿namespace GiEnJul.Dtos
 {
     public class RecipientDataTableDto
     {
@@ -16,6 +11,5 @@ namespace GiEnJul.Dtos
 
         public string Location { get; set; }
         public string EventName { get; set; }
-
     }
 }

@@ -24,6 +24,5 @@ namespace GiEnJul.Helpers
 
             return filter;
         }
-
     }
 }
