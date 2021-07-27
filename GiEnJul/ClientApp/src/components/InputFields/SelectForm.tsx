@@ -36,7 +36,7 @@ const SelectForm: FC<ISelect> = ({
 }) => {
   const [isMob, setIsMob] = useState(false);
 
-  const jsxOptions = () => {
+  const jsxOptions = useMemo(() => {
     if (isMob) {
       if (options && options.length !== 0) {
         return (
@@ -64,7 +64,7 @@ const SelectForm: FC<ISelect> = ({
         ))
       );
     }
-  };
+  }, [value, options, isMob]);
 
   useEffect(() => {
     setIsMob(isMobile());
@@ -92,7 +92,7 @@ const SelectForm: FC<ISelect> = ({
         value={value}
         {...rest}
       >
-        {jsxOptions()}
+        {jsxOptions}
       </Select>
       {error && errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
