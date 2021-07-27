@@ -2,19 +2,18 @@ import {
   AppBar,
   Button,
   IconButton,
-  Menu,
-  MenuItem,
-  MenuList,
   Toolbar,
+  Drawer,
+  List,
+  ListItem,
 } from "@material-ui/core";
 import React, { FC, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
 import logo from "./../../styling/img/logo_gronn.svg";
 import useStyles from "./Styles";
 import MenuIcon from "@material-ui/icons/Menu";
-import { ArrowForwardIos } from "@material-ui/icons";
+import { ArrowForwardIos, Close } from "@material-ui/icons";
 
 const NavBar: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -31,13 +30,13 @@ const NavBar: FC = () => {
   if (window.location.pathname === "/bli-giver") {
     return (
       <>
-        <AppBar className={classes.navContainer} >
-          <Toolbar>
-            <Link to="/">
-              <IconButton edge="start" >
+        <AppBar className={classes.navContainer}>
+          <Toolbar className={classes.toolBar}>
+            <IconButton >
+              <Link to="/">
                 <img className={classes.smallLogo} src={logo}></img>
-              </IconButton>
-            </Link>
+              </Link>
+            </IconButton>
           </Toolbar>
         </AppBar>
       </>
@@ -45,39 +44,40 @@ const NavBar: FC = () => {
   } else {
     return (
       <>
-        <AppBar className={classes.navContainer} >
-          <Toolbar className= {classes.toolBar}>
+        <AppBar className={classes.navContainer}>
+          <Toolbar className={classes.toolBar}>
             <IconButton
               className={classes.navIcon}
-              edge='start'
+              edge="start"
               onClick={handleEvent}
             >
               <MenuIcon />
             </IconButton>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-              <MenuList>
-                <MenuItem>
+            <Drawer open={open} anchor="top" onClose={handleClose}>
+              <List className={classes.drawerMenu}>
+                <Close className={classes.closeButton} onClick={handleClose} />
+                <ListItem>
                   <Scroll onClick={handleClose} to="how" smooth={true}>
                     Hvordan fungerer gi en jul?
                   </Scroll>
-                </MenuItem>
-                <MenuItem>
+                </ListItem>
+                <ListItem>
                   <Scroll onClick={handleClose} to="questions" smooth={true}>
                     Ofte stilte spørsmål
                   </Scroll>
-                </MenuItem>
-                <MenuItem>
+                </ListItem>
+                <ListItem>
                   <Scroll onClick={handleClose} to="companies" smooth={true}>
-                    For Bedrifter
+                    For bedrifter
                   </Scroll>
-                </MenuItem>
-                <MenuItem>
+                </ListItem>
+                <ListItem>
                   <Scroll onClick={handleClose} to="contact" smooth={true}>
                     Kontakt
                   </Scroll>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+                </ListItem>
+              </List>
+            </Drawer>
             <Link to="/bli-giver">
               <Button
                 size="large"

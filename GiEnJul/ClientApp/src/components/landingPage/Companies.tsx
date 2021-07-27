@@ -7,7 +7,7 @@ const Companies = () => {
 
   return (
     <Container id="companies" className={classes.companyContainer}>
-      <Typography className={classes.textHeadline}>For Bedrifter</Typography>
+      <Typography className={classes.textHeadline}>For bedrifter</Typography>
       <Typography>
         Få med kolleger og Gi en jul, og registrer dere som givere. Gi et
         pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi

@@ -8,7 +8,7 @@ import IFormData from "./IFormData";
 import FamilySize from "./FamilySize";
 import getLocations from "../../common/constants/Locations";
 import useStyles from "./Styles";
-import NavMenu from "../../common/components/NavMenu";
+import NavBar from "../../common/components/NavBar";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -139,7 +139,7 @@ const RegistrationMacro = () => {
 
   return (
     <>
-    <NavMenu/>
+    <NavBar/>
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
           <Confirmation

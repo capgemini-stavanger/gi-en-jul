@@ -52,14 +52,9 @@ overrides: {
     }
   }
   }, 
-  MuiOutlinedInput: {
+  MuiListItem: {
     root: {
-      borderRadius: '20px',
-    },
-  },
-  MuiContainer:{
-    root: {
-      maxWidth: '100%',
+      justifyContent: 'center',
     }
   }
 }
