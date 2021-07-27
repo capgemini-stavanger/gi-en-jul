@@ -1,9 +1,9 @@
-﻿using System.Data;
+﻿using System.Collections.Specialized;
 
 namespace GiEnJul.Utilities.ExcelClasses
 {
     public interface IExcel
     {
-        void AddRow(ref DataTable table);
+        OrderedDictionary AsOrderedDictionary();
     }
 }

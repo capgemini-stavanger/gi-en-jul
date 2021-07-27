@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Specialized;
+using System.Data;
 
 namespace GiEnJul.Utilities.ExcelClasses
 {
@@ -16,21 +17,22 @@ namespace GiEnJul.Utilities.ExcelClasses
         public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
 
-        public void AddRow(ref DataTable table)
+        public OrderedDictionary AsOrderedDictionary()
         {
-            table.Rows.Add(
-                Check,
-                FamilyId,
-                PersonCount,
-                Institution,
-                ReferenceId,
-                SubmitterFullName,
-                SubmitterPhoneNumber,
-                SubmitterEmail,
-                GiverFullName,
-                GiverPhoneNumber,
-                GiverEmail
-                );
+            return new OrderedDictionary
+            {
+                ["Hentet"] = Check,
+                ["Familie id"] = FamilyId,
+                ["Familiemedlemmer"] = PersonCount,
+                ["Institusjon"] = Institution,
+                ["Referanse id"] = ReferenceId,
+                ["Innmelder navn"] = SubmitterFullName,
+                ["Innmelder mobil"] = SubmitterPhoneNumber,
+                ["Innmelder email"] = SubmitterEmail,
+                ["Giver navn"] = GiverFullName,
+                ["Giver mobil"] = GiverPhoneNumber,
+                ["Giver email"] = GiverEmail
+            };
         }
     }
 }

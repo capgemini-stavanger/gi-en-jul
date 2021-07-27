@@ -4,6 +4,7 @@ using GiEnJul.Utilities.ExcelClasses;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace GiEnJul.Utilities
 {
@@ -15,13 +16,25 @@ namespace GiEnJul.Utilities
             {
                 var workbook = new XLWorkbook();
                 var table = new DataTable();
-                var excelType = excelEntries.GetType().GetGenericArguments()[0];
-                ExcelHelper.AddHeaders(ref table, excelType);
                 foreach (var entry in excelEntries)
                 {
-                    entry.AddRow(ref table);
+                    foreach (var header in entry.AsOrderedDictionary().Keys)
+                    {
+                        table.Columns.Add(new DataColumn((string)header));
+                    }
+                    break;
                 }
-                var worksheet = workbook.Worksheets.Add(ExcelHelper.GetWorksheetName(excelType));
+                foreach (var entry in excelEntries)
+                {
+                    var dataRow = table.NewRow();
+                    var dict = entry.AsOrderedDictionary();
+                    foreach (var key in dict.Keys)
+                    {
+                        dataRow[(string)key] = dict[key];
+                    }
+                    table.Rows.Add(dataRow);
+                }
+                var worksheet = workbook.Worksheets.Add("Worksheet");
                 worksheet.FirstCell().InsertTable(table);
                 worksheet.Columns().AdjustToContents();
                 return workbook;
