@@ -42,6 +42,9 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
 
+            CreateMap<Models.Recipient, Dtos.RecipientDataTableDto>();
+
+
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())

@@ -141,7 +141,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
-        public async Task<IList<GiverDataTableDto>> GetSuggestedGiversAsync([FromBody] string location, int quantity = 1)
+        public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromBody] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
@@ -151,6 +151,20 @@ namespace GiEnJul.Controllers
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedGivers, quantity);
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
+        }
+
+        [HttpGet("Suggestions/Recipient/{quantity}")]
+        [HttpGet("Suggestions/Recipient")]
+        public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromBody] string location, int quantity = 1)
+        {
+            if (quantity < 1) throw new ArgumentOutOfRangeException();
+
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var unmatchedRecipients = await _recipientRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
+
+            var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
+
+            return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
     }
 }
