@@ -1,64 +1,38 @@
-import { Button, Container, Grid, Typography, useScrollTrigger, Fab } from "@material-ui/core";
-import React, { useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { Container, Grid, Typography } from "@material-ui/core";
+import React from "react";
 import ScrollToTop from "../../common/components/ScrollToTop";
 import Companies from "./Companies";
 import How from "./How";
 import Questions from "./Questions";
 import useStyles from "./Styles";
-import logo from './../../styling/img/logo_gronn.svg';
+import logo from "./../../styling/img/logo_gronn.svg";
 import Contact from "./Contact";
-import NavMenu from "../../common/components/NavMenu";
-import {ArrowForwardIos} from '@material-ui/icons';
-
-
-
+import NavBar from "../../common/components/NavBar";
 
 const Home = () => {
   const classes = useStyles();
-  const history = useHistory();
 
   return (
-    <> 
-    <NavMenu/>
-    <Container
-    className={classes.root}  maxWidth={false}>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Container className={classes.circle}>
-        <img className={classes.logoLarge}
-         src={logo}></img>
-        </Container>
-        <Typography className={classes.logoText} >Gi en jul</Typography>
-
+    <>
+      <NavBar />
+      <Container className={classes.root} maxWidth={false}>
         <Grid
           container
-          direction="row"
+          direction="column"
           justifyContent="center"
           alignItems="center"
         >
-          <Button
-            size="large"
-            endIcon={<ArrowForwardIos/>}
-            className={classes.buttonNext}
-            onClick={useCallback(() => {
-              history.push("/bli-giver");
-            }, [history])}
-          >
-            Bli Giver
-          </Button>
+          <Container className={classes.circle}>
+            <img className={classes.logoLarge} src={logo}></img>
+          </Container>
+          <Typography className={classes.logoText}>Gi en jul</Typography>
         </Grid>
-      </Grid>
-      <How />
-      <Questions />
-      <Companies />
-      <Contact/>
-        <ScrollToTop maxPagePosition={300}/>
-    </Container>
+        <How />
+        <Questions />
+        <Companies />
+        <Contact />
+        <ScrollToTop maxPagePosition={300} />
+      </Container>
     </>
   );
 };

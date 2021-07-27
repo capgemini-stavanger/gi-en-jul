@@ -40,7 +40,7 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({ maxPagePosition }) => {
           aria-label="scroll back to top"
           className={classes.topButton}
         >
-          <ExpandLessRoundedIcon />
+          <ExpandLessRoundedIcon/>
         </Fab>
       </Zoom>
     </Button>
