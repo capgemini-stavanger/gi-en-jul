@@ -62,13 +62,14 @@ namespace GiEnJul.Controllers
         // }
 
         [HttpGet("givers")]
-        // [Authorize(Policy = "ReadGiver")] This will deny any unauthorized requests, but will break the application atm
+        //[Authorize(Policy = "ReadGiver")] 
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
             // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
         }
         [HttpGet("recipients")]
+        //[Authorize(Policy = "ReadRecipient")]
         public async Task<List<Recipient>> GetRecipientsAsync()
         {
             var recipients = await _recipientRepository.GetAllAsModelAsync();
@@ -107,13 +108,12 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = true;
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
                 var title = "Du har blitt tildelt en familie!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var body =
                     $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {recipient.FamilyMembers.Count}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
+                    $"Du har nå fått tildelt en familie på {recipient.PersonCount}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
                     $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
@@ -148,6 +148,20 @@ namespace GiEnJul.Controllers
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
             var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
+        }
+
+        [HttpGet("Suggestions/Giver/{quantity}")]
+        [HttpGet("Suggestions/Giver")]
+        public async Task<IList<GiverDataTableDto>> GetSuggestedGiversAsync([FromBody] string location, int quantity = 1)
+        {
+            if (quantity < 1) throw new ArgumentOutOfRangeException();
+
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
+
+            var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedGivers, quantity);
+
+            return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
     }
 }

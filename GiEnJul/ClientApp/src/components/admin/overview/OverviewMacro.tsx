@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
+import ApiService from "../../../common/functions/apiServiceClass";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
@@ -15,29 +16,20 @@ function OverviewMacro() {
   const selectedConnection = useRef<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const apiservice = new ApiService();
 
   async function fetchGivers() {
-    await fetch("api/admin/givers", {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => setGiverData(json))
+    await apiservice
+      .get("admin/givers")
+      .then((resp) => setGiverData(resp.data))
       .catch((errorStack) => {
         console.error(errorStack);
       });
   }
   async function fetchRecipients() {
-    await fetch("./api/admin/recipients", {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => setRecipientData(json))
+    await apiservice
+      .get("admin/recipients")
+      .then((resp) => setRecipientData(resp.data))
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -76,18 +68,17 @@ function OverviewMacro() {
   };
 
   const connectGiverRecipient = async () => {
-    await fetch("api/admin", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        GiverRowKey: selectedConnection.current.giverRowKey,
-        GiverPartitionKey: selectedConnection.current.giverPartitionKey,
-        RecipientRowKey: selectedConnection.current.recipientRowKey,
-        RecipientPartitionKey: selectedConnection.current.recipientPartitionKey,
-      }),
-    })
+    await apiservice
+      .post(
+        "admin/",
+        JSON.stringify({
+          GiverRowKey: selectedConnection.current.giverRowKey,
+          GiverPartitionKey: selectedConnection.current.giverPartitionKey,
+          RecipientRowKey: selectedConnection.current.recipientRowKey,
+          RecipientPartitionKey:
+            selectedConnection.current.recipientPartitionKey,
+        })
+      )
       .then((response) => {
         //use this for sending a response to the user
         if (response.status === 200) {
@@ -100,7 +91,6 @@ function OverviewMacro() {
         console.error(errorStack);
       });
   };
-
   return (
     <>
       <Button onClick={connectGiverRecipient}>Koble sammen</Button>
