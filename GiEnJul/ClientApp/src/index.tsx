@@ -45,13 +45,32 @@ const theme = createTheme({
     fontFamily: 'Quicksand',
   },
 overrides: {
+  MuiButton:{
+    root: {
+      borderRadius:'20px',
+      textTransform: 'none',
+    },
+  },
   MuiSelect: {
     select:{
     "&:focus": {
       borderRadius: '20px',
     }
   }
-  }, 
+  },
+  MuiOutlinedInput:{
+    root:{
+      borderRadius: '20px',
+      "&:focus": {
+        borderRadius: '20px',
+      }
+    }
+  },
+  MuiPaper:{
+    rounded:{
+      borderRadius: '20px',
+    }
+  },
   MuiListItem: {
     root: {
       justifyContent: 'center',

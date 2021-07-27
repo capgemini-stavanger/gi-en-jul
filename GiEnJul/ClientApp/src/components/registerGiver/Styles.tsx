@@ -36,20 +36,15 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
   },
-  selectInput: {
-    borderRadius: '20px',
-  },
   buttons: {
     margin: theme.spacing(3, 0, 3),
   },
   buttonBack:{
-    borderRadius: '20px',
     color: theme.palette.primary.main,
     padding: theme.spacing(1.1),
     textTransform: 'none'
   },
   buttonNext:{
-    borderRadius: '20px',
     color: 'white',
     backgroundColor: theme.palette.primary.light,
     padding: theme.spacing(1.1),

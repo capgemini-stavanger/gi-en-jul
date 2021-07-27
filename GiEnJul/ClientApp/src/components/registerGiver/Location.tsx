@@ -44,7 +44,6 @@ const Location: React.FC<Props> = ({
           onError={(errors) => console.error(errors)}
         >
           <InputValidator
-            className={classes.selectInput}
             viewErrorTrigger={viewErrorTrigger}
             type="select"
             fullWidth

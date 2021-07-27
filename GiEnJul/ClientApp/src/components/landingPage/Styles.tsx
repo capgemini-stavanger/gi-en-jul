@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme) => (
       
     },
     buttonNext:{
-      borderRadius: '20px',
       color: 'white',
       backgroundColor: theme.palette.primary.light,
       margin: theme.spacing(4),

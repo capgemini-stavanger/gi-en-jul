@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonNext: {
     position: "inherit",
-    borderRadius: "20px",
     color: "white",
     backgroundColor: theme.palette.primary.light,
     textTransform: "none",
