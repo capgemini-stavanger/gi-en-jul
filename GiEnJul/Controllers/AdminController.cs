@@ -85,7 +85,7 @@ namespace GiEnJul.Controllers
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
-            using var wb = await ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
+            using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
             return wb.Deliver("leveranse_liste.xlsx");
         }
         [HttpPost]
