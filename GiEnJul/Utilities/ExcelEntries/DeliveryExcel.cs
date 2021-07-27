@@ -16,21 +16,17 @@ namespace GiEnJul.Utilities.ExcelClasses
         public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
 
-        public void AddRow(ref DataTable table)
+        public object[] AsObjectArray()
         {
-            table.Rows.Add(
-                Check,
-                FamilyId,
-                PersonCount,
-                Institution,
-                ReferenceId,
-                SubmitterFullName,
-                SubmitterPhoneNumber,
-                SubmitterEmail,
-                GiverFullName,
-                GiverPhoneNumber,
-                GiverEmail
-                );
+            var props = GetType().GetProperties();
+
+            var obj = new object[props.Length];
+            for (int i = 0; i < props.Length; i++)
+            {
+                obj[i] = props[i].GetValue(this);
+            }
+
+            return obj;
         }
     }
 }

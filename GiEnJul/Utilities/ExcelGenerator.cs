@@ -19,7 +19,7 @@ namespace GiEnJul.Utilities
                 ExcelHelper.AddHeaders(ref table, excelType);
                 foreach (var entry in excelEntries)
                 {
-                    entry.AddRow(ref table);
+                    table.Rows.Add(entry.AsObjectArray());
                 }
                 var worksheet = workbook.Worksheets.Add(ExcelHelper.GetWorksheetName(excelType));
                 worksheet.FirstCell().InsertTable(table);
