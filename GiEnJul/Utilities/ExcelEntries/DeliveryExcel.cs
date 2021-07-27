@@ -1,7 +1,4 @@
-﻿using ClosedXML.Attributes;
-using GiEnJul.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
+﻿using System.Data;
 
 namespace GiEnJul.Utilities.ExcelClasses
 {
@@ -9,21 +6,30 @@ namespace GiEnJul.Utilities.ExcelClasses
     {
         public string Check { get; }
         public string FamilyId { get; set; }
+        public int PersonCount { get; set; }
+        public string Institution { get; set; }
         public string ReferenceId { get; set; }
+        public string SubmitterFullName { get; set; }
+        public string SubmitterEmail { get; set; }
+        public string SubmitterPhoneNumber { get; set; }
+        public string GiverFullName { get; set; }
+        public string GiverEmail { get; set; }
+        public string GiverPhoneNumber { get; set; }
 
-        public void AddHeader(ref DataTable table)
-        {
-            table.Columns.Add("Cross", typeof(string));
-            table.Columns.Add("Family id", typeof(string));
-            table.Columns.Add("Reference id", typeof(string));
-        }
-
-        public void AddRow (ref DataTable table)
+        public void AddRow(ref DataTable table)
         {
             table.Rows.Add(
-                Check, 
-                FamilyId, 
-                ReferenceId
+                Check,
+                FamilyId,
+                PersonCount,
+                Institution,
+                ReferenceId,
+                SubmitterFullName,
+                SubmitterPhoneNumber,
+                SubmitterEmail,
+                GiverFullName,
+                GiverPhoneNumber,
+                GiverEmail
                 );
         }
     }

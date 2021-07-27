@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using GiEnJul.Helpers;
 using GiEnJul.Utilities.ExcelClasses;
 using System.Collections.Generic;
 using System.Data;
@@ -14,18 +15,15 @@ namespace GiEnJul.Utilities
             {
                 var workbook = new XLWorkbook();
                 var table = new DataTable();
-                var addedHeader = false;
+                var excelType = excelEntries.GetType().GetGenericArguments()[0];
+                ExcelHelper.AddHeaders(ref table, excelType);
                 foreach (var entry in excelEntries)
                 {
-                    if (!addedHeader)
-                    {
-                        addedHeader = true;
-                        entry.AddHeader(ref table);
-                    }
                     entry.AddRow(ref table);
                 }
-                var worksheet = workbook.Worksheets.Add("Delivery");
+                var worksheet = workbook.Worksheets.Add(ExcelHelper.GetWorksheetName(excelType));
                 worksheet.FirstCell().InsertTable(table);
+                worksheet.Columns().AdjustToContents();
                 return workbook;
             });
         }

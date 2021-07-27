@@ -26,9 +26,9 @@ namespace GiEnJul.Entities
             ReceiverLocation = recipient.Location;
             FamilyId = recipient.FamilyId;
 
-            SubmitterFullName = giver.FullName;
-            SubmitterEmail = giver.Email;
-            SubmitterPhoneNumber = giver.PhoneNumber;
+            SubmitterFullName = recipient.ContactFullName;
+            SubmitterEmail = recipient.ContactEmail;
+            SubmitterPhoneNumber = recipient.ContactPhoneNumber;
 
             Institution = recipient.Institution;
             ReferenceId = recipient.ReferenceId;
@@ -67,5 +67,4 @@ namespace GiEnJul.Entities
         public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
     }
-
 }
