@@ -30,5 +30,6 @@ namespace GiEnJul.Models
         public bool HasConfirmedMatch { get; set; } = false;
 
         public List<Person> FamilyMembers { get; set; } = new List<Person>();
+        public int PersonCount { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 using AutoMapper;
+using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
+using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ namespace GiEnJul.Repositories
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
         Task<IEnumerable<Models.Giver>> GetAllAsModelAsync();
         Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
+        Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -42,5 +45,14 @@ namespace GiEnJul.Repositories
             return _mapper.Map<Models.Giver>(giver);
         }
 
+        public async Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity)
+        {
+            var filter = TableQueryFilterHelper.GetUnsuggestedFilter(eventName, location);
+            var query = new TableQuery<Entities.Giver>().Where(filter);
+
+            var unsuggestedGivers = await GetAllByQueryAsync(query);
+
+            return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
+        }
     }
 }

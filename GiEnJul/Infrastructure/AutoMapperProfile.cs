@@ -29,7 +29,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
                 .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
                 .ForMember(dest => dest.MatchedGiver, act => act.Ignore())
-                .ForMember(dest => dest.FamilyId, act => act.Ignore());
+                .ForMember(dest => dest.FamilyId, act => act.Ignore())
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
 
             CreateMap<Models.Recipient, Entities.Recipient>()
@@ -40,6 +41,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
             CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
+
+            CreateMap<Models.Recipient, Dtos.RecipientDataTableDto>();
+
 
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
@@ -60,6 +64,7 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
 
+            CreateMap<Models.Giver, Dtos.GiverDataTableDto>();
         }
     }
 }
