@@ -25,7 +25,6 @@ const NavBar: FC = () => {
   const handleClose = () => {
     setAnchorEl(() => null);
   };
-  const open = Boolean(anchorEl);
 
   if (window.location.pathname === "/bli-giver") {
     return (
@@ -53,7 +52,7 @@ const NavBar: FC = () => {
             >
               <MenuIcon />
             </IconButton>
-            <Drawer open={open} anchor="top" onClose={handleClose}>
+            <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
               <List className={classes.drawerMenu}>
                 <Close className={classes.closeButton} onClick={handleClose} />
                 <ListItem>

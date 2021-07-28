@@ -47,28 +47,28 @@ const theme = createTheme({
 overrides: {
   MuiButton:{
     root: {
-      borderRadius:'20px',
+      borderRadius:'10em',
       textTransform: 'none',
     },
   },
   MuiSelect: {
     select:{
     "&:focus": {
-      borderRadius: '20px',
+      borderRadius: '10em',
     }
   }
   },
   MuiOutlinedInput:{
     root:{
-      borderRadius: '20px',
+      borderRadius: '10em',
       "&:focus": {
-        borderRadius: '20px',
+        borderRadius: '10em',
       }
     }
   },
   MuiPaper:{
     rounded:{
-      borderRadius: '20px',
+      borderRadius: '10em',
     }
   },
   MuiListItem: {

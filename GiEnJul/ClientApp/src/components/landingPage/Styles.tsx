@@ -34,16 +34,16 @@ const useStyles = makeStyles((theme) => (
 
     },
     howContainer: {
-      spacing: '2',
+      marginTop: theme.spacing(2),
     },
     companyContainer: {
-      spacing: '2',
+      marginTop: theme.spacing(2),
     },
     howItem: {
       backgroundColor: 'white',
       margin: theme.spacing(1),
       padding: theme.spacing(1), 
-      borderRadius: '20px',
+      borderRadius: '2em',
 
     },
     nextIcon: {
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => (
     },
     questionBox: {
       margin: theme.spacing(1),
-      borderRadius: '20px',
+      borderRadius: '2em',
       overflow: 'hidden',
       borderColor: theme.palette.secondary.light,
       
