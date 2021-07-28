@@ -9,7 +9,7 @@ const DeliveryExcelDownload = () => {
 
   const download = () => {
     apiservice
-      .get(`/api/admin/excel/delivery/${location}`, { responseType: "blob" })
+      .get(`admin/excel/delivery/${location}`, { responseType: "blob" })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
@@ -25,8 +25,7 @@ const DeliveryExcelDownload = () => {
       variant="contained"
       color="primary"
       startIcon={<GetAppIcon />}
-      href={`/api/admin/excel/delivery/${location}`}
-      download={`Leveranseliste_${location}.xlsx`}
+      onClick={download}
     >
       Download - (Defaults to Nittedal)
     </Button>
