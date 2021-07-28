@@ -20,7 +20,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
 
   useEffect(() => {
     apiservice
-      .postEmpty(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`)
+      .post(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {})
       .then((response) => setError(!(response.status == 200)));
   }, []);
 

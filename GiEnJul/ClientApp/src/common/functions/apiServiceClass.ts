@@ -57,12 +57,6 @@ class ApiService implements IApiService {
       callback(response.status, response.data);
     });
   };
-  postEmpty = (path: string, extras?: any) => {
-    const newConfig = extras
-    ? { headers: { ...this.config.headers, ...extras.headers } }
-    : this.config;
-    return axios.post(this.baseUrl+ path,{}, newConfig);
-  }
   all = (args: any[], callback: any) => {
     return axios.all(args).then(response => callback(response));
   };
