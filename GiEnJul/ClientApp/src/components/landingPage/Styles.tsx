@@ -1,71 +1,116 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { isMobile } from '../../common/functions/IsMobile';
+import { makeStyles } from "@material-ui/core/styles";
+import { isMobile } from "../../common/functions/IsMobile";
 
-const useStyles = makeStyles((theme) => (
-  {
-    root: {
-      backgroundColor: theme.palette.secondary.light,
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.secondary.light,
+  },
+  circle: {
+    borderRadius: "50%",
+    margin: theme.spacing(9, 2, 2, 2),
+    padding: theme.spacing(1, 1),
+    backgroundColor: "white",
+    height: "40%",
+    width: "40%",
+    position: 'static',
+    [theme.breakpoints.up("tablet")]: {
+      height: "30%",
+      width: "30%",
     },
-    circle: {
-      height: '70%',
-      width: '40%', 
-      borderRadius: '50%',
-      margin:theme.spacing(9,2,2,2),
-      padding: theme.spacing(1,1),
-      backgroundColor: 'white',
+    [theme.breakpoints.up("laptop")]: {
+      height: "20%",
+      width: "20%",
     },
-    logoLarge:{
-      height: '50%',
-      width: '60%', 
-      display: 'block',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      margin:theme.spacing(1),
-    }, 
-    logoText: {
-      color: theme.palette.primary.main,
-      fontSize: '250%', 
-      fontWeight: 500,
+  },
+  logoLarge: {
+    height: "44%",
+    width: "52.8%",
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
+    margin: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]: {
+      height: "35.2%",
+      width: "42.24%",
     },
-    textHeadline:{
-      color: theme.palette.primary.main,
-      fontSize: '200%', 
-      fontWeight: 400,
+    [theme.breakpoints.up("laptop")]: {
+      height: "28.16%",
+      width: "33.8%",
+    },
+  },
+  logoText: {
+    color: theme.palette.primary.main,
+    fontSize: "250%",
+    fontWeight: 500,
+  },
+  textHeadline: {
+    color: theme.palette.primary.main,
+    fontSize: "200%",
+    fontWeight: 400,
+  },
+  howContainer: {
+    marginTop: theme.spacing(2),
+    maxWidth: '85em',
+    maxHeight: '150em',
+  },
+  companyContainer: {
+    marginTop: theme.spacing(2),
+  },
+  howItem: {
+    backgroundColor: "white",
+    margin: theme.spacing(2),
+    borderRadius: "2em",
+    maxWidth: "100%",
+    objectFit: 'cover',
+    display: 'stretch',
+    [theme.breakpoints.up("tablet")]: {
 
+      maxWidth: "33.3%",
     },
-    howContainer: {
-      marginTop: theme.spacing(2),
-    },
-    companyContainer: {
-      marginTop: theme.spacing(2),
-    },
-    howItem: {
-      backgroundColor: 'white',
-      margin: theme.spacing(1),
-      padding: theme.spacing(1), 
-      borderRadius: '2em',
+    [theme.breakpoints.up("laptop")]: {
 
+      maxWidth: "25%",
     },
-    nextIcon: {
-      color: theme.palette.primary.main,
-      margin: 'auto'
-    },
-    questionBox: {
-      margin: theme.spacing(1),
-      borderRadius: '2em',
-      overflow: 'hidden',
-      borderColor: theme.palette.secondary.light,
-      
-    },
-    buttonNext:{
-      color: 'white',
-      backgroundColor: theme.palette.primary.light,
-      margin: theme.spacing(4),
-      textTransform: 'none',
-      "&:hover": {
-        backgroundColor: theme.palette.primary.main,
-      }
-    },
-  }));
+  },
+  howText: {
+    objectFit: 'cover',
+    MaxHeight: '100%',
+    padding: theme.spacing(2),
 
-  export default useStyles;
+  },
+  howImage:{
+    objectFit: 'cover',
+    MaxHeight: '100%',
+    width: '100%', 
+    height: '10em',
+    padding: theme.spacing(0),
+    bottom: theme.spacing(0),
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  nextIcon: {
+    color: theme.palette.primary.main,
+    margin: "auto",
+  },
+  dummmyIcon: {
+    color: theme.palette.secondary.light,
+    margin: "auto",
+  },
+  questionBox: {
+    margin: theme.spacing(1),
+    borderRadius: "2em",
+    overflow: "hidden",
+    borderColor: theme.palette.secondary.light,
+  },
+  buttonNext: {
+    color: "white",
+    backgroundColor: theme.palette.primary.light,
+    margin: theme.spacing(4),
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+}));
+
+export default useStyles;
