@@ -8,9 +8,9 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import * as React from "react";
-import Circle from "../../common/Circle";
-import ConnectionsField from "../ConnectionsField";
-import ConnectionStyle from "../ConnectionStyles";
+import Circle from "../common/Circle";
+import ConnectionsField from "./ConnectionsField";
+import ConnectionStyle from "./ConnectionStyles";
 
 interface ICompletedProps {
   //Need to implement connections dict

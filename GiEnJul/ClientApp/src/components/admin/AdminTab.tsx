@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CompletedMacro from "./connections/completed/Macro";
+import CompletedMacro from "./completed/Macro";
 import { Tab } from "@material-ui/core";
 import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import OverviewMacro from "./overview/OverviewMacro";
