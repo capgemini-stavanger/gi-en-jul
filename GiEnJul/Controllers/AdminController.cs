@@ -1,17 +1,20 @@
 ﻿using AutoMapper;
-using GiEnJul.Dtos;
-using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using ClosedXML.Extensions;
 using GiEnJul.Clients;
-using GiEnJul.Models;
-using Microsoft.AspNetCore.Authorization;
-using GiEnJul.Repositories;
-using System;
+using GiEnJul.Dtos;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
+using GiEnJul.Models;
+using GiEnJul.Repositories;
+using GiEnJul.Utilities;
+using GiEnJul.Utilities.ExcelClasses;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
 {
@@ -77,8 +80,16 @@ namespace GiEnJul.Controllers
             }
             return recipients;
         }
+        [HttpGet("excel/delivery/{location}")]
+        public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
+        {
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
+            using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
+            return wb.Deliver("leveranse_liste.xlsx");
+        }
         [HttpPost]
-        public async Task<ActionResult> SuggestConnectionAsyc([FromBody] PostConnectionDto connectionDto)
+        public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);

@@ -63,8 +63,11 @@ namespace GiEnJul.Infrastructure
             CreateMap<Entities.Giver, Models.Giver>();
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
-
             CreateMap<Models.Giver, Dtos.GiverDataTableDto>();
+
+            //Connection mapping
+            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
+                .ForMember(dest => dest.Check, opt => opt.Ignore());
         }
     }
 }
