@@ -5,7 +5,7 @@ import Companies from "./Companies";
 import How from "./How";
 import Questions from "./Questions";
 import useStyles from "./Styles";
-import logo from "./../../styling/img/logo_gronn.svg";
+import logo from "./../../styling/img/logo_green.svg";
 import Contact from "./Contact";
 import NavBar from "../../common/components/NavBar";
 

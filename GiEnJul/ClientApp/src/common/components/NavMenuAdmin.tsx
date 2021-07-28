@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './NavMenuAdmin.css';
-import logo from './../../styling/img/logo_gronn.svg';
+import logo from './../../styling/img/logo_green.svg';
 
 export default class NavMenuAdmin extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {

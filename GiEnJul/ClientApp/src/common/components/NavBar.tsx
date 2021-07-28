@@ -10,7 +10,7 @@ import {
 import React, { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
-import logo from "./../../styling/img/logo_gronn.svg";
+import logo from "./../../styling/img/logo_green.svg";
 import useStyles from "./Styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
