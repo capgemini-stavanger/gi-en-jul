@@ -31,7 +31,7 @@ namespace GiEnJul.Repositories
             }
             catch (StorageException e)
             {
-                _log.Fatal("Could not create or connect to Azure Table Storage.\n{@0}", e.ToString());
+                _log.Fatal(e, "Could not create or connect to Azure Table Storage");
                 throw e;
             }
         }
@@ -50,7 +50,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to delete Entity:{@entity}, in table:{@tablename}. \n{@Exception}", entity, _table.Name, e);
+                _log.Error(e, "Exception while trying to delete Entity:{@entity}, in table:{@tablename}", entity, _table.Name);
                 throw e;
             }
         }
@@ -78,7 +78,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception occurred while trying to delete multiple entities, in table:{0}. \n{@Exception}", _table.Name, e);
+                _log.Error(e, "Exception occurred while trying to delete multiple entities, in table:{0}", _table.Name);
                 throw e;
             }
         }
@@ -96,7 +96,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to fetch row with RowKey:{@rowKey}, and PartitionKey:{@partitionKey}, in table:{@tablename}. \n{@Exception}", rowKey, partitionKey, _table.Name, e);
+                _log.Error(e,  "Exception while trying to fetch row with RowKey:{@rowKey}, and PartitionKey:{@partitionKey}, in table:{@tablename}", rowKey, partitionKey, _table.Name);
                 throw e;
             }
         }
@@ -114,7 +114,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to add or update Entity:{@entity}, into table:{@tablename}. \n{@Exception}", entity, _table.Name, e);
+                _log.Error(e,  "Exception while trying to add or update Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
                 throw e;
             }
         }
@@ -140,7 +140,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception while trying to add or update multiple entities, into table:{0}. \n{@Exception}", _table.Name, e);
+                _log.Error(e,  "Exception while trying to add or update multiple entities, into table:{0}", _table.Name);
                 throw e;
             }
         }
@@ -172,7 +172,7 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error("Exception while fetching entities, in table:{0}", _table.Name, e);
+                _log.Error(e,  "Exception while fetching entities, in table:{0}", _table.Name);
                 throw;
             }
         }

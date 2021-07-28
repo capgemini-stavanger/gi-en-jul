@@ -27,7 +27,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
 
             var logger = new LoggerConfiguration()
-                                .MinimumLevel.Debug()
+                                .MinimumLevel.Is(settings.LogLevel)
                                 .WriteTo.Console()
                                 .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(settings.TableConnectionString), storageTableName: settings.LogTableName)
                                 .CreateLogger();
