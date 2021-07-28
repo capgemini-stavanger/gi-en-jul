@@ -17,7 +17,7 @@ interface ICompletedProps {
   // The information should come from the macrocomponent
 }
 
-const Completed: React.FC<ICompletedProps> = (props) => {
+const Table: React.FC<ICompletedProps> = () => {
   const classes = ConnectionStyle();
   return (
     <div className={classes.root}>
@@ -104,4 +104,4 @@ const Completed: React.FC<ICompletedProps> = (props) => {
     </div>
   );
 };
-export default Completed;
+export default Table;

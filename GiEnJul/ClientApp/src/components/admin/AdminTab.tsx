@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Completed from "./connections/Completed";
+import CompletedMacro from "./completed/Macro";
 import { Tab } from "@material-ui/core";
 import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import OverviewMacro from "./overview/OverviewMacro";
@@ -24,7 +24,7 @@ function AdminTab() {
         </TabPanel>
         <TabPanel value="2"></TabPanel>
         <TabPanel value="3">
-          <Completed />
+          <CompletedMacro />
         </TabPanel>
       </TabContext>
     </>
