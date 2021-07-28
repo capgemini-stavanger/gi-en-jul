@@ -1,6 +1,7 @@
 ﻿import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
+import ApiService from "../../common/functions/apiServiceClass";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -15,11 +16,12 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
     useParams<RouteParameters>();
 
   const [error, setError] = useState(false);
+  const apiservice = new ApiService();
 
   useEffect(() => {
-    fetch(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {
-      method: "POST",
-    }).then((response) => setError(!response.ok));
+    apiservice
+      .post(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {})
+      .then((response) => setError(!(response.status == 200)));
   }, []);
 
   if (error)

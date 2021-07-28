@@ -1,9 +1,16 @@
-async function getLocations() {
-    const locations = await fetch('/api/event/ActiveLocations')
-        .then(response => response.json())
-        .then(data => { return data });
+import ApiService from "../functions/apiServiceClass";
 
-    return locations;
+async function getLocations(): Promise<string[]> {
+  const apiservice = new ApiService();
+  const locations: string[] = await apiservice
+    .get("event/ActiveLocations")
+    .then((resp) => {
+      return resp.data;
+    })
+    .catch((e) => {
+      console.error(e);
+    });
+  return locations;
 }
 
 export default getLocations;
