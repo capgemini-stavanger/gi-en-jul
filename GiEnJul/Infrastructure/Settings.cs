@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Serilog.Events;
 
 namespace GiEnJul.Infrastructure
 {
@@ -21,6 +22,7 @@ namespace GiEnJul.Infrastructure
 
         public string TableConnectionString => _configuration.GetValue<string>("TableConnectionString");
         public string LogTableName => _configuration.GetValue("LogTableName", "Logs");
+        public LogEventLevel LogLevel => _configuration.GetValue("LogLevel", LogEventLevel.Debug);
         public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri");
         public MailSettings MailSettings
         {

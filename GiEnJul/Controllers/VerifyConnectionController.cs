@@ -64,7 +64,7 @@ namespace GiEnJul.Controllers
             }
             catch (InvalidConnectionCreationException e)
             {
-                _log.Error("Connection between {@0} and {@1} is not possible", giver, recipient);
+                _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
                 throw e;
             }
             catch (Exception e)
