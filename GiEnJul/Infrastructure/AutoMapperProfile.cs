@@ -42,6 +42,9 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
 
+            CreateMap<Models.Recipient, Dtos.RecipientDataTableDto>();
+
+
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
                 .ForMember(x => x.PartitionKey, opt => opt.Ignore())
@@ -60,8 +63,11 @@ namespace GiEnJul.Infrastructure
             CreateMap<Entities.Giver, Models.Giver>();
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
-
             CreateMap<Models.Giver, Dtos.GiverDataTableDto>();
+
+            //Connection mapping
+            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
+                .ForMember(dest => dest.Check, opt => opt.Ignore());
         }
     }
 }

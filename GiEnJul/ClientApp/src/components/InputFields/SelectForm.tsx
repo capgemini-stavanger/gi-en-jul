@@ -7,6 +7,7 @@ import {
   SelectProps,
 } from "@material-ui/core";
 import React, { FC, useEffect, useState } from "react";
+import { useMemo } from "react";
 import { isMobile } from "../../common/functions/IsMobile";
 
 interface ISelect extends SelectProps {
@@ -30,9 +31,40 @@ const SelectForm: FC<ISelect> = ({
   disabled,
   fullWidth,
   margin,
+  value,
   ...rest
 }) => {
   const [isMob, setIsMob] = useState(false);
+
+  const jsxOptions = useMemo(() => {
+    if (isMob) {
+      if (options && options.length !== 0) {
+        return (
+          <>
+            {options.some((o) => !o.value) || value || (
+              <option value="">-- Velg alternativ --</option>
+            )}
+            {options.map((o) => (
+              <option key={`n_${name}_${o.text}`} value={o.value}>
+                {o.text}
+              </option>
+            ))}
+          </>
+        );
+      } else {
+        return <option value="">Ingen alternativer</option>;
+      }
+    } else {
+      return (
+        options &&
+        options.map((o) => (
+          <MenuItem key={`${name}_${o.text}`} value={o.value}>
+            {o.text}
+          </MenuItem>
+        ))
+      );
+    }
+  }, [value, options, isMob]);
 
   useEffect(() => {
     setIsMob(isMobile());
@@ -45,8 +77,11 @@ const SelectForm: FC<ISelect> = ({
       disabled={disabled}
       fullWidth={fullWidth}
       margin={margin}
+      focused={!disabled && isMob}
     >
-      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <InputLabel variant={variant} htmlFor={id}>
+        {label}
+      </InputLabel>
       <Select
         native={isMob}
         inputProps={{
@@ -54,28 +89,10 @@ const SelectForm: FC<ISelect> = ({
           id: id,
         }}
         label={label}
+        value={value}
         {...rest}
       >
-        {options &&
-          options.map((o) =>
-            isMob ? (
-              <option
-                key={`n_${name}_${o.text}`}
-                value={o.value}
-                className="text-capitalize"
-              >
-                {o.text}
-              </option>
-            ) : (
-              <MenuItem
-                key={`${name}_${o.text}`}
-                value={o.value}
-                className="text-capitalize"
-              >
-                {o.text}
-              </MenuItem>
-            )
-          )}
+        {jsxOptions}
       </Select>
       {error && errorMessage && <FormHelperText>{errorMessage}</FormHelperText>}
     </FormControl>
