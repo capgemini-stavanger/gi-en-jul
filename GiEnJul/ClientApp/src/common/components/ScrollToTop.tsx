@@ -29,21 +29,18 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({ maxPagePosition }) => {
   }, []);
 
   return (
-    <Button
-      onClick={() => {
-        scroll.scrollToTop();
-      }}
-    >
       <Zoom in={isVisible} timeout={200}>
         <Fab
           size="small"
           aria-label="scroll back to top"
           className={classes.toTopButton}
+          onClick={() => {
+            scroll.scrollToTop();
+          }}
         >
           <ExpandLessRoundedIcon />
         </Fab>
       </Zoom>
-    </Button>
   );
 };
 
