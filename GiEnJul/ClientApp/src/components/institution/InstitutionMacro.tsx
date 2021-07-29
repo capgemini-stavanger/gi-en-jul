@@ -1,11 +1,11 @@
 import * as React from "react";
-import RegistrationInfo from "./InstitutionInfo";
-import RegistrationForm from "./InstitutionForm";
 import NavMenuAdmin from "../../common/components/NavMenuAdmin";
+import RegistrationForm from "./InstitutionForm";
+import RegistrationInfo from "./InstitutionInfo";
 
 export default () => (
   <>
-  <NavMenuAdmin/>
+    <NavMenuAdmin role={"Institution"} />
     <RegistrationInfo />
     <RegistrationForm />
   </>
