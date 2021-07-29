@@ -56,7 +56,7 @@ function AdminPage() {
       return (
         <>
           <NavMenuAdmin />
-          {/*// @ts-ignore */}
+          {/* @ts-ignore */}
           <AdminTab accessToken={userAccessToken} location={location} />
         </>
       );
