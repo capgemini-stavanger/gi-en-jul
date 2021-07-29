@@ -22,8 +22,7 @@ import useStyles from "./Styles";
 type Props = {
   data: GiverType[] | [];
   handleGiverChange: (
-    newGiverRowKey: string,
-    newGiverPartitionKey: string
+    newGiver: GiverType
   ) => void;
   selectedConnection: SelectedConnectionType;
 };
@@ -50,19 +49,19 @@ const Datatable: React.FC<Props> = ({
     <Container>
       {data.map((giver) => (
         <Accordion
-          onChange={() => handleGiverChange(giver.rowKey, giver.partitionKey)}
+          onChange={() => handleGiverChange(giver)}
           key={giver.rowKey}
           //Styling should be in a seperate file
           //This is not working atm because selectedConnection is a ref and will not rerender this component.
-          style={
-            giver.rowKey === selectedConnection.giverRowKey &&
-            !giver.isSuggestedMatch
-              ? {
-                  background:
-                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
-                }
-              : { background: "white" }
-          }
+          // style={
+          //   giver.rowKey === selectedConnection.giverRowKey &&
+          //   !giver.isSuggestedMatch
+          //     ? {
+          //         background:
+          //           "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+          //       }
+          //     : { background: "white" }
+          // }
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}

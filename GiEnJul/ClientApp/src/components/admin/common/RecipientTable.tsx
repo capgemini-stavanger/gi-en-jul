@@ -23,8 +23,7 @@ import useStyles from "./Styles";
 type Props = {
   data: RecipientType[] | [];
   handleRecipientChange: (
-    newRecipientRowKey: string,
-    newRecipientPartitionKey: string
+    newRecipient: RecipientType
   ) => void;
   selectedConnection: SelectedConnectionType;
 };
@@ -76,20 +75,20 @@ const DatatableRecipient: React.FC<Props> = ({
       {data.map((recipient) => (
         <Accordion
           onChange={() =>
-            handleRecipientChange(recipient.rowKey, recipient.partitionKey)
+            handleRecipientChange(recipient)
           }
           key={recipient.rowKey}
           //Styling should be in a seperate file
           //This is not working atm because selectedConnection is a ref and will not rerender this component.
-          style={
-            recipient.rowKey === selectedConnection.recipientRowKey &&
-            !recipient.isSuggestedMatch
-              ? {
-                  background:
-                    "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
-                }
-              : { background: "white" }
-          }
+          // style={
+          //   recipient.rowKey === selectedConnection.recipientRowKey &&
+          //   !recipient.isSuggestedMatch
+          //     ? {
+          //         background:
+          //           "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
+          //       }
+          //     : { background: "white" }
+          // }
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
