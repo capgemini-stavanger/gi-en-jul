@@ -61,8 +61,6 @@ function AdminPage() {
         return <ErrorPage ErrorText={"En Feil har skjedd"} ErrorCode={500} />;
     }
   } else {
-    console.log(role, location);
-
     return <LoadingPage />;
   }
 }
