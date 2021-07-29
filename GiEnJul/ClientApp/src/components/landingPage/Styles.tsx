@@ -70,9 +70,11 @@ const useStyles = makeStyles((theme) => ({
 
     [theme.breakpoints.up("tablet")]: {
       maxWidth: "33.3%",
+      margin: theme.spacing(3),
     },
     [theme.breakpoints.up("laptop")]: {
       maxWidth: "25%",
+      margin: theme.spacing(4),
     },
   },
   howText: {
