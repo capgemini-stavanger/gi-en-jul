@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     height: "40%",
     width: "40%",
-    position: 'static',
+    position: "static",
     [theme.breakpoints.up("tablet")]: {
       height: "30%",
       width: "30%",
@@ -48,10 +48,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "200%",
     fontWeight: 400,
   },
+  headLineContainer: {
+    textAlign: "center",
+    margin: theme.spacing(4),
+  },
   howContainer: {
     marginTop: theme.spacing(2),
-    maxWidth: '75em',
-    maxHeight: '150em',
+    maxWidth: "75em",
+    maxHeight: "150em",
   },
   companyContainer: {
     marginTop: theme.spacing(2),
@@ -61,43 +65,41 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     borderRadius: "2em",
     maxWidth: "100%",
-    objectFit: 'cover',
-    display: 'stretch',
-    
-    [theme.breakpoints.up("tablet")]: {
+    objectFit: "cover",
+    display: "stretch",
 
+    [theme.breakpoints.up("tablet")]: {
       maxWidth: "33.3%",
     },
     [theme.breakpoints.up("laptop")]: {
-
       maxWidth: "25%",
     },
   },
   howText: {
-    objectFit: 'cover',
-    MaxHeight: '100%',
+    objectFit: "cover",
+    MaxHeight: "100%",
     padding: theme.spacing(2),
-
   },
-  card:{
-    justifyContent: 'space-between',
+  card: {
+    justifyContent: "space-between",
     padding: 0,
-    overflow: 'hidden',
-    height: '100%',
+    overflow: "hidden",
+    height: "100%",
   },
-  howImage:{
-    objectFit: 'cover',
-    MaxHeight: '100%',
-    width: '100%', 
-    height: '10em',
+  howImage: {
+    objectFit: "cover",
+    MaxHeight: "100%",
+    width: "100%",
+    height: "10em",
     padding: theme.spacing(0),
     bottom: theme.spacing(0),
-    display: 'flex',
-    alignItems: 'flex-end',
+    display: "flex",
+    alignItems: "flex-end",
   },
   nextIcon: {
     color: theme.palette.primary.main,
     margin: "auto",
+    fontSize: "large",
   },
   dummmyIcon: {
     color: theme.palette.secondary.light,
