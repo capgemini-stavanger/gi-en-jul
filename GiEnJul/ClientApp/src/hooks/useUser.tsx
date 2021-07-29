@@ -7,17 +7,20 @@ const domainEnvUrl: string = `https://${process.env
 
 interface IState {
   managementAccessToken: string;
-  location: string;
+  location?: string;
+  role?: string;
 }
 
 const initState: () => IState = () => ({
   managementAccessToken: "",
-  location: "",
+  location: undefined,
+  role: undefined,
 });
 
 enum ReducerActionType {
   setManagementAccessToken,
   setLocation,
+  setRole,
 }
 
 interface IReducerAction {
@@ -30,7 +33,9 @@ const reducer = (state: IState, action: IReducerAction) => {
     case ReducerActionType.setManagementAccessToken:
       return { ...state, managementAccessToken: action.data };
     case ReducerActionType.setLocation:
-      return { ...state, location: action.data ?? state.location };
+      return { ...state, location: action.data ?? null };
+    case ReducerActionType.setRole:
+      return { ...state, role: action.data ?? "Unspecified" };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
@@ -43,7 +48,7 @@ const useUser = () => {
   useEffect(() => {
     getAccessTokenSilently({
       audience: domainEnvUrl,
-      scope: "read:current_user",
+      scope: "read:current_user read:users_app_metadata",
     }).then((response) => {
       dispatch({
         type: ReducerActionType.setManagementAccessToken,
@@ -65,6 +70,10 @@ const useUser = () => {
             type: ReducerActionType.setLocation,
             data: response.data.user_metadata.location,
           });
+          dispatch({
+            type: ReducerActionType.setRole,
+            data: response.data.app_metadata.role,
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -73,8 +82,8 @@ const useUser = () => {
   }, [user, state.managementAccessToken]);
 
   return {
-    user,
     location: state.location,
+    role: state.role,
   };
 };
 
