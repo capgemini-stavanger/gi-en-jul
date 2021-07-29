@@ -7,9 +7,9 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
     color: "white",
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     "&:hover": {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.dark,
     },
   },
   closeButton: {
@@ -24,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerMenu: {
     backgroundColor: theme.palette.secondary.light,
-    alignItems: "center",
-    justifyContent: "center",
     fontSize: "120%",
     fontWeight: 500,
     color: theme.palette.primary.main,
@@ -53,10 +51,10 @@ const useStyles = makeStyles((theme) => ({
   buttonNext: {
     position: "inherit",
     color: "white",
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     textTransform: "none",
     "&:hover": {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.dark,
     },
     [theme.breakpoints.up("tablet")]:{
       padding: theme.spacing(1.5,2,1.5,2),

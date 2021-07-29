@@ -45,19 +45,23 @@ const useStyles = makeStyles((theme) => ({
   },
   textHeadline: {
     color: theme.palette.primary.main,
-    fontSize: "200%",
-    fontWeight: 400,
+    fontSize: "180%",
+    fontWeight: 500,
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "200%",
+    },
   },
   headLineContainer: {
     textAlign: "center",
-    margin: theme.spacing(4),
+    margin: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]: {
+      margin: theme.spacing(4),
+    },
   },
   sectionContainer: {
-    marginTop: theme.spacing(2),
-    maxWidth: "75em",
-  },
-  companyContainer: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
+    padding: 0,
+    maxWidth: "70em",
   },
   howItem: {
     backgroundColor: "white",
@@ -76,20 +80,20 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(4),
     },
   },
-  questionItem:{
+  questionItem: {
     width: "80%",
     margin: theme.spacing(1),
     [theme.breakpoints.up("laptop")]: {
-      width: "48%"
+      width: "48%",
     },
   },
   questionBox: {
-    width: "100%"
+    width: "100%",
   },
-  questionSummary:{
+  questionSummary: {
     backgroundColor: theme.palette.primary.light,
     borderRadius: "2em",
-    color: "white"
+    color: "white",
   },
   howText: {
     objectFit: "cover",
@@ -106,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     MaxHeight: "100%",
     width: "100%",
-    height: "10em",
+    height: "8em",
     padding: theme.spacing(0),
     bottom: theme.spacing(0),
     display: "flex",
@@ -115,16 +119,35 @@ const useStyles = makeStyles((theme) => ({
   nextIcon: {
     color: theme.palette.primary.main,
     margin: "auto",
-    fontSize: "large",
   },
-
-  buttonNext: {
-    color: "white",
+  contactHeader: {
     backgroundColor: theme.palette.primary.light,
-    margin: theme.spacing(4),
-    textTransform: "none",
-    "&:hover": {
-      backgroundColor: theme.palette.primary.main,
+    color: "white",
+    padding: theme.spacing(1.5),
+    fontSize: "140%",
+    textAlign: "center",
+  },
+  contactCard: {
+    width: "100%",
+  },
+  contactContent: {
+    textAlign: "center",
+    padding: theme.spacing(0.2),
+    justifyContent: "center",
+  },
+  mailIcon: {
+    marginRight: theme.spacing(1),
+  },
+  contactItem: {
+    maxWidth: "18em",
+    objectFit: "cover",
+    margin: theme.spacing(2),
+    minWidth: "16em",
+    [theme.breakpoints.up("tablet")]: {
+      width: "30%",
+    },
+    [theme.breakpoints.up("laptop")]: {
+      width: "20%",
     },
   },
 }));
