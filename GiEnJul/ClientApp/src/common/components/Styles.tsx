@@ -39,15 +39,12 @@ const useStyles = makeStyles((theme) => ({
   toolBar: {
     justifyContent: "space-between",
     marginTop: theme.spacing(1),
-<<<<<<< HEAD
     [theme.breakpoints.up("tablet")]:{
       margin: theme.spacing(2)
     }, 
     [theme.breakpoints.up("laptop")]:{
       margin: theme.spacing(3)
     }, 
-=======
->>>>>>> master
   },
   navIcon: {
     color: theme.palette.primary.light,
@@ -61,15 +58,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
     },
-<<<<<<< HEAD
     [theme.breakpoints.up("tablet")]:{
       padding: theme.spacing(1.5,2,1.5,2),
     }, 
     [theme.breakpoints.up("laptop")]:{
       padding: theme.spacing(2,2.5,2,2.5),
     },
-=======
->>>>>>> master
   },
 }));
 export default useStyles;
