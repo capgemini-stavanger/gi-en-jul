@@ -68,11 +68,11 @@ const useUser = () => {
         .then((response) => {
           dispatch({
             type: ReducerActionType.setLocation,
-            data: response.data.user_metadata.location,
+            data: response.data.user_metadata?.location,
           });
           dispatch({
             type: ReducerActionType.setRole,
-            data: response.data.app_metadata.role,
+            data: response.data.app_metadata?.role,
           });
         })
         .catch((e) => {

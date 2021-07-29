@@ -56,8 +56,7 @@ function AdminPage() {
       return (
         <>
           <NavMenuAdmin />
-          {/* @ts-ignore */}
-          <AdminTab accessToken={userAccessToken} location={location} />
+          <AdminTab accessToken={userAccessToken} location={location ?? ""} />
         </>
       );
     case "Institution":
