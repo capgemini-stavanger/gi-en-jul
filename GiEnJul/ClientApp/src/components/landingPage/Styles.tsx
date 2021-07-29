@@ -52,10 +52,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     margin: theme.spacing(4),
   },
-  howContainer: {
+  sectionContainer: {
     marginTop: theme.spacing(2),
     maxWidth: "75em",
-    maxHeight: "150em",
   },
   companyContainer: {
     marginTop: theme.spacing(2),
@@ -76,6 +75,21 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: "25%",
       margin: theme.spacing(4),
     },
+  },
+  questionItem:{
+    width: "80%",
+    margin: theme.spacing(1),
+    [theme.breakpoints.up("laptop")]: {
+      width: "48%"
+    },
+  },
+  questionBox: {
+    width: "100%"
+  },
+  questionSummary:{
+    backgroundColor: theme.palette.primary.light,
+    borderRadius: "2em",
+    color: "white"
   },
   howText: {
     objectFit: "cover",
@@ -103,16 +117,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
     fontSize: "large",
   },
-  dummmyIcon: {
-    color: theme.palette.secondary.light,
-    margin: "auto",
-  },
-  questionBox: {
-    margin: theme.spacing(1),
-    borderRadius: "2em",
-    overflow: "hidden",
-    borderColor: theme.palette.secondary.light,
-  },
+
   buttonNext: {
     color: "white",
     backgroundColor: theme.palette.primary.light,
