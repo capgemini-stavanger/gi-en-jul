@@ -1,9 +1,9 @@
-import * as React from "react";
-import { Container, Button, Grid, Typography } from "@material-ui/core";
-import LOCATIONS from "../../common/constants/Locations";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import useStyles from "./Styles";
+import * as React from "react";
 import { useState } from "react";
+import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
+import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import {
   isEmail,
@@ -11,8 +11,8 @@ import {
   isPhoneNumber,
 } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
-import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import Pager from "./Pager";
+import useStyles from "./Styles";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
@@ -68,6 +68,7 @@ const SummaryRegistration: React.FC<Props> = ({
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState(initChangesState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
+  const apiservice = new ApiService();
 
   const trigger = (b: boolean) => {
     callingback(b);
@@ -85,19 +86,17 @@ const SummaryRegistration: React.FC<Props> = ({
   };
 
   const Submit = async () => {
-    await fetch("api/giver", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        location: values.location,
-        fullname: values.fullname,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        maxReceivers: values.maxReceivers,
-      }),
-    })
+    await apiservice
+      .post(
+        "giver",
+        JSON.stringify({
+          location: values.location,
+          fullname: values.fullname,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          maxReceivers: values.maxReceivers,
+        })
+      )
       .then((response) => {
         if (response.status === 201) {
           trigger(true);

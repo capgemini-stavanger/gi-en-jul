@@ -81,6 +81,7 @@ namespace GiEnJul.Controllers
             return recipients;
         }
         [HttpGet("excel/delivery/{location}")]
+        [Authorize(Policy = "DownloadDeliveryExcel")]
         public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);

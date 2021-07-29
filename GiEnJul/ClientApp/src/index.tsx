@@ -9,7 +9,7 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import configureStore from "./store/configureStore";
 import { createTheme, ThemeProvider } from "@material-ui/core";
-import {BreakpointOverrides} from "@material-ui/core/styles/createBreakpoints";
+import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
 
 // Create browser history to use in the Redux store
 const baseUrl = document
@@ -35,19 +35,19 @@ declare module "@material-ui/core/styles/createBreakpoints" {
     desktop: true;
   }
 }
-declare module '@material-ui/core/styles/createTheme' {
+declare module "@material-ui/core/styles/createTheme" {
   interface Theme {
     appDrawer: {
-      width: React.CSSProperties['width']
-      breakpoint: BreakpointOverrides
-    }
+      width: React.CSSProperties["width"];
+      breakpoint: BreakpointOverrides;
+    };
   }
   // allow configuration using `createMuiTheme`
   interface ThemeOptions {
     appDrawer?: {
-      width?: React.CSSProperties['width']
-      breakpoint?: BreakpointOverrides
-    }
+      width?: React.CSSProperties["width"];
+      breakpoint?: BreakpointOverrides;
+    };
   }
 }
 export const theme = createTheme({
@@ -55,86 +55,83 @@ export const theme = createTheme({
     values: {
       tablet: 500,
       laptop: 900,
-      desktop: 1200
-    }
+      desktop: 1200,
+    },
   },
   palette: {
-     primary: {
-        main: "#49a591" // Dark green
-        
-               },
-     secondary: {
-        main:"#d9f0f2" // Light blue
-                }, 
-      error: {
-        main: "#ed8175" // Light red
-      }, 
-      warning: {
-        main: "#f4cf8a" //Yellow
-      }, 
-      info: {
-        main: "#d9f0f2" // Light blue
-      },
-           },
-  typography: {
-    fontFamily: 'Quicksand',
-  },
-overrides: {
-  MuiButton:{
-    root: {
-      borderRadius:'2em',
-      textTransform: 'none',
+    primary: {
+      main: "#49a591", // Dark green
+    },
+    secondary: {
+      main: "#d9f0f2", // Light blue
+    },
+    error: {
+      main: "#ed8175", // Light red
+    },
+    warning: {
+      main: "#f4cf8a", //Yellow
+    },
+    info: {
+      main: "#d9f0f2", // Light blue
     },
   },
-  MuiSelect: {
-    select:{
-    "&:focus": {
-      borderRadius: '2em',
-    }
-  }
+  typography: {
+    fontFamily: "Quicksand",
   },
-  MuiOutlinedInput:{
-    root:{
-      borderRadius: '2em',
-      "&:focus": {
-        borderRadius: '2em',
-      }
-    }
-  },
-  MuiPaper:{
-    elevation1: {
+  overrides: {
+    MuiButton: {
+      root: {
+        borderRadius: "2em",
+        textTransform: "none",
+      },
+    },
+    MuiSelect: {
+      select: {
+        "&:focus": {
+          borderRadius: "2em",
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      root: {
+        borderRadius: "2em",
+        "&:focus": {
+          borderRadius: "2em",
+        },
+      },
+    },
+    MuiPaper: {
+      elevation1: {
         boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
         "&:hover": {
-          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
-        }
+          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+        },
+      },
+      rounded: {
+        borderRadius: "2em",
+      },
     },
-    rounded:{
-      borderRadius: '2em',
-    }
+    MuiListItem: {
+      root: {
+        justifyContent: "center",
+      },
+    },
   },
-  MuiListItem: {
-    root: {
-      justifyContent: 'center',
-    }
-  },
-}
 });
-
-
 
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-    <Auth0Provider
-      domain={domainEnv}
-      clientId={clientidEnv}
-      redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
-      audience={apiurl}
-    >
-      <ConnectedRouter history={history}>
-        <App />
-      </ConnectedRouter>
-    </Auth0Provider>
+      <Auth0Provider
+        domain={domainEnv}
+        clientId={clientidEnv}
+        redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
+        audience={apiurl}
+      >
+        <ConnectedRouter history={history}>
+          <App />
+        </ConnectedRouter>
+      </Auth0Provider>
     </ThemeProvider>
   </Provider>,
   document.getElementById("root")

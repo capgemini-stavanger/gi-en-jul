@@ -7,11 +7,11 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import * as React from "react";
-import { useEffect } from "react";
 import { useState } from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
+import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import {
   isEmail,
@@ -118,6 +118,7 @@ const RegistrationForm = () => {
   const [validFormState, setValidFormState] = useState({
     ...initValidFormState,
   });
+  const apiservice = new ApiService();
 
   const addPerson = () => {
     setFormDataState((prev) => ({
@@ -314,13 +315,8 @@ const RegistrationForm = () => {
     }));
 
     let goodFetch = false;
-    await fetch("/api/recipient", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(submit),
-    })
+    await apiservice
+      .post("recipient", JSON.stringify(submit))
       .then((response) => {
         if (response.status === 200) {
           goodFetch = true;
