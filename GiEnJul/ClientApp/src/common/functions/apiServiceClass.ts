@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosPromise, AxiosResponse, AxiosError, Method } from "axios";
 export interface IApiService {
   token: string;
   baseUrl: string;
@@ -9,7 +9,13 @@ export interface IApiService {
   postAction: (path: string, data: any, callback: any, extras?: any) => Promise<any>;
   all: (args: any[], callback: any) => AxiosPromise<any>;
   fetch: (fullPath: string, params?: any) => AxiosPromise<any>;
- 
+  downloadFile: (
+    path: string,
+    filename: string,
+    body?: any,
+    method?: Method,
+    callback?: Function
+  ) => Promise<any>;
 }
 class ApiService implements IApiService {
   baseUrl: string;
@@ -29,13 +35,13 @@ class ApiService implements IApiService {
   }
   get = (path: string, extras?: any) => {
     const newConfig = extras
-      ? { headers: { ...this.config.headers, ...extras.headers } }
+      ? {...extras, headers: { ...this.config.headers, ...extras.headers } }
       : this.config;
     return axios.get(this.baseUrl + path, newConfig);
   };
   getAction = (path: string, callback: any, extras?: any) => {
     const newConfig = extras
-      ? { headers: { ...this.config.headers, ...extras.headers } }
+      ? { ...extras, headers: { ...this.config.headers, ...extras.headers } }
       : this.config;
     return axios.get(this.baseUrl + path, newConfig as any).then(response => {
       if (response.status >= 400 && response.status < 600) console.error(response);
@@ -44,13 +50,13 @@ class ApiService implements IApiService {
   };
   post = (path: string, data: any, extras?: any) => {
     const newConfig = extras
-      ? { headers: { ...this.config.headers, ...extras.headers } }
+      ? { ...extras, headers: { ...this.config.headers, ...extras.headers } }
       : this.config;
     return axios.post(this.baseUrl + path, data, newConfig as any);
   };
   postAction = (path: string, data: any, callback: any, extras?: any) => {
     const newConfig = extras
-      ? { headers: { ...this.config.headers, ...extras.headers } }
+      ? { ...extras, headers: { ...this.config.headers, ...extras.headers } }
       : this.config;
     return axios.post(this.baseUrl + path, data, newConfig as any).then(response => {
       if (response.status >= 400 && response.status < 600) console.error(response);
@@ -66,7 +72,49 @@ class ApiService implements IApiService {
   delete = (path: string, deleteData: any) => {
     const newConfig = { ...this.config, data:deleteData };
     return axios.delete(this.baseUrl + path, newConfig)
-  }
-  
+  };
+  downloadFile = (
+    path: string,
+    filename: string,
+    body?: any,
+    method: Method = "get",
+    callback?: Function
+  ) => {
+    return this.fetchBlobURL(path, "application/octet-stream", body, method)
+      .then((blobUrl: string) => {
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.setAttribute("download", filename);
+        const clickHandler = () => {
+          setTimeout(() => {
+            URL.revokeObjectURL(blobUrl);
+            link.removeEventListener("click", clickHandler);
+            document.body.removeChild(link);
+            callback?.();
+          }, 150);
+        };
+        document.body.appendChild(link);
+        link.addEventListener("click", clickHandler, false);
+        link.click();
+      })
+      .catch((error: AxiosError) => {
+        throw error;
+      });
+  };
+  private fetchBlobURL = (path: string, type: string, body?: any, method: Method = "get") => {
+    return axios({
+      url: this.baseUrl + path,
+      method: method,
+      responseType: "blob",
+      headers: {
+        Authorization: `Bearer ${this.token}`
+      },
+      data: body
+    }).then(response => {
+      if (response.status >= 400 && response.status < 600) throw new Error(response.statusText);
+      const bloburl = window.URL.createObjectURL(new Blob([response.data], { type }));
+      return bloburl;
+    });
+  };
 }
 export default ApiService;
