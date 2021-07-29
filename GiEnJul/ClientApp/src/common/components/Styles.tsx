@@ -1,3 +1,4 @@
+import { red } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,12 @@ const useStyles = makeStyles((theme) => ({
   toolBar: {
     justifyContent: "space-between",
     marginTop: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]:{
+      margin: theme.spacing(2)
+    }, 
+    [theme.breakpoints.up("laptop")]:{
+      margin: theme.spacing(3)
+    }, 
   },
   navIcon: {
     color: theme.palette.primary.light,
@@ -51,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
+    },
+    [theme.breakpoints.up("tablet")]:{
+      padding: theme.spacing(1.5,2,1.5,2),
+    }, 
+    [theme.breakpoints.up("laptop")]:{
+      padding: theme.spacing(2,2.5,2,2.5),
     },
   },
 }));
