@@ -6,13 +6,14 @@ import LogOutButton from "../login/LogOutButton";
 import AdminTab from "./AdminTab";
 
 function AdminPage() {
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
   const [userAccessToken, setUserAccessToken] = useState<string>("");
 
   async function getUserAccessToken(): Promise<string> {
     const accessToken = await getAccessTokenSilently();
     return accessToken;
   }
+
   useEffect(() => {
     getUserAccessToken().then((resp: string) => {
       setUserAccessToken(resp);
@@ -23,7 +24,7 @@ function AdminPage() {
     return (
       <>
         <LogOutButton />
-        <AdminTab />
+        <AdminTab accessToken={userAccessToken} />
       </>
     );
   } else {
