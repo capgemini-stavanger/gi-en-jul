@@ -6,10 +6,8 @@ import Recipient from "./Recipient";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
 
 const initState: SelectedConnectionType = {
-  giverRowKey: "",
-  giverPartitionKey: "",
-  recipientRowKey: "",
-  recipientPartitionKey: "",
+  giver: undefined,
+  recipient: undefined,
 };
 
 function OverviewMacro() {
@@ -42,26 +40,26 @@ function OverviewMacro() {
 
   const handleGiverChange = (
     newGiver: GiverType
-  ) => {  
-    if (selectedConnection.current.giverRowKey === newGiver.rowKey) {
-      selectedConnection.current.giverRowKey = "";
-      selectedConnection.current.giverPartitionKey = "";
-    } else {
-      selectedConnection.current.giverRowKey = newGiver.rowKey;
-      selectedConnection.current.giverPartitionKey = newGiver.partitionKey;
+  ) => {
+    if(!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch){
+      if (selectedConnection.current.giver?.rowKey === newGiver.rowKey) {
+        selectedConnection.current.giver = undefined;
+      } else {
+        selectedConnection.current.giver = newGiver;
+      }
+    } else{
     }
   };
 
   const handleRecipientChange = (
     newRecipient: RecipientType,
   ) => {
-    if (selectedConnection.current.recipientRowKey === newRecipient.rowKey) {
-      selectedConnection.current.recipientRowKey = "";
-      selectedConnection.current.recipientPartitionKey = "";
-    } else {
-      selectedConnection.current.recipientRowKey = newRecipient.rowKey;
-      selectedConnection.current.recipientPartitionKey =
-        newRecipient.partitionKey;
+    if(!newRecipient.isSuggestedMatch && !newRecipient.hasConfirmedMatch){
+      if (selectedConnection.current.recipient?.rowKey === newRecipient.rowKey) {
+        selectedConnection.current.recipient = undefined;
+      } else {
+        selectedConnection.current.recipient = newRecipient;
+      }
     }
   };
 
@@ -70,11 +68,11 @@ function OverviewMacro() {
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: selectedConnection.current.giverRowKey,
-          GiverPartitionKey: selectedConnection.current.giverPartitionKey,
-          RecipientRowKey: selectedConnection.current.recipientRowKey,
+          GiverRowKey: selectedConnection.current.giver?.rowKey,
+          GiverPartitionKey: selectedConnection.current.giver?.partitionKey,
+          RecipientRowKey: selectedConnection.current.recipient?.rowKey,
           RecipientPartitionKey:
-            selectedConnection.current.recipientPartitionKey,
+            selectedConnection.current.recipient?.partitionKey,
         })
       )
       .then((response) => {
