@@ -41,29 +41,27 @@ function OverviewMacro() {
   }, []);
 
   const handleGiverChange = (
-    newGiverRowKey: string,
-    newGiverPartitionKey: string
-  ) => {
-    if (selectedConnection.current.giverRowKey === newGiverRowKey) {
+    newGiver: GiverType
+  ) => {  
+    if (selectedConnection.current.giverRowKey === newGiver.rowKey) {
       selectedConnection.current.giverRowKey = "";
       selectedConnection.current.giverPartitionKey = "";
     } else {
-      selectedConnection.current.giverRowKey = newGiverRowKey;
-      selectedConnection.current.giverPartitionKey = newGiverPartitionKey;
+      selectedConnection.current.giverRowKey = newGiver.rowKey;
+      selectedConnection.current.giverPartitionKey = newGiver.partitionKey;
     }
   };
 
   const handleRecipientChange = (
-    newRecipientRowKey: string,
-    newRecipientPartitionKey: string
+    newRecipient: RecipientType,
   ) => {
-    if (selectedConnection.current.recipientRowKey === newRecipientRowKey) {
+    if (selectedConnection.current.recipientRowKey === newRecipient.rowKey) {
       selectedConnection.current.recipientRowKey = "";
       selectedConnection.current.recipientPartitionKey = "";
     } else {
-      selectedConnection.current.recipientRowKey = newRecipientRowKey;
+      selectedConnection.current.recipientRowKey = newRecipient.rowKey;
       selectedConnection.current.recipientPartitionKey =
-        newRecipientPartitionKey;
+        newRecipient.partitionKey;
     }
   };
 
