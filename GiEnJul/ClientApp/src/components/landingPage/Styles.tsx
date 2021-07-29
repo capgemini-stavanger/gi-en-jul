@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
   howContainer: {
     marginTop: theme.spacing(2),
-    maxWidth: '85em',
+    maxWidth: '75em',
     maxHeight: '150em',
   },
   companyContainer: {
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "100%",
     objectFit: 'cover',
     display: 'stretch',
+    
     [theme.breakpoints.up("tablet")]: {
 
       maxWidth: "33.3%",
@@ -77,6 +78,12 @@ const useStyles = makeStyles((theme) => ({
     MaxHeight: '100%',
     padding: theme.spacing(2),
 
+  },
+  card:{
+    justifyContent: 'space-between',
+    padding: 0,
+    overflow: 'hidden',
+    height: '100%',
   },
   howImage:{
     objectFit: 'cover',

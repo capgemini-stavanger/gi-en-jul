@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CssBaseline, Typography, Container, Grid, Card } from "@material-ui/core";
+import { CssBaseline, Typography, Container, Grid, Card, CardContent } from "@material-ui/core";
 import useStyles from "./Styles";
 import { ExpandMore } from "@material-ui/icons";
 import dummy from "./../../styling/img/dummy-image.jpg";
@@ -13,7 +13,8 @@ const How = () => {
       </Typography>
       <Grid container>
         <Grid container className={classes.howItem}>
-          <Card>
+          <Card >
+            <CardContent className={classes.card}>
             <div className={classes.howText}>
             <Typography>
               Alene, eller sammen med vennegjengen, kolleger, familie eller
@@ -21,12 +22,14 @@ const How = () => {
             </Typography>
             </div>
             <img className={classes.howImage} src={dummy}></img>
+            </CardContent>
           </Card>
         </Grid>
         
         <ExpandMore className={classes.nextIcon} />
         <Grid container className={classes.howItem}>
         <Card>
+          <CardContent className={classes.card}>
           <div className={classes.howText}>
           <Typography>
             På gienjul.no registrerer du deg som giver og opplyser antall
@@ -34,6 +37,7 @@ const How = () => {
           </Typography>
           </div>
           <img className={classes.howImage} src={dummy}></img>
+          </CardContent>
           </Card>
         </Grid>
         <ExpandMore className={classes.nextIcon} />
