@@ -5,6 +5,7 @@ import InputValidator from "../InputFields/Validators/InputValidator";
 import { isNotNull } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
+import useStyles from "./Styles";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
@@ -30,11 +31,13 @@ const FamilySize: React.FC<Props> = ({
     }
     nextStep(e);
   };
+  const classes = useStyles();
   return (
     <>
-      <Typography component="h2">Familiesammensetning</Typography>
-      <Container>
-        <form style={{ width: "100%", marginTop: "20px" }}>
+      <Typography 
+      className={classes.subHeading}>Familiesammensetning</Typography>
+      <Container
+      className={classes.form}>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             setIsValids={setIsValid}
@@ -49,8 +52,7 @@ const FamilySize: React.FC<Props> = ({
             errorMessages={["Hvilken familie venter på din gave?"]}
             options={FAMILY_SIZES}
           />
-          <Pager onContinue={extendedNextStep} onBack={prevStep} />
-        </form>
+          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"}/>
       </Container>
     </>
   );

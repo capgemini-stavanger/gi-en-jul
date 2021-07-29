@@ -2,6 +2,7 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
+import NavMenuAdmin from "../../common/components/NavMenuAdmin";
 import LogOutButton from "../login/LogOutButton";
 import AdminTab from "./AdminTab";
 
@@ -22,6 +23,7 @@ function AdminPage() {
   if (userAccessToken !== "") {
     return (
       <>
+        <NavMenuAdmin />
         <LogOutButton />
         <AdminTab />
       </>

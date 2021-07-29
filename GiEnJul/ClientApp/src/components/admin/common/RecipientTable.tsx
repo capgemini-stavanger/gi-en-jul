@@ -13,6 +13,7 @@ import {
   Group,
   Mail,
   Phone,
+  HourglassEmpty
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
@@ -104,7 +105,11 @@ const DatatableRecipient: React.FC<Props> = ({
             </Typography>
             {recipient.isSuggestedMatch ? (
               //Styling should be in a seperate file
-              <CheckRounded style={{ color: "#49a591" }} />
+              !recipient.hasConfirmedMatch ? (
+                <HourglassEmpty style={{ color: "#f4cf8a" }}/>
+              ) : (
+                <CheckRounded style={{ color: "#49a591" }} />
+              )
             ) : (
               <CloseRounded style={{ color: "#ed8175" }} />
             )}

@@ -6,6 +6,7 @@ import InputValidator from "../InputFields/Validators/InputValidator";
 import { isNotNull } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
+import useStyles from './Styles';
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
@@ -32,15 +33,15 @@ const Location: React.FC<Props> = ({
     }
     nextStep(e);
   };
+  const classes = useStyles();
 
   return (
     <>
-      <Typography component="h2">Hvor vil du gi?</Typography>
-      <Container>
-        <ValidatorForm
+      <Typography className={classes.subHeading}>Hvor vil du gi?</Typography>
+      <Container className={classes.form}>
+        <ValidatorForm 
           onSubmit={nextStep}
-          onError={(errors) => console.log(errors)}
-          style={{ width: "100%", marginTop: "20px" }}
+          onError={(errors) => console.error(errors)}
         >
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
@@ -64,6 +65,7 @@ const Location: React.FC<Props> = ({
           <Pager
             onBack={useCallback(() => history.push("/"), [history])}
             onContinue={extendedNextStep}
+            continueText={"Kontaktinformasjon"}
           />
         </ValidatorForm>
       </Container>

@@ -9,6 +9,7 @@ import draftToHtml from "draftjs-to-html";
 import EditCompany from "./EditCompany";
 import EditContact from "./EditContact";
 import EditStart from "./EditStart";
+import NavMenuAdmin from "../../../common/components/NavMenuAdmin";
 
 export default () => {
   const [step, setStep] = useState<Number>(0);
@@ -57,7 +58,8 @@ export default () => {
   ];
 
   return (
-    <Container>
+    <>
+    <NavMenuAdmin/>
       <Typography align="center" variant="h4">
         Rediger gienjul.no
       </Typography>
@@ -124,6 +126,6 @@ export default () => {
       <Button variant="contained" onClick={save}>
         Lagre
       </Button>
-    </Container>
+      </>
   );
 };

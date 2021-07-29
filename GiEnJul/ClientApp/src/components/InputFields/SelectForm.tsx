@@ -22,7 +22,6 @@ interface ISelect extends SelectProps {
 const SelectForm: FC<ISelect> = ({
   name,
   options,
-
   errorMessage,
   id,
   label,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CssBaseline, Typography, Container } from "@material-ui/core";
+import { Typography, Container, Grid } from "@material-ui/core";
 import Confirmation from "./Confirmation";
 import ContactInfo from "./ContactInfo";
 import Location from "./Location";
@@ -7,6 +7,8 @@ import SummaryRegistration from "./Summary";
 import IFormData from "./IFormData";
 import FamilySize from "./FamilySize";
 import getLocations from "../../common/constants/Locations";
+import useStyles from "./Styles";
+import NavBar from "../../common/components/NavBar";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -73,6 +75,8 @@ const RegistrationMacro = () => {
     setState((prev) => ({ ...prev, confirmationOK: submitOK }));
   };
 
+  const classes = useStyles();
+
   const getStepPage = () => {
     switch (state.step) {
       case 1:
@@ -134,17 +138,22 @@ const RegistrationMacro = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className="paper">
-        {state.step === 5 || (
-          <Typography component="h1" variant="h4">
-            Bli giver
-          </Typography>
-        )}
-        {getStepPage()}
-      </div>
-    </Container>
+    <>
+    <NavBar/>
+      {state.step === 5 ? (
+        <Container className={classes.summaryDesign}>
+          <Confirmation
+            values={formDataState}
+            confirmationOK={state.confirmationOK}
+          ></Confirmation>
+        </Container>
+      ) : (
+        <Container className={classes.giverForm}>
+          <Typography className={classes.heading}>Bli giver</Typography>
+          {getStepPage()}
+        </Container>
+      )}
+    </>
   );
 };
 

@@ -1,11 +1,9 @@
-import { Container } from "@material-ui/core";
 import * as React from "react";
 import { Route } from "react-router";
 import AdminPage from "../src/components/admin/AdminPage";
 import LoadingPage from "./common/components/LoadingPage";
-import NavMenuAdmin from "./common/components/NavMenuAdmin";
 import Edit from "./components/admin/editLandingPage/EditMacro";
-import Home from "./components/home/Home";
+import Home from "./components/landingPage/Macro";
 import Institution from "./components/institution/InstitutionMacro";
 import RegistrationMacro from "./components/registerGiver/Macro";
 import VerifyConnection from "./components/verifyConnection/verifyConnection";
@@ -14,8 +12,6 @@ import "./custom.css";
 const App = () => {
   return (
     <>
-      <NavMenuAdmin />
-      <Container>
         <Route path="/admin" component={AdminPage} />
         <Route exact path="/" component={Home} />
         <Route path="/registrer-familie" component={Institution} />
@@ -26,7 +22,6 @@ const App = () => {
           path="/:giverRowKey/:recipientRowKey/:partitionKey"
           component={VerifyConnection}
         />
-      </Container>
     </>
   );
 };

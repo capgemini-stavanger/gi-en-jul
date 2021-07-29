@@ -1,6 +1,7 @@
 import { Button, Grid } from "@material-ui/core";
 import React, { FC } from "react";
 import useStyles from "./Styles";
+import {ArrowBackIos, ArrowForwardIos} from '@material-ui/icons';
 
 interface IPager {
   onBack?: (event: React.FormEvent) => void;
@@ -16,19 +17,25 @@ const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText }) => {
       container
       spacing={2}
       justifyContent="center"
-      className={classes.submit}
+      className={classes.buttons}
     >
       {onBack && (
         <Grid item>
-          <Button variant="contained" onClick={onBack}>
-            {backText}
+          <Button 
+          className={classes.buttonBack}
+          startIcon={<ArrowBackIos/>}
+          onClick={onBack}>
+          {backText}
           </Button>
         </Grid>
       )}
       {onContinue && (
         <Grid item>
-          <Button variant="contained" onClick={onContinue}>
-            {continueText}
+          <Button 
+          className={classes.buttonNext}
+          endIcon={<ArrowForwardIos/>}
+          onClick={onContinue}>
+          {continueText}
           </Button>
         </Grid>
       )}
