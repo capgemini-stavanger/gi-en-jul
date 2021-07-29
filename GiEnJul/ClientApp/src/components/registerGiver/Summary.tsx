@@ -129,8 +129,9 @@ const SummaryRegistration: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
-      <Container className={classes.form}>
-          <Grid container className={classes.inputRow}>
+      <Container >
+          <Grid container className={classes.form}>
+            <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -159,7 +160,8 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-          <Grid container className={classes.inputRow}>
+          
+          <Grid container >
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -184,7 +186,7 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-          <Grid container className={classes.inputRow}>
+          <Grid container >
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -246,7 +248,7 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-          <Grid container className={classes.inputRow}>
+          <Grid container >
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -263,6 +265,7 @@ const SummaryRegistration: React.FC<Props> = ({
                 options={FAMILY_SIZES}
               />
             </Grid>
+            
             <Grid item xs={3}>
               <Button onClick={handleChange("family")}>
                 <EditOutlinedIcon
@@ -270,6 +273,7 @@ const SummaryRegistration: React.FC<Props> = ({
                 ></EditOutlinedIcon>
               </Button>
             </Grid>
+          </Grid>
           </Grid>
           <Pager
             onContinue={extendedNextStep}
