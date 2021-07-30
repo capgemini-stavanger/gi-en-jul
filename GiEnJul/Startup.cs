@@ -1,14 +1,15 @@
 using Autofac;
-using GiEnJul.Infrastructure;
+using Autofac.Extensions.DependencyInjection;
 using GiEnJul.Auth;
+using GiEnJul.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+
 namespace GiEnJul
 {
     public class Startup
@@ -28,11 +29,6 @@ namespace GiEnJul
         {
             services.AddControllersWithViews().AddNewtonsoftJson();
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/build";
-            });
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
             services.AddAuthentication(options =>
             {
@@ -50,7 +46,6 @@ namespace GiEnJul
                 Authconfig.SetPolicies(options)
             );
         }
-
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -72,28 +67,32 @@ namespace GiEnJul
                 app.UseHsts();
             }
 
+            var container = app.ApplicationServices.GetAutofacRoot();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            var settings = container.Resolve<ISettings>();
+            var log = container.Resolve<ILogger>();
+            log.Information("React App: {@0}", settings.ReactAppUri);
+
+            app.UseCors(p =>
+                p.AllowAnyMethod()
+                   .AllowAnyHeader()
+                   .SetIsOriginAllowed(x =>
+                   {
+                       log.Verbose(x);
+                       return x == settings.ReactAppUri;
+                   }));
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
-            });
-
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
             });
         }
     }
