@@ -24,7 +24,7 @@ namespace GiEnJul.Helpers
 
             return filter;
         }
-        public static string GetAllFilter(string eventName, string location)
+        public static string GetAllActiveEventsFilter(string eventName, string location)
         {
             var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
             var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
