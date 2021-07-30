@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace GiEnJul
 {
@@ -75,12 +76,17 @@ namespace GiEnJul
             app.UseAuthorization();
 
             var settings = container.Resolve<ISettings>();
+            var log = container.Resolve<ILogger>();
+            log.Information("React App: {@0}", settings.ReactAppUri);
 
             app.UseCors(p =>
                 p.AllowAnyMethod()
                    .AllowAnyHeader()
-                   .SetIsOriginAllowed(x => 
-                       x == settings.ReactAppUri));
+                   .SetIsOriginAllowed(x =>
+                   {
+                       log.Verbose(x);
+                       return x == settings.ReactAppUri;
+                   }));
 
             app.UseEndpoints(endpoints =>
             {
