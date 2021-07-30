@@ -54,9 +54,8 @@ namespace GiEnJul.Controllers
             _settings = settings;
         }
 
-        [HttpGet("givers")]
-        //[Authorize(Policy = "ReadGiver")] 
-        public async Task<IEnumerable<Giver>> GetGiversAsync()
+        [HttpGet("Overview/Givers")]
+        public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
             return await _giverRepository.GetAllAsModelAsync();
         }

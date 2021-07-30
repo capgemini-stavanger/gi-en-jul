@@ -9,8 +9,11 @@ const initState: SelectedConnectionType = {
   giver: undefined,
   recipient: undefined,
 };
+interface IOverviewMacro {
+  location: string;
+}
 
-function OverviewMacro() {
+const OverviewMacro: React.FC<IOverviewMacro> = ({ location }) => {
   const selectedConnection = useRef<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
@@ -18,7 +21,7 @@ function OverviewMacro() {
 
   async function fetchGivers() {
     await apiservice
-      .get("admin/givers")
+      .get("admin/Overview/Givers", { params: { location: location } })
       .then((resp) => setGiverData(resp.data))
       .catch((errorStack) => {
         console.error(errorStack);
@@ -38,24 +41,22 @@ function OverviewMacro() {
     fetchGivers();
   }, []);
 
-  const handleGiverChange = (
-    newGiver: GiverType
-  ) => {
-    if(!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch){
+  const handleGiverChange = (newGiver: GiverType) => {
+    if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
       if (selectedConnection.current.giver?.rowKey === newGiver.rowKey) {
         selectedConnection.current.giver = undefined;
       } else {
         selectedConnection.current.giver = newGiver;
       }
-    } else{
+    } else {
     }
   };
 
-  const handleRecipientChange = (
-    newRecipient: RecipientType,
-  ) => {
-    if(!newRecipient.isSuggestedMatch && !newRecipient.hasConfirmedMatch){
-      if (selectedConnection.current.recipient?.rowKey === newRecipient.rowKey) {
+  const handleRecipientChange = (newRecipient: RecipientType) => {
+    if (!newRecipient.isSuggestedMatch && !newRecipient.hasConfirmedMatch) {
+      if (
+        selectedConnection.current.recipient?.rowKey === newRecipient.rowKey
+      ) {
         selectedConnection.current.recipient = undefined;
       } else {
         selectedConnection.current.recipient = newRecipient;
@@ -119,5 +120,5 @@ function OverviewMacro() {
       </Grid>
     </>
   );
-}
+};
 export default OverviewMacro;
