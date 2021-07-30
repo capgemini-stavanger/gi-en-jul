@@ -68,11 +68,11 @@ namespace GiEnJul.Controllers
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
             foreach (var recipient in recipients)
             {
-                var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-                recipient.FamilyMembers = familyMembers;
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             }
             return recipients;
         }
+
         [HttpGet("excel/delivery/{location}")]
         [Authorize(Policy = "DownloadDeliveryExcel")]
         public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)

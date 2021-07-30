@@ -70,11 +70,12 @@ namespace GiEnJul.Repositories
 
             return _mapper.Map<IList<Models.Recipient>>(unsuggestedRecipient);
         }
-        public Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
+        public async Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
         {
-            throw new System.NotImplementedException();
-            // var filter = TableQueryFilterHelper.GetAllFilter(eventName, location);
-            // var query = new TableQuery<Entities.Recipient>().Where(filter);
+            var filter = TableQueryFilterHelper.GetAllFilter(eventName, location);
+            var query = new TableQuery<Entities.Recipient>().Where(filter);
+            var recipients = await GetAllByQueryAsync(query);
+            return _mapper.Map<List<Models.Recipient>>(recipients);
         }
     }
 }
