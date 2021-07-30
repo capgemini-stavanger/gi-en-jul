@@ -58,7 +58,7 @@ namespace GiEnJul.Repositories
 
         public async Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location)
         {
-            var filter = TableQueryFilterHelper.GetAllFilter(eventName, location);
+            var filter = TableQueryFilterHelper.GetAllActiveEventsFilter(eventName, location);
             var query = new TableQuery<Entities.Giver>().Where(filter);
             var givers = await GetAllByQueryAsync(query);
             return _mapper.Map<IEnumerable<Models.Giver>>(givers);

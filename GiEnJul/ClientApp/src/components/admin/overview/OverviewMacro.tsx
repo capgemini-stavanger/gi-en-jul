@@ -20,8 +20,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ location }) => {
   const apiservice = new ApiService();
 
   async function fetchGivers() {
-    console.log(location);
-    console.log(typeof location);
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
       .then((resp) => setGiverData(resp.data))
