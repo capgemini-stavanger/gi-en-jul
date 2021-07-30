@@ -53,26 +53,19 @@ namespace GiEnJul.Controllers
             _emailClient = emailClient;
             _settings = settings;
         }
-        //The function below is not in use now, but should be implemented later:
-        // Need to add an appropriate routing for the api call below. 
-        // [HttpGet]
-        // public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location) {
-        //     var currentEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-        // return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
-        // }
 
         [HttpGet("givers")]
         //[Authorize(Policy = "ReadGiver")] 
         public async Task<IEnumerable<Giver>> GetGiversAsync()
         {
             return await _giverRepository.GetAllAsModelAsync();
-            // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
         }
-        [HttpGet("recipients")]
+        [HttpGet("Overview/Recipient")]
         //[Authorize(Policy = "ReadRecipient")]
-        public async Task<List<Recipient>> GetRecipientsAsync()
+        public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
-            var recipients = await _recipientRepository.GetAllAsModelAsync();
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
             foreach (var recipient in recipients)
             {
                 var familyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
