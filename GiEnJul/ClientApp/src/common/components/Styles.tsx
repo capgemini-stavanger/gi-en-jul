@@ -15,7 +15,10 @@ const useStyles = makeStyles((theme) => ({
   closeButton: {
     margin: theme.spacing(2),
     marginTop: theme.spacing(3),
-
+    cursor: "pointer",
+    "&:hover": {
+      color: theme.palette.primary.dark,
+    },
   },
   smallLogo: {
     height: "40px",
@@ -24,9 +27,16 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerMenu: {
     backgroundColor: theme.palette.secondary.light,
-    fontSize: "120%",
-    fontWeight: 500,
     color: theme.palette.primary.main,
+  },
+  drawerContent: {
+    cursor: "pointer",
+    fontSize: "120%",
+    fontWeight: 600,
+    "&:hover": {
+      color: theme.palette.primary.dark,
+      fontWeight: 700,
+    },
   },
   navContainer: {
     backgroundColor: "transparent",
