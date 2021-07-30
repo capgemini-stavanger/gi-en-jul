@@ -29,7 +29,9 @@ namespace GiEnJul.Infrastructure
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)
                                 .WriteTo.Console()
-                                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(settings.TableConnectionString), storageTableName: settings.LogTableName)
+                                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(settings.TableConnectionString), 
+                                                        storageTableName: settings.LogTableName, 
+                                                        writeInBatches: true)
                                 .CreateLogger();
 
             builder.Register(c => logger).As<ILogger>().SingleInstance();
