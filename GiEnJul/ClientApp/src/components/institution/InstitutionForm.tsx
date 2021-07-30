@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import * as React from "react";
+import { useCallback } from "react";
 import { useState } from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
@@ -277,6 +278,7 @@ const RegistrationForm = () => {
 
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
+
     if (!allIsValid()) {
       setState((prev) => ({
         ...prev,

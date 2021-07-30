@@ -136,10 +136,9 @@ const RegistrationMacro = () => {
         return null;
     }
   };
-
   return (
     <>
-    <NavBar/>
+      <NavBar />
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
           <Confirmation
