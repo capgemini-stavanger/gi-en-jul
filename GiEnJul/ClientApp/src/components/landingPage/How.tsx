@@ -8,7 +8,7 @@ import { isMobile } from "../../common/functions/IsMobile";
 const How = () => {
   const classes = useStyles();
   return (
-    <Container id="how" className={classes.howContainer}>
+    <Container id="how" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>
           Hvordan fungerer gi en jul?

@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import InputValidator from "../InputFields/Validators/InputValidator";
@@ -38,6 +38,15 @@ const FamilySize: React.FC<Props> = ({
       className={classes.subHeading}>Familiesammensetning</Typography>
       <Container
       className={classes.form}>
+        <Grid 
+        container
+        direction="column"
+        justifyContent="space-between"
+        alignItems="stretch"
+        className={classes.form} 
+        >
+        
+        <Grid item>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             setIsValids={setIsValid}
@@ -52,7 +61,11 @@ const FamilySize: React.FC<Props> = ({
             errorMessages={["Hvilken familie venter på din gave?"]}
             options={FAMILY_SIZES}
           />
+          </Grid>
+          <Grid item>
           <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"}/>
+          </Grid>
+          </Grid>
       </Container>
     </>
   );
