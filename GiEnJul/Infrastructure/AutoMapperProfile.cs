@@ -11,6 +11,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore());
 
+            CreateMap<Models.Person, Dtos.RecipientDataTableDto.PersonDataTableDto>();
+
             CreateMap<Entities.Person, Models.Person>();
 
             CreateMap<Models.Person, Entities.Person>()
