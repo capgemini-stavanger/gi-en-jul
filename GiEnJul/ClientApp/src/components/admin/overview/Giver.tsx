@@ -7,8 +7,7 @@ import { GiverType, SelectedConnectionType } from "./Types";
 type Props = {
   data: GiverType[] | [];
   handleGiverChange: (
-    newGiverRowKey: string,
-    newGiverPartitionKey: string
+    newGiver: GiverType
   ) => void;
   selectedConnection: SelectedConnectionType;
 };
@@ -21,13 +20,12 @@ const Giver: React.FC<Props> = ({
   const [query, setQuery] = useState("");
 
   const search = (input: GiverType[] | []) => {
-    const keys = input[0] && Object.keys(input[0]);
 
     return input.filter(
       (input) =>
-        input.fullName?.toLowerCase().indexOf(query) > -1 ||
-        input.email?.toLowerCase().indexOf(query) > -1 ||
-        input.phoneNumber?.toLowerCase().indexOf(query) > -1
+        input.fullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.email?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.phoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
 

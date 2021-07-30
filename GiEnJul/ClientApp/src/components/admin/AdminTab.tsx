@@ -1,11 +1,16 @@
+import { Tab } from "@material-ui/core";
+import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import CompletedMacro from "./completed/Macro";
-import { Tab } from "@material-ui/core";
-import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import OverviewMacro from "./overview/OverviewMacro";
 import ConnectionSuggesterMacro from "./suggestedConnections/ConnectionSuggesterMacro";
 
-function AdminTab() {
+interface IAdminTab {
+  accessToken: string;
+  location: string;
+}
+
+const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -27,10 +32,10 @@ function AdminTab() {
           <ConnectionSuggesterMacro />
         </TabPanel>
         <TabPanel value="3">
-          <CompletedMacro />
+          <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
       </TabContext>
     </>
   );
-}
+};
 export default AdminTab;

@@ -2,10 +2,15 @@ import React from "react";
 import DeliveryExcelDownload from "./DeliveryExcelDownload";
 import Table from "./Table";
 
-const Macro = () => {
+interface IMacro {
+  accessToken: string;
+  location: string;
+}
+
+const Macro: React.FC<IMacro> = ({ accessToken, location }) => {
   return (
     <>
-      <DeliveryExcelDownload />
+      <DeliveryExcelDownload accessToken={accessToken} location={location} />
       <Table />
     </>
   );

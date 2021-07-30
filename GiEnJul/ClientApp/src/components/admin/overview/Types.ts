@@ -1,10 +1,8 @@
 import Gender from "../../../common/enums/Gender";
 
 export interface SelectedConnectionType {
-    giverRowKey: string;
-    giverPartitionKey: string;
-    recipientRowKey: string;
-    recipientPartitionKey: string;
+    giver?: GiverType;
+    recipient?: RecipientType;
   }
   
   export interface GiverType {

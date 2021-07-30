@@ -7,8 +7,7 @@ import { RecipientType, SelectedConnectionType } from "./Types";
 type Props = {
   data: RecipientType[] | [];
   handleRecipientChange: (
-    newRecipientRowKey: string,
-    newRecipientPartitionKey: string
+    newRecipient: RecipientType
   ) => void;
   selectedConnection: SelectedConnectionType;
 };
@@ -21,14 +20,13 @@ const Recipient: React.FC<Props> = ({
   const [query, setQuery] = useState("");
 
   const search = (input: RecipientType[] | []) => {
-    const keys = input[0] && Object.keys(input[0]);
     return input.filter(
       (input) =>
-        input.contactEmail?.toLocaleLowerCase().indexOf(query) > -1 ||
-        input.contactFullName?.toLocaleLowerCase().indexOf(query) > -1 ||
-        input.contactPhoneNumber?.toLocaleLowerCase().indexOf(query) > -1 ||
-        input.institution?.toLocaleLowerCase().indexOf(query) > -1 ||
-        input.referenceId?.toLocaleLowerCase().indexOf(query) > -1
+        input.contactEmail?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.contactFullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.contactPhoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.institution?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
 
