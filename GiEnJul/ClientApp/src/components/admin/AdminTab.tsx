@@ -25,7 +25,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <Tab label="Fullførte koblinger" value="3" />
         </TabList>
         <TabPanel value="1">
-          <OverviewMacro />
+          <OverviewMacro location={location}/>
         </TabPanel>
         <TabPanel value="2"></TabPanel>
         <TabPanel value="3">
