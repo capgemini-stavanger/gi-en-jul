@@ -3,6 +3,7 @@ import CompletedMacro from "./completed/Macro";
 import { Tab } from "@material-ui/core";
 import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import OverviewMacro from "./overview/OverviewMacro";
+import ConnectionSuggesterMacro from "./suggestedConnections/ConnectionSuggesterMacro";
 
 function AdminTab() {
   const [step, setStep] = useState<string>("1");
@@ -22,7 +23,9 @@ function AdminTab() {
         <TabPanel value="1">
           <OverviewMacro />
         </TabPanel>
-        <TabPanel value="2"></TabPanel>
+        <TabPanel value="2">
+          <ConnectionSuggesterMacro />
+        </TabPanel>
         <TabPanel value="3">
           <CompletedMacro />
         </TabPanel>
