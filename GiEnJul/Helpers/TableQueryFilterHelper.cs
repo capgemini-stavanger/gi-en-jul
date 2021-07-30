@@ -24,5 +24,17 @@ namespace GiEnJul.Helpers
 
             return filter;
         }
+
+        public static string GetGiversFilter(string eventName, string location)
+        {
+            var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
+            var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
+            var locationFilter = TableQuery.GenerateFilterCondition("Location", QueryComparisons.Equal, location);
+
+            var filter = TableQuery
+                .CombineFilters(PKfilter, TableOperators.And, TableQuery
+                .CombineFilters(eventNameFilter, TableOperators.And, locationFilter));
+            return filter;
+        }
     }
 }

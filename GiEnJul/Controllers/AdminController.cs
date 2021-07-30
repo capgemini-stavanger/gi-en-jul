@@ -61,13 +61,20 @@ namespace GiEnJul.Controllers
         // return await _recipientRepository.GetUnmatchedRecipientsAsync(location, currentEvent);
         // }
 
-        [HttpGet("givers")]
-        //[Authorize(Policy = "ReadGiver")] 
-        public async Task<IEnumerable<Giver>> GetGiversAsync()
+        [HttpGet("Overview/Givers")]
+        public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
-            return await _giverRepository.GetAllAsModelAsync();
-            // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            return await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
         }
+
+        // [HttpGet("Overview/Givers")]
+        // //[Authorize(Policy = "ReadGiver")] 
+        // public async Task<IEnumerable<Giver>> GetGiversAsync()
+        // {
+        //     return await _giverRepository.GetAllAsModelAsync();
+        //     // return await _giverRepository.GetAllAsync().OrderBy(x => x.FullName).ToList();
+        // }
         [HttpGet("recipients")]
         //[Authorize(Policy = "ReadRecipient")]
         public async Task<List<Recipient>> GetRecipientsAsync()
