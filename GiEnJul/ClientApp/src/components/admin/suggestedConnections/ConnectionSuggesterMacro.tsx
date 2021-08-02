@@ -5,10 +5,10 @@ import RecipientSuggestions from "./RecipientTable";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
-const api = new ApiService();
 
 interface ConnectionSuggesterMacro {
   location: string;
+  accessToken: string;
 }
 
 type ConnectionSuggestionProps = {
@@ -32,6 +32,8 @@ const initialState: ConnectionSuggestionProps = {
 const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   location,
 }) => {
+  const api = new ApiService(accessToken);
+
   const [state, setState] = useState(initialState);
 
   const getSuggestedRecipients = () => {
