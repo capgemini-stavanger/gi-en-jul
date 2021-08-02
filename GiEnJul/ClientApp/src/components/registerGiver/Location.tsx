@@ -14,6 +14,7 @@ interface Props {
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
   locationOptions: string[];
+  step: number;
 }
 
 const Location: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const Location: React.FC<Props> = ({
   handleLocationChange,
   placeHolder,
   locationOptions,
+  step
 }) => {
   const history = useHistory();
   const [isValid, setIsValid] = useState(false);
@@ -76,6 +78,7 @@ const Location: React.FC<Props> = ({
             onBack={useCallback(() => history.push("/"), [history])}
             onContinue={extendedNextStep}
             continueText={"Kontaktinformasjon"}
+            step={step}
           />
           </Grid>
           </Grid>

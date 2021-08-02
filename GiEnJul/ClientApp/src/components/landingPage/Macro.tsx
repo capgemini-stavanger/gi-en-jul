@@ -8,6 +8,7 @@ import useStyles from "./Styles";
 import logo from "./../../styling/img/logo_green.svg";
 import Contact from "./Contact";
 import NavBar from "../../common/components/NavBar";
+import Footer from "../../common/components/Footer";
 
 const Home = () => {
   const classes = useStyles();
@@ -32,6 +33,7 @@ const Home = () => {
         <Companies />
         <Contact />
         <ScrollToTop maxPagePosition={300} />
+        <Footer/>
       </Container>
     </>
   );

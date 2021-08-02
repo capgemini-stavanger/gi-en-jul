@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Container, Grid } from "@material-ui/core";
+import { Typography, Container} from "@material-ui/core";
 import Confirmation from "./Confirmation";
 import ContactInfo from "./ContactInfo";
 import Location from "./Location";
@@ -87,6 +87,7 @@ const RegistrationMacro = () => {
             values={formDataState}
             placeHolder={"Velg et sted..."}
             locationOptions={locationOptions}
+            step={state.step}
           />
         );
       case 2:
@@ -98,6 +99,7 @@ const RegistrationMacro = () => {
             handleEmailChange={handleEmailChange}
             handleTlfChange={handleTlfChange}
             values={formDataState}
+            step={state.step}
           />
         );
       case 3:
@@ -108,6 +110,7 @@ const RegistrationMacro = () => {
             handleFamilyChange={handleFamilyChange}
             values={formDataState}
             placeHolder={"Familiestørrelse"}
+            step={state.step}
           />
         );
       case 4:
@@ -123,6 +126,7 @@ const RegistrationMacro = () => {
             values={formDataState}
             locationOptions={locationOptions}
             callingback={handleConfirm}
+            step={state.step}
           />
         );
       case 5:

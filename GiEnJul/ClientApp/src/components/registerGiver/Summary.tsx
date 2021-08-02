@@ -26,6 +26,7 @@ interface Props {
   values: IFormData;
   locationOptions: string[];
   callingback: (e: boolean) => void;
+  step: number;
 }
 
 const initState = {
@@ -65,6 +66,7 @@ const SummaryRegistration: React.FC<Props> = ({
   values,
   locationOptions,
   callingback,
+  step,
 }) => {
   const apiservice = new ApiService();
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -277,12 +279,22 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
+<<<<<<< HEAD
         </Grid>
         <Pager
           onContinue={extendedNextStep}
           onBack={prevStep}
           continueText="Fullfør registreringen"
         />
+=======
+          </Grid>
+          <Pager
+            onContinue={extendedNextStep}
+            onBack={prevStep}
+            continueText="Fullfør registreringen"
+            step={step}
+          />
+>>>>>>> 59567ffd264114a3952df7f6713b1e456171b0a2
       </Container>
     </>
   );
