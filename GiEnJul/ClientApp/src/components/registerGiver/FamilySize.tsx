@@ -13,6 +13,7 @@ interface Props {
   values: IFormData;
   handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
+  step: number;
 }
 
 const FamilySize: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const FamilySize: React.FC<Props> = ({
   values,
   handleFamilyChange,
   placeHolder,
+  step,
 }) => {
   const [isValid, setIsValid] = useState(false);
   const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
@@ -63,7 +65,7 @@ const FamilySize: React.FC<Props> = ({
           />
           </Grid>
           <Grid item>
-          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"}/>
+          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"} step={step}/>
           </Grid>
           </Grid>
       </Container>
