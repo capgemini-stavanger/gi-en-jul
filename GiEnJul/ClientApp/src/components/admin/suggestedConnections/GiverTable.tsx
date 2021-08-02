@@ -16,9 +16,9 @@ type GiverRowProps = {
 function formatMaxreceivers(maxReceivers: number) {
   switch (maxReceivers) {
     case 2:
-      return " 2";
+      return " 1 - 2";
     case 5:
-      return " 5";
+      return " 3 - 5";
     case 100:
       return " 6 +";
   }
