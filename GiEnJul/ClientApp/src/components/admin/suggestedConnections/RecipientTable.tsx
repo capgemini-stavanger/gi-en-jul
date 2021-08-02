@@ -120,7 +120,7 @@ type TableProps = {
 };
 
 export default function RecipientSuggestions(props: TableProps) {
-  const [selected, setSelected] = useState<string>("");
+  const [selectedRow, setSelectedRow] = useState<string>("");
 
   return (
     <Table aria-label="Mottakere" className="col-5">
@@ -137,9 +137,9 @@ export default function RecipientSuggestions(props: TableProps) {
           <Row
             key={recipient.rowKey}
             recipient={recipient}
-            selected={selected === recipient.rowKey}
+            selected={selectedRow === recipient.rowKey}
             onClick={() => {
-              setSelected(recipient.rowKey);
+              setSelectedRow(recipient.rowKey);
               props.selectRecipient([recipient.rowKey, recipient.partitionKey]);
             }}
           />
