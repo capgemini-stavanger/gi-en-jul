@@ -3,7 +3,7 @@ using ClosedXML.Extensions;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Exceptions;
-using GiEnJul.Helpers;
+using GiEnJul.Utilities;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;

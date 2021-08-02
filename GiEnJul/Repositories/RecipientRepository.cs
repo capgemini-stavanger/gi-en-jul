@@ -4,7 +4,7 @@ using Serilog;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos.Table;
 using System.Collections.Generic;
-using GiEnJul.Helpers;
+using GiEnJul.Utilities;
 
 namespace GiEnJul.Repositories
 {

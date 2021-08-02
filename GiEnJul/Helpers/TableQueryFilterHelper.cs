@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Helpers
+namespace GiEnJul.Utilities
 {
     public static class TableQueryFilterHelper
     {

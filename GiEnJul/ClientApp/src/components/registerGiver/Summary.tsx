@@ -1,12 +1,10 @@
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
-import { useEffect } from "react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import ApiService from "../../common/functions/apiServiceClass";
-import useRecaptcha from "../../hooks/useRecaptcha";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import {
   isEmail,
@@ -69,10 +67,10 @@ const SummaryRegistration: React.FC<Props> = ({
   callingback,
 }) => {
   const apiservice = new ApiService();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState(initChangesState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
-  const { validateRecaptcha } = useRecaptcha("register_giver");
 
   const trigger = (b: boolean) => {
     callingback(b);
@@ -91,27 +89,19 @@ const SummaryRegistration: React.FC<Props> = ({
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
       });
     }
-    validateRecaptcha().then((response) => {
-      switch (response) {
-        case true:
-          submit();
-          nextStep();
-          break;
-        case false:
-          alert("Invalid verification!");
-          break;
-        default:
-          alert("An error occurred. Please try again.");
-          break;
-      }
-    });
+    submit();
+    nextStep();
   };
 
   const submit = async () => {
+    if (!executeRecaptcha) return;
+    let recaptchaToken = await executeRecaptcha("register_giver");
+    recaptchaToken += "d";
     await apiservice
       .post(
         "giver",
         JSON.stringify({
+          recaptchaToken,
           location: values.location,
           fullname: values.fullname,
           email: values.email,
@@ -125,7 +115,8 @@ const SummaryRegistration: React.FC<Props> = ({
         }
       })
       .catch((errorStack) => {
-        console.log(errorStack);
+        console.error(errorStack);
+        trigger(false);
       });
   };
 
@@ -229,6 +220,35 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("email")}>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+              </Button>
+            </Grid>
+          </Grid>
+          <Grid container className={classes.inputRow}>
+            <Grid item xs={9}>
+              <InputValidator
+                viewErrorTrigger={state.viewErrorTrigger}
+                disabled={changesState.phone}
+                label="Telefonnummer"
+                onChange={handleTlfChange}
+                name="phoneNumber"
+                value={values.phoneNumber}
+                validators={[isPhoneNumber, isNotNull]}
+                errorMessages={[
+                  "Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?",
+                  "Vennligst skriv inn ditt telefonnummer",
+                ]}
+                setIsValids={[
+                  getValiditySetter("isValidPhone"),
+                  getValiditySetter("isNotNullPhone"),
+                ]}
+                autoComplete="tel"
+                variant="outlined"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Button onClick={handleChange("phone")}>
                 <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>

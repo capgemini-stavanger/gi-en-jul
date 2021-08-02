@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Threading.Tasks;
@@ -18,20 +20,30 @@ namespace GiEnJul.Controllers
         private readonly IEmailClient _emailClient;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
+        private readonly ISettings _settings;
 
-        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, IEmailClient emailClient, ILogger log, IMapper mapper)
+        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, IEmailClient emailClient, ILogger log, IMapper mapper, ISettings settings)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
             _emailClient = emailClient;
             _log = log;
             _mapper = mapper;
+            _settings = settings;
         }
 
         // POST api/<GiverController>
         [HttpPost]
         public async Task<ActionResult<PostGiverResultDto>> PostAsync([FromBody] PostGiverDto giverDto)
         {
+            var recaptcha = new Recaptcha(_settings.RecaptchaSecret, giverDto.RecaptchaToken);
+            var recaptchaDto = await recaptcha.VerifyAsync();
+            if (!recaptchaDto.Success)
+            {
+                _log.Information($"Repcaptcha denied access based on the following response: {recaptchaDto}");
+                return Forbid();
+            }
+
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
 

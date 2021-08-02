@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GiEnJul.Helpers
+namespace GiEnJul.Utilities
 {
     public static class SuggestionHelper
     {
