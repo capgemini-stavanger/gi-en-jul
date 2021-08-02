@@ -55,7 +55,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Givers")]
-        //[Authorize(Policy = "ReadGiver")]
+        [Authorize(Policy = "ReadGiver")]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -63,7 +63,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Recipients")]
-        //[Authorize(Policy = "ReadRecipient")]
+        [Authorize(Policy = "ReadRecipient")]
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -171,7 +171,7 @@ namespace GiEnJul.Controllers
 
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
 
-            foreach(var recipient in suggestions)
+            foreach (var recipient in suggestions)
             {
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             }

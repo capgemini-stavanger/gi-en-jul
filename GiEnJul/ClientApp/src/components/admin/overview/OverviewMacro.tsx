@@ -11,13 +11,14 @@ const initState: SelectedConnectionType = {
 };
 interface IOverviewMacro {
   location: string;
+  accessToken: string;
 }
 
-const OverviewMacro: React.FC<IOverviewMacro> = ({ location }) => {
+const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const selectedConnection = useRef<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  const apiservice = new ApiService();
+  const apiservice = new ApiService(accessToken);
 
   async function fetchGivers() {
     await apiservice

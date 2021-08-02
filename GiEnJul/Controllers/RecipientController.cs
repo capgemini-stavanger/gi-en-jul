@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using GiEnJul.Repositories;
 
 namespace GiEnJul.Controllers
@@ -22,11 +23,11 @@ namespace GiEnJul.Controllers
         private readonly IMapper _mapper;
 
         public RecipientController(
-            IRecipientRepository recipientRepository, 
-            IPersonRepository personRepository, 
-            IEventRepository eventRepository, 
+            IRecipientRepository recipientRepository,
+            IPersonRepository personRepository,
+            IEventRepository eventRepository,
             IAutoIncrementRepository autoIncrementRepository,
-            ILogger log, 
+            ILogger log,
             IMapper mapper
             )
         {
@@ -39,7 +40,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = "AddRecipient")]
+        [Authorize(Policy = "AddRecipient")]
         public async Task<ActionResult> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);

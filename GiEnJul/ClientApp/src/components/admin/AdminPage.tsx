@@ -62,7 +62,7 @@ function AdminPage() {
     case "Institution":
       return (
         <>
-          <InstitutionMacro />
+          <InstitutionMacro accessToken={userAccessToken} />
         </>
       );
     default:
