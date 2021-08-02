@@ -15,6 +15,10 @@ import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 const api = new ApiService();
 
+interface ConnectionSuggesterMacro {
+  location: string;
+}
+
 type ConnectionSuggestionProps = {
   givers: GiverType[];
   recipients: RecipientType[];
@@ -33,14 +37,16 @@ const initialState: ConnectionSuggestionProps = {
   refreshing: false,
 };
 
-function ConnectionSuggesterMacro() {
+const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
+  location,
+}) => {
   const [state, setState] = useState(initialState);
 
   const getSuggestedRecipients = () => {
     setState({ ...state, refreshing: true });
     api
       .get("admin/Suggestions/Recipient", {
-        params: { location: "Stavanger" },
+        params: { location: location },
       })
       .then((response) => {
         if (response.status == 200) {
@@ -65,7 +71,7 @@ function ConnectionSuggesterMacro() {
   useEffect(() => {
     api
       .get("admin/Suggestions/Giver", {
-        params: { location: "Stavanger" /*TODO: Fetch by user.location*/ },
+        params: { location: location },
       })
       .then((response) => {
         if (response.status == 200) {
@@ -142,6 +148,6 @@ function ConnectionSuggesterMacro() {
       </Grid>
     </>
   );
-}
+};
 
 export default ConnectionSuggesterMacro;
