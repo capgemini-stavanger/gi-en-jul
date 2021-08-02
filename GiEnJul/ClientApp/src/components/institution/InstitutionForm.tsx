@@ -429,7 +429,7 @@ const RegistrationForm = () => {
                   foods={DINNERS}
                   required
                   header={"Middag"}
-                  inputLabel="Annen middag"
+                  inputLabel="Annen middag (ikke fisk)"
                   setIsValid={getValiditySetter("dinner")}
                   name="dinner"
                 />
