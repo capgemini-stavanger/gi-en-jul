@@ -10,6 +10,8 @@ const information: string[] = [
   "Alderstilpasset gave betyr at giveren selv kan finne noe som passer til alderen.",
   "Skriv så detaljerte ønsker som mulig -dersom barnet ikke har ønsker kan du skrive noe om interesser, som fotball, hobbyting, turn osv.",
   "Husk å skrive dersom familien har spesielle behov.",
+  "Et sammendrag av familiens info og ønsker blir sendt til giver. Skriv derfor utfyllende og fullstendige setninger.",
+  "Under Kontaktpersonfeltet så må du skrive ditt navn, din telefon og din epost.",
 ];
 
 const RegistrationInfo = () => {
