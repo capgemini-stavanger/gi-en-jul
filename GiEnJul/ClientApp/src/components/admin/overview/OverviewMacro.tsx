@@ -30,7 +30,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   }
   async function fetchRecipients() {
     await apiservice
-      .get("admin/recipients")
+      .get("admin/Overview/Recipients", { params: { location: location } })
       .then((resp) => setRecipientData(resp.data))
       .catch((errorStack) => {
         console.error(errorStack);

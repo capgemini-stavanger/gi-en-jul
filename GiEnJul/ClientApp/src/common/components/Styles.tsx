@@ -79,5 +79,13 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(2,2.5,2,2.5),
     },
   },
+  footerText:{
+    textAlign: 'center',
+    color: theme.palette.primary.main,
+    padding: theme.spacing(3),
+    fontSize: "100%",
+    fontWeight: 500,
+  }
 }));
+
 export default useStyles;

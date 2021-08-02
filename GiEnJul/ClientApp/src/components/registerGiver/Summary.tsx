@@ -25,6 +25,7 @@ interface Props {
   values: IFormData;
   locationOptions: string[];
   callingback: (e: boolean) => void;
+  step: number;
 }
 
 const initState = {
@@ -64,6 +65,7 @@ const SummaryRegistration: React.FC<Props> = ({
   values,
   locationOptions,
   callingback,
+  step,
 }) => {
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState(initChangesState);
@@ -279,6 +281,7 @@ const SummaryRegistration: React.FC<Props> = ({
             onContinue={extendedNextStep}
             onBack={prevStep}
             continueText="Fullfør registreringen"
+            step={step}
           />
       </Container>
     </>
