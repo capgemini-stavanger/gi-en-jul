@@ -1,13 +1,5 @@
-import {
-  Button,
-  ButtonGroup,
-  Container,
-  Grid,
-  TableContainer,
-  Typography,
-  withWidth,
-} from "@material-ui/core";
-import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
+import { Button, Container, Grid } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
 import RefreshIcon from "@material-ui/icons/Refresh";
