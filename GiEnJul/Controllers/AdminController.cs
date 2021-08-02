@@ -55,10 +55,13 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Givers")]
+        //[Authorize(Policy = "ReadGiver")]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
-            return await _giverRepository.GetAllAsModelAsync();
+            var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
+            return await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
         }
+
         [HttpGet("Overview/Recipient")]
         //[Authorize(Policy = "ReadRecipient")]
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
