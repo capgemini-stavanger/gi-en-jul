@@ -9,13 +9,11 @@ type Props = {
   handleGiverChange: (
     newGiver: GiverType
   ) => void;
-  selectedConnection: SelectedConnectionType;
 };
 
 const Giver: React.FC<Props> = ({
   data,
   handleGiverChange,
-  selectedConnection,
 }) => {
   const [query, setQuery] = useState("");
 
@@ -46,7 +44,6 @@ const Giver: React.FC<Props> = ({
       <Datatable
         data={search(data)}
         handleGiverChange={handleGiverChange}
-        selectedConnection={selectedConnection}
       ></Datatable>
     </Container>
   );

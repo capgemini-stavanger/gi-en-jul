@@ -9,13 +9,11 @@ type Props = {
   handleRecipientChange: (
     newRecipient: RecipientType
   ) => void;
-  selectedConnection: SelectedConnectionType;
 };
 
 const Recipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
-  selectedConnection,
 }) => {
   const [query, setQuery] = useState("");
 
@@ -47,7 +45,6 @@ const Recipient: React.FC<Props> = ({
       <Datatable
         data={search(data)}
         handleRecipientChange={handleRecipientChange}
-        selectedConnection={selectedConnection}
       />
     </Container>
   );

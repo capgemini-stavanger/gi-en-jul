@@ -25,13 +25,11 @@ type Props = {
   handleRecipientChange: (
     newRecipient: RecipientType
   ) => void;
-  selectedConnection: SelectedConnectionType;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
-  selectedConnection,
 }) => {
   const classes = useStyles();
 
@@ -78,17 +76,6 @@ const DatatableRecipient: React.FC<Props> = ({
             handleRecipientChange(recipient)
           }
           key={recipient.rowKey}
-          //Styling should be in a seperate file
-          //This is not working atm because selectedConnection is a ref and will not rerender this component.
-          // style={
-          //   recipient.rowKey === selectedConnection.recipientRowKey &&
-          //   !recipient.isSuggestedMatch
-          //     ? {
-          //         background:
-          //           "linear-gradient(45deg, #D6F0EB 30%, #E2FFF9 90%)",
-          //       }
-          //     : { background: "white" }
-          // }
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
