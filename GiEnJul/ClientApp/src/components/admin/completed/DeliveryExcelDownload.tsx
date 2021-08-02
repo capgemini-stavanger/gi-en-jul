@@ -3,7 +3,6 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import ApiService from "../../../common/functions/apiServiceClass";
-import useUser from "../../../hooks/useUser";
 
 interface IDeliveryExcelDownload {
   accessToken: string;
