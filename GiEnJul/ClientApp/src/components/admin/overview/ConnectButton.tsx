@@ -38,7 +38,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({
           className={classes.waitingButton}
         >
           Velg en giver å koble sammen med <br /> med familienummer{" "}
-          {selectedConnection.recipient?.referenceId}
+          {selectedConnection.recipient?.familyId}
         </Button>
       );
     }
@@ -53,7 +53,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({
         >
           Koble sammen <br />
           {selectedConnection.giver?.fullName} med familienummer{" "}
-          {selectedConnection.recipient?.referenceId}
+          {selectedConnection.recipient?.familyId}
         </Button>
       );
     } else {

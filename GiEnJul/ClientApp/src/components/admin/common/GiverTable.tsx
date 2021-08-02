@@ -7,16 +7,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import {
-  CheckRounded,
-  CloseRounded,
   ExpandMore,
   Group,
   Mail,
   Phone,
-  HourglassEmpty,
+  FiberManualRecord,
 } from "@material-ui/icons";
 import React from "react";
-import { GiverType, SelectedConnectionType } from "../overview/Types";
+import { GiverType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {
@@ -49,6 +47,7 @@ const Datatable: React.FC<Props> = ({
         <Accordion
           onChange={() => handleGiverChange(giver)}
           key={giver.rowKey}
+          className={classes.accordionContainer}
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
@@ -65,12 +64,16 @@ const Datatable: React.FC<Props> = ({
             {giver.isSuggestedMatch ? (
               //Styling should be in a seperate file
               !giver.hasConfirmedMatch ? (
-                <HourglassEmpty style={{ color: "#f4cf8a" }}/>
+                <FiberManualRecord 
+                fontSize = "large"
+                style={{ color: "#f4cf8a" }} />
               ) : (
-                <CheckRounded style={{ color: "#49a591" }} />
+                <FiberManualRecord 
+                fontSize = "large" style={{ color: "#49a591" }} />
               )
             ) : (
-              <CloseRounded style={{ color: "#ed8175" }} />
+              <FiberManualRecord 
+                fontSize = "large" style={{ color: "#ed8175" }} />
             )}
           </AccordionSummary>
           <Divider />

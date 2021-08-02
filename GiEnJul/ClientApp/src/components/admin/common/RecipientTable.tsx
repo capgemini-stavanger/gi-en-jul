@@ -7,24 +7,20 @@ import {
   Typography,
 } from "@material-ui/core";
 import {
-  CheckRounded,
-  CloseRounded,
   ExpandMore,
   Group,
   Mail,
   Phone,
-  HourglassEmpty
+  FiberManualRecord,
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
-import { RecipientType, SelectedConnectionType } from "../overview/Types";
+import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
 
 type Props = {
   data: RecipientType[] | [];
-  handleRecipientChange: (
-    newRecipient: RecipientType
-  ) => void;
+  handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
@@ -72,10 +68,9 @@ const DatatableRecipient: React.FC<Props> = ({
     <Container>
       {data.map((recipient) => (
         <Accordion
-          onChange={() =>
-            handleRecipientChange(recipient)
-          }
+          onChange={() => handleRecipientChange(recipient)}
           key={recipient.rowKey}
+          className={classes.accordionContainer}
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
@@ -83,7 +78,7 @@ const DatatableRecipient: React.FC<Props> = ({
             id="panel1bh-header"
           >
             <Typography className={classes.heading}>
-              {recipient.referenceId}
+              {recipient.familyId}
             </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
@@ -92,12 +87,21 @@ const DatatableRecipient: React.FC<Props> = ({
             {recipient.isSuggestedMatch ? (
               //Styling should be in a seperate file
               !recipient.hasConfirmedMatch ? (
-                <HourglassEmpty style={{ color: "#f4cf8a" }}/>
+                <FiberManualRecord
+                  fontSize="large"
+                  style={{ color: "#f4cf8a" }}
+                />
               ) : (
-                <CheckRounded style={{ color: "#49a591" }} />
+                <FiberManualRecord
+                  fontSize="large"
+                  style={{ color: "#49a591" }}
+                />
               )
             ) : (
-              <CloseRounded style={{ color: "#ed8175" }} />
+              <FiberManualRecord
+                fontSize="large"
+                style={{ color: "#ed8175" }}
+              />
             )}
           </AccordionSummary>
           <Divider />

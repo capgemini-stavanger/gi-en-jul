@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     justifyContent: "center",
     bottom: theme.spacing(3),
-    right: theme.spacing(3),
+    left: theme.spacing(3),
     zIndex: 1,
     backgroundColor: "white",
     border: "2px solid",
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     position: "fixed",
     justifyContent: "center",
     bottom: theme.spacing(3),
-    right: theme.spacing(3),
+    left: theme.spacing(3),
     zIndex: 1,
     color: "white",
     backgroundColor: theme.palette.primary.light,
@@ -29,6 +29,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.main,
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
+  },
+  searchField:{
+    marginBottom: theme.spacing(1),
   },
 }));
 
