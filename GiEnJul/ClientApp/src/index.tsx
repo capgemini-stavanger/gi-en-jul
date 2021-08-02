@@ -10,6 +10,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import configureStore from "./store/configureStore";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
 
 // Create browser history to use in the Redux store
 const baseUrl = document
@@ -24,7 +25,41 @@ const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 const apiurl: string = process.env.REACT_APP_API_URL!;
 const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY!;
 
-const theme = createTheme({
+declare module "@material-ui/core/styles/createBreakpoints" {
+  interface BreakpointOverrides {
+    xs: false; // removes the `xs` breakpoint
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+    tablet: true; // adds the `tablet` breakpoint
+    laptop: true;
+    desktop: true;
+  }
+}
+declare module "@material-ui/core/styles/createTheme" {
+  interface Theme {
+    appDrawer: {
+      width: React.CSSProperties["width"];
+      breakpoint: BreakpointOverrides;
+    };
+  }
+  // allow configuration using `createMuiTheme`
+  interface ThemeOptions {
+    appDrawer?: {
+      width?: React.CSSProperties["width"];
+      breakpoint?: BreakpointOverrides;
+    };
+  }
+}
+export const theme = createTheme({
+  breakpoints: {
+    values: {
+      tablet: 500,
+      laptop: 900,
+      desktop: 1200,
+    },
+  },
   palette: {
     primary: {
       main: "#49a591", // Dark green
@@ -68,6 +103,12 @@ const theme = createTheme({
       },
     },
     MuiPaper: {
+      elevation1: {
+        boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
+        "&:hover": {
+          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+        },
+      },
       rounded: {
         borderRadius: "2em",
       },
@@ -75,6 +116,29 @@ const theme = createTheme({
     MuiListItem: {
       root: {
         justifyContent: "center",
+      },
+    },
+    MuiAccordion: {
+      rounded: {
+        borderBottomLeftRadius: "2em",
+        borderBottomRightRadius: "2em",
+        borderTopLeftRadius: "2em",
+        borderTopRightRadius: "2em",
+        borderRadius: "2em",
+        "&:last-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em",
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
+        },
+        "&:first-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em",
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
+        },
       },
     },
   },

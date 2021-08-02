@@ -35,9 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%',
+    height: '26em',
+    maxHeight: '26em',
+    display: 'inline-flex',
   },
   buttons: {
     margin: theme.spacing(3, 0, 3),
+    bottom: 0,
   },
   buttonBack:{
     color: theme.palette.primary.main,

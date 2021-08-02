@@ -1,0 +1,35 @@
+name: Build and Deploy Frontend to Azure
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - './GiEnJul/ClientApp/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: ./GiEnJul/ClientApp
+
+# Substitute variables here
+
+      - name: Build
+        run: npm run build
+        working-directory: ./GiEnJul/ClientApp
+      
+      - name: Tests
+        run: npm test --watchAll=false
+        working-directory: ./GiEnJul/ClientApp
+        
+      - name: Deploy to Azure
+        uses: TravisSpomer/deploy-to-azure-storage@v1.4.0
+        with:
+          source-path: ./GiEnJul/ClientApp/build
+          sas-url: ${{secrets.DEPLOY_SAS_URL}}

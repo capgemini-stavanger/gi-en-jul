@@ -6,6 +6,7 @@ import {
   Drawer,
   List,
   ListItem,
+  Typography,
 } from "@material-ui/core";
 import React, { FC, useState } from "react";
 import { Link } from "react-router-dom";
@@ -14,10 +15,12 @@ import logo from "./../../styling/img/logo_green.svg";
 import useStyles from "./Styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
+import { useHistory } from "react-router-dom";
 
 const NavBar: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
+  const history = useHistory();
 
   const handleEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(() => event.currentTarget);
@@ -54,38 +57,41 @@ const NavBar: FC = () => {
             </IconButton>
             <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
               <List className={classes.drawerMenu}>
-                <Close className={classes.closeButton} onClick={handleClose} />
-                <ListItem>
+                <IconButton 
+                onClick={handleClose}
+                className={classes.closeButton}>
+                <Close color="primary"/>
+                </IconButton>
+                <ListItem >
                   <Scroll onClick={handleClose} to="how" smooth={true}>
-                    Hvordan fungerer gi en jul?
+                    <Typography className={classes.drawerContent}>Hvordan fungerer gi en jul?</Typography>
                   </Scroll>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="questions" smooth={true}>
-                    Ofte stilte spørsmål
+                  <Typography className={classes.drawerContent}>Ofte stilte spørsmål</Typography>
                   </Scroll>
-                </ListItem>
+                </ListItem >
                 <ListItem>
                   <Scroll onClick={handleClose} to="companies" smooth={true}>
-                    For bedrifter
+                  <Typography className={classes.drawerContent}>For bedrifter</Typography>
                   </Scroll>
                 </ListItem>
-                <ListItem>
+                <ListItem >
                   <Scroll onClick={handleClose} to="contact" smooth={true}>
-                    Kontakt
+                  <Typography className={classes.drawerContent}>Kontakt</Typography>
                   </Scroll>
                 </ListItem>
               </List>
             </Drawer>
-            <Link to="/bli-giver">
               <Button
                 size="large"
                 endIcon={<ArrowForwardIos />}
                 className={classes.buttonNext}
+                onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
               >
                 Bli giver
               </Button>
-            </Link>
           </Toolbar>
         </AppBar>
       </>

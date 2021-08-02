@@ -6,9 +6,11 @@ const Companies = () => {
   const classes = useStyles();
 
   return (
-    <Container id="companies" className={classes.companyContainer}>
+    <Container id="companies" className={classes.sectionContainer}>
+      <div className={classes.headLineContainer}>
       <Typography className={classes.textHeadline}>For bedrifter</Typography>
-      <Typography>
+      </div>
+      <Typography className={classes.contactContent}>
         Få med kolleger og Gi en jul, og registrer dere som givere. Gi et
         pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi
         gavekort på opplevelser som vi putter oppi som ekstragave i juleeskene.

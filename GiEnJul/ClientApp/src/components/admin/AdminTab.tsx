@@ -1,14 +1,15 @@
+import { Tab } from "@material-ui/core";
+import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import CompletedMacro from "./completed/Macro";
-import { Tab } from "@material-ui/core";
-import { TabContext, TabPanel, TabList } from "@material-ui/lab";
 import OverviewMacro from "./overview/OverviewMacro";
 
 interface IAdminTab {
   accessToken: string;
+  location: string;
 }
 
-const AdminTab: React.FC<IAdminTab> = ({ accessToken }) => {
+const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
@@ -24,11 +25,11 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken }) => {
           <Tab label="Fullførte koblinger" value="3" />
         </TabList>
         <TabPanel value="1">
-          <OverviewMacro />
+          <OverviewMacro location={location}/>
         </TabPanel>
         <TabPanel value="2"></TabPanel>
         <TabPanel value="3">
-          <CompletedMacro accessToken={accessToken} />
+          <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
       </TabContext>
     </>

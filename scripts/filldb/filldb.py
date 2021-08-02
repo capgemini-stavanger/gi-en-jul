@@ -210,7 +210,7 @@ def create_table(filename: str, header: str):
     for col in header:
         full_header.append(col)
         full_header.append(f"{col}@type")
-    with open(filename, "w") as f:
+    with open(filename, "w", encoding = "utf8") as f:
         f.write(f'{",".join(full_header)}\n')
 
 

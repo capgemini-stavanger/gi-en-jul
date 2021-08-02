@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import InputValidator from "../../components/InputFields/Validators/InputValidator";
 import {
@@ -67,7 +67,13 @@ const ContactInfo: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Kontaktinformasjon</Typography>
-      <Container className={classes.form}>
+      <Container>
+        <Grid container
+        direction="column"
+        justifyContent="space-between"
+        alignItems="stretch"
+        className={classes.form} >
+        <Grid item>
           <InputValidator
             autoFocus
             viewErrorTrigger={state.viewErrorTrigger}
@@ -114,7 +120,11 @@ const ContactInfo: React.FC<Props> = ({
             margin="normal"
             fullWidth
           />
+          </Grid>
+          <Grid item>
           <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} />
+          </Grid>
+          </Grid>
       </Container>
     </>
   );
