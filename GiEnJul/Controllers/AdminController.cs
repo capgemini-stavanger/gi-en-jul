@@ -63,7 +63,11 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Recipients")]
+<<<<<<< HEAD
         [Authorize(Policy = "ReadRecipient")]
+=======
+        //[Authorize(Policy = "ReadRecipient")]
+>>>>>>> master
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
