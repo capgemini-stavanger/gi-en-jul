@@ -17,6 +17,7 @@ type Props = {
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   values: IFormData;
+  step: number;
 };
 
 type ValidFormEntry = {
@@ -40,6 +41,7 @@ const ContactInfo: React.FC<Props> = ({
   handleEmailChange,
   handleTlfChange,
   values,
+  step,
 }) => {
   const [state, setState] = useState(initState);
   const [validFormState, setValidFormState] = useState(initValidFormState);
@@ -122,7 +124,7 @@ const ContactInfo: React.FC<Props> = ({
           />
           </Grid>
           <Grid item>
-          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} />
+          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} step={step}/>
           </Grid>
           </Grid>
       </Container>

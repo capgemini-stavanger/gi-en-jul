@@ -40,8 +40,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex',
   },
   buttons: {
-    margin: theme.spacing(3, 0, 3),
     bottom: 0,
+    maxWidth: 400,
+    flexGrow: 1,
+    backgroundColor: "transparent",
   },
   buttonBack:{
     color: theme.palette.primary.main,
