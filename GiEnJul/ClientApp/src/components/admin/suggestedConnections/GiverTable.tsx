@@ -5,10 +5,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { GiverType } from "./Types";
-import ApiService from "../../../common/functions/apiServiceClass";
 import { Group } from "@material-ui/icons";
-
-const api = new ApiService();
 
 type GiverRowProps = {
   giver: GiverType;
