@@ -1,10 +1,12 @@
 import Gender from "../../../common/enums/Gender";
 
 export interface GiverType {
+  rowKey: string;
+  partitionKey: string;
+
   email: string;
   fullName: string;
-  maxReceivers: Number;
-  rowKey: string;
+  maxReceivers: number;
 }
 
 export interface RecipientType {
@@ -28,6 +30,6 @@ export interface RecipientType {
 export interface PersonType {
   rowKey: string;
   wish: string;
-  age: Number;
+  age: number;
   gender: Gender;
 }
