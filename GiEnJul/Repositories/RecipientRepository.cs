@@ -72,7 +72,7 @@ namespace GiEnJul.Repositories
         }
         public async Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
         {
-            var filter = TableQueryFilterHelper.GetAllActiveEventsFilter(eventName, location);
+            var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
             var query = new TableQuery<Entities.Recipient>().Where(filter);
             var recipients = await GetAllByQueryAsync(query);
             return _mapper.Map<List<Models.Recipient>>(recipients);
