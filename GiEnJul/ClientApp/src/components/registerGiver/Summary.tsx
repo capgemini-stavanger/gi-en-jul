@@ -72,10 +72,6 @@ const SummaryRegistration: React.FC<Props> = ({
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
   const apiservice = new ApiService();
 
-  const trigger = (b: boolean) => {
-    callingback(b);
-  };
-
   const extendedNextStep = (e: any) => {
     for (let isValid in isValidsState) {
       if (isValidsState[isValid]) continue;
@@ -101,10 +97,11 @@ const SummaryRegistration: React.FC<Props> = ({
       )
       .then((response) => {
         if (response.status === 201) {
-          trigger(true);
+          callingback(true);
         }
       })
       .catch((errorStack) => {
+        callingback(false);
         console.log(errorStack);
       });
   };
@@ -131,9 +128,9 @@ const SummaryRegistration: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
-      <Container >
-          <Grid container className={classes.form}>
-            <Grid container>
+      <Container>
+        <Grid container className={classes.form}>
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -156,14 +153,12 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("location")}>
-                <EditOutlinedIcon
-                  className={classes.icon}
-                ></EditOutlinedIcon>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>
           </Grid>
-          
-          <Grid container >
+
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -182,13 +177,11 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("fullName")}>
-                <EditOutlinedIcon
-                  className={classes.icon}
-                ></EditOutlinedIcon>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>
           </Grid>
-          <Grid container >
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -213,9 +206,7 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("email")}>
-                <EditOutlinedIcon
-                  className={classes.icon}
-                ></EditOutlinedIcon>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>
           </Grid>
@@ -244,13 +235,11 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
             <Grid item xs={3}>
               <Button onClick={handleChange("phone")}>
-                <EditOutlinedIcon
-                  className={classes.icon}
-                ></EditOutlinedIcon>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>
           </Grid>
-          <Grid container >
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -267,22 +256,20 @@ const SummaryRegistration: React.FC<Props> = ({
                 options={FAMILY_SIZES}
               />
             </Grid>
-            
+
             <Grid item xs={3}>
               <Button onClick={handleChange("family")}>
-                <EditOutlinedIcon
-                  className={classes.icon}
-                ></EditOutlinedIcon>
+                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
               </Button>
             </Grid>
           </Grid>
-          </Grid>
-          <Pager
-            onContinue={extendedNextStep}
-            onBack={prevStep}
-            continueText="Fullfør registreringen"
-            step={step}
-          />
+        </Grid>
+        <Pager
+          onContinue={extendedNextStep}
+          onBack={prevStep}
+          continueText="Fullfør registreringen"
+          step={step}
+        />
       </Container>
     </>
   );

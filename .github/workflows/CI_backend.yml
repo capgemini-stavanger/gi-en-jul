@@ -3,11 +3,15 @@ name: Build and Test .NET API
 on:
   push:
     branches: [ master ]
-    paths: 'GiEnJul/**'
+    paths: 
+      - 'GiEnJul/**'
+      - '!GiEnJul/ClientApp/'
       
   pull_request:
     branches: [ master ]
-    paths: 'GiEnJul/**'
+    paths: 
+      - 'GiEnJul/**'
+      - '!GiEnJul/ClientApp/'
 
   workflow_dispatch:
   
