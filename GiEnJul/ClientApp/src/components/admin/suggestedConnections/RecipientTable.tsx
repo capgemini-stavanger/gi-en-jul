@@ -129,7 +129,7 @@ export default function RecipientSuggestions(props: TableProps) {
           <TableCell>Institusjon</TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody style={{ cursor: "pointer" }}>
         {props.recipients.map((recipient) => (
           <Row
             key={recipient.rowKey}

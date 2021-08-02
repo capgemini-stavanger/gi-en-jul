@@ -61,7 +61,7 @@ export default function GiverSuggestions(props: TableProps) {
           <TableCell>Ønsket størrelse</TableCell>
         </TableRow>
       </TableHead>
-      <TableBody>
+      <TableBody style={{ cursor: "pointer" }}>
         {props.givers.map((giver) => (
           <Row
             key={giver.rowKey}
