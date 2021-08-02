@@ -80,7 +80,9 @@ function Row(props: RecipientRowProps) {
                 <TableBody>
                   {recipient.familyMembers.map((familyMember) => (
                     <TableRow key={familyMember.rowKey}>
-                      <TableCell>{getGender(familyMember.gender)}</TableCell>
+                      <TableCell>
+                        {getGender(familyMember.gender, familyMember.age)}
+                      </TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell component="th" scope="row">
                         {familyMember.wish == null
