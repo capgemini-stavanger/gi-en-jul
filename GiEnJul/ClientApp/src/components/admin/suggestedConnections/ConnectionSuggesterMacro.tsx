@@ -38,7 +38,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   const [state, setState] = useState(initialState);
 
   const getSuggestedRecipients = () => {
-    setState({ ...state, refreshing: true });
+    setState((prev) => ({ ...prev, refreshing: true }));
     api
       .get("admin/Suggestions/Recipient", {
         params: { location: location },
@@ -70,7 +70,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       })
       .then((response) => {
         if (response.status == 200) {
-          setState({ ...state, givers: response.data });
+          setState((prev) => ({ ...prev, givers: response.data }));
         } else {
           alert("Kunne ikke hente givere, prøv igjen");
         }
@@ -78,11 +78,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   }, [state.recipients]);
 
   const updateSelectedRecipient = (newSelected: [string, string]): void => {
-    setState({ ...state, selectedRecipient: newSelected });
+    setState((prev) => ({ ...prev, selectedRecipient: newSelected }));
   };
 
   const updateSelectedGiver = (newSelected: [string, string]): void => {
-    setState({ ...state, selectedGiver: newSelected });
+    setState((prev) => ({ ...prev, selectedGiver: newSelected }));
   };
 
   const submitConnection = () => {
@@ -125,13 +125,13 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           >
             Koble sammen
           </Button>
-          <p></p>
           <Button
             onClick={getSuggestedRecipients}
             fullWidth
             variant="contained"
             color="secondary"
             disabled={state.refreshing}
+            style={{ marginTop: "15px" }}
           >
             <RefreshIcon />
           </Button>
