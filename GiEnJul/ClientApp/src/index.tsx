@@ -116,6 +116,29 @@ export const theme = createTheme({
         justifyContent: "center",
       },
     },
+    MuiAccordion:{
+      rounded:{
+        borderBottomLeftRadius: "2em",
+        borderBottomRightRadius: "2em", 
+        borderTopLeftRadius: "2em",
+        borderTopRightRadius: "2em", 
+        borderRadius: "2em",
+        "&:last-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em", 
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em", 
+          borderRadius: "2em"
+        },
+        "&:first-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em", 
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em", 
+          borderRadius: "2em"
+          }
+      }
+    }
   },
 });
 

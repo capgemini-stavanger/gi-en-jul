@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import InputValidator from "../../components/InputFields/Validators/InputValidator";
 import {
@@ -17,6 +17,7 @@ type Props = {
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleTlfChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   values: IFormData;
+  step: number;
 };
 
 type ValidFormEntry = {
@@ -40,6 +41,7 @@ const ContactInfo: React.FC<Props> = ({
   handleEmailChange,
   handleTlfChange,
   values,
+  step,
 }) => {
   const [state, setState] = useState(initState);
   const [validFormState, setValidFormState] = useState(initValidFormState);
@@ -67,7 +69,13 @@ const ContactInfo: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Kontaktinformasjon</Typography>
-      <Container className={classes.form}>
+      <Container>
+        <Grid container
+        direction="column"
+        justifyContent="space-between"
+        alignItems="stretch"
+        className={classes.form} >
+        <Grid item>
           <InputValidator
             autoFocus
             viewErrorTrigger={state.viewErrorTrigger}
@@ -114,7 +122,11 @@ const ContactInfo: React.FC<Props> = ({
             margin="normal"
             fullWidth
           />
-          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} />
+          </Grid>
+          <Grid item>
+          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} step={step}/>
+          </Grid>
+          </Grid>
       </Container>
     </>
   );

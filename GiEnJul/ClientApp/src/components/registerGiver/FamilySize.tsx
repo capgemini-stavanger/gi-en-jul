@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import InputValidator from "../InputFields/Validators/InputValidator";
@@ -13,6 +13,7 @@ interface Props {
   values: IFormData;
   handleFamilyChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
+  step: number;
 }
 
 const FamilySize: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const FamilySize: React.FC<Props> = ({
   values,
   handleFamilyChange,
   placeHolder,
+  step,
 }) => {
   const [isValid, setIsValid] = useState(false);
   const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
@@ -38,6 +40,15 @@ const FamilySize: React.FC<Props> = ({
       className={classes.subHeading}>Familiesammensetning</Typography>
       <Container
       className={classes.form}>
+        <Grid 
+        container
+        direction="column"
+        justifyContent="space-between"
+        alignItems="stretch"
+        className={classes.form} 
+        >
+        
+        <Grid item>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             setIsValids={setIsValid}
@@ -52,7 +63,11 @@ const FamilySize: React.FC<Props> = ({
             errorMessages={["Hvilken familie venter på din gave?"]}
             options={FAMILY_SIZES}
           />
-          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"}/>
+          </Grid>
+          <Grid item>
+          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"} step={step}/>
+          </Grid>
+          </Grid>
       </Container>
     </>
   );

@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { useHistory } from "react-router-dom";
@@ -14,6 +14,7 @@ interface Props {
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
   locationOptions: string[];
+  step: number;
 }
 
 const Location: React.FC<Props> = ({
@@ -22,6 +23,7 @@ const Location: React.FC<Props> = ({
   handleLocationChange,
   placeHolder,
   locationOptions,
+  step
 }) => {
   const history = useHistory();
   const [isValid, setIsValid] = useState(false);
@@ -38,7 +40,14 @@ const Location: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Hvor vil du gi?</Typography>
-      <Container className={classes.form}>
+      <Container>
+        <Grid 
+        container
+        direction="column"
+        justifyContent="space-between"
+        alignItems="stretch"
+        className={classes.form}>
+          <Grid item>
         <ValidatorForm 
           onSubmit={nextStep}
           onError={(errors) => console.error(errors)}
@@ -62,12 +71,17 @@ const Location: React.FC<Props> = ({
                 : [{ value: "", text: "Ingen lokasjoner" }]
             }
           />
-          <Pager
+        </ValidatorForm>
+        </Grid>
+        <Grid item>
+        <Pager
             onBack={useCallback(() => history.push("/"), [history])}
             onContinue={extendedNextStep}
             continueText={"Kontaktinformasjon"}
+            step={step}
           />
-        </ValidatorForm>
+          </Grid>
+          </Grid>
       </Container>
     </>
   );
