@@ -2,25 +2,29 @@ name: Build and Test .NET API
 
 on:
   push:
-    branches: [ master ]
-    paths: 'GiEnJul/**'
-      
+    branches: [master]
+    paths: "GiEnJul/**"
+
   pull_request:
-    branches: [ master ]
-    paths: 'GiEnJul/**'
+    branches: [master]
+    paths: "GiEnJul/**"
 
   workflow_dispatch:
-  
+
 env:
-  DOTNET_VERSION: '3.1.x'
+  DOTNET_VERSION: "3.1.x"
 
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Get recaptcha secret
+        env:
+          RECAPTCHA_SECRET: ${{ secrets.RECAPTCHA_SECRET }}
 
       - name: Set up . NET Core
         uses: actions/setup-dotnet@v1
@@ -29,9 +33,9 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-      
+
       - name: Build
         run: dotnet build
-      
+
       - name: Test
         run: dotnet test

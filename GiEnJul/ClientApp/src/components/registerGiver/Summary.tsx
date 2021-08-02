@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
+import { useEffect } from "react";
 import { useCallback, useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
@@ -17,8 +18,8 @@ import Pager from "./Pager";
 import useStyles from "./Styles";
 
 interface Props {
-  nextStep: (event: React.FormEvent) => void;
-  prevStep: (event: React.FormEvent) => void;
+  nextStep: () => void;
+  prevStep: () => void;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -29,12 +30,8 @@ interface Props {
   callingback: (e: boolean) => void;
 }
 
-const initState: {
-  viewErrorTrigger: number;
-  validRecaptcha?: boolean;
-} = {
+const initState = {
   viewErrorTrigger: 0,
-  validRecaptcha: true,
 };
 
 type keyValue = {
@@ -71,10 +68,10 @@ const SummaryRegistration: React.FC<Props> = ({
   locationOptions,
   callingback,
 }) => {
+  const apiservice = new ApiService();
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState(initChangesState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
-  const apiservice = new ApiService();
   const { validateRecaptcha } = useRecaptcha("register_giver");
 
   const trigger = (b: boolean) => {
@@ -88,17 +85,29 @@ const SummaryRegistration: React.FC<Props> = ({
     return true;
   };
 
-  const extendedNextStep = (e: any) => {
-    if (!allIsValid() || !validateRecaptcha()) {
+  const extendedNextStep = () => {
+    if (!allIsValid()) {
       return setState((prev) => {
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
       });
     }
-    Submit();
-    nextStep(e);
+    validateRecaptcha().then((response) => {
+      switch (response) {
+        case true:
+          submit();
+          nextStep();
+          break;
+        case false:
+          alert("Invalid verification!");
+          break;
+        default:
+          alert("An error occurred. Please try again.");
+          break;
+      }
+    });
   };
 
-  const Submit = async () => {
+  const submit = async () => {
     await apiservice
       .post(
         "giver",
