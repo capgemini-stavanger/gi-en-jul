@@ -279,22 +279,13 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-<<<<<<< HEAD
         </Grid>
         <Pager
           onContinue={extendedNextStep}
           onBack={prevStep}
           continueText="Fullfør registreringen"
+          step={step}
         />
-=======
-          </Grid>
-          <Pager
-            onContinue={extendedNextStep}
-            onBack={prevStep}
-            continueText="Fullfør registreringen"
-            step={step}
-          />
->>>>>>> 59567ffd264114a3952df7f6713b1e456171b0a2
       </Container>
     </>
   );

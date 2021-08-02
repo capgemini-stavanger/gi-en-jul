@@ -2,25 +2,16 @@ name: Build and Test .NET API
 
 on:
   push:
-<<<<<<< HEAD:.github/workflows/main_backend.yml
     branches: [master]
-    paths: "GiEnJul/**"
+    paths:
+      - "GiEnJul/**"
+      - "!GiEnJul/ClientApp/"
 
   pull_request:
     branches: [master]
-    paths: "GiEnJul/**"
-=======
-    branches: [ master ]
-    paths: 
-      - 'GiEnJul/**'
-      - '!GiEnJul/ClientApp/'
-      
-  pull_request:
-    branches: [ master ]
-    paths: 
-      - 'GiEnJul/**'
-      - '!GiEnJul/ClientApp/'
->>>>>>> 59567ffd264114a3952df7f6713b1e456171b0a2:.github/workflows/CI_backend.yml
+    paths:
+      - "GiEnJul/**"
+      - "!GiEnJul/ClientApp/"
 
   workflow_dispatch:
 
