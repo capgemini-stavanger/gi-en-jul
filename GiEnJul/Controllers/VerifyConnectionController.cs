@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using GiEnJul.Exceptions;
-using GiEnJul.Utilities;
+using GiEnJul.Helpers;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
