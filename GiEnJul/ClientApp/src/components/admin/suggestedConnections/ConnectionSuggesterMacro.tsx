@@ -31,6 +31,7 @@ const initialState: ConnectionSuggestionProps = {
 
 const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   location,
+  accessToken,
 }) => {
   const api = new ApiService(accessToken);
 
