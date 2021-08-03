@@ -5,7 +5,7 @@ const information: string[] = [
   "Før du melder inn en familie må familien ha sag ja til å bli med, og du har all informasjon som trengs nedenfor.",
   "Dersom du har en ID på familien (som PID), må det legges inn.",
   "Mange givere synes det er fint å kunne kjøpe inn gaver, og ikke bare gavekort.",
-  "Gaveønskene skal ligge på rundt 300 per person. Kom gjerne med flere ønsker, så har giveren noe å velge mellom.",
+  "Gaveønskene skal ligge på rundt 300 kr per person. Kom gjerne med flere ønsker, så har giveren noe å velge mellom.",
   "Fyll inn størrelser dersom de ønsker klær eller sko.",
   "Alderstilpasset gave betyr at giveren selv kan finne noe som passer til alderen.",
   "Skriv så detaljerte ønsker som mulig -dersom barnet ikke har ønsker kan du skrive noe om interesser, som fotball, hobbyting, turn osv.",
