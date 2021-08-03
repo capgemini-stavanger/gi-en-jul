@@ -116,8 +116,12 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       });
   };
 
-  const handleClose = () => setSnackbarContent(initialSnackBar);
-
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarContent(initialSnackBar);
+  };
   return (
     <>
       <Grid container direction="row" justifyContent="center">
@@ -156,7 +160,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       </Grid>
       <Snackbar
         open={snackbarContent.open}
-        autoHideDuration={3000}
+        autoHideDuration={2000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
