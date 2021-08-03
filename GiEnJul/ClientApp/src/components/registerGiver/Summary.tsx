@@ -74,10 +74,6 @@ const SummaryRegistration: React.FC<Props> = ({
   const [changesState, setChangesState] = useState(initChangesState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
 
-  const trigger = (b: boolean) => {
-    callingback(b);
-  };
-
   const allIsValid = () => {
     for (let isValid in isValidsState) {
       if (!isValidsState[isValid]) return false;
@@ -113,12 +109,12 @@ const SummaryRegistration: React.FC<Props> = ({
       )
       .then((response) => {
         if (response.status === 201) {
-          trigger(true);
+          callingback(true);
         }
       })
       .catch((errorStack) => {
-        console.error(errorStack);
-        trigger(false);
+        callingback(false);
+        console.log(errorStack);
       });
   };
 

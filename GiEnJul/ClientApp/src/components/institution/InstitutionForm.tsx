@@ -112,14 +112,17 @@ const initValidFormState: ValidFormEntry = {
   contactPhoneNumber: false,
   contactEmail: false,
 };
+interface props {
+  accessToken: string;
+}
 
-const RegistrationForm = () => {
+const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
   const [formDataState, setFormDataState] = useState(initFormDataState());
   const [validFormState, setValidFormState] = useState({
     ...initValidFormState,
   });
-  const apiservice = new ApiService();
+  const apiservice = new ApiService(accessToken);
 
   const addPerson = () => {
     setFormDataState((prev) => ({
@@ -431,7 +434,7 @@ const RegistrationForm = () => {
                   foods={DINNERS}
                   required
                   header={"Middag"}
-                  inputLabel="Annen middag"
+                  inputLabel="Annen middag (ikke fisk)"
                   setIsValid={getValiditySetter("dinner")}
                   name="dinner"
                 />
