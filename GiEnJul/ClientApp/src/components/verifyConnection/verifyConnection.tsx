@@ -1,8 +1,7 @@
-﻿import { makeStyles, Typography } from "@material-ui/core";
+﻿import { Typography } from "@material-ui/core";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
-import { Spinner } from "reactstrap";
 import LoadingPage from "../../common/components/LoadingPage";
 import ApiService from "../../common/functions/apiServiceClass";
 
@@ -39,11 +38,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
       </Typography>
     );
   else {
-    return (
-      <>
-        <LoadingPage />
-      </>
-    );
+    return <LoadingPage />;
   }
 };
 export default VerifyConnection;
