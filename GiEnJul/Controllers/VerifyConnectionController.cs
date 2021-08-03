@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
-    [Route("verify")]
+    [Route("api/verify")]
     [ApiController]
     public class VerifyConnectionController : ControllerBase
     {
