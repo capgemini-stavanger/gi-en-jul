@@ -51,20 +51,30 @@ namespace GiEnJul.Controllers
             {
                 throw new InvalidConnectionCreationException();
             }
-            
+
+            if (await _connectionRepository.ConnectionExists(giver, recipient))
+            {
+                throw new AlreadyConnectedException("This connection is already created");
+            }
+
             (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
 
             try
             {
                 giver.HasConfirmedMatch = true;
                 await _giverRepository.InsertOrReplaceAsync(giver);
-                
+
                 recipient.HasConfirmedMatch = true;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
             }
             catch (InvalidConnectionCreationException e)
             {
                 _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
+                throw e;
+            }
+            catch (AlreadyConnectedException e)
+            {
+                _log.Error(e, "Connection between {@0} and {@1} is already registered", giver, recipient);
                 throw e;
             }
             catch (Exception e)
@@ -81,7 +91,9 @@ namespace GiEnJul.Controllers
             }
         }
 
-        
+
+
+
 
     }
 }
