@@ -84,6 +84,15 @@ namespace GiEnJul.Controllers
             using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
             return wb.Deliver("leveranse_liste.xlsx");
         }
+        [HttpGet("completed/{location}")]
+        [Authorize(Policy = "ReadConnection")]
+        public async Task<IEnumerable<Entities.Connection>> GetConnectionsByLocation(string location)
+        {
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
+            return connections;
+        }
+
         [HttpPost]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
