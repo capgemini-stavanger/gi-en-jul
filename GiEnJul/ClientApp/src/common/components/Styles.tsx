@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   smallLogo: {
     height: "40px",
     width: "40px",
-    margin: theme.spacing(-1.5)
+    margin: theme.spacing(-1.5),
   },
   drawerMenu: {
     backgroundColor: theme.palette.secondary.light,
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   navContainer: {
-    backgroundColor: "transparent",
+    backgroundColor: "rgba(0, 0, 0, 0)",
     position: "fixed",
     border: "none",
     boxShadow: "none",
@@ -47,12 +47,12 @@ const useStyles = makeStyles((theme) => ({
   toolBar: {
     justifyContent: "space-between",
     marginTop: theme.spacing(1),
-    [theme.breakpoints.up("tablet")]:{
-      margin: theme.spacing(2)
-    }, 
-    [theme.breakpoints.up("laptop")]:{
-      margin: theme.spacing(3)
-    }, 
+    [theme.breakpoints.up("tablet")]: {
+      margin: theme.spacing(2),
+    },
+    [theme.breakpoints.up("laptop")]: {
+      margin: theme.spacing(3),
+    },
   },
   navIcon: {
     color: theme.palette.primary.light,
@@ -66,26 +66,26 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
-    [theme.breakpoints.up("tablet")]:{
-      padding: theme.spacing(1.5,2,1.5,2),
-    }, 
-    [theme.breakpoints.up("laptop")]:{
-      padding: theme.spacing(2,2.5,2,2.5),
+    [theme.breakpoints.up("tablet")]: {
+      padding: theme.spacing(1.5, 2, 1.5, 2),
     },
-    [theme.breakpoints.up("tablet")]:{
-      padding: theme.spacing(1.5,2,1.5,2),
-    }, 
-    [theme.breakpoints.up("laptop")]:{
-      padding: theme.spacing(2,2.5,2,2.5),
+    [theme.breakpoints.up("laptop")]: {
+      padding: theme.spacing(2, 2.5, 2, 2.5),
+    },
+    [theme.breakpoints.up("tablet")]: {
+      padding: theme.spacing(1.5, 2, 1.5, 2),
+    },
+    [theme.breakpoints.up("laptop")]: {
+      padding: theme.spacing(2, 2.5, 2, 2.5),
     },
   },
-  footerText:{
-    textAlign: 'center',
+  footerText: {
+    textAlign: "center",
     color: theme.palette.primary.main,
     padding: theme.spacing(3),
     fontSize: "100%",
     fontWeight: 500,
-  }
+  },
 }));
 
 export default useStyles;
