@@ -36,6 +36,11 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingBottom: 0,
       paddingTop: 0,
     },
+    accordionContainer:{
+      marginBottom: theme.spacing(1), 
+      border: "0.05px solid",
+      borderColor: "#d3d3d354",
+    },
   })
 );
 

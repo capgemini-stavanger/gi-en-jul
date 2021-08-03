@@ -1,6 +1,7 @@
 import { Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
+import ScrollToTop from "../../common/components/ScrollToTop";
 import CompletedMacro from "./completed/Macro";
 import OverviewMacro from "./overview/OverviewMacro";
 import ConnectionSuggesterMacro from "./suggestedConnections/ConnectionSuggesterMacro";
@@ -38,6 +39,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
       </TabContext>
+      <ScrollToTop maxPagePosition={300}/>
     </>
   );
 };
