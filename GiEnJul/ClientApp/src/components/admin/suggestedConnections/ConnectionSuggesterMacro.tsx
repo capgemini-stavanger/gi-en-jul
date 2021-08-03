@@ -5,6 +5,7 @@ import RecipientSuggestions from "./RecipientTable";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
+import useStyles from "../common/Styles";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -34,6 +35,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   accessToken,
 }) => {
   const api = new ApiService(accessToken);
+  const classes = useStyles();
 
   const [state, setState] = useState(initialState);
 
@@ -131,7 +133,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             variant="contained"
             color="secondary"
             disabled={state.refreshing}
-            style={{ marginTop: "15px" }}
+            className={classes.buttonRefresh}
           >
             <RefreshIcon />
           </Button>

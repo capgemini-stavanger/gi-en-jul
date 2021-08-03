@@ -6,6 +6,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { GiverType } from "./Types";
 import { Group } from "@material-ui/icons";
+import useStyles from "../common/Styles";
 
 type GiverRowProps = {
   giver: GiverType;
@@ -52,6 +53,7 @@ type TableProps = {
 
 export default function GiverSuggestions(props: TableProps) {
   const [selected, setSelected] = useState<string>("");
+  const classes = useStyles();
 
   return (
     <Table aria-label="Mottakere" className="col-5">
@@ -61,7 +63,7 @@ export default function GiverSuggestions(props: TableProps) {
           <TableCell>Ønsket størrelse</TableCell>
         </TableRow>
       </TableHead>
-      <TableBody style={{ cursor: "pointer" }}>
+      <TableBody className={classes.clickableTableBody}>
         {props.givers.map((giver) => (
           <Row
             key={giver.rowKey}

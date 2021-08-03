@@ -14,6 +14,7 @@ import { RecipientType } from "./Types";
 import { getGender } from "../../../common/functions/GetGender";
 import { capitalize } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
+import useStyles from "../common/Styles";
 
 type RecipientRowProps = {
   recipient: RecipientType;
@@ -24,6 +25,7 @@ type RecipientRowProps = {
 function Row(props: RecipientRowProps) {
   const { recipient } = props;
   const [open, setOpen] = React.useState(false);
+  const classes = useStyles();
 
   return (
     <>
@@ -47,7 +49,7 @@ function Row(props: RecipientRowProps) {
         <TableCell>{recipient.institution}</TableCell>
       </TableRow>
       <TableRow style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell className={classes.unpaddedTableCell} colSpan={6}>
           <Collapse in={open} timeout="auto">
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
@@ -118,6 +120,7 @@ type TableProps = {
 
 export default function RecipientSuggestions(props: TableProps) {
   const [selectedRow, setSelectedRow] = useState<string>("");
+  const classes = useStyles();
 
   return (
     <Table aria-label="Mottakere" className="col-5">
@@ -129,7 +132,7 @@ export default function RecipientSuggestions(props: TableProps) {
           <TableCell>Institusjon</TableCell>
         </TableRow>
       </TableHead>
-      <TableBody style={{ cursor: "pointer" }}>
+      <TableBody className={classes.clickableTableBody}>
         {props.recipients.map((recipient) => (
           <Row
             key={recipient.rowKey}
