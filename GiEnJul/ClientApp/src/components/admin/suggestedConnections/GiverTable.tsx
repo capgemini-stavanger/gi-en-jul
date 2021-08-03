@@ -47,7 +47,7 @@ function Row(props: GiverRowProps) {
 }
 
 type TableProps = {
-  selectGiver: (newSelected: [string, string]) => void;
+  selectGiver: (newSelected: GiverType) => void;
   givers: GiverType[];
 };
 
@@ -71,7 +71,7 @@ export default function GiverSuggestions(props: TableProps) {
             selected={selected === giver.rowKey}
             onClick={() => {
               setSelected(giver.rowKey);
-              props.selectGiver([giver.rowKey, giver.partitionKey]);
+              props.selectGiver(giver);
             }}
           />
         ))}

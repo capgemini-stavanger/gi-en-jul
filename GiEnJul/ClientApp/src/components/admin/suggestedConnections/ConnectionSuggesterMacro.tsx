@@ -1,4 +1,11 @@
-import { Button, Container, Grid } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  Grid,
+  Slide,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
@@ -6,6 +13,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
+import MuiAlert from "@material-ui/lab/Alert";
+import { TransitionProps } from "@material-ui/core/transitions";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -15,19 +24,26 @@ interface ConnectionSuggesterMacro {
 type ConnectionSuggestionProps = {
   givers: GiverType[];
   recipients: RecipientType[];
-  selectedGiver: [string, string];
-  selectedRecipient: [string, string];
+  selectedGiver: GiverType;
+  selectedRecipient: RecipientType;
   refreshing: boolean;
 };
-
-const initialSelection: [string, string] = ["", ""];
 
 const initialState: ConnectionSuggestionProps = {
   givers: [],
   recipients: [],
-  selectedRecipient: initialSelection,
-  selectedGiver: initialSelection,
+  selectedRecipient: {} as RecipientType,
+  selectedGiver: {} as GiverType,
   refreshing: false,
+};
+
+const initialSnackBar = {
+  textContent: "",
+  open: false,
+};
+
+const slideTransition = (props: TransitionProps) => {
+  return <Slide {...props} direction="up" />;
 };
 
 const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
@@ -38,6 +54,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   const classes = useStyles();
 
   const [state, setState] = useState(initialState);
+  const [snackbarContent, setSnackbarContent] = useState(initialSnackBar);
 
   const getSuggestedRecipients = () => {
     setState((prev) => ({ ...prev, refreshing: true }));
@@ -48,11 +65,9 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .then((response) => {
         if (response.status == 200) {
           setState({
-            ...state,
+            ...initialState,
             recipients: response.data,
             refreshing: false,
-            selectedGiver: initialSelection,
-            selectedRecipient: initialSelection,
           });
         } else {
           alert("Kunne ikke hente familier, prøv igjen");
@@ -79,11 +94,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       });
   }, [state.recipients]);
 
-  const updateSelectedRecipient = (newSelected: [string, string]): void => {
+  const updateSelectedRecipient = (newSelected: RecipientType): void => {
     setState((prev) => ({ ...prev, selectedRecipient: newSelected }));
   };
 
-  const updateSelectedGiver = (newSelected: [string, string]): void => {
+  const updateSelectedGiver = (newSelected: GiverType): void => {
     setState((prev) => ({ ...prev, selectedGiver: newSelected }));
   };
 
@@ -92,14 +107,16 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: state.selectedGiver[0],
-          GiverPartitionKey: state.selectedGiver[1],
-          RecipientRowKey: state.selectedRecipient[0],
-          RecipientPartitionKey: state.selectedRecipient[1],
+          GiverRowKey: state.selectedGiver.rowKey,
+          GiverPartitionKey: state.selectedGiver.partitionKey,
+          RecipientRowKey: state.selectedRecipient.rowKey,
+          RecipientPartitionKey: state.selectedRecipient.partitionKey,
         })
       )
       .then((response) => {
         if (response.status == 200) {
+          const snackbarText = ` Foreslo kobling til ${state.selectedGiver.fullName} med familie: ${state.selectedRecipient.familyId}`;
+          setSnackbarContent({ textContent: snackbarText, open: true });
           getSuggestedRecipients();
         } else {
           alert("Kunne ikke sende kobling, prøv igjen");
@@ -107,6 +124,12 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       });
   };
 
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarContent(initialSnackBar);
+  };
   return (
     <>
       <Grid container direction="row" justifyContent="center">
@@ -120,12 +143,12 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             variant="contained"
             color="primary"
             disabled={
-              state.selectedGiver === initialSelection ||
-              state.selectedRecipient === initialSelection
+              state.selectedGiver === initialState.selectedGiver ||
+              state.selectedRecipient === initialState.selectedRecipient
             }
             onClick={submitConnection}
           >
-            Koble sammen
+            <Typography>Koble sammen</Typography>
           </Button>
           <Button
             onClick={getSuggestedRecipients}
@@ -143,6 +166,17 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           givers={state.givers}
         />
       </Grid>
+      <Snackbar
+        open={snackbarContent.open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        TransitionComponent={slideTransition}
+      >
+        <MuiAlert severity="success" variant="filled">
+          {snackbarContent.textContent}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
