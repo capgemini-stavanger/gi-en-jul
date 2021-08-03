@@ -2,6 +2,7 @@ import { Button, Container, Grid, Typography } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
 import { useState } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
@@ -15,8 +16,8 @@ import Pager from "./Pager";
 import useStyles from "./Styles";
 
 interface Props {
-  nextStep: (event: React.FormEvent) => void;
-  prevStep: (event: React.FormEvent) => void;
+  nextStep: () => void;
+  prevStep: () => void;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handlefullnameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleEmailChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -67,27 +68,38 @@ const SummaryRegistration: React.FC<Props> = ({
   callingback,
   step,
 }) => {
+  const apiservice = new ApiService();
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState(initChangesState);
   const [isValidsState, setIsValidsState] = useState(initIsValidsState);
-  const apiservice = new ApiService();
 
-  const extendedNextStep = (e: any) => {
+  const allIsValid = () => {
     for (let isValid in isValidsState) {
-      if (isValidsState[isValid]) continue;
+      if (!isValidsState[isValid]) return false;
+    }
+    return true;
+  };
+
+  const extendedNextStep = () => {
+    if (!allIsValid()) {
       return setState((prev) => {
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
       });
     }
-    Submit();
-    nextStep(e);
+    submit();
+    nextStep();
   };
 
-  const Submit = async () => {
+  const submit = async () => {
+    if (!executeRecaptcha) return;
+    let recaptchaToken = await executeRecaptcha("register_giver");
+    recaptchaToken += "d";
     await apiservice
       .post(
         "giver",
         JSON.stringify({
+          recaptchaToken,
           location: values.location,
           fullname: values.fullname,
           email: values.email,

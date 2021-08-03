@@ -21,6 +21,8 @@ type ConnectionSuggestionProps = {
   refreshing: boolean;
 };
 
+const initialSelection: [string, string] = ["", ""];
+
 const initialState: ConnectionSuggestionProps = {
   givers: [],
   recipients: [],
