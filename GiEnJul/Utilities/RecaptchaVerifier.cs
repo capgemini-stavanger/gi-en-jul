@@ -14,12 +14,12 @@ namespace GiEnJul.Utilities
 
     public class RecaptchaVerifier : IRecaptchaVerifier
     {
+        private readonly string _secret;
+
         public RecaptchaVerifier(ISettings settings)
         {
             _secret = settings.RecaptchaSecret;
         }
-
-        private readonly string _secret;
 
         public async Task<GetRecaptchaDto> VerifyAsync(string token)
         {

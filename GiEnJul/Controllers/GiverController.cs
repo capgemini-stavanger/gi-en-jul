@@ -40,7 +40,6 @@ namespace GiEnJul.Controllers
         [HttpPost]
         public async Task<ActionResult<PostGiverResultDto>> PostAsync([FromBody] PostGiverDto giverDto)
         {
-
             var recaptchaDto = await _recaptchaVerifier.VerifyAsync(giverDto.RecaptchaToken);
             if (!recaptchaDto.Success)
             {
