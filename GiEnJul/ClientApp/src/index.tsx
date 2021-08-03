@@ -9,6 +9,7 @@ import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import configureStore from "./store/configureStore";
 import { createTheme, ThemeProvider } from "@material-ui/core";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
 
 // Create browser history to use in the Redux store
@@ -22,6 +23,7 @@ const store = configureStore(history);
 const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
 const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
 const apiurl: string = process.env.REACT_APP_API_URL!;
+const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY!;
 
 declare module "@material-ui/core/styles/createBreakpoints" {
   interface BreakpointOverrides {
@@ -116,33 +118,32 @@ export const theme = createTheme({
         justifyContent: "center",
       },
     },
-    MuiAccordion:{
-      root:{
-        overflow:"hidden",
+    MuiAccordion: {
+      root: {
+        overflow: "hidden",
       },
-      rounded:{
+      rounded: {
         borderBottomLeftRadius: "2em",
-        borderBottomRightRadius: "2em", 
+        borderBottomRightRadius: "2em",
         borderTopLeftRadius: "2em",
-        borderTopRightRadius: "2em", 
+        borderTopRightRadius: "2em",
         borderRadius: "2em",
         "&:last-child": {
           borderBottomLeftRadius: "2em",
-          borderBottomRightRadius: "2em", 
+          borderBottomRightRadius: "2em",
           borderTopLeftRadius: "2em",
-          borderTopRightRadius: "2em", 
-          borderRadius: "2em"
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
         },
         "&:first-child": {
           borderBottomLeftRadius: "2em",
-          borderBottomRightRadius: "2em", 
+          borderBottomRightRadius: "2em",
           borderTopLeftRadius: "2em",
-          borderTopRightRadius: "2em", 
-          borderRadius: "2em"
-          }
-          
-      }
-    }
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
+        },
+      },
+    },
   },
 });
 
@@ -155,9 +156,11 @@ ReactDOM.render(
         redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
         audience={apiurl}
       >
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
+        <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </GoogleReCaptchaProvider>
       </Auth0Provider>
     </ThemeProvider>
   </Provider>,

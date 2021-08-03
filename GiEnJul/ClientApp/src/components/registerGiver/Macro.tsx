@@ -34,16 +34,16 @@ const RegistrationMacro = () => {
   }, []);
 
   // go back to previous step
-  const prevStep = (event: React.FormEvent) => {
-    event.preventDefault();
+  const prevStep = (event?: React.FormEvent) => {
+    event?.preventDefault();
     setState((prev) => {
       return { ...prev, step: prev.step - 1 };
     });
   };
 
   // proceed to the next step
-  const nextStep = (event: React.FormEvent) => {
-    event.preventDefault();
+  const nextStep = (event?: React.FormEvent) => {
+    event?.preventDefault();
     setState((prev) => {
       return { ...prev, step: prev.step + 1 };
     });
@@ -140,10 +140,9 @@ const RegistrationMacro = () => {
         return null;
     }
   };
-
   return (
     <>
-    <NavBar/>
+      <NavBar />
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
           <Confirmation
