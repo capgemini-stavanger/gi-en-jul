@@ -11,7 +11,7 @@ const How = () => {
     <Container id="how" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>
-          Hvordan fungerer Gi en jul?
+          Hvordan fungerer gi en jul?
         </Typography>
       </div>
       <Grid container justifyContent="center">

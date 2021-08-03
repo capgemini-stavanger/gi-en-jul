@@ -8,10 +8,10 @@ const Companies = () => {
   return (
     <Container id="companies" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
-        <Typography className={classes.textHeadline}>For bedrifter</Typography>
+      <Typography className={classes.textHeadline}>For bedrifter</Typography>
       </div>
       <Typography className={classes.contactContent}>
-        Få med kolleger og gi en jul, og registrer dere som givere. Gi et
+        Få med kolleger og Gi en jul, og registrer dere som givere. Gi et
         pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi
         gavekort på opplevelser som vi putter oppi som ekstragave i juleeskene.
         Gi noe annet vi kan putte i eskene, som konfekt, godteri og lignende.

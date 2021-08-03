@@ -25,7 +25,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
           </Typography>
           <Typography className={classes.paragraph}>
             Ditt bidrag er svært betydningsfullt. Vi har nå registrert deg som
-            giver til årets Gi en jul og har sendt en oppsummering av din
+            giver til årets Gi en Jul og har sendt en oppsummering av din
             registrering til
           </Typography>
           <br />
