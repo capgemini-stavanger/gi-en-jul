@@ -70,6 +70,25 @@ namespace GiEnJul.Infrastructure
             //Connection mapping
             CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
                 .ForMember(dest => dest.Check, opt => opt.Ignore());
+
+            CreateMap<Entities.Connection, Models.Giver>()
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.GiverFullName))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.GiverEmail))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.GiverPhoneNumber))
+                .ForMember(dest => dest.MatchedRecipient, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1))) //Rowkey is "rid_gid"
+                .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.GiverLocation));
+
+            CreateMap<Entities.Connection, Models.Recipient>()
+                .ForMember(dest => dest.ContactFullName, opt => opt.MapFrom(src => src.SubmitterFullName))
+                .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.SubmitterEmail))
+                .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.SubmitterPhoneNumber))
+                .ForMember(dest => dest.MatchedGiver, opt => opt.MapFrom(src => src.RowKey.Substring(0, src.RowKey.IndexOf('_') - 1))) //same as above
+                .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ReceiverLocation))
+                .ForMember(dest => dest.FamilyMembers, act => act.Ignore());
         }
     }
 }
