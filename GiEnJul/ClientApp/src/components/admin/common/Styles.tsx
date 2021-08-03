@@ -26,6 +26,11 @@ import { green, red } from "@material-ui/core/colors";
     smallColumn: {
       flexBasis: "15%",
     },
+    accordionContainer:{
+      marginBottom: theme.spacing(1), 
+      border: "0.05px solid",
+      borderColor: "#d3d3d354",
+    },
   })
 );
 
