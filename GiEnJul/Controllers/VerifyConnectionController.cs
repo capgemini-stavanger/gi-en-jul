@@ -47,14 +47,14 @@ namespace GiEnJul.Controllers
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
 
-            if (!ConnectionHelper.CanConnect(giver, recipient))
-            {
-                throw new InvalidConnectionCreationException();
-            }
-
             if (await _connectionRepository.ConnectionExists(giver, recipient))
             {
                 throw new AlreadyConnectedException("This connection is already created");
+            }
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                throw new InvalidConnectionCreationException();
             }
 
             (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
@@ -90,10 +90,5 @@ namespace GiEnJul.Controllers
                 throw e;
             }
         }
-
-
-
-
-
     }
 }
