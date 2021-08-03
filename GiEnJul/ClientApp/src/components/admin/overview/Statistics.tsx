@@ -1,7 +1,8 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Card, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
 import { FiberManualRecord } from "@material-ui/icons";
+import useStyles from "./Styles";
 
 type IStatistics = {
   givers: GiverType[] | [];
@@ -24,33 +25,59 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
   });
   const giversWithoutRecipient: number = totalGivers - suggestedMatch;
   const recipientsWithoutGiver: number = totalRecipints - suggestedMatch;
+  const classes = useStyles();
 
   return (
     <>
-      <Grid 
-      container
-      direction="column"
-      justifyContent="flex-start"
-      alignItems="center">
-        <Grid item>
-          <Typography>Antall familier:</Typography>
-          <Typography>
-            Totalt: {totalRecipints.toString()} <br />
-            Uten giver: {recipientsWithoutGiver.toString()}
+      <Grid container direction="column" justifyContent="flex-start" className={classes.statisticsContainer}>
+        <Grid item className={classes.infoContainer}>
+          <Typography  variant="h4">
+            {" "}
+            {totalRecipints.toString()} familier
+          </Typography>
+          <Typography className={classes.textWarning}>
+            {" "}
+            {recipientsWithoutGiver.toString()} uten giver
           </Typography>
         </Grid>
-        <Grid item>
-          <Typography>Antall givere:</Typography>
-          <Typography>
-            Totalt: {totalGivers.toString()} <br />
-            Uten giver: {giversWithoutRecipient.toString()}
+        <Grid item className={classes.infoContainer}>
+          <Typography variant="h4"> {totalGivers.toString()} givere</Typography>
+          <Typography className={classes.textWarning}>
+            {" "}
+            {giversWithoutRecipient.toString()} uten familie
           </Typography>
         </Grid>
-        <Grid item>
-          <Typography>Koblinger:</Typography>
+        <Grid item className={classes.infoContainer}>
+          <Typography  variant="h4">Koblinger:</Typography>
           <Typography>
-            <FiberManualRecord /> {suggestedMatch.toString()} <br />
-            <FiberManualRecord /> {confirmedMatch.toString()}
+            <FiberManualRecord fontSize="large" style={{ color: "#49a591" }} />{" "}
+            {suggestedMatch.toString()}
+            <FiberManualRecord
+              fontSize="large"
+              style={{ color: "#f4cf8a" }}
+            />{" "}
+            {confirmedMatch.toString()}
+          </Typography>
+        </Grid>
+        <Grid item className={classes.explanationContainer}>
+            <Typography variant="h4">Forklaring</Typography>
+          <Typography>
+            <FiberManualRecord fontSize="large" color="primary" /> = bekreftet
+            kobling
+          </Typography>
+          <br />
+          <Typography>
+            <FiberManualRecord
+              fontSize="large"
+              //not possible to use color="warning"
+              style={{ color: "#f4cf8a" }}
+            />{" "}
+            = foreslått kobling
+          </Typography>
+          <br />
+          <Typography>
+            <FiberManualRecord fontSize="large" color="error" /> = ikke koblet
+            enda
           </Typography>
         </Grid>
       </Grid>

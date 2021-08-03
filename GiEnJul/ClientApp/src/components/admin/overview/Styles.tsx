@@ -30,8 +30,23 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
     },
   },
-  searchField:{
+  searchField: {
     marginBottom: theme.spacing(1),
+  },
+  textWarning: {
+    fontWeight: 400,
+    color: theme.palette.error.main,
+    fontSize: "130%",
+  },
+  statisticsContainer: {
+    position: "fixed",
+  },
+  infoContainer: {
+    margin: theme.spacing(3),
+  },
+  explanationContainer: {
+    margin: theme.spacing(3),
+    marginTop: theme.spacing(10),
   },
 }));
 
