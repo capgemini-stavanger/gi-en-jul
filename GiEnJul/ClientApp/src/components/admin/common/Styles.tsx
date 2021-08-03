@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
     unpaddedTableCell: {
       paddingBottom: 0,
       paddingTop: 0,
+    },
     accordionContainer:{
       marginBottom: theme.spacing(1), 
       border: "0.05px solid",
