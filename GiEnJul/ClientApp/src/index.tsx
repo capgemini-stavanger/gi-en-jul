@@ -117,6 +117,9 @@ export const theme = createTheme({
       },
     },
     MuiAccordion:{
+      root:{
+        overflow:"hidden",
+      },
       rounded:{
         borderBottomLeftRadius: "2em",
         borderBottomRightRadius: "2em", 
@@ -137,6 +140,7 @@ export const theme = createTheme({
           borderTopRightRadius: "2em", 
           borderRadius: "2em"
           }
+          
       }
     }
   },
