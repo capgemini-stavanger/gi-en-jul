@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Snackbar } from "@material-ui/core";
+import { Button, Container, Grid, Slide, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
@@ -7,6 +7,7 @@ import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
 import MuiAlert from "@material-ui/lab/Alert";
+import { TransitionProps } from "@material-ui/core/transitions";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -34,6 +35,10 @@ const initialState: ConnectionSuggestionProps = {
 const initialSnackBar = {
   textContent: "",
   open: false,
+};
+
+const slideTransition = (props: TransitionProps) => {
+  return <Slide {...props} direction="up" />;
 };
 
 const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
@@ -163,6 +168,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         autoHideDuration={2000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        TransitionComponent={slideTransition}
       >
         <MuiAlert severity="success" variant="filled">
           {snackbarContent.textContent}
