@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
@@ -6,6 +6,7 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
+import MuiAlert from "@material-ui/lab/Alert";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -15,19 +16,22 @@ interface ConnectionSuggesterMacro {
 type ConnectionSuggestionProps = {
   givers: GiverType[];
   recipients: RecipientType[];
-  selectedGiver: [string, string];
-  selectedRecipient: [string, string];
+  selectedGiver: GiverType;
+  selectedRecipient: RecipientType;
   refreshing: boolean;
 };
-
-const initialSelection: [string, string] = ["", ""];
 
 const initialState: ConnectionSuggestionProps = {
   givers: [],
   recipients: [],
-  selectedRecipient: initialSelection,
-  selectedGiver: initialSelection,
+  selectedRecipient: {} as RecipientType,
+  selectedGiver: {} as GiverType,
   refreshing: false,
+};
+
+const initialSnackBar = {
+  textContent: "",
+  open: false,
 };
 
 const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
@@ -38,6 +42,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   const classes = useStyles();
 
   const [state, setState] = useState(initialState);
+  const [snackbarContent, setSnackbarContent] = useState(initialSnackBar);
 
   const getSuggestedRecipients = () => {
     setState((prev) => ({ ...prev, refreshing: true }));
@@ -51,8 +56,8 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             ...state,
             recipients: response.data,
             refreshing: false,
-            selectedGiver: initialSelection,
-            selectedRecipient: initialSelection,
+            selectedGiver: {} as GiverType,
+            selectedRecipient: {} as RecipientType,
           });
         } else {
           alert("Kunne ikke hente familier, prøv igjen");
@@ -79,11 +84,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       });
   }, [state.recipients]);
 
-  const updateSelectedRecipient = (newSelected: [string, string]): void => {
+  const updateSelectedRecipient = (newSelected: RecipientType): void => {
     setState((prev) => ({ ...prev, selectedRecipient: newSelected }));
   };
 
-  const updateSelectedGiver = (newSelected: [string, string]): void => {
+  const updateSelectedGiver = (newSelected: GiverType): void => {
     setState((prev) => ({ ...prev, selectedGiver: newSelected }));
   };
 
@@ -92,20 +97,24 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: state.selectedGiver[0],
-          GiverPartitionKey: state.selectedGiver[1],
-          RecipientRowKey: state.selectedRecipient[0],
-          RecipientPartitionKey: state.selectedRecipient[1],
+          GiverRowKey: state.selectedGiver.rowKey,
+          GiverPartitionKey: state.selectedGiver.partitionKey,
+          RecipientRowKey: state.selectedRecipient.rowKey,
+          RecipientPartitionKey: state.selectedRecipient.partitionKey,
         })
       )
       .then((response) => {
         if (response.status == 200) {
+          const snackbarText = ` Foreslo kobling til ${state.selectedGiver.fullName} med familie: ${state.selectedRecipient.familyId}`;
+          setSnackbarContent({ textContent: snackbarText, open: true });
           getSuggestedRecipients();
         } else {
           alert("Kunne ikke sende kobling, prøv igjen");
         }
       });
   };
+
+  const handleClose = () => setSnackbarContent(initialSnackBar);
 
   return (
     <>
@@ -120,8 +129,8 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             variant="contained"
             color="primary"
             disabled={
-              state.selectedGiver === initialSelection ||
-              state.selectedRecipient === initialSelection
+              state.selectedGiver === ({} as GiverType) ||
+              state.selectedRecipient === ({} as RecipientType)
             }
             onClick={submitConnection}
           >
@@ -143,6 +152,16 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           givers={state.givers}
         />
       </Grid>
+      <Snackbar
+        open={snackbarContent.open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <MuiAlert severity="success" variant="filled">
+          {snackbarContent.textContent}
+        </MuiAlert>
+      </Snackbar>
     </>
   );
 };
