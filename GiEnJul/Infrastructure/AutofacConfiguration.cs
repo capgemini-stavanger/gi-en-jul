@@ -2,6 +2,7 @@
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
@@ -25,6 +26,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
             builder.RegisterType<AutoIncrementRepository>().As<IAutoIncrementRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
+            builder.RegisterType<RecaptchaVerifier>().As<IRecaptchaVerifier>().InstancePerLifetimeScope();
 
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
-using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
@@ -20,27 +19,32 @@ namespace GiEnJul.Controllers
         private readonly IEmailClient _emailClient;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
-        private readonly ISettings _settings;
+        private readonly IRecaptchaVerifier _recaptchaVerifier;
 
-        public GiverController(IGiverRepository giverRepository, IEventRepository eventRepository, IEmailClient emailClient, ILogger log, IMapper mapper, ISettings settings)
+        public GiverController(IGiverRepository giverRepository,
+                               IEventRepository eventRepository,
+                               IEmailClient emailClient,
+                               ILogger log,
+                               IMapper mapper,
+                               IRecaptchaVerifier recaptchaVerifier)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
             _emailClient = emailClient;
             _log = log;
             _mapper = mapper;
-            _settings = settings;
+            _recaptchaVerifier = recaptchaVerifier;
         }
 
         // POST api/<GiverController>
         [HttpPost]
         public async Task<ActionResult<PostGiverResultDto>> PostAsync([FromBody] PostGiverDto giverDto)
         {
-            var recaptcha = new Recaptcha(_settings.RecaptchaSecret, giverDto.RecaptchaToken);
-            var recaptchaDto = await recaptcha.VerifyAsync();
+
+            var recaptchaDto = await _recaptchaVerifier.VerifyAsync(giverDto.RecaptchaToken);
             if (!recaptchaDto.Success)
             {
-                _log.Information($"Repcaptcha denied access based on the following response: {recaptchaDto}");
+                _log.Information($"Recaptcha denied access based on the following response: {recaptchaDto}");
                 return Forbid();
             }
 
