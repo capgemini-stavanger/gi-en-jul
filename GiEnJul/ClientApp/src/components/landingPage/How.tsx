@@ -10,8 +10,8 @@ const How = () => {
   return (
     <Container id="how" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
-        <Typography className={classes.textHeadline}>
-          Hvordan fungerer Gi en jul?
+        <Typography className={classes.textHeadlineHow}>
+          Hvordan fungerer <br/> Gi en jul?
         </Typography>
       </div>
       <Grid container justifyContent="center">
