@@ -1,6 +1,8 @@
-﻿import * as React from "react";
+﻿import { makeStyles } from "@material-ui/core";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
+import { Spinner } from "reactstrap";
 import ApiService from "../../common/functions/apiServiceClass";
 
 interface RouteParameters {
@@ -11,33 +13,52 @@ interface RouteParameters {
 
 interface VerifyConnection extends RouteComponentProps<RouteParameters> {}
 
+const useStyles = makeStyles({
+  midScreen: {
+    textAlign: "center",
+    top: "50%",
+    left: "50%",
+  },
+});
+
 const VerifyConnection: React.FC<VerifyConnection> = () => {
   const { giverRowKey, recipientRowKey, partitionKey } =
     useParams<RouteParameters>();
+  const classes = useStyles();
 
-  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState<boolean | undefined>(undefined);
+
   const apiservice = new ApiService();
 
   useEffect(() => {
     apiservice
       .post(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {})
-      .then((response) => setError(!(response.status == 200)));
+      .then((response) => {
+        setSuccess(response.status == 200);
+      });
   }, []);
 
-  if (error)
+  if (success)
     return (
       <>
-        <h1>
+        <h1 className={classes.midScreen}>Takk til deg!</h1>
+      </>
+    );
+  else if (!success)
+    return (
+      <>
+        <h1 className={classes.midScreen}>
           En feil oppsto, prøv igjen senere. Hvis feilen vedvarer, ta kontakt
           med din lokale Gi En Jul administrator.
         </h1>
       </>
     );
-
-  return (
-    <>
-      <h1>Takk til deg!</h1>
-    </>
-  );
+  else {
+    return (
+      <>
+        <Spinner className={classes.midScreen} />
+      </>
+    );
+  }
 };
 export default VerifyConnection;
