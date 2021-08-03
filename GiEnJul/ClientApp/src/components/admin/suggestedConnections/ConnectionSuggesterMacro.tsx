@@ -1,4 +1,11 @@
-import { Button, Container, Grid, Slide, Snackbar } from "@material-ui/core";
+import {
+  Button,
+  Container,
+  Grid,
+  Slide,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
@@ -21,8 +28,6 @@ type ConnectionSuggestionProps = {
   selectedRecipient: RecipientType;
   refreshing: boolean;
 };
-
-const initialSelection: [string, string] = ["", ""];
 
 const initialState: ConnectionSuggestionProps = {
   givers: [],
@@ -60,11 +65,9 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .then((response) => {
         if (response.status == 200) {
           setState({
-            ...state,
+            ...initialState,
             recipients: response.data,
             refreshing: false,
-            selectedGiver: {} as GiverType,
-            selectedRecipient: {} as RecipientType,
           });
         } else {
           alert("Kunne ikke hente familier, prøv igjen");
@@ -140,12 +143,12 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             variant="contained"
             color="primary"
             disabled={
-              state.selectedGiver === ({} as GiverType) ||
-              state.selectedRecipient === ({} as RecipientType)
+              state.selectedGiver === initialState.selectedGiver ||
+              state.selectedRecipient === initialState.selectedRecipient
             }
             onClick={submitConnection}
           >
-            Koble sammen
+            <Typography>Koble sammen</Typography>
           </Button>
           <Button
             onClick={getSuggestedRecipients}
