@@ -3,9 +3,9 @@ name: Build and Deploy Frontend to Azure
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master]
     paths:
-      - './GiEnJul/ClientApp/**'
+      - 'GiEnJul/ClientApp/**'
 
 jobs:
   build:

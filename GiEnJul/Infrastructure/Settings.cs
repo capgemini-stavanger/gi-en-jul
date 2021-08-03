@@ -7,6 +7,7 @@ namespace GiEnJul.Infrastructure
     {
         public string TableConnectionString { get; }
         public string LogTableName { get; }
+        public string RecaptchaSecret { get; }
         public string ReactAppUri { get; }
         public MailSettings MailSettings { get; }
     }
@@ -23,6 +24,7 @@ namespace GiEnJul.Infrastructure
         public string TableConnectionString => _configuration.GetValue<string>("TableConnectionString");
         public string LogTableName => _configuration.GetValue("LogTableName", "Logs");
         public LogEventLevel LogLevel => _configuration.GetValue("LogLevel", LogEventLevel.Debug);
+        public string RecaptchaSecret => _configuration.GetValue<string>("RecaptchaSecret");
         public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri");
         public MailSettings MailSettings
         {

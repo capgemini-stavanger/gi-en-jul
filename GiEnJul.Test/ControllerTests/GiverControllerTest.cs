@@ -1,7 +1,9 @@
 ﻿using GiEnJul.Clients;
 using GiEnJul.Controllers;
 using GiEnJul.Dtos;
+using GiEnJul.Infrastructure;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -16,6 +18,8 @@ namespace GiEnJul.Test.ControllerTests
         private Mock<IGiverRepository> mockGiverRepo { get; set; }
         private Mock<IEventRepository> mockEventRepo { get; set; }
         private Mock<IEmailClient> mockEmailClient { get; set; }
+        private Mock<ISettings> mockSettings { get; set; }
+        private Mock<IRecaptchaVerifier> mockRecaptchaVerifier { get; set; }
         private GiverController _controller;
 
 
@@ -25,7 +29,11 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo = new Mock<IGiverRepository>();
             mockEventRepo = new Mock<IEventRepository>();
             mockEmailClient = new Mock<IEmailClient>();
-            _controller = new GiverController(mockGiverRepo.Object, mockEventRepo.Object, mockEmailClient.Object, _log, _mapper);
+            mockSettings = new Mock<ISettings>();
+            mockRecaptchaVerifier = new Mock<IRecaptchaVerifier>();
+            _controller = new GiverController(mockGiverRepo.Object, mockEventRepo.Object, mockEmailClient.Object, _log, _mapper, mockRecaptchaVerifier.Object);
+
+            mockRecaptchaVerifier.Setup(x => x.VerifyAsync(It.IsAny<string>())).ReturnsAsync(new GetRecaptchaDto() { Success = true });
         }
 
         //Runs after each test
@@ -55,7 +63,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new KeyNotFoundException());
 
             //Act & Assert
-            await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
         }
@@ -68,7 +76,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new Exception());
 
             //Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
         }
@@ -82,7 +90,7 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
             //Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
@@ -99,7 +107,7 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
 
             //Act
-            var result = await _controller.PostAsync(new PostGiverDto() { Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
+            var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
 
             //Assert
             var actionResult = Assert.IsType<ActionResult<PostGiverResultDto>>(result);
@@ -110,6 +118,20 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+        }
+
+        [Fact]
+        public async Task PostAsync_GiverRepositoryThrowsException_RecaptchaReturnsUnsuccessful()
+        {
+            //Arrange
+            var token = "abcdefg123456";
+            mockRecaptchaVerifier.Setup(x => x.VerifyAsync(It.IsAny<string>())).ReturnsAsync(new GetRecaptchaDto() { Success = false });
+
+            //Act & Assert
+            var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = token, Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
+            Assert.IsType<ForbidResult>(result.Result);
+
+            mockRecaptchaVerifier.Verify(x => x.VerifyAsync(token), Times.Once());
         }
     }
 }

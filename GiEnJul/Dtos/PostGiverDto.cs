@@ -7,6 +7,8 @@ namespace GiEnJul.Dtos
     public class PostGiverDto
     {
         [Required]
+        public string RecaptchaToken { get; set; }
+        [Required]
         [Range(1, 999)]
         public int MaxReceivers { get; set; }
         [Required]

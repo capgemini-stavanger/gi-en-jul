@@ -148,7 +148,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
-        public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromBody] string location, int quantity = 1)
+        public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
