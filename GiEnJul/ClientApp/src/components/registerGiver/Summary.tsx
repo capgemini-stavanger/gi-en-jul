@@ -222,7 +222,7 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-          <Grid container className={classes.inputRow}>
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
