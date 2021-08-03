@@ -76,6 +76,9 @@ export const theme = createTheme({
     info: {
       main: "#d9f0f2", // Light blue
     },
+    success: {
+      main: "#49a591",
+    },
   },
   typography: {
     fontFamily: "Quicksand",
