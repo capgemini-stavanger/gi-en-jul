@@ -48,7 +48,8 @@ export default class NavMenuAdmin extends React.PureComponent<
               <img className={"logo-small"} src={logo}></img>
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
-            <Collapse
+            {/* for the code below to work we have to find a way to pass token to institutionPage and have a working rediger nettside  */}
+            {/* <Collapse
               className="d-sm-inline-flex flex-sm-row-reverse"
               isOpen={this.state.isOpen}
               navbar
@@ -74,7 +75,7 @@ export default class NavMenuAdmin extends React.PureComponent<
                   </NavLink>
                 </NavItem>
               </ul>
-            </Collapse>
+            </Collapse> */}
             <LogOutButton />
           </Container>
         </Navbar>
