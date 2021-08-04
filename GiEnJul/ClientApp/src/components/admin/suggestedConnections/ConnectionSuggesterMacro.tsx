@@ -132,12 +132,17 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   };
   return (
     <>
-      <Grid container direction="row" justifyContent="center">
-        <RecipientSuggestions
-          selectRecipient={updateSelectedRecipient}
-          recipients={state.recipients}
-        />
-        <Container className="col-2">
+      <Grid container direction="row" justifyContent="center" spacing={10}>
+        <Grid item xs={4}>
+          <Typography variant="h4" align="center">
+            Givere
+          </Typography>
+          <GiverSuggestions
+            selectGiver={updateSelectedGiver}
+            givers={state.givers}
+          />
+        </Grid>
+        <Grid item xs={2} alignItems="center" justifyContent="center">
           <Button
             fullWidth
             variant="contained"
@@ -147,6 +152,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
               state.selectedRecipient === initialState.selectedRecipient
             }
             onClick={submitConnection}
+            className={classes.submitButton}
           >
             <Typography>Koble sammen</Typography>
           </Button>
@@ -156,15 +162,20 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             variant="contained"
             color="secondary"
             disabled={state.refreshing}
-            className={classes.buttonRefresh}
+            className={classes.refreshButton}
           >
             <RefreshIcon />
           </Button>
-        </Container>
-        <GiverSuggestions
-          selectGiver={updateSelectedGiver}
-          givers={state.givers}
-        />
+        </Grid>
+        <Grid item xs={5}>
+          <Typography variant="h4" align="center">
+            Familier
+          </Typography>
+          <RecipientSuggestions
+            selectRecipient={updateSelectedRecipient}
+            recipients={state.recipients}
+          />
+        </Grid>
       </Grid>
       <Snackbar
         open={snackbarContent.open}
