@@ -89,35 +89,21 @@ namespace GiEnJul.Controllers
         [HttpGet("connections/{location}")]
         [Authorize(Policy = "ReadConnection")]
         public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
-        //public async Task<IList<(Models.Giver,Models.Recipient)>> GetConnectionsByLocationAsync(string location)
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
-            var completed =  await _connectionRepository.GetAllConnectionsByLocation(eventName);
+            var completed =  await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
             var Dto = _mapper.Map<List<GetConnectionDto>>(completed);
             var suggestedGiver =  await _giverRepository.GetSuggestedAsync(eventName, location);
             var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
             var suggested = new List<GetConnectionDto>();
-            //var suggested = new List<(Models.Giver, Models.Recipient)>();
-
-            var s = new GetConnectionDto();
-      
             foreach (var giver in suggestedGiver)
             {
-               
-
-                var d = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
-                suggestedRecipient.Remove(d);
-                suggested.Add(_mapper.Map<GetConnectionDto>((giver, d)));
-                //suggested.Add((suggestedGiver[i],suggestedRecipient[i]));
-                //suggested.Add(
-                // _mapper.Map<GetConnectionDto>((suggestedGiver[i],
-                //                            suggestedRecipient[i])
-                //));
+                var mathedGiver = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
+                suggestedRecipient.Remove(mathedGiver);
+                suggested.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
             }
             Dto.AddRange(suggested);
-
             return Dto;
-            throw new NotImplementedException();
                 
         }
         [HttpPost]

@@ -13,7 +13,7 @@ namespace GiEnJul.Repositories
         Task<(string, string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
         Task DeleteConnectionAsync(string partitionKey, string rowKey);
         Task<IEnumerable<Connection>> GetAllByLocationEventAsync(string location, string eventName);
-        Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName);
+        Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName,string location);
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
@@ -42,11 +42,11 @@ namespace GiEnJul.Repositories
             return await GetAllByQueryAsync(query);
         }
 
-        public async Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName)
+        public async Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location)
         {
             var query = new TableQuery<Entities.Connection>()
             {
-                FilterString = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, eventName)
+                FilterString = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}")
             };
             var connections = await GetAllByQueryAsync(query);
 
