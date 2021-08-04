@@ -139,6 +139,10 @@ const SummaryRegistration: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
+      <Typography className={classes.infoText}>
+        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før du sender inn. Sjekk gjerne at
+        telefonnummer og epostadresse er riktig skrevet.{" "}
+      </Typography>
       <Container>
         <Grid container className={classes.form}>
           <Grid container>

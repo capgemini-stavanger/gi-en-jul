@@ -27,20 +27,22 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
   },
   subHeading: {
-    fontSize: "200%",
+    fontSize: "170%",
     fontWeight: 500,
     margin: theme.spacing(1),
-    paddingBottom: theme.spacing(2),
     color: theme.palette.text.secondary,
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "200%",
+    },
   },
   form: {
     width: "100%",
-    height: "26em",
-    maxHeight: "26em",
+    height: "25em",
+    maxHeight: "25em",
     display: "inline-flex",
   },
   buttons: {
-    bottom: 0,
+    bottom: theme.spacing(2),
     maxWidth: 400,
     flexGrow: 1,
     backgroundColor: "transparent",
@@ -72,16 +74,27 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   paragraph: {
-    fontSize: "110%",
+    fontSize: "90%",
     fontWeight: 500,
     margin: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "110%",
+    },
   },
   paragraphBold: {
-    fontSize: "110%",
+    fontSize: "90%",
     fontWeight: 700,
     marginLeft: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "110%",
+    },
   },
-
+  infoText:{
+    fontSize: "85%",
+    fontWeight: 400,
+    margin: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
   icon: {
     alignItems: "center",
     justifyContent: "center",
