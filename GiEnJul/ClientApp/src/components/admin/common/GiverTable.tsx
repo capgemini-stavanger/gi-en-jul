@@ -15,19 +15,15 @@ import {
 } from "@material-ui/icons";
 import React from "react";
 import { GiverType } from "../overview/Types";
+import Circle from "./Circle";
 import useStyles from "./Styles";
 
 type Props = {
   data: GiverType[] | [];
-  handleGiverChange: (
-    newGiver: GiverType
-  ) => void;
+  handleGiverChange: (newGiver: GiverType) => void;
 };
 
-const Datatable: React.FC<Props> = ({
-  data,
-  handleGiverChange,
-}) => {
+const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
   const classes = useStyles();
 
   const formatFamily = (input: Number) => {
@@ -64,16 +60,12 @@ const Datatable: React.FC<Props> = ({
             {giver.isSuggestedMatch ? (
               //Styling should be in a seperate file
               !giver.hasConfirmedMatch ? (
-                <FiberManualRecord 
-                fontSize = "large"
-                style={{ color: "#f4cf8a" }} />
+                <Circle color="yellow" />
               ) : (
-                <FiberManualRecord 
-                fontSize = "large" style={{ color: "#49a591" }} />
+                <Circle color="green" />
               )
             ) : (
-              <FiberManualRecord 
-                fontSize = "large" style={{ color: "#ed8175" }} />
+              <Circle color="red" />
             )}
           </AccordionSummary>
           <Divider />

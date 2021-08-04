@@ -1,12 +1,11 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
-import { ValidatorForm } from "react-material-ui-form-validator";
 import { useHistory } from "react-router-dom";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import { isNotNull } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
-import useStyles from './Styles';
+import useStyles from "./Styles";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
@@ -23,7 +22,7 @@ const Location: React.FC<Props> = ({
   handleLocationChange,
   placeHolder,
   locationOptions,
-  step
+  step,
 }) => {
   const history = useHistory();
   const [isValid, setIsValid] = useState(false);
@@ -41,47 +40,48 @@ const Location: React.FC<Props> = ({
     <>
       <Typography className={classes.subHeading}>Hvor vil du gi?</Typography>
       <Container>
-        <Grid 
-        container
-        direction="column"
-        justifyContent="space-between"
-        alignItems="stretch"
-        className={classes.form}>
-          <Grid item>
-        <ValidatorForm 
-          onSubmit={nextStep}
-          onError={(errors) => console.error(errors)}
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          alignItems="stretch"
+          className={classes.form}
         >
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            type="select"
-            fullWidth
-            placeholder={placeHolder}
-            validators={[isNotNull]}
-            label="Lokasjon*"
-            name="location-input"
-            value={values.location}
-            id="location-input"
-            onChange={handleLocationChange}
-            errorMessages={["Hvor vil du spre glede?"]}
-            setIsValids={[setIsValid]}
-            options={
-              locationOptions.length !== 0
-                ? locationOptions.map((loc) => ({ value: loc, text: loc }))
-                : [{ value: "", text: "Ingen lokasjoner" }]
-            }
-          />
-        </ValidatorForm>
+          <Grid item>
+            <form
+              onSubmit={nextStep}
+              onError={(errors) => console.error(errors)}
+            >
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                type="select"
+                fullWidth
+                placeholder={placeHolder}
+                validators={[isNotNull]}
+                label="Lokasjon*"
+                name="location-input"
+                value={values.location}
+                id="location-input"
+                onChange={handleLocationChange}
+                errorMessages={["Hvor vil du spre glede?"]}
+                setIsValids={[setIsValid]}
+                options={
+                  locationOptions.length !== 0
+                    ? locationOptions.map((loc) => ({ value: loc, text: loc }))
+                    : [{ value: "", text: "Ingen lokasjoner" }]
+                }
+              />
+            </form>
+          </Grid>
+          <Grid item>
+            <Pager
+              onBack={useCallback(() => history.push("/"), [history])}
+              onContinue={extendedNextStep}
+              continueText={"Kontaktinformasjon"}
+              step={step}
+            />
+          </Grid>
         </Grid>
-        <Grid item>
-        <Pager
-            onBack={useCallback(() => history.push("/"), [history])}
-            onContinue={extendedNextStep}
-            continueText={"Kontaktinformasjon"}
-            step={step}
-          />
-          </Grid>
-          </Grid>
       </Container>
     </>
   );

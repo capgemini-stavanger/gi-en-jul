@@ -42,11 +42,11 @@ function Row(props: RecipientRowProps) {
           </IconButton>
         </TableCell>
         <TableCell>{recipient.familyId}</TableCell>
-        <TableCell>
+        <TableCell align="center">
           <Group />
           {" " + recipient.familyMembers.length}
         </TableCell>
-        <TableCell>{recipient.institution}</TableCell>
+        <TableCell align="center">{recipient.institution}</TableCell>
       </TableRow>
       <TableRow style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}>
         <TableCell className={classes.unpaddedTableCell} colSpan={6}>
@@ -123,13 +123,13 @@ export default function RecipientSuggestions(props: TableProps) {
   const classes = useStyles();
 
   return (
-    <Table aria-label="Mottakere" className="col-5">
+    <Table aria-label="Mottakere">
       <TableHead>
         <TableRow>
           <TableCell />
           <TableCell>Id</TableCell>
-          <TableCell>Størrelse</TableCell>
-          <TableCell>Institusjon</TableCell>
+          <TableCell align="center">Størrelse</TableCell>
+          <TableCell align="center">Institusjon</TableCell>
         </TableRow>
       </TableHead>
       <TableBody className={classes.clickableTableBody}>
