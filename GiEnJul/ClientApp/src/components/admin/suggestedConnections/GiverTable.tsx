@@ -37,7 +37,7 @@ function Row(props: GiverRowProps) {
         style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}
       >
         <TableCell>{giver.fullName}</TableCell>
-        <TableCell>
+        <TableCell align="center">
           <Group />
           {formatMaxreceivers(giver.maxReceivers)}
         </TableCell>
@@ -56,11 +56,11 @@ export default function GiverSuggestions(props: TableProps) {
   const classes = useStyles();
 
   return (
-    <Table aria-label="Mottakere" className="col-5">
+    <Table aria-label="Mottakere">
       <TableHead>
         <TableRow>
           <TableCell>Navn</TableCell>
-          <TableCell>Ønsket størrelse</TableCell>
+          <TableCell align="center">Ønsket størrelse</TableCell>
         </TableRow>
       </TableHead>
       <TableBody className={classes.clickableTableBody}>
