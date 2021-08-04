@@ -92,18 +92,16 @@ namespace GiEnJul.Controllers
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
-            var Dto = _mapper.Map<List<GetConnectionDto>>(completed);
+            var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
             var suggestedGiver = await _giverRepository.GetSuggestedAsync(eventName, location);
             var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
-            var suggested = new List<GetConnectionDto>();
             foreach (var giver in suggestedGiver)
             {
                 var mathedGiver = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
                 suggestedRecipient.Remove(mathedGiver);
-                suggested.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
+                connecitonDtos.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
             }
-            Dto.AddRange(suggested);
-            return Dto;
+            return connecitonDtos;
         }
         [HttpPost]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
