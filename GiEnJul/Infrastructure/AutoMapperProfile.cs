@@ -40,7 +40,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
-                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.PersonCount));
 
             CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
 
