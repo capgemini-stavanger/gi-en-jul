@@ -1,6 +1,8 @@
-﻿import * as React from "react";
+﻿import { Typography } from "@material-ui/core";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
+import LoadingPage from "../../common/components/LoadingPage";
 import ApiService from "../../common/functions/apiServiceClass";
 
 interface RouteParameters {
@@ -15,29 +17,28 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
   const { giverRowKey, recipientRowKey, partitionKey } =
     useParams<RouteParameters>();
 
-  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState<boolean | undefined>(undefined);
+
   const apiservice = new ApiService();
 
   useEffect(() => {
     apiservice
       .post(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {})
-      .then((response) => setError(!(response.status == 200)));
+      .then((response) => {
+        setSuccess(response.status == 200);
+      });
   }, []);
 
-  if (error)
+  if (success) return <Typography align="center">Takk til deg!</Typography>;
+  else if (!success)
     return (
-      <>
-        <h1>
-          En feil oppsto, prøv igjen senere. Hvis feilen vedvarer, ta kontakt
-          med din lokale Gi En Jul administrator.
-        </h1>
-      </>
+      <Typography align="center">
+        En feil oppsto, prøv igjen senere. Hvis feilen vedvarer, ta kontakt med
+        din lokale Gi En Jul administrator.
+      </Typography>
     );
-
-  return (
-    <>
-      <h1>Takk til deg!</h1>
-    </>
-  );
+  else {
+    return <LoadingPage />;
+  }
 };
 export default VerifyConnection;
