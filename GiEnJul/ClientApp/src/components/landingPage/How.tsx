@@ -13,7 +13,7 @@ const How = () => {
         <Typography className={classes.textHeadline}>
           Hvordan fungerer <br /> Gi en jul?
         </Typography>
-        {/* <ExpandMore />
+        <ExpandMore />
         <Typography className={classes.paragraph}>
         Gi en jul er et veldedighets-prosjekt i samarbeid med blant andre
           barnevernet og NAV.
@@ -23,7 +23,7 @@ const How = () => {
           julegaver til en familie som virkelig trenger det. Dette er foreldre
           og barn som ikke selv har mulighet til å kjøpe en skikkelig
           julemiddag, julesnop eller julegaver til hverandre.
-        </Typography> */}
+        </Typography>
       </div>
       <Grid container justifyContent="center">
         <Grid container className={classes.howItem}>
