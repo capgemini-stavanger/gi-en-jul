@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import React from "react";
 import useStyles from "./Styles";
 import { SelectedConnectionType } from "./Types";
@@ -60,10 +60,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({
       return <></>;
     }
   };
-  return (
-    <Grid container spacing={2} justifyContent="flex-end" alignItems="flex-end">
-      {displayButton()}
-    </Grid>
-  );
+  return <>{displayButton()}</>;
 };
 export default ConnectButton;

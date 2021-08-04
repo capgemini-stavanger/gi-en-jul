@@ -23,12 +23,12 @@ namespace GiEnJul.Utilities
 
         public async Task<GetRecaptchaDto> VerifyAsync(string token)
         {
-            /*if (_secret == "") {  // Skips verification on dev
+            if (_secret == "") {  // Skips verification on dev
                 return new GetRecaptchaDto
                 {
                     Success = true
                 };
-            } */  // This code should be added after the recaptcha has been tested on prod
+            }
             var request = WebRequest.Create($"https://www.google.com/recaptcha/api/siteverify?secret={_secret}&response={token}");
             request.Method = "GET";
 

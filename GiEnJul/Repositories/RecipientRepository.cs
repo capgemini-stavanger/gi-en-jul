@@ -16,6 +16,7 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetAllAsModelAsync();
         Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey);
         Task<IList<Models.Recipient>> GetUnsuggestedAsync(string eventName, string location, int quantity);
+        Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
@@ -69,6 +70,16 @@ namespace GiEnJul.Repositories
             var unsuggestedRecipient = await GetAllByQueryAsync(query);
 
             return _mapper.Map<IList<Models.Recipient>>(unsuggestedRecipient);
+        }
+
+        public async Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location)
+        {
+            var filter = TableQueryFilterHelper.GetSuggestedFilter(eventName, location);
+            var query = new TableQuery<Entities.Recipient>().Where(filter);
+
+            var suggestedRecipient = await GetAllByQueryAsync(query);
+
+            return _mapper.Map<List<Models.Recipient>>(suggestedRecipient);
         }
         public async Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
         {
