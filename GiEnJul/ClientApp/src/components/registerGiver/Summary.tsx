@@ -1,6 +1,15 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
@@ -31,6 +40,7 @@ interface Props {
 
 const initState = {
   viewErrorTrigger: 0,
+  viewPrivacyError: false,
 };
 
 type keyValue = {
@@ -53,6 +63,7 @@ const initIsValidsState: keyValue = {
   isValidPhone: true,
   isNotNullPhone: true,
   isValidFamily: true,
+  isValidPrivacy: false,
 };
 
 const SummaryRegistration: React.FC<Props> = ({
@@ -71,8 +82,8 @@ const SummaryRegistration: React.FC<Props> = ({
   const apiservice = new ApiService();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [state, setState] = useState(initState);
-  const [changesState, setChangesState] = useState(initChangesState);
-  const [isValidsState, setIsValidsState] = useState(initIsValidsState);
+  const [changesState, setChangesState] = useState({ ...initChangesState });
+  const [isValidsState, setIsValidsState] = useState({ ...initIsValidsState });
 
   const allIsValid = () => {
     for (let isValid in isValidsState) {
@@ -133,6 +144,17 @@ const SummaryRegistration: React.FC<Props> = ({
       });
     };
   };
+
+  const onPrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    getValiditySetter("isValidPrivacy")(e.target.checked);
+
+  useEffect(() => {
+    if (!state.viewErrorTrigger) return;
+    setState((prev) => ({
+      ...prev,
+      viewPrivacyError: !isValidsState.isValidPrivacy,
+    }));
+  }, [state.viewErrorTrigger]);
 
   const classes = useStyles();
 
@@ -274,6 +296,22 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
+          <FormControl required error>
+            <FormControlLabel
+              control={<Checkbox color="primary" onChange={onPrivacyChange} />}
+              label={
+                <Typography
+                  variant="subtitle2"
+                  color={state.viewPrivacyError ? "error" : undefined}
+                >
+                  Jeg godtar Gi en juls{" "}
+                  <a href="/personvernserklaering" target="_blank">
+                    personverserklæring
+                  </a>
+                </Typography>
+              }
+            />
+          </FormControl>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
           <Typography variant="caption" gutterBottom>
             This site is protected by reCAPTCHA and the Google{" "}
