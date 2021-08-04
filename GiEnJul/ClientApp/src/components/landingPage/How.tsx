@@ -10,7 +10,7 @@ const How = () => {
   return (
     <Container id="how" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
-        <Typography className={classes.textHeadlineHow}>
+        <Typography className={classes.textHeadline}>
           Hvordan fungerer <br/> Gi en jul?
         </Typography>
       </div>

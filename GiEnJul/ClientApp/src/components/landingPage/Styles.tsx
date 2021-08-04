@@ -49,15 +49,6 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "200%",
     },
   },
-  textHeadlineHow: {
-    color: theme.palette.primary.main,
-    button: 0,
-    fontSize: "180%",
-    fontWeight: 500,
-    [theme.breakpoints.up("tablet")]: {
-      fontSize: "200%",
-    },
-  },
   headLineContainer: {
     textAlign: "center",
     margin: theme.spacing(1),
