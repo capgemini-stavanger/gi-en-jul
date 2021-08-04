@@ -49,6 +49,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "200%",
     },
   },
+  blueTextHeadline: {
+    color: "#698BAC",
+    fontSize: "180%",
+    fontWeight: 500,
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "200%",
+    },
+  },
   headLineContainer: {
     textAlign: "center",
     margin: theme.spacing(1),
@@ -103,6 +111,12 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     overflow: "hidden",
     height: "100%",
+  },
+  stepsImage:{
+    objectFit: "none",
+    width: "100%",
+    height: "100%",
+
   },
   paragraph: {
     fontSize: "100%",
