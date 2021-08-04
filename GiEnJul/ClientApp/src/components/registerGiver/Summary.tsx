@@ -276,10 +276,15 @@ const SummaryRegistration: React.FC<Props> = ({
           </Grid>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
           <Typography variant="caption" gutterBottom>
-            This site is protected by reCAPTCHA and the Google{" "}
-            <a href="https://policies.google.com/privacy">Privacy Policy</a> and{" "}
-            <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
-            apply.
+            Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
+            <a href="https://policies.google.com/privacy" target="_blank">
+              personvernerklæring
+            </a>{" "}
+            og{" "}
+            <a href="https://policies.google.com/terms" target="_blank">
+              vilkår for bruk
+            </a>{" "}
+            gjelder.
           </Typography>
         </Grid>
         <Pager
