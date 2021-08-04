@@ -76,6 +76,9 @@ export const theme = createTheme({
     info: {
       main: "#d9f0f2", // Light blue
     },
+    success: {
+      main: "#49a591",
+    },
   },
   typography: {
     fontFamily: "Quicksand",
@@ -156,7 +159,7 @@ ReactDOM.render(
         redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
         audience={apiurl}
       >
-        <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
+        <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey} language="no">
           <ConnectedRouter history={history}>
             <App />
           </ConnectedRouter>

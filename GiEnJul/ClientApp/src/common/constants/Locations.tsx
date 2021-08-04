@@ -10,7 +10,7 @@ async function getLocations(): Promise<string[]> {
     .catch((e) => {
       console.error(e);
     });
-  return locations;
+  return locations ?? [];
 }
 
 export default getLocations;

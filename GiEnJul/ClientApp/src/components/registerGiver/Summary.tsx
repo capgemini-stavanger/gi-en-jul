@@ -94,7 +94,6 @@ const SummaryRegistration: React.FC<Props> = ({
   const submit = async () => {
     if (!executeRecaptcha) return;
     let recaptchaToken = await executeRecaptcha("register_giver");
-    recaptchaToken += "d";
     await apiservice
       .post(
         "giver",
@@ -222,7 +221,7 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
-          <Grid container className={classes.inputRow}>
+          <Grid container>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -275,6 +274,13 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
+          {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
+          <Typography variant="caption" gutterBottom>
+            This site is protected by reCAPTCHA and the Google{" "}
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and{" "}
+            <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
+            apply.
+          </Typography>
         </Grid>
         <Pager
           onContinue={extendedNextStep}

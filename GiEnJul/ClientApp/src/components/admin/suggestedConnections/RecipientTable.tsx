@@ -114,7 +114,7 @@ function Row(props: RecipientRowProps) {
 }
 
 type TableProps = {
-  selectRecipient: (newSelected: [string, string]) => void;
+  selectRecipient: (newSelected: RecipientType) => void;
   recipients: RecipientType[];
 };
 
@@ -140,7 +140,7 @@ export default function RecipientSuggestions(props: TableProps) {
             selected={selectedRow === recipient.rowKey}
             onClick={() => {
               setSelectedRow(recipient.rowKey);
-              props.selectRecipient([recipient.rowKey, recipient.partitionKey]);
+              props.selectRecipient(recipient);
             }}
           />
         ))}

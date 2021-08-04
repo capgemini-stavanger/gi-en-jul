@@ -13,7 +13,8 @@ namespace GiEnJul.Repositories
         Task<(string, string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
         Task DeleteConnectionAsync(string partitionKey, string rowKey);
         Task<IEnumerable<Connection>> GetAllByLocationEventAsync(string location, string eventName);
-        Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName,string location);
+        Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location);
+        Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient);
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
@@ -59,6 +60,12 @@ namespace GiEnJul.Repositories
                     ));
             }
             return GiverRecipientTuples;
+        }
+        public async Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient)
+        {
+            var connection = await GetAsync(giver.PartitionKey, $"{recipient.RowKey}_{giver.RowKey}");
+
+            return connection != null;
         }
     }
 }
