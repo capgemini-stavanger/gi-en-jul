@@ -39,6 +39,7 @@ const Location: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Hvor vil du gi?</Typography>
+      <Typography className={classes.infoText}>Velg hvor du ønsker å Gi en jul </Typography>
       <Container>
         <Grid
           container
@@ -77,7 +78,7 @@ const Location: React.FC<Props> = ({
             <Pager
               onBack={useCallback(() => history.push("/"), [history])}
               onContinue={extendedNextStep}
-              continueText={"Kontaktinformasjon"}
+              continueText={"Start registrering"}
               step={step}
             />
           </Grid>

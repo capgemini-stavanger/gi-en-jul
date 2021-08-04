@@ -68,7 +68,8 @@ const ContactInfo: React.FC<Props> = ({
   const classes = useStyles();
   return (
     <>
-      <Typography className={classes.subHeading}>Kontaktinformasjon</Typography>
+      <Typography className={classes.subHeading}>Registrering</Typography>
+      <Typography className={classes.infoText}>Vi trenger din kontaktinformasjon for å kunne gi deg en familie</Typography>
       <Container>
         <Grid container
         direction="column"
