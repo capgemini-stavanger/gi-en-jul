@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -83,6 +84,24 @@ namespace GiEnJul.Controllers
             var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
             using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
             return wb.Deliver("leveranse_liste.xlsx");
+        }
+
+        [HttpGet("connections/{location}")]
+        [Authorize(Policy = "ReadConnection")]
+        public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
+        {
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
+            var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
+            var suggestedGiver = await _giverRepository.GetSuggestedAsync(eventName, location);
+            var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
+            foreach (var giver in suggestedGiver)
+            {
+                var mathedGiver = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
+                suggestedRecipient.Remove(mathedGiver);
+                connecitonDtos.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
+            }
+            return connecitonDtos;
         }
         [HttpPost]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)

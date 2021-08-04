@@ -16,6 +16,7 @@ namespace GiEnJul.Repositories
         Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
         Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity);
         Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location);
+        Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -54,6 +55,16 @@ namespace GiEnJul.Repositories
             var unsuggestedGivers = await GetAllByQueryAsync(query);
 
             return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
+        }
+
+        public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)
+        {
+            var filter = TableQueryFilterHelper.GetSuggestedFilter(eventName, location);
+            var query = new TableQuery<Entities.Giver>().Where(filter);
+
+            var suggestedGivers = await GetAllByQueryAsync(query);
+
+            return _mapper.Map<List<Models.Giver>>(suggestedGivers);
         }
 
         public async Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location)

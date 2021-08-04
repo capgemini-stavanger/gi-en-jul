@@ -13,6 +13,7 @@ namespace GiEnJul.Repositories
         Task<(string, string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient);
         Task DeleteConnectionAsync(string partitionKey, string rowKey);
         Task<IEnumerable<Connection>> GetAllByLocationEventAsync(string location, string eventName);
+        Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location);
         Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient);
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
@@ -42,6 +43,24 @@ namespace GiEnJul.Repositories
             return await GetAllByQueryAsync(query);
         }
 
+        public async Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location)
+        {
+            var query = new TableQuery<Entities.Connection>()
+            {
+                FilterString = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}")
+            };
+            var connections = await GetAllByQueryAsync(query);
+
+            var GiverRecipientTuples = new List<(Models.Giver, Models.Recipient)>();
+            foreach (var conn in connections)
+            {
+                GiverRecipientTuples.Add((
+                    _mapper.Map<Models.Giver>(conn),
+                    _mapper.Map<Models.Recipient>(conn)
+                    ));
+            }
+            return GiverRecipientTuples;
+        }
         public async Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient)
         {
             var connection = await GetAsync(giver.PartitionKey, $"{recipient.RowKey}_{giver.RowKey}");

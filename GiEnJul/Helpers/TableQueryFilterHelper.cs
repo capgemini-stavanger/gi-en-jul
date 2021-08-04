@@ -21,6 +21,22 @@ namespace GiEnJul.Helpers
             return filter;
         }
 
+        public static string GetSuggestedFilter(string eventName, string location)
+        {
+            var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
+            var suggestedFilter = TableQuery.GenerateFilterConditionForBool("IsSuggestedMatch", QueryComparisons.Equal, true);
+            var notConfirmedFilter = TableQuery.GenerateFilterConditionForBool("HasConfirmedMatch", QueryComparisons.Equal, false);
+            var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
+            var locationFilter = TableQuery.GenerateFilterCondition("Location", QueryComparisons.Equal, location);
+
+            var filter =  TableQuery
+                .CombineFilters(PKfilter, TableOperators.And, TableQuery
+                .CombineFilters(suggestedFilter, TableOperators.And, TableQuery
+                .CombineFilters(notConfirmedFilter, TableOperators.And, TableQuery
+                .CombineFilters(eventNameFilter, TableOperators.And, locationFilter))));
+            return filter;
+        }
+
         public static string GetAllByActiveEventsFilter(string eventName, string location)
         {
             var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");

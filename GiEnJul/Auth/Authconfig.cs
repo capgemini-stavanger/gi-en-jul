@@ -12,6 +12,7 @@ namespace GiEnJul.Auth
             opt.AddPolicy("ReadRecipient", policy => policy.RequireClaim("permissions", "read:recipient"));
             opt.AddPolicy("UpdateRecipient", policy => policy.RequireClaim("permissions", "update:recipient"));
             opt.AddPolicy("DeleteRecipient", policy => policy.RequireClaim("permissions", "delete:recipient"));
+            opt.AddPolicy("ReadConnection", policy => policy.RequireClaim("permissions", "read:connection"));
             opt.AddPolicy("DownloadDeliveryExcel", policy => policy.RequireClaim("permissions", "download:deliveryexcel"));
         }
     }
