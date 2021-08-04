@@ -64,20 +64,9 @@ export default () =>
       color: "white",
       backgroundColor: theme.palette.primary.main,
       textTransform: "none",
+      padding: theme.spacing(1.5, 2, 1.5, 2),
       "&:hover": {
         backgroundColor: theme.palette.primary.dark,
-      },
-      [theme.breakpoints.up("tablet")]: {
-        padding: theme.spacing(1.5, 2, 1.5, 2),
-      },
-      [theme.breakpoints.up("laptop")]: {
-        padding: theme.spacing(2, 2.5, 2, 2.5),
-      },
-      [theme.breakpoints.up("tablet")]: {
-        padding: theme.spacing(1.5, 2, 1.5, 2),
-      },
-      [theme.breakpoints.up("laptop")]: {
-        padding: theme.spacing(2, 2.5, 2, 2.5),
       },
     },
     footerText: {
