@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GiEnJul.Dtos;
 
 namespace GiEnJul.Infrastructure
 {
@@ -21,6 +22,12 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore())
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
+            CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
+                .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Item1.HasConfirmedMatch))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Item1.FullName))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Item1.PhoneNumber))
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.Item2.PersonCount))
+                .ForMember(dest => dest.FamilyId, opt => opt.MapFrom(src => src.Item2.FamilyId));
 
             //Recipient mapping
             CreateMap<Dtos.PostRecipientDto, Models.Recipient>()
@@ -40,7 +47,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
-                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.PersonCount));
 
             CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
 

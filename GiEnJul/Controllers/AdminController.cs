@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -83,6 +84,41 @@ namespace GiEnJul.Controllers
             var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
             using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
             return wb.Deliver("leveranse_liste.xlsx");
+        }
+
+        [HttpGet("connections/{location}")]
+        [Authorize(Policy = "ReadConnection")]
+        public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
+        //public async Task<IList<(Models.Giver,Models.Recipient)>> GetConnectionsByLocationAsync(string location)
+        {
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+            var completed =  await _connectionRepository.GetAllConnectionsByLocation(eventName);
+            var Dto = _mapper.Map<List<GetConnectionDto>>(completed);
+            var suggestedGiver =  await _giverRepository.GetSuggestedAsync(eventName, location);
+            var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
+            var suggested = new List<GetConnectionDto>();
+            //var suggested = new List<(Models.Giver, Models.Recipient)>();
+
+            var s = new GetConnectionDto();
+      
+            foreach (var giver in suggestedGiver)
+            {
+               
+
+                var d = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
+                suggestedRecipient.Remove(d);
+                suggested.Add(_mapper.Map<GetConnectionDto>((giver, d)));
+                //suggested.Add((suggestedGiver[i],suggestedRecipient[i]));
+                //suggested.Add(
+                // _mapper.Map<GetConnectionDto>((suggestedGiver[i],
+                //                            suggestedRecipient[i])
+                //));
+            }
+            Dto.AddRange(suggested);
+
+            return Dto;
+            throw new NotImplementedException();
+                
         }
         [HttpPost]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
