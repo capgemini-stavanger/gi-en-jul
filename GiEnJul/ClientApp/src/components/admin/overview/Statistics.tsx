@@ -1,6 +1,6 @@
 import { Card, Grid, Typography } from "@material-ui/core";
-import React from "react";
-import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
+import React, {useState, useEffect} from "react";
+import { GiverType, RecipientType} from "./Types";
 import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "./Styles";
 
@@ -8,55 +8,81 @@ type IStatistics = {
   givers: GiverType[] | [];
   recipients: RecipientType[] | [];
 };
+type StatisticsType = {
+  totalGivers: number;
+  totalRecipints: number;
+  suggestedMatch: number;
+  confirmedMatch: number;
+  giversWithoutRecipient: number;
+  recipientsWithoutGiver: number;
+
+};
 
 const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
-  const totalGivers: number = givers.length;
-  const totalRecipints: number = recipients.length;
-  let suggestedMatch: number = 0;
+  const [statistics, setStatistics] = useState<StatisticsType>();
+
+  const getStatistics= () => {
+  let suggestedMatch: number = givers.filter(giver => giver.isSuggestedMatch === true).length;
   let confirmedMatch: number = 0;
+
+  
   givers.map((giver) => {
-    if (giver.isSuggestedMatch) {
-      if (giver.hasConfirmedMatch) {
-        confirmedMatch++;
-      } else {
-        suggestedMatch++;
+
+    // if (giver.isSuggestedMatch) {
+    //   if (giver.hasConfirmedMatch) {
+    //     confirmedMatch++;
+    //   } else {
+    //     suggestedMatch++;
+    //   }
+    // }
+    setStatistics((prevState) => {
+      return {
+        ...prevState, 
+        totalGivers: givers.length,
+        totalRecipints: recipients.length,
+        suggestedMatch:suggestedMatch,
+        confirmedMatch: confirmedMatch,
+        giversWithoutRecipient: (givers.length - suggestedMatch - confirmedMatch),
+        recipientsWithoutGiver: (recipients.length - suggestedMatch - confirmedMatch),
       }
-    }
+    })
   });
-  const giversWithoutRecipient: number = totalGivers - suggestedMatch;
-  const recipientsWithoutGiver: number = totalRecipints - suggestedMatch;
+}
+  useEffect(() => {
+    getStatistics();
+  }, [recipients]);
   const classes = useStyles();
 
   return (
     <>
-      <Grid container direction="column" justifyContent="flex-start" className={classes.statisticsContainer}>
+      <Grid container direction="column" alignItems="flex-start" className={classes.statisticsContainer}>
         <Grid item className={classes.infoContainer}>
           <Typography  variant="h4">
             {" "}
-            {totalRecipints.toString()} familier
+            {statistics?.totalRecipints.toString()} familier
           </Typography>
           <Typography className={classes.textWarning}>
             {" "}
-            {recipientsWithoutGiver.toString()} uten giver
+            {statistics?.recipientsWithoutGiver.toString()} uten giver
           </Typography>
         </Grid>
         <Grid item className={classes.infoContainer}>
-          <Typography variant="h4"> {totalGivers.toString()} givere</Typography>
+          <Typography variant="h4"> {statistics?.totalGivers.toString()} givere</Typography>
           <Typography className={classes.textWarning}>
             {" "}
-            {giversWithoutRecipient.toString()} uten familie
+            {statistics?.giversWithoutRecipient.toString()} uten familie
           </Typography>
         </Grid>
         <Grid item className={classes.infoContainer}>
           <Typography  variant="h4">Koblinger:</Typography>
           <Typography>
-            <FiberManualRecord fontSize="large" style={{ color: "#49a591" }} />{" "}
-            {suggestedMatch.toString()}
+            <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />{" "}
+            {statistics?.suggestedMatch.toString()}
             <FiberManualRecord
               fontSize="large"
-              style={{ color: "#f4cf8a" }}
+              color="primary"
             />{" "}
-            {confirmedMatch.toString()}
+            {statistics?.confirmedMatch.toString()}
           </Typography>
         </Grid>
         <Grid item className={classes.explanationContainer}>
@@ -86,3 +112,4 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
 };
 
 export default Statistics;
+

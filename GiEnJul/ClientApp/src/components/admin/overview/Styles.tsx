@@ -40,13 +40,24 @@ const useStyles = makeStyles((theme) => ({
   },
   statisticsContainer: {
     position: "fixed",
+      marginTop: -theme.spacing(8),
+    [theme.breakpoints.up("desktop")]: {
+      marginTop: -theme.spacing(2),
+    },
   },
   infoContainer: {
-    margin: theme.spacing(3),
+    margin: theme.spacing(1.5),
+    [theme.breakpoints.up("desktop")]: {
+      margin: theme.spacing(3),
+    },
   },
   explanationContainer: {
-    margin: theme.spacing(3),
-    marginTop: theme.spacing(10),
+    margin: theme.spacing(1.5),
+    marginTop: theme.spacing(6),
+    [theme.breakpoints.up("desktop")]: {
+      margin: theme.spacing(3),
+    },
+
   },
 }));
 
