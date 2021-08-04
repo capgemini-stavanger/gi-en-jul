@@ -88,39 +88,23 @@ const columns: GridColumns = [
   },
 ];
 
-const rows: GridRowData[] = [
-  {
-    id: 1,
-    confirmed: "Bekreftet",
-    familySize: "4",
-    giverName: "Ola",
-    giverTelephone: "45687727",
-  },
-  {
-    id: 2,
-    confirmed: "Venter",
-    familySize: "6",
-    giverName: "Kim",
-    giverTelephone: "47457774",
-  },
-];
-
 const Table: FC<ITable> = ({ accessToken }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
   const { location } = useUser();
   const [connections, setConnections] = useState<
     GridRowData[] | undefined | null
-  >(rows);
+  >(undefined);
 
-  /*useEffect(() => {
+  useEffect(() => {
+    if (!location) return;
     apiservice
       .get(`admin/connections/${location}`)
       .then((response) => {
         setConnections(
           response.data.map((connection: ConnectionDto) => ({
             id: connection.familyId,
-            confirmed: connection.confirmed ? "🟢" : "🟡",
+            confirmed: connection.confirmed ? "Bekreftet" : "Venter",
             familySize: `${connection.personCount}`,
             giverName: connection.fullName,
             giverTelephone: connection.phoneNumber,
@@ -131,7 +115,7 @@ const Table: FC<ITable> = ({ accessToken }) => {
         console.error(error);
         setConnections(null);
       });
-  }, [location]);*/
+  }, [location]);
 
   const getPage = () => {
     switch (connections) {
@@ -146,7 +130,7 @@ const Table: FC<ITable> = ({ accessToken }) => {
 
   switch (getPage()) {
     case Page.Loading:
-      return <DataGrid columns={columns} rows={[]} loading />;
+      return <DataGrid columns={columns} rows={[]} loading autoHeight />;
     case Page.Error:
       return (
         <DataGrid
