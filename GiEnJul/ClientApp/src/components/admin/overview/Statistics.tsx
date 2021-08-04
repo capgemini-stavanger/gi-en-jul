@@ -1,6 +1,6 @@
-import { Card, Grid, Typography } from "@material-ui/core";
-import React, {useState, useEffect} from "react";
-import { GiverType, RecipientType} from "./Types";
+import { Grid, Typography } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { GiverType, RecipientType } from "./Types";
 import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "./Styles";
 
@@ -15,78 +15,75 @@ type StatisticsType = {
   confirmedMatch: number;
   giversWithoutRecipient: number;
   recipientsWithoutGiver: number;
-
 };
 
 const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
   const [statistics, setStatistics] = useState<StatisticsType>();
 
-  const getStatistics= () => {
-  let suggestedMatch: number = givers.filter(giver => giver.isSuggestedMatch === true).length;
-  let confirmedMatch: number = 0;
+  const getStatistics = () => {
+    let suggestedMatch: number = givers.filter(
+      (giver) => giver.isSuggestedMatch === true
+    ).length;
+    let confirmedMatch: number = givers.filter(
+      (giver) => giver.hasConfirmedMatch === true
+    ).length;
 
-  
-  givers.map((giver) => {
-
-    // if (giver.isSuggestedMatch) {
-    //   if (giver.hasConfirmedMatch) {
-    //     confirmedMatch++;
-    //   } else {
-    //     suggestedMatch++;
-    //   }
-    // }
     setStatistics((prevState) => {
       return {
-        ...prevState, 
+        ...prevState,
         totalGivers: givers.length,
         totalRecipints: recipients.length,
-        suggestedMatch:suggestedMatch,
+        suggestedMatch: suggestedMatch,
         confirmedMatch: confirmedMatch,
-        giversWithoutRecipient: (givers.length - suggestedMatch - confirmedMatch),
-        recipientsWithoutGiver: (recipients.length - suggestedMatch - confirmedMatch),
-      }
-    })
-  });
-}
+        giversWithoutRecipient: givers.length - suggestedMatch - confirmedMatch,
+        recipientsWithoutGiver:
+          recipients.length - suggestedMatch - confirmedMatch,
+      };
+    });
+  };
   useEffect(() => {
     getStatistics();
   }, [recipients]);
   const classes = useStyles();
 
   return (
-    <>
-      <Grid container direction="column" alignItems="flex-start" className={classes.statisticsContainer}>
+      <Grid
+        container
+        direction="column"
+        alignItems="flex-start"
+        className={classes.statisticsContainer}
+      >
         <Grid item className={classes.infoContainer}>
-          <Typography  variant="h4">
+          <Typography variant="h4">
             {" "}
-            {statistics?.totalRecipints.toString()} familier
+            {statistics?.totalRecipints} familier
           </Typography>
           <Typography className={classes.textWarning}>
             {" "}
-            {statistics?.recipientsWithoutGiver.toString()} uten giver
+            {statistics?.recipientsWithoutGiver} uten giver
           </Typography>
         </Grid>
         <Grid item className={classes.infoContainer}>
-          <Typography variant="h4"> {statistics?.totalGivers.toString()} givere</Typography>
+          <Typography variant="h4">
+            {" "}
+            {statistics?.totalGivers} givere
+          </Typography>
           <Typography className={classes.textWarning}>
             {" "}
-            {statistics?.giversWithoutRecipient.toString()} uten familie
+            {statistics?.giversWithoutRecipient} uten familie
           </Typography>
         </Grid>
         <Grid item className={classes.infoContainer}>
-          <Typography  variant="h4">Koblinger:</Typography>
+          <Typography variant="h4">Koblinger:</Typography>
           <Typography>
             <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />{" "}
-            {statistics?.suggestedMatch.toString()}
-            <FiberManualRecord
-              fontSize="large"
-              color="primary"
-            />{" "}
-            {statistics?.confirmedMatch.toString()}
+            {statistics?.suggestedMatch}
+            <FiberManualRecord fontSize="large" color="primary" />{" "}
+            {statistics?.confirmedMatch}
           </Typography>
         </Grid>
         <Grid item className={classes.explanationContainer}>
-            <Typography variant="h4">Forklaring</Typography>
+          <Typography variant="h4">Forklaring</Typography>
           <Typography>
             <FiberManualRecord fontSize="large" color="primary" /> = bekreftet
             kobling
@@ -107,9 +104,7 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
           </Typography>
         </Grid>
       </Grid>
-    </>
   );
 };
 
 export default Statistics;
-
