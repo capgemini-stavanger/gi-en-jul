@@ -5,6 +5,7 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  Link,
   Typography,
 } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -305,9 +306,13 @@ const SummaryRegistration: React.FC<Props> = ({
                   color={state.viewPrivacyError ? "error" : undefined}
                 >
                   Jeg godtar Gi en juls{" "}
-                  <a href="/personvernserklaering" target="_blank">
+                  <Link
+                    href="/personvernserklaering"
+                    target="_blank"
+                    color={state.viewPrivacyError ? "error" : "textSecondary"}
+                  >
                     personverserklæring
-                  </a>
+                  </Link>
                 </Typography>
               }
             />
@@ -315,8 +320,19 @@ const SummaryRegistration: React.FC<Props> = ({
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
           <Typography variant="caption" gutterBottom>
             This site is protected by reCAPTCHA and the Google{" "}
-            <a href="https://policies.google.com/privacy">Privacy Policy</a> and{" "}
-            <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
+            <Link
+              color="textSecondary"
+              href="https://policies.google.com/privacy"
+            >
+              Privacy Policy
+            </Link>{" "}
+            and{" "}
+            <Link
+              color="textSecondary"
+              href="https://policies.google.com/terms"
+            >
+              Terms of Service
+            </Link>{" "}
             apply.
           </Typography>
         </Grid>
