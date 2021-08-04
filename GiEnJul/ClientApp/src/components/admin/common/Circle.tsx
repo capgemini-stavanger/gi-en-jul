@@ -1,15 +1,26 @@
-import React, { FC } from 'react';
+import { FiberManualRecord } from "@material-ui/icons";
+import { FC } from "react";
 
-interface Props {
-    prop1: string,
+interface ICircle {
+  color: "red" | "yellow" | "green";
 }
 
-const Circle:FC<Props> = (props) => {
-    return (
-        <svg height="20" width="20">
-            <circle cx="10" cy="10" r="10" fill={props.prop1} />
-        </svg>
-    );
-}
+const Circle: FC<ICircle> = ({ color }) => {
+  let hexcolor = "";
+  switch (color) {
+    case "red":
+      hexcolor = "#ed8175";
+      break;
+    case "yellow":
+      hexcolor = "#f4cf8a";
+      break;
+    case "green":
+      hexcolor = "#49a591";
+      break;
+    default:
+      throw new Error(`Invalid color: ${color}`);
+  }
+  return <FiberManualRecord fontSize="large" style={{ color: hexcolor }} />;
+};
 
 export default Circle;

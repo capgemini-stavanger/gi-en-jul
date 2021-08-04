@@ -11,7 +11,7 @@ const Macro: React.FC<IMacro> = ({ accessToken, location }) => {
   return (
     <>
       <DeliveryExcelDownload accessToken={accessToken} location={location} />
-      <Table />
+      <Table accessToken={accessToken} />
     </>
   );
 };
