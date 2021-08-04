@@ -1,45 +1,39 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { isMobile } from "../../common/functions/IsMobile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    padding: theme.spacing(2),
   },
-  circle: {
-    borderRadius: "50%",
-    margin: theme.spacing(9, 2, 2, 2),
-    padding: theme.spacing(3.5),
-    backgroundColor: "white",
-    width: "40%",
-    position: "static",
-    "&:after":{
-      content: "",
-      display: "block",
-      paddingBottom: "100%",
-    },
+  logo: {
+    marginTop: theme.spacing(10),
+    marginBottom: theme.spacing(2),
+    maxHeight: "15em",
     [theme.breakpoints.up("tablet")]: {
-      width: "30%",
-      padding: theme.spacing(4),
-    },
-    [theme.breakpoints.up("laptop")]: {
-      width: "20%",
-      padding: theme.spacing(4),
+      maxHeight: "18em",
     },
   },
-  logoLarge: {
-    content: "absolute",
+  familyImage:{
+    justifySelf: "center",
+    zIndex: 2,
     width: "100%",
-    heigth: "100%",
-    minWidth: "3em",
-    minHeigth: "4em",
-    display: "block",
+    height: "100%",
+    position: "relative",
+    objectFit: "cover",
+
+  },
+  snowDown:{
+    marginTop: -theme.spacing(8),
+    marginBottom: -theme.spacing(15),
+    objectFit: "cover",
+    width: "100%",
+    height: "100%",
     [theme.breakpoints.up("tablet")]: {
-      paddingRight: theme.spacing(1),
-      paddingLeft: theme.spacing(0.7),
+      marginBottom: -theme.spacing(30),
     },
     [theme.breakpoints.up("laptop")]: {
-      paddingRight: theme.spacing(3),
-      paddingLeft: theme.spacing(2),
+      marginBottom: -theme.spacing(35),
     },
   },
   logoText: {
