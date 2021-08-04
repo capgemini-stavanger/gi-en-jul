@@ -8,6 +8,7 @@ import ApiService from "../../../common/functions/apiServiceClass";
 import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
+import Statistics from "./Statistics";
 import useStyles from "./Styles";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
 
@@ -124,13 +125,16 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           justifyContent="center"
           alignItems="flex-start"
         >
-          <Grid item xs={6}>
+          <Grid item xs={2}>
+            <Statistics givers={giverData} recipients={recipientData}/>
+          </Grid>
+          <Grid item xs={5}>
             <Typography variant="h4" align="center">
               Givere
             </Typography>
             <Giver data={giverData} handleGiverChange={handleGiverChange} />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={5}>
             <Typography variant="h4" align="center">
               Familier
             </Typography>
