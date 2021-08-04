@@ -142,7 +142,7 @@ const RegistrationMacro = () => {
   };
   return (
     <>
-      <NavBar />
+      
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
           <Confirmation
@@ -151,10 +151,13 @@ const RegistrationMacro = () => {
           ></Confirmation>
         </Container>
       ) : (
+        <>
+        <NavBar />
         <Container className={classes.giverForm}>
           <Typography className={classes.heading}>Bli giver</Typography>
           {getStepPage()}
         </Container>
+        </>
       )}
     </>
   );

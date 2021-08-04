@@ -1,10 +1,13 @@
-import { Container, Typography } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import IFormData from "./IFormData";
-import Pager from "./Pager";
 import useStyles from "./Styles";
+import snowmanFull from "./../../styling/img/snowmanFull.svg";
+import snowDown from "./../../styling/img/snow_down2.svg";
+import logo from "./../../styling/img/logo_green.svg";
+import { ArrowForwardIos } from "@material-ui/icons";
 
 type Props = {
   values: IFormData;
@@ -24,15 +27,13 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             Hjertelig takk {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Ditt bidrag er svært betydningsfullt. Vi har nå registrert deg som
-            giver til årets Gi en jul og har sendt en oppsummering av din
+            Tusen takk for innsatsen dere skal gjøre! Vi har nå registrert deg
+            som giver til årets Gi en jul og har sendt en oppsummering av din
             registrering til
           </Typography>
-          <br />
           <Typography className={classes.paragraphBold}>
             {values.email}
           </Typography>
-          <br />
           <Typography className={classes.paragraph}>
             Når det nærmer seg jul vil du motta mer informasjon som ønskelister,
             sted og tidspunkt for innlevering av ditt bidrag.
@@ -40,13 +41,14 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
         </>
       ) : (
         <>
-          <Typography className={classes.heading}>
+          <Typography className={classes.headingBold}>
             {" "}
             Ånei! {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Desverre har det skjedd en feil og vi fikk ikke registrert deg.
-            Gjerne prøv på ny senere og ta kontakt på epost dersom det ikke går.
+            Desverre har det skjedd en feil og vi har ikke fått til å registrert
+            deg. Gjerne prøv på ny senere og ta kontakt på epost dersom det ikke
+            går.
           </Typography>
         </>
       ),
@@ -55,13 +57,33 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
 
   return (
     <>
-      <Container className={classes.giverForm}>
-        {confirmationOK !== undefined ? getMessage() : <Spinner />}
-        <Pager
-          onContinue={React.useCallback(() => history.push("/"), [history])}
-          continueText={"Til hovedsiden"}
-        />
-      </Container>
+      <Button
+        size="large"
+        endIcon={<ArrowForwardIos />}
+        className={classes.buttonMainPage}
+        onClick={React.useCallback(() => history.push("/"), [history])}
+      >
+        Hovedsiden
+      </Button>
+      <img className={classes.smallLogo} src={logo}></img>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item>
+          <img className={classes.imageSnow} src={snowDown}></img>
+        </Grid>
+        <Grid item>
+          <Container className={classes.giverForm}>
+            {confirmationOK !== undefined ? getMessage() : <Spinner />}
+          </Container>
+        </Grid>
+        <Grid item className={classes.imageContainer}>
+          <img className={classes.backgroundImage} src={snowmanFull}></img>
+        </Grid>
+      </Grid>
     </>
   );
 };
