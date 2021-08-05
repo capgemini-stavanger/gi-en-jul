@@ -32,7 +32,7 @@ const PrivacyTexts = {
   ],
   text: [
     "Karianne Munch-Ellingsen er på vegne av Gi en jul behandlingsansvarlig for selskapets behandling av personopplysninger.",
-    "Vi lagrer følgende personopplysninger om våre kunder:navn, adresse, telefonnummer, e-postadresse.",
+    "Vi lagrer følgende personopplysninger om våre kunder:navn, telefonnummer, e-postadresse.",
     "Vi behandler opplysningene for å kunne gjennomføre prosjektet. Personopplysninger vil bli brukt for å koble givere og familier, informasjonsflyt angående prosjektet og generell kontakt om det er nødvendig.",
     "Informasjon om navn, telefon, e-postadresse benyttes for å oppfylle avtalen. Grunnlaget for denne behandlingen er personvernforordningens artikkel Art 6 (b).",
     "Vi lagrer de personopplysningene du har avgitt på våre nettsider.",
