@@ -37,7 +37,7 @@ const PrivacyTexts = {
     "Informasjon om navn, telefon, e-postadresse benyttes for å oppfylle avtalen. Grunnlaget for denne behandlingen er personvernforordningens artikkel Art 6 (b).",
     "Vi lagrer de personopplysningene du har avgitt på våre nettsider.Vi bruker informasjonskapsler/cookies på våre nettsider for å gi deg som besøker siden best kundeopplevelse og service.Lov om elektronisk kommunikasjon krever at vi informerer våre besøkende om bruk av informasjonskapsler (cookies). Les mer om bruk av informasjonskapsler her:",
     "Vi vil ikke dele, selge, overføre eller på annen måte utlevere personopplysninger til andre, med mindre vi er rettslig forpliktet til det.",
-    "Opplysninger vi har mottatt i forbindelse med ditt kjøp lagres i vårt aktive database i 13 måneder.",
+   "Opplysninger vi har mottatt i forbindelse med din deltagelse i Gi en jul lagres i vårt aktive database i 13 måneder.",
     "Vi behandler dine personopplysninger i henhold til personopplysningsloven og gjeldende forskrifter. Det gjøres oppmerksom på at du kan kreve innsyn i og flytting av egne personopplysninger, samt kreve retting eller sletting av opplysninger. Det kan klages til Datatilsynet på behandling i strid med reglene.",
     "Vi sikrer dine personopplysninger ved best practice for situasjonen",
   ],
