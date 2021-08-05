@@ -88,26 +88,6 @@ const Questions = () => {
                 <ExpandMoreIcon className={classes.questionSummary} />
               }
             >
-              <Typography>Kan jeg legge oppi noe ekstra?</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                Dersom du har noe pent brukt som passer til alderen, kan du
-                legge det oppi. Merk: Dette erstatter ikke julegaven, og det må
-                være i god stand.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
-
-        <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
-            <AccordionSummary
-              className={classes.questionSummary}
-              expandIcon={
-                <ExpandMoreIcon className={classes.questionSummary} />
-              }
-            >
               <Typography>Kan jeg velge familie selv?</Typography>
             </AccordionSummary>
             <AccordionDetails>
