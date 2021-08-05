@@ -1,6 +1,17 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  Link,
+  Typography,
+} from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
+import { useEffect } from "react";
+import { useCallback } from "react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
@@ -13,6 +24,7 @@ import {
 } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
+import PrivacyDialog from "./PrivacyDialog";
 import useStyles from "./Styles";
 
 interface Props {
@@ -31,6 +43,8 @@ interface Props {
 
 const initState = {
   viewErrorTrigger: 0,
+  viewPrivacyError: false,
+  dialogOpen: false,
 };
 
 type keyValue = {
@@ -53,6 +67,7 @@ const initIsValidsState: keyValue = {
   isValidPhone: true,
   isNotNullPhone: true,
   isValidFamily: true,
+  isValidPrivacy: false,
 };
 
 const SummaryRegistration: React.FC<Props> = ({
@@ -69,10 +84,11 @@ const SummaryRegistration: React.FC<Props> = ({
   step,
 }) => {
   const apiservice = new ApiService();
+  const classes = useStyles();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [state, setState] = useState(initState);
-  const [changesState, setChangesState] = useState(initChangesState);
-  const [isValidsState, setIsValidsState] = useState(initIsValidsState);
+  const [changesState, setChangesState] = useState({ ...initChangesState });
+  const [isValidsState, setIsValidsState] = useState({ ...initIsValidsState });
 
   const allIsValid = () => {
     for (let isValid in isValidsState) {
@@ -134,7 +150,32 @@ const SummaryRegistration: React.FC<Props> = ({
     };
   };
 
-  const classes = useStyles();
+  const setIsValidPrivacyState = (isValid: boolean) => {
+    setIsValidsState((prev) => ({
+      ...prev,
+      isValidPrivacy: isValid,
+    }));
+  };
+
+  const setShowPrivacyDialog = (show: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      dialogOpen: show,
+    }));
+  };
+
+  const getPrivacyState = useCallback(
+    () => isValidsState.isValidPrivacy,
+    [isValidsState]
+  );
+
+  useEffect(() => {
+    if (!state.viewErrorTrigger) return;
+    setState((prev) => ({
+      ...prev,
+      viewPrivacyError: !isValidsState.isValidPrivacy,
+    }));
+  }, [state.viewErrorTrigger]);
 
   return (
     <>
@@ -278,12 +319,52 @@ const SummaryRegistration: React.FC<Props> = ({
               </Button>
             </Grid>
           </Grid>
+          <FormControl required error>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="primary"
+                  onChange={(e) => setIsValidPrivacyState(e.target.checked)}
+                  checked={getPrivacyState()}
+                />
+              }
+              label={
+                <Typography
+                  variant="subtitle2"
+                  color={state.viewPrivacyError ? "error" : undefined}
+                >
+                  Jeg godtar Gi en juls{" "}
+                  <Link
+                    color={state.viewPrivacyError ? "error" : "textSecondary"}
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowPrivacyDialog(true);
+                    }}
+                  >
+                    personvernerklæring
+                  </Link>
+                </Typography>
+              }
+            />
+          </FormControl>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
           <Typography variant="caption" gutterBottom>
-            This site is protected by reCAPTCHA and the Google{" "}
-            <a href="https://policies.google.com/privacy">Privacy Policy</a> and{" "}
-            <a href="https://policies.google.com/terms">Terms of Service</a>{" "}
-            apply.
+            Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
+            <Link
+              color="textSecondary"
+              href="https://policies.google.com/privacy"
+            >
+              personvernerklæring
+            </Link>{" "}
+            og{" "}
+            <Link
+              color="textSecondary"
+              href="https://policies.google.com/terms"
+            >
+              vilkår for bruk
+            </Link>{" "}
+            gjelder.
           </Typography>
         </Grid>
         <Pager
@@ -293,6 +374,12 @@ const SummaryRegistration: React.FC<Props> = ({
           step={step}
         />
       </Container>
+      <PrivacyDialog
+        open={state.dialogOpen}
+        onClose={() => setShowPrivacyDialog(false)}
+        privacyState={isValidsState.isValidPrivacy}
+        setPrivacyState={setIsValidPrivacyState}
+      />
     </>
   );
 };
