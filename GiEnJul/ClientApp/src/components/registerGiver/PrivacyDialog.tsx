@@ -39,7 +39,7 @@ const PrivacyTexts = {
     "Vi vil ikke dele, selge, overføre eller på annen måte utlevere personopplysninger til andre, med mindre vi er rettslig forpliktet til det.",
     "Opplysninger vi har mottatt i forbindelse med ditt kjøp lagres i vårt aktive database i 13 måneder.",
     "Vi behandler dine personopplysninger i henhold til personopplysningsloven og gjeldende forskrifter. Det gjøres oppmerksom på at du kan kreve innsyn i og flytting av egne personopplysninger, samt kreve retting eller sletting av opplysninger. Det kan klages til Datatilsynet på behandling i strid med reglene.",
-    "Vi sikrer dine personopplysninger ved både fysisk og virtuell adgangs- og tilgangskontroll, samt ved kryptering av sensitive deler av avgitte opplysninger.",
+    "Vi sikrer dine personopplysninger ved best practice for situasjonen",
   ],
 };
 
