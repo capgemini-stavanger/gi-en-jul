@@ -24,18 +24,31 @@ Either run the backend in Visual Studio or download the SDK https://dotnet.micro
  The api should now be running on localhost:5001
 
 ### FrontEnd
-To run the frontend node of version 7.20.2 or later is recommended, especially since older versions of node will generate a package-log.json of an older version than what we used.
+To run the frontend npm of version 7.20.2 or later is recommended, especially since older versions of node will generate a package-log.json of an older version than what we used.
+Link for dowloading node https://nodejs.org/en/download/
+Run to show current npm version:  -npm -v
+
 * Run npm i
 * Run npm start
 The website should now be accessible on localhost:3000
 
 ### DataBase
-We used *azurite* for emulating a Azure Table Storage locally
+We used *azurite* for emulating a Azure Table Storage locally.
 * Run - npm install -g azurite
 * Run - cd [auzritefolder] or - mkdir azurite - cd azurite
 * Then run this command in the designated folder - azurite 
+Note: Where you are running the *azurite*, there will be added folders for storing the data
 
 ### Papercut
 We used *papercut* to emulate a SMTP server locally for the mails
 To install it, go to the https://github.com/ChangemakerStudios/Papercut-SMTP repo and follow the README for instructions
 This has to run while running the app
+
+## Recommended tools
+* Visual Studio Code(FrontEnd)
+    * Prettier
+    * React Extension Pack
+    * ++ more extensions
+* Visual Studio 2019 (BackEnd)
+* Microsoft Azure Storage Explorer (Table Storage)
+* Python 3.x.x (Scripts)
