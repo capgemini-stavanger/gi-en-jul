@@ -129,5 +129,11 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(4),
     left: theme.spacing(4),
   },
+  rightMiddleAlign: {
+    position: "absolute",
+    right: "0",
+    top: "0",
+    margin: "0.3em",
+  },
 }));
 export default useStyles;
