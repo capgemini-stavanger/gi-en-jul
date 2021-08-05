@@ -104,6 +104,16 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     height: "100%",
   },
+  paragraph: {
+    fontSize: "100%",
+    textAlign: "start",
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
+    margin: theme.spacing(1),
+    [theme.breakpoints.up("tablet")]: {
+      fontSize: "110%",
+    },
+  },
   howImage: {
     objectFit: "cover",
     MaxHeight: "100%",

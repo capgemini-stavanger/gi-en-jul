@@ -36,38 +36,48 @@ const FamilySize: React.FC<Props> = ({
   const classes = useStyles();
   return (
     <>
-      <Typography 
-      className={classes.subHeading}>Familiesammensetning</Typography>
-      <Container
-      className={classes.form}>
-        <Grid 
-        container
-        direction="column"
-        justifyContent="space-between"
-        alignItems="stretch"
-        className={classes.form} 
+      <Typography className={classes.subHeading}>
+        Familiesammensetning
+      </Typography>
+      <Typography className={classes.infoText}>
+        En familie kan bestå av en ungdom opp til 23 år som er alene, en
+        alenemor med fem barn og alt mellom og over. Vi kan ikke garantere at du
+        får familiestørrelsen du ønsker, og dersom det er «samme for deg/dere»
+        er det fint om du klikker på alternativet 5+.{" "}
+      </Typography>
+      <Container className={classes.form}>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          alignItems="stretch"
+          className={classes.form}
         >
-        
-        <Grid item>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            setIsValids={setIsValid}
-            type="select"
-            fullWidth
-            placeholder={placeHolder}
-            validators={[isNotNull]}
-            name="familyType-input"
-            value={values.maxReceivers ? values.maxReceivers : ""}
-            onChange={handleFamilyChange}
-            label="Familiesammensetning*"
-            errorMessages={["Hvilken familie venter på din gave?"]}
-            options={FAMILY_SIZES}
-          />
+          <Grid item>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              setIsValids={setIsValid}
+              type="select"
+              fullWidth
+              placeholder={placeHolder}
+              validators={[isNotNull]}
+              name="familyType-input"
+              value={values.maxReceivers ? values.maxReceivers : ""}
+              onChange={handleFamilyChange}
+              label="Familiesammensetning*"
+              errorMessages={["Hvilken familie venter på din gave?"]}
+              options={FAMILY_SIZES}
+            />
           </Grid>
           <Grid item>
-          <Pager onContinue={extendedNextStep} onBack={prevStep} continueText={"Oppsummering"} step={step}/>
+            <Pager
+              onContinue={extendedNextStep}
+              onBack={prevStep}
+              continueText={"Oppsummering"}
+              step={step}
+            />
           </Grid>
-          </Grid>
+        </Grid>
       </Container>
     </>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Container} from "@material-ui/core";
+import { Typography, Container } from "@material-ui/core";
 import Confirmation from "./Confirmation";
 import ContactInfo from "./ContactInfo";
 import Location from "./Location";
@@ -9,6 +9,7 @@ import FamilySize from "./FamilySize";
 import getLocations from "../../common/constants/Locations";
 import useStyles from "./Styles";
 import NavBar from "../../common/components/NavBar";
+import LoadingPage from "../../common/components/LoadingPage";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -27,7 +28,9 @@ const RegistrationMacro = () => {
   const [state, setState] = useState(initState);
   const [formDataState, setFormDataState] = useState(initFormDataState);
 
-  const [locationOptions, setLocationOptions] = useState<string[]>([]);
+  const [locationOptions, setLocationOptions] = useState<string[] | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     getLocations().then((locationArray) => setLocationOptions(locationArray));
@@ -78,6 +81,9 @@ const RegistrationMacro = () => {
   const classes = useStyles();
 
   const getStepPage = () => {
+    if (locationOptions === undefined) {
+      return <LoadingPage />;
+    }
     switch (state.step) {
       case 1:
         return (
@@ -86,7 +92,7 @@ const RegistrationMacro = () => {
             handleLocationChange={handleLocationChange}
             values={formDataState}
             placeHolder={"Velg et sted..."}
-            locationOptions={locationOptions}
+            locationOptions={locationOptions ?? []}
             step={state.step}
           />
         );
@@ -124,7 +130,7 @@ const RegistrationMacro = () => {
             handleTlfChange={handleTlfChange}
             handleFamilyChange={handleFamilyChange}
             values={formDataState}
-            locationOptions={locationOptions}
+            locationOptions={locationOptions ?? []}
             callingback={handleConfirm}
             step={state.step}
           />
@@ -142,7 +148,6 @@ const RegistrationMacro = () => {
   };
   return (
     <>
-      
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
           <Confirmation
@@ -152,11 +157,11 @@ const RegistrationMacro = () => {
         </Container>
       ) : (
         <>
-        <NavBar />
-        <Container className={classes.giverForm}>
-          <Typography className={classes.heading}>Bli giver</Typography>
-          {getStepPage()}
-        </Container>
+          <NavBar />
+          <Container className={classes.giverForm}>
+            <Typography className={classes.heading}>Bli giver</Typography>
+            {getStepPage()}
+          </Container>
         </>
       )}
     </>

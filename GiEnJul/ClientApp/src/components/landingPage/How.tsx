@@ -11,8 +11,19 @@ const How = () => {
     <Container id="how" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>
-          Hvordan fungerer <br/> Gi en jul?
+          Hvordan fungerer <br /> Gi en jul?
         </Typography>
+        {/* <ExpandMore />
+        <Typography className={classes.paragraph}>
+        Gi en jul er et veldedighets-prosjekt i samarbeid med blant andre
+          barnevernet og NAV.
+        </Typography>
+        <Typography className={classes.paragraph}>
+          Som giver til “Gi en jul” donerer du julemiddag og
+          julegaver til en familie som virkelig trenger det. Dette er foreldre
+          og barn som ikke selv har mulighet til å kjøpe en skikkelig
+          julemiddag, julesnop eller julegaver til hverandre.
+        </Typography> */}
       </div>
       <Grid container justifyContent="center">
         <Grid container className={classes.howItem}>

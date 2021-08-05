@@ -22,7 +22,8 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
 
   const getStatistics = () => {
     let suggestedMatch: number = givers.filter(
-      (giver) => giver.isSuggestedMatch === true
+      (giver) =>
+        giver.isSuggestedMatch === true && giver.hasConfirmedMatch === false
     ).length;
     let confirmedMatch: number = givers.filter(
       (giver) => giver.hasConfirmedMatch === true
@@ -35,9 +36,8 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         totalRecipints: recipients.length,
         suggestedMatch: suggestedMatch,
         confirmedMatch: confirmedMatch,
-        giversWithoutRecipient: givers.length - suggestedMatch - confirmedMatch,
-        recipientsWithoutGiver:
-          recipients.length - suggestedMatch - confirmedMatch,
+        giversWithoutRecipient: ( givers.length - suggestedMatch - confirmedMatch),
+        recipientsWithoutGiver: (recipients.length - suggestedMatch - confirmedMatch),
       };
     });
   };
@@ -47,63 +47,60 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
   const classes = useStyles();
 
   return (
-      <Grid
-        container
-        direction="column"
-        alignItems="flex-start"
-        className={classes.statisticsContainer}
-      >
-        <Grid item className={classes.infoContainer}>
-          <Typography variant="h4">
-            {" "}
-            {statistics?.totalRecipints} familier
-          </Typography>
-          <Typography className={classes.textWarning}>
-            {" "}
-            {statistics?.recipientsWithoutGiver} uten giver
-          </Typography>
-        </Grid>
-        <Grid item className={classes.infoContainer}>
-          <Typography variant="h4">
-            {" "}
-            {statistics?.totalGivers} givere
-          </Typography>
-          <Typography className={classes.textWarning}>
-            {" "}
-            {statistics?.giversWithoutRecipient} uten familie
-          </Typography>
-        </Grid>
-        <Grid item className={classes.infoContainer}>
-          <Typography variant="h4">Koblinger:</Typography>
-          <Typography>
-            <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />{" "}
-            {statistics?.suggestedMatch}
-            <FiberManualRecord fontSize="large" color="primary" />{" "}
-            {statistics?.confirmedMatch}
-          </Typography>
-        </Grid>
-        <Grid item className={classes.explanationContainer}>
-          <Typography variant="h4">Forklaring</Typography>
-          <Typography>
-            <FiberManualRecord fontSize="large" color="primary" /> = bekreftet
-            kobling
-          </Typography>
-          <br />
-          <Typography>
-            <FiberManualRecord
-              fontSize="large"
-              //not possible to use color="warning"
-              style={{ color: "#f4cf8a" }}
-            />{" "}
-            = foreslått kobling
-          </Typography>
-          <br />
-          <Typography>
-            <FiberManualRecord fontSize="large" color="error" /> = ikke koblet
-            enda
-          </Typography>
-        </Grid>
+    <Grid
+      container
+      direction="column"
+      alignItems="flex-start"
+      className={classes.statisticsContainer}
+    >
+      <Grid item className={classes.infoContainer}>
+        <Typography variant="h4">
+          {" "}
+          {statistics?.totalRecipints} familier
+        </Typography>
+        <Typography className={classes.textWarning}>
+          {" "}
+          {statistics?.recipientsWithoutGiver} uten giver
+        </Typography>
       </Grid>
+      <Grid item className={classes.infoContainer}>
+        <Typography variant="h4"> {statistics?.totalGivers} givere</Typography>
+        <Typography className={classes.textWarning}>
+          {" "}
+          {statistics?.giversWithoutRecipient} uten familie
+        </Typography>
+      </Grid>
+      <Grid item className={classes.infoContainer}>
+        <Typography variant="h4">Koblinger:</Typography>
+        <Typography>
+          <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />{" "}
+          {statistics?.suggestedMatch}
+          <FiberManualRecord fontSize="large" color="primary" />{" "}
+          {statistics?.confirmedMatch}
+        </Typography>
+      </Grid>
+      <Grid item className={classes.explanationContainer}>
+        <Typography variant="h4">Forklaring</Typography>
+        <Typography>
+          <FiberManualRecord fontSize="large" color="primary" /> = bekreftet
+          kobling
+        </Typography>
+        <br />
+        <Typography>
+          <FiberManualRecord
+            fontSize="large"
+            //not possible to use color="warning"
+            style={{ color: "#f4cf8a" }}
+          />{" "}
+          = foreslått kobling
+        </Typography>
+        <br />
+        <Typography>
+          <FiberManualRecord fontSize="large" color="error" /> = ikke koblet
+          enda
+        </Typography>
+      </Grid>
+    </Grid>
   );
 };
 

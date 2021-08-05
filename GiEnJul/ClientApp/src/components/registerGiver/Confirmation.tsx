@@ -27,7 +27,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             Hjertelig takk {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Tusen takk for innsatsen dere skal gjøre! Vi har nå registrert deg
+            Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg
             som giver til årets Gi en jul og har sendt en oppsummering av din
             registrering til
           </Typography>
@@ -46,9 +46,8 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             Ånei! {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Desverre har det skjedd en feil og vi har ikke fått til å registrert
-            deg. Gjerne prøv på ny senere og ta kontakt på epost dersom det ikke
-            går.
+            Desverre har det skjedd en feil og vi har ikke fått registrert
+            deg. Gjerne prøv igjen senere og ta kontakt på epost dersom feilen vedvarer.
           </Typography>
         </>
       ),
