@@ -128,7 +128,7 @@ namespace GiEnJul.Controllers
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var body =
                     $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {recipient.PersonCount}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
+                    $"Du har nå fått tildelt en familie på {getFamilyMembersString(recipient.FamilyMembers)}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
                     $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
@@ -145,6 +145,22 @@ namespace GiEnJul.Controllers
                 throw e;
             }
             return Ok();
+        }
+
+        private string getFamilyMembersString(List<Person> familyMembers)
+        {
+            var children = familyMembers.Count(x => x.Age < 18);
+            var adults = familyMembers.Count(x => x.Age >= 18);
+            var str = "";
+            if(children > 0) str += children + " barn, ";
+            
+            
+            if(adults == 1) 
+                str += $"{adults} voksen";
+            else 
+                str += $"{adults} voksne";
+
+            return str;
         }
 
         [HttpDelete("recipient")]
