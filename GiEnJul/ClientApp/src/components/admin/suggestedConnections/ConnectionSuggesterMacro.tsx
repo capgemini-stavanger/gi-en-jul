@@ -142,7 +142,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             givers={state.givers}
           />
         </Grid>
-        <Grid item xs={2} alignItems="center" justifyContent="center">
+        <Grid item xs={2}>
           <Button
             fullWidth
             variant="contained"

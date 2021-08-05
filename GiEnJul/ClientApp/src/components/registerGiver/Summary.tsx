@@ -11,6 +11,7 @@ import {
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import * as React from "react";
 import { useEffect } from "react";
+import { useCallback } from "react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
@@ -23,6 +24,7 @@ import {
 } from "../InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
+import PrivacyDialog from "./PrivacyDialog";
 import useStyles from "./Styles";
 
 interface Props {
@@ -42,6 +44,7 @@ interface Props {
 const initState = {
   viewErrorTrigger: 0,
   viewPrivacyError: false,
+  dialogOpen: false,
 };
 
 type keyValue = {
@@ -81,6 +84,7 @@ const SummaryRegistration: React.FC<Props> = ({
   step,
 }) => {
   const apiservice = new ApiService();
+  const classes = useStyles();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [state, setState] = useState(initState);
   const [changesState, setChangesState] = useState({ ...initChangesState });
@@ -146,8 +150,24 @@ const SummaryRegistration: React.FC<Props> = ({
     };
   };
 
-  const onPrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    getValiditySetter("isValidPrivacy")(e.target.checked);
+  const setIsValidPrivacyState = (isValid: boolean) => {
+    setIsValidsState((prev) => ({
+      ...prev,
+      isValidPrivacy: isValid,
+    }));
+  };
+
+  const setShowPrivacyDialog = (show: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      dialogOpen: show,
+    }));
+  };
+
+  const getPrivacyState = useCallback(
+    () => isValidsState.isValidPrivacy,
+    [isValidsState]
+  );
 
   useEffect(() => {
     if (!state.viewErrorTrigger) return;
@@ -156,8 +176,6 @@ const SummaryRegistration: React.FC<Props> = ({
       viewPrivacyError: !isValidsState.isValidPrivacy,
     }));
   }, [state.viewErrorTrigger]);
-
-  const classes = useStyles();
 
   return (
     <>
@@ -299,7 +317,13 @@ const SummaryRegistration: React.FC<Props> = ({
           </Grid>
           <FormControl required error>
             <FormControlLabel
-              control={<Checkbox color="primary" onChange={onPrivacyChange} />}
+              control={
+                <Checkbox
+                  color="primary"
+                  onChange={(e) => setIsValidPrivacyState(e.target.checked)}
+                  checked={getPrivacyState()}
+                />
+              }
               label={
                 <Typography
                   variant="subtitle2"
@@ -307,9 +331,12 @@ const SummaryRegistration: React.FC<Props> = ({
                 >
                   Jeg godtar Gi en juls{" "}
                   <Link
-                    href="/personvernserklaering"
-                    target="_blank"
                     color={state.viewPrivacyError ? "error" : "textSecondary"}
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowPrivacyDialog(true);
+                    }}
                   >
                     personverserklæring
                   </Link>
@@ -319,21 +346,21 @@ const SummaryRegistration: React.FC<Props> = ({
           </FormControl>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
           <Typography variant="caption" gutterBottom>
-            This site is protected by reCAPTCHA and the Google{" "}
+            Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
             <Link
               color="textSecondary"
               href="https://policies.google.com/privacy"
             >
-              Privacy Policy
+              personvernerklæring
             </Link>{" "}
-            and{" "}
+            og{" "}
             <Link
               color="textSecondary"
               href="https://policies.google.com/terms"
             >
-              Terms of Service
+              vilkår for bruk
             </Link>{" "}
-            apply.
+            gjelder.
           </Typography>
         </Grid>
         <Pager
@@ -343,6 +370,12 @@ const SummaryRegistration: React.FC<Props> = ({
           step={step}
         />
       </Container>
+      <PrivacyDialog
+        open={state.dialogOpen}
+        onClose={() => setShowPrivacyDialog(false)}
+        privacyState={isValidsState.isValidPrivacy}
+        setPrivacyState={setIsValidPrivacyState}
+      />
     </>
   );
 };
