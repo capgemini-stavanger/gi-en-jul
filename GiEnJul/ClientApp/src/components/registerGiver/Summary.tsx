@@ -338,7 +338,7 @@ const SummaryRegistration: React.FC<Props> = ({
                       setShowPrivacyDialog(true);
                     }}
                   >
-                    personverserklæring
+                    personvernerklæring
                   </Link>
                 </Typography>
               }
