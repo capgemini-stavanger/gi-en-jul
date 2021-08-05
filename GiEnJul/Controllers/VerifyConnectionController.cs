@@ -60,7 +60,7 @@ namespace GiEnJul.Controllers
 
             if (await _connectionRepository.ConnectionExists(giver, recipient))
             {
-                throw new AlreadyConnectedException("This connection is already created");
+                return; 
             }
 
             if (!ConnectionHelper.CanConnect(giver, recipient))
@@ -88,11 +88,7 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
                 throw e;
             }
-            catch (AlreadyConnectedException e)
-            {
-                _log.Error(e, "Connection between {@0} and {@1} is already registered", giver, recipient);
-                throw e;
-            }
+
             catch (Exception e)
             {
                 //Undo all operations
