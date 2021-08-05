@@ -56,8 +56,8 @@ export const theme = createTheme({
   breakpoints: {
     values: {
       tablet: 500,
-      laptop: 900,
-      desktop: 1200,
+      laptop: 1000,
+      desktop: 1300,
     },
   },
   palette: {

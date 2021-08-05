@@ -36,17 +36,15 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: -theme.spacing(35),
     },
   },
-  logoText: {
-    color: theme.palette.primary.main,
-    fontSize: "250%",
-    fontWeight: 500,
-  },
   textHeadline: {
     color: theme.palette.primary.main,
     fontSize: "180%",
     fontWeight: 500,
+    textAlign: "center",
+    margin: theme.spacing(1),
     [theme.breakpoints.up("tablet")]: {
       fontSize: "200%",
+      margin: theme.spacing(4),
     },
   },
   blueTextHeadline: {
@@ -60,9 +58,6 @@ const useStyles = makeStyles((theme) => ({
   headLineContainer: {
     textAlign: "center",
     margin: theme.spacing(1),
-    [theme.breakpoints.up("tablet")]: {
-      margin: theme.spacing(4),
-    },
   },
   sectionContainer: {
     marginTop: theme.spacing(3),
@@ -70,20 +65,11 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: "70em",
   },
   howItem: {
-    backgroundColor: "white",
-    margin: theme.spacing(2),
-    borderRadius: "2em",
     maxWidth: "100%",
     objectFit: "cover",
     display: "stretch",
-
-    [theme.breakpoints.up("tablet")]: {
-      maxWidth: "33.3%",
-      margin: theme.spacing(3),
-    },
     [theme.breakpoints.up("laptop")]: {
-      maxWidth: "25%",
-      margin: theme.spacing(4),
+      maxWidth: "33%",
     },
   },
   questionItem: {
@@ -101,31 +87,34 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     color: "white",
   },
-  howText: {
-    objectFit: "cover",
-    MaxHeight: "100%",
-    padding: theme.spacing(2),
-  },
-  card: {
-    justifyContent: "space-between",
-    padding: 0,
+  imgContainer:{
     overflow: "hidden",
     height: "100%",
   },
   stepsImage:{
     objectFit: "none",
-    width: "100%",
-    height: "100%",
-
+    width: "346px", 
+    height: "278px",
+    margin: "auto", 
+    display: "block",
   },
   paragraph: {
-    fontSize: "100%",
-    textAlign: "start",
+    fontSize: "110%",
+    textAlign: "center",
     fontWeight: 600,
     color: theme.palette.text.secondary,
     margin: theme.spacing(1),
     [theme.breakpoints.up("tablet")]: {
-      fontSize: "110%",
+      fontSize: "120%",
+    },
+  },
+  textContainer:{
+    maxWidth: "30em", 
+    textAlign: "center",
+    margin: theme.spacing(1),
+    [theme.breakpoints.up("laptop")]: {
+      maxWidth: "51em",
+      margin: theme.spacing(4),
     },
   },
   howImage: {
@@ -137,10 +126,6 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(0),
     display: "flex",
     alignItems: "flex-end",
-  },
-  nextIcon: {
-    color: theme.palette.primary.main,
-    margin: "auto",
   },
   contactHeader: {
     backgroundColor: theme.palette.primary.light,
