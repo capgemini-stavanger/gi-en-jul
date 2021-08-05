@@ -29,18 +29,6 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
       (giver) => giver.hasConfirmedMatch === true
     ).length;
 
-    let giversWithoutRecipient: number;
-    givers.length - suggestedMatch - confirmedMatch < 0
-      ? (giversWithoutRecipient = 0)
-      : (giversWithoutRecipient =
-          givers.length - suggestedMatch - confirmedMatch);
-
-    let recipientsWithoutGiver: number;
-    recipients.length - suggestedMatch - confirmedMatch < 0
-      ? (recipientsWithoutGiver = 0)
-      : (recipientsWithoutGiver =
-          recipients.length - suggestedMatch - confirmedMatch);
-
     setStatistics((prevState) => {
       return {
         ...prevState,
@@ -48,8 +36,8 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         totalRecipints: recipients.length,
         suggestedMatch: suggestedMatch,
         confirmedMatch: confirmedMatch,
-        giversWithoutRecipient: giversWithoutRecipient,
-        recipientsWithoutGiver: recipientsWithoutGiver,
+        giversWithoutRecipient: ( givers.length - suggestedMatch - confirmedMatch),
+        recipientsWithoutGiver: (recipients.length - suggestedMatch - confirmedMatch),
       };
     });
   };
