@@ -37,7 +37,6 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-
         // POST: /verify/giverGuid/recipientGuid/event_location
         [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}")]
         public async Task VerifyConnection(string giverRowKey, string recipientRowKey, string partitionkey)
@@ -46,6 +45,11 @@ namespace GiEnJul.Controllers
             var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
+
+            if (await _connectionRepository.ConnectionExists(giver, recipient))
+            {
+                return; 
+            }
 
             if (!ConnectionHelper.CanConnect(giver, recipient))
             {
