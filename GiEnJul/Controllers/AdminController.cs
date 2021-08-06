@@ -124,11 +124,13 @@ namespace GiEnJul.Controllers
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+
                 var title = "Du har blitt tildelt en familie!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var body =
                     $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {recipient.PersonCount}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
+                    $"Du har nå fått tildelt en familie på {GetFamilyMembersString(recipient.FamilyMembers)}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
                     $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
@@ -145,6 +147,22 @@ namespace GiEnJul.Controllers
                 throw e;
             }
             return Ok();
+        }
+
+        private string GetFamilyMembersString(List<Person> familyMembers)
+        {
+            var children = familyMembers.Count(x => x.Age < 18);
+            var adults = familyMembers.Count(x => x.Age >= 18);
+            var str = "";
+            if(children > 0) 
+                str += children + " barn og ";
+            
+            if(adults == 1) 
+                str += $"{adults} voksen";
+            else 
+                str += $"{adults} voksne";
+
+            return str;
         }
 
         [HttpDelete("recipient")]

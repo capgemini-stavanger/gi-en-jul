@@ -113,9 +113,7 @@ namespace GiEnJul.Controllers
             recipient.FamilyMembers.ForEach(
                 person => wishList += 
                     $"<li>" +
-                    $"{GenderToString(person)}, " +
-                    $"{person.Age} år, " +
-                    $"{(string.IsNullOrEmpty(person.Wish) ? "Ønske ikke spesifisert" : person.Wish)}" +
+                    $"{person.ToReadableString()}, " +
                     $"</li>");
 
             var foodList =
@@ -134,20 +132,6 @@ namespace GiEnJul.Controllers
                 "</div>";
 
             return body;
-        }
-
-        private string GenderToString(Person person)
-        {
-            switch (person.Gender)
-            {
-                case Gender.Female:
-                    return person.Age > 18 ? "Kvinne" : "Jente";
-                case Gender.Male:
-                    return person.Age > 18 ? "Mann" : "Gutt";
-                case Gender.Unspecified:
-                default:
-                    return "Ikke spesifisert";
-            }
         }
     }
 }
