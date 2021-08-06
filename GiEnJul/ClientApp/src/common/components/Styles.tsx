@@ -5,8 +5,8 @@ export default () =>
     toTopButton: {
       position: "fixed",
       justifyContent: "center",
-      bottom: theme.spacing(2),
-      right: theme.spacing(2),
+      bottom: theme.spacing(3),
+      right: theme.spacing(4),
       color: "white",
       backgroundColor: theme.palette.primary.main,
       "&:hover": {
