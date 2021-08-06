@@ -54,7 +54,7 @@ namespace GiEnJul.Controllers
 
             var messageContent =
                 $"<h2>Hjertelig takk, {insertedAsDto.FullName}!</h2>" +
-                $"Da er du registrert. Tusen takk for innsatsen dere skal gjøre! Vit at familiene setter utrolig stor pris på dette, " +
+                $"Da er du registrert! Vit at familiene setter utrolig stor pris på dette, " +
                 $"og barnevernet forteller om mange tårevåte øyeblikk når familiene får eskene sine.<br/>" +
                 $"Når det nærmer seg jul vil du motta mer informasjon om familien du skal gi en jul. " +
                 $"Da får du også ønskelister, sted og tidspunkt for innlevering av juleesken.</br></br>" +
