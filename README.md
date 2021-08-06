@@ -52,3 +52,4 @@ This has to run while running the app
 * Visual Studio 2019 (BackEnd)
 * Microsoft Azure Storage Explorer (Table Storage)
 * Python 3.x.x (Scripts)
+* Postman (Api requests)

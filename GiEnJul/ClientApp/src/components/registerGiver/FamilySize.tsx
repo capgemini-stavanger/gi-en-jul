@@ -43,7 +43,7 @@ const FamilySize: React.FC<Props> = ({
         En familie kan bestå av en ungdom opp til 23 år som er alene, en
         alenemor med fem barn og alt mellom og over. Vi kan ikke garantere at du
         får familiestørrelsen du ønsker, og dersom det er «samme for deg/dere»
-        er det fint om du klikker på alternativet 5+.{" "}
+        er det fint om du klikker på alternativet 6+.{" "}
       </Typography>
       <Container className={classes.form}>
         <Grid

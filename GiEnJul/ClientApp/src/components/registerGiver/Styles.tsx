@@ -37,9 +37,10 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: "100%",
-    height: "25em",
-    maxHeight: "25em",
     display: "inline-flex",
+    [theme.breakpoints.up("tablet")]: {
+      height: "30em",
+    },
   },
   buttons: {
     bottom: theme.spacing(2),
@@ -135,5 +136,11 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     margin: "0.3em",
   },
+  captchaContainer:{
+    paddingBottom:theme.spacing(8),
+  }, 
+  summaryInput:{
+    marginBottom: "1.2em",
+  }
 }));
 export default useStyles;

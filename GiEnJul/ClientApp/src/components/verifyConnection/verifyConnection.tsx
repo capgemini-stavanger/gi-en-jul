@@ -51,10 +51,9 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       du skal gjøre!
                     </Typography>
                     <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og
-                      barnevernet og de andre forteller om mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg
-                      med finne en fin gave.
+                      Vit at familiene setter utrolig stor pris på dette, og det
+                      blir mange tårevåte øyeblikk når familiene får eskene
+                      sine. Håper du koser deg med finne en fin gave.
                     </Typography>
                   </Container>
                 </Grid>
@@ -99,9 +98,9 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       Gi en jul der du bor så skal vi registrere ditt bidrag.
                     </Typography>
                     <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og
-                      barnevernet og de andre forteller om mange tårevåte
-                      øyeblikk når familiene får eskene sine.
+                      Vit at familiene setter utrolig stor pris på dette, og det
+                      blir mange tårevåte øyeblikk når familiene får eskene
+                      sine. Håper du koser deg med finne en fin gave
                     </Typography>
                   </Container>
                 </Grid>
@@ -148,9 +147,9 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                     en jul der du bor så skal vi registrere ditt bidrag.
                   </Typography>
                   <Typography className={classes.paragraph}>
-                    Vit at familiene setter utrolig stor pris på dette, og
-                    barnevernet og de andre forteller om mange tårevåte øyeblikk
-                    når familiene får eskene sine.
+                    Vit at familiene setter utrolig stor pris på dette, og det
+                    blir mange tårevåte øyeblikk når familiene får eskene sine.
+                    Håper du koser deg med finne en fin gave
                   </Typography>
                 </Container>
               </Grid>

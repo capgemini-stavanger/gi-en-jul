@@ -186,7 +186,7 @@ const SummaryRegistration: React.FC<Props> = ({
       </Typography>
       <Container>
         <Grid container className={classes.form}>
-          <Grid container>
+          <Grid container className={classes.summaryInput}>
             <Grid item xs={9}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
@@ -215,7 +215,7 @@ const SummaryRegistration: React.FC<Props> = ({
           </Grid>
 
           <Grid container>
-            <Grid item xs={9}>
+            <Grid item xs={9} className={classes.summaryInput}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
                 disabled={changesState.fullName}
@@ -238,7 +238,7 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={9}>
+            <Grid item xs={9} className={classes.summaryInput}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
                 disabled={changesState.email}
@@ -267,7 +267,7 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={9}>
+            <Grid item xs={9} className={classes.summaryInput}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
                 disabled={changesState.phone}
@@ -296,7 +296,7 @@ const SummaryRegistration: React.FC<Props> = ({
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={9}>
+            <Grid item xs={9} className={classes.summaryInput}>
               <InputValidator
                 viewErrorTrigger={state.viewErrorTrigger}
                 type="select"
@@ -349,7 +349,7 @@ const SummaryRegistration: React.FC<Props> = ({
             />
           </FormControl>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
-          <Typography variant="caption" gutterBottom>
+          <div className={classes.captchaContainer}><Typography variant="caption" gutterBottom>
             Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
             <Link
               color="textSecondary"
@@ -366,6 +366,7 @@ const SummaryRegistration: React.FC<Props> = ({
             </Link>{" "}
             gjelder.
           </Typography>
+          </div>
         </Grid>
         <Pager
           onContinue={extendedNextStep}

@@ -52,7 +52,14 @@ namespace GiEnJul.Controllers
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
-            var messageContent = $"{insertedAsDto.FullName}, vi bekrefter å ha mottatt din registering for å gi en jul i {insertedAsDto.Location}";
+            var messageContent =
+                $"<h2>Hjertelig takk, {insertedAsDto.FullName}!</h2>" +
+                $"Da er du registrert! Vit at familiene setter utrolig stor pris på dette, " +
+                $"og barnevernet forteller om mange tårevåte øyeblikk når familiene får eskene sine.<br/>" +
+                $"Når det nærmer seg jul vil du motta mer informasjon om familien du skal gi en jul. " +
+                $"Da får du også ønskelister, sted og tidspunkt for innlevering av juleesken.</br></br>" +
+                $"Følg også med på Gi en jul sin <a href='https://www.facebook.com/gienjul'>Facebook - side</a>. Igjen tusen takk, ditt bidrag betyr veldig mye!";
+
             await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Takk for din registrering!", messageContent);
 
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
