@@ -1,4 +1,3 @@
-import re
 import random
 import time
 import os
@@ -15,7 +14,8 @@ TABLE_HEADER_PERSON = ["Age", "Gender", "Wish"]
 TABLE_HEADER_GIVER = ["Email", "EventName", "FullName", "HasConfirmedMatch",
                       "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber"]
 TABLE_HEADER_RECIPIENT = ["ContactEmail", "ContactFullName", "ContactPhoneNumber", "Dessert", "Dinner", "EventName",
-                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount", "ReferenceId", "FamilyId"]
+                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount",
+                          "ReferenceId", "FamilyId", "MatchedGiver"]
 
 PHONE_NUMBER_RANGES = ((40_00_00_00, 49_99_99_99), (90_00_00_00, 99_99_99_99))
 EMAIL_DOMAIN = ("gmail", "outlook", "live", "lyse", "hotmail")
@@ -210,7 +210,7 @@ def create_table(filename: str, header: str):
     for col in header:
         full_header.append(col)
         full_header.append(f"{col}@type")
-    with open(filename, "w", encoding = "utf8") as f:
+    with open(filename, "w", encoding="utf8") as f:
         f.write(f'{",".join(full_header)}\n')
 
 
@@ -257,16 +257,16 @@ def add_table_entry_person(recipient_id: str):
                   [age, gender, wish])
 
 
-internal_id_int = 0
+family_id_int = 0
 
 
 def add_table_entry_recipient_and_persons(location: str, event_name: str):
-    global internal_id_int
-    internal_id_int += 1
+    global family_id_int
+    family_id_int += 1
 
     event_name = event_name.capitalize()
     location = location.capitalize()
-    internal_id = str(internal_id_int)
+    family_id = str(family_id_int)
     partition_key = get_event_location_str(event_name, location)
     row_key = get_uuid()
     contact_full_name = get_name(get_gender())
@@ -280,10 +280,11 @@ def add_table_entry_recipient_and_persons(location: str, event_name: str):
     reference_id = get_refid()
     has_confirmed_match = False
     is_suggested_match = False
+    matched_giver = None
     add_table_row(FILE_PATH_RECIPIENT, partition_key, row_key,
                   (contact_email, contact_full_name, contact_phone_number, dessert, dinner,
                    event_name, has_confirmed_match, institution, is_suggested_match, location,
-                   note, personCount, reference_id, internal_id))
+                   note, personCount, reference_id, family_id, matched_giver))
 
     for p in range(personCount):
         add_table_entry_person(row_key)
