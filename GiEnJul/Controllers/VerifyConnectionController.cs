@@ -107,7 +107,6 @@ namespace GiEnJul.Controllers
         {
             var deliveryAddress = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
 
-            var information = $"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis elementum massa vel blandit faucibus. Maecenas sed nisi ornare, pretium sapien nec, sollicitudin enim. Suspendisse sem urna, porta sed nulla id, vulputate hendrerit tellus. Nullam sagittis, enim eu facilisis hendrerit, velit ex vulputate mi, a rutrum nibh velit ac purus. Praesent tincidunt vehicula interdum. Sed viverra nulla sed vehicula sollicitudin. Pellentesque porttitor velit vel nulla ultricies sodales. Etiam id massa sed neque lobortis congue. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis lacinia metus neque, id bibendum sem vulputate a. Nunc ultricies placerat tellus, sed volutpat ex sodales vitae. Curabitur suscipit in sem quis sollicitudin. Donec pharetra ipsum eget ante congue iaculis.Donec mollis elit nibh, non suscipit diam imperdiet vitae. Aenean a pretium felis. Donec ornare, urna vitae egestas consectetur, ligula nisl condimentum est, a pellentesque nunc enim eu mauris.Morbi volutpat et odio ac tincidunt. Aenean vel leo id nunc cursus dignissim.Nullam ac erat faucibus, efficitur enim sit amet, fringilla tortor. Quisque tincidunt egestas felis, ut rutrum tellus rutrum vel. Sed vitae nisl id enim maximus ornare porttitor eu dolor. Maecenas non semper est, varius tristique tortor. Fusce ornare enim felis, in ullamcorper orci aliquam sit amet.";
 
             var wishList = "";
             recipient.FamilyMembers.ForEach(
@@ -122,7 +121,6 @@ namespace GiEnJul.Controllers
                 $"<li>Notat: {(string.IsNullOrEmpty(recipient.Note) ? "-" : recipient.Note)}</li>";
 
             var body = 
-                information +
                 $"<h1>Familie {recipient.FamilyId}</h1>" +
                 "<div>" +
                 $"<ul>{wishList}</ul>" +
