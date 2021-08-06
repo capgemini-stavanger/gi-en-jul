@@ -44,6 +44,7 @@ export default () =>
       position: "fixed",
       border: "none",
       boxShadow: "none",
+      padding: theme.spacing(2),
     },
     toolBar: {
       justifyContent: "space-between",
