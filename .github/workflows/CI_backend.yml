@@ -5,13 +5,11 @@ on:
     branches: [ master ]
     paths: 
       - 'GiEnJul/**'
-      - '!GiEnJul/ClientApp/'
       
   pull_request:
     branches: [ master ]
     paths: 
       - 'GiEnJul/**'
-      - '!GiEnJul/ClientApp/'
 
   workflow_dispatch:
   
