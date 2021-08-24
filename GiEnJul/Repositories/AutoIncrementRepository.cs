@@ -62,7 +62,7 @@ namespace GiEnJul.Repositories
                     attempts += 1;
                     if (e.RequestInformation.HttpStatusCode != 412 || attempts > 3)
                     {
-                        throw(e);
+                        throw e;
                     }
                     await Task.Delay(50);
                 }

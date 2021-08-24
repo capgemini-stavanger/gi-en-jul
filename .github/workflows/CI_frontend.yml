@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'GiEnJul/ClientApp/**'
+      - 'ClientApp/**'
   pull_request:
     branches: [ master ]
     paths:
-      - 'GiEnJul/ClientApp/**'
+      - 'ClientApp/**'
 
   workflow_dispatch:
 
@@ -21,12 +21,12 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-        working-directory: ./GiEnJul/ClientApp
+        working-directory: ./ClientApp
 
       - name: Build
         run: npm run build
-        working-directory: ./GiEnJul/ClientApp
+        working-directory: ./ClientApp
         
       - name: Test
         run: npm test --watchAll=false
-        working-directory: ./GiEnJul/ClientApp
+        working-directory: ./ClientApp
