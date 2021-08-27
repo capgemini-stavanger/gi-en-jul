@@ -69,7 +69,7 @@ const Contact = () => {
 
         <Grid container className={classes.contactItem}>
           <Card className={classes.contactCard}>
-            <Typography className={classes.contactHeader}>Nittedal</Typography>
+            <Typography className={classes.contactHeader}>Gjesdal</Typography>
             <CardMedia className={classes.howImage} image={dummyImg} />
             <CardContent className={classes.contactContent}>
               <Typography>
