@@ -73,6 +73,44 @@ const Contact = () => {
             <CardMedia className={classes.howImage} image={dummyImg} />
             <CardContent className={classes.contactContent}>
               <Typography>
+                Ta kontakt med <br /> Caroline på
+              </Typography>
+            </CardContent>
+            <CardActions className={classes.contactContent}>
+              <IconButton>
+                <Mail color="primary" className={classes.mailIcon} />
+                <Typography>gjesdal@gienjul.no</Typography>
+              </IconButton>
+            </CardActions>
+            <CardActions className={classes.contactContent}>
+              <IconButton
+                onClick={() => {
+                  window
+                    .open("https://www.facebook.com/gienjul", "_blank")
+                    ?.focus();
+                }}
+              >
+                <Facebook color="primary" />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  window
+                    .open("https://www.instagram.com/gienjul/", "_blank")
+                    ?.focus();
+                }}
+              >
+                <Instagram color="primary" />
+              </IconButton>
+            </CardActions>
+          </Card>
+        </Grid>
+
+        <Grid container className={classes.contactItem}>
+          <Card className={classes.contactCard}>
+            <Typography className={classes.contactHeader}>Nittedal</Typography>
+            <CardMedia className={classes.howImage} image={dummyImg} />
+            <CardContent className={classes.contactContent}>
+              <Typography>
                 Ta kontakt med <br /> Nina på
               </Typography>
             </CardContent>
