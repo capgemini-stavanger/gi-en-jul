@@ -275,7 +275,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   const onSuccessSubmit = () => {
-    setAlert(true, "Familie registrert!", "success");
+    var message = 'Familie #' + formDataState.pid + ' registrert!';
+    setAlert(true, message, "success");
     resetForm();
   };
 
@@ -349,6 +350,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     e: React.SyntheticEvent | React.MouseEvent,
     reason?: string
   ) => {
+    if(reason == 'clickaway')
+      return ;
     setAlert(false);
   };
 
@@ -357,7 +360,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={state.alert.open}
-        autoHideDuration={6000}
+        autoHideDuration={60000}
         onClose={handleAlertClose}
       >
         <Alert severity={state.alert.severity} onClose={handleAlertClose}>
