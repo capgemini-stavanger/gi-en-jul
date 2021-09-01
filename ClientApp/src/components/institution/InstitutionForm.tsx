@@ -275,7 +275,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   const onSuccessSubmit = () => {
-    var message = 'Familie #' + formDataState.pid + ' registrert!';
+    var message = formDataState.pid.length > 0 ? 'Familie #' + formDataState.pid + ' registrert!' : 'Familie ' + formDataState.pid + ' registrert!';
     setAlert(true, message, "success");
     resetForm();
   };
