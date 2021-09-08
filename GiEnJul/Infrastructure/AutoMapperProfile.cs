@@ -96,6 +96,17 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ReceiverLocation))
                 .ForMember(dest => dest.FamilyMembers, act => act.Ignore());
+
+            //Event mapping
+            CreateMap<Dtos.PostEventDto, Models.Event>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.EventType))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.City));
+
+            CreateMap<Models.Event, Entities.Event>()
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Event, Models.Event>();
         }
     }
 }

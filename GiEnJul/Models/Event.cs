@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace GiEnJul.Entities
+namespace GiEnJul.Models
 {
-    public class Event : EntityBase
+    public class Event
     {
-        //RK - EventType
-        //PK - City
+        // RowKey is the EventType
+        public string RowKey { get; set; }
+        // PartitionKey is the City
+        public string PartitionKey { get; set; }
 
         public string EventType { get; set; }
         public string City { get; set; }
