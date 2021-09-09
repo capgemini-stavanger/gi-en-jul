@@ -22,7 +22,7 @@ const Home = () => {
 
   const apiservice = new ApiService;
   useEffect(() => {
-    apiservice.get("event/ActiveLocations").then((response) => setContactCards(response.data));
+    apiservice.get("event/Contacts").then((response) => setContactCards(response.data));
   }, []);
 
   const classes = useStyles();

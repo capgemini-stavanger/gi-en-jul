@@ -17,9 +17,9 @@ import { Mail, Facebook, Instagram } from "@material-ui/icons";
 
 
 export interface ContactsData {
-  location: string,
-  name: string,
-  mail: string,
+  city: string,
+  contactPerson: string,
+  email: string,
   facebook: string,
   instagram: string,
 }
@@ -34,28 +34,28 @@ const Contact : React.FC<Props> = ({contacts}) => {
 
 console.log(contacts);
 
-const listContacts = contacts.map((contacts, index) =>
+const listContacts = contacts.map((contact, index) =>
   <div key={index}> 
   <Grid container className={classes.contactItem}>
     <Card className={classes.contactCard}>
-      <Typography className={classes.contactHeader}>{contacts}</Typography>
+      <Typography className={classes.contactHeader}>{contact.city}</Typography>
       <CardMedia className={classes.howImage} image={dummyImg} />
       <CardContent className={classes.contactContent}>
         <Typography>
-          Ta kontakt med <br /> Bodil på
+          Ta kontakt med <br /> {contact.contactPerson} på
         </Typography>
       </CardContent>
       <CardActions className={classes.contactContent}>
         <IconButton>
           <Mail color="primary" className={classes.mailIcon} />
-          <Typography>bodø@gienjul.no</Typography>
+          <Typography>{contact.email}</Typography>
         </IconButton>
       </CardActions>
       <CardActions className={classes.contactContent}>
         <IconButton
           onClick={() => {
             window
-              .open("https://www.facebook.com/gienjul", "_blank")
+              .open(contact.facebook, "_blank")
               ?.focus();
           }}
         >
@@ -64,7 +64,7 @@ const listContacts = contacts.map((contacts, index) =>
         <IconButton
           onClick={() => {
             window
-              .open("https://www.instagram.com/gienjul/", "_blank")
+              .open(contact.instagram, "_blank")
               ?.focus();
           }}
         >
