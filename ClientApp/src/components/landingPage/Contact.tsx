@@ -16,7 +16,7 @@ import dummyImg from "./../../styling/img/dummy-image.jpg";
 import { Mail, Facebook, Instagram } from "@material-ui/icons";
 
 
-export interface ContactsData {
+export interface ContactData {
   city: string,
   contactPerson: string,
   email: string,
@@ -25,21 +25,19 @@ export interface ContactsData {
 }
 
 interface Props {
-  contacts : ContactsData[]
+  contacts : ContactData[]
 }
 
 
 const Contact : React.FC<Props> = ({contacts}) => {
   const classes = useStyles();
 
-console.log(contacts);
-
-const listContacts = contacts.map((contact, index) =>
+const ContactCards = contacts.map((contact, index) =>
   <div key={index}> 
   <Grid container className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
-      <CardMedia className={classes.howImage} image={dummyImg} />
+      {<CardMedia className={classes.howImage} image={dummyImg} />}
       <CardContent className={classes.contactContent}>
         <Typography>
           Ta kontakt med <br /> {contact.contactPerson} på
@@ -52,16 +50,18 @@ const listContacts = contacts.map((contact, index) =>
         </IconButton>
       </CardActions>
       <CardActions className={classes.contactContent}>
-        <IconButton
+        { contact.facebook &&
+          <IconButton
           onClick={() => {
             window
               .open(contact.facebook, "_blank")
               ?.focus();
           }}
-        >
+          >
           <Facebook color="primary" />
-        </IconButton>
-        <IconButton
+        </IconButton>}
+        { contact.instagram &&
+          <IconButton
           onClick={() => {
             window
               .open(contact.instagram, "_blank")
@@ -69,7 +69,7 @@ const listContacts = contacts.map((contact, index) =>
           }}
         >
           <Instagram color="primary" />
-        </IconButton>
+        </IconButton>}
       </CardActions>
     </Card>
   </Grid>
@@ -82,13 +82,20 @@ const listContacts = contacts.map((contact, index) =>
         <Typography className={classes.textHeadline}>Kontakt</Typography>
       </div>
       {/* Todo: Legg inn scrolle-link under */}
+      { ContactCards.length &&
       <Typography className={classes.contactContent}>
         Før du tar kontakt, se om du finner svaret på det du lurer på i ofte
         stilte spørsmål.
       </Typography>
-      <Grid container justifyContent="center">
-        {listContacts}
-      </Grid>
+       ||
+      <Typography className={classes.contactContent}>
+        Det er dessverre ikke mulig å melde seg opp som giver enda.
+      </Typography>
+      }
+      { ContactCards.length &&
+        <Grid container justifyContent="center">
+        {ContactCards}
+      </Grid>}
     </Container>
   );
 };

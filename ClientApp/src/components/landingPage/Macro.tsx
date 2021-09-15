@@ -9,7 +9,7 @@ import logo from "./../../styling/img/logo_background.svg";
 import family from "./../../styling/img/familyTop.svg";
 import snowDown from "./../../styling/img/snow_down.svg";
 import Contact from "./Contact";
-import {ContactsData} from "./Contact";
+import {ContactData} from "./Contact";
 import NavBar from "../../common/components/NavBar";
 import Footer from "../../common/components/Footer";
 import { useState } from "react";
@@ -18,11 +18,11 @@ import ApiService from "../../common/functions/apiServiceClass";
 
 const Home = () => {
 
-  const [xContact, setContactCards] = useState<ContactsData[]>([]);
+  const [contacts, setContacts] = useState<ContactData[]>([]);
 
   const apiservice = new ApiService;
   useEffect(() => {
-    apiservice.get("event/Contacts").then((response) => setContactCards(response.data));
+    apiservice.get("event/Contacts").then((response) => setContacts(response.data));
   }, []);
 
   const classes = useStyles();
@@ -50,7 +50,7 @@ const Home = () => {
         <How />
         <Questions />
         <Companies />
-        <Contact contacts={xContact}/>
+        <Contact contacts={contacts}/>
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
