@@ -1,5 +1,4 @@
-﻿
-namespace GiEnJul.Dtos
+﻿namespace GiEnJul.Dtos
 {
     public class GetContactsDto
     {
