@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Models
+﻿using System;
+
+namespace GiEnJul.Models
 {
     public class Giver
     {
@@ -11,6 +13,8 @@
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public string EventName { get; set; }
+        public DateTime RegistrationDate { get; set; }
+
         //Is the Rowkey to the recipient
         public string MatchedRecipient { get; set; }
         //Match with family, default is false

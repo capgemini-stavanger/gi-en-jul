@@ -3,6 +3,7 @@ using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace GiEnJul.Repositories
 
         public async Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model)
         {
+            model.RegistrationDate = DateTime.UtcNow;
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Giver>(model));
             return _mapper.Map<Models.Giver>(inserted);
         }

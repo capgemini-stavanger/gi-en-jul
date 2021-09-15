@@ -19,6 +19,7 @@ namespace GiEnJul.Entities
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public DateTime RegistrationDate { get; set; }
 
         //Is the Rowkey to the recipient
         public string MatchedRecipient { get; set; }
