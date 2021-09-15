@@ -108,7 +108,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "AddEvent")]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
-
             if (eventDto.StartDate <= System.DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
@@ -116,6 +115,18 @@ namespace GiEnJul.Controllers
 
             var eventEntity = _mapper.Map<Event>(eventDto);
             await _eventRepository.InsertOrReplaceAsync(eventEntity);
+
+            return Ok();
+        }
+
+        [HttpPut("person/{person_rowkey}/wish")]
+        [Authorize(Policy = "UpdateWish")]
+        public async Task<ActionResult> PutWishAsync(string person_rowkey, [FromBody] string wish)  
+        {
+            var person = await _personRepository.GetPersonByRowKey(person_rowkey);
+            person.Wish = wish.Any() ? wish : null;
+
+            await _personRepository.InsertOrReplaceAsync(person);
 
             return Ok();
         }
