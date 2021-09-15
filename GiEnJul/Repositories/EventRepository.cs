@@ -15,6 +15,7 @@ namespace GiEnJul.Repositories
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();
         Task<string> GetDeliveryAddressForLocationAsync(string location);
+        Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -82,6 +83,12 @@ namespace GiEnJul.Repositories
             var endDateNotPassed = TableQuery.GenerateFilterConditionForDate("EndDate", QueryComparisons.GreaterThanOrEqual, DateTime.Now);
 
             return TableQuery.CombineFilters(startDatePassed, TableOperators.And, endDateNotPassed);
+        }
+
+        public async Task<Models.Event> InsertOrReplaceAsync(Models.Event model)
+        {
+            var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Event>(model));
+            return _mapper.Map<Models.Event>(inserted);
         }
     }
 }

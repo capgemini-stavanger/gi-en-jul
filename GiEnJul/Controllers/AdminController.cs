@@ -103,6 +103,24 @@ namespace GiEnJul.Controllers
             }
             return connecitonDtos;
         }
+
+        [HttpPost("event")]
+        [Authorize(Policy = "AddEvent")]
+        public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
+        {
+
+            if (eventDto.StartDate <= System.DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
+            {
+                throw new ArgumentException();
+            }
+
+            var eventEntity = _mapper.Map<Event>(eventDto);
+            await _eventRepository.InsertOrReplaceAsync(eventEntity);
+
+            return Ok();
+        }
+
+
         [HttpPost]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {

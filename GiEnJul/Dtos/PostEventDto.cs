@@ -1,18 +1,24 @@
 ﻿using System;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
-namespace GiEnJul.Entities
+namespace GiEnJul.Dtos
 {
-    public class Event : EntityBase
+    public class PostEventDto
     {
-        //PK - EventName
-        //RK - City
-
+        [Required]
         public string EventName { get; set; }
+        [Required]
         public string City { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
+        [Required]
         public string DeliveryAddress { get; set; }
+        [Required]
         public string ContactPerson { get; set; }
+        [Required]
         public string Email { get; set; }
         public string Facebook { get; set; }
         public string Instagram { get; set; }
