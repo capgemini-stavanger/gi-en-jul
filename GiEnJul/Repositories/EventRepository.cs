@@ -14,6 +14,7 @@ namespace GiEnJul.Repositories
     {
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();
+        Task<List<Models.Event>> GetContactsWithActiveEventAsync();
         Task<string> GetDeliveryAddressForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
     }
@@ -89,6 +90,17 @@ namespace GiEnJul.Repositories
         {
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Event>(model));
             return _mapper.Map<Models.Event>(inserted);
+        }
+
+        public async Task<List<Models.Event>> GetContactsWithActiveEventAsync()
+        {
+            var query = new TableQuery<Event>().Where(HasActiveDates());
+
+            var events = await GetAllByQueryAsync(query);
+
+            var modelEvents = _mapper.Map<List<Models.Event>>(events);
+
+            return modelEvents;
         }
     }
 }
