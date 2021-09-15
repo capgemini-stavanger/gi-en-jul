@@ -16,6 +16,9 @@ import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
 import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 import {
   isEmail,
   isNotNull,
@@ -497,13 +500,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               label="PID eller annen ID"
               placeholder="PID eller annen ID"
             />
+            <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
             { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
-          </Grid>
-          <Grid item>
+            </Tooltip>
+          </Grid> 
+          <Typography>
            {state.displayText && 
            <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
            }
-          </Grid>
+          </Typography>
           <Grid item container spacing={1} direction="column">
             <Grid item>
               <Typography variant="h5">Kontaktperson</Typography>
