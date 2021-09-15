@@ -12,8 +12,7 @@ import Contact from "./Contact";
 import {ContactData} from "./Contact";
 import NavBar from "../../common/components/NavBar";
 import Footer from "../../common/components/Footer";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import ApiService from "../../common/functions/apiServiceClass";
 
 const Home = () => {
