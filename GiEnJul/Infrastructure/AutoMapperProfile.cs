@@ -107,6 +107,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.ETag, opt => opt.Ignore());
 
             CreateMap<Entities.Event, Models.Event>();
+
+            CreateMap<Models.Event, GetContactsDto>();
         }
     }
 }
