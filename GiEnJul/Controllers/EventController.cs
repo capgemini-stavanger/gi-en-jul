@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using GiEnJul.Dtos;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -26,6 +29,14 @@ namespace GiEnJul.Controllers
         public async Task<string[]> GetActiveLocationsAsync()
         {
             return await _eventRepository.GetLocationsWithActiveEventAsync();
+        }
+
+        [HttpGet("contacts")]
+        public async Task<List<GetContactsDto>> GetActiveContactsAsync()
+        {
+            var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
+            return _mapper.Map<List<GetContactsDto>>(contacts);
+
         }
     }
 }
