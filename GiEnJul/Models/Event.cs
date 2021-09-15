@@ -7,10 +7,13 @@ namespace GiEnJul.Models
 {
     public class Event
     {
-        // RowKey is the EventType
-        public string RowKey { get; set; }
-        // PartitionKey is the City
+        // PartitionKey is the EventName
         public string PartitionKey { get; set; }
+
+        // RowKey is the City
+        public string RowKey { get; set; }
+
+        public string EventName { get; set; }
         public string City { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

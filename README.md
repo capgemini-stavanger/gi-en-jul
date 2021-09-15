@@ -33,8 +33,8 @@ Run to show current npm version:  -npm -v
 The website should now be accessible on localhost:3000
 
 ### DataBase
-We used *azurite* for emulating a Azure Table Storage locally.
-* Run - npm install -g azurite
+We used *azurite* 3.13.1 for emulating a Azure Table Storage locally.
+* Run - npm install -g azurite@3.13.1
 * Run - cd [auzritefolder] or - mkdir azurite - cd azurite
 * Then run this command in the designated folder - azurite 
 Note: Where you are running the *azurite*, there will be added folders for storing the data
