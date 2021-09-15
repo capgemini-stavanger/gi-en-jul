@@ -50,7 +50,7 @@ const ContactCards = contacts.map((contact, index) =>
         </IconButton>
       </CardActions>
       <CardActions className={classes.contactContent}>
-        { contact.facebook.length &&
+        { contact.facebook &&
           <IconButton
           onClick={() => {
             window
@@ -60,7 +60,7 @@ const ContactCards = contacts.map((contact, index) =>
           >
           <Facebook color="primary" />
         </IconButton>}
-        { contact.instagram.length &&
+        { contact.instagram &&
           <IconButton
           onClick={() => {
             window
