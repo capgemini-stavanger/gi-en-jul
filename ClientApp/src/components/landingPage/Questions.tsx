@@ -10,8 +10,15 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 
+
 const Questions = () => {
   const classes = useStyles();
+  //Method used to filter which panel to activate
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const handleChange = (panel:string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false)
+  };
+
   return (
     <Container id="questions" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
@@ -21,7 +28,7 @@ const Questions = () => {
       </div>
       <Grid container justifyContent="center">
         <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
+          <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')} className={classes.questionBox}>
             <AccordionSummary
               className={classes.questionSummary}
               expandIcon={
@@ -42,14 +49,14 @@ const Questions = () => {
         </Grid>
 
         <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
+          <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')} className={classes.questionBox}>
             <AccordionSummary
               className={classes.questionSummary}
               expandIcon={
                 <ExpandMoreIcon className={classes.questionSummary} />
               }
             >
-              <Typography>Når får jeg familie</Typography>
+              <Typography>Når får jeg tildelt en familie?</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -61,7 +68,7 @@ const Questions = () => {
         </Grid>
 
         <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
+          <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}  className={classes.questionBox}>
             <AccordionSummary
               className={classes.questionSummary}
               expandIcon={
@@ -81,7 +88,7 @@ const Questions = () => {
         </Grid>
 
         <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
+          <Accordion expanded={expanded === 'panel4'} onChange={handleChange('panel4')}  className={classes.questionBox}>
             <AccordionSummary
               className={classes.questionSummary}
               expandIcon={
@@ -99,7 +106,7 @@ const Questions = () => {
         </Grid>
 
         <Grid className={classes.questionItem}>
-          <Accordion className={classes.questionBox}>
+          <Accordion expanded={expanded === 'panel5'} onChange={handleChange('panel5')}  className={classes.questionBox}>
             <AccordionSummary
               className={classes.questionSummary}
               expandIcon={
