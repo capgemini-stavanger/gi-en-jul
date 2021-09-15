@@ -4,6 +4,7 @@ using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -54,7 +55,10 @@ namespace GiEnJul.Repositories
 
             var unsuggestedGivers = await GetAllByQueryAsync(query);
 
-            return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
+            //Order Givers from oldest to newest registrations
+            unsuggestedGivers = unsuggestedGivers.OrderBy(x => x.Timestamp);
+            
+            return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
         }
 
         public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)
