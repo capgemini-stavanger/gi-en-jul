@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GiEnJul.Dtos;
+using System;
 
 namespace GiEnJul.Infrastructure
 {
@@ -17,9 +18,8 @@ namespace GiEnJul.Infrastructure
             CreateMap<Entities.Person, Models.Person>();
 
             CreateMap<Models.Person, Entities.Person>()
-                .ConstructUsing(src => new Entities.Person(src.PartitionKey))
-                .ForMember(dest => dest.RowKey, act => act.Ignore())
-                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RowKey) ? Guid.NewGuid().ToString() : src.RowKey))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
             CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
