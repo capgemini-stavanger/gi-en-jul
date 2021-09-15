@@ -105,7 +105,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("event")]
-        [Authorize(Policy = "ReadConnection")]
+        [Authorize(Policy = "AddEvent")]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
 
@@ -114,15 +114,9 @@ namespace GiEnJul.Controllers
                 throw new ArgumentException();
             }
 
-            try
-            {
-                var eventEntity = _mapper.Map<Event>(eventDto);
-                await _eventRepository.InsertOrReplaceAsync(eventEntity);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            var eventEntity = _mapper.Map<Event>(eventDto);
+            await _eventRepository.InsertOrReplaceAsync(eventEntity);
+
             return Ok();
         }
 
