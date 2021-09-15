@@ -6,6 +6,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
 import { useCallback } from "react";
 import { useState } from "react";
@@ -14,6 +16,9 @@ import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
 import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
+import Tooltip from '@material-ui/core/Tooltip';
+
+
 import {
   isEmail,
   isNotNull,
@@ -62,6 +67,7 @@ interface IContact {
 
 const initState: {
   viewErrorTrigger: number;
+  displayText: boolean;
   alert: {
     isLoading: boolean;
     msg: React.ReactNode;
@@ -70,6 +76,7 @@ const initState: {
   };
 } = {
   viewErrorTrigger: 0,
+  displayText: false, 
   alert: {
     isLoading: false,
     msg: "",
@@ -114,7 +121,7 @@ const initValidFormState: ValidFormEntry = {
 };
 interface props {
   accessToken: string;
-}
+} 
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
@@ -279,6 +286,19 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setAlert(true, message, "success");
     resetForm();
   };
+
+  const displayHelpText = () => {
+    setState((prev) => ({
+      ...prev, 
+      displayText : true,
+    }));
+  }
+  const hideHelpText = () => {
+    setState((prev) => ({
+      ...prev, 
+      displayText : false,
+    }));
+  }
 
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
@@ -473,17 +493,25 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             </Grid>
           </Grid>
           <Grid item>
-            <Typography variant="h5">ID</Typography>
+            <Typography variant="h5">Deres ID på familien</Typography>
             <TextField
               variant="outlined"
               onChange={onPidChange}
               value={formDataState.pid}
               name="pid"
               id="PID"
-              label="PID"
-              placeholder="PID eller annen ID dere bruker for å gjenkjenne familien"
+              label="PID eller annen ID"
+              placeholder="PID eller annen ID"
             />
-          </Grid>
+            <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
+            { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
+            </Tooltip>
+          </Grid> 
+          <Typography>
+           {state.displayText && 
+           <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
+           }
+          </Typography>
           <Grid item container spacing={1} direction="column">
             <Grid item>
               <Typography variant="h5">Kontaktperson</Typography>
