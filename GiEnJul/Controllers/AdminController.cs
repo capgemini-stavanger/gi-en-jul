@@ -210,6 +210,8 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
 
+            unmatchedGivers = unmatchedGivers.OrderBy(x => x.RegistrationDate).ToList();
+            
             var suggestions = new List<Giver>
             {
                 unmatchedGivers.First(x => x.MaxReceivers == 2),

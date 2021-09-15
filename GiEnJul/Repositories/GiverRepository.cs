@@ -56,9 +56,6 @@ namespace GiEnJul.Repositories
             var query = new TableQuery<Entities.Giver>().Where(filter);
 
             var unsuggestedGivers = await GetAllByQueryAsync(query);
-
-            //Order Givers from oldest to newest registrations
-            unsuggestedGivers = unsuggestedGivers.OrderBy(x => x.Timestamp);
             
             return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
         }
