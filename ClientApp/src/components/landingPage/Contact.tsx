@@ -92,10 +92,9 @@ const ContactCards = contacts.map((contact, index) =>
         Det er dessverre ikke mulig å melde seg opp som giver enda.
       </Typography>
       }
-      { ContactCards.length &&
-        <Grid container justifyContent="center">
-          {ContactCards}
-        </Grid>}
+      <Grid container justifyContent="center">
+        {ContactCards}
+      </Grid>
     </Container>
   );
 };

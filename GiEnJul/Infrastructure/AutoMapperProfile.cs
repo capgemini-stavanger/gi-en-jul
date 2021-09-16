@@ -112,7 +112,8 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Entities.Event, Models.Event>();
 
-            CreateMap<Models.Event, GetContactsDto>();
+            CreateMap<Models.Event, GetContactsDto>()
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
         }
     }
 }
