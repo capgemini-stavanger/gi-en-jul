@@ -221,7 +221,14 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
 
-            var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedGivers, quantity);
+            unmatchedGivers = unmatchedGivers.OrderBy(x => x.RegistrationDate).ToList();
+            
+            var suggestions = new List<Giver>
+            {
+                unmatchedGivers.First(x => x.MaxReceivers == 2),
+                unmatchedGivers.First(x => x.MaxReceivers == 5),
+                unmatchedGivers.First(x => x.MaxReceivers == 100)
+            };
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }

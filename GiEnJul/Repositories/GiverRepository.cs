@@ -3,6 +3,7 @@ using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Microsoft.Azure.Cosmos.Table;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,6 +33,7 @@ namespace GiEnJul.Repositories
 
         public async Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model)
         {
+            model.RegistrationDate = DateTime.UtcNow;
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Giver>(model));
             return _mapper.Map<Models.Giver>(inserted);
         }
@@ -53,8 +55,8 @@ namespace GiEnJul.Repositories
             var query = new TableQuery<Entities.Giver>().Where(filter);
 
             var unsuggestedGivers = await GetAllByQueryAsync(query);
-
-            return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
+            
+            return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
         }
 
         public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)
