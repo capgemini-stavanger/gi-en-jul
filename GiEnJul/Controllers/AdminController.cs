@@ -60,7 +60,9 @@ namespace GiEnJul.Controllers
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
-            return await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
+            var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
+            return givers.OrderBy(x => x.RegistrationDate).ToList();
+            
         }
 
         [HttpGet("Overview/Recipients")]
