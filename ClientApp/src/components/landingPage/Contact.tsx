@@ -29,6 +29,12 @@ interface Props {
   contacts : ContactData[]
 }
 
+const style = {
+  greyImageFilter: {
+    filter: "grayscale(100%)"
+  }
+}
+
 
 const Contact : React.FC<Props> = ({contacts}) => {
   const classes = useStyles();
@@ -38,7 +44,7 @@ const ContactCards = contacts.map((contact, index) =>
   <Grid container className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
-      {<CardMedia className={classes.howImage} image={contact.image || dummyImg} />}
+      {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={contact.image || dummyImg} />}
       <CardContent className={classes.contactContent}>
         <Typography>
           Ta kontakt med <br /> {contact.contactPerson} på
