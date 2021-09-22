@@ -48,8 +48,7 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            var active_event = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
-            var giver_limit = await _eventRepository.GetGiverLimitForLocationAsync(giverDto.Location);
+            var (giver_limit, active_event) = await _eventRepository.GetGiverLimitAndEventNameForLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
