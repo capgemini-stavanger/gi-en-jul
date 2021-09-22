@@ -2,23 +2,23 @@ name: Build and Test .NET API
 
 on:
   push:
-    branches: [ master ]
-    paths: 
+    branches: [master, dev]
+    paths:
       - 'GiEnJul/**'
-      
+
   pull_request:
-    branches: [ master ]
-    paths: 
+    branches: [master, dev]
+    paths:
       - 'GiEnJul/**'
 
   workflow_dispatch:
-  
+
 env:
   DOTNET_VERSION: '3.1.x'
 
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -31,9 +31,9 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-      
+
       - name: Build
         run: dotnet build
-      
+
       - name: Test
         run: dotnet test
