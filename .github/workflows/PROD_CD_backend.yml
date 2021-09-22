@@ -5,12 +5,12 @@ on:
     branches:
       - [master]
     paths:
-      - "GiEnJul/**"
+      - 'GiEnJul/**'
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: "3.1.x"
-  PACKAGE_PATH: "Deploy"
+  DOTNET_VERSION: '3.1.x'
+  PACKAGE_PATH: 'Deploy'
 
 jobs:
   build-and-deploy:
@@ -18,7 +18,9 @@ jobs:
 
     steps:
       - name: Checkout Github Action
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
+        with:
+          ref: master
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1

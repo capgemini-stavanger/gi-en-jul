@@ -4,17 +4,17 @@ on:
   push:
     branches: [master, dev]
     paths:
-      - "GiEnJul/**"
+      - 'GiEnJul/**'
 
   pull_request:
     branches: [master, dev]
     paths:
-      - "GiEnJul/**"
+      - 'GiEnJul/**'
 
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: "3.1.x"
+  DOTNET_VERSION: '3.1.x'
 
 jobs:
   build:
