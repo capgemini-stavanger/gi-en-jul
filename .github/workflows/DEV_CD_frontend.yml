@@ -1,9 +1,9 @@
-name: Build and Deploy Frontend to Azure
+name: DEV - Build and Deploy Frontend to Azure
 
 on:
   workflow_dispatch:
   push:
-    branches: [master, dev]
+    branches: [dev]
     paths:
       - "ClientApp/**"
 

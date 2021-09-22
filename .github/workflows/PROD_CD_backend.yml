@@ -1,9 +1,9 @@
-name: Deploy Application to Azure
+name: PROD - Build and Deploy Application to Azure
 
 on:
   push:
     branches:
-      - [master, dev]
+      - [master]
     paths:
       - "GiEnJul/**"
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout Github Action
-        uses: actions/checkout@v2
+        uses: actions/checkout@master
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -41,5 +41,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: gienjultestapi
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_TEST }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROD }}
           package: ./${{ env.PACKAGE_PATH }}
