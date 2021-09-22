@@ -48,24 +48,24 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_EventRepositoryThrowsArgumentException_ControllerReturnsBadRequest()
         {
             //Arrange
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new ArgumentException());
+            mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).Throws(new ArgumentException());
 
             //Act & Assert
             await Assert.ThrowsAsync<ArgumentException>(() => _controller.PostAsync(new PostGiverDto()));
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
         public async Task PostAsync_EventRepositoryThrowsKeyNotFoundException_ControllerReturnsBadRequest()
         {
             //Arrange
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new KeyNotFoundException());
+            mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).Throws(new KeyNotFoundException());
 
             //Act & Assert
             await Assert.ThrowsAsync<KeyNotFoundException>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
         }
 
 
@@ -73,35 +73,37 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_EventRepositoryThrowsException_ControllerReturnsBadRequest()
         {
             //Arrange
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).Throws(new Exception());
+            mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).Throws(new Exception());
 
             //Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
         public async Task PostAsync_GiverRepositoryThrowsException_ControllerReturnsBadRequest()
         {
             //Arrange
-            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
+            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit=40 };
+            mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).ReturnsAsync((fakeEvent.GiverLimit, fakeEvent.PartitionKey));
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
             //Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" }));
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+
         }
 
         [Fact]
         public async Task PostAsync_GiverRepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
-            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow };
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent.PartitionKey);
+            var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
+            mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).ReturnsAsync((fakeEvent.GiverLimit, fakeEvent.PartitionKey));
 
             var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
@@ -118,6 +120,9 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockGiverRepo.Verify(x => x.GetGiversByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+
         }
 
         [Fact]

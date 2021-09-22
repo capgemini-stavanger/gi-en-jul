@@ -18,6 +18,7 @@ namespace GiEnJul.Dtos
         public string DeliveryAddress { get; set; }
         [Required]
         public string ContactPerson { get; set; }
+        public int GiverLimit { get; set; }
         [Required]
         public string Email { get; set; }
         public string Facebook { get; set; }
