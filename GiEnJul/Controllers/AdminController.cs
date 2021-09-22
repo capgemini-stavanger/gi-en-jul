@@ -108,7 +108,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "AddEvent")]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
-
             if (eventDto.StartDate <= System.DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
@@ -116,6 +115,18 @@ namespace GiEnJul.Controllers
 
             var eventEntity = _mapper.Map<Event>(eventDto);
             await _eventRepository.InsertOrReplaceAsync(eventEntity);
+
+            return Ok();
+        }
+
+        [HttpPut("person/{person_rowkey}/wish")]
+        [Authorize(Policy = "UpdateWish")]
+        public async Task<ActionResult> PutWishAsync(string person_rowkey, [FromBody] string wish)  
+        {
+            var person = await _personRepository.GetPersonByRowKey(person_rowkey);
+            person.Wish = wish.Any() ? wish : null;
+
+            await _personRepository.InsertOrReplaceAsync(person);
 
             return Ok();
         }
@@ -210,7 +221,14 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
 
-            var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedGivers, quantity);
+            unmatchedGivers = unmatchedGivers.OrderBy(x => x.RegistrationDate).ToList();
+            
+            var suggestions = new List<Giver>
+            {
+                unmatchedGivers.First(x => x.MaxReceivers == 2),
+                unmatchedGivers.First(x => x.MaxReceivers == 5),
+                unmatchedGivers.First(x => x.MaxReceivers == 100)
+            };
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }

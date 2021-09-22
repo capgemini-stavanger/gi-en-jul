@@ -55,8 +55,8 @@ namespace GiEnJul.Repositories
             var query = new TableQuery<Entities.Giver>().Where(filter);
 
             var unsuggestedGivers = await GetAllByQueryAsync(query);
-
-            return _mapper.Map<IList<Models.Giver>>(unsuggestedGivers);
+            
+            return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
         }
 
         public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)

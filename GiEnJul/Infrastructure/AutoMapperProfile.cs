@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GiEnJul.Dtos;
+using System;
 
 namespace GiEnJul.Infrastructure
 {
@@ -17,9 +18,8 @@ namespace GiEnJul.Infrastructure
             CreateMap<Entities.Person, Models.Person>();
 
             CreateMap<Models.Person, Entities.Person>()
-                .ConstructUsing(src => new Entities.Person(src.PartitionKey))
-                .ForMember(dest => dest.RowKey, act => act.Ignore())
-                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RowKey) ? Guid.NewGuid().ToString() : src.RowKey))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
             CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
@@ -61,7 +61,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(x => x.EventName, opt => opt.Ignore())
                 .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
                 .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
-                .ForMember(dest => dest.MatchedRecipient, act => act.Ignore());
+                .ForMember(dest => dest.MatchedRecipient, act => act.Ignore())
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
+            
 
             CreateMap<Models.Giver, Entities.Giver>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
@@ -85,7 +87,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.MatchedRecipient, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1))) //Rowkey is "rid_gid"
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
-                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.GiverLocation));
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.GiverLocation))
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
+
 
             CreateMap<Entities.Connection, Models.Recipient>()
                 .ForMember(dest => dest.ContactFullName, opt => opt.MapFrom(src => src.SubmitterFullName))
@@ -107,6 +111,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.ETag, opt => opt.Ignore());
 
             CreateMap<Entities.Event, Models.Event>();
+
+            CreateMap<Models.Event, GetContactsDto>()
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
         }
     }
 }
