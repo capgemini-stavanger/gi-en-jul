@@ -16,6 +16,7 @@ namespace GiEnJul.Models
         public DateTime? EndDate { get; set; }
         public string DeliveryAddress { get; set; }
         public string ContactPerson { get; set; }
+        public int GiverLimit { get; set; }
         public string Email { get; set; }
         public string Facebook { get; set; }
         public string Instagram { get; set; }

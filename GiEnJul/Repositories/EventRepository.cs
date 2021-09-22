@@ -16,6 +16,7 @@ namespace GiEnJul.Repositories
         Task<string[]> GetLocationsWithActiveEventAsync();
         Task<List<Models.Event>> GetContactsWithActiveEventAsync();
         Task<string> GetDeliveryAddressForLocationAsync(string location);
+        Task<int> GetGiverLimitForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
     }
 
@@ -35,6 +36,12 @@ namespace GiEnJul.Repositories
         {
             var evnt = await GetEventByLocationAsync(location);
             return evnt.DeliveryAddress;
+        }
+
+        public async Task<int> GetGiverLimitForLocationAsync(string location)
+        {
+            var evnt = await GetEventByLocationAsync(location);
+            return evnt.GiverLimit;
         }
 
         private async Task<Event> GetEventByLocationAsync(string location)
