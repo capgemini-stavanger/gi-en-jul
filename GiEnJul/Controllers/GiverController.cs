@@ -48,7 +48,7 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            var active_location = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
+            var active_event = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
             var giver_limit = await _eventRepository.GetGiverLimitForLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
@@ -56,15 +56,15 @@ namespace GiEnJul.Controllers
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
-            var givers_by_location = await _giverRepository.GetGiversByLocationAsync(active_location, giverDto.Location);
-            var num_givers = givers_by_location.Count();
+            var givers_in_event = await _giverRepository.GetGiversByLocationAsync(active_event, giverDto.Location);
+            var num_givers = givers_in_event.Count();
             bool waiting_list = num_givers > giver_limit;
 
             var messageContent =
                 $"<h2>Hjertelig takk, {insertedAsDto.FullName}!</h2>" +
                 $"Da er du registrert! Vit at familiene setter utrolig stor pris på dette, " +
                 $"og barnevernet forteller om mange tårevåte øyeblikk når familiene får eskene sine.<br/>" +
-                $"{(waiting_list ? $"Grunnet stor pågang har du havnet i ventelisten.</br>Din posisjon i ventelisten er {num_givers-giver_limit}.</br>" : "")}" + 
+                $"{(waiting_list ? $"</br>Grunnet stor pågang har du havnet i ventelisten.</br>Din posisjon i ventelisten er: {num_givers-giver_limit}.</br></br>" : "")}" + 
                 $"Når det nærmer seg jul vil du motta mer informasjon om familien du skal gi en jul. " +
                 $"Da får du også ønskelister, sted og tidspunkt for innlevering av juleesken.</br></br>" +
                 $"Følg også med på Gi en jul sin <a href='https://www.facebook.com/gienjul'>Facebook - side</a>. Igjen tusen takk, ditt bidrag betyr veldig mye!";
