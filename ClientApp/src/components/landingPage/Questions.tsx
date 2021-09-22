@@ -28,7 +28,6 @@ const Questions = () => {
       </div>
       <Grid container justifyContent="center">
         {Array.from(faq).map((val,index)=>(
-          
           <Grid className={classes.questionItem} key={index}>
           <Accordion  expanded={expanded === index.toString()} onChange={handleChange(index.toString())}>
           <AccordionSummary
