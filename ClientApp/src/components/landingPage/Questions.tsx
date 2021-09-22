@@ -9,7 +9,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import useStyles from "./Styles";
-import {faq} from "../../common/constants/FAQsource"
+import {faq} from "../../common/constants/FAQs"
 
 const Questions = () => {
   const classes = useStyles();
