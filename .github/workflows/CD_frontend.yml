@@ -3,9 +3,9 @@ name: Build and Deploy Frontend to Azure
 on:
   workflow_dispatch:
   push:
-    branches: [master]
+    branches: [master, dev]
     paths:
-      - 'ClientApp/**'
+      - "ClientApp/**"
 
 jobs:
   build:
@@ -18,16 +18,16 @@ jobs:
         run: npm install
         working-directory: ./ClientApp
 
-# Substitute variables here
+      # Substitute variables here
 
       - name: Build
         run: npm run build
         working-directory: ./ClientApp
-      
+
       - name: Tests
         run: npm test --watchAll=false
         working-directory: ./ClientApp
-        
+
       - name: Deploy to Azure
         uses: TravisSpomer/deploy-to-azure-storage@v1.4.0
         with:

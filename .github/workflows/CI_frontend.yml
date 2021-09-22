@@ -2,13 +2,13 @@ name: Build frontend - React App and run tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [master, dev]
     paths:
-      - 'ClientApp/**'
+      - "ClientApp/**"
   pull_request:
-    branches: [ master ]
+    branches: [master, dev]
     paths:
-      - 'ClientApp/**'
+      - "ClientApp/**"
 
   workflow_dispatch:
 
@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ./ClientApp
-        
+
       - name: Test
         run: npm test --watchAll=false
         working-directory: ./ClientApp

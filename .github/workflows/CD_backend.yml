@@ -3,44 +3,43 @@ name: Deploy Application to Azure
 on:
   push:
     branches:
-      - master
+      - [master, dev]
     paths:
-      - 'GiEnJul/**'
+      - "GiEnJul/**"
   workflow_dispatch:
-  
+
 env:
-  DOTNET_VERSION: '3.1.x'
-  PACKAGE_PATH: 'Deploy'
+  DOTNET_VERSION: "3.1.x"
+  PACKAGE_PATH: "Deploy"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    
-    - name: Checkout Github Action
-      uses: actions/checkout@master
-      
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-    - name: Install BackEnd Dependencies
-      run: dotnet restore
-      
-    - name: Build Release Config
-      run: dotnet build --configuration Release
-      
-    - name: Run Tests
-      run: dotnet test
-    
-    - name: Publish
-      run: dotnet publish GiEnJul -c Release -o ${{env.PACKAGE_PATH}}
-      
-    - name: Deploy with Azure webapp creds
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: gienjultestapi
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_TEST }}
-        package: ./${{ env.PACKAGE_PATH }}
+      - name: Checkout Github Action
+        uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Install BackEnd Dependencies
+        run: dotnet restore
+
+      - name: Build Release Config
+        run: dotnet build --configuration Release
+
+      - name: Run Tests
+        run: dotnet test
+
+      - name: Publish
+        run: dotnet publish GiEnJul -c Release -o ${{env.PACKAGE_PATH}}
+
+      - name: Deploy with Azure webapp creds
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: gienjultestapi
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_TEST }}
+          package: ./${{ env.PACKAGE_PATH }}
