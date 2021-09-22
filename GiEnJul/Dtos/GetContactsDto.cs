@@ -8,5 +8,6 @@ namespace GiEnJul.Dtos
         public string Email { get; set; }
         public string Facebook { get; set; }
         public string Instagram { get; set; }
+        public string Image { get; set; }
     }
 }

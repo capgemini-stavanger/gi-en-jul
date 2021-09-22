@@ -22,6 +22,7 @@ export interface ContactData {
   email: string,
   facebook: string,
   instagram: string,
+  image: string,
 }
 
 interface Props {
@@ -37,7 +38,7 @@ const ContactCards = contacts.map((contact, index) =>
   <Grid container className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
-      {<CardMedia className={classes.howImage} image={dummyImg} />}
+      {<CardMedia className={classes.howImage} image={contact.image} />}
       <CardContent className={classes.contactContent}>
         <Typography>
           Ta kontakt med <br /> {contact.contactPerson} på
