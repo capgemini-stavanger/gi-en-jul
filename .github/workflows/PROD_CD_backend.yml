@@ -2,8 +2,7 @@ name: PROD - Build and Deploy Application to Azure
 
 on:
   push:
-    branches:
-      - [master]
+    branches: [master]
     paths:
       - 'GiEnJul/**'
   workflow_dispatch:

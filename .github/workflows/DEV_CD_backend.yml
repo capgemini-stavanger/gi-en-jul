@@ -2,8 +2,7 @@ name: DEV - Build and Deploy Application to Azure
 
 on:
   push:
-    branches:
-      - [dev]
+    branches: [dev]
     paths:
       - 'GiEnJul/**'
   workflow_dispatch:
