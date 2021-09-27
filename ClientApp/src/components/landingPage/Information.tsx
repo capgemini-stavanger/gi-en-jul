@@ -40,7 +40,7 @@ const ContactCard =
       <CardActions className={classes.contactContent}>
         <IconButton>
           <Mail color="primary" className={classes.mailIcon} />
-          <Typography>e.ohlgren@gmail.com</Typography>
+          <a href="mailto:e.ohlgren@gmail.com"><Typography color="primary">e.ohlgren@gmail.com</Typography></a>
         </IconButton>
       </CardActions>
     </Card>
