@@ -1,8 +1,10 @@
 # Gi en jul
 
-[![Build frontend - React App and run tests](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/main_frontend.yml/badge.svg?branch=master)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/main_frontend.yml)
+## Deployment Status
+|dev|prod|
+|---|---|
+[![DEV - Build and Deploy Application to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_backend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_backend.yml) [![DEV Build and Deploy Frontend to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_frontend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_frontend.yml) | [![PROD - Build and Deploy Application to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_backend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_backend.yml) [![PROD Build and Deploy Frontend to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_frontend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_frontend.yml)
 
-[![Build and Test .NET API](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/main_backend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/main_backend.yml)
 
 ## Setup
 
