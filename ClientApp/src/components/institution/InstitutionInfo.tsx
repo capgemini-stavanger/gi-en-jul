@@ -25,9 +25,9 @@ const RegistrationInfo = () => {
           Tusen takk for at du melder inn familie til Gi en jul. Husk:
         </Typography>
         <ul>
-          {information.map((informationPoint) => (
+          {information.map((informationPoint, index) => (
             <li>
-              <Typography variant="body1">{informationPoint}</Typography>
+              <Typography variant="body1" key={"body" + index}>{informationPoint}</Typography>
             </li>
           ))}
         </ul>
