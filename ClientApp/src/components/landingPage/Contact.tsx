@@ -53,7 +53,7 @@ const ContactCards = contacts.map((contact, index) =>
       <CardActions className={classes.contactContent}>
         <IconButton>
           <Mail color="primary" className={classes.mailIcon} />
-          <Typography>{contact.email}</Typography>
+          <a href={"mailto:" + contact.email}><Typography color="primary">{contact.email}</Typography></a>
         </IconButton>
       </CardActions>
       <CardActions className={classes.contactContent}>
