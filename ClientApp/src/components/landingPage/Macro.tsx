@@ -14,10 +14,12 @@ import NavBar from "../../common/components/NavBar";
 import Footer from "../../common/components/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "../../common/functions/apiServiceClass";
+import Information from "./Information";
 
 const Home = () => {
 
   const [contacts, setContacts] = useState<ContactData[]>([]);
+  const [information, setInformation] = useState<ContactData[]>([]);
 
   const apiservice = new ApiService;
   useEffect(() => {
@@ -50,6 +52,7 @@ const Home = () => {
         <Questions />
         <Companies />
         <Contact contacts={contacts}/>
+        <Information />
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
