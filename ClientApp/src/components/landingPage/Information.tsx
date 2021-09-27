@@ -14,7 +14,7 @@ import {
 import useStyles from "./Styles";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
 import { Mail, Facebook, Instagram } from "@material-ui/icons";
-
+import myImage from "./Elisabeth.png";
 
 const style = {
   greyImageFilter: {
@@ -31,7 +31,7 @@ const ContactCard =
 
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>Elisabeth Ohlgren Tidemann</Typography>
-      {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={ "https://gienjulteststorage.blob.core.windows.net/$web/contact_images/Elisabeth.png?sp=rl&st=2021-09-27T10:02:44Z&se=2022-01-28T10:02:00Z&sv=2020-08-04&sr=b&sig=QFc0FedF2Ez7VsQe9kJKcU4s4%2BvjLIRa4erNIKnX3jY%3D" || dummyImg} />}
+      {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={ myImage || dummyImg} />}
       <CardContent className={classes.contactContent}>
         <Typography>
           Ta kontakt med <br /> Elisabeth på
