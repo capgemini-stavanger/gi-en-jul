@@ -11,11 +11,7 @@ const Companies = () => {
         <Typography className={classes.textHeadline}>For bedrifter</Typography>
       </div>
       <Typography className={classes.contactContent}>
-        Få med kolleger og gi en jul, og registrer dere som givere. Gi et
-        pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi
-        gavekort på opplevelser som vi putter oppi som ekstragave i juleeskene.
-        Gi noe annet vi kan putte i eskene, som konfekt, godteri og lignende.
-        Låne Gi en jul store biler som benyttes til utkjøring.
+      Hvert år er det mange lokale bedrifter som bidrar til Gi en jul, og det er flere måter å gjøre det på. Ta kontakt med Gi en jul i din kommune. Kontaktinformasjon finner du under her.
       </Typography>
     </Container>
   );
