@@ -8,10 +8,7 @@ export function isPhoneNumber(inputValue: string) {
   // Returns true if norwegian number or foreign number starting with +{countryCode}
   inputValue = inputValue.trim();
   return !!(
-    validator.isNumeric(inputValue) ||
-    (inputValue &&
-      inputValue.startsWith("+") &&
-      validator.isNumeric(inputValue.replace("+", "")))
+    validator.isNumeric(inputValue)
   );
 }
 
