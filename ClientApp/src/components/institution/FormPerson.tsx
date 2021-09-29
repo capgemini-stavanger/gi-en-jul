@@ -52,7 +52,8 @@ const InstitutionPerson: FC<PersonProps> = ({
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
-    let intAge = parseInt(strAge);
+    let intAge = Math.floor(parseInt(strAge));
+    strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
         strAge = "130";
@@ -62,7 +63,26 @@ const InstitutionPerson: FC<PersonProps> = ({
     } else {
       return;
     }
+    if (intAge >= 1) {
+      person.months = "0";
+    }
     updatePerson({ age: strAge, isValidAge: !!strAge });
+  };
+
+  const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strMonths = e.target.value;
+    let intMonths = Math.floor(parseInt(strMonths));
+    strMonths = intMonths.toString();
+    if (intMonths !== NaN) {
+      if (intMonths > 11) {
+        strMonths = "11";
+      } else if (intMonths < 0) {
+        strMonths = "0";
+      }
+    } else {
+      return;
+    }
+    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -98,10 +118,23 @@ const InstitutionPerson: FC<PersonProps> = ({
           name="age"
           type="number"
           label="Alder"
-          value={person.age}
+          value={person.age || 0}
           onChange={onAgeChange}
         />
       </Grid>
+      {(parseInt(person.age) < 1 || !person.age) &&
+      <Grid item xs={2}>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          name="months"
+          type="number"
+          label="Måneder"
+          value={person.months || 0}
+          onChange={onMonthsChange}
+        />
+      </Grid>
+}
       <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
