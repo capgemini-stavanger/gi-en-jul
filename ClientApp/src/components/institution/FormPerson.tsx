@@ -122,7 +122,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           onChange={onAgeChange}
         />
       </Grid>
-      {parseInt(person.age) < 1 &&
+      {(parseInt(person.age) < 1 || !person.age) &&
       <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
