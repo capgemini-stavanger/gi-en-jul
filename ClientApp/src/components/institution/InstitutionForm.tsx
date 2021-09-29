@@ -32,6 +32,7 @@ import Locations from "./InstitutionLocations";
 type PersonType = {
   Wish?: string;
   Age: number;
+  Month: number;
   Gender: Gender;
 };
 
@@ -316,6 +317,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       const person1: PersonType = {
         Wish: person.wish,
         Age: parseInt(person.age),
+        Month: parseInt(person.month),
         Gender: person.gender,
       };
       personsList.push(person1);
