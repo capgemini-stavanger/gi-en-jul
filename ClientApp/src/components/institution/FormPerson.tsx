@@ -12,7 +12,7 @@ import { FC, useEffect, useState } from "react";
 import { GENDERS } from "../../common/constants/Genders";
 import Gender from "../../common/enums/Gender";
 import InputValidator from "../InputFields/Validators/InputValidator";
-import { isNotNull } from "../InputFields/Validators/Validators";
+import { isNotNull, isInt } from "../InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
 
 interface PersonProps {
@@ -24,6 +24,7 @@ interface PersonProps {
 
 const initState: { [data: string]: any } = {
   ageWish: false,
+  commentSelect: false,
   wishInput: "",
   validWishInput: false,
 };
@@ -49,6 +50,7 @@ const InstitutionPerson: FC<PersonProps> = ({
       isValidWish: state.validWishInput || person.wish === undefined,
     });
   }, [state.validWishInput, person.wish]);
+
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
@@ -104,33 +106,48 @@ const InstitutionPerson: FC<PersonProps> = ({
     updatePerson({ wish: undefined });
   };
 
+  const onCommentSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newInput = e.target.checked;
+    getSetter("commentSelect")(newInput);
+    if (!newInput) {
+      updatePerson({ comment: "" });
+    }
+    updatePerson({ commentSelect: newInput });
+  };
+
+  const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newInput = e.target.value;
+    getSetter("comment")(newInput);
+    updatePerson({ comment: newInput });
+  };
+
   return (
-    <Grid container spacing={1} alignItems="center">
+    <Grid container spacing={5} alignItems="center">
       <Grid item>
         <IconButton color="secondary" onClick={deletePerson}>
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
+          validators={[isInt]}
           name="age"
           type="number"
           label="Alder"
-          value={person.age || 0}
+          value={person.age || "0"}
           onChange={onAgeChange}
         />
       </Grid>
       {(parseInt(person.age) < 1 || !person.age) &&
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
+          validators={[isInt]}
           name="months"
           type="number"
           label="Måneder"
-          value={person.months || 0}
+          value={person.months || "0"}
           onChange={onMonthsChange}
         />
       </Grid>
@@ -151,7 +168,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           fullWidth
         />
       </Grid>
-      <Grid item xs>
+      <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
@@ -164,7 +181,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           fullWidth
         />
       </Grid>
-      <Grid item xs>
+      <Grid item xs={2}>
         <FormControlLabel
           control={
             <Checkbox
@@ -178,7 +195,38 @@ const InstitutionPerson: FC<PersonProps> = ({
           label="Giver kjøper alderstilpasset gave"
         />
       </Grid>
+      <Grid item xs={1}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={state.Comment}
+              onChange={onCommentSelectChange}
+              name="commentSelect"
+              color="primary"
+            />
+          }
+          className="my-0"
+          label="Legg til kommentar?"
+        />
+      </Grid>
+      { state.commentSelect &&
+        <Grid>
+         <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          multiline
+          name="comment"
+          type="text"
+          label="Kommentar"
+          placeholder="Kommentar vil bli synlig for giver"
+          value={person.comment}
+          onChange={onCommentChange}
+          maxRows="4"
+        />
+        </Grid>
+}
     </Grid>
+    
   );
 };
 

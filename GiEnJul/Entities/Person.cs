@@ -21,5 +21,6 @@ namespace GiEnJul.Entities
         // 2 = Female;
         // 9 = Not applicable.
         public int Gender { get; set; }
+        public string Comment { get; set; }
     }
 }

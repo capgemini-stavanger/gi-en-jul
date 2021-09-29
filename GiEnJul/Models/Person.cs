@@ -9,6 +9,7 @@
         public int Age { get; set; }
         public int Months {  get; set; }
         public Gender Gender { get; set; }
+        public string Comment { get; set; }
 
         public string ToReadableString()
         {
