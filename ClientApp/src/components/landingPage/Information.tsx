@@ -30,7 +30,7 @@ const Information : React.FC = () => {
   <div key={"Information"}> 
   <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
-      <Typography className={classes.contactHeader}>Vil du Gi en jul?</Typography>
+      <Typography className={classes.contactHeader}>Start Gi en jul i din kommune?</Typography>
       {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={ myImage || dummyImg} />}
       <CardContent className={classes.contactContent}>
         <Typography>
