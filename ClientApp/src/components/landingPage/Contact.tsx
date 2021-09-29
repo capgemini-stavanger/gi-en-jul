@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
-import { Mail, Facebook, Instagram } from "@material-ui/icons";
+import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
 
 
 export interface ContactData {
@@ -23,6 +23,7 @@ export interface ContactData {
   facebook: string,
   instagram: string,
   image: string,
+  phoneNumber: string,
 }
 
 interface Props {
@@ -55,6 +56,13 @@ const ContactCards = contacts.map((contact, index) =>
           <Mail color="primary" className={classes.mailIcon} />
           <a href={"mailto:" + contact.email}><Typography color="primary">{contact.email}</Typography></a>
         </IconButton>
+      </CardActions>
+      <CardActions className={classes.contactContent}>
+      { contact.phoneNumber &&
+        <IconButton>
+          <Phone color="primary" className={classes.mailIcon} />
+          <a href={"tel:" + contact.phoneNumber}><Typography color="primary">{contact.phoneNumber}</Typography></a>
+        </IconButton>}
       </CardActions>
       <CardActions className={classes.contactContent}>
         { contact.facebook &&

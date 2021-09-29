@@ -18,5 +18,6 @@ namespace GiEnJul.Entities
         public string Facebook { get; set; }
         public string Instagram { get; set; }
         public string Image { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
