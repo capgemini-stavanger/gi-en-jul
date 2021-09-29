@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
+import Information from "./Information";
 import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
 
 
@@ -109,6 +110,9 @@ const ContactCards = contacts.map((contact, index) =>
       }
       <Grid container justifyContent="center">
         {ContactCards}
+        <div>
+          <Information />
+        </div>
       </Grid>
     </Container>
   );

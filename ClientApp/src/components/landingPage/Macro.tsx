@@ -52,7 +52,6 @@ const Home = () => {
         <Questions />
         <Companies />
         <Contact contacts={contacts}/>
-        <Information />
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
