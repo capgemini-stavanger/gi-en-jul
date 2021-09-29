@@ -18,12 +18,13 @@ const How = () => {
           <ExpandMore color="primary" />
           <div className={classes.textContainer}>
             <Typography className={classes.paragraph}>
-              Gi en jul er et veldedighets-prosjekt i samarbeid med blant andre
+              Gi en jul er et frivillig prosjekt i samarbeid med blant andre
               barnevernet og NAV. <br />
-              Som giver til “Gi en jul” donerer du julemiddag og julegaver til
+              Som giver gir du julemiddag og julegaver til
               en familie som virkelig trenger det. Dette er foreldre og barn som
               ikke selv har mulighet til å kjøpe en skikkelig julemiddag,
-              julesnop eller julegaver til hverandre.
+              julesnop eller julegaver til hverandre. I år kan du melde deg som giver i Gjesdal, 
+              Sandnes, Sola eller Stavanger.
             </Typography>
           </div>
         </div>
