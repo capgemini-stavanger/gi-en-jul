@@ -11,11 +11,12 @@ const Companies = () => {
         <Typography className={classes.textHeadline}>For bedrifter</Typography>
       </div>
       <Typography className={classes.contactContent}>
-        Få med kolleger og gi en jul, og registrer dere som givere. Gi et
-        pengebeløp som kan benyttes til gavekort på en opplevelse for barna. Gi
-        gavekort på opplevelser som vi putter oppi som ekstragave i juleeskene.
-        Gi noe annet vi kan putte i eskene, som konfekt, godteri og lignende.
-        Låne Gi en jul store biler som benyttes til utkjøring.
+        Dersom du ønsker å få med kolleger og gi en jul, registrerer du 
+        dere som givere som vanlig. Andre måter å bidra på er å gi et 
+        pengebeløp som kan benyttes til gavekort på en opplevelse for barn,
+        eller noe annet vi kan putte i eskene, som konfekt, godteri og lignende.
+        Eller så kan du ta kontakt med kontaktpersonen i din kommune,  
+        så kan vi snakkes mer om hvordan din bedrift kan bidra. 
       </Typography>
     </Container>
   );
