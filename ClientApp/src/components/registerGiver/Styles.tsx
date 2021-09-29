@@ -136,6 +136,10 @@ const useStyles = makeStyles((theme) => ({
     top: "0",
     margin: "0.3em",
   },
+  policyTitle: {
+    overflowWrap: 'break-word', 
+    marginRight: "1.6em",
+  },
   captchaContainer:{
     paddingBottom:theme.spacing(8),
   }, 
