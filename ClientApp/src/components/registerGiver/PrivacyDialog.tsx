@@ -59,7 +59,7 @@ const PrivacyDialog: FC<IPrivacyDialog> = ({
   return (
     <Dialog onClose={onClose} aria-labelledby="dialog-title" open={open}>
       <DialogTitle id="dialog-title" disableTypography>
-        <Typography variant="h5" className={classes.policyTitle}>Personvernerklæring for Gi en jul</Typography>
+        <Typography variant="h5">Personvernerklæring for Gi en jul</Typography>
         {onClose ? (
           <IconButton
             className={classes.rightMiddleAlign}
