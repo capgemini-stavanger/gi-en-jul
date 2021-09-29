@@ -8,10 +8,7 @@ export function isPhoneNumber(inputValue: string) {
   // Returns true if norwegian number or foreign number starting with +{countryCode}
   inputValue = inputValue.trim();
   return !!(
-    validator.isMobilePhone(inputValue, ["nb-NO", "nn-NO"]) ||
-    (inputValue &&
-      inputValue.startsWith("+") &&
-      validator.isMobilePhone(inputValue))
+    validator.isNumeric(inputValue)
   );
 }
 
