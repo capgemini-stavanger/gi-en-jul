@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
+import Information from "./Information";
 import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
 
 
@@ -42,7 +43,7 @@ const Contact : React.FC<Props> = ({contacts}) => {
 
 const ContactCards = contacts.map((contact, index) =>
   <div key={index}> 
-  <Grid container className={classes.contactItem}>
+  <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
       {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={contact.image || dummyImg} />}
@@ -109,6 +110,9 @@ const ContactCards = contacts.map((contact, index) =>
       }
       <Grid container justifyContent="center">
         {ContactCards}
+        <div>
+          <Information />
+        </div>
       </Grid>
     </Container>
   );
