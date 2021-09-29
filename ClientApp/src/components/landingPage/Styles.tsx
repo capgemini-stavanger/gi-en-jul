@@ -14,6 +14,10 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: "18em",
     },
   },
+  textLink:{
+    textDecorationLine: 'underline',
+    cursor: 'pointer'
+  },
   familyImage:{
     justifySelf: "center",
     zIndex: 2,
