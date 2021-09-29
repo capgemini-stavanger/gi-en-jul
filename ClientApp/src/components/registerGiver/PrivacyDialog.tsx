@@ -83,9 +83,9 @@ const PrivacyDialog: FC<IPrivacyDialog> = ({
         ))}
         <Typography variant="subtitle2">Kontaktinformasjon</Typography>
         <Typography variant="caption">
-          Henvendelser om hvilke opplysninger som er registrert, retting og
-          sletting kan sende skriftlig til følgende adresser:
-          stavanger@gienjul.no
+          Henvendelser om hvilke opplysninger som er registrert samt retting og
+          sletting av opplysninger kan bli sendt til
+          <a href={"mailto:stavanger@gienjul.no"}> stavanger@gienjul.no</a>
         </Typography>
       </DialogContent>
       {!privacyState && (
