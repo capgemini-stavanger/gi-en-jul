@@ -23,7 +23,7 @@ jobs:
       # Substitute variables here
 
       - name: Build
-        run: npm run build
+        run: npm run build:prod
         working-directory: ./ClientApp
 
       - name: Tests
