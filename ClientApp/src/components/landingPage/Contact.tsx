@@ -43,7 +43,7 @@ const Contact : React.FC<Props> = ({contacts}) => {
 
 const ContactCards = contacts.map((contact, index) =>
   <div key={index}> 
-  <Grid container className={classes.contactItem}>
+  <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
       {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={contact.image || dummyImg} />}
