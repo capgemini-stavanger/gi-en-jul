@@ -64,25 +64,25 @@ const InstitutionPerson: FC<PersonProps> = ({
       return;
     }
     if (intAge >= 1) {
-      person.month = "0";
+      person.months = "0";
     }
     updatePerson({ age: strAge, isValidAge: !!strAge });
   };
 
-  const onMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let strMonth = e.target.value;
-    let intMonth = Math.floor(parseInt(strMonth));
-    strMonth = intMonth.toString();
-    if (intMonth !== NaN) {
-      if (intMonth > 11) {
-        strMonth = "11";
-      } else if (intMonth < 0) {
-        strMonth = "0";
+  const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strMonths = e.target.value;
+    let intMonths = Math.floor(parseInt(strMonths));
+    strMonths = intMonths.toString();
+    if (intMonths !== NaN) {
+      if (intMonths > 11) {
+        strMonths = "11";
+      } else if (intMonths < 0) {
+        strMonths = "0";
       }
     } else {
       return;
     }
-    updatePerson({ month: strMonth, isValidMonth: !!strMonth });
+    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,7 +118,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           name="age"
           type="number"
           label="Alder"
-          value={person.age}
+          value={person.age || 0}
           onChange={onAgeChange}
         />
       </Grid>
@@ -127,11 +127,11 @@ const InstitutionPerson: FC<PersonProps> = ({
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          name="month"
+          name="months"
           type="number"
           label="Måneder"
-          value={person.month || 0}
-          onChange={onMonthChange}
+          value={person.months || 0}
+          onChange={onMonthsChange}
         />
       </Grid>
 }

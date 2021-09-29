@@ -14,7 +14,7 @@ namespace GiEnJul.Entities
 
         public string Wish { get; set; }
         public int Age { get; set; }
-        public int Month { get; set; }
+        public int Months { get; set; }
         // Following ISO/IEC 5218:2004 gender is stored as:
         // 0 = Not known;
         // 1 = Male;

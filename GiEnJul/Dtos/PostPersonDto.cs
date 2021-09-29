@@ -8,7 +8,7 @@ namespace GiEnJul.Dtos
         public string Wish { get; set; }
         [Required]
         public int Age { get; set; }
-        public int Month { get; set; }
+        public int Months { get; set; }
         [Required]
         public Gender Gender { get; set; }
     }
