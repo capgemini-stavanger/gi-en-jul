@@ -26,11 +26,11 @@ const style = {
 const Information : React.FC = () => {
   const classes = useStyles();
 
-const ContactCard = 
+  const ContactCard = 
   <div key={"Information"}> 
-
+  <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
-      <Typography className={classes.contactHeader}>Elisabeth Ohlgren Tidemann</Typography>
+      <Typography className={classes.contactHeader}>Start Gi en jul i din kommune?</Typography>
       {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={ myImage || dummyImg} />}
       <CardContent className={classes.contactContent}>
         <Typography>
@@ -44,16 +44,13 @@ const ContactCard =
         </IconButton>
       </CardActions>
     </Card>
-
+  </Grid>
   </div>
   
 
   return (
     <Container id="information" className={classes.sectionContainer}>
       <div className={classes.headLineContainer}>
-        <Typography className={classes.textHeadline}>
-          Vil du starte Gi En Jul i din kommune?
-        </Typography>
       </div>
       {/* Todo: Legg inn scrolle-link under */}
       <Grid container justifyContent="center">

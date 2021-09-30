@@ -4,7 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 interface IFormPerson {
   uuid: string;
   age: string;
+  months: string;
   gender: Gender;
+  comment: String;
   wish?: string; // Age-adjusted gift if undefined
   isValidAge: boolean;
   isValidGender: boolean;
@@ -13,10 +15,12 @@ interface IFormPerson {
 
 export const getFormPerson: () => IFormPerson = () => ({
   uuid: uuidv4(),
-  age: "",
+  age: "0",
+  months: "0",
   gender: Gender.Unspecified,
+  comment: "",
   wish: "",
-  isValidAge: false,
+  isValidAge: true,
   isValidGender: false,
   isValidWish: false,
 });
