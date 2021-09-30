@@ -56,22 +56,9 @@ namespace GiEnJul.Controllers
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
-            //var eventName = await _eventRepository.GetActiveEventForLocationAsync(giver.Location);
             var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
 
-            Console.WriteLine(contacts);
             var eventDto = contacts.First(x => x.RowKey == giverDto.Location); 
-            //foreach(Event eventet in contacts)
-            //{
-             //   Console.Write(eventet.RowKey);
-               // if (eventet.RowKey == giverDto.Location)
-             //   {
-             //       eventDto = eventet;
-            //    }
-            //}
-            //var eventDto = _mapper.Map<PostEventDto>(await _eventRepository.InsertOrReplaceAsync(city));
-
-
 
             //var givers_in_event = await _giverRepository.GetGiversByLocationAsync(active_event, giverDto.Location);
             //var num_givers = givers_in_event.Count();
@@ -80,7 +67,7 @@ namespace GiEnJul.Controllers
 
 
             var messageContent =
-                $"Hei! <br/>" +
+                $"Hei! <br/><br/>" +
 
 
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
@@ -108,7 +95,7 @@ namespace GiEnJul.Controllers
                 $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
 
                 $"Igjen vil vi si tusen takk for at du har meldt seg som giver! Vi håper du har fått informasjonen du trenger, <br/>" +
-                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stile spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href='https://www.facebook.com/gienjul'>facebook-eventet<a/>.<br/><br/>" +
+                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href='https://www.facebook.com/gienjul'>facebook-eventet<a/>.<br/><br/>" +
                 $"Vennlig hilsen {eventDto.ContactPerson}";
 
 
