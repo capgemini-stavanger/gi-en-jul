@@ -49,16 +49,15 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            var (giver_limit, active_event) = await _eventRepository.GetGiverLimitAndEventNameForLocationAsync(giverDto.Location);
+            //var (giver_limit, active_event) = await _eventRepository.GetGiverLimitAndEventNameForLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
 
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
-            var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
 
-            var eventDto = contacts.First(x => x.RowKey == giverDto.Location); 
+            var eventDto = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
             //var givers_in_event = await _giverRepository.GetGiversByLocationAsync(active_event, giverDto.Location);
             //var num_givers = givers_in_event.Count();
@@ -98,9 +97,9 @@ namespace GiEnJul.Controllers
                 $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href='https://www.facebook.com/gienjul'>facebook-eventet<a/>.<br/><br/>" +
                 $"Vennlig hilsen {eventDto.ContactPerson}";
 
-
+            
             await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", messageContent);
-
+            
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
     }

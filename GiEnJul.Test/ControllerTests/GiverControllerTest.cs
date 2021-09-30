@@ -102,8 +102,12 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
+
             var fakeEvent = new Entities.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
             mockEventRepo.Setup(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>())).ReturnsAsync((fakeEvent.GiverLimit, fakeEvent.PartitionKey));
+
+            var fakeEventModel = new Models.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
+            mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEventModel);
 
             var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
@@ -120,6 +124,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
             mockEventRepo.Verify(x => x.GetGiverLimitAndEventNameForLocationAsync(It.IsAny<string>()), Times.Once());
             mockGiverRepo.Verify(x => x.GetGiversByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
 
