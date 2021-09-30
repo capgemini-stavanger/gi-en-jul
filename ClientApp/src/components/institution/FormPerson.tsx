@@ -1,10 +1,12 @@
 import {
   capitalize,
   Checkbox,
+  Link,
   FormControlLabel,
   Grid,
   SvgIcon,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
@@ -14,6 +16,8 @@ import Gender from "../../common/enums/Gender";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import { isNotNull, isInt } from "../InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
+import MessageDialog from "./MessageDialog";
+
 
 interface PersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -27,6 +31,8 @@ const initState: { [data: string]: any } = {
   commentSelect: false,
   wishInput: "",
   validWishInput: false,
+  dialogOpen: false,
+  comment: "",
 };
 
 const InstitutionPerson: FC<PersonProps> = ({
@@ -36,6 +42,22 @@ const InstitutionPerson: FC<PersonProps> = ({
   person,
 }) => {
   const [state, setState] = useState({ ...initState });
+
+  const setShowMessageDialog = (show: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      dialogOpen: show,
+    }));
+  };
+
+  const setValidMessage = (message: string) => {
+    setState((prev) => ({
+      ...prev,
+      comment: message,
+    }));
+    getSetter("comment")(message);
+    updatePerson({ comment: message });
+  };
 
   const getSetter =
     (target: keyof typeof state) => (value: typeof state[typeof target]) => {
@@ -104,21 +126,6 @@ const InstitutionPerson: FC<PersonProps> = ({
     let newInput = e.target.checked;
     getSetter("ageWish")(newInput);
     updatePerson({ wish: undefined });
-  };
-
-  const onCommentSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.checked;
-    getSetter("commentSelect")(newInput);
-    if (!newInput) {
-      updatePerson({ comment: "" });
-    }
-    updatePerson({ commentSelect: newInput });
-  };
-
-  const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.value;
-    getSetter("comment")(newInput);
-    updatePerson({ comment: newInput });
   };
 
   return (
@@ -195,36 +202,26 @@ const InstitutionPerson: FC<PersonProps> = ({
           label="Giver kjøper alderstilpasset gave"
         />
       </Grid>
-      <Grid item xs={1}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.Comment}
-              onChange={onCommentSelectChange}
-              name="commentSelect"
-              color="primary"
-            />
-          }
-          className="my-0"
-          label="Legg til kommentar?"
-        />
+      <Grid item xs={2}>
+      <Link
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowMessageDialog(true);
+        }}
+      >
+        <Typography>
+        Legg til en kommentar for denne personen
+        </Typography>
+      </Link>
       </Grid>
-      { state.commentSelect &&
-        <Grid>
-         <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
-          multiline
-          name="comment"
-          type="text"
-          label="Kommentar"
-          placeholder="Kommentar vil bli synlig for giver"
-          value={person.comment}
-          onChange={onCommentChange}
-          maxRows="4"
-        />
-        </Grid>
-}
+      <Grid>
+      <MessageDialog 
+        open={state.dialogOpen}
+        onClose={() => setShowMessageDialog(false)}
+        setMessage={setValidMessage}
+      />
+      </Grid>
     </Grid>
     
   );
