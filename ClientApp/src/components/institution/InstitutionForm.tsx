@@ -34,6 +34,7 @@ type PersonType = {
   Age: number;
   Months: number;
   Gender: Gender;
+  Comment: String;
 };
 
 type submittype = {
@@ -319,6 +320,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
+        Comment: person.comment,
       };
       personsList.push(person1);
     });
