@@ -1,10 +1,12 @@
 import {
   capitalize,
   Checkbox,
+  Link,
   FormControlLabel,
   Grid,
   SvgIcon,
   IconButton,
+  Typography,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
@@ -12,8 +14,10 @@ import { FC, useEffect, useState } from "react";
 import { GENDERS } from "../../common/constants/Genders";
 import Gender from "../../common/enums/Gender";
 import InputValidator from "../InputFields/Validators/InputValidator";
-import { isNotNull } from "../InputFields/Validators/Validators";
+import { isNotNull, isInt } from "../InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
+import MessageDialog from "./MessageDialog";
+
 
 interface PersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -24,8 +28,11 @@ interface PersonProps {
 
 const initState: { [data: string]: any } = {
   ageWish: false,
+  commentSelect: false,
   wishInput: "",
   validWishInput: false,
+  dialogOpen: false,
+  comment: "",
 };
 
 const InstitutionPerson: FC<PersonProps> = ({
@@ -35,6 +42,22 @@ const InstitutionPerson: FC<PersonProps> = ({
   person,
 }) => {
   const [state, setState] = useState({ ...initState });
+
+  const setShowMessageDialog = (show: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      dialogOpen: show,
+    }));
+  };
+
+  const setValidMessage = (message: string) => {
+    setState((prev) => ({
+      ...prev,
+      comment: message,
+    }));
+    getSetter("comment")(message);
+    updatePerson({ comment: message });
+  };
 
   const getSetter =
     (target: keyof typeof state) => (value: typeof state[typeof target]) => {
@@ -50,9 +73,11 @@ const InstitutionPerson: FC<PersonProps> = ({
     });
   }, [state.validWishInput, person.wish]);
 
+
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
-    let intAge = parseInt(strAge);
+    let intAge = Math.floor(parseInt(strAge));
+    strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
         strAge = "130";
@@ -62,7 +87,26 @@ const InstitutionPerson: FC<PersonProps> = ({
     } else {
       return;
     }
+    if (intAge >= 1) {
+      person.months = "0";
+    }
     updatePerson({ age: strAge, isValidAge: !!strAge });
+  };
+
+  const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strMonths = e.target.value;
+    let intMonths = Math.floor(parseInt(strMonths));
+    strMonths = intMonths.toString();
+    if (intMonths !== NaN) {
+      if (intMonths > 11) {
+        strMonths = "11";
+      } else if (intMonths < 0) {
+        strMonths = "0";
+      }
+    } else {
+      return;
+    }
+    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,23 +129,36 @@ const InstitutionPerson: FC<PersonProps> = ({
   };
 
   return (
-    <Grid container spacing={1} alignItems="center">
+    <Grid container spacing={5} alignItems="center">
       <Grid item>
         <IconButton color="secondary" onClick={deletePerson}>
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
+          validators={[isInt]}
           name="age"
           type="number"
           label="Alder"
-          value={person.age}
+          value={person.age || "0"}
           onChange={onAgeChange}
         />
       </Grid>
+      {(parseInt(person.age) < 1 || !person.age) &&
+      <Grid item xs={1}>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isInt]}
+          name="months"
+          type="number"
+          label="Måneder"
+          value={person.months || "0"}
+          onChange={onMonthsChange}
+        />
+      </Grid>
+}
       <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
@@ -118,7 +175,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           fullWidth
         />
       </Grid>
-      <Grid item xs>
+      <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
@@ -131,7 +188,7 @@ const InstitutionPerson: FC<PersonProps> = ({
           fullWidth
         />
       </Grid>
-      <Grid item xs>
+      <Grid item xs={2}>
         <FormControlLabel
           control={
             <Checkbox
@@ -145,7 +202,28 @@ const InstitutionPerson: FC<PersonProps> = ({
           label="Giver kjøper alderstilpasset gave"
         />
       </Grid>
+      <Grid item xs={2}>
+      <Link
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowMessageDialog(true);
+        }}
+      >
+        <Typography>
+        Legg til en kommentar for denne personen
+        </Typography>
+      </Link>
+      </Grid>
+      <Grid>
+      <MessageDialog 
+        open={state.dialogOpen}
+        onClose={() => setShowMessageDialog(false)}
+        setMessage={setValidMessage}
+      />
+      </Grid>
     </Grid>
+    
   );
 };
 
