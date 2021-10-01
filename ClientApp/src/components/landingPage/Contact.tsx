@@ -14,7 +14,8 @@ import {
 import useStyles from "./Styles";
 import { Link as Scroll } from "react-scroll";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
-import { Mail, Facebook, Instagram } from "@material-ui/icons";
+import Information from "./Information";
+import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
 
 
 export interface ContactData {
@@ -24,6 +25,7 @@ export interface ContactData {
   facebook: string,
   instagram: string,
   image: string,
+  phoneNumber: string,
 }
 
 interface Props {
@@ -42,7 +44,7 @@ const Contact : React.FC<Props> = ({contacts}) => {
 
 const ContactCards = contacts.map((contact, index) =>
   <div key={index}> 
-  <Grid container className={classes.contactItem}>
+  <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
       {<CardMedia style={style.greyImageFilter} className={classes.howImage} image={contact.image || dummyImg} />}
@@ -56,6 +58,13 @@ const ContactCards = contacts.map((contact, index) =>
           <Mail color="primary" className={classes.mailIcon} />
           <a href={"mailto:" + contact.email}><Typography color="primary">{contact.email}</Typography></a>
         </IconButton>
+      </CardActions>
+      <CardActions className={classes.contactContent}>
+      { contact.phoneNumber &&
+        <IconButton>
+          <Phone color="primary" className={classes.mailIcon} />
+          <a href={"tel:" + contact.phoneNumber}><Typography color="primary">{contact.phoneNumber}</Typography></a>
+        </IconButton>}
       </CardActions>
       <CardActions className={classes.contactContent}>
         { contact.facebook &&
@@ -105,6 +114,9 @@ const ContactCards = contacts.map((contact, index) =>
       }
       <Grid container justifyContent="center">
         {ContactCards}
+        <div>
+          <Information />
+        </div>
       </Grid>
     </Container>
   );

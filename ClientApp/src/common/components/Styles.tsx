@@ -41,7 +41,7 @@ export default () =>
     },
     navContainer: {
       backgroundColor: "rgba(0, 0, 0, 0)",
-      position: "fixed",
+      position: "absolute",
       border: "none",
       boxShadow: "none",
       padding: theme.spacing(2),
