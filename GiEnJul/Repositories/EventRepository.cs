@@ -18,6 +18,7 @@ namespace GiEnJul.Repositories
         Task<string> GetDeliveryAddressForLocationAsync(string location);
         Task<(int, string)> GetGiverLimitAndEventNameForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
+        Task<Models.Event> GetEventByUserLocationAsync(string location);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -25,6 +26,12 @@ namespace GiEnJul.Repositories
         public EventRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Event") : base(settings, tableName, mapper, log)
         { }
 
+        public async Task<Models.Event> GetEventByUserLocationAsync(string location)
+        {
+            var eventByLocation = await GetEventByLocationAsync(location);
+
+            return _mapper.Map<Models.Event>(eventByLocation);
+        }
 
         public async Task<string> GetActiveEventForLocationAsync(string location)
         {

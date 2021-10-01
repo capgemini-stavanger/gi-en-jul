@@ -185,7 +185,7 @@ namespace GiEnJul.Controllers
             var children = familyMembers.Count(x => x.Age < 18);
             var adults = familyMembers.Count(x => x.Age >= 18);
             var str = "";
-            if(children > 0) 
+            if(children >= 0) 
                 str += children + " barn og ";
             
             if(adults == 1) 
