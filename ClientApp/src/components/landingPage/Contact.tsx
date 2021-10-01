@@ -12,6 +12,7 @@ import {
   Divider,
 } from "@material-ui/core";
 import useStyles from "./Styles";
+import { Link as Scroll } from "react-scroll";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
 import Information from "./Information";
 import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
@@ -100,8 +101,11 @@ const ContactCards = contacts.map((contact, index) =>
       {/* Todo: Legg inn scrolle-link under */}
       { ContactCards.length &&
       <Typography className={classes.contactContent}>
-        Før du tar kontakt, se om du finner svaret på det du lurer på i ofte
-        stilte spørsmål.
+        Før du tar kontakt, se om du finner svaret på det du lurer på i 
+        <Scroll to="questions" smooth={true}>
+                  <Typography className={classes.textLink}>ofte stilte spørsmål.</Typography>
+          </Scroll> 
+          
       </Typography>
        ||
       <Typography className={classes.contactContent}>

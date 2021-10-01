@@ -12,6 +12,9 @@ namespace GiEnJul.Entities
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string DeliveryAddress { get; set; }
+        public string DeliveryTime { get; set; }
+        public string DeliveryGPS { get; set; }
+        public string DeliveryDate { get; set; }
         public string ContactPerson { get; set; }
         public int GiverLimit { get; set; }
         public string Email { get; set; }
