@@ -98,7 +98,6 @@ namespace GiEnJul.Controllers
             catch (Exception e)
             {
                 _log.Error(e, "Could not send registration email to {@0}", giver.Email);
-
                 await _giverRepository.DeleteAsync(giverModel);
                 throw e;
             }
