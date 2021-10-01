@@ -49,21 +49,13 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            //var (giver_limit, active_event) = await _eventRepository.GetGiverLimitAndEventNameForLocationAsync(giverDto.Location);
-
-            var giver = _mapper.Map<Giver>(giverDto);
-            giver.EventName = await _eventRepository.GetActiveEventForLocationAsync(giverDto.Location);
-
-            var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
-
-
             var eventDto = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
-            //var givers_in_event = await _giverRepository.GetGiversByLocationAsync(active_event, giverDto.Location);
-            //var num_givers = givers_in_event.Count();
-            //bool waiting_list = num_givers > giver_limit;
-            //$"{(waiting_list ? $"</br> Tusen takk for at du har meldt deg som giver til årets Gi en jul. Grunnet stor pågang har du havnet i ventelisten.</br>Din posisjon i ventelisten er: {num_givers - giver_limit}.</br></br>" : "Du slapp ventelisten.")}" +
+            var giver = _mapper.Map<Giver>(giverDto);
+            giver.EventName = eventDto.PartitionKey;
 
+
+            var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
 
             var messageContent =
                 $"Hei! <br/><br/>" +
