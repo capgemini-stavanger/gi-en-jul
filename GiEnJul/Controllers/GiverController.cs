@@ -65,7 +65,7 @@ namespace GiEnJul.Controllers
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
-                $"Leveringsinfo <br>Dato:{eventDto.DeliveryDate}<br>Tid:{eventDto.DeliveryTime}<br>Sted:<a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a>" +
+                $"Leveringsinfo <br>Dato: {eventDto.DeliveryDate}<br>Tid: {eventDto.DeliveryTime}<br>Sted: <a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a>" +
                 $"<br/><br/>" +
 
                 $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien. <br/><br/>" +
