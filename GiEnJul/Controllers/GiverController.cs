@@ -53,9 +53,10 @@ namespace GiEnJul.Controllers
 
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = eventDto.PartitionKey;
+            giver.Email = giver.Email.Trim();
 
-
-            var insertedAsDto = _mapper.Map<PostGiverResultDto>(await _giverRepository.InsertOrReplaceAsync(giver));
+            var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
+            var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
             var messageContent =
                 $"Hei! <br/><br/>" +
@@ -64,9 +65,10 @@ namespace GiEnJul.Controllers
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
-                $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate}, <a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a>.<br/><br/>" +
+                $"Leveringsinfo <br>Dato:{eventDto.DeliveryDate}<br>Tid:{eventDto.DeliveryTime}<br>Sted:<a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a>" +
+                $"<br/><br/>" +
 
-                $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat-og gaveønsker når du får familien. <br/><br/>" +
+                $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien. <br/><br/>" +
 
                 $"Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. Middagen kan <br/>" +
                 $"eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spaghetti, eller noe annet du synes er passende. <br/><br/>" +
@@ -89,9 +91,17 @@ namespace GiEnJul.Controllers
                 $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href='https://www.facebook.com/gienjul'>facebook-eventet<a/>.<br/><br/>" +
                 $"Vennlig hilsen {eventDto.ContactPerson}";
 
-            
-            await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", messageContent);
-            
+            try
+            {
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", messageContent);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.DeleteAsync(giverModel);
+                throw e;
+            }
+
+
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
     }
