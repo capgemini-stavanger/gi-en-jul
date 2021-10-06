@@ -21,29 +21,21 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
   const [statistics, setStatistics] = useState<StatisticsType>();
 
   const getStatistics = () => {
-    let suggestedMatch: number = givers.filter(
-      (giver) =>
-        giver.isSuggestedMatch === true && giver.hasConfirmedMatch === false
-    ).length;
-    let confirmedMatch: number = givers.filter(
-      (giver) => giver.hasConfirmedMatch === true
-    ).length;
-
     setStatistics((prevState) => {
       return {
         ...prevState,
         totalGivers: givers.length,
         totalRecipints: recipients.length,
-        suggestedMatch: suggestedMatch,
-        confirmedMatch: confirmedMatch,
-        giversWithoutRecipient: ( givers.length - suggestedMatch - confirmedMatch),
-        recipientsWithoutGiver: (recipients.length - suggestedMatch - confirmedMatch),
+        suggestedMatch: givers.filter((giver) => giver.isSuggestedMatch === true && giver.hasConfirmedMatch === false).length,
+        confirmedMatch: givers.filter((giver) => giver.hasConfirmedMatch === true).length,
+        giversWithoutRecipient: (givers.filter((giver) => giver.isSuggestedMatch === false).length),
+        recipientsWithoutGiver: (recipients.filter((recipient) => recipient.isSuggestedMatch === false).length),
       };
     });
   };
   useEffect(() => {
     getStatistics();
-  }, [recipients]);
+  }, [recipients, givers]);
   const classes = useStyles();
 
   return (
