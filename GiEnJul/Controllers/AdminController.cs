@@ -242,7 +242,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "GetUnsuggestedRecipients")]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
-            Console.WriteLine("Hei");
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
