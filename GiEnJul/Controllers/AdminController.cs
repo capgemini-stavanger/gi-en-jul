@@ -227,9 +227,9 @@ namespace GiEnJul.Controllers
             
             var suggestions = new List<Giver>
             {
-                unmatchedGivers.First(x => x.MaxReceivers == 2),
-                unmatchedGivers.First(x => x.MaxReceivers == 5),
-                unmatchedGivers.First(x => x.MaxReceivers == 100)
+                unmatchedGivers.FirstOrDefault(x => x.MaxReceivers == 2),
+                unmatchedGivers.FirstOrDefault(x => x.MaxReceivers == 5),
+                unmatchedGivers.FirstOrDefault(x => x.MaxReceivers == 100)
             };
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
