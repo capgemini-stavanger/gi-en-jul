@@ -234,7 +234,7 @@ namespace GiEnJul.Controllers
                 unmatchedGivers.FirstOrDefault(x => x.MaxReceivers == 100)
             };
 
-            return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
+            return _mapper.Map<IList<GiverDataTableDto>>(suggestions.Where(x => x != null));
         }
 
         [HttpGet("Suggestions/Recipient/{quantity}")]
