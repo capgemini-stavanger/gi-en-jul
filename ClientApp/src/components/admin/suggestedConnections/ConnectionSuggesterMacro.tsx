@@ -64,11 +64,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       })
       .then((response) => {
         if (response.status == 200) {
-          setState({
-            ...initialState,
+          setState((prev) => ({
+            ...prev,
             recipients: response.data,
-            refreshing: false,
-          });
+            refreshing: false
+          }))
         } else {
           alert("Kunne ikke hente familier, prøv igjen");
         }
@@ -92,7 +92,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           alert("Kunne ikke hente givere, prøv igjen");
         }
       });
-  }, [state.recipients]);
+  }, []);
 
   const updateSelectedRecipient = (newSelected: RecipientType): void => {
     setState((prev) => ({ ...prev, selectedRecipient: newSelected }));

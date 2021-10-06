@@ -58,15 +58,34 @@ namespace GiEnJul.Controllers
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
+            var familysize = "6+";
+            if (giver.MaxReceivers < 6)
+            {
+                var minReceivers = (int)Math.Ceiling(giver.MaxReceivers / 2.0);
+                familysize = $"{minReceivers}-{giver.MaxReceivers}";
+            }
+
             var messageContent =
-                $"Hei! <br/><br/>" +
-
-
+                $"Hei!</br></br>" + 
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
-                $"Leveringsinfo <br>Dato:{eventDto.DeliveryDate}<br>Tid:{eventDto.DeliveryTime}<br>Sted:<a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a>" +
-                $"<br/><br/>" +
+                $"Din informasjon:" +
+                $"<ul>" +
+                $"<li>Kommune: {giver.Location}</li>" +
+                $"<li>Navn: {giver.FullName}</li>" +
+                $"<li>Epost: {giver.Email}</li>" +
+                $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
+                $"<li>Familiestørrelse: {familysize} personer</li>" +
+                $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
+                $"</ul></br>" +
+
+                $"Leveringsinformasjon:</br>" +
+                $"<ul>" +
+                $"<li>Dato: {eventDto.DeliveryDate}</li>" +
+                $"<li>Tid: {eventDto.DeliveryTime}</li>" +
+                $"<li>Sted: <a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a></li>" +
+                $"</ul></br>" +
 
                 $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien. <br/><br/>" +
 
