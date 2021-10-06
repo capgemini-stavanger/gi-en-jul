@@ -59,13 +59,10 @@ namespace GiEnJul.Controllers
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
             var familysize = "6+";
-            if (giver.MaxReceivers == 2)
+            if (giver.MaxReceivers < 6)
             {
-                familysize = "1-2";
-            }
-            else if (giver.MaxReceivers == 5)
-            {
-                familysize = "3-5";
+                var minReceivers = (int)Math.Ceiling(giver.MaxReceivers / 2.0);
+                familysize = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
             var messageContent =
@@ -73,16 +70,15 @@ namespace GiEnJul.Controllers
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
-                $"Din informasjon:</br>" +
+                $"Din informasjon:" +
                 $"<ul>" +
-                $"<li>Lokasjon: {giver.Location}</li>" +
+                $"<li>Kommune: {giver.Location}</li>" +
                 $"<li>Navn: {giver.FullName}</li>" +
                 $"<li>Epost: {giver.Email}</li>" +
                 $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
                 $"<li>Familiestørrelse: {familysize} personer</li>" +
                 $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
                 $"</ul></br>" +
-
 
                 $"Leveringsinformasjon:</br>" +
                 $"<ul>" +
