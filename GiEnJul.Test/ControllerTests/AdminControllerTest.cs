@@ -6,6 +6,7 @@ using GiEnJul.Repositories;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,34 +14,34 @@ namespace GiEnJul.Test.ControllerTests
 {
     public class AdminControllerTest : BaseControllerTest
     {
-        private Mock<IEventRepository> mockEventRepo { get; set; }
-        public Mock<IGiverRepository> mockGiverRepo { get; private set; }
-        public Mock<IRecipientRepository> mockRecipientRepo { get; private set; }
-        public Mock<IPersonRepository> mockPersonRepo { get; private set; }
-        public Mock<IConnectionRepository> mockConnectionRepo { get; private set; }
+        private Mock<IEventRepository> MockEventRepo { get; set; }
+        public Mock<IGiverRepository> MockGiverRepo { get; private set; }
+        public Mock<IRecipientRepository> MockRecipientRepo { get; private set; }
+        public Mock<IPersonRepository> MockPersonRepo { get; private set; }
+        public Mock<IConnectionRepository> MockConnectionRepo { get; private set; }
 
         private readonly Mock<IEmailClient> emailClientMock;
 
-        public Mock<IConfiguration> configMock { get; private set; }
+        public Mock<IConfiguration> ConfigMock { get; private set; }
         public readonly Settings settings;
 
         private AdminController _controller;
 
         public AdminControllerTest()
         {
-            mockEventRepo = new Mock<IEventRepository>();
-            mockGiverRepo = new Mock<IGiverRepository>();
-            mockRecipientRepo = new Mock<IRecipientRepository>();
-            mockPersonRepo = new Mock<IPersonRepository>();
-            mockConnectionRepo = new Mock<IConnectionRepository>();
+            MockEventRepo = new Mock<IEventRepository>();
+            MockGiverRepo = new Mock<IGiverRepository>();
+            MockRecipientRepo = new Mock<IRecipientRepository>();
+            MockPersonRepo = new Mock<IPersonRepository>();
+            MockConnectionRepo = new Mock<IConnectionRepository>();
             emailClientMock = new Mock<IEmailClient>();
-            configMock = new Mock<IConfiguration>();
-            settings = new Settings(configMock.Object);
-            _controller = new AdminController(mockEventRepo.Object,
-                                              mockGiverRepo.Object,
-                                              mockRecipientRepo.Object,
-                                              mockPersonRepo.Object,
-                                              mockConnectionRepo.Object,
+            ConfigMock = new Mock<IConfiguration>();
+            settings = new Settings(ConfigMock.Object);
+            _controller = new AdminController(MockEventRepo.Object,
+                                              MockGiverRepo.Object,
+                                              MockRecipientRepo.Object,
+                                              MockPersonRepo.Object,
+                                              MockConnectionRepo.Object,
                                               _log,
                                               _mapper,
                                               emailClientMock.Object,
@@ -49,11 +50,11 @@ namespace GiEnJul.Test.ControllerTests
 
         public void Dispose()
         {
-            mockEventRepo.VerifyNoOtherCalls();
-            mockGiverRepo.VerifyNoOtherCalls();
-            mockRecipientRepo.VerifyNoOtherCalls();
-            mockPersonRepo.VerifyNoOtherCalls();
-            mockConnectionRepo.VerifyNoOtherCalls();
+            MockEventRepo.VerifyNoOtherCalls();
+            MockGiverRepo.VerifyNoOtherCalls();
+            MockRecipientRepo.VerifyNoOtherCalls();
+            MockPersonRepo.VerifyNoOtherCalls();
+            MockConnectionRepo.VerifyNoOtherCalls();
 
             emailClientMock.VerifyNoOtherCalls();
         }
@@ -61,59 +62,75 @@ namespace GiEnJul.Test.ControllerTests
         [Fact]
         public async Task GetUnsuggestedGivers_ListContainsAllMaxRecipientTypes()
         {
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
-            mockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            MockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
+            MockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(CreateGiverList());
 
             var list = await _controller.GetUnsuggestedGiversAsync("Stavanger");
 
             Assert.Equal(3, list.Count);
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
-            mockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+            MockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
+            MockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 
         [Fact]
         public async Task GetUnsuggestedGivers_ListContainsTwoMaxRecipientTypes()
         {
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
-            mockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            MockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
+            MockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(CreateGiverList(false));
 
             var list = await _controller.GetUnsuggestedGiversAsync("Stavanger");
 
             Assert.Equal(2, list.Count);
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
-            mockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+            MockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
+            MockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 
         [Fact]
         public async Task GetUnsuggestedGivers_ListIsEmpty()
         {
-            mockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
-            mockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+            MockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
+            MockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
                 .ReturnsAsync(new List<Giver>());
 
             var list = await _controller.GetUnsuggestedGiversAsync("Stavanger");
 
             Assert.Equal(0, list.Count);
 
-            mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
-            mockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+            MockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
+            MockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task GetUnsuggestedGivers_ListIsInOrder()
+        {
+            MockEventRepo.Setup(x => x.GetActiveEventForLocationAsync("Stavanger")).ReturnsAsync("event");
+            MockGiverRepo.Setup(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .ReturnsAsync(CreateGiverList());
+
+            var list = await _controller.GetUnsuggestedGiversAsync("Stavanger");
+
+            Assert.True(list.First().MaxReceivers < list.Skip(1).First().MaxReceivers);
+            Assert.True(list.Skip(1).First().MaxReceivers < list.Skip(2).First().MaxReceivers);
+
+            MockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
+            MockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 
         public List<Giver> CreateGiverList(bool oneOfEach = true, string location = "Stavanger")
         {
             var list = new List<Giver>();
+            list.Add(new Giver { IsSuggestedMatch = false, Email = "Tre@tre.com", Location = location, MaxReceivers = 5 });
             list.Add(new Giver { IsSuggestedMatch = false, Email = "Uno@one.com", Location = location, MaxReceivers = 2 });
             list.Add(new Giver { IsSuggestedMatch = false, Email = "Dos@two.com", Location = location, MaxReceivers = 5 });
-            list.Add(new Giver { IsSuggestedMatch = false, Email = "Tre@tre.com", Location = location, MaxReceivers = 5 });
             if (oneOfEach)
             {
+                list.Add(new Giver { IsSuggestedMatch = false, Email = "third@thr.com", Location = location, MaxReceivers = 100 });
                 list.Add(new Giver { IsSuggestedMatch = false, Email = "first@one.com", Location = location, MaxReceivers = 2 });
                 list.Add(new Giver { IsSuggestedMatch = false, Email = "Secon@two.com", Location = location, MaxReceivers = 5 });
-                list.Add(new Giver { IsSuggestedMatch = false, Email = "third@thr.com", Location = location, MaxReceivers = 100 });
             }
             return list;
         }
