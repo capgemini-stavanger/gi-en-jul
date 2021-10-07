@@ -9,6 +9,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
+using System.Linq;
 
 namespace GiEnJul
 {
@@ -85,7 +87,7 @@ namespace GiEnJul
                    .SetIsOriginAllowed(x =>
                    {
                        log.Verbose(x);
-                       return x == settings.ReactAppUri;
+                       return IsOriginAllowed(x, settings);
                    }));
 
             app.UseEndpoints(endpoints =>
@@ -94,6 +96,12 @@ namespace GiEnJul
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+        }
+
+        private bool IsOriginAllowed(string x, ISettings settings)
+        {
+            var allowedOrigins = settings.ReactAppUri.Split(';');
+            return allowedOrigins.Contains(x);
         }
     }
 }

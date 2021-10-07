@@ -14,6 +14,11 @@ namespace GiEnJul.Auth
             opt.AddPolicy("DeleteRecipient", policy => policy.RequireClaim("permissions", "delete:recipient"));
             opt.AddPolicy("ReadConnection", policy => policy.RequireClaim("permissions", "read:connection"));
             opt.AddPolicy("DownloadDeliveryExcel", policy => policy.RequireClaim("permissions", "download:deliveryexcel"));
+            opt.AddPolicy("AddEvent", policy => policy.RequireClaim("permissions", "add:event"));
+            opt.AddPolicy("UpdateWish", policy => policy.RequireClaim("permissions", "update:wish"));
+            opt.AddPolicy("AddConnection", policy => policy.RequireClaim("permissions", "add:connection"));
+            opt.AddPolicy("GetUnsuggestedGivers", policy => policy.RequireClaim("permissions", "get:unsuggestedgivers"));
+            opt.AddPolicy("GetUnsuggestedRecipients", policy => policy.RequireClaim("permissions", "get:unsuggestedrecipients"));
         }
     }
 }

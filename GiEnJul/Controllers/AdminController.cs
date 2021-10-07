@@ -135,6 +135,7 @@ namespace GiEnJul.Controllers
 
 
         [HttpPost]
+        [Authorize(Policy = "AddConnection")]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
@@ -216,6 +217,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
+        [Authorize(Policy = "GetUnsuggestedGivers")]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
@@ -223,20 +225,18 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
 
-            unmatchedGivers = unmatchedGivers.OrderBy(x => x.RegistrationDate).ToList();
-            
-            var suggestions = new List<Giver>
-            {
-                unmatchedGivers.First(x => x.MaxReceivers == 2),
-                unmatchedGivers.First(x => x.MaxReceivers == 5),
-                unmatchedGivers.First(x => x.MaxReceivers == 100)
-            };
+            var suggestions = unmatchedGivers
+                .OrderBy(x => x.RegistrationDate)
+                .GroupBy(x => x.MaxReceivers)
+                .Select(x => x.First())
+                .ToList();
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
 
         [HttpGet("Suggestions/Recipient/{quantity}")]
         [HttpGet("Suggestions/Recipient")]
+        [Authorize(Policy = "GetUnsuggestedRecipients")]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
