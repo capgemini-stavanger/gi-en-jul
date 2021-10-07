@@ -9,7 +9,6 @@ import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
-import { useCallback } from "react";
 import { useState } from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
@@ -17,6 +16,7 @@ import Gender from "../../common/enums/Gender";
 import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
+import ConfirmationDialog from './ConfirmationDialog';
 
 
 import {
@@ -76,6 +76,11 @@ const initState: {
     severity?: "error" | "info" | "success" | "warning";
     open: boolean;
   };
+  dialog: {
+    referenceId:string;
+    familyId:string;
+    open: boolean;
+  }
 } = {
   viewErrorTrigger: 0,
   displayText: false, 
@@ -85,6 +90,11 @@ const initState: {
     severity: undefined,
     open: false,
   },
+  dialog: {
+    referenceId: "",
+    familyId: "",
+    open: false,
+  }
 };
 
 const initFormDataState: () => {
@@ -127,6 +137,7 @@ interface props {
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
+
   const [formDataState, setFormDataState] = useState(initFormDataState());
   const [validFormState, setValidFormState] = useState({
     ...initValidFormState,
@@ -139,6 +150,10 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       persons: [...prev.persons, getFormPerson()],
     }));
   };
+
+  const closeDialog = () => {
+    setDialog(false);
+  }
 
   const updatePerson = (
     index: number,
@@ -256,6 +271,22 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
+  const setDialog = (
+    open?: boolean,
+    familyId?: string,
+    referenceId?: string
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      dialog: {
+        ...prev.dialog,
+        open: open !== undefined ? open : prev.dialog.open,
+        familyId: familyId !== undefined ? familyId : prev.dialog.familyId,
+        referenceId: referenceId !== undefined ? referenceId : prev.dialog.referenceId,
+      },
+    }));
+  };
+
   const getDinner = () => {
     return formDataState.dinner.radio === "annet"
       ? formDataState.dinner.input
@@ -285,7 +316,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const onSuccessSubmit = () => {
     var message = formDataState.pid.length > 0 ? 'Familie #' + formDataState.pid + ' registrert!' : 'Familie registrert!';
-    setAlert(true, message, "success");
+    setDialog(true);
     resetForm();
   };
 
@@ -349,6 +380,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       .post("recipient", JSON.stringify(submit))
       .then((response) => {
         if (response.status === 200) {
+          setDialog(true, response.data.item1, response.data.item2)
           goodFetch = true;
         }
       })
@@ -583,6 +615,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             )}
           </Grid>
         </Grid>
+        <ConfirmationDialog open={state.dialog.open} familyId={state.dialog.familyId} referenceId={state.dialog.referenceId} handleClose={closeDialog} />
       </form>
     </>
   );
