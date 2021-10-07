@@ -41,7 +41,7 @@ namespace GiEnJul.Controllers
 
         [HttpPost]
         [Authorize(Policy = "AddRecipient")]
-        public async Task<ActionResult> PostAsync([FromBody] PostRecipientDto recipientDto)
+        public async Task<ActionResult<(string FamilyId,string ReferenceId)>> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
@@ -57,8 +57,7 @@ namespace GiEnJul.Controllers
                 family.ForEach(person => person.PartitionKey = insertedRecipient.RowKey);
 
                 await _personRepository.InsertOrReplaceBatchAsync(family);
-
-                return Ok();
+                return (insertedRecipient.FamilyId, insertedRecipient.ReferenceId);
             }
             catch (Exception ex)
             {
