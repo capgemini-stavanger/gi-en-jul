@@ -264,9 +264,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       ...prev,
       alert: {
         ...prev.alert,
-        msg: message !== undefined ? message : prev.alert.msg,
-        severity: severity !== undefined ? severity : prev.alert.severity,
-        open: open !== undefined ? open : prev.alert.open,
+        msg: message ?? prev.alert.msg,
+        severity: severity ?? prev.alert.severity,
+        open: open ?? prev.alert.open,
       },
     }));
   };
@@ -280,9 +280,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       ...prev,
       dialog: {
         ...prev.dialog,
-        open: open !== undefined ? open : prev.dialog.open,
-        familyId: familyId !== undefined ? familyId : prev.dialog.familyId,
-        referenceId: referenceId !== undefined ? referenceId : prev.dialog.referenceId,
+        open: open ?? prev.dialog.open,
+        familyId: familyId ?? prev.dialog.familyId,
+        referenceId: referenceId ?? prev.dialog.referenceId,
       },
     }));
   };

@@ -37,7 +37,7 @@ return (
                 { referenceId.length > 0 &&
                 <p>Din Id: <b>{referenceId}</b></p>
                 }
-                <p>Gi en jul's samilienummer: <b>{familyId}</b></p>
+                <p>Gi en jul's familienummer: <b>{familyId}</b></p>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
