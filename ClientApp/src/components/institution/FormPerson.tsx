@@ -22,6 +22,7 @@ import MessageDialog from "./MessageDialog";
 interface PersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
+  setAlert: (open: boolean, message?:string, severity?:string) => void;
   viewErrorTrigger: number;
   person: IFormPerson;
 }
@@ -38,6 +39,7 @@ const initState: { [data: string]: any } = {
 const InstitutionPerson: FC<PersonProps> = ({
   updatePerson,
   deletePerson,
+  setAlert,
   viewErrorTrigger,
   person,
 }) => {
@@ -210,9 +212,14 @@ const InstitutionPerson: FC<PersonProps> = ({
           setShowMessageDialog(true);
         }}
       >
+        { person.comment.length == 0 &&
         <Typography>
-        Legg til en kommentar for denne personen
+          Legg til en kommentar for denne personen
+        </Typography> ||
+        <Typography>
+          Se/endre kommentaren for denne personen
         </Typography>
+        }
       </Link>
       </Grid>
       <Grid>
@@ -220,6 +227,8 @@ const InstitutionPerson: FC<PersonProps> = ({
         open={state.dialogOpen}
         onClose={() => setShowMessageDialog(false)}
         setMessage={setValidMessage}
+        message={person.comment}
+        setAlert={() => setAlert(true)}
       />
       </Grid>
     </Grid>

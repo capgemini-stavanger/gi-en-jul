@@ -10,7 +10,6 @@ import {
   } from "@material-ui/core";
   import CloseIcon from "@material-ui/icons/Close";
   import { FC, useState } from "react";
-  import useStyles from "./Styles";
   
   const style = {
     dialogWidth: {
@@ -20,6 +19,8 @@ import {
 
   interface IMessageDialog {
     setMessage: (message: string) => void;
+    setAlert: (open: boolean, message?:string, severity?:string) => void;
+    message: string;
     onClose: () => void;
     open: boolean;
   }
@@ -27,25 +28,29 @@ import {
   const MessageDialog
   : FC<IMessageDialog> = ({
     setMessage,
+    setAlert,
+    message,
     onClose,
     open,
   }) => {
-    const classes = useStyles();
-  
     const [value, setValue] = useState("");
 
     const onCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value);
-        setMessage(e.target.value);
+        setValue(() => e.target.value);
       };
 
     const handleSubmit = () => {
     setMessage(value);
+    setAlert(true, "Kommentar oppdatert!", "success");
     onClose();
     };
-  
+
+    const onCommentOpen = () => {
+      setValue(message)
+    }
+    
     return (
-      <Dialog onClose={onClose} aria-labelledby="dialog-title" open={open}>
+      <Dialog onClose={() => {onClose(); onCommentOpen()}} aria-labelledby="dialog-title" open={open}>
         <DialogTitle id="dialog-title" disableTypography>
           <Typography
           style={style.dialogWidth}
@@ -56,7 +61,7 @@ import {
           {onClose ? (
             <IconButton
               aria-label="close"
-              onClick={onClose}
+              onClick={() => {onClose(); onCommentOpen()}}
             >
               <CloseIcon />
             </IconButton>
@@ -76,7 +81,14 @@ import {
         </DialogContent>
             <DialogActions>
                 <Button onClick={handleSubmit} color="primary">
+                  {message.length == 0 &&
+                  <Typography>
                     Legg til kommentar
+                  </Typography> ||
+                  <Typography>
+                    Endre kommentar
+                  </Typography>
+                  }
                 </Button>
             </DialogActions>
       </Dialog>
