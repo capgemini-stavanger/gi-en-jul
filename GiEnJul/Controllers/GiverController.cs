@@ -65,8 +65,11 @@ namespace GiEnJul.Controllers
                 familysize = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
+            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventDto.PartitionKey, giverDto.Location);
+            bool waiting_list = num_givers > eventDto.GiverLimit;
+
             var messageContent =
-                $"Hei!</br></br>" + 
+                $"Hei!</br></br>" +
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
@@ -107,12 +110,38 @@ namespace GiEnJul.Controllers
                 $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
 
                 $"Igjen vil vi si tusen takk for at du har meldt seg som giver! Vi håper du har fått informasjonen du trenger, <br/>" +
-                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href='https://www.facebook.com/gienjul'>facebook-eventet<a/>.<br/><br/>" +
+                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href={eventDto.Facebook}'>Facebook-eventet<a/>.<br/><br/>" +
+
+                $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
+
                 $"Vennlig hilsen {eventDto.ContactPerson}";
+
+
+            var altMessageContent = 
+                $"Hei!</br></br>" +
+                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul.</br></br>" + 
+                $"Grunnet stor pågang har du havnet på ventelisten. Det er dermed ikke sikkert at du vil bli tildelt en familie.</br>" +
+                $"Vi tar kontakt med deg dersom vi får inn en familie til deg.</br></br>" +
+
+                $"Din informasjon:" +
+                $"<ul>" +
+                $"<li>Kommune: {giver.Location}</li>" +
+                $"<li>Navn: {giver.FullName}</li>" +
+                $"<li>Epost: {giver.Email}</li>" +
+                $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
+                $"<li>Familiestørrelse: {familysize} personer</li>" +
+                $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
+                $"</ul></br>" +
+
+                $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
+
+                $"Vennlig hilsen {eventDto.ContactPerson}";
+
+            var finalMessage = waiting_list ? altMessageContent : messageContent;
 
             try
             {
-                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", messageContent);
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", finalMessage);
             }
             catch (Exception e)
             {
@@ -120,7 +149,6 @@ namespace GiEnJul.Controllers
                 await _giverRepository.DeleteAsync(giverModel);
                 throw e;
             }
-
 
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
