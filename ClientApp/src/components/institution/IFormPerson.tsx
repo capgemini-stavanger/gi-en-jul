@@ -6,7 +6,7 @@ interface IFormPerson {
   age: string;
   months: string;
   gender: Gender;
-  comment: String;
+  comment: string;
   wish?: string; // Age-adjusted gift if undefined
   isValidAge: boolean;
   isValidGender: boolean;
