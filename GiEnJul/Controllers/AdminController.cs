@@ -62,7 +62,6 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
             return givers.OrderBy(x => x.RegistrationDate).ToList();
-            
         }
 
         [HttpGet("Overview/Recipients")]
@@ -135,6 +134,7 @@ namespace GiEnJul.Controllers
 
 
         [HttpPost]
+        [Authorize(Policy = "AddConnection")]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
@@ -159,7 +159,6 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
-
                 var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
                 var familyTable = "";
@@ -179,7 +178,6 @@ namespace GiEnJul.Controllers
                         var member = recipient.FamilyMembers[i];
                         familyTable += $"{member.ToReadableString()}</br></br>";
                     }
-                 
                 }
 
                 var body =
@@ -271,13 +269,13 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
+        [Authorize(Policy = "GetUnsuggestedGivers")]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
-
 
             var suggestions = unmatchedGivers
                 .OrderBy(x => x.RegistrationDate)
@@ -286,12 +284,12 @@ namespace GiEnJul.Controllers
                 .OrderBy(x => x.MaxReceivers)
                 .ToList();
 
-
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
 
         [HttpGet("Suggestions/Recipient/{quantity}")]
         [HttpGet("Suggestions/Recipient")]
+        [Authorize(Policy = "GetUnsuggestedRecipients")]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
