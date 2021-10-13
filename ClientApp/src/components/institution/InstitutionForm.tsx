@@ -9,7 +9,7 @@ import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
@@ -17,7 +17,6 @@ import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
 import ConfirmationDialog from './ConfirmationDialog';
-
 
 import {
   isEmail,
@@ -28,6 +27,7 @@ import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "./IFormPerson";
 import Locations from "./InstitutionLocations";
+import useUser from "../../hooks/useUser";
 
 type PersonType = {
   Wish?: string;
@@ -124,7 +124,6 @@ type ValidFormEntry = {
 };
 
 const initValidFormState: ValidFormEntry = {
-  location: false,
   dinner: false,
   dessert: false,
   contactName: false,
@@ -150,6 +149,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       persons: [...prev.persons, getFormPerson()],
     }));
   };
+  
+  
+  const { location, role } = useUser();
 
   const closeDialog = () => {
     setDialog(false);
@@ -361,7 +363,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Dessert: getDessert(),
       Note: formDataState.specialNeeds,
       Event: "JUL2021",
-      Location: formDataState.location,
+      Location: location,
       ContactFullName: formDataState.contact.name,
       ContactEmail: formDataState.contact.email,
       ContactPhoneNumber: formDataState.contact.phoneNumber,
@@ -426,15 +428,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
-          <Grid item>
-            <Locations
-              value={formDataState.location}
-              onChange={onLocationChange}
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValidLocation={getValiditySetter("location")}
-              include_header
-            />
-          </Grid>
           <Grid item>
             <Grid container spacing={1} direction="column">
               <Grid item>
