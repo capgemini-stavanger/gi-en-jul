@@ -65,7 +65,6 @@ const useUser = () => {
 
   useEffect(() => {
     if (user && state.managementAccessToken) {
-      console.log(user);
       axios
         .get(`${domainEnvUrl}users/${user.sub}`, {
           headers: {
@@ -73,7 +72,6 @@ const useUser = () => {
           },
         })
         .then((response) => {
-          console.log(response);
           dispatch({
             type: ReducerActionType.setLocation,
             data: response.data.user_metadata?.location,
