@@ -106,6 +106,7 @@ namespace GiEnJul.Test.ControllerTests
 
             var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
+            mockGiverRepo.Setup(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(It.IsAny<int>());
 
             //Act
             var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
@@ -117,6 +118,7 @@ namespace GiEnJul.Test.ControllerTests
             Assert.Equal((fakeModel.FullName, fakeModel.Email), (returnValue.FullName, returnValue.Email));
 
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
+            mockGiverRepo.Verify(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
         }
