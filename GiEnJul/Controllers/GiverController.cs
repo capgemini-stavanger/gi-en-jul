@@ -65,10 +65,17 @@ namespace GiEnJul.Controllers
                 familysize = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
+            var (giver_limit, active_event) = await _eventRepository.GetGiverLimitAndEventNameForLocationAsync(giverDto.Location);
+            var givers_in_event = await _giverRepository.GetGiversByLocationAsync(active_event, giverDto.Location);
+            var num_givers = givers_in_event.Count();
+            bool waiting_list = num_givers > giver_limit;
+
             var messageContent =
-                $"Hei!</br></br>" + 
+                $"Hei!</br></br>" +
                 $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
+
+                $"{(waiting_list ? $"<b>Grunnet stor pågang har du havnet i ventelisten.</b></br><b>Det er dermed ikke sikkert at du vil bli tildelt en familie.</b></br></br>" : "")}" +
 
                 $"Din informasjon:" +
                 $"<ul>" +
