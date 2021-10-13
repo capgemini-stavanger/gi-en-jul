@@ -22,3 +22,7 @@ export function isPhoneNumber(inputValue: string) {
 export function isEmail(inputValue: string) {
   return validator.isEmail(inputValue.trim());
 }
+
+export function isEqual(inputValue1: string, inputValue2: string) {
+  return !!(inputValue1 == inputValue2);
+}
