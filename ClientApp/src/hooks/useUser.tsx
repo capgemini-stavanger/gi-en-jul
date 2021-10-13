@@ -9,18 +9,22 @@ interface IState {
   managementAccessToken: string;
   location?: string;
   role?: string;
+  institution?: string
+  //Event
 }
 
 const initState: () => IState = () => ({
   managementAccessToken: "",
   location: undefined,
   role: undefined,
+  institution: undefined,
 });
 
 enum ReducerActionType {
   setManagementAccessToken,
   setLocation,
   setRole,
+  setInstitution,
 }
 
 interface IReducerAction {
@@ -36,6 +40,8 @@ const reducer = (state: IState, action: IReducerAction) => {
       return { ...state, location: action.data ?? null };
     case ReducerActionType.setRole:
       return { ...state, role: action.data ?? "Unspecified" };
+    case ReducerActionType.setInstitution:
+      return { ...state, institution: action.data ?? "Unspecified" };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
@@ -59,6 +65,7 @@ const useUser = () => {
 
   useEffect(() => {
     if (user && state.managementAccessToken) {
+      console.log(user);
       axios
         .get(`${domainEnvUrl}users/${user.sub}`, {
           headers: {
@@ -66,6 +73,7 @@ const useUser = () => {
           },
         })
         .then((response) => {
+          console.log(response);
           dispatch({
             type: ReducerActionType.setLocation,
             data: response.data.user_metadata?.location,
@@ -73,6 +81,10 @@ const useUser = () => {
           dispatch({
             type: ReducerActionType.setRole,
             data: response.data.app_metadata?.role,
+          });
+          dispatch({
+            type: ReducerActionType.setInstitution,
+            data: response.data.app_metadata?.institution,
           });
         })
         .catch((e) => {
@@ -84,6 +96,7 @@ const useUser = () => {
   return {
     location: state.location,
     role: state.role,
+    institution: state.institution,
   };
 };
 

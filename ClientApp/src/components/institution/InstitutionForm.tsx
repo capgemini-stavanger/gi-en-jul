@@ -151,7 +151,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
   
   
-  const { location, role } = useUser();
+  const { location, role, institution } = useUser();
 
   const closeDialog = () => {
     setDialog(false);
@@ -362,12 +362,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Dinner: getDinner(),
       Dessert: getDessert(),
       Note: formDataState.specialNeeds,
-      Event: "JUL2021",
       Location: location,
       ContactFullName: formDataState.contact.name,
       ContactEmail: formDataState.contact.email,
       ContactPhoneNumber: formDataState.contact.phoneNumber,
-      Institution: "NAV",
+      Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
