@@ -229,6 +229,7 @@ namespace GiEnJul.Controllers
                 .OrderBy(x => x.RegistrationDate)
                 .GroupBy(x => x.MaxReceivers)
                 .Select(x => x.First())
+                .OrderBy(x => x.MaxReceivers)
                 .ToList();
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
