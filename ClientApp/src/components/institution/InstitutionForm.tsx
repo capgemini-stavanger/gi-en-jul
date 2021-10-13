@@ -257,7 +257,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const setAlert = (
     open?: boolean,
-    message?: React.ReactNode,
+    message?: React.ReactNode | string,
     severity?: "error" | "info" | "success" | "warning"
   ) => {
     setState((prev) => ({
@@ -444,7 +444,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                 {formDataState.persons.map((person, i) => {
                   return (
                     <FormPerson
-                      setAlert={() => setAlert(true)}
+                      setAlert={setAlert}
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}

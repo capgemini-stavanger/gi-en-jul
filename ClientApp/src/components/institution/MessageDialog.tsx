@@ -19,7 +19,7 @@ import {
 
   interface IMessageDialog {
     setMessage: (message: string) => void;
-    setAlert: (open: boolean, message?:string, severity?:string) => void;
+    setAlert: (open?: boolean, message?:string, severity?:"error" | "info" | "success" | "warning") => void;
     message: string;
     onClose: () => void;
     open: boolean;
