@@ -26,9 +26,10 @@ type Props = {
 const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState<string | false>(false);
-  const handleChange = (panel:string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false)
+  const [expanded, setExpanded] = React.useState<GiverType | false>(false);
+  const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? giver : false);
+    handleGiverChange(giver);
   };
 
   const formatFamily = (input: Number) => {
@@ -44,10 +45,9 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
 
   return (
     <Container>
-      {data.map((giver, index) => (
-        <Accordion expanded={expanded===index.toString()}
-          onChange={() => {handleGiverChange(giver)}}
-          onClick = {handleChange(index.toString())}
+      {data.map((giver) => (
+        <Accordion expanded={expanded===giver}
+          onChange = {handleChange(giver)}
           key={giver.rowKey}
           className={classes.accordionContainer}
         >
