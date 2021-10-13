@@ -5,6 +5,7 @@ using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -17,6 +18,7 @@ namespace GiEnJul.Repositories
         Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
         Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity);
         Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location);
+        Task<int> GetGiversCountByLocationAsync(string eventName, string location);
         Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
     }
 
@@ -75,6 +77,12 @@ namespace GiEnJul.Repositories
             var query = new TableQuery<Entities.Giver>().Where(filter);
             var givers = await GetAllByQueryAsync(query);
             return _mapper.Map<IEnumerable<Models.Giver>>(givers);
+        }
+
+        public async Task<int> GetGiversCountByLocationAsync(string eventName, string location)
+        {
+            var givers = await GetGiversByLocationAsync(eventName, location);
+            return givers.Count();
         }
     }
 }
