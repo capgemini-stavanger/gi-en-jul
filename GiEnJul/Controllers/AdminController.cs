@@ -135,7 +135,6 @@ namespace GiEnJul.Controllers
 
 
         [HttpPost]
-        [Authorize(Policy = "AddConnection")]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
@@ -148,6 +147,8 @@ namespace GiEnJul.Controllers
 
             try
             {
+                var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
                 await _giverRepository.InsertOrReplaceAsync(giver);
@@ -158,12 +159,65 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
-                var title = "Du har blitt tildelt en familie!";
+
+                var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+                var familyTable = "";
+                var recipientNote = "";
+                if (string.IsNullOrWhiteSpace(recipient.Note)) 
+                {
+                        recipientNote = "";
+                } else
+                {
+                        recipientNote = $"Merk: {recipient.Note}.";
+                }
+
+                for (var i = 0; i<recipient.PersonCount; i++)
+                {
+                    if (recipient.FamilyMembers != null)
+                    {
+                        var member = recipient.FamilyMembers[i];
+                        familyTable += $"{member.ToReadableString()}</br></br>";
+                    }
+                 
+                }
+
                 var body =
-                    $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {GetFamilyMembersString(recipient.FamilyMembers)}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
-                    $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
+                    $"Hei {giver.FullName}, </br></br> " +
+
+                    $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. </br>" +
+                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. </br><br/>" +
+
+                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer. </br></br>" +
+
+                    $" <h3>SKJEMA MED INFO OM FAMILIE OG GAVEØNSKER </h3>" +
+                    $"{familyTable}" +
+
+                    $" Foretrukket middag: {recipient.Dinner} and {recipient.Dessert}. {recipientNote} </br></br>" +
+
+
+                    $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}.</br></br>" +
+
+                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten.</br></br>" +
+                    $"Middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. </br></br>" +
+
+                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er: <br/>" +
+                    $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
+                    $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
+                    $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
+                    $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! <br/>" +
+                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg og annet som inneholder det. </br></br>" +
+
+                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre.</br></br>" +
+                    $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære.</br></br>" +
+
+                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
+
+                    $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. </br></br>" +
+
+                    $"Viktig: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. </br></br>";
+
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
             }
@@ -186,7 +240,7 @@ namespace GiEnJul.Controllers
             var children = familyMembers.Count(x => x.Age < 18);
             var adults = familyMembers.Count(x => x.Age >= 18);
             var str = "";
-            if(children >= 0) 
+            if(children > 0) 
                 str += children + " barn og ";
             
             if(adults == 1) 
@@ -217,7 +271,6 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
-        [Authorize(Policy = "GetUnsuggestedGivers")]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
@@ -225,18 +278,20 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var unmatchedGivers = await _giverRepository.GetUnsuggestedAsync(activeEvent, location, quantity);
 
-            var suggestions = unmatchedGivers
-                .OrderBy(x => x.RegistrationDate)
-                .GroupBy(x => x.MaxReceivers)
-                .Select(x => x.First())
-                .ToList();
+            unmatchedGivers = unmatchedGivers.OrderBy(x => x.RegistrationDate).ToList();
+            
+            var suggestions = new List<Giver>
+            {
+                unmatchedGivers.First(x => x.MaxReceivers == 2),
+                unmatchedGivers.First(x => x.MaxReceivers == 5),
+                unmatchedGivers.First(x => x.MaxReceivers == 100)
+            };
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
         }
 
         [HttpGet("Suggestions/Recipient/{quantity}")]
         [HttpGet("Suggestions/Recipient")]
-        [Authorize(Policy = "GetUnsuggestedRecipients")]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
