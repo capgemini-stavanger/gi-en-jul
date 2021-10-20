@@ -39,9 +39,9 @@ const reducer = (state: IState, action: IReducerAction) => {
     case ReducerActionType.setLocation:
       return { ...state, location: action.data ?? null };
     case ReducerActionType.setRole:
-      return { ...state, role: action.data ?? "Unspecified" };
+      return { ...state, role: action.data ?? null };
     case ReducerActionType.setInstitution:
-      return { ...state, institution: action.data ?? "Unspecified" };
+      return { ...state, institution: action.data ?? null };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }

@@ -424,13 +424,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
           {state.alert.msg}
         </Alert>
       </Snackbar>
-
+      
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
             <Grid container spacing={1} direction="column">
               <Grid item>
-                <Typography variant="h5">Familie</Typography>
+                <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
               </Grid>
               <Grid item>
                 {formDataState.persons.map((person, i) => {
