@@ -9,6 +9,7 @@ using Serilog;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using GiEnJul.Utilities.Constants;
 
 namespace GiEnJul.Controllers
 {
@@ -58,11 +59,11 @@ namespace GiEnJul.Controllers
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
-            var familysize = "6+";
-            if (giver.MaxReceivers < 6)
+            var familyRange = "6+";
+            if (giver.MaxReceivers < FamilySize.Medium)
             {
                 var minReceivers = (int)Math.Ceiling(giver.MaxReceivers / 2.0);
-                familysize = $"{minReceivers}-{giver.MaxReceivers}";
+                familyRange = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
             var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventDto.PartitionKey, giverDto.Location);
@@ -79,7 +80,7 @@ namespace GiEnJul.Controllers
                 $"<li>Navn: {giver.FullName}</li>" +
                 $"<li>Epost: {giver.Email}</li>" +
                 $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
-                $"<li>Familiestørrelse: {familysize} personer</li>" +
+                $"<li>Familiestørrelse: {familyRange} personer</li>" +
                 $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
                 $"</ul></br>" +
 
@@ -129,7 +130,7 @@ namespace GiEnJul.Controllers
                 $"<li>Navn: {giver.FullName}</li>" +
                 $"<li>Epost: {giver.Email}</li>" +
                 $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
-                $"<li>Familiestørrelse: {familysize} personer</li>" +
+                $"<li>Familiestørrelse: {familyRange} personer</li>" +
                 $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
                 $"</ul></br>" +
 

@@ -109,7 +109,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "AddEvent")]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
-            if (eventDto.StartDate <= System.DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
+            if (eventDto.StartDate <= DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
             }
@@ -161,16 +161,9 @@ namespace GiEnJul.Controllers
 
                 var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
-                var familyTable = "";
-                var recipientNote = "";
-                if (string.IsNullOrWhiteSpace(recipient.Note)) 
-                {
-                        recipientNote = "";
-                } else
-                {
-                        recipientNote = $"Merk: {recipient.Note}.";
-                }
+                var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"Merk: {recipient.Note}.";
 
+                var familyTable = "";
                 for (var i = 0; i<recipient.PersonCount; i++)
                 {
                     if (recipient.FamilyMembers != null)
@@ -231,22 +224,6 @@ namespace GiEnJul.Controllers
                 throw e;
             }
             return Ok();
-        }
-
-        private string GetFamilyMembersString(List<Person> familyMembers)
-        {
-            var children = familyMembers.Count(x => x.Age < 18);
-            var adults = familyMembers.Count(x => x.Age >= 18);
-            var str = "";
-            if(children > 0) 
-                str += children + " barn og ";
-            
-            if(adults == 1) 
-                str += $"{adults} voksen";
-            else 
-                str += $"{adults} voksne";
-
-            return str;
         }
 
         [HttpDelete("recipient")]

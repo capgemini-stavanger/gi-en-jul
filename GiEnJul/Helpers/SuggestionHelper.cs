@@ -1,4 +1,5 @@
 ﻿using GiEnJul.Models;
+using GiEnJul.Utilities.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,10 @@ namespace GiEnJul.Helpers
             var suggestions = new List<Recipient>();
 
             var random = new Random();
-            suggestions.AddRange(recipients.Where(x => x.PersonCount <= 2).OrderBy(x => random.Next()).Take(quantity));
-            suggestions.AddRange(recipients.Where(x => x.PersonCount > 2 && x.PersonCount <= 5).OrderBy(x => random.Next()).Take(quantity));
-            suggestions.AddRange(recipients.Where(x => x.PersonCount > 5 && x.PersonCount <= 100).OrderBy(x => random.Next()).Take(quantity));
+
+            suggestions.AddRange(recipients.Where(x => x.PersonCount <= FamilySize.Small).OrderBy(x => random.Next()).Take(quantity));
+            suggestions.AddRange(recipients.Where(x => x.PersonCount > FamilySize.Small && x.PersonCount <= FamilySize.Medium).OrderBy(x => random.Next()).Take(quantity));
+            suggestions.AddRange(recipients.Where(x => x.PersonCount > FamilySize.Medium && x.PersonCount <= FamilySize.Large).OrderBy(x => random.Next()).Take(quantity));
 
             return suggestions;
         }
