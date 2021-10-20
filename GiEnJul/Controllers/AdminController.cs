@@ -136,24 +136,14 @@ namespace GiEnJul.Controllers
         // [Authorize(Policy = "DeleteConnection")]
         public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
         {
-            Giver giver;
-            Recipient recipient;
+            var giver = await _giverRepository.GetGiverAsync(location, rowKey);
 
-            try
-            {
-                giver = await _giverRepository.GetGiverAsync(location, rowKey);
-                recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
-
-            }
-            catch (NullReferenceException)
-            {
-                return NotFound();
-            }
-
-            catch (ArgumentNullException)
+            if (giver?.MatchedRecipient is null)
             {
                 return NoContent();
             }
+
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
 
             var originalMatchedRecipient = giver.MatchedRecipient;
             var originalMatchedGiver = recipient.MatchedGiver;
@@ -168,12 +158,13 @@ namespace GiEnJul.Controllers
 
             try
             {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+
                 if (await _connectionRepository.ConnectionExists(giver, recipient))
                 {
                     await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
                 }
-                await _giverRepository.InsertOrReplaceAsync(giver);
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
             }
             catch (NullReferenceException)
             {
@@ -193,7 +184,6 @@ namespace GiEnJul.Controllers
             
             return Ok();
         }
-
 
         [HttpPost]
         [Authorize(Policy = "AddConnection")]
