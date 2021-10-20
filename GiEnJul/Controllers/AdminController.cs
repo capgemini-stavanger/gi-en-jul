@@ -132,6 +132,68 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpDelete("Connection")]
+        // [Authorize(Policy = "DeleteConnection")]
+        public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
+        {
+            Giver giver;
+            Recipient recipient;
+
+            try
+            {
+                giver = await _giverRepository.GetGiverAsync(location, rowKey);
+                recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
+
+            catch (ArgumentNullException)
+            {
+                return NoContent();
+            }
+
+            var originalMatchedRecipient = giver.MatchedRecipient;
+            var originalMatchedGiver = recipient.MatchedGiver;
+
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = null;
+
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = null;
+
+            try
+            {
+                if (await _connectionRepository.ConnectionExists(giver, recipient))
+                {
+                    await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
+                }
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+            }
+            catch (NullReferenceException)
+            {
+                giver.HasConfirmedMatch = true;
+                giver.IsSuggestedMatch = true;
+                giver.MatchedRecipient = originalMatchedRecipient;
+
+                recipient.HasConfirmedMatch = true;
+                recipient.IsSuggestedMatch = true;
+                recipient.MatchedGiver = originalMatchedGiver;
+
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+
+                return NotFound();
+            }
+            
+            return Ok();
+        }
+
 
         [HttpPost]
         [Authorize(Policy = "AddConnection")]
