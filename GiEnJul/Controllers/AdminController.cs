@@ -140,13 +140,18 @@ namespace GiEnJul.Controllers
 
             if (giver?.MatchedRecipient is null)
             {
-                return NoContent();
+                return NotFound();
             }
 
             var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
 
-            var originalMatchedRecipient = giver.MatchedRecipient;
-            var originalMatchedGiver = recipient.MatchedGiver;
+            if (recipient is null)
+            {
+                return NotFound();
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
 
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
@@ -166,19 +171,12 @@ namespace GiEnJul.Controllers
                     await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
                 }
             }
-            catch (NullReferenceException)
+            catch (Exception e)
             {
-                giver.HasConfirmedMatch = true;
-                giver.IsSuggestedMatch = true;
-                giver.MatchedRecipient = originalMatchedRecipient;
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
 
-                recipient.HasConfirmedMatch = true;
-                recipient.IsSuggestedMatch = true;
-                recipient.MatchedGiver = originalMatchedGiver;
-
-                await _giverRepository.InsertOrReplaceAsync(giver);
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
-
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
             
