@@ -21,8 +21,6 @@ namespace GiEnJul.Controllers
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IConnectionRepository _connectionRepository;
-        private readonly IEventRepository _eventRepository;
-        private readonly IEmailClient _emailClient;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly ISettings _settings;
@@ -32,18 +30,14 @@ namespace GiEnJul.Controllers
             IRecipientRepository recipientRepository,
             IPersonRepository personRepository,
             IConnectionRepository connectionRepository,
-            IEventRepository eventRepository,
             ILogger log,
             IMapper mapper,
-            IEmailClient emailClient,
             ISettings settings)
         {
             _giverRepository = giverRepository;
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
             _connectionRepository = connectionRepository;
-            _eventRepository = eventRepository;
-            _emailClient = emailClient;
             _log = log;
             _mapper = mapper;
             _settings = settings;
@@ -77,18 +71,12 @@ namespace GiEnJul.Controllers
 
                 recipient.HasConfirmedMatch = true;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-
-                var title = $"Handleliste til familie {recipient.FamilyId}";
-                var body = await ConstructEmailBodyAsync(recipient);
-
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
             }
             catch (InvalidConnectionCreationException e)
             {
                 _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
                 throw e;
             }
-
             catch (Exception e)
             {
                 //Undo all operations
@@ -101,35 +89,6 @@ namespace GiEnJul.Controllers
                 _log.Error("An exception was thrown", e);
                 throw e;
             }
-        }
-
-        private async Task<string> ConstructEmailBodyAsync(Recipient recipient)
-        {
-            var deliveryAddress = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
-
-
-            var wishList = "";
-            recipient.FamilyMembers.ForEach(
-                person => wishList += 
-                    $"<li>" +
-                    $"{person.ToReadableString()}, " +
-                    $"</li>");
-
-            var foodList =
-                $"<li>Middag: {recipient.Dinner}</li>" +
-                $"<li>Dessert: {recipient.Dessert}</li>" +
-                $"<li>Notat: {(string.IsNullOrEmpty(recipient.Note) ? "-" : recipient.Note)}</li>";
-
-            var body = 
-                $"<h1>Familie {recipient.FamilyId}</h1>" +
-                "<div>" +
-                $"<ul>{wishList}</ul>" +
-                "<h3>Matønsker</h3>" +
-                $"<ul>{foodList}</ul>" +
-                $"Leveres til {deliveryAddress}, {recipient.Location}" +
-                "</div>";
-
-            return body;
         }
     }
 }
