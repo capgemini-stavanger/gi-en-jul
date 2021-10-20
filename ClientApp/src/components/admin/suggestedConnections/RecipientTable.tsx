@@ -10,34 +10,39 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import EditIcon from '@material-ui/icons/Edit';
 import { RecipientType } from "./Types";
 import { getGender } from "../../../common/functions/GetGender";
 import { capitalize } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
 import useStyles from "../common/Styles";
 
-type RecipientRowProps = {
+type IRecipientRowProps = {
   recipient: RecipientType;
   onClick: any;
   selected: boolean;
+  openDialog: (open: boolean) => void;
 };
 
-function Row(props: RecipientRowProps) {
+function Row(props: IRecipientRowProps) {
   const { recipient } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
+
 
   return (
     <>
       <TableRow
         onClick={() => {
           props.onClick(recipient.rowKey, recipient.partitionKey);
-          setOpen(!open);
+          
         }}
         style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}
       >
         <TableCell>
-          <IconButton aria-label="expand row" size="small">
+          <IconButton aria-label="expand row" size="small" 
+            onClick={() => setOpen(!open)}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -47,6 +52,11 @@ function Row(props: RecipientRowProps) {
           {" " + recipient.familyMembers.length}
         </TableCell>
         <TableCell align="center">{recipient.institution}</TableCell>
+        <TableCell>
+          <IconButton aria-label="expand row" size="small">
+            <EditIcon  onClick={() => {props.openDialog(true)}}/>
+          </IconButton>
+        </TableCell>
       </TableRow>
       <TableRow style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}>
         <TableCell className={classes.unpaddedTableCell} colSpan={6}>
@@ -115,12 +125,14 @@ function Row(props: RecipientRowProps) {
 
 type TableProps = {
   selectRecipient: (newSelected: RecipientType) => void;
+  openDialog: (open: boolean) => void;
   recipients: RecipientType[];
 };
 
 export default function RecipientSuggestions(props: TableProps) {
   const [selectedRow, setSelectedRow] = useState<string>("");
   const classes = useStyles();
+
 
   return (
     <Table aria-label="Mottakere">
@@ -137,6 +149,7 @@ export default function RecipientSuggestions(props: TableProps) {
           <Row
             key={recipient.rowKey}
             recipient={recipient}
+            openDialog={props.openDialog}
             selected={selectedRow === recipient.rowKey}
             onClick={() => {
               setSelectedRow(recipient.rowKey);

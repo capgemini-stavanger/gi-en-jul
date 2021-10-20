@@ -15,6 +15,7 @@ import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TransitionProps } from "@material-ui/core/transitions";
+import EditFamily from "../EditFamily";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -27,6 +28,7 @@ type ConnectionSuggestionProps = {
   selectedGiver: GiverType;
   selectedRecipient: RecipientType;
   refreshing: boolean;
+  dialogOpen: boolean;
 };
 
 const initialState: ConnectionSuggestionProps = {
@@ -35,6 +37,7 @@ const initialState: ConnectionSuggestionProps = {
   selectedRecipient: {} as RecipientType,
   selectedGiver: {} as GiverType,
   refreshing: false,
+  dialogOpen: false,
 };
 
 const initialSnackBar = {
@@ -100,6 +103,21 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
 
   const updateSelectedGiver = (newSelected: GiverType): void => {
     setState((prev) => ({ ...prev, selectedGiver: newSelected }));
+  };
+
+  const setOpenDialog = (show: boolean) => {
+    setState((prev) => ({
+      ...prev,
+      dialogOpen: show,
+    }));
+    console.log("Hheh")
+  };
+
+  const setRecipient = (family: RecipientType) => {
+    setState((prev) => ({
+      ...prev,
+      selectedRecipient: family,
+    }));
   };
 
   const submitConnection = () => {
@@ -172,6 +190,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             Familier
           </Typography>
           <RecipientSuggestions
+            openDialog={setOpenDialog}
             selectRecipient={updateSelectedRecipient}
             recipients={state.recipients}
           />
@@ -188,6 +207,13 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           {snackbarContent.textContent}
         </MuiAlert>
       </Snackbar>
+      {state.selectedRecipient.familyMembers && 
+      <EditFamily 
+      recipient={state.selectedRecipient} 
+      setRecipient={setRecipient}
+      onClose={() => setOpenDialog(false)}
+      open={state.dialogOpen} />
+}
     </>
   );
 };
