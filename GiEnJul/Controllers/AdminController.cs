@@ -133,7 +133,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpDelete("Connection")]
-        // [Authorize(Policy = "DeleteConnection")]
+        [Authorize(Policy = "DeleteConnection")]
         public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
         {
             var giver = await _giverRepository.GetGiverAsync(location, rowKey);
