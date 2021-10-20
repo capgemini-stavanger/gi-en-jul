@@ -21,7 +21,7 @@ interface IConfirmationDialog {
     referenceId,
     handleClose,
   }) => {
-
+    console.log("confirmation dialog")
 return (
     <div>
       <Dialog
