@@ -59,7 +59,7 @@ namespace GiEnJul.Controllers
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
             var familyRange = "6+";
-            if (giver.MaxReceivers < FamilySize.Medium)
+            if (giver.MaxReceivers <= FamilySize.Medium)
             {
                 var minReceivers = (int)Math.Ceiling(giver.MaxReceivers / 2.0);
                 familyRange = $"{minReceivers}-{giver.MaxReceivers}";
