@@ -29,6 +29,12 @@ const DatatableRecipient: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
 
+  const [expanded, setExpanded] = React.useState<RecipientType | false>(false);
+  const handleChange = (recipient:RecipientType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? recipient : false);
+    handleRecipientChange(recipient);
+  };
+
   const formatFamily = (input: Number) => {
     if (input < 3) {
       return "< 3";
@@ -67,8 +73,8 @@ const DatatableRecipient: React.FC<Props> = ({
   return (
     <Container>
       {data.map((recipient) => (
-        <Accordion
-          onChange={() => handleRecipientChange(recipient)}
+        <Accordion expanded={expanded===recipient}
+          onChange={handleChange(recipient)}
           key={recipient.rowKey}
           className={classes.accordionContainer}
         >
