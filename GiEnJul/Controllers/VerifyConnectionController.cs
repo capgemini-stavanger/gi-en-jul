@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using GiEnJul.Clients;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
-using GiEnJul.Models;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
