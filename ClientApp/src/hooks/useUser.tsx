@@ -9,18 +9,22 @@ interface IState {
   managementAccessToken: string;
   location?: string;
   role?: string;
+  institution?: string
+  //Event
 }
 
 const initState: () => IState = () => ({
   managementAccessToken: "",
   location: undefined,
   role: undefined,
+  institution: undefined,
 });
 
 enum ReducerActionType {
   setManagementAccessToken,
   setLocation,
   setRole,
+  setInstitution,
 }
 
 interface IReducerAction {
@@ -35,7 +39,9 @@ const reducer = (state: IState, action: IReducerAction) => {
     case ReducerActionType.setLocation:
       return { ...state, location: action.data ?? null };
     case ReducerActionType.setRole:
-      return { ...state, role: action.data ?? "Unspecified" };
+      return { ...state, role: action.data ?? null };
+    case ReducerActionType.setInstitution:
+      return { ...state, institution: action.data ?? null };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
@@ -74,6 +80,10 @@ const useUser = () => {
             type: ReducerActionType.setRole,
             data: response.data.app_metadata?.role,
           });
+          dispatch({
+            type: ReducerActionType.setInstitution,
+            data: response.data.app_metadata?.institution,
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -84,6 +94,7 @@ const useUser = () => {
   return {
     location: state.location,
     role: state.role,
+    institution: state.institution,
   };
 };
 
