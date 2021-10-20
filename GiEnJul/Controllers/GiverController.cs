@@ -6,7 +6,6 @@ using GiEnJul.Repositories;
 using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.Linq;
 using System;
 using System.Threading.Tasks;
 using GiEnJul.Utilities.Constants;
