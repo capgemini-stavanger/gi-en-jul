@@ -41,6 +41,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.FamilyId, act => act.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
+            CreateMap<Dtos.PutRecipientDto, Models.Recipient>()
+                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))

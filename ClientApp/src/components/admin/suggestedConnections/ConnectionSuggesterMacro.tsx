@@ -105,6 +105,21 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
     setState((prev) => ({ ...prev, selectedGiver: newSelected }));
   };
 
+  const updateRecipient = async () => {
+    console.log(state.selectedRecipient)
+    console.log("before")
+    await api
+      .put("admin/recipient", JSON.stringify(state.selectedRecipient))
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("updated")
+        }
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  }
+
   const setOpenDialog = (show: boolean) => {
     setState((prev) => ({
       ...prev,
@@ -202,6 +217,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       </Snackbar>
       {state.selectedRecipient.familyMembers && 
       <EditFamily 
+      updateRecipient={updateRecipient}
       recipient={state.selectedRecipient} 
       onClose={() => setOpenDialog(false)}
       open={state.dialogOpen} />

@@ -18,12 +18,12 @@ import {
     TableFooter,
     Input,
   } from "@material-ui/core";
+import ApiService from "../../common/functions/apiServiceClass";
 import { Group } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
 import { FC, Key, useEffect, useState } from "react";
 import { getGender } from "../../common/functions/GetGender";
 import { PersonType, RecipientType } from "./suggestedConnections/Types";
-import cloneDeep from 'lodash/cloneDeep';
 import Gender from "../../common/enums/Gender";
 import { string } from "joi";
   
@@ -34,6 +34,7 @@ import { string } from "joi";
   }
 
   interface IEditFamilyDialog {
+    updateRecipient: () => void;
     recipient: RecipientType;
     onClose: () => void;
     open: boolean;
@@ -42,6 +43,7 @@ import { string } from "joi";
   
   const EditFamilyDialog
   : FC<IEditFamilyDialog> = ({
+    updateRecipient,
     recipient,
     onClose,
     open,
@@ -49,14 +51,16 @@ import { string } from "joi";
     
     useEffect(() => {
       setNewRecipient(JSON.parse(JSON.stringify(recipient)))
+      console.log(newRecipient)
     }, [open]);
     const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
 
-    const updateFamily = () => {
+    const updateFamily = async () => {
       recipient.dinner = newRecipient.dinner;
       recipient.dessert = newRecipient.dessert;
       recipient.note = newRecipient.note;
       recipient.familyMembers = newRecipient.familyMembers;
+      await updateRecipient();
       onClose()
     }
 

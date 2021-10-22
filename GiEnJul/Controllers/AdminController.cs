@@ -206,6 +206,21 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpPut("recipient")]
+        [Authorize(Policy = "UpdateRecipient")]
+        public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
+        {
+            var RecipientToPut = _mapper.Map<Recipient>(recipientDto);
+            var getRecipient = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            foreach (var prop in RecipientToPut.GetType().GetProperties())
+            {
+                var propValue = prop.GetValue(RecipientToPut);
+                //getRecipient = propValue;
+                //getRecipient.(prop.Name) = propValue != null ? prop.GetValue(getRecipient);
+            }
+            return Ok();
+        }
+
         [HttpDelete("giver")]
         [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
