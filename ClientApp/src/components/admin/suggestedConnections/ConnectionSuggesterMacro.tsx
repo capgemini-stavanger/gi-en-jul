@@ -69,7 +69,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         if (response.status == 200) {
           setState((prev) => ({
             ...prev,
-            recipients: response.data,
+            recipients: JSON.parse(JSON.stringify(response.data)),
             refreshing: false
           }))
         } else {
@@ -110,14 +110,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       ...prev,
       dialogOpen: show,
     }));
-    console.log("Hheh")
-  };
-
-  const setRecipient = (family: RecipientType) => {
-    setState((prev) => ({
-      ...prev,
-      selectedRecipient: family,
-    }));
   };
 
   const submitConnection = () => {
@@ -148,6 +140,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
     }
     setSnackbarContent(initialSnackBar);
   };
+
   return (
     <>
       <Grid container direction="row" justifyContent="center" spacing={10}>
@@ -210,7 +203,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       {state.selectedRecipient.familyMembers && 
       <EditFamily 
       recipient={state.selectedRecipient} 
-      setRecipient={setRecipient}
       onClose={() => setOpenDialog(false)}
       open={state.dialogOpen} />
 }

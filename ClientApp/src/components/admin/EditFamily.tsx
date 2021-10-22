@@ -19,10 +19,13 @@ import {
     Input,
   } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
-  import CloseIcon from "@material-ui/icons/Close";
-  import { FC, useState } from "react";
+import CloseIcon from "@material-ui/icons/Close";
+import { FC, Key, useEffect, useState } from "react";
 import { getGender } from "../../common/functions/GetGender";
 import { PersonType, RecipientType } from "./suggestedConnections/Types";
+import cloneDeep from 'lodash/cloneDeep';
+import Gender from "../../common/enums/Gender";
+import { string } from "joi";
   
   const style = {
     dialogWidth: {
@@ -32,19 +35,30 @@ import { PersonType, RecipientType } from "./suggestedConnections/Types";
 
   interface IEditFamilyDialog {
     recipient: RecipientType;
-    setRecipient: (recipient: RecipientType) => void;
     onClose: () => void;
     open: boolean;
   }
+
   
   const EditFamilyDialog
   : FC<IEditFamilyDialog> = ({
-    setRecipient,
     recipient,
     onClose,
     open,
   }) => {
+    
+    useEffect(() => {
+      setNewRecipient(JSON.parse(JSON.stringify(recipient)))
+    }, [open]);
+    const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
 
+    const updateFamily = () => {
+      recipient.dinner = newRecipient.dinner;
+      recipient.dessert = newRecipient.dessert;
+      recipient.note = newRecipient.note;
+      recipient.familyMembers = newRecipient.familyMembers;
+      onClose()
+    }
 
     return (
       <>
@@ -67,13 +81,13 @@ import { PersonType, RecipientType } from "./suggestedConnections/Types";
                   <TableBody>
                     <TableRow>
                       <TableCell>
-                        <Input type="text" value={recipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {recipient.dinner = e.target.value; setRecipient(recipient)}}/>
+                        <Input type="text" value={newRecipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dinner = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={recipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {recipient.dessert = e.target.value; setRecipient(recipient)}}/>
+                        <Input type="text" value={newRecipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dessert = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={recipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {recipient.note = e.target.value; setRecipient(recipient)}}/>
+                        <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.note = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -90,16 +104,16 @@ import { PersonType, RecipientType } from "./suggestedConnections/Types";
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {recipient.familyMembers.map((familyMember) => (
+                    {newRecipient.familyMembers.map((familyMember: { rowKey: Key | null | undefined; gender: Gender; age: number; wish: any; }) => (
                       <TableRow key={familyMember.rowKey}>
                         <TableCell>
                           {getGender(familyMember.gender, familyMember.age)}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setRecipient(recipient)}}/>
+                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.wish || "Giver kjøper alderstilpasset gave"} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setRecipient(recipient)}}/>
+                          <Input type="text" value={familyMember.wish || "Giver kjøper alderstilpasset gave"} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -108,6 +122,13 @@ import { PersonType, RecipientType } from "./suggestedConnections/Types";
               </Box>
           </TableCell>
         </TableRow>
+        <DialogActions>
+                <Button color="primary">
+                  <Button onClick={updateFamily}>
+                    Oppdater Familie
+                  </Button>
+                </Button>
+            </DialogActions>
       </Dialog>
     </>
   );
