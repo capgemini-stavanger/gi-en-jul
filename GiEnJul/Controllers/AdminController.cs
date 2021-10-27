@@ -169,45 +169,46 @@ namespace GiEnJul.Controllers
                     if (recipient.FamilyMembers != null)
                     {
                         var member = recipient.FamilyMembers[i];
-                        familyTable += $"{member.ToReadableString()}</br></br>";
+                        familyTable += $"{member.ToReadableString()}. <br/><br/>";
+                        familyTable += " ";
                     }
                 }
 
                 var body =
-                    $"Hei {giver.FullName}, </br></br> " +
+                    $"Hei {giver.FullName}, <br/><br/> " +
 
-                    $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. </br>" +
-                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. </br><br/>" +
+                    $"da har vi en familie til deg! <br/><br/> Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
+                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. <br/><br/>" +
 
-                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer. </br></br>" +
+                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer. <br/><br/>" +
 
                     $" <h3>SKJEMA MED INFO OM FAMILIE OG GAVEØNSKER </h3>" +
                     $"{familyTable}" +
 
-                    $" Foretrukket middag: {recipient.Dinner} and {recipient.Dessert}. {recipientNote} </br></br>" +
+                    $" Foretrukket middag: {recipient.Dinner} og {recipient.Dessert}. {recipientNote} <br/><br/>" +
 
 
-                    $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}.</br></br>" +
+                    $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}. <br/><br/>" +
 
-                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten.</br></br>" +
-                    $"Middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. </br></br>" +
+                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. <br/><br/>" +
+                    $"Middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. <br/><br/>" +
 
-                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er: <br/>" +
+                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. < Forslag til ekstra-ting, er: <br/><br/>" +
                     $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
                     $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
                     $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
                     $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! <br/>" +
-                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg og annet som inneholder det. </br></br>" +
+                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg og annet som inneholder det. <br/><br/>" +
 
-                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre.</br></br>" +
-                    $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære.</br></br>" +
+                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. <br/><br/>" +
+                    $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære. <br/><br/>" +
 
-                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
-                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
+                    $"<br> NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. <br/><br/>" +
 
-                    $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. </br></br>" +
+                    $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. <br/><br/>" +
 
-                    $"Viktig: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. </br></br>";
+                    $"Viktig: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>";
 
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
