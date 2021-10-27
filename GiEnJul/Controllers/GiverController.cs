@@ -69,8 +69,9 @@ namespace GiEnJul.Controllers
             bool waiting_list = num_givers > eventDto.GiverLimit;
 
             var messageContent =
-                $"Hei!</br></br>" +
-                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg," +
+                $"Hei! <br/><br/>" +
+
+                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg, " +
                 $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
 
                 $"Din informasjon:" +
@@ -118,10 +119,10 @@ namespace GiEnJul.Controllers
 
 
             var altMessageContent = 
-                $"Hei!</br></br>" +
-                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul.</br></br>" + 
-                $"Grunnet stor pågang har du havnet på ventelisten. Det er dermed ikke sikkert at du vil bli tildelt en familie.</br>" +
-                $"Vi tar kontakt med deg dersom vi får inn en familie til deg.</br></br>" +
+                $"Hei! <br/><br/>" +
+                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. <br/><br/>" + 
+                $"Grunnet stor pågang har du havnet på ventelisten. Det er dermed ikke sikkert at du vil bli tildelt en familie. <br/><br/>" +
+                $"Vi tar kontakt med deg dersom vi får inn en familie til deg. <br/><br/>" +
 
                 $"Din informasjon:" +
                 $"<ul>" +
