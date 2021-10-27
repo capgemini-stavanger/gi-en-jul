@@ -26,7 +26,7 @@ const Recipient: React.FC<Props> = ({
         input.contactPhoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         input.institution?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.familyId.toString()?.toLocaleLowerCase().indexOf(query.toLowerCase()) > -1
+        input.familyId.toString()?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
 
