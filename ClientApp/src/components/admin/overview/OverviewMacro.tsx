@@ -112,8 +112,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
               note: newRecipient.note,
               contactFullName: newRecipient.contactFullName,
               contactEmail: newRecipient.contactEmail,
-              contactPhoneNumber: newRecipient.rowKey,
-              institution: newRecipient.rowKey,
+              contactPhoneNumber: newRecipient.contactPhoneNumber,
+              institution: newRecipient.institution,
               referenceId: newRecipient.referenceId,
               familyMembers: newRecipient.familyMembers as Types.PersonType[],
             } as Types.RecipientType

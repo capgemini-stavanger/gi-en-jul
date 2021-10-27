@@ -128,7 +128,7 @@ import { Agent } from "http";
                           label="Age"
                           type="number"
                           onChange={(event) => {
-                            familyMember.gender = event.target.value.toString().length >= 0 ? parseInt(event.target.value as string) : Gender.Unspecified
+                            familyMember.gender = typeof event.target.value !== "undefined" ? parseInt(event.target.value as string) : Gender.Unspecified
                             setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))
                           }}
                         >
