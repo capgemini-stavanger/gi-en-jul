@@ -17,6 +17,8 @@ import {
     capitalize,
     TableFooter,
     Input,
+    Select,
+    MenuItem,
   } from "@material-ui/core";
 import ApiService from "../../common/functions/apiServiceClass";
 import { Group } from "@material-ui/icons";
@@ -25,7 +27,9 @@ import { FC, Key, useEffect, useState } from "react";
 import { getGender } from "../../common/functions/GetGender";
 import { PersonType, RecipientType } from "./suggestedConnections/Types";
 import Gender from "../../common/enums/Gender";
+import { GENDERS } from "../../common/constants/Genders";
 import { string } from "joi";
+import { Agent } from "http";
   
   const style = {
     dialogWidth: {
@@ -63,6 +67,11 @@ import { string } from "joi";
       recipient.familyMembers.forEach(person => person.partitionKey = recipient.rowKey)
       updateRecipient();
       onClose()
+    }
+
+    const newFamilyMember = () => {
+      newRecipient.familyMembers.push({age: 0, gender: 9, partitionKey: recipient.rowKey, wish: ""} as PersonType);
+      setNewRecipient(JSON.parse(JSON.stringify(newRecipient)));
     }
 
     return (
@@ -112,7 +121,21 @@ import { string } from "joi";
                     {newRecipient.familyMembers.map((familyMember: { rowKey: Key | null | undefined; gender: Gender; age: number; wish: any; }) => (
                       <TableRow key={familyMember.rowKey}>
                         <TableCell>
-                          {getGender(familyMember.gender, familyMember.age)}
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={familyMember.gender}
+                          label="Age"
+                          type="number"
+                          onChange={(event) => {
+                            familyMember.gender = event.target.value.toString().length >= 0 ? parseInt(event.target.value as string) : Gender.Unspecified
+                            setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))
+                          }}
+                        >
+                          {GENDERS.map((o) => {
+                            return <MenuItem value={o.value.toString()}>{getGender(o.value, familyMember.age)}</MenuItem>;
+                          })}
+                        </Select>
                         </TableCell>
                         <TableCell component="th" scope="row">
                         <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
@@ -125,15 +148,22 @@ import { string } from "joi";
                   </TableBody>
                 </Table>
               </Box>
+            <DialogActions>
+              <Button color="primary">
+                <Button onClick={newFamilyMember}>
+                  Nytt familiemedlem
+                </Button>
+              </Button>
+          </DialogActions>
           </TableCell>
         </TableRow>
         <DialogActions>
-                <Button color="primary">
-                  <Button onClick={updateFamily}>
-                    Oppdater Familie
-                  </Button>
-                </Button>
-            </DialogActions>
+            <Button color="primary">
+              <Button onClick={updateFamily}>
+                Oppdater Familie
+              </Button>
+            </Button>
+        </DialogActions>
       </Dialog>
     </>
   );

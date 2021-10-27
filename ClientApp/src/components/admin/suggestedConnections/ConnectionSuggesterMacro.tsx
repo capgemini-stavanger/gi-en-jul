@@ -110,7 +110,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .put("admin/recipient", JSON.stringify(state.selectedRecipient))
       .then((response) => {
         if (response.status === 200) {
-          console.log("updated")
         }
       })
       .catch((errorStack) => {
