@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   Container,
   Divider,
+  IconButton,
   Typography,
 } from "@material-ui/core";
 import {
@@ -17,15 +18,18 @@ import * as React from "react";
 import Gender from "../../../common/enums/Gender";
 import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
+import EditIcon from '@material-ui/icons/Edit';
 
 type Props = {
   data: RecipientType[] | [];
   handleRecipientChange: (newRecipient: RecipientType) => void;
+  openDialog: () => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
+  openDialog,
 }) => {
   const classes = useStyles();
 
@@ -103,6 +107,11 @@ const DatatableRecipient: React.FC<Props> = ({
                 style={{ color: "#ed8175" }}
               />
             )}
+            <Typography>
+              <IconButton aria-label="expand row" size="small">
+                <EditIcon  onClick={() => {openDialog()}}/>
+              </IconButton>
+            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>

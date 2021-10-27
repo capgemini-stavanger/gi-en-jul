@@ -1,20 +1,24 @@
 import { Container, Grid, Typography } from "@material-ui/core";
+import { boolean } from "joi";
 import React, {
   useCallback,
   useEffect,
   useState,
 } from "react";
 import ApiService from "../../../common/functions/apiServiceClass";
+import EditFamily from "../EditFamily";
 import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
 import useStyles from "./Styles";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
+import * as Types from "../../admin/suggestedConnections/Types";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
-  recipient: undefined,
+  recipient: {} as RecipientType,
+  editRecipient: {} as Types.RecipientType
 };
 interface IOverviewMacro {
   location: string;
@@ -26,6 +30,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const [show, setShow] = useState(true);
   const apiservice = new ApiService(accessToken);
 
   async function fetchGivers() {
@@ -41,6 +46,18 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
       .get("admin/Overview/Recipients", { params: { location: location } })
       .then((resp) => {
         setRecipientData(resp.data)})
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  }
+
+  const updateRecipient = async () => {
+    await apiservice
+      .put("admin/recipient", JSON.stringify(selectedConnection.editRecipient))
+      .then((response) => {
+        if (response.status === 200) {
+        }
+      })
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -78,7 +95,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
-            recipient: undefined,
+            recipient: {} as RecipientType,
           };
         });
       } else {
@@ -86,11 +103,26 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           return {
             ...prevState,
             recipient: newRecipient,
+            editRecipient: {
+              rowKey: newRecipient.rowKey,
+              partitionKey: newRecipient.partitionKey,
+              familyId: newRecipient.familyId.toString(),
+              dinner: newRecipient.dinner,
+              dessert: newRecipient.dessert,
+              note: newRecipient.note,
+              contactFullName: newRecipient.contactFullName,
+              contactEmail: newRecipient.contactEmail,
+              contactPhoneNumber: newRecipient.rowKey,
+              institution: newRecipient.rowKey,
+              referenceId: newRecipient.referenceId,
+              familyMembers: newRecipient.familyMembers as Types.PersonType[],
+            } as Types.RecipientType
           };
         });
       }
     }
   }, []);
+  
 
   const connectGiverRecipient = async () => {
     await apiservice
@@ -141,6 +173,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Recipient
               data={recipientData}
               handleRecipientChange={handleRecipientChange}
+              openDialog={() => {setShow(true)} }
             />
           </Grid>
         </Grid>
@@ -149,6 +182,13 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           connectGiverRecipient={connectGiverRecipient}
         />
       </Container>
+      {selectedConnection.editRecipient.familyMembers &&
+      <EditFamily 
+        updateRecipient={updateRecipient}
+        recipient={selectedConnection.editRecipient}
+        onClose={() => setShow(false)}
+        open={show} />
+      }
     </>
   );
 };

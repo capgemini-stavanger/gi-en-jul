@@ -64,7 +64,7 @@ import { Agent } from "http";
       recipient.dessert = newRecipient.dessert;
       recipient.note = newRecipient.note;
       recipient.familyMembers = newRecipient.familyMembers;
-      recipient.familyMembers.forEach(person => person.partitionKey = recipient.rowKey)
+      recipient.familyMembers.forEach(person => person.partitionKey = recipient.rowKey);
       updateRecipient();
       onClose()
     }

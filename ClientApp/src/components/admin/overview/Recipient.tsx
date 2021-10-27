@@ -10,11 +10,13 @@ type Props = {
   handleRecipientChange: (
     newRecipient: RecipientType
   ) => void;
+  openDialog: () => void;
 };
 
 const Recipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
+  openDialog,
 }) => {
   const [query, setQuery] = useState("");
 
@@ -43,13 +45,14 @@ const Recipient: React.FC<Props> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={classes.searchField}
-          ></TextField>
+            ></TextField>
         </Grid>
       </Grid>
       <Datatable
         data={search(data)}
         handleRecipientChange={handleRecipientChange}
-      />
+        openDialog={() => {openDialog()}}
+        />
     </Container>
   );
 };
