@@ -414,6 +414,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
 
+
   const closeFamilyDialog = () => {
     setShowFamilyDialog(false);
   }
@@ -440,7 +441,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
           <Grid item>
             <Typography variant="h5">Tidligere registrerte familier </Typography>
             <Button onClick={openFamilyDialog} variant="contained" color="primary"> Klikk her for å se familieoversikt </Button>
-            <FamilyDialog open={showFamilyDialog} accessToken={accessToken}  handleClose={closeFamilyDialog}/>
+            <Grid item >
+              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
+            </Grid>
             <Grid container spacing={1} direction="column">
               <Grid item>
                 <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
