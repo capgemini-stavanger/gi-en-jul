@@ -51,16 +51,17 @@ import { string } from "joi";
     
     useEffect(() => {
       setNewRecipient(JSON.parse(JSON.stringify(recipient)))
-      console.log(newRecipient)
     }, [open]);
+
     const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
 
-    const updateFamily = async () => {
+    const updateFamily = () => {
       recipient.dinner = newRecipient.dinner;
       recipient.dessert = newRecipient.dessert;
       recipient.note = newRecipient.note;
       recipient.familyMembers = newRecipient.familyMembers;
-      await updateRecipient();
+      recipient.familyMembers.forEach(person => person.partitionKey = recipient.rowKey)
+      updateRecipient();
       onClose()
     }
 
@@ -117,7 +118,7 @@ import { string } from "joi";
                         <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.wish || "Giver kjøper alderstilpasset gave"} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                         </TableCell>
                       </TableRow>
                     ))}

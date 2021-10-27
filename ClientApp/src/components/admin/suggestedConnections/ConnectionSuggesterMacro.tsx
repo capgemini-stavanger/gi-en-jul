@@ -106,8 +106,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   };
 
   const updateRecipient = async () => {
-    console.log(state.selectedRecipient)
-    console.log("before")
     await api
       .put("admin/recipient", JSON.stringify(state.selectedRecipient))
       .then((response) => {

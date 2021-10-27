@@ -210,13 +210,17 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "UpdateRecipient")]
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
-            var RecipientToPut = _mapper.Map<Recipient>(recipientDto);
-            var getRecipient = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
-            foreach (var prop in RecipientToPut.GetType().GetProperties())
+            var recipientToPut = _mapper.Map<Recipient>(recipientDto);
+            var recipientToSet = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            foreach (var prop in recipientToPut.GetType().GetProperties())
             {
-                var propValue = prop.GetValue(RecipientToPut);
-                //getRecipient = propValue;
-                //getRecipient.(prop.Name) = propValue != null ? prop.GetValue(getRecipient);
+                var propValuePut = prop.GetValue(recipientToPut);
+                if (propValuePut != null) prop.SetValue(recipientToSet, propValuePut);
+            }
+            await _recipientRepository.InsertOrReplaceAsync(recipientToSet);
+            foreach (var person in recipientToSet.FamilyMembers)
+            {
+                await _personRepository.InsertOrReplaceAsync(person);
             }
             return Ok();
         }

@@ -11,7 +11,6 @@ namespace GiEnJul.Entities
         // PartitionKey = {recipientId}
         public Person(string recipientId) : base(recipientId, Guid.NewGuid().ToString())
         { }
-
         public string Wish { get; set; }
         public int Age { get; set; }
         public int Months { get; set; }
