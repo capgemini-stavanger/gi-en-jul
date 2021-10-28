@@ -72,11 +72,11 @@ const DatatableRecipient: React.FC<Props> = ({
     <Container>
       {data.map((recipient) => (
         <Accordion
-          onChange={() => handleRecipientChange(recipient)}
           key={recipient.rowKey}
           className={classes.accordionContainer}
         >
           <AccordionSummary
+            onClick={() => handleRecipientChange(recipient)}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
@@ -108,8 +108,8 @@ const DatatableRecipient: React.FC<Props> = ({
               />
             )}
             <Typography>
-              <IconButton aria-label="expand row" size="small">
-                <EditIcon  onClick={() => {openDialog()}}/>
+              <IconButton aria-label="expand row" size="small" onClick={() => {openDialog()}}>
+                <EditIcon/>
               </IconButton>
             </Typography>
           </AccordionSummary>

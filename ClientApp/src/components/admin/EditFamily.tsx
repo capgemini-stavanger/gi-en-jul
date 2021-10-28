@@ -2,11 +2,8 @@ import {
     Button,
     Dialog,
     DialogActions,
-    DialogContent,
     DialogTitle,
-    IconButton,
     Typography,
-    TextField,
     TableRow,
     TableCell,
     Collapse,
@@ -14,22 +11,15 @@ import {
     Table,
     TableBody,
     TableHead,
-    capitalize,
-    TableFooter,
     Input,
     Select,
     MenuItem,
   } from "@material-ui/core";
-import ApiService from "../../common/functions/apiServiceClass";
-import { Group } from "@material-ui/icons";
-import CloseIcon from "@material-ui/icons/Close";
 import { FC, Key, useEffect, useState } from "react";
 import { getGender } from "../../common/functions/GetGender";
 import { PersonType, RecipientType } from "./suggestedConnections/Types";
 import Gender from "../../common/enums/Gender";
 import { GENDERS } from "../../common/constants/Genders";
-import { string } from "joi";
-import { Agent } from "http";
   
   const style = {
     dialogWidth: {

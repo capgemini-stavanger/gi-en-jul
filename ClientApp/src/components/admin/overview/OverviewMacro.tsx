@@ -1,5 +1,4 @@
 import { Container, Grid, Typography } from "@material-ui/core";
-import { boolean } from "joi";
 import React, {
   useCallback,
   useEffect,
@@ -30,7 +29,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  const [show, setShow] = useState(true);
+  const [open, setOpen] = useState(false);
   const apiservice = new ApiService(accessToken);
 
   async function fetchGivers() {
@@ -173,7 +172,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Recipient
               data={recipientData}
               handleRecipientChange={handleRecipientChange}
-              openDialog={() => {setShow(true)} }
+              openDialog={() => {setOpen(true)} }
             />
           </Grid>
         </Grid>
@@ -186,8 +185,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
       <EditFamily 
         updateRecipient={updateRecipient}
         recipient={selectedConnection.editRecipient}
-        onClose={() => setShow(false)}
-        open={show} />
+        onClose={() => setOpen(false)}
+        open={open} />
       }
     </>
   );
