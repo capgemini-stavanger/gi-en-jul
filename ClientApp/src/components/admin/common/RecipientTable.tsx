@@ -33,6 +33,12 @@ const DatatableRecipient: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
 
+  const [expanded, setExpanded] = React.useState<RecipientType | false>(false);
+  const handleChange = (recipient:RecipientType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+    setExpanded(isExpanded ? recipient : false);
+    handleRecipientChange(recipient);
+  };
+
   const formatFamily = (input: Number) => {
     if (input < 3) {
       return "< 3";

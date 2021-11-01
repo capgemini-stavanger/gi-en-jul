@@ -13,7 +13,7 @@
 
         public string ToReadableString()
         {
-            return $"{GenderToString()} {Age} år, {(string.IsNullOrEmpty(Wish) ? " Ønske ikke spesifisert" : Wish)}";
+            return $"{GenderToString()} {Age} år, {(string.IsNullOrEmpty(Wish) ? "  Her du kan selv finne aldertilpasset gave" : Wish)} {(string.IsNullOrEmpty(Comment) ? " " : ", Kommentar til gave: "+Comment)}";
         }
 
         private string GenderToString()

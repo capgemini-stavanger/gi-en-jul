@@ -177,6 +177,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
           fullWidth
         />
       </Grid>
+      { !state.ageWish &&
       <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
@@ -190,6 +191,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
           fullWidth
         />
       </Grid>
+}
       <Grid item xs={2}>
         <FormControlLabel
           control={
