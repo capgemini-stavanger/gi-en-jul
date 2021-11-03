@@ -10,10 +10,12 @@
  import Recipient from "../admin/overview/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
+ import * as Types from "../admin/suggestedConnections/Types";
 
  const initState: SelectedConnectionType= {
-    recipient: undefined,
-  };
+   recipient: {} as RecipientType,
+   editRecipient: {} as Types.RecipientType
+ };
 
 interface IFamilyDialog{
      open: boolean;
@@ -47,14 +49,14 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
             setSelectedConnection((prevState) => {
               return {
                 ...prevState,
-                recipient: undefined,
+                recipient: newRecipient ?? prevState.recipient,
               };
             });
           } else {
             setSelectedConnection((prevState) => {
               return {
                 ...prevState,
-                recipient: newRecipient,
+                recipient: prevState.recipient,
               };
             });
           }
