@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Snackbar, Typography } from "@material-ui/core";
 import React, {
   useCallback,
   useEffect,
@@ -13,12 +13,26 @@ import Statistics from "./Statistics";
 import useStyles from "./Styles";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
 import * as Types from "../../admin/suggestedConnections/Types";
+import { Alert } from "@material-ui/lab";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
   recipient: {} as RecipientType,
-  editRecipient: {} as Types.RecipientType
+  editRecipient: {} as Types.RecipientType,
 };
+
+const alertState: {
+  isLoading: boolean;
+  msg: string;
+  severity?: "error" | "info" | "success" | "warning";
+  open: boolean;
+} = {
+    isLoading: false,
+    msg: "",
+    severity: undefined,
+    open: false,
+};
+
 interface IOverviewMacro {
   location: string;
   accessToken: string;
@@ -29,8 +43,31 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const [state, setState] = useState(alertState);
   const [open, setOpen] = useState(false);
   const apiservice = new ApiService(accessToken);
+
+  const setAlert = (
+    open?: boolean,
+    message?: string,
+    severity?: "error" | "info" | "success" | "warning"
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      open: open ?? prev.open,
+      msg: message ?? prev.msg,
+      severity: severity ?? prev.severity,
+    }));
+  };
+
+  const handleAlertClose = (
+    e: React.SyntheticEvent | React.MouseEvent,
+    reason?: string
+  ) => {
+    if(reason == 'clickaway')
+      return ;
+    setAlert(false);
+  };
 
   async function fetchGivers() {
     await apiservice
@@ -55,10 +92,13 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
       .put("admin/recipient", JSON.stringify(selectedConnection.editRecipient))
       .then((response) => {
         if (response.status === 200) {
+          fetchRecipients();
+          setAlert(true, "Familie oppdatert!");
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
+        setAlert(true, "Kunne ikke oppdatere familie..", "error")
       });
   }
 
@@ -146,6 +186,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         console.error(errorStack);
       });
   };
+
   const classes = useStyles();
   return (
     <>
@@ -188,6 +229,16 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         onClose={() => setOpen(false)}
         open={open} />
       }
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={state.open}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert severity={state.severity} onClose={handleAlertClose}>
+          {state.msg}
+        </Alert>
+      </Snackbar>
     </>
   );
 };
