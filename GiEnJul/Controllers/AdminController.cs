@@ -132,6 +132,53 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpDelete("Connection")]
+        [Authorize(Policy = "DeleteConnection")]
+        public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
+        {
+            var giver = await _giverRepository.GetGiverAsync(location, rowKey);
+
+            if (giver?.MatchedRecipient is null)
+            {
+                return NotFound();
+            }
+
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+
+            if (recipient is null)
+            {
+                return NotFound();
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = null;
+
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = null;
+
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                
+                await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+            
+            return Ok();
+        }
 
         [HttpPost]
         [Authorize(Policy = "AddConnection")]
