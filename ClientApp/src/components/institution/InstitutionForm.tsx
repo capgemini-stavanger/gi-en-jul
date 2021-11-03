@@ -9,7 +9,7 @@ import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
@@ -17,6 +17,7 @@ import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
 import ConfirmationDialog from './ConfirmationDialog';
+import FamilyDialog from './FamilyDialog';
 
 import {
   isEmail,
@@ -80,7 +81,8 @@ const initState: {
     referenceId:string;
     familyId:string;
     open: boolean;
-  }
+  }; 
+
 } = {
   viewErrorTrigger: 0,
   displayText: false, 
@@ -136,21 +138,20 @@ interface props {
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
-
+  const [showFamilyDialog, setShowFamilyDialog] = useState(false);
   const [formDataState, setFormDataState] = useState(initFormDataState());
   const [validFormState, setValidFormState] = useState({
     ...initValidFormState,
   });
   const apiservice = new ApiService(accessToken);
-
   const addPerson = () => {
     setFormDataState((prev) => ({
       ...prev,
       persons: [...prev.persons, getFormPerson()],
     }));
   };
-  
-  
+
+
   const { location, role, institution } = useUser();
 
   const closeDialog = () => {
@@ -412,6 +413,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setAlert(false);
   };
 
+
+
+  const closeFamilyDialog = () => {
+    setShowFamilyDialog(false);
+  }
+
+  const openFamilyDialog = () => {
+    setShowFamilyDialog(true);
+  }
+
   return (
     <>
       <Snackbar
@@ -428,6 +439,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
+            <Typography variant="h5">Tidligere registrerte familier </Typography>
+            <Button onClick={openFamilyDialog} variant="contained" color="primary"> Klikk her for å se familieoversikt </Button>
+            <Grid item >
+              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
+            </Grid>
             <Grid container spacing={1} direction="column">
               <Grid item>
                 <Typography variant="h5">Du registrerer nå familie i {location}</Typography>

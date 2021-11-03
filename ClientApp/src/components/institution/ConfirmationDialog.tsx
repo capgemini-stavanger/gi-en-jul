@@ -22,7 +22,7 @@ interface IConfirmationDialog {
     handleClose,
   }) => {
 
-return (
+    return (
     <div>
       <Dialog
         open={open}
