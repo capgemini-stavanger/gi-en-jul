@@ -165,11 +165,8 @@ namespace GiEnJul.Controllers
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-
-                if (await _connectionRepository.ConnectionExists(giver, recipient))
-                {
-                    await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
-                }
+                
+                await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
             }
             catch (Exception e)
             {
