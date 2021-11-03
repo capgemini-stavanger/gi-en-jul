@@ -19,6 +19,7 @@ import Gender from "../../../common/enums/Gender";
 import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
 import EditIcon from '@material-ui/icons/Edit';
+import { useState } from "react";
 
 type Props = {
   data: RecipientType[] | [];
@@ -38,6 +39,8 @@ const DatatableRecipient: React.FC<Props> = ({
     setExpanded(isExpanded ? recipient : false);
     handleRecipientChange(recipient);
   };
+
+  const [selected, setSelected] = useState(-1);
 
   const formatFamily = (input: Number) => {
     if (input < 3) {
@@ -76,10 +79,12 @@ const DatatableRecipient: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((recipient) => (
+      {data.map((recipient, index) => (
         <Accordion
+          expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onClick={() => { index != selected ? setSelected(index) : setSelected(-1)}}
         >
           <AccordionSummary
             onClick={() => handleRecipientChange(recipient)}
@@ -114,7 +119,7 @@ const DatatableRecipient: React.FC<Props> = ({
               />
             )}
             <Typography>
-              <IconButton aria-label="expand row" size="small" onClick={() => {openDialog()}}>
+              <IconButton aria-label="expand row" size="small" onClick={() => {openDialog(); setSelected(-1)}}>
                 <EditIcon/>
               </IconButton>
             </Typography>
