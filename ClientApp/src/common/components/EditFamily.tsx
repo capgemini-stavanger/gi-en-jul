@@ -14,40 +14,87 @@ import {
     Input,
     Select,
     MenuItem,
+    Snackbar,
   } from "@material-ui/core";
 import { FC, Key, useEffect, useState } from "react";
-import { getGender } from "../../common/functions/GetGender";
-import { PersonType, RecipientType } from "./suggestedConnections/Types";
-import Gender from "../../common/enums/Gender";
-import { GENDERS } from "../../common/constants/Genders";
-  
-  const style = {
-    dialogWidth: {
-      minWidth: "50vh"
-    }
-  }
+import { getGender } from "../functions/GetGender";
+import { PersonType, RecipientType } from "../../components/admin/suggestedConnections/Types";
+import Gender from "../enums/Gender";
+import { GENDERS } from "../constants/Genders";
+import ApiService from "../functions/apiServiceClass";
+import { Alert } from "@material-ui/lab";
 
   interface IEditFamilyDialog {
-    updateRecipient: () => void;
     recipient: RecipientType;
     onClose: () => void;
     open: boolean;
+    accessToken: string;
   }
-
+    
+    const alertState: {
+      isLoading: boolean;
+      msg: string;
+      severity?: "error" | "info" | "success" | "warning";
+      open: boolean;
+    } = {
+      isLoading: false,
+      msg: "",
+      severity: undefined,
+      open: false,
+    };
   
   const EditFamilyDialog
   : FC<IEditFamilyDialog> = ({
-    updateRecipient,
     recipient,
     onClose,
     open,
+    accessToken,
   }) => {
     
     useEffect(() => {
       setNewRecipient(JSON.parse(JSON.stringify(recipient)))
     }, [open]);
 
+    
+    const apiservice = new ApiService(accessToken);
     const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
+    const [state, setState] = useState(alertState);
+    
+    const setAlert = (
+      open?: boolean,
+      message?: string,
+      severity?: "error" | "info" | "success" | "warning"
+    ) => {
+      setState((prev) => ({
+        ...prev,
+        open: open ?? prev.open,
+        msg: message ?? prev.msg,
+        severity: severity ?? prev.severity,
+      }));
+    };
+
+    const handleAlertClose = (
+      e: React.SyntheticEvent | React.MouseEvent,
+      reason?: string
+      ) => {
+        if(reason == 'clickaway')
+        return ;
+        setAlert(false);
+      };
+
+    const updateRecipient = async () => {
+      await apiservice
+        .put("admin/recipient", JSON.stringify(newRecipient))
+        .then((response) => {
+          if (response.status === 200) {
+            setAlert(true, "Familie oppdatert!");
+          }
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+          setAlert(true, "Kunne ikke oppdatere familie..", "error")
+        });
+    }
 
     const updateFamily = () => {
       recipient.dinner = newRecipient.dinner;
@@ -155,6 +202,16 @@ import { GENDERS } from "../../common/constants/Genders";
             </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        open={state.open}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+      >
+        <Alert severity={state.severity} onClose={handleAlertClose}>
+          {state.msg}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

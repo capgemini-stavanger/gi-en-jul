@@ -15,7 +15,6 @@ import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
 import MuiAlert from "@material-ui/lab/Alert";
 import { TransitionProps } from "@material-ui/core/transitions";
-import EditFamily from "../EditFamily";
 
 interface ConnectionSuggesterMacro {
   location: string;
@@ -104,18 +103,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
   const updateSelectedGiver = (newSelected: GiverType): void => {
     setState((prev) => ({ ...prev, selectedGiver: newSelected }));
   };
-
-  const updateRecipient = async () => {
-    await api
-      .put("admin/recipient", JSON.stringify(state.selectedRecipient))
-      .then((response) => {
-        if (response.status === 200) {
-        }
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  }
 
   const setOpenDialog = (show: boolean) => {
     setState((prev) => ({
@@ -212,13 +199,6 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           {snackbarContent.textContent}
         </MuiAlert>
       </Snackbar>
-      {state.selectedRecipient.familyMembers && 
-      <EditFamily 
-      updateRecipient={updateRecipient}
-      recipient={state.selectedRecipient} 
-      onClose={() => setOpenDialog(false)}
-      open={state.dialogOpen} />
-}
     </>
   );
 };

@@ -65,5 +65,18 @@ namespace GiEnJul.Controllers
                 throw ex;
             }
         }
+
+        [HttpGet]
+        [Authorize(Policy = "ReadRecipient")]
+        public async Task<List<Recipient>> GetRecipientsByInstitutionAsync([FromQuery] string institution)
+        {
+            
+            var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
+            foreach (var recipient in recipients)
+            {
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+            }
+            return recipients;
+        }
     }
 }

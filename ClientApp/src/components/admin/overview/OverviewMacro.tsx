@@ -5,7 +5,7 @@ import React, {
   useState,
 } from "react";
 import ApiService from "../../../common/functions/apiServiceClass";
-import EditFamily from "../EditFamily";
+import EditFamily from "../../../common/components/EditFamily";
 import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
@@ -21,18 +21,6 @@ const initState: SelectedConnectionType = {
   editRecipient: {} as Types.RecipientType,
 };
 
-const alertState: {
-  isLoading: boolean;
-  msg: string;
-  severity?: "error" | "info" | "success" | "warning";
-  open: boolean;
-} = {
-    isLoading: false,
-    msg: "",
-    severity: undefined,
-    open: false,
-};
-
 interface IOverviewMacro {
   location: string;
   accessToken: string;
@@ -43,31 +31,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  const [state, setState] = useState(alertState);
   const [open, setOpen] = useState(false);
   const apiservice = new ApiService(accessToken);
-
-  const setAlert = (
-    open?: boolean,
-    message?: string,
-    severity?: "error" | "info" | "success" | "warning"
-  ) => {
-    setState((prev) => ({
-      ...prev,
-      open: open ?? prev.open,
-      msg: message ?? prev.msg,
-      severity: severity ?? prev.severity,
-    }));
-  };
-
-  const handleAlertClose = (
-    e: React.SyntheticEvent | React.MouseEvent,
-    reason?: string
-  ) => {
-    if(reason == 'clickaway')
-      return ;
-    setAlert(false);
-  };
 
   async function fetchGivers() {
     await apiservice
@@ -84,21 +49,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         setRecipientData(resp.data)})
       .catch((errorStack) => {
         console.error(errorStack);
-      });
-  }
-
-  const updateRecipient = async () => {
-    await apiservice
-      .put("admin/recipient", JSON.stringify(selectedConnection.editRecipient))
-      .then((response) => {
-        if (response.status === 200) {
-          fetchRecipients();
-          setAlert(true, "Familie oppdatert!");
-        }
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-        setAlert(true, "Kunne ikke oppdatere familie..", "error")
       });
   }
 
@@ -223,22 +173,13 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         />
       </Container>
       {selectedConnection.editRecipient.familyMembers &&
-      <EditFamily 
-        updateRecipient={updateRecipient}
+      <EditFamily
         recipient={selectedConnection.editRecipient}
-        onClose={() => setOpen(false)}
-        open={open} />
+        onClose={() => { setOpen(false); fetchRecipients()}}
+        open={open} 
+        accessToken={accessToken}
+        />
       }
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-        open={state.open}
-        autoHideDuration={6000}
-        onClose={handleAlertClose}
-      >
-        <Alert severity={state.severity} onClose={handleAlertClose}>
-          {state.msg}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

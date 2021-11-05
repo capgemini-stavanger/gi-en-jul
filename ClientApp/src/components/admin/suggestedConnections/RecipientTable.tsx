@@ -17,14 +17,14 @@ import { capitalize } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
 import useStyles from "../common/Styles";
 
-type IRecipientRowProps = {
+type RecipientRowProps = {
   recipient: RecipientType;
   onClick: any;
   selected: boolean;
   openDialog: (open: boolean) => void;
 };
 
-function Row(props: IRecipientRowProps) {
+function Row(props: RecipientRowProps) {
   const { recipient } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useStyles();
@@ -52,11 +52,6 @@ function Row(props: IRecipientRowProps) {
           {" " + recipient.familyMembers.length}
         </TableCell>
         <TableCell align="center">{recipient.institution}</TableCell>
-        <TableCell>
-          <IconButton aria-label="expand row" size="small">
-            <EditIcon  onClick={() => {props.openDialog(true)}}/>
-          </IconButton>
-        </TableCell>
       </TableRow>
       <TableRow style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}>
         <TableCell className={classes.unpaddedTableCell} colSpan={6}>
@@ -139,7 +134,7 @@ export default function RecipientSuggestions(props: TableProps) {
       <TableHead>
         <TableRow>
           <TableCell />
-          <TableCell>Id</TableCell>
+          <TableCell>Familienummer</TableCell>
           <TableCell align="center">Størrelse</TableCell>
           <TableCell align="center">Institusjon</TableCell>
         </TableRow>

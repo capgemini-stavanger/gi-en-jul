@@ -27,9 +27,11 @@ const Recipient: React.FC<Props> = ({
         input.contactFullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         input.contactPhoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
         input.institution?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1
+        input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.familyId.toString()?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
+
   const classes= useStyles();
 
   return (
