@@ -29,6 +29,7 @@ import { Alert } from "@material-ui/lab";
     onClose: () => void;
     open: boolean;
     accessToken: string;
+    refreshRecipients: () => void;
   }
     
     const alertState: {
@@ -49,6 +50,7 @@ import { Alert } from "@material-ui/lab";
     onClose,
     open,
     accessToken,
+    refreshRecipients,
   }) => {
     
     useEffect(() => {
@@ -88,6 +90,7 @@ import { Alert } from "@material-ui/lab";
         .then((response) => {
           if (response.status === 200) {
             setAlert(true, "Familie oppdatert!");
+            refreshRecipients();
           }
         })
         .catch((errorStack) => {

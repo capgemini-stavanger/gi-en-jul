@@ -175,9 +175,10 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
       {selectedConnection.editRecipient.familyMembers &&
       <EditFamily
         recipient={selectedConnection.editRecipient}
-        onClose={() => { setOpen(false); fetchRecipients()}}
+        onClose={() => { setOpen(false)}}
         open={open} 
         accessToken={accessToken}
+        refreshRecipients={() => {fetchRecipients(); console.log("Hheh")}}
         />
       }
     </>
