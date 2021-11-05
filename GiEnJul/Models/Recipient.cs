@@ -31,5 +31,10 @@ namespace GiEnJul.Models
 
         public List<Person> FamilyMembers { get; set; } = new List<Person>();
         public int PersonCount { get; set; }
+
+        public Recipient ShallowCopy()
+        {
+            return (Recipient) this.MemberwiseClone();
+        }
     }
 }

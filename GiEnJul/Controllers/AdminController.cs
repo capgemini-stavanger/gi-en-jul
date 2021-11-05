@@ -132,6 +132,53 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpDelete("Connection")]
+        [Authorize(Policy = "DeleteConnection")]
+        public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
+        {
+            var giver = await _giverRepository.GetGiverAsync(location, rowKey);
+
+            if (giver?.MatchedRecipient is null)
+            {
+                return NotFound();
+            }
+
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+
+            if (recipient is null)
+            {
+                return NotFound();
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = null;
+
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = null;
+
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                
+                await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+            
+            return Ok();
+        }
 
         [HttpPost]
         [Authorize(Policy = "AddConnection")]
@@ -161,6 +208,7 @@ namespace GiEnJul.Controllers
 
                 var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"Merk: {recipient.Note}.";
 
                 var familyTable = "";
@@ -177,42 +225,42 @@ namespace GiEnJul.Controllers
                 var body =
                     $"Hei {giver.FullName}, <br/><br/> " +
 
-                    $"Da har vi en familie til deg! <br/><br/> Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
+                    $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
                     $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. <br/><br/>" +
 
-                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer. <br/><br/>" +
+                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
 
-                    $" <h3>SKJEMA MED INFO OM FAMILIE OG GAVEØNSKER </h3>" +
+                    $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
                     $"{familyTable}" +
 
                     $" Foretrukket middag: {recipient.Dinner} og {recipient.Dessert}. {recipientNote} <br/><br/>" +
 
-
                     $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}. <br/><br/>" +
 
-                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. <br/><br/>" +
-                    $"Middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. <br/><br/>" +
+                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. " +
+                    $"Ekstra-middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. <br/><br/>" +
 
-                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er: <br/><br/>" +
+                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Tips: <br/><br/>" +
                     $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
                     $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
                     $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
-                    $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! <br/>" +
-                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg og annet som inneholder det. <br/><br/>" +
+                    $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! " +
+                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg eller godteri og annet som inneholder svin og gelatin. <br/><br/>" +
 
-                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. <br/><br/>" +
+                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre." +
                     $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære. <br/><br/>" +
 
-                    $"<br> NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
-                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. <br/><br/>" +
+                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. Dersom du har mye klær og/eller leker du ønsker å gi, men ikke matcher familien du har fått, "+ 
+                    $"kan du sende en mail til oss, så kan vi se om vi kan få gitt det til en passende familie.<br/><br/>" +
 
                     $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. <br/><br/>" +
 
-                    $"Viktig: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
+                    $"<b>Viktig</b>: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
 
                     $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
 
-                    $"Vennlig hilsen {eventDto.ContactPerson}";
+                    $"Hilsen {eventDto.ContactPerson} i Gi en jul {eventDto.City}";
 
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);

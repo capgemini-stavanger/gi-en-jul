@@ -20,5 +20,10 @@ namespace GiEnJul.Models
         //Match with family, default is false
         public bool IsSuggestedMatch { get; set; } = false;
         public bool HasConfirmedMatch { get; set; } = false;
+
+        public Giver ShallowCopy() 
+        {
+            return (Giver) this.MemberwiseClone();
+        }
     }
 }
