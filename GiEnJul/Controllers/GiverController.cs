@@ -125,7 +125,6 @@ namespace GiEnJul.Controllers
                 throw e;
             }
 
-
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
         }
     }
