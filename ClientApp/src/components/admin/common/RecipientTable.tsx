@@ -5,6 +5,7 @@ import {
   Container,
   Divider,
   Typography,
+  IconButton,
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -17,15 +18,19 @@ import * as React from "react";
 import Gender from "../../../common/enums/Gender";
 import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
+import EditIcon from '@material-ui/icons/Edit';
+import { useState } from "react";
 
 type Props = {
   data: RecipientType[] | [];
   handleRecipientChange: (newRecipient: RecipientType) => void;
+  openDialog: () => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
   handleRecipientChange,
+  openDialog,
 }) => {
   const classes = useStyles();
 
@@ -34,6 +39,8 @@ const DatatableRecipient: React.FC<Props> = ({
     setExpanded(isExpanded ? recipient : false);
     handleRecipientChange(recipient);
   };
+
+  const [selected, setSelected] = useState(-1);
 
   const formatFamily = (input: Number) => {
     if (input < 3) {
@@ -72,13 +79,15 @@ const DatatableRecipient: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((recipient) => (
-        <Accordion expanded={expanded===recipient}
-          onChange={handleChange(recipient)}
+      {data.map((recipient, index) => (
+        <Accordion
+          expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onClick={() => { index != selected ? setSelected(index) : setSelected(-1)}}
         >
           <AccordionSummary
+            onClick={() => handleRecipientChange(recipient)}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
@@ -109,6 +118,11 @@ const DatatableRecipient: React.FC<Props> = ({
                 style={{ color: "#ed8175" }}
               />
             )}
+            <Typography>
+              <IconButton aria-label="expand row" size="small" onClick={() => {openDialog(); setSelected(-1)}}>
+                <EditIcon/>
+              </IconButton>
+            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>

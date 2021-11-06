@@ -29,6 +29,6 @@ namespace GiEnJul.Dtos
         [Required]
         [MinLength(1)]
         [MaxLength(999)]
-        public List<PostPersonDto> FamilyMembers { get; set; } = new List<PostPersonDto>();
+        public List<PutPersonDto> FamilyMembers { get; set; } = new List<PutPersonDto>();
     }
 }

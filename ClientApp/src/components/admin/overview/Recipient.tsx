@@ -7,6 +7,7 @@ import { RecipientType} from "./Types";
 
 type Props = {
   data: RecipientType[] | [];
+  openDialog: () => void;
   handleRecipientChange: (
     newRecipient: RecipientType
   ) => void;
@@ -14,6 +15,7 @@ type Props = {
 
 const Recipient: React.FC<Props> = ({
   data,
+  openDialog,
   handleRecipientChange,
 }) => {
   const [query, setQuery] = useState("");
@@ -51,6 +53,7 @@ const Recipient: React.FC<Props> = ({
       <Datatable
         data={search(data)}
         handleRecipientChange={handleRecipientChange}
+        openDialog={() => {openDialog()}}
       />
     </Container>
   );

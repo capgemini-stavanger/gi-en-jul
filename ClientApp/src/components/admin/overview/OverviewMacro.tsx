@@ -1,20 +1,24 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Snackbar, Typography } from "@material-ui/core";
 import React, {
   useCallback,
   useEffect,
   useState,
 } from "react";
 import ApiService from "../../../common/functions/apiServiceClass";
+import EditFamily from "../../../common/components/EditFamily";
 import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
 import useStyles from "./Styles";
 import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
+import * as Types from "../../admin/suggestedConnections/Types";
+import { Alert } from "@material-ui/lab";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
-  recipient: undefined,
+  recipient: {} as RecipientType,
+  editRecipient: {} as Types.RecipientType,
 };
 interface IOverviewMacro {
   location: string;
@@ -27,6 +31,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const apiservice = new ApiService(accessToken);
+  const [open, setOpen] = useState(false);
 
   async function fetchGivers() {
     await apiservice
@@ -78,7 +83,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
-            recipient: undefined,
+            recipient: {} as RecipientType,
           };
         });
       } else {
@@ -86,6 +91,20 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           return {
             ...prevState,
             recipient: newRecipient,
+            editRecipient: {
+              rowKey: newRecipient.rowKey,
+              partitionKey: newRecipient.partitionKey,
+              familyId: newRecipient.familyId.toString(),
+              dinner: newRecipient.dinner,
+              dessert: newRecipient.dessert,
+              note: newRecipient.note,
+              contactFullName: newRecipient.contactFullName,
+              contactEmail: newRecipient.contactEmail,
+              contactPhoneNumber: newRecipient.contactPhoneNumber,
+              institution: newRecipient.institution,
+              referenceId: newRecipient.referenceId,
+              familyMembers: newRecipient.familyMembers as Types.PersonType[],
+            } as Types.RecipientType
           };
         });
       }
@@ -141,6 +160,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Recipient
               data={recipientData}
               handleRecipientChange={handleRecipientChange}
+              openDialog={() => {setOpen(true)} }
             />
           </Grid>
         </Grid>
@@ -149,6 +169,15 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           connectGiverRecipient={connectGiverRecipient}
         />
       </Container>
+      {selectedConnection.editRecipient.familyMembers &&
+      <EditFamily
+        recipient={selectedConnection.editRecipient}
+        onClose={() => { setOpen(false)}}
+        open={open} 
+        accessToken={accessToken}
+        refreshRecipients={() => fetchRecipients()}
+        />
+      }
     </>
   );
 };

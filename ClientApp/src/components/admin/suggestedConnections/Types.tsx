@@ -28,6 +28,7 @@ export interface RecipientType {
   familyMembers: PersonType[];
 }
 export interface PersonType {
+  partitionKey: string;
   rowKey: string;
   wish: string;
   age: number;
