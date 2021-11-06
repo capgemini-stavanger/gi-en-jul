@@ -9,9 +9,11 @@ namespace GiEnJul.Infrastructure
         public AutoMapperProfile()
         {
             //Person mapping
-            CreateMap<Dtos.PutPersonDto, Models.Person>()
+            CreateMap<Dtos.PostPersonDto, Models.Person>()
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore());
+
+            CreateMap<Dtos.PutPersonDto, Models.Person>();
 
             CreateMap<Models.Person, Dtos.RecipientDataTableDto.PersonDataTableDto>();
 
