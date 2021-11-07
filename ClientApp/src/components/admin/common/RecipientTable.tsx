@@ -44,6 +44,10 @@ const DatatableRecipient: React.FC<Props> = ({
     index != selected ? setSelected(index) : setSelected(-1)
   }
 
+  const mergeRecipientTypes = (recipient: RecipientType) => {
+    return Object.assign({} as Types.RecipientType, recipient);
+  }
+  
   const formatFamily = (input: Number) => {
     if (input < 3) {
       return "< 3";
@@ -89,20 +93,7 @@ const DatatableRecipient: React.FC<Props> = ({
           onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
-            onClick={() => setSelectedRecipient({
-              rowKey: recipient.rowKey,
-              partitionKey: recipient.partitionKey,
-              familyId: recipient.familyId.toString(),
-              dinner: recipient.dinner,
-              dessert: recipient.dessert,
-              note: recipient.note,
-              contactFullName: recipient.contactFullName,
-              contactEmail: recipient.contactEmail,
-              contactPhoneNumber: recipient.contactPhoneNumber,
-              institution: recipient.institution,
-              referenceId: recipient.referenceId,
-              familyMembers: recipient.familyMembers as Types.PersonType[],
-            } as Types.RecipientType)}
+            onClick={() => {setSelectedRecipient(mergeRecipientTypes(recipient),)}}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
