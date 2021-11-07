@@ -311,6 +311,7 @@ namespace GiEnJul.Controllers
             }
             catch (Exception ex)
             {
+                await _recipientRepository.InsertOrReplaceAsync(recipientOld);
                 throw ex;
             }
 
