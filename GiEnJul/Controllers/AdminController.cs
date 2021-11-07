@@ -303,6 +303,7 @@ namespace GiEnJul.Controllers
             }
 
             await _recipientRepository.InsertOrReplaceAsync(recipientNew);
+
             try
             {
                 await _personRepository.InsertOrReplaceBatchAsync(recipientNew.FamilyMembers);
@@ -312,7 +313,7 @@ namespace GiEnJul.Controllers
             {
                 throw ex;
             }
-            await _recipientRepository.InsertOrReplaceAsync(recipientNew);
+
             return Ok();
         }
 
