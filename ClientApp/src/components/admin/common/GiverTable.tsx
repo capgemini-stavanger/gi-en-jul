@@ -14,7 +14,7 @@ import {
   FiberManualRecord,
 } from "@material-ui/icons";
 import React from "react";
-import { GiverType } from "../overview/Types";
+import { GiverType } from "../../../common/components/Types";
 import Circle from "./Circle";
 import useStyles from "./Styles";
 

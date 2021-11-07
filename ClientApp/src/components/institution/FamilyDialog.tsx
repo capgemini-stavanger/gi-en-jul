@@ -6,15 +6,14 @@
      DialogContentText, 
      DialogTitle, 
  } from "@material-ui/core";
- import {RecipientType, SelectedConnectionType} from "../admin/overview/Types";
+ import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
  import Recipient from "../admin/overview/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
- import * as Types from "../admin/suggestedConnections/Types";
+ import * as Types from "../../common/components/Types";
 
  const initState: SelectedConnectionType= {
       recipient: {} as RecipientType,
-      editRecipient: {} as Types.RecipientType
   };
 
 interface IFamilyDialog{

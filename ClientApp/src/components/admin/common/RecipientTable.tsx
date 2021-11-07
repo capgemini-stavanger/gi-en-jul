@@ -16,7 +16,7 @@ import {
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
-import { RecipientType } from "../overview/Types";
+import { RecipientType } from "../../../common/components/Types";
 import useStyles from "./Styles";
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
@@ -38,8 +38,11 @@ const DatatableRecipient: React.FC<Props> = ({
 
   const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
   const [open, setOpen] = useState(false)
-
   const [selected, setSelected] = useState(-1);
+
+  const handleSelectedAccordion = (index: number) => {
+    index != selected ? setSelected(index) : setSelected(-1)
+  }
 
   const formatFamily = (input: Number) => {
     if (input < 3) {
@@ -83,7 +86,7 @@ const DatatableRecipient: React.FC<Props> = ({
           expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
-          onClick={() => { index != selected ? setSelected(index) : setSelected(-1)}}
+          onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
             onClick={() => setSelectedRecipient({

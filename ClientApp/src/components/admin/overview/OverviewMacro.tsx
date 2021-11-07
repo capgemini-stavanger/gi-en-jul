@@ -11,14 +11,13 @@ import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
 import useStyles from "./Styles";
-import { GiverType, RecipientType, SelectedConnectionType } from "./Types";
-import * as Types from "../../admin/suggestedConnections/Types";
+import { GiverType, RecipientType, SelectedConnectionType } from "../../../common/components/Types";
+import * as Types from "../../../common/components/Types";
 import { Alert } from "@material-ui/lab";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
   recipient: {} as RecipientType,
-  editRecipient: {} as Types.RecipientType,
 };
 interface IOverviewMacro {
   location: string;
@@ -91,20 +90,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           return {
             ...prevState,
             recipient: newRecipient,
-            editRecipient: {
-              rowKey: newRecipient.rowKey,
-              partitionKey: newRecipient.partitionKey,
-              familyId: newRecipient.familyId.toString(),
-              dinner: newRecipient.dinner,
-              dessert: newRecipient.dessert,
-              note: newRecipient.note,
-              contactFullName: newRecipient.contactFullName,
-              contactEmail: newRecipient.contactEmail,
-              contactPhoneNumber: newRecipient.contactPhoneNumber,
-              institution: newRecipient.institution,
-              referenceId: newRecipient.referenceId,
-              familyMembers: newRecipient.familyMembers as Types.PersonType[],
-            } as Types.RecipientType
           };
         });
       }

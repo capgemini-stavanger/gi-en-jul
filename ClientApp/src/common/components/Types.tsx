@@ -1,10 +1,8 @@
-import Gender from "../../../common/enums/Gender";
-import * as Types from "../../admin/suggestedConnections/Types";
+import Gender from "../enums/Gender";
 
 export interface SelectedConnectionType {
     giver?: GiverType;
     recipient: RecipientType;
-    editRecipient: Types.RecipientType;
   }
   
   export interface GiverType {
