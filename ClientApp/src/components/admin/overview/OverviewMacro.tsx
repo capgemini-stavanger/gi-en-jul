@@ -159,8 +159,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              handleRecipientChange={handleRecipientChange}
-              openDialog={() => {setOpen(true)} }
+              accessToken={accessToken}
+              refreshRecipients={() => fetchRecipients()}
             />
           </Grid>
         </Grid>
@@ -169,15 +169,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           connectGiverRecipient={connectGiverRecipient}
         />
       </Container>
-      {selectedConnection.editRecipient.familyMembers &&
-      <EditFamily
-        recipient={selectedConnection.editRecipient}
-        onClose={() => { setOpen(false)}}
-        open={open} 
-        accessToken={accessToken}
-        refreshRecipients={() => fetchRecipients()}
-        />
-      }
     </>
   );
 };

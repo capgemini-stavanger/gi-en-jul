@@ -4,19 +4,18 @@ import React, { useState } from "react";
 import useStyles from "./Styles";
 import Datatable from "../common/RecipientTable";
 import { RecipientType} from "./Types";
+import * as Types from "../suggestedConnections/Types";
 
 type Props = {
   data: RecipientType[] | [];
-  openDialog: () => void;
-  handleRecipientChange: (
-    newRecipient: RecipientType
-  ) => void;
+  refreshRecipients: () => void;
+  accessToken: string;
 };
 
 const Recipient: React.FC<Props> = ({
   data,
-  openDialog,
-  handleRecipientChange,
+  refreshRecipients,
+  accessToken
 }) => {
   const [query, setQuery] = useState("");
 
@@ -52,8 +51,8 @@ const Recipient: React.FC<Props> = ({
       </Grid>
       <Datatable
         data={search(data)}
-        handleRecipientChange={handleRecipientChange}
-        openDialog={() => {openDialog()}}
+        refreshRecipients={() => refreshRecipients()}
+        accessToken={accessToken}
       />
     </Container>
   );

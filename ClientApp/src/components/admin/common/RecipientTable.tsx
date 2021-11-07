@@ -20,25 +20,24 @@ import { RecipientType } from "../overview/Types";
 import useStyles from "./Styles";
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
+import * as Types from "../suggestedConnections/Types";
+import EditFamily from "../../../common/components/EditFamily";
 
 type Props = {
   data: RecipientType[] | [];
-  handleRecipientChange: (newRecipient: RecipientType) => void;
-  openDialog: () => void;
+  refreshRecipients: () => void;
+  accessToken: string;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  handleRecipientChange,
-  openDialog,
+  accessToken,
+  refreshRecipients,
 }) => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState<RecipientType | false>(false);
-  const handleChange = (recipient:RecipientType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? recipient : false);
-    handleRecipientChange(recipient);
-  };
+  const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
+  const [open, setOpen] = useState(false)
 
   const [selected, setSelected] = useState(-1);
 
@@ -87,7 +86,20 @@ const DatatableRecipient: React.FC<Props> = ({
           onClick={() => { index != selected ? setSelected(index) : setSelected(-1)}}
         >
           <AccordionSummary
-            onClick={() => handleRecipientChange(recipient)}
+            onClick={() => setSelectedRecipient({
+              rowKey: recipient.rowKey,
+              partitionKey: recipient.partitionKey,
+              familyId: recipient.familyId.toString(),
+              dinner: recipient.dinner,
+              dessert: recipient.dessert,
+              note: recipient.note,
+              contactFullName: recipient.contactFullName,
+              contactEmail: recipient.contactEmail,
+              contactPhoneNumber: recipient.contactPhoneNumber,
+              institution: recipient.institution,
+              referenceId: recipient.referenceId,
+              familyMembers: recipient.familyMembers as Types.PersonType[],
+            } as Types.RecipientType)}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
@@ -119,7 +131,7 @@ const DatatableRecipient: React.FC<Props> = ({
               />
             )}
             <Typography>
-              <IconButton aria-label="expand row" size="small" onClick={() => {openDialog(); setSelected(-1)}}>
+              <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
                 <EditIcon/>
               </IconButton>
             </Typography>
@@ -169,6 +181,15 @@ const DatatableRecipient: React.FC<Props> = ({
           </AccordionDetails>
         </Accordion>
       ))}
+      { selectedRecipient.familyMembers &&
+      <EditFamily
+        recipient={selectedRecipient}
+        onClose={() => { setOpen(false)}}
+        open={open} 
+        accessToken={accessToken}
+        refreshRecipients={() => refreshRecipients()}
+        />
+      }
     </Container>
   );
 };

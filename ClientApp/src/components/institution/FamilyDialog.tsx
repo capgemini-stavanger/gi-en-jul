@@ -72,7 +72,7 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
                      <DialogContentText id="alert-dialog-description">
                          <p>Liste over familier</p>
                      </DialogContentText>
-                     <Recipient data={recipientData} handleRecipientChange={handleRecipientChange} openDialog={() => ""}/>
+                     <Recipient data={recipientData} accessToken={""} refreshRecipients={() => ""}/>
                  </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>
