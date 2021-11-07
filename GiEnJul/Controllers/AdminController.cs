@@ -292,28 +292,27 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "UpdateRecipient")]
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
-            var recipientUpdated = _mapper.Map<Recipient>(recipientDto);
-            var recipientToUpdate = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var recipientNew = _mapper.Map<Recipient>(recipientDto);
+            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
 
+            foreach (var prop in recipientOld.GetType().GetProperties())
+            {
+                var valueNew = prop.GetValue(recipientNew);
+                var valueOld = prop.GetValue(recipientOld);
+                if (valueNew == null) prop.SetValue(recipientNew, valueOld);
+            }
+
+            await _recipientRepository.InsertOrReplaceAsync(recipientNew);
             try
             {
-                foreach (var prop in recipientUpdated.GetType().GetProperties())
-                {
-                    var value = prop.GetValue(recipientUpdated);
-                    if (value != null) prop.SetValue(recipientToUpdate, value);
-                }
-
-
-                await _recipientRepository.InsertOrReplaceAsync(recipientToUpdate);
-                foreach (var person in recipientToUpdate.FamilyMembers)
-                {
-                    await _personRepository.InsertOrReplaceAsync(person);
-                }
+                await _personRepository.InsertOrReplaceBatchAsync(recipientNew.FamilyMembers);
+                
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            await _recipientRepository.InsertOrReplaceAsync(recipientNew);
             return Ok();
         }
 
