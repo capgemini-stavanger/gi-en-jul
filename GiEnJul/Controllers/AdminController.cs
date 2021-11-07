@@ -302,15 +302,17 @@ namespace GiEnJul.Controllers
                     var value = prop.GetValue(recipientUpdated);
                     if (value != null) prop.SetValue(recipientToUpdate, value);
                 }
+
+
+                await _recipientRepository.InsertOrReplaceAsync(recipientToUpdate);
+                foreach (var person in recipientToUpdate.FamilyMembers)
+                {
+                    await _personRepository.InsertOrReplaceAsync(person);
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
-            await _recipientRepository.InsertOrReplaceAsync(recipientToUpdate);
-            foreach (var person in recipientToUpdate.FamilyMembers)
-            {
-                await _personRepository.InsertOrReplaceAsync(person);
             }
             return Ok();
         }
