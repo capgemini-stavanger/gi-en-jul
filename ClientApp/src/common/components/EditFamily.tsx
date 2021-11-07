@@ -89,7 +89,7 @@ import { Alert } from "@material-ui/lab";
         .put("admin/recipient", JSON.stringify(newRecipient))
         .then((response) => {
           if (response.status === 200) {
-            setAlert(true, "Familie oppdatert!");
+            setAlert(true, "Familie oppdatert!", "success");
             refreshRecipients();
           }
         })
