@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import useStyles from "./Styles";
-import { SelectedConnectionType } from "./Types";
+import { SelectedConnectionType } from "../../../common/components/Types";
 
 type ConnectButtonProps = {
   selectedConnection: SelectedConnectionType;

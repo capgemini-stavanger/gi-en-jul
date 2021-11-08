@@ -6,13 +6,14 @@
      DialogContentText, 
      DialogTitle, 
  } from "@material-ui/core";
- import {RecipientType, SelectedConnectionType} from "../admin/overview/Types";
+ import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
  import Recipient from "../admin/overview/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
+ import * as Types from "../../common/components/Types";
 
  const initState: SelectedConnectionType= {
-    recipient: undefined,
+      recipient: {} as RecipientType,
   };
 
 interface IFamilyDialog{
@@ -47,14 +48,14 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
             setSelectedConnection((prevState) => {
               return {
                 ...prevState,
-                recipient: undefined,
+                recipient: newRecipient ?? prevState.recipient,
               };
             });
           } else {
             setSelectedConnection((prevState) => {
               return {
                 ...prevState,
-                recipient: newRecipient,
+                recipient: prevState.recipient,
               };
             });
           }
@@ -70,7 +71,7 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
                      <DialogContentText id="alert-dialog-description">
                          <p>Liste over familier</p>
                      </DialogContentText>
-                     <Recipient data={recipientData} handleRecipientChange={handleRecipientChange}/>
+                     <Recipient data={recipientData} accessToken={""} refreshRecipients={() => ""}/>
                  </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>

@@ -5,6 +5,7 @@ import {
   Container,
   Divider,
   Typography,
+  IconButton,
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -15,26 +16,38 @@ import {
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
-import { RecipientType } from "../overview/Types";
+import { RecipientType } from "../../../common/components/Types";
 import useStyles from "./Styles";
+import EditIcon from '@material-ui/icons/Edit';
+import { useState } from "react";
+import * as Types from "../suggestedConnections/Types";
+import EditFamily from "../../../common/components/EditFamily";
 
 type Props = {
   data: RecipientType[] | [];
-  handleRecipientChange: (newRecipient: RecipientType) => void;
+  refreshRecipients: () => void;
+  accessToken: string;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  handleRecipientChange,
+  accessToken,
+  refreshRecipients,
 }) => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState<RecipientType | false>(false);
-  const handleChange = (recipient:RecipientType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? recipient : false);
-    handleRecipientChange(recipient);
-  };
+  const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(-1);
 
+  const handleSelectedAccordion = (index: number) => {
+    index != selected ? setSelected(index) : setSelected(-1)
+  }
+
+  const mergeRecipientTypes = (recipient: RecipientType) => {
+    return Object.assign({} as Types.RecipientType, recipient);
+  }
+  
   const formatFamily = (input: Number) => {
     if (input < 3) {
       return "< 3";
@@ -72,13 +85,15 @@ const DatatableRecipient: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((recipient) => (
-        <Accordion expanded={expanded===recipient}
-          onChange={handleChange(recipient)}
+      {data.map((recipient, index) => (
+        <Accordion
+          expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
+            onClick={() => {setSelectedRecipient(mergeRecipientTypes(recipient),)}}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
@@ -109,6 +124,11 @@ const DatatableRecipient: React.FC<Props> = ({
                 style={{ color: "#ed8175" }}
               />
             )}
+            <Typography>
+              <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
+                <EditIcon/>
+              </IconButton>
+            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
@@ -155,6 +175,15 @@ const DatatableRecipient: React.FC<Props> = ({
           </AccordionDetails>
         </Accordion>
       ))}
+      { selectedRecipient.familyMembers &&
+      <EditFamily
+        recipient={selectedRecipient}
+        onClose={() => { setOpen(false)}}
+        open={open} 
+        accessToken={accessToken}
+        refreshRecipients={() => refreshRecipients()}
+        />
+      }
     </Container>
   );
 };

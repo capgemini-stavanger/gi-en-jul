@@ -13,6 +13,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RowKey, act => act.Ignore())
                 .ForMember(dest => dest.PartitionKey, act => act.Ignore());
 
+            CreateMap<Dtos.PutPersonDto, Models.Person>();
+
             CreateMap<Models.Person, Dtos.RecipientDataTableDto.PersonDataTableDto>();
 
             CreateMap<Entities.Person, Models.Person>();
@@ -41,6 +43,20 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.FamilyId, act => act.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
 
+            CreateMap<Dtos.PutRecipientDto, Models.Recipient>()
+                .ForMember(dest => dest.EventName, act => act.Ignore())
+                .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count))
+                .ForMember(dest => dest.FamilyId, act => act.Ignore())
+                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
+                .ForMember(dest => dest.MatchedGiver, act => act.Ignore())
+                .ForMember(dest => dest.Location, act => act.Ignore())
+                .ForMember(dest => dest.ContactFullName, act => act.Ignore())
+                .ForMember(dest => dest.ContactEmail, act => act.Ignore())
+                .ForMember(dest => dest.ContactPhoneNumber, act => act.Ignore())
+                .ForMember(dest => dest.Institution, act => act.Ignore())
+                .ForMember(dest => dest.ReferenceId, act => act.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
