@@ -166,7 +166,7 @@ import useStyles from "../../components/admin/common/Styles";
                         <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, note: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, refereneId: e.target.value }})}}/>
+                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, referenceId: e.target.value }})}}/>
                       </TableCell>
                     </TableRow>
                   </TableBody>
