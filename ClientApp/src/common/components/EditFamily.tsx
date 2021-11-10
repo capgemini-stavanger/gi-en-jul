@@ -113,11 +113,7 @@ import useStyles from "../../components/admin/common/Styles";
     }
 
     const updateFamily = () => {
-      recipient.dinner = newRecipient.dinner;
-      recipient.dessert = newRecipient.dessert;
-      recipient.note = newRecipient.note;
-      recipient.familyMembers = newRecipient.familyMembers;
-      recipient.familyMembers.forEach(person => person.partitionKey = recipient.rowKey);
+      Object.assign({} as RecipientType, newRecipient);
       updateRecipient();
       onClose()
     }
@@ -157,6 +153,7 @@ import useStyles from "../../components/admin/common/Styles";
                       <TableCell>Middag</TableCell>
                       <TableCell>Dessert</TableCell>
                       <TableCell>Notat</TableCell>
+                      <TableCell>Referanse Id</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -170,6 +167,9 @@ import useStyles from "../../components/admin/common/Styles";
                       <TableCell>
                         <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.note = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                       </TableCell>
+                      <TableCell>
+                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.referenceId = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                      </TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -182,10 +182,11 @@ import useStyles from "../../components/admin/common/Styles";
                       <TableCell>Kjønn</TableCell>
                       <TableCell>Alder</TableCell>
                       <TableCell>Ønske</TableCell>
+                      <TableCell>Kommentar</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {newRecipient.familyMembers.map((familyMember: { rowKey: Key | null | undefined; gender: Gender; age: number; wish: any; }, index: number) => (
+                    {newRecipient.familyMembers.map((familyMember : PersonType , index: number) => (
                       <TableRow key={familyMember.rowKey}>
                         <TableCell>
                         <Select
@@ -210,7 +211,11 @@ import useStyles from "../../components/admin/common/Styles";
                         <TableCell component="th" scope="row">
                           <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
                         </TableCell>
-                        <TableCell>
+                        <TableCell component="th" scope="row">
+                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        </TableCell>
+                        { !familyMember.rowKey &&
+                          <TableCell>
                           <IconButton
                             aria-label="close"
                             onClick={() => removeFamilyMember(index)}
@@ -218,6 +223,7 @@ import useStyles from "../../components/admin/common/Styles";
                             <CloseIcon />
                           </IconButton>
                         </TableCell>
+                        }
                       </TableRow>
                     ))}
                   </TableBody>
@@ -225,7 +231,7 @@ import useStyles from "../../components/admin/common/Styles";
               </Box>
             <DialogActions>
               <Button color="primary">
-                <Button onClick={newFamilyMember}>
+                <Button onClick={() => {newFamilyMember()}}>
                   Nytt familiemedlem
                 </Button>
               </Button>

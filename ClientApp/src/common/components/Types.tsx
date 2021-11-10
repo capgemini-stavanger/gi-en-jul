@@ -44,4 +44,5 @@ export interface SelectedConnectionType {
     wish: string;
     age: Number;
     gender: Gender;
+    comment: string;
   }
