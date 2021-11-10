@@ -225,7 +225,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
       </Link>
       </Grid>
       <Grid>
-      <MessageDialog 
+      <MessageDialog
         open={state.dialogOpen}
         onClose={() => setShowMessageDialog(false)}
         setMessage={setValidMessage}

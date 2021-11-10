@@ -81,11 +81,11 @@ const initState: {
     referenceId:string;
     familyId:string;
     open: boolean;
-  }; 
+  };
 
 } = {
   viewErrorTrigger: 0,
-  displayText: false, 
+  displayText: false,
   alert: {
     isLoading: false,
     msg: "",
@@ -134,7 +134,7 @@ const initValidFormState: ValidFormEntry = {
 };
 interface props {
   accessToken: string;
-} 
+}
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
@@ -325,13 +325,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const displayHelpText = () => {
     setState((prev) => ({
-      ...prev, 
+      ...prev,
       displayText : true,
     }));
   }
   const hideHelpText = () => {
     setState((prev) => ({
-      ...prev, 
+      ...prev,
       displayText : false,
     }));
   }
@@ -551,9 +551,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
             { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
             </Tooltip>
-          </Grid> 
+          </Grid>
           <Typography>
-           {state.displayText && 
+           {state.displayText &&
            <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
            }
           </Typography>

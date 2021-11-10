@@ -128,8 +128,8 @@ import useStyles from "../../components/admin/common/Styles";
 
     return (
       <>
-      <Dialog onClose={(_, reason) => 
-        {if (reason != "backdropClick") onClose()}} 
+      <Dialog onClose={(_, reason) =>
+        {if (reason != "backdropClick") onClose()}}
         aria-labelledby="dialog-title" open={open}>
         <DialogTitle id="dialog-title" disableTypography>Rediger Familie</DialogTitle>
         <TableRow>
