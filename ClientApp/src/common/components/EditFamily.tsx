@@ -158,16 +158,16 @@ import useStyles from "../../components/admin/common/Styles";
                   <TableBody>
                     <TableRow>
                       <TableCell>
-                        <Input type="text" value={newRecipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dinner = e.target.value; setNewRecipient((prev) => {return { ...prev, dinner: e.target.value }})}}/>
+                        <Input type="text" value={newRecipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, dinner: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dessert = e.target.value; setNewRecipient((prev) => {return { ...prev, dessert: e.target.value }})}}/>
+                        <Input type="text" value={newRecipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, dessert: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.note = e.target.value; setNewRecipient((prev) => {return { ...prev, note: e.target.value }})}}/>
+                        <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, note: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.referenceId = e.target.value; setNewRecipient((prev) => {return { ...prev, referenceId: e.target.value }})}}/>
+                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, referenceId: e.target.value }})}}/>
                       </TableCell>
                     </TableRow>
                   </TableBody>
