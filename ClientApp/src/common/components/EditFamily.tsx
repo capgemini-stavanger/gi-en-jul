@@ -15,6 +15,7 @@ import {
     Select,
     MenuItem,
     Snackbar,
+    IconButton,
   } from "@material-ui/core";
 import { FC, Key, useEffect, useState } from "react";
 import { getGender } from "../functions/GetGender";
@@ -23,12 +24,14 @@ import Gender from "../enums/Gender";
 import { GENDERS } from "../constants/Genders";
 import ApiService from "../functions/apiServiceClass";
 import { Alert } from "@material-ui/lab";
+import { useAuth0  } from "@auth0/auth0-react";
+import CloseIcon from "@material-ui/icons/Close";
+import useStyles from "../../components/admin/common/Styles";
 
   interface IEditFamilyDialog {
     recipient: RecipientType;
     onClose: () => void;
     open: boolean;
-    accessToken: string;
     refreshRecipients: () => void;
   }
 
@@ -49,18 +52,28 @@ import { Alert } from "@material-ui/lab";
     recipient,
     onClose,
     open,
-    accessToken,
     refreshRecipients,
   }) => {
 
+    async function getUserAccessToken(): Promise<string> {
+      const accessToken = await getAccessTokenSilently();
+      return accessToken;
+    }
+
     useEffect(() => {
       setNewRecipient(JSON.parse(JSON.stringify(recipient)))
+      getUserAccessToken().then((resp: string) => {
+        setUserAccessToken(resp);
+      });
     }, [open]);
 
-
-    const apiservice = new ApiService(accessToken);
+    const { getAccessTokenSilently } = useAuth0();
+    const [userAccessToken, setUserAccessToken] = useState<string>("");
+    const apiservice = new ApiService(userAccessToken);
     const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
     const [state, setState] = useState(alertState);
+
+    const classes = useStyles();
 
     const setAlert = (
       open?: boolean,
@@ -114,11 +127,25 @@ import { Alert } from "@material-ui/lab";
       setNewRecipient(JSON.parse(JSON.stringify(newRecipient)));
     }
 
+    const removeFamilyMember = (index: number) => {
+      newRecipient.familyMembers.splice(index, 1);
+      setNewRecipient(JSON.parse(JSON.stringify(newRecipient)));
+    }
+
     return (
       <>
-      <Dialog onClose={() => {onClose()}} aria-labelledby="dialog-title" open={open}>
+      <Dialog onClose={(_, reason) => 
+        {if (reason != "backdropClick") onClose()}} 
+        aria-labelledby="dialog-title" open={open}>
         <DialogTitle id="dialog-title" disableTypography>Rediger Familie</DialogTitle>
         <TableRow>
+        <IconButton
+            className={classes.rightMiddleAlign}
+            aria-label="close"
+            onClick={onClose}
+          >
+            <CloseIcon />
+          </IconButton>
           <TableCell colSpan={6}>
               <Box margin={1}>
                 <Typography variant="h6" gutterBottom component="div">
@@ -158,7 +185,7 @@ import { Alert } from "@material-ui/lab";
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {newRecipient.familyMembers.map((familyMember: { rowKey: Key | null | undefined; gender: Gender; age: number; wish: any; }) => (
+                    {newRecipient.familyMembers.map((familyMember: { rowKey: Key | null | undefined; gender: Gender; age: number; wish: any; }, index: number) => (
                       <TableRow key={familyMember.rowKey}>
                         <TableCell>
                         <Select
@@ -182,6 +209,14 @@ import { Alert } from "@material-ui/lab";
                         </TableCell>
                         <TableCell component="th" scope="row">
                           <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        </TableCell>
+                        <TableCell>
+                          <IconButton
+                            aria-label="close"
+                            onClick={() => removeFamilyMember(index)}
+                          >
+                            <CloseIcon />
+                          </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}

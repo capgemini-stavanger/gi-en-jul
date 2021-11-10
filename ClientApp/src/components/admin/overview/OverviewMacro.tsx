@@ -30,7 +30,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const apiservice = new ApiService(accessToken);
-  const [open, setOpen] = useState(false);
 
   async function fetchGivers() {
     await apiservice
@@ -144,8 +143,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              accessToken={accessToken}
               refreshRecipients={() => fetchRecipients()}
+              handleRecipientChange={handleRecipientChange}
             />
           </Grid>
         </Grid>

@@ -44,6 +44,12 @@ const useStyles = makeStyles((theme: Theme) =>
       border: "0.05px solid",
       borderColor: "#d3d3d354",
     },
+    rightMiddleAlign: {
+      position: "absolute",
+      right: "0",
+      top: "0",
+      margin: "0.3em",
+    },
   })
 );
 

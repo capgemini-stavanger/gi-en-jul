@@ -26,13 +26,13 @@ import EditFamily from "../../../common/components/EditFamily";
 type Props = {
   data: RecipientType[] | [];
   refreshRecipients: () => void;
-  accessToken: string;
+  handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  accessToken,
   refreshRecipients,
+  handleRecipientChange,
 }) => {
   const classes = useStyles();
 
@@ -90,6 +90,7 @@ const DatatableRecipient: React.FC<Props> = ({
           expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onChange={() => { handleRecipientChange(recipient) }}
           onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
@@ -180,7 +181,6 @@ const DatatableRecipient: React.FC<Props> = ({
         recipient={selectedRecipient}
         onClose={() => { setOpen(false)}}
         open={open} 
-        accessToken={accessToken}
         refreshRecipients={() => refreshRecipients()}
         />
       }
