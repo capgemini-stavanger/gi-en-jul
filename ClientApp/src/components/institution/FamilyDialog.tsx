@@ -10,7 +10,6 @@
  import Recipient from "../admin/overview/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
- import * as Types from "../../common/components/Types";
 
  const initState: SelectedConnectionType= {
       recipient: {} as RecipientType,
@@ -24,9 +23,9 @@ interface IFamilyDialog{
  }
  
 const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, handleClose}) => {
-    const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-    const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
-    const apiservice = new ApiService(accessToken);
+/*
+  const apiservice = new ApiService(accessToken);
+  const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
  
     const fetchRecipients = () =>{
         apiservice
@@ -41,26 +40,8 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
       useEffect(() => {
           fetchRecipients();
       }, []);
+ */   
     
-    const handleRecipientChange = useCallback((newRecipient: RecipientType) => {
-        if (!newRecipient.isSuggestedMatch && !newRecipient.hasConfirmedMatch) {
-          if (selectedConnection.recipient?.rowKey === newRecipient.rowKey) {
-            setSelectedConnection((prevState) => {
-              return {
-                ...prevState,
-                recipient: newRecipient ?? prevState.recipient,
-              };
-            });
-          } else {
-            setSelectedConnection((prevState) => {
-              return {
-                ...prevState,
-                recipient: prevState.recipient,
-              };
-            });
-          }
-        }
-      }, []);
     return (
          <div>
              <Dialog fullWidth={true} open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
@@ -71,7 +52,8 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
                      <DialogContentText id="alert-dialog-description">
                          <p>Liste over familier</p>
                      </DialogContentText>
-                     <Recipient data={recipientData} accessToken={""} refreshRecipients={() => ""}/>
+                     Kommer snart
+                     {/* <Recipient data={recipientData} accessToken={accessToken} refreshRecipients={() => ""}/> */}
                  </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>
