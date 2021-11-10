@@ -59,9 +59,9 @@ function Row(props: RecipientRowProps) {
                 <TableHead></TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>{capitalize(recipient.dinner)}</TableCell>
-                    <TableCell>{capitalize(recipient.dessert)}</TableCell>
-                    <TableCell>{recipient.note}</TableCell>
+                    <TableCell>Middag: {capitalize(recipient.dinner)}</TableCell>
+                    <TableCell>Dessert: {capitalize(recipient.dessert)}</TableCell>
+                    <TableCell>{recipient.note ? "Kommentar: "+recipient.note : ""}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -74,7 +74,7 @@ function Row(props: RecipientRowProps) {
                     <TableCell>Kjønn</TableCell>
                     <TableCell>Alder</TableCell>
                     <TableCell>Ønske</TableCell>
-                  </TableRow>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                   {recipient.familyMembers.map((familyMember) => (
@@ -83,10 +83,10 @@ function Row(props: RecipientRowProps) {
                         {getGender(familyMember.gender, familyMember.age)}
                       </TableCell>
                       <TableCell>{familyMember.age}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {familyMember.wish == null
-                          ? "Giver kjøper alderstilpasset gave"
-                          : familyMember.wish}
+                      <TableCell>
+                        {familyMember.wish ? familyMember.wish : "Giver kjøper aldertilpasset gave. "}
+                        <br/>
+                        {familyMember.comment ? "Kommentar: "+familyMember.comment : ""}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -102,6 +102,7 @@ function Row(props: RecipientRowProps) {
                     <TableCell>{recipient.contactFullName}</TableCell>
                     <TableCell>{recipient.contactEmail}</TableCell>
                     <TableCell>{recipient.contactPhoneNumber}</TableCell>
+                    <TableCell>{recipient.referenceId}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
