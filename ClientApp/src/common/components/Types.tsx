@@ -1,8 +1,8 @@
-import Gender from "../../../common/enums/Gender";
+import Gender from "../enums/Gender";
 
 export interface SelectedConnectionType {
     giver?: GiverType;
-    recipient?: RecipientType;
+    recipient: RecipientType;
   }
   
   export interface GiverType {
@@ -38,10 +38,12 @@ export interface SelectedConnectionType {
     rowKey: string;
     familyId: number;
   }
+
   export interface PersonType {
     partitionKey: string;
     rowKey: string;
     wish: string;
     age: Number;
     gender: Gender;
+    comment: string;
   }

@@ -3,7 +3,7 @@ import { Search } from "@material-ui/icons";
 import React, { useState } from "react";
 import Datatable from "../common/GiverTable";
 import useStyles from "./Styles";
-import { GiverType } from "./Types";
+import { GiverType } from "../../../common/components/Types";
 
 type Props = {
   data: GiverType[] | [];

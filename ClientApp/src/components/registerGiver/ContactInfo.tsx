@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import InputValidator from "../../components/InputFields/Validators/InputValidator";
 import {
   isEmail,
+  isEqual,
   isNotNull,
   isPhoneNumber,
 } from "../../components/InputFields/Validators/Validators";
@@ -56,6 +57,12 @@ const ContactInfo: React.FC<Props> = ({
     nextStep(e);
   };
 
+  const [confimationEmail, setConfirmationEmail] = useState('');
+
+  const handleConfirmEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmationEmail(() => event.target.value)
+  };
+
   const getValiditySetter = (target: string) => {
     return (isValid: boolean) => {
       setValidFormState((prev) => {
@@ -97,9 +104,28 @@ const ContactInfo: React.FC<Props> = ({
             label="Epost*"
             onChange={handleEmailChange}
             name="email"
+            type="email"
             value={values.email ? values.email : ""}
-            validators={[isEmail, isNotNull]}
+            validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
             errorMessages={[
+              "Eposten er ikke lik..",
+              "Eposten din ser litt rar ut, er den skrevet riktig?",
+              "Vi trenger din epost for å sende deg viktig informasjon",
+            ]}
+            autoComplete="email"
+            margin="normal"
+            fullWidth
+          />
+          <InputValidator
+            viewErrorTrigger={state.viewErrorTrigger}
+            setIsValids={getValiditySetter("isValidEmail")}
+            label="Bekreft epost*"
+            onChange={handleConfirmEmailChange}
+            name="email"
+            value={confimationEmail ? confimationEmail : ""}
+            validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
+            errorMessages={[
+              "Eposten er ikke lik..",
               "Eposten din ser litt rar ut, er den skrevet riktig?",
               "Vi trenger din epost for å sende deg viktig informasjon",
             ]}
@@ -113,6 +139,7 @@ const ContactInfo: React.FC<Props> = ({
             label="Telefonnummer*"
             onChange={handleTlfChange}
             name="phoneNumber"
+            type="tel"
             value={values.phoneNumber ? values.phoneNumber : ""}
             validators={[isPhoneNumber, isNotNull]}
             errorMessages={[

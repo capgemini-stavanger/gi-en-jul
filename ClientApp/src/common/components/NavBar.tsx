@@ -57,7 +57,7 @@ const NavBar: FC = () => {
             </IconButton>
             <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
               <List className={classes.drawerMenu}>
-                <IconButton 
+                <IconButton
                 onClick={handleClose}
                 className={classes.closeButton}>
                 <Close color="primary"/>

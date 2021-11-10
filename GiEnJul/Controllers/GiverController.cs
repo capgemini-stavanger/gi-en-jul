@@ -93,7 +93,7 @@ namespace GiEnJul.Controllers
 
                 $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien. <br/><br/>" +
 
-                $"Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. Middagen kan <br/>" +
+                $"Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. Middagen kan " +
                 $"eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spaghetti, eller noe annet du synes er passende. <br/><br/>" +
 
                 $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er: <br/>" +
@@ -101,6 +101,7 @@ namespace GiEnJul.Controllers
                 $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
                 $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
                 $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! <br/>" +
+
                 $"<h3>Innkjøp av julegaver </h3>" +
                 $"Husk at det er gaveønsker og ikke handleliste som må følges til punkt og prikke. Dersom ønskene er gavekort, kan du likevel kjøpe en gave du synes passer til alderen.<br/><br/>" +
 
@@ -118,9 +119,9 @@ namespace GiEnJul.Controllers
                 $"Vennlig hilsen {eventDto.ContactPerson}";
 
 
-            var altMessageContent =
+            var altMessageContent = 
                 $"Hei! <br/><br/>" +
-                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. <br/><br/>" +
+                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. <br/><br/>" + 
                 $"Grunnet stor pågang har du havnet på ventelisten. Det er dermed ikke sikkert at du vil bli tildelt en familie. <br/><br/>" +
                 $"Vi tar kontakt med deg dersom vi får inn en familie til deg. <br/><br/>" +
 

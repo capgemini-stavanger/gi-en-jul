@@ -48,6 +48,12 @@ class ApiService implements IApiService {
       callback(response.status, response.data);
     });
   };
+  put = (path: string, data: any, extras?: any) => {
+    const newConfig = extras
+      ? { ...extras, headers: { ...this.config.headers, ...extras.headers } }
+      : this.config;
+    return axios.put(this.baseUrl + path, data, newConfig as any);
+  };
   post = (path: string, data: any, extras?: any) => {
     const newConfig = extras
       ? { ...extras, headers: { ...this.config.headers, ...extras.headers } }

@@ -5,6 +5,8 @@ import {
   Container,
   Divider,
   Typography,
+  IconButton,
+  capitalize
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -15,20 +17,38 @@ import {
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
-import { RecipientType } from "../overview/Types";
+import { RecipientType } from "../../../common/components/Types";
 import useStyles from "./Styles";
+import EditIcon from '@material-ui/icons/Edit';
+import { useState } from "react";
+import * as Types from "../suggestedConnections/Types";
+import EditFamily from "../../../common/components/EditFamily";
 
 type Props = {
   data: RecipientType[] | [];
+  refreshRecipients: () => void;
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
+  refreshRecipients,
   handleRecipientChange,
 }) => {
   const classes = useStyles();
 
+  const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(-1);
+
+  const handleSelectedAccordion = (index: number) => {
+    index != selected ? setSelected(index) : setSelected(-1)
+  }
+
+  const mergeRecipientTypes = (recipient: RecipientType) => {
+    return Object.assign({} as Types.RecipientType, recipient);
+  }
+  
   const formatFamily = (input: Number) => {
     if (input < 3) {
       return "< 3";
@@ -66,13 +86,17 @@ const DatatableRecipient: React.FC<Props> = ({
 
   return (
     <Container>
-      {data.map((recipient) => (
+      {data.map((recipient, index) => (
         <Accordion
-          onChange={() => handleRecipientChange(recipient)}
+          expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onChange={() => { handleRecipientChange(recipient) }}
+
+          onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
+            onClick={() => {setSelectedRecipient(mergeRecipientTypes(recipient),)}}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
@@ -103,6 +127,13 @@ const DatatableRecipient: React.FC<Props> = ({
                 style={{ color: "#ed8175" }}
               />
             )}
+            <Typography>
+            { !recipient.isSuggestedMatch &&
+              <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
+                <EditIcon/>
+              </IconButton>
+              }
+            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
@@ -121,6 +152,8 @@ const DatatableRecipient: React.FC<Props> = ({
                 <Typography className={classes.largeColumn}>
                   {" "}
                   {person.wish}{" "}
+                  <br/>
+                  {person.comment  ? "Kommentar til gave: "+person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
@@ -131,7 +164,8 @@ const DatatableRecipient: React.FC<Props> = ({
               Matønsker:{" "}
             </Typography>
             <Typography className={classes.largeColumn}>
-              {recipient.dinner}, {recipient.dessert} {recipient.note}
+              Middag: {capitalize(recipient.dinner)}, Dessert: {capitalize(recipient.dessert)} <br/>
+              {recipient.note  ? "Kommentar på mat: "+recipient.note : ""}
             </Typography>
           </AccordionDetails>
           <Divider />
@@ -145,10 +179,20 @@ const DatatableRecipient: React.FC<Props> = ({
               <Phone /> {recipient.contactPhoneNumber}
               <br />
               <Mail /> {recipient.contactEmail}
+              <br />
+              {recipient.referenceId}
             </Typography>
           </AccordionDetails>
         </Accordion>
       ))}
+      { selectedRecipient.familyMembers &&
+      <EditFamily
+        recipientToUpdate={selectedRecipient}
+        onClose={() => { setOpen(false)}}
+        open={open} 
+        refreshRecipients={() => refreshRecipients()}
+        />
+      }
     </Container>
   );
 };

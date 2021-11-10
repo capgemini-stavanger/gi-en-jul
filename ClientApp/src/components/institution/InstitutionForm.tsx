@@ -9,7 +9,7 @@ import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState, useCallback} from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
@@ -17,7 +17,7 @@ import ApiService from "../../common/functions/apiServiceClass";
 import InputValidator from "../InputFields/Validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
 import ConfirmationDialog from './ConfirmationDialog';
-
+import FamilyDialog from './FamilyDialog';
 
 import {
   isEmail,
@@ -28,6 +28,7 @@ import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "./IFormPerson";
 import Locations from "./InstitutionLocations";
+import useUser from "../../hooks/useUser";
 
 type PersonType = {
   Wish?: string;
@@ -80,10 +81,11 @@ const initState: {
     referenceId:string;
     familyId:string;
     open: boolean;
-  }
+  };
+
 } = {
   viewErrorTrigger: 0,
-  displayText: false, 
+  displayText: false,
   alert: {
     isLoading: false,
     msg: "",
@@ -124,7 +126,6 @@ type ValidFormEntry = {
 };
 
 const initValidFormState: ValidFormEntry = {
-  location: false,
   dinner: false,
   dessert: false,
   contactName: false,
@@ -133,23 +134,25 @@ const initValidFormState: ValidFormEntry = {
 };
 interface props {
   accessToken: string;
-} 
+}
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
-
+  const [showFamilyDialog, setShowFamilyDialog] = useState(false);
   const [formDataState, setFormDataState] = useState(initFormDataState());
   const [validFormState, setValidFormState] = useState({
     ...initValidFormState,
   });
   const apiservice = new ApiService(accessToken);
-
   const addPerson = () => {
     setFormDataState((prev) => ({
       ...prev,
       persons: [...prev.persons, getFormPerson()],
     }));
   };
+
+
+  const { location, role, institution } = useUser();
 
   const closeDialog = () => {
     setDialog(false);
@@ -257,7 +260,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const setAlert = (
     open?: boolean,
-    message?: React.ReactNode,
+    message?: React.ReactNode | string,
     severity?: "error" | "info" | "success" | "warning"
   ) => {
     setState((prev) => ({
@@ -322,13 +325,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const displayHelpText = () => {
     setState((prev) => ({
-      ...prev, 
+      ...prev,
       displayText : true,
     }));
   }
   const hideHelpText = () => {
     setState((prev) => ({
-      ...prev, 
+      ...prev,
       displayText : false,
     }));
   }
@@ -360,12 +363,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Dinner: getDinner(),
       Dessert: getDessert(),
       Note: formDataState.specialNeeds,
-      Event: "JUL2021",
-      Location: formDataState.location,
+      Location: location,
       ContactFullName: formDataState.contact.name,
       ContactEmail: formDataState.contact.email,
       ContactPhoneNumber: formDataState.contact.phoneNumber,
-      Institution: "NAV",
+      Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
@@ -411,39 +413,46 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setAlert(false);
   };
 
+
+
+  const closeFamilyDialog = () => {
+    setShowFamilyDialog(false);
+  }
+
+  const openFamilyDialog = () => {
+    setShowFamilyDialog(true);
+  }
+
   return (
     <>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         open={state.alert.open}
-        autoHideDuration={60000}
+        autoHideDuration={6000}
         onClose={handleAlertClose}
       >
         <Alert severity={state.alert.severity} onClose={handleAlertClose}>
           {state.alert.msg}
         </Alert>
       </Snackbar>
-
+      
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
-            <Locations
-              value={formDataState.location}
-              onChange={onLocationChange}
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValidLocation={getValiditySetter("location")}
-              include_header
-            />
-          </Grid>
-          <Grid item>
+            <Typography variant="h5">Tidligere registrerte familier </Typography>
+            <Button onClick={openFamilyDialog} variant="contained" color="primary"> Klikk her for å se familieoversikt </Button>
+            <Grid item >
+              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
+            </Grid>
             <Grid container spacing={1} direction="column">
               <Grid item>
-                <Typography variant="h5">Familie</Typography>
+                <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
               </Grid>
               <Grid item>
                 {formDataState.persons.map((person, i) => {
                   return (
                     <FormPerson
+                      setAlert={setAlert}
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
@@ -520,7 +529,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   onChange={onSpecialNeedsChange}
                   type="textarea"
                   fullWidth
-                  label="Spesielle behov"
+                  label="Spesielle behov (Halal, vegetar, allergier)"
                   multiline
                   placeholder="Halal, vegetar, allergier"
                   maxRows="24"
@@ -542,9 +551,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
             { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
             </Tooltip>
-          </Grid> 
+          </Grid>
           <Typography>
-           {state.displayText && 
+           {state.displayText &&
            <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
            }
           </Typography>

@@ -62,7 +62,6 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
             return givers.OrderBy(x => x.RegistrationDate).ToList();
-            
         }
 
         [HttpGet("Overview/Recipients")]
@@ -110,7 +109,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "AddEvent")]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
-            if (eventDto.StartDate <= System.DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
+            if (eventDto.StartDate <= DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
             }
@@ -133,6 +132,53 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpDelete("Connection")]
+        [Authorize(Policy = "DeleteConnection")]
+        public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
+        {
+            var giver = await _giverRepository.GetGiverAsync(location, rowKey);
+
+            if (giver?.MatchedRecipient is null)
+            {
+                return NotFound();
+            }
+
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+
+            if (recipient is null)
+            {
+                return NotFound();
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = null;
+
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = null;
+
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                
+                await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+            
+            return Ok();
+        }
 
         [HttpPost]
         [Authorize(Policy = "AddConnection")]
@@ -148,6 +194,8 @@ namespace GiEnJul.Controllers
 
             try
             {
+                var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
                 await _giverRepository.InsertOrReplaceAsync(giver);
@@ -158,12 +206,64 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
-                var title = "Du har blitt tildelt en familie!";
+                var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+
+                var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
+
+                var familyTable = "";
+                for (var i = 0; i<recipient.PersonCount; i++)
+                {
+                    if (recipient.FamilyMembers != null)
+                    {
+                        var member = recipient.FamilyMembers[i];
+                        familyTable += $"{member.ToReadableString()} <br/><br/>";
+                        familyTable += " ";
+                    }
+                }
+
                 var body =
-                    $"Hei {giver.FullName}! " +
-                    $"Du har nå fått tildelt en familie på {GetFamilyMembersString(recipient.FamilyMembers)}, og vi ønsker tilbakemelding fra deg om du fortsatt har mulighet til å gi en jul. " +
-                    $"<a href=\"{verifyLink}\">Vennligst trykk her for å bekrefte tildelingen</a> ";
+                    $"Hei {giver.FullName}, <br/><br/> " +
+
+                    $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
+                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. <br/><br/>" +
+
+                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
+
+                    $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
+                    $"{familyTable}" +
+
+                    $"<strong>Middag:</strong>  {recipient.Dinner}<br/>" +
+                    $"<strong>Dessert:</strong> {recipient.Dessert}<br/>" +
+                    $"{recipientNote} <br/><br/> " +
+
+                    $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}. <br/><br/>" +
+
+                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. " +
+                    $"Ekstra-middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. <br/><br/>" +
+
+                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Tips: <br/><br/>" +
+                    $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
+                    $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
+                    $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
+                    $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! " +
+                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg eller godteri og annet som inneholder svin og gelatin. <br/><br/>" +
+
+                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre." +
+                    $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære. <br/><br/>" +
+
+                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. Dersom du har mye klær og/eller leker du ønsker å gi, men ikke matcher familien du har fått, "+ 
+                    $"kan du sende en mail til oss, så kan vi se om vi kan få gitt det til en passende familie.<br/><br/>" +
+
+                    $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. <br/><br/>" +
+
+                    $"<b>Viktig</b>: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
+
+                    $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
+
+                    $"Hilsen {eventDto.ContactPerson} i Gi en jul {eventDto.City}";
+
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
             }
@@ -176,25 +276,11 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = false;
                 recipient.MatchedGiver = "";
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
+
                 throw e;
             }
             return Ok();
-        }
-
-        private string GetFamilyMembersString(List<Person> familyMembers)
-        {
-            var children = familyMembers.Count(x => x.Age < 18);
-            var adults = familyMembers.Count(x => x.Age >= 18);
-            var str = "";
-            if(children >= 0) 
-                str += children + " barn og ";
-            
-            if(adults == 1) 
-                str += $"{adults} voksen";
-            else 
-                str += $"{adults} voksne";
-
-            return str;
         }
 
         [HttpDelete("recipient")]
@@ -203,6 +289,35 @@ namespace GiEnJul.Controllers
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
             var deletedRecipient = await _recipientRepository.DeleteAsync(recipientToDelete);
+            return Ok();
+        }
+
+        [HttpPut("recipient")]
+        [Authorize(Policy = "UpdateRecipient")]
+        public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
+        {
+            var recipientNew = _mapper.Map<Recipient>(recipientDto);
+            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+
+            foreach (var prop in recipientOld.GetType().GetProperties())
+            {
+                var valueNew = prop.GetValue(recipientNew);
+                var valueOld = prop.GetValue(recipientOld);
+                if (valueNew == null) prop.SetValue(recipientNew, valueOld);
+            }
+
+            await _recipientRepository.InsertOrReplaceAsync(recipientNew);
+
+            try
+            {
+                await _personRepository.InsertOrReplaceBatchAsync(recipientNew.FamilyMembers);
+            }
+            catch (Exception ex)
+            {
+                await _recipientRepository.InsertOrReplaceAsync(recipientOld);
+                throw ex;
+            }
+
             return Ok();
         }
 
@@ -229,6 +344,7 @@ namespace GiEnJul.Controllers
                 .OrderBy(x => x.RegistrationDate)
                 .GroupBy(x => x.MaxReceivers)
                 .Select(x => x.First())
+                .OrderBy(x => x.MaxReceivers)
                 .ToList();
 
             return _mapper.Map<IList<GiverDataTableDto>>(suggestions);

@@ -18,6 +18,7 @@ namespace GiEnJul.Repositories
         Task<IList<Models.Recipient>> GetUnsuggestedAsync(string eventName, string location, int quantity);
         Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location);
+        Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -86,6 +87,15 @@ namespace GiEnJul.Repositories
             var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
             var query = new TableQuery<Entities.Recipient>().Where(filter);
             var recipients = await GetAllByQueryAsync(query);
+            return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution)
+        {
+            var filter = TableQuery.GenerateFilterCondition("Institution", QueryComparisons.Equal, institution);
+            var query = new TableQuery<Entities.Recipient>().Where(filter);
+            var recipients = await GetAllByQueryAsync(query);
+
             return _mapper.Map<List<Models.Recipient>>(recipients);
         }
     }

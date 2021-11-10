@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { GiverType, RecipientType } from "./Types";
+import { GiverType, RecipientType } from "../../../common/components/Types";
 import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "./Styles";
 
