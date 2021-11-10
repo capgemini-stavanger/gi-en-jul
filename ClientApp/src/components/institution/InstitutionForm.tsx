@@ -529,7 +529,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   onChange={onSpecialNeedsChange}
                   type="textarea"
                   fullWidth
-                  label="Spesielle behov"
+                  label="Spesielle behov (Halal, vegetar, allergier)"
                   multiline
                   placeholder="Halal, vegetar, allergier"
                   maxRows="24"
