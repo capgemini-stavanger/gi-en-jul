@@ -127,9 +127,11 @@ const DatatableRecipient: React.FC<Props> = ({
               />
             )}
             <Typography>
+              { (!recipient.isSuggestedMatch && !recipient.hasConfirmedMatch) &&
               <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
                 <EditIcon/>
               </IconButton>
+              }
             </Typography>
           </AccordionSummary>
           <Divider />
