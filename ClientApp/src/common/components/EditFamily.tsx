@@ -63,7 +63,7 @@ import useStyles from "../../components/admin/common/Styles";
     }
 
     useEffect(() => {
-      setNewRecipient(JSON.parse(JSON.stringify(recipientToUpdate)))
+      setNewRecipient(Object.assign({} as RecipientType, recipientToUpdate))
       getUserAccessToken().then((resp: string) => {
         setUserAccessToken(resp);
       });
@@ -121,10 +121,12 @@ import useStyles from "../../components/admin/common/Styles";
 
     const newFamilyMember = () => {
       newRecipient.familyMembers.push({age: 0, gender: 9, partitionKey: recipientToUpdate.rowKey, wish: ""} as PersonType);
+      setNewRecipient((prev) => {return { ...prev }});
     }
 
     const removeFamilyMember = (index: number) => {
       newRecipient.familyMembers.splice(index, 1);
+      setNewRecipient((prev) => {return { ...prev }});
     }
 
     return (
@@ -208,10 +210,10 @@ import useStyles from "../../components/admin/common/Styles";
                         <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient((prev) => { return{ ...prev, age:parseInt(e.target.value) }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient((prev) => { return { ...prev, age:(e.target.value) }})}}/>
+                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient((prev) => { return { ...prev, wish:(e.target.value) }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient((prev) => { return{ ...prev, age:(e.target.value) }})}}/>
+                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient((prev) => { return{ ...prev, comment:(e.target.value) }})}}/>
                         </TableCell>
                         { !familyMember.rowKey &&
                           <TableCell>
