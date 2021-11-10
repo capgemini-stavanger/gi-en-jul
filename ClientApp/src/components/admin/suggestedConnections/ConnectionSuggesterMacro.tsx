@@ -4,6 +4,7 @@ import {
   Grid,
   Slide,
   Snackbar,
+  SnackbarContent,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
@@ -13,12 +14,18 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "./Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 import useStyles from "../common/Styles";
-import MuiAlert from "@material-ui/lab/Alert";
+import MuiAlert, { Color } from "@material-ui/lab/Alert";
 import { TransitionProps } from "@material-ui/core/transitions";
 
 interface ConnectionSuggesterMacro {
   location: string;
   accessToken: string;
+}
+
+interface ISnackBar {
+  textContent: string;
+  open: boolean;
+  severity: Color;
 }
 
 type ConnectionSuggestionProps = {
@@ -37,9 +44,10 @@ const initialState: ConnectionSuggestionProps = {
   refreshing: false,
 };
 
-const initialSnackBar = {
+const initialSnackBar: ISnackBar = {
   textContent: "",
   open: false,
+  severity: "success"
 };
 
 const slideTransition = (props: TransitionProps) => {
@@ -70,17 +78,13 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
             refreshing: false
           }))
         } else {
-          alert("Kunne ikke hente familier, prøv igjen");
+          setState(initialState);
+          setSnackbarContent({textContent:"Kunne ikke hente familier, prøv igjen senere.", open:true, severity: "error"});
         }
       });
   };
 
-  useEffect(() => {
-    getSuggestedRecipients();
-  }, []);
-
-  //Fetch suggested givers, if recipients are updated
-  useEffect(() => {
+  const getSuggestedGivers = () => {
     api
       .get("admin/Suggestions/Giver", {
         params: { location: location },
@@ -89,9 +93,18 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         if (response.status == 200) {
           setState((prev) => ({ ...prev, givers: response.data }));
         } else {
-          alert("Kunne ikke hente givere, prøv igjen");
+          setSnackbarContent({textContent:"Kunne ikke hente givere, prøv igjen senere.", open:true, severity: "error"});
         }
       });
+    }
+
+  useEffect(() => {
+    getSuggestedRecipients();
+  }, []);
+
+  //Fetch suggested givers, if recipients are updated
+  useEffect(() => {
+    getSuggestedGivers();
   }, []);
 
   const updateSelectedRecipient = (newSelected: RecipientType): void => {
@@ -116,10 +129,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .then((response) => {
         if (response.status == 200) {
           const snackbarText = ` Foreslo kobling til ${state.selectedGiver.fullName} med familie: ${state.selectedRecipient.familyId}`;
-          setSnackbarContent({ textContent: snackbarText, open: true });
+          setSnackbarContent({ textContent: snackbarText, open: true, severity: "success" });
           getSuggestedRecipients();
+          getSuggestedGivers();
         } else {
-          alert("Kunne ikke sende kobling, prøv igjen");
+          setSnackbarContent({textContent:"Kunne ikke foreslå kobling, prøv igjen senere.", open:true, severity: "error"});
         }
       });
   };
@@ -181,10 +195,10 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         open={snackbarContent.open}
         autoHideDuration={2000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         TransitionComponent={slideTransition}
       >
-        <MuiAlert severity="success" variant="filled">
+        <MuiAlert severity={snackbarContent.severity} variant="filled">
           {snackbarContent.textContent}
         </MuiAlert>
       </Snackbar>
