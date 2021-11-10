@@ -38,6 +38,7 @@ export interface SelectedConnectionType {
     rowKey: string;
     familyId: number;
   }
+
   export interface PersonType {
     partitionKey: string;
     rowKey: string;

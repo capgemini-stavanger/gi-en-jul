@@ -23,7 +23,7 @@ const How = () => {
               Som giver gir du julemiddag og julegaver til
               en familie som virkelig trenger det. Dette er foreldre og barn som
               ikke selv har mulighet til å kjøpe en skikkelig julemiddag,
-              julesnop eller julegaver til hverandre. I år kan du melde deg som giver i Gjesdal, 
+              julesnop eller julegaver til hverandre. I år kan du melde deg som giver i Gjesdal,
               Sandnes, Sola eller Stavanger.
             </Typography>
           </div>

@@ -181,8 +181,9 @@ const SummaryRegistration: React.FC<Props> = ({
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
       <Typography className={classes.infoText}>
-        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før du sender inn. Sjekk gjerne at
-        telefonnummer og epostadresse er riktig skrevet.{" "}
+        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før
+        du sender inn. Sjekk gjerne at telefonnummer og epostadresse er riktig
+        skrevet.{" "}
       </Typography>
       <Container>
         <Grid container className={classes.form}>
@@ -349,23 +350,24 @@ const SummaryRegistration: React.FC<Props> = ({
             />
           </FormControl>
           {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
-          <div className={classes.captchaContainer}><Typography variant="caption" gutterBottom>
-            Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
-            <Link
-              color="textSecondary"
-              href="https://policies.google.com/privacy"
-            >
-              personvernerklæring
-            </Link>{" "}
-            og{" "}
-            <Link
-              color="textSecondary"
-              href="https://policies.google.com/terms"
-            >
-              vilkår for bruk
-            </Link>{" "}
-            gjelder.
-          </Typography>
+          <div className={classes.captchaContainer}>
+            <Typography variant="caption" gutterBottom>
+              Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
+              <Link
+                color="textSecondary"
+                href="https://policies.google.com/privacy"
+              >
+                personvernerklæring
+              </Link>{" "}
+              og{" "}
+              <Link
+                color="textSecondary"
+                href="https://policies.google.com/terms"
+              >
+                vilkår for bruk
+              </Link>{" "}
+              gjelder.
+            </Typography>
           </div>
         </Grid>
         <Pager

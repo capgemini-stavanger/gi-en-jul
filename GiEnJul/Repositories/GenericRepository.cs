@@ -40,7 +40,6 @@ namespace GiEnJul.Repositories
         {
             try
             {
-                _log.Verbose("Trying to delete Entity:{@entity} in table:{@tablename}.", entity, _table.Name);
                 entity.ETag = "*";
                 var operation = TableOperation.Delete(entity);
                 var result = await _table.ExecuteAsync(operation);
@@ -67,7 +66,6 @@ namespace GiEnJul.Repositories
             var batchOperation = new TableBatchOperation();
             try
             {
-                _log.Verbose("Trying to delete multiple entities, in table:{@tablename}", _table.Name);
                 foreach (var entity in entities)
                 {
                     batchOperation.Delete(entity);
@@ -108,7 +106,7 @@ namespace GiEnJul.Repositories
                 _log.Verbose("Trying to add Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
                 var operation = TableOperation.InsertOrReplace(entity);
                 var result = await _table.ExecuteAsync(operation, null, context);
-                _log.Debug("Added Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
+                _log.Debug("Added or updated Entity:{@entity}, into table:{@tablename}", entity, _table.Name);
 
                 return (T)result.Result;
             }
@@ -135,7 +133,7 @@ namespace GiEnJul.Repositories
                     batchOperation.InsertOrReplace(entity);
                 }
                 var result = await _table.ExecuteBatchAsync(batchOperation);
-                _log.Debug("Added multiple entities, into table:{@tablename}", _table.Name);
+                _log.Debug("Added or updated multiple entities, into table:{@tablename}", _table.Name);
                 return result;
             }
             catch (Exception e)
@@ -167,7 +165,7 @@ namespace GiEnJul.Repositories
 
                 } while (token != null);
 
-                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _table.Name);
+                _log.Information("Fetched {0} entities in table:{1}", entities.Count, _table.Name);
                 return entities;
             }
             catch (Exception e)
