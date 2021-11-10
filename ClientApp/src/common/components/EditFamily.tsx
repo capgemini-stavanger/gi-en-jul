@@ -113,7 +113,7 @@ import useStyles from "../../components/admin/common/Styles";
     }
 
     const updateFamily = () => {
-      Object.assign({} as RecipientType, newRecipient);
+      setNewRecipient(JSON.parse(JSON.stringify(Object.assign({} as RecipientType, newRecipient))));
       updateRecipient();
       onClose()
     }

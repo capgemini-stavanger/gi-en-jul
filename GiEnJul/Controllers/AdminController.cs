@@ -294,7 +294,7 @@ namespace GiEnJul.Controllers
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
             var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
-
+            
             foreach (var prop in recipientOld.GetType().GetProperties())
             {
                 var valueNew = prop.GetValue(recipientNew);
