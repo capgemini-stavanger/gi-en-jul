@@ -1,4 +1,3 @@
-// import React from "react";
 import { Route } from "react-router";
 import AdminPage from "../src/components/admin/AdminPage";
 import LoadingPage from "./common/components/LoadingPage";
@@ -8,11 +7,8 @@ import Institution from "./components/institution/InstitutionMacro";
 import RegistrationMacro from "./components/registerGiver/Macro";
 import VerifyConnection from "./components/verifyConnection/verifyConnection";
 import "./custom.css";
-// import { Store } from "./Store";
 
 const App = () => {
-  // const { state, dispatch } = React.useContext(Store);
-
   return (
     <>
       <Route path="/admin" component={AdminPage} />

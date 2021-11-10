@@ -1,24 +1,13 @@
 import { Auth0Provider } from "@auth0/auth0-react";
 import "bootstrap/dist/css/bootstrap.css";
-// import { ConnectedRouter } from "connected-react-router";
-import { Router } from "react-router";
-import { createBrowserHistory } from "history";
-// import { createBrowserHistory } from "history";
+import { BrowserRouter as Router } from "react-router-dom";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { StoreProvider } from "./Store";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
-// import history from "./history";
-
-// Create browser history to use in the Redux store
-// const baseUrl = document
-//   .getElementsByTagName("base")[0]
-//   .getAttribute("href") as string;
-// const history = createBrowserHistory({ basename: baseUrl });
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
 const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
@@ -152,22 +141,20 @@ export const theme = createTheme({
 });
 
 ReactDOM.render(
-  <StoreProvider>
-    <ThemeProvider theme={theme}>
-      <Auth0Provider
-        domain={domainEnv}
-        clientId={clientidEnv}
-        redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
-        audience={apiurl}
-      >
-        <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey} language="no">
-          <Router history={createBrowserHistory()}>
-            <App />
-          </Router>
-        </GoogleReCaptchaProvider>
-      </Auth0Provider>
-    </ThemeProvider>
-  </StoreProvider>,
+  <ThemeProvider theme={theme}>
+    <Auth0Provider
+      domain={domainEnv}
+      clientId={clientidEnv}
+      redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
+      audience={apiurl}
+    >
+      <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey} language="no">
+        <Router>
+          <App />
+        </Router>
+      </GoogleReCaptchaProvider>
+    </Auth0Provider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 
