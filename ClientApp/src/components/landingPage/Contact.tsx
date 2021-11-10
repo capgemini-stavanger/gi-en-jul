@@ -43,7 +43,7 @@ const Contact : React.FC<Props> = ({contacts}) => {
   const classes = useStyles();
 
 const ContactCards = contacts.map((contact, index) =>
-  <div key={index}> 
+  <div key={index}>
   <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>{contact.city}</Typography>
@@ -101,10 +101,10 @@ const ContactCards = contacts.map((contact, index) =>
       {/* Todo: Legg inn scrolle-link under */}
       { ContactCards.length &&
       <Typography className={classes.contactContent}>
-        Før du tar kontakt, se om du finner svaret på det du lurer på i <br /> 
+        Før du tar kontakt, se om du finner svaret på det du lurer på i <br />
         <Scroll to="questions" smooth={true}>
                   <span className={classes.textLink}>ofte stilte spørsmål.</span>
-          </Scroll> 
+          </Scroll>
           
       </Typography>
        ||

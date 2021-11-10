@@ -1,10 +1,10 @@
  import {
-     Button, 
-     Dialog, 
-     DialogActions, 
-     DialogContent, 
-     DialogContentText, 
-     DialogTitle, 
+     Button,
+     Dialog,
+     DialogActions,
+     DialogContent,
+     DialogContentText,
+     DialogTitle,
  } from "@material-ui/core";
  import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
  import Recipient from "../admin/overview/Recipient";
@@ -18,7 +18,7 @@
 
 interface IFamilyDialog{
      open: boolean;
-     accessToken: string; 
+     accessToken: string;
      institution?: string;
      handleClose : () => void;
  }

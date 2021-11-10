@@ -187,7 +187,7 @@ const DatatableRecipient: React.FC<Props> = ({
       <EditFamily
         recipientToUpdate={selectedRecipient}
         onClose={() => { setOpen(false)}}
-        open={open} 
+        open={open}
         refreshRecipients={() => refreshRecipients()}
         />
       }
