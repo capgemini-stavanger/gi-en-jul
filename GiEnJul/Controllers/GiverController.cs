@@ -105,14 +105,14 @@ namespace GiEnJul.Controllers
                 $"<h3>Innkjøp av julegaver </h3>" +
                 $"Husk at det er gaveønsker og ikke handleliste som må følges til punkt og prikke. Dersom ønskene er gavekort, kan du likevel kjøpe en gave du synes passer til alderen.<br/><br/>" +
 
-                $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre." +
+                $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. " +
                 $"Det er lurt å legge byttelapp oppi esken. Pakk gjerne i bananesker, eller andre esker som er enkle å bære.<br/><br/>" +
 
-                $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven. " +
                 $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
 
                 $"Igjen vil vi si tusen takk for at du har meldt seg som giver! Vi håper du har fått informasjonen du trenger, <br/>" +
-                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href={eventDto.Facebook}'>Facebook-eventet<a/>. <br/><br/>" +
+                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href={eventDto.Facebook}>Facebook<a/>. <br/><br/>" +
 
                 $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
 

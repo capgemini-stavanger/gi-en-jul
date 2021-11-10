@@ -91,6 +91,7 @@ const DatatableRecipient: React.FC<Props> = ({
           key={recipient.rowKey}
           className={classes.accordionContainer}
           onChange={() => { handleRecipientChange(recipient) }}
+
           onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary

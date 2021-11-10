@@ -209,7 +209,7 @@ namespace GiEnJul.Controllers
                 var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
 
-                var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"Merk: {recipient.Note}.";
+                var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 
                 var familyTable = "";
                 for (var i = 0; i<recipient.PersonCount; i++)
@@ -233,7 +233,9 @@ namespace GiEnJul.Controllers
                     $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
                     $"{familyTable}" +
 
-                    $" Foretrukket middag: {recipient.Dinner} og {recipient.Dessert}. {recipientNote} <br/><br/>" +
+                    $"<strong>Middag:</strong>  {recipient.Dinner}<br/>" +
+                    $"<strong>Dessert:</strong> {recipient.Dessert}<br/>" +
+                    $"{recipientNote} <br/><br/> " +
 
                     $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}. <br/><br/>" +
 
@@ -294,7 +296,7 @@ namespace GiEnJul.Controllers
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
             var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
-            
+
             foreach (var prop in recipientOld.GetType().GetProperties())
             {
                 var valueNew = prop.GetValue(recipientNew);

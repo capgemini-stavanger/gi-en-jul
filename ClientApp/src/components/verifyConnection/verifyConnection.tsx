@@ -47,13 +47,10 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                 <Grid item>
                   <Container className={classes.giverForm}>
                     <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen <br />
-                      du skal gjøre!
+                      Tusen takk for at du skal Gi en jul! <br />
                     </Typography>
                     <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det
-                      blir mange tårevåte øyeblikk når familiene får eskene
-                      sine. Håper du koser deg med finne en fin gave.
+                      Familiene setter utrolig stor pris på det, og det blir mange tårevåte øyeblikk når de får eskene sine. Håper at du koser deg med handlingen! Hilsen oss i Gi en jul.
                     </Typography>
                   </Container>
                 </Grid>
