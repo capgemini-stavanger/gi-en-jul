@@ -22,7 +22,6 @@ namespace GiEnJul.Repositories
         Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location);
         Task<int> GetGiversCountByLocationAsync(string eventName, string location);
         Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
-        Task<int> GetGiversCountByLocationAsync(string eventName, string location);
 
     }
 
