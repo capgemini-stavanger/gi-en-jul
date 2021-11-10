@@ -9,13 +9,13 @@ import * as Types from "../suggestedConnections/Types";
 type Props = {
   data: RecipientType[] | [];
   refreshRecipients: () => void;
-  accessToken: string;
+  handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const Recipient: React.FC<Props> = ({
   data,
   refreshRecipients,
-  accessToken
+  handleRecipientChange,
 }) => {
   const [query, setQuery] = useState("");
 
@@ -52,7 +52,7 @@ const Recipient: React.FC<Props> = ({
       <Datatable
         data={search(data)}
         refreshRecipients={() => refreshRecipients()}
-        accessToken={accessToken}
+        handleRecipientChange={handleRecipientChange}
       />
     </Container>
   );

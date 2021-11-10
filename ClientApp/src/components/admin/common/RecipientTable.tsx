@@ -6,6 +6,7 @@ import {
   Divider,
   Typography,
   IconButton,
+  capitalize
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -26,13 +27,13 @@ import EditFamily from "../../../common/components/EditFamily";
 type Props = {
   data: RecipientType[] | [];
   refreshRecipients: () => void;
-  accessToken: string;
+  handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  accessToken,
   refreshRecipients,
+  handleRecipientChange,
 }) => {
   const classes = useStyles();
 
@@ -90,6 +91,8 @@ const DatatableRecipient: React.FC<Props> = ({
           expanded={selected == index}
           key={recipient.rowKey}
           className={classes.accordionContainer}
+          onChange={() => { handleRecipientChange(recipient) }}
+
           onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
@@ -147,6 +150,8 @@ const DatatableRecipient: React.FC<Props> = ({
                 <Typography className={classes.largeColumn}>
                   {" "}
                   {person.wish}{" "}
+                  <br/>
+                  {person.comment  ? "Kommentar til gave: "+person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
@@ -157,7 +162,8 @@ const DatatableRecipient: React.FC<Props> = ({
               Matønsker:{" "}
             </Typography>
             <Typography className={classes.largeColumn}>
-              {recipient.dinner}, {recipient.dessert} {recipient.note}
+              Middag: {capitalize(recipient.dinner)}, Dessert: {capitalize(recipient.dessert)} <br/>
+              {recipient.note  ? "Kommentar på mat: "+recipient.note : ""}
             </Typography>
           </AccordionDetails>
           <Divider />
@@ -171,16 +177,17 @@ const DatatableRecipient: React.FC<Props> = ({
               <Phone /> {recipient.contactPhoneNumber}
               <br />
               <Mail /> {recipient.contactEmail}
+              <br />
+              {recipient.referenceId}
             </Typography>
           </AccordionDetails>
         </Accordion>
       ))}
       { selectedRecipient.familyMembers &&
       <EditFamily
-        recipient={selectedRecipient}
+        recipientToUpdate={selectedRecipient}
         onClose={() => { setOpen(false)}}
         open={open} 
-        accessToken={accessToken}
         refreshRecipients={() => refreshRecipients()}
         />
       }
