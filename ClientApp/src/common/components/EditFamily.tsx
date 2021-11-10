@@ -31,7 +31,7 @@ import useStyles from "../../components/admin/common/Styles";
 
 
   interface IEditFamilyDialog {
-    recipient: RecipientType;
+    recipientToUpdate: RecipientType;
     onClose: () => void;
     open: boolean;
     refreshRecipients: () => void;
@@ -51,7 +51,7 @@ import useStyles from "../../components/admin/common/Styles";
 
   const EditFamilyDialog
   : FC<IEditFamilyDialog> = ({
-    recipient,
+    recipientToUpdate,
     onClose,
     open,
     refreshRecipients,
@@ -63,7 +63,6 @@ import useStyles from "../../components/admin/common/Styles";
     }
 
     useEffect(() => {
-      setNewRecipient(JSON.parse(JSON.stringify(recipient)))
       getUserAccessToken().then((resp: string) => {
         setUserAccessToken(resp);
       });
@@ -72,7 +71,7 @@ import useStyles from "../../components/admin/common/Styles";
     const { getAccessTokenSilently } = useAuth0();
     const [userAccessToken, setUserAccessToken] = useState<string>("");
     const apiservice = new ApiService(userAccessToken);
-    const [newRecipient, setNewRecipient] = useState(JSON.parse(JSON.stringify(recipient)));
+    const [newRecipient, setNewRecipient] = useState(Object.assign({} as RecipientType, recipientToUpdate));
     const [state, setState] = useState(alertState);
 
     const classes = useStyles();
@@ -115,19 +114,16 @@ import useStyles from "../../components/admin/common/Styles";
     }
 
     const updateFamily = () => {
-      setNewRecipient(JSON.parse(JSON.stringify(Object.assign({} as RecipientType, newRecipient))));
       updateRecipient();
       onClose()
     }
 
     const newFamilyMember = () => {
-      newRecipient.familyMembers.push({age: 0, gender: 9, partitionKey: recipient.rowKey, wish: ""} as PersonType);
-      setNewRecipient(JSON.parse(JSON.stringify(newRecipient)));
+      newRecipient.familyMembers.push({age: 0, gender: 9, partitionKey: recipientToUpdate.rowKey, wish: ""} as PersonType);
     }
 
     const removeFamilyMember = (index: number) => {
       newRecipient.familyMembers.splice(index, 1);
-      setNewRecipient(JSON.parse(JSON.stringify(newRecipient)));
     }
 
     return (
@@ -161,16 +157,16 @@ import useStyles from "../../components/admin/common/Styles";
                   <TableBody>
                     <TableRow>
                       <TableCell>
-                        <Input type="text" value={newRecipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dinner = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        <Input type="text" value={newRecipient.dinner} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, dinner: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.dessert = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        <Input type="text" value={newRecipient.dessert} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, dessert: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.note = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        <Input type="text" value={newRecipient.note} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, note: e.target.value }})}}/>
                       </TableCell>
                       <TableCell>
-                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {newRecipient.referenceId = e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        <Input type="text" value={newRecipient.referenceId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setNewRecipient((prev) => {return { ...prev, refereneId: e.target.value }})}}/>
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -208,13 +204,13 @@ import useStyles from "../../components/admin/common/Styles";
                         </Select>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient((prev) => {return { ...prev, age: parseInt(e.target.value) }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient((prev) => {return { ...prev, wish: e.target.value }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient(JSON.parse(JSON.stringify(newRecipient)))}}/>
+                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient((prev) => {return { ...prev, comment: e.target.value }})}}/>
                         </TableCell>
                         { !familyMember.rowKey &&
                           <TableCell>
