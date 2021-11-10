@@ -205,13 +205,13 @@ import useStyles from "../../components/admin/common/Styles";
                         </Select>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient((prev) => { return{ ...prev, age:parseInt(e.target.value) }})}}/>
+                        <Input type="number" value={familyMember.age} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.age=parseInt(e.target.value); setNewRecipient((prev) => { return{ ...prev, age: parseInt(e.target.value) }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient((prev) => { return { ...prev, age:(e.target.value) }})}}/>
+                          <Input type="text" value={familyMember.wish} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.wish=e.target.value; setNewRecipient((prev) => { return { ...prev, wish: (e.target.value) }})}}/>
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient((prev) => { return{ ...prev, age:(e.target.value) }})}}/>
+                          <Input type="text" value={familyMember.comment} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {familyMember.comment=e.target.value; setNewRecipient((prev) => { return{ ...prev, comment: (e.target.value) }})}}/>
                         </TableCell>
                         { !familyMember.rowKey &&
                           <TableCell>
