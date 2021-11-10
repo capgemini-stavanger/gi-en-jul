@@ -6,7 +6,6 @@ import {
   Divider,
   Typography,
   IconButton,
-  capitalize
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -128,9 +127,11 @@ const DatatableRecipient: React.FC<Props> = ({
               />
             )}
             <Typography>
+              { (!recipient.isSuggestedMatch && !recipient.hasConfirmedMatch) &&
               <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
                 <EditIcon/>
               </IconButton>
+              }
             </Typography>
           </AccordionSummary>
           <Divider />
@@ -150,8 +151,6 @@ const DatatableRecipient: React.FC<Props> = ({
                 <Typography className={classes.largeColumn}>
                   {" "}
                   {person.wish}{" "}
-                  <br/>
-                  {person.comment  ? "Kommentar til gave: "+person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
@@ -162,8 +161,7 @@ const DatatableRecipient: React.FC<Props> = ({
               Matønsker:{" "}
             </Typography>
             <Typography className={classes.largeColumn}>
-              Middag: {capitalize(recipient.dinner)}, Dessert: {capitalize(recipient.dessert)} <br/>
-              {recipient.note  ? "Kommentar på mat: "+recipient.note : ""}
+              {recipient.dinner}, {recipient.dessert} {recipient.note}
             </Typography>
           </AccordionDetails>
           <Divider />
@@ -177,8 +175,6 @@ const DatatableRecipient: React.FC<Props> = ({
               <Phone /> {recipient.contactPhoneNumber}
               <br />
               <Mail /> {recipient.contactEmail}
-              <br />
-              {recipient.referenceId}
             </Typography>
           </AccordionDetails>
         </Accordion>
