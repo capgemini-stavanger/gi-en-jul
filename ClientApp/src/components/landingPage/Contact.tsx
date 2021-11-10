@@ -101,9 +101,9 @@ const ContactCards = contacts.map((contact, index) =>
       {/* Todo: Legg inn scrolle-link under */}
       { ContactCards.length &&
       <Typography className={classes.contactContent}>
-        Før du tar kontakt, se om du finner svaret på det du lurer på i 
+        Før du tar kontakt, se om du finner svaret på det du lurer på i <br /> 
         <Scroll to="questions" smooth={true}>
-                  <Typography className={classes.textLink}>ofte stilte spørsmål.</Typography>
+                  <span className={classes.textLink}>ofte stilte spørsmål.</span>
           </Scroll> 
           
       </Typography>

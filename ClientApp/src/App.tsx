@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Route } from "react-router";
 import AdminPage from "../src/components/admin/AdminPage";
 import LoadingPage from "./common/components/LoadingPage";
@@ -12,16 +11,16 @@ import "./custom.css";
 const App = () => {
   return (
     <>
-        <Route path="/admin" component={AdminPage} />
-        <Route exact path="/" component={Home} />
-        <Route path="/registrer-familie" component={Institution} />
-        <Route path="/bli-giver" component={RegistrationMacro} />
-        <Route path="/rediger" component={Edit} />
-        <Route path="/loading" component={LoadingPage} />
-        <Route
-          path="/:giverRowKey/:recipientRowKey/:partitionKey"
-          component={VerifyConnection}
-        />
+      <Route path="/admin" component={AdminPage} />
+      <Route exact path="/" component={Home} />
+      <Route path="/registrer-familie" component={Institution} />
+      <Route path="/bli-giver" component={RegistrationMacro} />
+      <Route path="/rediger" component={Edit} />
+      <Route path="/loading" component={LoadingPage} />
+      <Route
+        path="/:giverRowKey/:recipientRowKey/:partitionKey"
+        component={VerifyConnection}
+      />
     </>
   );
 };

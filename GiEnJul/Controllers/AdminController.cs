@@ -276,6 +276,8 @@ namespace GiEnJul.Controllers
                 recipient.IsSuggestedMatch = false;
                 recipient.MatchedGiver = "";
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
+
                 throw e;
             }
             return Ok();
@@ -309,7 +311,6 @@ namespace GiEnJul.Controllers
             try
             {
                 await _personRepository.InsertOrReplaceBatchAsync(recipientNew.FamilyMembers);
-                
             }
             catch (Exception ex)
             {
