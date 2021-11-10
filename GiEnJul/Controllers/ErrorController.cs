@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 
 namespace GiEnJul.Controllers
@@ -10,6 +11,14 @@ namespace GiEnJul.Controllers
     [ApiController]
     public class ErrorController : ControllerBase
     {
+
+        private readonly ILogger _log;
+
+        public ErrorController(ILogger log)
+        {
+            _log = log;
+        }
+
         [Route("/error-local-development")]
         public IActionResult ErrorLocalDevelopment([FromServices] IWebHostEnvironment webHostEnvironment)
         {
@@ -28,6 +37,11 @@ namespace GiEnJul.Controllers
         }
 
         [Route("/error")]
-        public IActionResult Error() => Problem();
+        public IActionResult Error()
+        {
+            var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            _log.Error(context.Error, "");
+            return Problem();
+        }
     }
 }
