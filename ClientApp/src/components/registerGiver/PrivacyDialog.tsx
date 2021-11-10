@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { FC } from "react";
+import React, { FC } from "react";
 import useStyles from "./Styles";
 
 interface IPrivacyDialog {
@@ -72,21 +72,21 @@ const PrivacyDialog: FC<IPrivacyDialog> = ({
       </DialogTitle>
       <DialogContent dividers>
         {PrivacyTexts.headers.map((head, i) => (
-          <>
+          <React.Fragment  key={i}>
             <Typography variant="h6">
               {i + 1}
               {". " + head}
             </Typography>
             <Typography>{PrivacyTexts.text[i]}</Typography>
             <br />
-          </>
+          </React.Fragment>
         ))}
         <Typography variant="subtitle2">Kontaktinformasjon</Typography>
         <Typography variant="caption">
           Henvendelser om hvilke opplysninger som er registrert, retting og
           sletting kan sende skriftlig til følgende adresser:
           <a href={"mailto:stavanger@gienjul.no"}> stavanger@gienjul.no</a>
-        </Typography>
+        </Typography> 
       </DialogContent>
       {!privacyState && (
         <DialogActions>
