@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace GiEnJul.Repositories
 {
@@ -20,6 +22,8 @@ namespace GiEnJul.Repositories
         Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location);
         Task<int> GetGiversCountByLocationAsync(string eventName, string location);
         Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
+        Task<int> GetGiversCountByLocationAsync(string eventName, string location);
+
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
