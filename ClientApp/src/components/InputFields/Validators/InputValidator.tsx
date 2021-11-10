@@ -94,7 +94,7 @@ const InputValidator: FC<InputValidatorProps> = ({
   };
 
   const validate = () => {
-    let errorMsg: string | undefined = undefined;
+    let errorMsg: string | undefined;
     let isAnyInvalid = false;
 
     validators.forEach((item, i) => {

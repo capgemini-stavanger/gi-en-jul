@@ -39,7 +39,7 @@ const Recipient: React.FC<Props> = ({
         <Grid item>
           <Search />
         </Grid>
-        <Grid item 
+        <Grid item
         >
           <TextField
             placeholder="Søk etter familie"
