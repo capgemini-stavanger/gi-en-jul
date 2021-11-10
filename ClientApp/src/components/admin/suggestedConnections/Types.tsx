@@ -33,4 +33,5 @@ export interface PersonType {
   wish: string;
   age: number;
   gender: Gender;
+  comment: string;
 }
