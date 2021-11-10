@@ -14,6 +14,7 @@ namespace GiEnJul.Dtos
         [Required]
         public string Dessert { get; set; }
         public string Note { get; set; }
+        public string ReferenceId { get; set; }
         [Required]
         [MinLength(1)]
         [MaxLength(999)]

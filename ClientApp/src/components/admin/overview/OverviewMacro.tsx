@@ -144,8 +144,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              accessToken={accessToken}
               refreshRecipients={() => fetchRecipients()}
+              handleRecipientChange={handleRecipientChange}
             />
           </Grid>
         </Grid>
