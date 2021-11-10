@@ -26,8 +26,8 @@ const style = {
 const Information : React.FC = () => {
   const classes = useStyles();
 
-  const ContactCard = 
-  <div key={"Information"}> 
+  const ContactCard =
+  <div key={"Information"}>
   <Grid className={classes.contactItem}>
     <Card className={classes.contactCard}>
       <Typography className={classes.contactHeader}>Start Gi en jul i din kommune?</Typography>
