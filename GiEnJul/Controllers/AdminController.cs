@@ -61,7 +61,11 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
-            return givers.OrderBy(x => x.RegistrationDate).ToList();
+            return givers
+                .OrderBy(x => x.HasConfirmedMatch)
+                .ThenBy(x => x.IsSuggestedMatch)
+                .ThenBy(x => x.RegistrationDate)
+                .ToList();
         }
 
         [HttpGet("Overview/Recipients")]
@@ -74,7 +78,10 @@ namespace GiEnJul.Controllers
             {
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             }
-            return recipients;
+            return recipients
+                .OrderBy(x => x.HasConfirmedMatch)
+                .ThenBy(x => x.IsSuggestedMatch)
+                .ToList();
         }
 
         [HttpGet("excel/delivery/{location}")]
@@ -94,14 +101,6 @@ namespace GiEnJul.Controllers
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
             var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
-            var suggestedGiver = await _giverRepository.GetSuggestedAsync(eventName, location);
-            var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
-            foreach (var giver in suggestedGiver)
-            {
-                var mathedGiver = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
-                suggestedRecipient.Remove(mathedGiver);
-                connecitonDtos.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
-            }
             return connecitonDtos;
         }
 
