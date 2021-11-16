@@ -225,8 +225,6 @@ namespace GiEnJul.Controllers
                     $"Hei {giver.FullName}, <br/><br/> " +
 
                     $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
-                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. <br/><br/>" +
-
                     $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
 
                     $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
