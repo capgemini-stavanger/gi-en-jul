@@ -17,7 +17,7 @@ import { Alert } from "@material-ui/lab";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
-  recipient: {} as RecipientType,
+  recipient: undefined,
 };
 interface IOverviewMacro {
   location: string;
@@ -82,7 +82,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
-            recipient: {} as RecipientType,
+            recipient: undefined,
           };
         });
       } else {
