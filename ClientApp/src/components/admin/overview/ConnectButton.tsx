@@ -6,11 +6,13 @@ import { SelectedConnectionType } from "../../../common/components/Types";
 type ConnectButtonProps = {
   selectedConnection: SelectedConnectionType;
   connectGiverRecipient: () => void;
+  confirmModal: () => void; 
 };
 
 const ConnectButton: React.FC<ConnectButtonProps> = ({
   selectedConnection,
   connectGiverRecipient,
+  confirmModal,
 }) => {
   const classes = useStyles();
   const displayButton = () => {
@@ -48,7 +50,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({
     ) {
       return (
         <Button
-          onClick={connectGiverRecipient}
+          onClick={confirmModal}
           className={classes.finishedButton}
         >
           Koble sammen <br />

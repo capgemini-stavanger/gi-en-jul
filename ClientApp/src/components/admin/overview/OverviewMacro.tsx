@@ -1,4 +1,4 @@
-import { Container, Grid, Snackbar, Typography } from "@material-ui/core";
+import { Container, Grid, Snackbar,Typography, Modal, Box, Button} from "@material-ui/core";
 import React, {
   useCallback,
   useEffect,
@@ -23,6 +23,18 @@ interface IOverviewMacro {
   location: string;
   accessToken: string;
 }
+
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
   
 const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [selectedConnection, setSelectedConnection] =
@@ -31,6 +43,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const apiservice = new ApiService(accessToken);
   const [open, setOpen] = useState(false);
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
 
   async function fetchGivers() {
     await apiservice
@@ -149,9 +163,20 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             />
           </Grid>
         </Grid>
+        <Modal open={open}>
+          <Box sx={style}>
+            <Typography variant="h6" component="h2">
+              Bekreft at du vil koble {selectedConnection.giver?.fullName} sammen med familienummer{""}
+              {selectedConnection.recipient?.familyId}
+              </Typography>
+              <Button color="primary" onClick={() => {connectGiverRecipient();closeModal();}}>Yes</Button>
+              <Button color="secondary" onClick={closeModal}>Nei</Button>
+          </Box>
+          </Modal>
         <ConnectButton
           selectedConnection={selectedConnection}
           connectGiverRecipient={connectGiverRecipient}
+          confirmModal={openModal}
         />
       </Container>
     </>
