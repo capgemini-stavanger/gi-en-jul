@@ -8,8 +8,8 @@ import IFormData from "./IFormData";
 import FamilySize from "./FamilySize";
 import getLocations from "../../common/constants/Locations";
 import useStyles from "./Styles";
-import NavBar from "../../common/components/NavBar";
-import LoadingPage from "../../common/components/LoadingPage";
+import NavBar from "./../shared/NavBar/NavBar";
+import LoadingPage from "./../../pages/LoadingPage";
 
 const initFormDataState: IFormData = {
   location: "",

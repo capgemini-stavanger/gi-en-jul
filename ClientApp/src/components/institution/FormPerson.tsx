@@ -13,8 +13,8 @@ import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import { GENDERS } from "../../common/constants/Genders";
 import Gender from "../../common/enums/Gender";
-import InputValidator from "../InputFields/Validators/InputValidator";
-import { isNotNull, isInt } from "../InputFields/Validators/Validators";
+import InputValidator from "../shared/InputFields/Validators/InputValidator";
+import { isNotNull, isInt } from "../shared/InputFields/Validators/Validators";
 import IFormPerson from "./IFormPerson";
 import MessageDialog from "./MessageDialog";
 

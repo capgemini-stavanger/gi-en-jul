@@ -14,7 +14,7 @@ import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
 import ApiService from "../../common/functions/apiServiceClass";
-import InputValidator from "../InputFields/Validators/InputValidator";
+import InputValidator from "../shared/InputFields/Validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
 import ConfirmationDialog from './ConfirmationDialog';
 import FamilyDialog from './FamilyDialog';
@@ -23,7 +23,7 @@ import {
   isEmail,
   isNotNull,
   isPhoneNumber,
-} from "../InputFields/Validators/Validators";
+} from "../shared/InputFields/Validators/Validators";
 import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "./IFormPerson";

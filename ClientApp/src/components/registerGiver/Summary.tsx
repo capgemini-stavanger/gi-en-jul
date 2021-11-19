@@ -16,12 +16,12 @@ import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
 import ApiService from "../../common/functions/apiServiceClass";
-import InputValidator from "../InputFields/Validators/InputValidator";
+import InputValidator from "../shared/InputFields/Validators/InputValidator";
 import {
   isEmail,
   isNotNull,
   isPhoneNumber,
-} from "../InputFields/Validators/Validators";
+} from "../shared/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import PrivacyDialog from "./PrivacyDialog";

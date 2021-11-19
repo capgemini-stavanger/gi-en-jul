@@ -6,8 +6,8 @@ import {
   NavbarBrand,
   NavbarToggler,
 } from "reactstrap";
-import LogOutButton from "../../components/login/LogOutButton";
-import logo from "./../../styling/img/logo_green.svg";
+import LogOutButton from "./../../../components/login/LogOutButton";
+import logo from "./../../../styling/img/logo_green.svg";
 import "./NavMenuAdmin.css";
 
 export default class NavMenuAdmin extends React.PureComponent<

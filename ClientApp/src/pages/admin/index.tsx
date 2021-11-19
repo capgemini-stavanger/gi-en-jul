@@ -1,11 +1,11 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import LoadingPage from "../../common/components/LoadingPage";
-import NavMenuAdmin from "../../common/components/NavMenuAdmin";
+import LoadingPage from "./../LoadingPage";
+import NavMenuAdmin from "./../../components/shared/NavBar/NavMenuAdmin";
 import useUser from "../../hooks/useUser";
-import ErrorPage from "../common/ErrorPage";
-import InstitutionMacro from "../institution/InstitutionMacro";
-import AdminTab from "./AdminTab";
+import ErrorPage from "./../ErrorPage";
+import InstitutionMacro from "../../components/institution/InstitutionMacro";
+import AdminTab from "../../components/admin/AdminTab";
 
 function AdminPage() {
   const { getAccessTokenSilently } = useAuth0();

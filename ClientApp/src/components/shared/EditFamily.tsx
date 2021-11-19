@@ -18,15 +18,15 @@ import {
 
   } from "@material-ui/core";
 import { FC, useEffect, useState } from "react";
-import { getGender } from "../functions/GetGender";
-import { PersonType, RecipientType } from "../../components/admin/suggestedConnections/Types";
-import Gender from "../enums/Gender";
-import { GENDERS } from "../constants/Genders";
-import ApiService from "../functions/apiServiceClass";
+import { getGender } from "../../common/functions/GetGender";
+import { PersonType, RecipientType } from "../admin/connectionSuggester/Types";
+import Gender from "../../common/enums/Gender";
+import { GENDERS } from "../../common/constants/Genders";
+import ApiService from "../../common/functions/apiServiceClass";
 import { Alert } from "@material-ui/lab";
 import { useAuth0  } from "@auth0/auth0-react";
 import CloseIcon from "@material-ui/icons/Close";
-import useStyles from "../../components/admin/common/Styles";
+import useStyles from "../admin/common/Styles";
 
 
   interface IEditFamilyDialog {

@@ -6,8 +6,8 @@
      DialogContentText,
      DialogTitle,
  } from "@material-ui/core";
- import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
- import Recipient from "../admin/overview/Recipient";
+ import {RecipientType, SelectedConnectionType} from "../../components/shared/Types";
+ import Recipient from "../admin/dashboard/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
 

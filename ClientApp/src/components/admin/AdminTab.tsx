@@ -1,10 +1,10 @@
 import { Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
-import ScrollToTop from "../../common/components/ScrollToTop";
-import CompletedMacro from "./completed/Macro";
-import OverviewMacro from "./overview/OverviewMacro";
-import ConnectionSuggesterMacro from "./suggestedConnections/ConnectionSuggesterMacro";
+import ScrollToTop from "../../components/shared/ScrollToTop";
+import CompletedMacro from "./completedConnections/Macro";
+import OverviewMacro from "./dashboard/OverviewMacro";
+import ConnectionSuggesterMacro from "./connectionSuggester/ConnectionSuggesterMacro";
 
 interface IAdminTab {
   accessToken: string;

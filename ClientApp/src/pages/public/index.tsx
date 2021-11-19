@@ -1,16 +1,16 @@
 import { Container, Grid} from "@material-ui/core";
-import ScrollToTop from "../../common/components/ScrollToTop";
-import Companies from "./Companies";
-import How from "./How";
-import Questions from "./Questions";
-import useStyles from "./Styles";
+import ScrollToTop from "../../components/shared/ScrollToTop";
+import Companies from "../../components/landingPage/Companies";
+import How from "../../components/landingPage/How";
+import Questions from "../../components/landingPage/Questions";
+import useStyles from "../../components/landingPage/Styles";
 import logo from "./../../styling/img/logo_background.svg";
 import family from "./../../styling/img/familyTop.svg";
 import snowDown from "./../../styling/img/snow_down.svg";
-import Contact from "./Contact";
-import {ContactData} from "./Contact";
-import NavBar from "../../common/components/NavBar";
-import Footer from "../../common/components/Footer";
+import Contact from "../../components/landingPage/Contact";
+import {ContactData} from "../../components/landingPage/Contact";
+import NavBar from "../../components/shared/NavBar/NavBar";
+import Footer from "../../components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "../../common/functions/apiServiceClass";
 

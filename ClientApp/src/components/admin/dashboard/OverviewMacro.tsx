@@ -9,7 +9,7 @@ import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
-import { GiverType, RecipientType, SelectedConnectionType } from "../../../common/components/Types";
+import { GiverType, RecipientType, SelectedConnectionType } from "../../../components/shared/Types";
 
 const initState: SelectedConnectionType = {
   giver: undefined,

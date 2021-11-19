@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import React, { FC, useEffect, useState } from "react";
 import { useMemo } from "react";
-import { isMobile } from "../../common/functions/IsMobile";
+import { isMobile } from "../../../common/functions/IsMobile";
 
 interface ISelect extends SelectProps {
   name: string;

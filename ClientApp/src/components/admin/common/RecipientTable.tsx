@@ -17,12 +17,12 @@ import {
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
-import { RecipientType } from "../../../common/components/Types";
+import { RecipientType } from "../../../components/shared/Types";
 import useStyles from "./Styles";
 import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
-import * as Types from "../suggestedConnections/Types";
-import EditFamily from "../../../common/components/EditFamily";
+import * as Types from "../connectionSuggester/Types";
+import EditFamily from "../../shared/EditFamily";
 
 type Props = {
   data: RecipientType[] | [];

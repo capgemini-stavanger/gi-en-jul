@@ -1,8 +1,8 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
-import InputValidator from "../InputFields/Validators/InputValidator";
-import { isNotNull } from "../InputFields/Validators/Validators";
+import InputValidator from "../shared/InputFields/Validators/InputValidator";
+import { isNotNull } from "../shared/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";

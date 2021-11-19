@@ -1,12 +1,12 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import InputValidator from "../../components/InputFields/Validators/InputValidator";
+import InputValidator from "../shared/InputFields/Validators/InputValidator";
 import {
   isEmail,
   isEqual,
   isNotNull,
   isPhoneNumber,
-} from "../../components/InputFields/Validators/Validators";
+} from "../shared/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";

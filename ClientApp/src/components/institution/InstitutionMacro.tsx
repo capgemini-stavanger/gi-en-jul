@@ -1,6 +1,6 @@
 import { Container } from "@material-ui/core";
 import * as React from "react";
-import NavMenuAdmin from "../../common/components/NavMenuAdmin";
+import NavMenuAdmin from "../../components/shared/NavBar/NavMenuAdmin";
 import RegistrationForm from "./InstitutionForm";
 import RegistrationInfo from "./InstitutionInfo";
 import useStyles from "./Styles";
