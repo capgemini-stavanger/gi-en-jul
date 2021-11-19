@@ -97,9 +97,9 @@ const useStyles = makeStyles((theme) => ({
   },
   stepsImage:{
     objectFit: "none",
-    width: "346px", 
+    width: "346px",
     height: "278px",
-    margin: "auto", 
+    margin: "auto",
     display: "block",
   },
   paragraph: {
@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   textContainer:{
-    maxWidth: "30em", 
+    maxWidth: "30em",
     textAlign: "center",
     margin: theme.spacing(1),
     [theme.breakpoints.up("laptop")]: {

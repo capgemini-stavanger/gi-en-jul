@@ -130,6 +130,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         if (response.status == 200) {
           const snackbarText = ` Foreslo kobling til ${state.selectedGiver.fullName} med familie: ${state.selectedRecipient.familyId}`;
           setSnackbarContent({ textContent: snackbarText, open: true, severity: "success" });
+          setState(initialState);
           getSuggestedRecipients();
           getSuggestedGivers();
         } else {

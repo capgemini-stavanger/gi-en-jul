@@ -61,7 +61,11 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
-            return givers.OrderBy(x => x.RegistrationDate).ToList();
+            return givers
+                .OrderBy(x => x.HasConfirmedMatch)
+                .ThenBy(x => x.IsSuggestedMatch)
+                .ThenBy(x => x.RegistrationDate)
+                .ToList();
         }
 
         [HttpGet("Overview/Recipients")]
@@ -74,7 +78,10 @@ namespace GiEnJul.Controllers
             {
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             }
-            return recipients;
+            return recipients
+                .OrderBy(x => x.HasConfirmedMatch)
+                .ThenBy(x => x.IsSuggestedMatch)
+                .ToList();
         }
 
         [HttpGet("excel/delivery/{location}")]
@@ -94,14 +101,6 @@ namespace GiEnJul.Controllers
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
             var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
-            var suggestedGiver = await _giverRepository.GetSuggestedAsync(eventName, location);
-            var suggestedRecipient = await _recipientRepository.GetSuggestedAsync(eventName, location);
-            foreach (var giver in suggestedGiver)
-            {
-                var mathedGiver = suggestedRecipient.FirstOrDefault(x => x.MatchedGiver == giver.RowKey);
-                suggestedRecipient.Remove(mathedGiver);
-                connecitonDtos.Add(_mapper.Map<GetConnectionDto>((giver, mathedGiver)));
-            }
             return connecitonDtos;
         }
 
@@ -226,8 +225,6 @@ namespace GiEnJul.Controllers
                     $"Hei {giver.FullName}, <br/><br/> " +
 
                     $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
-                    $"Dersom du ikke har bekreftet innen <u>to dager</u> vil familien automatisk gå til en annen giver. Dette er for å sikre at alle familiene får giver. <br/><br/>" +
-
                     $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
 
                     $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
