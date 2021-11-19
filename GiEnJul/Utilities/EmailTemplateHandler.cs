@@ -11,10 +11,12 @@ namespace GiEnJul.Utilities
     {
         public static async Task<string> GetEmailContent(EmailTemplate template, Dictionary<string, string> data)
         {
-            var headerImage = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}\\Utilities\\EmailTemplates\\familyTop.0ff49710.svg");
+            var templatePath = string.Format("{0}Utilities{0}EmailTemplates{0}", Path.DirectorySeparatorChar);
+
+            var headerImage = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.0ff49710.svg");
             data.Add("headerImage", headerImage);
 
-            var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}\\Utilities\\EmailTemplates\\{template}.html");
+            var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}{template}.html");
             
             foreach (var item in data)
             {
