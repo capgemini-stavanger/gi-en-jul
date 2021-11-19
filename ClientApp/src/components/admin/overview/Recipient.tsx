@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import useStyles from "./Styles";
 import Datatable from "../common/RecipientTable";
 import { RecipientType} from "../../../common/components/Types";
-import * as Types from "../suggestedConnections/Types";
 
 type Props = {
   data: RecipientType[] | [];

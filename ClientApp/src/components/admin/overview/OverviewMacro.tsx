@@ -1,19 +1,15 @@
-import { Container, Grid, Snackbar, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, {
   useCallback,
   useEffect,
   useState,
 } from "react";
 import ApiService from "../../../common/functions/apiServiceClass";
-import EditFamily from "../../../common/components/EditFamily";
 import ConnectButton from "./ConnectButton";
 import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
-import useStyles from "./Styles";
 import { GiverType, RecipientType, SelectedConnectionType } from "../../../common/components/Types";
-import * as Types from "../../../common/components/Types";
-import { Alert } from "@material-ui/lab";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
@@ -119,7 +115,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         console.error(errorStack);
       });
   };
-  const classes = useStyles();
   return (
     <>
       <Container>

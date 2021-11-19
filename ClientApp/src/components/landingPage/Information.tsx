@@ -4,17 +4,15 @@ import {
   Container,
   Grid,
   Card,
-  CardHeader,
   CardMedia,
   CardContent,
   CardActions,
   IconButton,
-  Divider,
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import dummyImg from "./../../styling/img/dummy-image.jpg";
-import { Mail, Facebook, Instagram } from "@material-ui/icons";
-import myImage from "./Elisabeth.png";
+import { Mail } from "@material-ui/icons";
+import myImage from "./../../assets/Elisabeth.png";
 
 const style = {
   greyImageFilter: {

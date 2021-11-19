@@ -6,7 +6,6 @@ import {
     Typography,
     TableRow,
     TableCell,
-    Collapse,
     Box,
     Table,
     TableBody,
@@ -18,7 +17,7 @@ import {
     IconButton,
 
   } from "@material-ui/core";
-import { FC, Key, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { getGender } from "../functions/GetGender";
 import { PersonType, RecipientType } from "../../components/admin/suggestedConnections/Types";
 import Gender from "../enums/Gender";

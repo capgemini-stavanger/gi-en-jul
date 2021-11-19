@@ -1,5 +1,4 @@
-import * as React from "react";
-import { Typography, Container, Grid, Card } from "@material-ui/core";
+import { Typography, Container, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
 import { ExpandMore } from "@material-ui/icons";
 import step1 from "./../../styling/img/step1.svg";
