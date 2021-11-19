@@ -303,11 +303,12 @@ namespace GiEnJul.Controllers
                     deleteCount += 1;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
                 await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
-                return Conflict();
+
+                throw e;
             }
 
             return Ok();
