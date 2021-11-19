@@ -30,10 +30,11 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: "#e6e6e6",
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  mx: 5, 
+  p: 5,
 };
   
 const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
@@ -166,11 +167,17 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         <Modal open={open}>
           <Box sx={style}>
             <Typography variant="h6" component="h2">
-              Bekreft at du vil koble {selectedConnection.giver?.fullName} sammen med familienummer{""}
+              Bekreft at du vil koble {selectedConnection.giver?.fullName} sammen med familienummer {""}
               {selectedConnection.recipient?.familyId}
               </Typography>
-              <Button color="primary" onClick={() => {connectGiverRecipient();closeModal();}}>Yes</Button>
-              <Button color="secondary" onClick={closeModal}>Nei</Button>
+              <Grid container direction="row" spacing={8}>
+                <Grid item>
+                  <Button color="primary" variant="contained" onClick={() => {connectGiverRecipient();closeModal();}}>Ja</Button>
+                </Grid>
+                <Grid item >
+                  <Button color="inherit" variant="contained" onClick={closeModal}>Nei</Button>
+                </Grid>
+              </Grid>
           </Box>
           </Modal>
         <ConnectButton
