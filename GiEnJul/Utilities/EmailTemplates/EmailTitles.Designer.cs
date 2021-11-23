@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GiEnJul.Utilities {
+namespace GiEnJul.Utilities.EmailTemplates {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace GiEnJul.Utilities {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GiEnJul.Utilities.EmailTitles", typeof(EmailTitles).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GiEnJul.Utilities.EmailTemplates.EmailTitles", typeof(EmailTitles).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

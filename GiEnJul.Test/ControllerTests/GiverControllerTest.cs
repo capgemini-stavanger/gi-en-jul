@@ -4,6 +4,7 @@ using GiEnJul.Dtos;
 using GiEnJul.Infrastructure;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
+using GiEnJul.Utilities.EmailTemplates;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -20,6 +21,8 @@ namespace GiEnJul.Test.ControllerTests
         private Mock<IEmailClient> mockEmailClient { get; set; }
         private Mock<ISettings> mockSettings { get; set; }
         private Mock<IRecaptchaVerifier> mockRecaptchaVerifier { get; set; }
+        public Mock<IEmailTemplateBuilder> mockEmailTemplateBuilder { get; set; }
+
         private GiverController _controller;
 
 
@@ -31,7 +34,15 @@ namespace GiEnJul.Test.ControllerTests
             mockEmailClient = new Mock<IEmailClient>();
             mockSettings = new Mock<ISettings>();
             mockRecaptchaVerifier = new Mock<IRecaptchaVerifier>();
-            _controller = new GiverController(mockGiverRepo.Object, mockEventRepo.Object, mockEmailClient.Object, _log, _mapper, mockRecaptchaVerifier.Object);
+            mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
+            _controller = new GiverController(
+                mockGiverRepo.Object, 
+                mockEventRepo.Object, 
+                mockEmailClient.Object, 
+                _log, 
+                _mapper, 
+                mockRecaptchaVerifier.Object, 
+                mockEmailTemplateBuilder.Object);
 
             mockRecaptchaVerifier.Setup(x => x.VerifyAsync(It.IsAny<string>())).ReturnsAsync(new GetRecaptchaDto() { Success = true });
         }
@@ -42,6 +53,7 @@ namespace GiEnJul.Test.ControllerTests
             mockEventRepo.VerifyNoOtherCalls();
             mockGiverRepo.VerifyNoOtherCalls();
             mockEmailClient.VerifyNoOtherCalls();
+            mockEmailTemplateBuilder.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -108,6 +120,8 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
             mockGiverRepo.Setup(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(It.IsAny<int>());
 
+            mockEmailTemplateBuilder.Setup(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>())).ReturnsAsync(new EmailTemplate());
+
             //Act
             var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
 
@@ -121,6 +135,7 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Verify(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
+            mockEmailTemplateBuilder.Verify(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>()));
         }
 
         [Fact]

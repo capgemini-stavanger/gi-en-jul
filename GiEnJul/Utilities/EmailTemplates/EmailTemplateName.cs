@@ -1,6 +1,6 @@
 ﻿namespace GiEnJul.Utilities.EmailTemplates
 {
-    public enum EmailTemplate
+    public enum EmailTemplateName
     {
         Registered,
         WaitingList,

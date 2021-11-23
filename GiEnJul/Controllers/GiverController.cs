@@ -25,13 +25,15 @@ namespace GiEnJul.Controllers
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly IRecaptchaVerifier _recaptchaVerifier;
+        private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
         public GiverController(IGiverRepository giverRepository,
                                IEventRepository eventRepository,
                                IEmailClient emailClient,
                                ILogger log,
                                IMapper mapper,
-                               IRecaptchaVerifier recaptchaVerifier)
+                               IRecaptchaVerifier recaptchaVerifier,
+                               IEmailTemplateBuilder emailTemplateBuilder)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
@@ -39,6 +41,7 @@ namespace GiEnJul.Controllers
             _log = log;
             _mapper = mapper;
             _recaptchaVerifier = recaptchaVerifier;
+            _emailTemplateBuilder = emailTemplateBuilder;
         }
 
         // POST api/<GiverController>
@@ -52,10 +55,10 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            var eventDto = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
+            var eventModel = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
-            giver.EventName = eventDto.PartitionKey;
+            giver.EventName = eventModel.PartitionKey;
             giver.Email = giver.Email.Trim();
 
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
@@ -68,20 +71,19 @@ namespace GiEnJul.Controllers
                 familyRange = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
-            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventDto.PartitionKey, giverDto.Location);
-            bool waiting_list = num_givers > eventDto.GiverLimit;
+            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.PartitionKey, giverDto.Location);
+            bool waiting_list = num_givers > eventModel.GiverLimit;
 
             var emailValuesDict = new Dictionary<string, string> { { "familyRange", familyRange } };
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventDto, "eventDto."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
 
-            var templateId = waiting_list ? EmailTemplate.WaitingList : EmailTemplate.Registered;
-            var finalMessage = await EmailTemplateHandler.GetEmailContent(templateId, emailValuesDict);
-            var title = EmailTemplateHandler.GetEmailTitle(templateId);
+            var templateId = waiting_list ? EmailTemplateName.WaitingList : EmailTemplateName.Registered;
+            var email = await _emailTemplateBuilder.GetEmailTemplate(templateId, emailValuesDict);
 
             try
             {
-                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, title, finalMessage);
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email.Subject, email.Content);
             }
             catch (Exception e)
             {

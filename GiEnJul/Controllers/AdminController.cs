@@ -33,6 +33,7 @@ namespace GiEnJul.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailClient _emailClient;
         private readonly ISettings _settings;
+        private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
         public AdminController(
             IEventRepository eventRepository,
@@ -43,7 +44,8 @@ namespace GiEnJul.Controllers
             ILogger log,
             IMapper mapper,
             IEmailClient emailClient,
-            ISettings settings)
+            ISettings settings,
+            IEmailTemplateBuilder emailTemplateBuilder)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -54,6 +56,7 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
             _emailClient = emailClient;
             _settings = settings;
+            _emailTemplateBuilder = emailTemplateBuilder;
         }
 
         [HttpGet("Overview/Givers")]
@@ -194,7 +197,7 @@ namespace GiEnJul.Controllers
 
             try
             {
-                var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+                var @event = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
 
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
@@ -221,7 +224,7 @@ namespace GiEnJul.Controllers
                     }
                 }
                 
-                var emailTemplate = EmailTemplate.AssignedFamily;
+                var emailTemplatename = EmailTemplateName.AssignedFamily;
                 var emailValuesDict = new Dictionary<string, string> 
                 { 
                     { "familyTable", familyTable }, 
@@ -229,13 +232,12 @@ namespace GiEnJul.Controllers
                     { "recipientNote", recipientNote },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventDto, "eventDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(@event, "eventDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
-                var body = await EmailTemplateHandler.GetEmailContent(emailTemplate, emailValuesDict);
-                var title = EmailTemplateHandler.GetEmailTitle(emailTemplate);
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {

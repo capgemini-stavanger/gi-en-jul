@@ -8,6 +8,9 @@ namespace GiEnJul.Helpers
     {
         public static Dictionary<string, string> MakeStringValueDict(object o, string keyPrefix = "")
         {
+            if (o == null)
+                throw new ArgumentNullException("object","Unable to make dictionary out of a null object");
+            
             var dict = new Dictionary<string, string>();
 
             var props = o.GetType().GetProperties();
