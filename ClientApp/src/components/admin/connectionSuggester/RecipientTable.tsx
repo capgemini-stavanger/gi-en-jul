@@ -84,7 +84,7 @@ function Row(props: RecipientRowProps) {
                       </TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell>
-                        {familyMember.wish ? familyMember.wish : "Giver kjøper aldertilpasset gave. "}
+                        {familyMember.wish ? familyMember.wish : "Giver kjøper alderstilpasset gave. "}
                         <br/>
                         {familyMember.comment ? "Kommentar: "+familyMember.comment : ""}
                       </TableCell>

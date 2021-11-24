@@ -68,8 +68,10 @@ namespace GiEnJul.Repositories
             {
                 foreach (var entity in entities)
                 {
+                    entity.ETag = "*";
                     batchOperation.Delete(entity);
                 }
+
                 var result = await _table.ExecuteBatchAsync(batchOperation);
                 _log.Debug("Deleted multiple entities, in table:{@tablename}", _table.Name);
                 return result;

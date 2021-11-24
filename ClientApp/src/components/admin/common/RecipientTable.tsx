@@ -137,7 +137,7 @@ const DatatableRecipient: React.FC<Props> = ({
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
-            <Typography>Ønsker:</Typography>
+            <Typography style={{ fontWeight: 550, fontSize: 18 }} >Familiesammensetning:</Typography>
           </AccordionDetails>
           {recipient.familyMembers.map((person) => (
             <div key={person.rowKey}>
@@ -151,16 +151,16 @@ const DatatableRecipient: React.FC<Props> = ({
                 </Typography>
                 <Typography className={classes.largeColumn}>
                   {" "}
-                  {person.wish}{" "}
+                  {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
                   <br/>
-                  {person.comment  ? "Kommentar til gave: "+person.comment : ""}
+                  {person.comment  ? "Kommentar: "+person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
             </div>
           ))}
           <AccordionDetails>
-            <Typography className={classes.mediumColumn}>
+            <Typography className={classes.mediumColumn} style={{ fontWeight: 500, fontSize: 18 }}>
               Matønsker:{" "}
             </Typography>
             <Typography className={classes.largeColumn}>
@@ -170,7 +170,7 @@ const DatatableRecipient: React.FC<Props> = ({
           </AccordionDetails>
           <Divider />
           <AccordionDetails>
-            <Typography className={classes.mediumColumn}>
+            <Typography className={classes.mediumColumn} style={{ fontWeight: 500, fontSize: 18 }}>
               Kontaktperson:
             </Typography>
             <Typography className={classes.largeColumn}>
