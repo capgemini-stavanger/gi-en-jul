@@ -28,7 +28,6 @@ export default class NavMenuAdmin extends React.PureComponent<
           <Container>
             <NavbarBrand tag={Link} to="/">
               <img className={"logo-small"} src={logo}></img>
-              Hei Institution
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
             <LogOutButton />
