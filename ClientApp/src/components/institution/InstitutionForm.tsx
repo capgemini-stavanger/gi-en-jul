@@ -9,7 +9,7 @@ import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import * as React from "react";
-import { useEffect, useState, useCallback} from "react";
+import { useState} from "react";
 import { DESSERTS } from "../../common/constants/Desserts";
 import { DINNERS } from "../../common/constants/Dinners";
 import Gender from "../../common/enums/Gender";
@@ -27,7 +27,6 @@ import {
 import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "./IFormPerson";
-import Locations from "./InstitutionLocations";
 import useUser from "../../hooks/useUser";
 
 type PersonType = {

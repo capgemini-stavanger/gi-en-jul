@@ -1,10 +1,8 @@
 import {
   Button,
-  Container,
   Grid,
   Slide,
   Snackbar,
-  SnackbarContent,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";

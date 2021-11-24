@@ -2,11 +2,9 @@ import {
   DataGrid,
   GridCellParams,
   GridColumns,
-  GridColumnTypesRecord,
   GridRowData,
 } from "@material-ui/data-grid";
 import { FC, useEffect, useState } from "react";
-import LoadingPage from "../../../common/components/LoadingPage";
 import ApiService from "../../../common/functions/apiServiceClass";
 import useUser from "../../../hooks/useUser";
 import clsx from "clsx";

@@ -1,5 +1,3 @@
-import { capitalize } from "@material-ui/core";
-import { GENDERS } from "../constants/Genders";
 import Gender from "../enums/Gender";
 
 export function getGender(gender: Gender, age: number) {
