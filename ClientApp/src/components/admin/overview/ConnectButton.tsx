@@ -9,18 +9,6 @@ type ConnectButtonProps = {
   connectGiverRecipient: () => void;
 };
 
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: "#e6e6e6",
-  border: '2px solid #000',
-  boxShadow: 24,
-  mx: 5, 
-  p: 5,
-};
 
 const ConnectButton: React.FC<ConnectButtonProps> = ({
   selectedConnection,
@@ -74,7 +62,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({
           {selectedConnection.recipient?.familyId}
         </Button>
         <Modal open={open}>
-        <Box sx={style}>
+        <Box className={classes.modalStyle}>
           <Typography variant="h6" component="h2">
             Bekreft at du vil koble {selectedConnection.giver?.fullName} sammen med familienummer {""}
             {selectedConnection.recipient?.familyId}
