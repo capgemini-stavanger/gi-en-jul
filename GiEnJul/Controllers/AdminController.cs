@@ -286,7 +286,32 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
-            var deletedRecipient = await _recipientRepository.DeleteAsync(recipientToDelete);
+            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
+
+            if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            await _recipientRepository.DeleteAsync(recipientToDelete);
+
+            var deleteCount = 0;
+            try
+            {
+                foreach (var person in personsToDelete)
+                {
+                    await _personRepository.DeleteAsync(person);
+                    deleteCount += 1;
+                }
+            }
+            catch (Exception e)
+            {
+                await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
+                await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
+
+                throw e;
+            }
+
             return Ok();
         }
 
