@@ -1,5 +1,4 @@
 import { Container, Grid} from "@material-ui/core";
-import React from "react";
 import ScrollToTop from "../../common/components/ScrollToTop";
 import Companies from "./Companies";
 import How from "./How";
@@ -14,12 +13,10 @@ import NavBar from "../../common/components/NavBar";
 import Footer from "../../common/components/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "../../common/functions/apiServiceClass";
-import Information from "./Information";
 
 const Home = () => {
 
   const [contacts, setContacts] = useState<ContactData[]>([]);
-  const [information, setInformation] = useState<ContactData[]>([]);
 
   const apiservice = new ApiService;
   useEffect(() => {

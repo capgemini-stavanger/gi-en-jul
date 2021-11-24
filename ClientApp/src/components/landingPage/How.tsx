@@ -1,5 +1,4 @@
-import * as React from "react";
-import { Typography, Container, Grid, Card } from "@material-ui/core";
+import { Typography, Container, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
 import { ExpandMore } from "@material-ui/icons";
 import step1 from "./../../styling/img/step1.svg";
@@ -20,11 +19,11 @@ const How = () => {
             <Typography className={classes.paragraph}>
               Gi en jul er et frivillig prosjekt i samarbeid med blant andre
               barnevernet og NAV. <br />
-              Som giver gir du julemiddag og julegaver til
-              en familie som virkelig trenger det. Dette er foreldre og barn som
-              ikke selv har mulighet til å kjøpe en skikkelig julemiddag,
-              julesnop eller julegaver til hverandre. I år kan du melde deg som giver i Gjesdal,
-              Sandnes, Sola eller Stavanger.
+              Som giver gir du julemiddag og julegaver til en familie som
+              virkelig trenger det. Dette er foreldre og barn som ikke selv har
+              mulighet til å kjøpe en skikkelig julemiddag, julesnop eller
+              julegaver til hverandre. I år kan du melde deg som giver i Bodø,
+              Gjesdal, Sandnes, Sola eller Stavanger.
             </Typography>
           </div>
         </div>

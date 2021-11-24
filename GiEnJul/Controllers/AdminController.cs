@@ -216,19 +216,20 @@ namespace GiEnJul.Controllers
                     if (recipient.FamilyMembers != null)
                     {
                         var member = recipient.FamilyMembers[i];
-                        familyTable += $"{member.ToReadableString()} <br/><br/>";
+                        familyTable += $"<li>{member.ToReadableString()} </li>";
                         familyTable += " ";
                     }
                 }
 
                 var body =
-                    $"Hei {giver.FullName}, <br/><br/> " +
+                    $"Hei, {giver.FullName} <br/><br/> " +
 
                     $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
                     $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
 
                     $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
-                    $"{familyTable}" +
+                    
+                    $"<ul>{familyTable}</ul>" +
 
                     $"<strong>Middag:</strong>  {recipient.Dinner}<br/>" +
                     $"<strong>Dessert:</strong> {recipient.Dessert}<br/>" +
@@ -241,15 +242,15 @@ namespace GiEnJul.Controllers
 
                     $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Tips: <br/><br/>" +
                     $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
-                    $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
+                    $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre.</li>" +
                     $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
                     $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! " +
                     $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg eller godteri og annet som inneholder svin og gelatin. <br/><br/>" +
 
-                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre." +
+                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. " +
                     $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære. <br/><br/>" +
 
-                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven." +
+                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven. " +
                     $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. Dersom du har mye klær og/eller leker du ønsker å gi, men ikke matcher familien du har fått, "+ 
                     $"kan du sende en mail til oss, så kan vi se om vi kan få gitt det til en passende familie.<br/><br/>" +
 
@@ -285,7 +286,32 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
-            var deletedRecipient = await _recipientRepository.DeleteAsync(recipientToDelete);
+            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
+
+            if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            await _recipientRepository.DeleteAsync(recipientToDelete);
+
+            var deleteCount = 0;
+            try
+            {
+                foreach (var person in personsToDelete)
+                {
+                    await _personRepository.DeleteAsync(person);
+                    deleteCount += 1;
+                }
+            }
+            catch (Exception e)
+            {
+                await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
+                await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
+
+                throw e;
+            }
+
             return Ok();
         }
 

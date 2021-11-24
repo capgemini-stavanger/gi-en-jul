@@ -4,12 +4,10 @@ import {
   Container,
   Grid,
   Card,
-  CardHeader,
   CardMedia,
   CardContent,
   CardActions,
   IconButton,
-  Divider,
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import { Link as Scroll } from "react-scroll";

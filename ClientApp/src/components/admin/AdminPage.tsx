@@ -1,5 +1,4 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import LoadingPage from "../../common/components/LoadingPage";
 import NavMenuAdmin from "../../common/components/NavMenuAdmin";
@@ -55,7 +54,7 @@ function AdminPage() {
     case "Admin":
       return (
         <>
-          <NavMenuAdmin />
+          <NavMenuAdmin role="Admin"/>
           <AdminTab accessToken={userAccessToken} location={location ?? ""} />
         </>
       );

@@ -44,9 +44,7 @@ const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({
   };
 
   const handleAlertClose = (
-    e: React.SyntheticEvent | React.MouseEvent,
-    reason?: string
-  ) => {
+      ) => {
     setAlert(false);
   };
 
