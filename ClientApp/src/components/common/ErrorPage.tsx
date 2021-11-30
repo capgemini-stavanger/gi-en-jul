@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Container, Typography } from "@material-ui/core";
+import LogOutButton from "../login/LogOutButton";
 
 interface Props {
   ErrorText: string;
@@ -15,6 +16,7 @@ function ErrorPage({ ErrorText, ErrorCode }: Props) {
       <Typography className="errorText" variant="h2">
         {ErrorText}
       </Typography>
+      <LogOutButton />
     </Container>
   );
 }
