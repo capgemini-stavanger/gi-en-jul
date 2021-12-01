@@ -130,7 +130,7 @@ export default function RecipientSuggestions(props: TableProps) {
         <TableRow>
           <TableCell />
           <TableCell>Familienummer</TableCell>
-          <TableCell>Familie id</TableCell>
+          <TableCell>Referanse ID</TableCell>
           <TableCell align="center">Størrelse</TableCell>
           <TableCell align="center">Institusjon</TableCell>
         </TableRow>
