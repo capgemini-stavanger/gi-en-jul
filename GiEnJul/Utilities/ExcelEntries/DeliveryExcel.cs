@@ -10,6 +10,7 @@ namespace GiEnJul.Utilities.ExcelClasses
         public string ReferenceId { get; set; }
         public string GiverFullName { get; set; }
         public string GiverPhoneNumber { get; set; }
+        public string SubmitterFullName { get; set; }
 
         public OrderedDictionary AsOrderedDictionary()
         {
@@ -21,6 +22,7 @@ namespace GiEnJul.Utilities.ExcelClasses
                 ["Referanse id"] = ReferenceId,
                 ["Giver navn"] = GiverFullName,
                 ["Giver mobil"] = GiverPhoneNumber,
+                ["Kontaktperson"] = SubmitterFullName,
             };
         }
     }

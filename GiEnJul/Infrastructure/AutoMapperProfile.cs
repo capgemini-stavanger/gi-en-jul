@@ -29,7 +29,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Item1.FullName))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Item1.PhoneNumber))
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.Item2.PersonCount))
-                .ForMember(dest => dest.FamilyId, opt => opt.MapFrom(src => src.Item2.FamilyId));
+                .ForMember(dest => dest.FamilyId, opt => opt.MapFrom(src => src.Item2.FamilyId))
+                .ForMember(dest => dest.SubmitterFullName, opt => opt.MapFrom(src => src.Item2.ContactFullName));
 
             //Recipient mapping
             CreateMap<Dtos.PostRecipientDto, Models.Recipient>()
