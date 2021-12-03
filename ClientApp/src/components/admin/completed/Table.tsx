@@ -21,6 +21,7 @@ type ConnectionDto = {
   phoneNumber: string;
   confirmed: boolean;
   submitterFullName: string;
+  submitterEmail: string; 
 };
 
 enum Page {
@@ -91,6 +92,12 @@ const columns: GridColumns = [
     editable: false,
     flex: 4,
   },
+  {
+    field: "contactMail", 
+    headerName: "Kontaktperson mail", 
+    editable: false, 
+    flex: 4, 
+  }
 ];
 
 const Table: FC<ITable> = ({ accessToken }) => {
@@ -114,6 +121,7 @@ const Table: FC<ITable> = ({ accessToken }) => {
             giverName: connection.fullName,
             giverTelephone: connection.phoneNumber,
             contactName: connection.submitterFullName,
+            contactMail: connection.submitterEmail,
           }))
         );
       })
