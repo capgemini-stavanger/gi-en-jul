@@ -17,6 +17,7 @@ export interface SelectedConnectionType {
     partitionKey: string;
     rowKey: string;
     phoneNumber: string;
+    matchedRecipientId: string;
   }
   
   export interface RecipientType {
