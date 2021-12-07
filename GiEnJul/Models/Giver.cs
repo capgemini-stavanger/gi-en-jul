@@ -17,6 +17,9 @@ namespace GiEnJul.Models
 
         //Is the Rowkey to the recipient
         public string MatchedRecipient { get; set; }
+        public string MatchedRecipientId { get => 
+                "null" // getMatchedRecipientIdByGuid(MatchedRecipientGuid)
+                ;}
         //Match with family, default is false
         public bool IsSuggestedMatch { get; set; } = false;
         public bool HasConfirmedMatch { get; set; } = false;
