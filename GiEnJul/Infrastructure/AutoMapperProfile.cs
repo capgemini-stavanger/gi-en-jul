@@ -24,13 +24,15 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
+
             CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Item1.HasConfirmedMatch))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Item1.FullName))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Item1.PhoneNumber))
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.Item2.PersonCount))
                 .ForMember(dest => dest.FamilyId, opt => opt.MapFrom(src => src.Item2.FamilyId))
-                .ForMember(dest => dest.SubmitterFullName, opt => opt.MapFrom(src => src.Item2.ContactFullName));
+                .ForMember(dest => dest.SubmitterFullName, opt => opt.MapFrom(src => src.Item2.ContactFullName))
+                .ForMember(dest => dest.SubmitterMail, opt => opt.MapFrom(src => src.Item2.ContactEmail));
 
             //Recipient mapping
             CreateMap<Dtos.PostRecipientDto, Models.Recipient>()
