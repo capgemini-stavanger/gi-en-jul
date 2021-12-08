@@ -8,7 +8,7 @@ import { FC, useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import useUser from "hooks/useUser";
 import clsx from "clsx";
-import useStyles from "./Styles";
+import useStyles from "components/admin/completedConnections/Styles";
 
 interface ITable {
   accessToken: string;

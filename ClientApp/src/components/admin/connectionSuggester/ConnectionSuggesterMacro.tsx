@@ -6,8 +6,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import GiverSuggestions from "./GiverTable";
-import RecipientSuggestions from "./RecipientTable";
+import GiverSuggestions from "components/admin/connectionSuggester/GiverTable";
+import RecipientSuggestions from "components/admin/connectionSuggester/RecipientTable";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { RecipientType, GiverType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";

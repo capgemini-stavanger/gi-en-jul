@@ -49,11 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
       top: "0",
       margin: "0.3em",
     },
-    adminMenu: {
-      position: "absolute",
-      left: 0,
-      margin: "0 1em",
-    },
   })
 );
 
