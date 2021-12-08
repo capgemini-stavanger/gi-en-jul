@@ -17,13 +17,12 @@ import ApiService from "common/functions/apiServiceClass";
 const Home = () => {
 
   const [contacts, setContacts] = useState<ContactData[]>([]);
-
+  const classes = useStyles();
   const apiservice = new ApiService;
   useEffect(() => {
     apiservice.get("event/contacts").then((response) => setContacts(response.data));
   }, []);
 
-  const classes = useStyles();
 
   return (
     <>
