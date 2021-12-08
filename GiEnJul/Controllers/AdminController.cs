@@ -61,6 +61,15 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
+
+            var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
+
+            foreach (var giver in givers.Where(x => x.IsSuggestedMatch))
+            {
+                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipientId);
+                giver.MatchedFamilyId = matchedRecipient.FamilyId;
+            }
+
             return givers
                 .OrderBy(x => x.HasConfirmedMatch)
                 .ThenBy(x => x.IsSuggestedMatch)
@@ -137,12 +146,12 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(location, rowKey);
 
-            if (giver?.MatchedRecipient is null)
+            if (giver?.MatchedRecipientId is null)
             {
                 return NotFound();
             }
 
-            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipientId);
 
             if (recipient is null)
             {
@@ -154,7 +163,7 @@ namespace GiEnJul.Controllers
 
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
-            giver.MatchedRecipient = null;
+            giver.MatchedRecipientId = null;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
@@ -196,8 +205,8 @@ namespace GiEnJul.Controllers
                 var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
 
                 giver.IsSuggestedMatch = true;
-                giver.MatchedRecipient = connectionDto.RecipientRowKey;
-                giver.MatchedRecipientId = connectionDto.RecipientFamilyId;
+                giver.MatchedRecipientId = connectionDto.RecipientRowKey;
+                giver.MatchedFamilyId = connectionDto.RecipientFamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;
@@ -269,7 +278,8 @@ namespace GiEnJul.Controllers
             catch (Exception e)
             {
                 giver.IsSuggestedMatch = false;
-                giver.MatchedRecipient = "";
+                giver.MatchedRecipientId = "";
+                giver.MatchedFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = false;

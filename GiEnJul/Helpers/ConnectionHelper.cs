@@ -11,7 +11,7 @@ namespace GiEnJul.Helpers
             return
                 recipient.IsSuggestedMatch &&
                 giver.IsSuggestedMatch &&
-                giver.MatchedRecipient == recipient.RowKey &&
+                giver.MatchedRecipientId == recipient.RowKey &&
                 recipient.MatchedGiver == giver.RowKey &&
                 CanSuggestConnection(giver, recipient);
         }
