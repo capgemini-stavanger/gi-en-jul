@@ -8,9 +8,9 @@ import {
 } from "reactstrap";
 import LogOutButton from "components/login/LogOutButton";
 import logo from "styling/img/logo_green.svg";
-import "./NavMenuAdmin.css";
+import "components/shared/navbar/NavBarLoggedIn.css";
 
-export default class NavMenuAdmin extends React.PureComponent<
+export default class NavBarLoggedIn extends React.PureComponent<
   { role?: string },
   { isOpen: boolean }
 > {

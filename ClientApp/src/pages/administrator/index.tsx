@@ -5,7 +5,7 @@ import ScrollToTop from "components/shared/ScrollToTop";
 import CompletedMacro from "components/admin/dashboard-completed/Macro";
 import OverviewMacro from "components/admin/dashboard-all/OverviewMacro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
-import NavMenuAdmin from "components/shared/navbar/NavMenuAdmin";
+import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 
 interface IAdminTab {
   accessToken: string;
@@ -21,7 +21,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
 
   return (
     <>
-      <NavMenuAdmin role="Admin"/>
+      <NavBarLoggedIn role="Admin"/>
       <TabContext value={step}>
         <TabList onChange={handleChange} centered>
           <Tab label="Oversikt" value="1" />

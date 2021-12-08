@@ -1,9 +1,8 @@
-import * as React from "react";
 import { useState, useEffect } from "react";
 import { animateScroll as scroll } from "react-scroll";
 import { Fab, Zoom } from "@material-ui/core";
 import ExpandLessRoundedIcon from "@material-ui/icons/ExpandLessRounded";
-import useStyles from "./Styles";
+import useStyles from "components/shared/Styles";
 
 interface ScrollToTopProps {
   maxPagePosition: number;

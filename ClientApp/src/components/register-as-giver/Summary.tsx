@@ -16,16 +16,16 @@ import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import ApiService from "common/functions/apiServiceClass";
-import InputValidator from "components/shared/InputFields/Validators/InputValidator";
+import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import {
   isEmail,
   isNotNull,
   isPhoneNumber,
-} from "components/shared/InputFields/Validators/Validators";
-import IFormData from "./IFormData";
-import Pager from "./Pager";
-import PrivacyDialog from "./PrivacyDialog";
-import useStyles from "./Styles";
+} from "components/shared/input-fields/validators/Validators";
+import IFormData from "components/register-as-giver/IFormData";
+import Pager from "components/register-as-giver/Pager";
+import PrivacyDialog from "components/register-as-giver/PrivacyDialog";
+import useStyles from "components/register-as-giver/Styles";
 
 interface Props {
   nextStep: () => void;

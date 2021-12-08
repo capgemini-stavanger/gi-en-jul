@@ -3,7 +3,7 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import ApiService from "../../../common/functions/apiServiceClass";
+import ApiService from "common/functions/apiServiceClass";
 
 interface IDeliveryExcelDownload {
   accessToken: string;

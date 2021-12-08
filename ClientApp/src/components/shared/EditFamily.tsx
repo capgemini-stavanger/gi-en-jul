@@ -15,7 +15,6 @@ import {
     MenuItem,
     Snackbar,
     IconButton,
-
   } from "@material-ui/core";
 import { FC, useEffect, useState } from "react";
 import getGender from "common/functions/GetGender";
@@ -27,8 +26,6 @@ import { Alert } from "@material-ui/lab";
 import { useAuth0  } from "@auth0/auth0-react";
 import CloseIcon from "@material-ui/icons/Close";
 import useStyles from "components/admin/Styles";
-
-
 
   interface IEditFamilyDialog {
     recipientToUpdate: RecipientType;

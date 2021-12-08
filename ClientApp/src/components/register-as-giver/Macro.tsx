@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Typography, Container } from "@material-ui/core";
-import Confirmation from "./Confirmation";
-import ContactInfo from "./ContactInfo";
-import Location from "./Location";
-import SummaryRegistration from "./Summary";
-import IFormData from "./IFormData";
-import FamilySize from "./FamilySize";
+import Confirmation from "components/register-as-giver/Confirmation";
+import ContactInfo from "components/register-as-giver/ContactInfo";
+import Location from "components/register-as-giver/Location";
+import SummaryRegistration from "components/register-as-giver/Summary";
+import IFormData from "components/register-as-giver/IFormData";
+import FamilySize from "components/register-as-giver/FamilySize";
 import getLocations from "common/constants/Locations";
-import useStyles from "./Styles";
-import NavBar from "components/shared/NavBar/NavBar";
+import useStyles from "components/register-as-giver/Styles";
+import NavBar from "components/shared/navbar/NavBar";
 import LoadingPage from "pages/LoadingPage";
 
 const initFormDataState: IFormData = {

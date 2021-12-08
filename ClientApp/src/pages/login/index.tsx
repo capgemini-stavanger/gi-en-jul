@@ -1,11 +1,10 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import LoadingPage from "pages/LoadingPage";
-import NavMenuAdmin from "components/shared/NavBar/NavMenuAdmin";
 import useUser from "hooks/useUser";
 import ErrorPage from "pages/ErrorPage";
 import InstitutionMacro from "pages/institution";
-import AdminTab from "components/admin/AdminTab";
+import AdminTab from "pages/administrator";
 
 function LoginRedirector() {
   const { getAccessTokenSilently } = useAuth0();
@@ -54,7 +53,6 @@ function LoginRedirector() {
     case "Admin":
       return (
         <>
-          <NavMenuAdmin role="Admin"/>
           <AdminTab accessToken={userAccessToken} location={location ?? ""} />
         </>
       );
