@@ -6,10 +6,10 @@ import Location from "./Location";
 import SummaryRegistration from "./Summary";
 import IFormData from "./IFormData";
 import FamilySize from "./FamilySize";
-import getLocations from "../../common/constants/Locations";
+import getLocations from "common/constants/Locations";
 import useStyles from "./Styles";
-import NavBar from "./../shared/NavBar/NavBar";
-import LoadingPage from "./../../pages/LoadingPage";
+import NavBar from "components/shared/NavBar/NavBar";
+import LoadingPage from "pages/LoadingPage";
 
 const initFormDataState: IFormData = {
   location: "",

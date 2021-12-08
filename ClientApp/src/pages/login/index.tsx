@@ -1,13 +1,13 @@
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import LoadingPage from "./../LoadingPage";
-import NavMenuAdmin from "./../../components/shared/NavBar/NavMenuAdmin";
-import useUser from "../../hooks/useUser";
-import ErrorPage from "./../ErrorPage";
-import InstitutionMacro from "../../components/institution/InstitutionMacro";
-import AdminTab from "../../components/admin/AdminTab";
+import LoadingPage from "pages/LoadingPage";
+import NavMenuAdmin from "components/shared/NavBar/NavMenuAdmin";
+import useUser from "hooks/useUser";
+import ErrorPage from "pages/ErrorPage";
+import InstitutionMacro from "pages/institution";
+import AdminTab from "components/admin/AdminTab";
 
-function AdminPage() {
+function LoginRedirector() {
   const { getAccessTokenSilently } = useAuth0();
   const [userAccessToken, setUserAccessToken] = useState<string>("");
   const { location, role } = useUser();
@@ -68,6 +68,7 @@ function AdminPage() {
       return <ErrorPage ErrorText={"En Feil har skjedd"} ErrorCode={500} />;
   }
 }
-export default withAuthenticationRequired(AdminPage, {
+
+export default withAuthenticationRequired(LoginRedirector, {
   onRedirecting: () => <LoadingPage />,
 });

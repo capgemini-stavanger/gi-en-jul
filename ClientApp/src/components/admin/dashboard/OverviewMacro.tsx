@@ -1,16 +1,16 @@
-import { Container, Grid, Snackbar,Typography} from "@material-ui/core";
+import { Container, Grid, Typography} from "@material-ui/core";
 
 import React, {
   useCallback,
   useEffect,
   useState,
 } from "react";
-import ApiService from "../../../common/functions/apiServiceClass";
+import ApiService from "common/functions/apiServiceClass";
 import ConnectButton from "./ConnectButton";
-import Giver from "./Giver";
-import Recipient from "./Recipient";
+import Giver from "./GiverSearch";
+import Recipient from "./RecipientSearch";
 import Statistics from "./Statistics";
-import { GiverType, RecipientType, SelectedConnectionType } from "../../../components/shared/Types";
+import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
 
 const initState: SelectedConnectionType = {
   giver: undefined,

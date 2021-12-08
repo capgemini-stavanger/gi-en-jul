@@ -1,9 +1,9 @@
 import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import React, { useState } from "react";
-import Datatable from "../common/GiverTable";
+import Datatable from "./GiverTable";
 import useStyles from "./Styles";
-import { GiverType } from "../../../components/shared/Types";
+import { GiverType } from "../../shared/Types";
 
 type Props = {
   data: GiverType[] | [];

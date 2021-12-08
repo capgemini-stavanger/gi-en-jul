@@ -1,14 +1,13 @@
 ﻿import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { ArrowForwardIos } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
-import LoadingPage from "./LoadingPage";
-import ApiService from "../common/functions/apiServiceClass";
-import useStyles from "../components/registerGiver/Styles";
-import snowmanFull from "./../styling/img/snowmanFull.svg";
-import snowDown from "./../styling/img/snow_down2.svg";
+import LoadingPage from "pages/LoadingPage";
+import ApiService from "common/functions/apiServiceClass";
+import useStyles from "components/registerGiver/Styles";
+import snowmanFull from "styling/img/snowmanFull.svg";
+import snowDown from "styling/img/snow_down2.svg";
 
 interface RouteParameters {
   giverRowKey: string;

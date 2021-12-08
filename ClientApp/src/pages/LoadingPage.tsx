@@ -6,7 +6,7 @@ import {
   Theme,
 } from "@material-ui/core";
 import * as React from "react";
-import DotLoader from "../common/constants/DotLoader";
+import DotLoader from "common/constants/DotLoader";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -1,9 +1,9 @@
 import { Container } from "@material-ui/core";
 import * as React from "react";
-import NavMenuAdmin from "../../components/shared/NavBar/NavMenuAdmin";
-import RegistrationForm from "./InstitutionForm";
-import RegistrationInfo from "./InstitutionInfo";
-import useStyles from "./Styles";
+import NavMenuAdmin from "components/shared/NavBar/NavMenuAdmin";
+import RegistrationForm from "components/institution/InstitutionForm";
+import RegistrationInfo from "components/institution/InstitutionInfo";
+import useStyles from "components/institution/Styles";
 
 interface IInstitutionMacro {
   accessToken: string;

@@ -9,8 +9,8 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { FC } from "react";
-import InputValidator from "../shared/InputFields/Validators/InputValidator";
-import { isNotNull } from "../shared/InputFields/Validators/Validators";
+import InputValidator from "components/shared/InputFields/Validators/InputValidator";
+import { isNotNull } from "components/shared/InputFields/Validators/Validators";
 
 interface IFormDinner {
   viewErrorTrigger: number;

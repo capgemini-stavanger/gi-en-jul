@@ -1,5 +1,5 @@
 import { Container, Typography } from "@material-ui/core";
-import LogOutButton from "../login/LogOutButton";
+import LogOutButton from "components/login/LogOutButton";
 
 interface Props {
   ErrorText: string;

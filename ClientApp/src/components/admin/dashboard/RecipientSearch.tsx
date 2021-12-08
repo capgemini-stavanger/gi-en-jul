@@ -2,8 +2,8 @@ import { Container, Grid, TextField } from "@material-ui/core";
 import { Search } from "@material-ui/icons";
 import React, { useState } from "react";
 import useStyles from "./Styles";
-import Datatable from "../common/RecipientTable";
-import { RecipientType} from "../../../components/shared/Types";
+import Datatable from "./RecipientTable";
+import { RecipientType} from "components/shared/Types";
 
 type Props = {
   data: RecipientType[] | [];

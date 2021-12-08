@@ -14,14 +14,14 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { FAMILY_SIZES } from "../../common/constants/FamilySizes";
-import ApiService from "../../common/functions/apiServiceClass";
-import InputValidator from "../shared/InputFields/Validators/InputValidator";
+import { FAMILY_SIZES } from "common/constants/FamilySizes";
+import ApiService from "common/functions/apiServiceClass";
+import InputValidator from "components/shared/InputFields/Validators/InputValidator";
 import {
   isEmail,
   isNotNull,
   isPhoneNumber,
-} from "../shared/InputFields/Validators/Validators";
+} from "components/shared/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import PrivacyDialog from "./PrivacyDialog";

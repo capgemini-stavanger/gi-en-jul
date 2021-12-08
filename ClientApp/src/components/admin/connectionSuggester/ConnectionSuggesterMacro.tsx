@@ -9,9 +9,9 @@ import React, { useEffect, useState } from "react";
 import GiverSuggestions from "./GiverTable";
 import RecipientSuggestions from "./RecipientTable";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { RecipientType, GiverType } from "./Types";
-import ApiService from "../../../common/functions/apiServiceClass";
-import useStyles from "../common/Styles";
+import { RecipientType, GiverType } from "components/shared/Types";
+import ApiService from "common/functions/apiServiceClass";
+import useStyles from "components/admin/Styles";
 import MuiAlert, { Color } from "@material-ui/lab/Alert";
 import { TransitionProps } from "@material-ui/core/transitions";
 

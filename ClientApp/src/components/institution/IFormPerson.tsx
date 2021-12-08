@@ -1,4 +1,4 @@
-import Gender from "../../common/enums/Gender";
+import Gender from "common/enums/Gender";
 import { v4 as uuidv4 } from "uuid";
 
 interface IFormPerson {

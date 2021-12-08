@@ -5,8 +5,8 @@ import {
   GridRowData,
 } from "@material-ui/data-grid";
 import { FC, useEffect, useState } from "react";
-import ApiService from "../../../common/functions/apiServiceClass";
-import useUser from "../../../hooks/useUser";
+import ApiService from "common/functions/apiServiceClass";
+import useUser from "hooks/useUser";
 import clsx from "clsx";
 import useStyles from "./Styles";
 

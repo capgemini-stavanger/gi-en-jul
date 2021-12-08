@@ -11,12 +11,12 @@ import {
   Group,
   Mail,
   Phone,
-  FiberManualRecord,
 } from "@material-ui/icons";
 import React from "react";
-import { GiverType } from "../../../components/shared/Types";
-import Circle from "./Circle";
-import useStyles from "./Styles";
+import { GiverType } from "components/shared/Types";
+import Circle from "components/admin/dashboard/Circle";
+import useStyles from "components/admin/Styles";
+import formatFamily from "common/functions/GetFamilySize"
 
 type Props = {
   data: GiverType[] | [];
@@ -32,16 +32,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
     handleGiverChange(giver);
   };
 
-  const formatFamily = (input: Number) => {
-    if (input === 2) {
-      return "< 3";
-    }
-    if (input === 5) {
-      return "3 - 5";
-    } else {
-      return "> 5";
-    }
-  };
+  
 
   return (
     <Container>

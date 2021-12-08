@@ -3,10 +3,10 @@ import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import IFormData from "./IFormData";
-import useStyles from "./Styles";
-import snowmanFull from "./../../styling/img/snowmanFull.svg";
-import snowDown from "./../../styling/img/snow_down2.svg";
-import logo from "./../../styling/img/logo_green.svg";
+import useStyles from "components/registerGiver/Styles";
+import snowmanFull from "styling/img/snowmanFull.svg";
+import snowDown from "styling/img/snow_down2.svg";
+import logo from "styling/img/logo_green.svg";
 import { ArrowForwardIos } from "@material-ui/icons";
 
 type Props = {

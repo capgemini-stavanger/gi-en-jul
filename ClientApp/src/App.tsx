@@ -1,11 +1,11 @@
 import { Route } from "react-router";
-import AdminPage from "./pages/admin";
-import LoadingPage from "./pages/LoadingPage";
-import Home from "./pages/public";
-import Institution from "./components/institution/InstitutionMacro";
-import RegistrationMacro from "./components/registerGiver/Macro";
-import VerifyConnection from "./pages/VerifyConnection";
-import "./custom.css";
+import AdminPage from "pages/login";
+import LoadingPage from "pages/LoadingPage";
+import Home from "pages/public";
+import Institution from "pages/institution";
+import RegistrationMacro from "components/registerGiver/Macro";
+import VerifyConnection from "pages/VerifyConnection";
+import "custom.css";
 
 const App = () => {
   return (

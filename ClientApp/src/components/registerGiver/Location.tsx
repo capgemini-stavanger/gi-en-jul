@@ -1,8 +1,8 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router-dom";
-import InputValidator from "../shared/InputFields/Validators/InputValidator";
-import { isNotNull } from "../shared/InputFields/Validators/Validators";
+import InputValidator from "components/shared/InputFields/Validators/InputValidator";
+import { isNotNull } from "components/shared/InputFields/Validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";

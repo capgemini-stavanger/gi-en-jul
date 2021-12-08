@@ -4,9 +4,9 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { GiverType } from "./Types";
+import { GiverType } from "components/shared/Types";
 import { Group } from "@material-ui/icons";
-import useStyles from "../common/Styles";
+import useStyles from "components/admin/Styles";
 
 type GiverRowProps = {
   giver: GiverType;

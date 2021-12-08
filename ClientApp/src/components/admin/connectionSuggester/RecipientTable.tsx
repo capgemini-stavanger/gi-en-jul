@@ -10,11 +10,11 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import { RecipientType } from "./Types";
-import { getGender } from "../../../common/functions/GetGender";
+import { RecipientType } from "components/shared/Types";
+import getGender from "common/functions/GetGender";
 import { capitalize } from "@material-ui/core";
 import { Group } from "@material-ui/icons";
-import useStyles from "../common/Styles";
+import useStyles from "components/admin/Styles";
 
 type RecipientRowProps = {
   recipient: RecipientType;

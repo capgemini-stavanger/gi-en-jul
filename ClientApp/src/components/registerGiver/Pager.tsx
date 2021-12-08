@@ -2,7 +2,7 @@ import { Button, Grid, MobileStepper } from "@material-ui/core";
 import React, { FC } from "react";
 import useStyles from "./Styles";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
-import { isMobile } from "../../common/functions/IsMobile";
+import { isMobile } from "common/functions/IsMobile";
 interface IPager {
   onBack?: (event: React.FormEvent) => void;
   onContinue?: (event: React.FormEvent) => void;
