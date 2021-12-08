@@ -8,7 +8,7 @@
  import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
- import { DataGrid, GridColDef } from '@mui/x-data-grid';
+ import { DataGrid, GridColDef } from '@material-ui/data-grid';
 
 const columns: GridColDef[] = [
     {field: "id", headerName: "Familie ID", type: "number", width: 200}, 
@@ -46,7 +46,7 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
     let rows = [];
     for(let i = 0; i<recipientData.length; i++){
         rows[i] = {id: recipientData[i].familyId, refId: recipientData[i].referenceId, contactName: recipientData[i].contactFullName, contactMail: recipientData[i].contactEmail, contactPhone: recipientData[i].contactPhoneNumber};
-    } //test for rebuild in github. 
+    }
     return (
          <div>
              <Dialog fullWidth={true} open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
