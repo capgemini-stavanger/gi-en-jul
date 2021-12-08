@@ -2,7 +2,7 @@ import Gender from "../enums/Gender";
 
 export interface SelectedConnectionType {
     giver?: GiverType;
-    recipient: RecipientType;
+    recipient?: RecipientType;
   }
   
   export interface GiverType {
@@ -13,6 +13,7 @@ export interface SelectedConnectionType {
     isSuggestedMatch: Boolean;
     location: string;
     matchedRecipient?: string;
+    matchedRecipientId?: string;
     maxReceivers: Number;
     partitionKey: string;
     rowKey: string;

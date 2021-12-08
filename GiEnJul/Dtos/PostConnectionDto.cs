@@ -6,5 +6,6 @@ namespace GiEnJul.Dtos
         public string GiverPartitionKey { get; set; }
         public string RecipientRowKey { get; set; }
         public string RecipientPartitionKey { get; set; }
+        public string RecipientFamilyId { get; set; }
     }
 }

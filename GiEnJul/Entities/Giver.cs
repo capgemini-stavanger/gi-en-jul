@@ -23,6 +23,7 @@ namespace GiEnJul.Entities
 
         //Is the Rowkey to the recipient
         public string MatchedRecipient { get; set; }
+        public string MatchedRecipientId { get; set; }
 
         //Match with family, default is false
         public Boolean IsSuggestedMatch { get; set; } = false;

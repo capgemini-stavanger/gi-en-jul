@@ -1,4 +1,5 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Snackbar,Typography} from "@material-ui/core";
+
 import React, {
   useCallback,
   useEffect,
@@ -13,25 +14,25 @@ import { GiverType, RecipientType, SelectedConnectionType } from "../../../commo
 
 const initState: SelectedConnectionType = {
   giver: undefined,
-  recipient: {} as RecipientType,
+  recipient: undefined,
 };
 interface IOverviewMacro {
   location: string;
   accessToken: string;
 }
+
   
 const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [selectedConnection, setSelectedConnection] =
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  const apiservice = new ApiService(accessToken);
-  const [open, setOpen] = useState(false);
+  const apiservice = new ApiService(accessToken); 
 
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
-      .then((resp) => setGiverData(resp.data))
+      .then((resp) =>{setGiverData(resp.data); console.log(resp.data)})
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -78,7 +79,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
-            recipient: {} as RecipientType,
+            recipient: undefined,
           };
         });
       } else {
@@ -101,6 +102,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           GiverPartitionKey: selectedConnection.giver?.partitionKey,
           RecipientRowKey: selectedConnection.recipient?.rowKey,
           RecipientPartitionKey: selectedConnection.recipient?.partitionKey,
+          RecipientFamilyId : selectedConnection.recipient?.familyId
         })
       )
       .then((response) => {
