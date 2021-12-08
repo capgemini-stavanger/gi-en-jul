@@ -3,17 +3,20 @@
      Dialog,
      DialogActions,
      DialogContent,
-     DialogContentText,
      DialogTitle,
  } from "@material-ui/core";
  import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
- import Recipient from "../admin/overview/Recipient";
  import ApiService from "../../common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
+ import { DataGrid, GridColDef } from '@material-ui/data-grid';
 
- const initState: SelectedConnectionType= {
-      recipient: {} as RecipientType,
-  };
+const columns: GridColDef[] = [
+    {field: "id", headerName: "Familie ID", type: "number", width: 200}, 
+    {field: "refId", headerName: "Referanse ID", width: 200}, 
+    {field: "contactName", headerName: "Kontaktperson navn", width: 200},
+    {field: "contactMail", headerName: "Kontaktperson mail", width: 200},
+    {field: "contactPhone", headerName: "Kontaktperson nummer", width: 200},
+];
 
 interface IFamilyDialog{
      open: boolean;
@@ -23,7 +26,7 @@ interface IFamilyDialog{
  }
  
 const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, handleClose}) => {
-/*
+
   const apiservice = new ApiService(accessToken);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
  
@@ -36,24 +39,27 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
           console.error(errorStack)
         });
     }
-    
       useEffect(() => {
           fetchRecipients();
       }, []);
- */   
     
+    let rows = [];
+    for(let i = 0; i<recipientData.length; i++){
+        rows[i] = {id: recipientData[i].familyId, refId: recipientData[i].referenceId, contactName: recipientData[i].contactFullName, contactMail: recipientData[i].contactEmail, contactPhone: recipientData[i].contactPhoneNumber};
+    }
     return (
          <div>
              <Dialog fullWidth={true} open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-                 <DialogTitle id="alert-dialog-title">
+                 <DialogTitle id="alert-dialog-title"> 
                      {"Tidligere registrerte familier"}
                  </DialogTitle>
-                 <DialogContent>
-                     <DialogContentText id="alert-dialog-description">
-                         <p>Liste over familier</p>
-                     </DialogContentText>
-                     Kommer snart
-                     {/* <Recipient data={recipientData} accessToken={accessToken} refreshRecipients={() => ""}/> */}
+                 <DialogContent style={{height:'800px'}}>
+                    <DataGrid
+                     rows={rows}
+                     columns={columns}
+                     autoPageSize
+                     pagination
+                     />
                  </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>

@@ -42,6 +42,7 @@ function Row(props: RecipientRowProps) {
           </IconButton>
         </TableCell>
         <TableCell>{recipient.familyId}</TableCell>
+        <TableCell>{recipient.referenceId}</TableCell>
         <TableCell align="center">
           <Group />
           {" " + recipient.familyMembers.length}
@@ -129,6 +130,7 @@ export default function RecipientSuggestions(props: TableProps) {
         <TableRow>
           <TableCell />
           <TableCell>Familienummer</TableCell>
+          <TableCell>Referanse ID</TableCell>
           <TableCell align="center">Størrelse</TableCell>
           <TableCell align="center">Institusjon</TableCell>
         </TableRow>
