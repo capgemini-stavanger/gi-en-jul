@@ -5,7 +5,7 @@ import ScrollToTop from "components/shared/ScrollToTop";
 import CompletedMacro from "components/admin/dashboard-completed/Macro";
 import OverviewMacro from "components/admin/dashboard-all/OverviewMacro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
-import NavBarLoggedIn from "components/shared/navbar/NavBar";
+import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 
 interface IAdminTab {
   accessToken: string;

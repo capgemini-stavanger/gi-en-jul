@@ -9,6 +9,7 @@ import FamilySize from "components/register-as-giver/FamilySize";
 import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
+import NavBar from "components/shared/navbar/NavBar";
 
 const initFormDataState: IFormData = {
   location: "",

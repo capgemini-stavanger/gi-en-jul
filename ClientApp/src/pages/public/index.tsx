@@ -9,7 +9,7 @@ import family from "styling/img/familyTop.svg";
 import snowDown from "styling/img/snow_down.svg";
 import Contact from "components/landing-page/Contact";
 import {ContactData} from "components/landing-page/Contact";
-import NavBar from "components/shared/navbar/NavBar";
+import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
@@ -26,7 +26,7 @@ const Home = () => {
 
   return (
     <>
-      <NavBar />
+      <NavBarLoggedIn />
       <Container className={classes.root} maxWidth={false}>
         <Grid
           container
