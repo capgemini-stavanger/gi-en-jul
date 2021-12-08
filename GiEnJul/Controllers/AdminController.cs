@@ -66,7 +66,7 @@ namespace GiEnJul.Controllers
 
             foreach (var giver in givers.Where(x => x.IsSuggestedMatch))
             {
-                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipientId);
+                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipient);
                 giver.MatchedFamilyId = matchedRecipient.FamilyId;
             }
 
@@ -146,12 +146,12 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(location, rowKey);
 
-            if (giver?.MatchedRecipientId is null)
+            if (giver?.MatchedRecipient is null)
             {
                 return NotFound();
             }
 
-            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipientId);
+            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
 
             if (recipient is null)
             {
@@ -163,7 +163,7 @@ namespace GiEnJul.Controllers
 
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
-            giver.MatchedRecipientId = null;
+            giver.MatchedRecipient = null;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
@@ -205,7 +205,7 @@ namespace GiEnJul.Controllers
                 var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
 
                 giver.IsSuggestedMatch = true;
-                giver.MatchedRecipientId = connectionDto.RecipientRowKey;
+                giver.MatchedRecipient = connectionDto.RecipientRowKey;
                 giver.MatchedFamilyId = connectionDto.RecipientFamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
@@ -278,7 +278,7 @@ namespace GiEnJul.Controllers
             catch (Exception e)
             {
                 giver.IsSuggestedMatch = false;
-                giver.MatchedRecipientId = "";
+                giver.MatchedRecipient = "";
                 giver.MatchedFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);
 

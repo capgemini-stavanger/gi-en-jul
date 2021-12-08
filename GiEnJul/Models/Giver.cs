@@ -16,7 +16,7 @@ namespace GiEnJul.Models
         public DateTime RegistrationDate { get; set; }
 
         //Is the Rowkey to the recipient
-        public string MatchedRecipientId { get; set; }
+        public string MatchedRecipient { get; set; }
         public string MatchedFamilyId { get; set; }
         //Match with family, default is false
         public bool IsSuggestedMatch { get; set; } = false;

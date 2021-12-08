@@ -91,7 +91,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
           <AccordionDetails>
             <Typography>
               <Person />
-              {`Tilkoblet Familie: ${giver.matchedRecipientId}`}
+              {`Tilkoblet Familie: ${giver.matchedFamilyId}`}
             </Typography>
           </AccordionDetails>
 }

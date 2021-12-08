@@ -13,7 +13,7 @@ export interface SelectedConnectionType {
     isSuggestedMatch: Boolean;
     location: string;
     matchedRecipient?: string;
-    matchedRecipientId?: string;
+    matchedFamilyId?: string;
     maxReceivers: Number;
     partitionKey: string;
     rowKey: string;
