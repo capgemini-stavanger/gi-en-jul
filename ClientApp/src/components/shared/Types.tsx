@@ -2,7 +2,7 @@ import Gender from "./../../common/enums/Gender"
 
 export interface SelectedConnectionType {
     giver?: GiverType;
-    recipient: RecipientType;
+    recipient?: RecipientType;
   }
   
   export interface GiverType {

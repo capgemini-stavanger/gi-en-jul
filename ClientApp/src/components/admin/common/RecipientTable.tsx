@@ -102,7 +102,8 @@ const DatatableRecipient: React.FC<Props> = ({
             id="panel1bh-header"
           >
             <Typography className={classes.heading}>
-              {recipient.familyId}
+              {"id: " + recipient.familyId}<br/>
+              {recipient.referenceId && "ref: " + recipient.referenceId}
             </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />

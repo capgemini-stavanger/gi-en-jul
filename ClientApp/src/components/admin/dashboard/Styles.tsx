@@ -57,7 +57,17 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("desktop")]: {
       margin: theme.spacing(3),
     },
-
+  },
+  modalStyle: {
+    position: "absolute", 
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%,-50%)",
+    width: 400,
+    backgroundColor: "#e6e6e6",
+    border: "2px solid #000",
+    margin: theme.spacing(5), 
+    padding: theme.spacing(1.5),
   },
 }));
 
