@@ -6,9 +6,9 @@
      DialogContentText,
      DialogTitle,
  } from "@material-ui/core";
- import {RecipientType, SelectedConnectionType} from "../../components/shared/Types";
- import Recipient from "../admin/dashboard/Recipient";
- import ApiService from "../../common/functions/apiServiceClass";
+ import {RecipientType, SelectedConnectionType} from "components/shared/Types";
+ import Recipient from "components/admin/dashboard/Recipient";
+ import ApiService from "common/functions/apiServiceClass";
  import { useEffect, useState, useCallback} from "react";
 
  const initState: SelectedConnectionType= {

@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import { Link as Scroll } from "react-scroll";
-import dummyImg from "./../../styling/img/dummy-image.jpg";
+import dummyImg from "styling/img/dummy-image.jpg";
 import Information from "./Information";
 import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
 

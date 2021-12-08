@@ -10,9 +10,9 @@ import {
   IconButton,
 } from "@material-ui/core";
 import useStyles from "./Styles";
-import dummyImg from "./../../styling/img/dummy-image.jpg";
+import dummyImg from "styling/img/dummy-image.jpg";
 import { Mail } from "@material-ui/icons";
-import myImage from "./../../assets/Elisabeth.png";
+import myImage from "assets/Elisabeth.png";
 
 const style = {
   greyImageFilter: {

@@ -1,9 +1,9 @@
 import { Typography, Container, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
 import { ExpandMore } from "@material-ui/icons";
-import step1 from "./../../styling/img/step1.svg";
-import step2 from "./../../styling/img/step2.svg";
-import step3 from "./../../styling/img/step3.svg";
+import step1 from "styling/img/step1.svg";
+import step2 from "styling/img/step2.svg";
+import step3 from "styling/img/step3.svg";
 
 const How = () => {
   const classes = useStyles();
