@@ -8,7 +8,7 @@ import IFormData from "components/register-as-giver/IFormData";
 import FamilySize from "components/register-as-giver/FamilySize";
 import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
-import NavBar from "components/shared/navbar/NavBar";
+import * as NavBar from "components/shared/navbar/NavBar";
 import LoadingPage from "pages/LoadingPage";
 
 const initFormDataState: IFormData = {
@@ -157,7 +157,7 @@ const RegistrationMacro = () => {
         </Container>
       ) : (
         <>
-          <NavBar />
+          <NavBar.NavBar />
           <Container className={classes.giverForm}>
             <Typography className={classes.heading}>Bli giver</Typography>
             {getStepPage()}
