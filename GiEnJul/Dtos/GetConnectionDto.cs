@@ -9,6 +9,6 @@ namespace GiEnJul.Dtos
         public string PhoneNumber { get; set; }
         public bool Confirmed { get; set; }
         public string SubmitterFullName { get; set; }
-        public string SubmitterMail { get; set; }
+        public string SubmitterEmail { get; set; }
     }
 }
