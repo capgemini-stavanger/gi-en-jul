@@ -1,4 +1,4 @@
-import Gender from "../enums/Gender";
+import Gender from "common/enums/Gender";
 
 export function getGender(gender: Gender, age: number) {
   if (age === undefined || age < 18) {

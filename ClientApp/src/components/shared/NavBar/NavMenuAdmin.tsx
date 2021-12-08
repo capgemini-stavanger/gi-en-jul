@@ -6,8 +6,8 @@ import {
   NavbarBrand,
   NavbarToggler,
 } from "reactstrap";
-import LogOutButton from "./../../../components/login/LogOutButton";
-import logo from "./../../../styling/img/logo_green.svg";
+import LogOutButton from "components/login/LogOutButton";
+import logo from "styling/img/logo_green.svg";
 import "./NavMenuAdmin.css";
 
 export default class NavMenuAdmin extends React.PureComponent<
@@ -28,7 +28,6 @@ export default class NavMenuAdmin extends React.PureComponent<
           <Container>
             <NavbarBrand tag={Link} to="/">
               <img className={"logo-small"} src={logo}></img>
-              Hei Institution
             </NavbarBrand>
             <NavbarToggler onClick={this.toggle} className="mr-2" />
             <LogOutButton />

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import useStyles from "./Styles";
-import { SelectedConnectionType } from "../../../components/shared/Types";
+import { SelectedConnectionType } from "components/shared/Types";
 import { Grid, Typography, Modal, Box, Button} from "@material-ui/core";
 
 
