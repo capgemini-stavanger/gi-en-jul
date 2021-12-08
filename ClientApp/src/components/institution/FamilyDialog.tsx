@@ -46,11 +46,11 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
     let rows = [];
     for(let i = 0; i<recipientData.length; i++){
         rows[i] = {id: recipientData[i].familyId, refId: recipientData[i].referenceId, contactName: recipientData[i].contactFullName, contactMail: recipientData[i].contactEmail, contactPhone: recipientData[i].contactPhoneNumber};
-    }
+    } //test for rebuild in github. 
     return (
          <div>
              <Dialog fullWidth={true} open={open} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-                 <DialogTitle id="alert-dialog-title">
+                 <DialogTitle id="alert-dialog-title"> 
                      {"Tidligere registrerte familier"}
                  </DialogTitle>
                  <DialogContent style={{height:'800px'}}>
