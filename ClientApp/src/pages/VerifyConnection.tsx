@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "react-router";
 import LoadingPage from "pages/LoadingPage";
 import ApiService from "common/functions/apiServiceClass";
-import useStyles from "components/registerGiver/Styles";
+import useStyles from "components/register-as-giver/Styles";
 import snowmanFull from "styling/img/snowmanFull.svg";
 import snowDown from "styling/img/snow_down2.svg";
 

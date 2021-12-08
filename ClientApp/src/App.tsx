@@ -3,7 +3,7 @@ import AdminPage from "pages/login";
 import LoadingPage from "pages/LoadingPage";
 import Home from "pages/public";
 import Institution from "pages/institution";
-import RegistrationMacro from "components/registerGiver/Macro";
+import RegistrationMacro from "components/register-as-giver/Macro";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
 
