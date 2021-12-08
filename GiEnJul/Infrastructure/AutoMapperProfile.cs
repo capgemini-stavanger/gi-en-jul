@@ -96,8 +96,7 @@ namespace GiEnJul.Infrastructure
 
             //Connection mapping
             CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
-                .ForMember(dest => dest.Check, opt => opt.Ignore())
-                .ForMember(dest => dest.SubmitterEmail, opt => opt.Ignore());
+                .ForMember(dest => dest.Check, opt => opt.Ignore());
 
             CreateMap<Entities.Connection, Models.Giver>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.GiverFullName))
