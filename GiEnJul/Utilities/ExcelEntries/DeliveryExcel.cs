@@ -9,6 +9,7 @@ namespace GiEnJul.Utilities.ExcelClasses
         public string Institution { get; set; }
         public string ReferenceId { get; set; }
         public string GiverFullName { get; set; }
+        public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
 
         public OrderedDictionary AsOrderedDictionary()
@@ -20,6 +21,7 @@ namespace GiEnJul.Utilities.ExcelClasses
                 ["Institusjon"] = Institution,
                 ["Referanse id"] = ReferenceId,
                 ["Giver navn"] = GiverFullName,
+                ["Giver epost"] = GiverEmail,
                 ["Giver mobil"] = GiverPhoneNumber,
             };
         }
