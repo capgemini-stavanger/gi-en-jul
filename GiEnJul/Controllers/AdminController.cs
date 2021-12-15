@@ -206,7 +206,7 @@ namespace GiEnJul.Controllers
 
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
-                giver.MatchedFamilyId = connectionDto.RecipientFamilyId;
+                giver.MatchedFamilyId = recipient.FamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;

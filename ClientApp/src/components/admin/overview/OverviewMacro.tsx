@@ -32,7 +32,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
-      .then((resp) =>{setGiverData(resp.data); console.log(resp.data)})
+      .then((resp) =>{setGiverData(resp.data)})
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -102,7 +102,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           GiverPartitionKey: selectedConnection.giver?.partitionKey,
           RecipientRowKey: selectedConnection.recipient?.rowKey,
           RecipientPartitionKey: selectedConnection.recipient?.partitionKey,
-          RecipientFamilyId : selectedConnection.recipient?.familyId
         })
       )
       .then((response) => {
