@@ -54,6 +54,11 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     fetchGivers();
   }, []);
 
+  const refreshData = () => {
+    fetchGivers();
+    fetchRecipients();
+  }
+
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
       if (selectedConnection.giver?.rowKey === newGiver.rowKey) {
@@ -137,7 +142,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Giver 
               data={giverData} 
               handleGiverChange={handleGiverChange}
-              refreshData={() => fetchGivers()}
+              refreshData={() => refreshData()}
               />
           </Grid>
           <Grid item xs={5}>
