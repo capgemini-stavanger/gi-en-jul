@@ -11,19 +11,19 @@ import {
   Group,
   Mail,
   Phone,
-  FiberManualRecord,
 } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 import { GiverType } from "../../../common/components/Types";
 import Circle from "./Circle";
 import useStyles from "./Styles";
 
 type Props = {
   data: GiverType[] | [];
+  handleOpen: () => void;
   handleGiverChange: (newGiver: GiverType) => void;
 };
 
-const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
+const Datatable: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => {
   const classes = useStyles();
 
   const [expanded, setExpanded] = React.useState<GiverType | false>(false);
@@ -86,8 +86,15 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
               {giver.email}
             </Typography>
           </AccordionDetails>
+          <AccordionDetails>
+            <Typography onClick={handleOpen}>
+              <Mail />
+              Slett giver
+            </Typography>
+          </AccordionDetails>
         </Accordion>
-      ))}
+        
+        ))}
     </Container>
   );
 };

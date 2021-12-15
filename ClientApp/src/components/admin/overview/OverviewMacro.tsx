@@ -11,6 +11,7 @@ import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
 import { GiverType, RecipientType, SelectedConnectionType } from "../../../common/components/Types";
+import DeleteGiverDialog from "./DeleteGiverDialog";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
@@ -27,6 +28,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const [openDialog, setOpenDialog] = useState(false);
   const apiservice = new ApiService(accessToken); 
 
   async function fetchGivers() {
@@ -51,6 +53,18 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     fetchRecipients();
     fetchGivers();
   }, []);
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true)
+  }
+
+  const handleDeleteGiver = (giverRowKey?: string) => {
+    console.log(giverRowKey)
+  }
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
@@ -132,7 +146,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Typography variant="h4" align="center">
               Givere
             </Typography>
-            <Giver data={giverData} handleGiverChange={handleGiverChange} />
+            <Giver data={giverData} handleGiverChange={handleGiverChange} handleOpen={handleOpenDialog}/>
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h4" align="center">
@@ -142,6 +156,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
               data={recipientData}
               refreshRecipients={() => fetchRecipients()}
               handleRecipientChange={handleRecipientChange}
+              
             />
           </Grid>
         </Grid>
@@ -149,6 +164,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           selectedConnection={selectedConnection}
           connectGiverRecipient={connectGiverRecipient}
         />
+        <DeleteGiverDialog open={openDialog} handleClose={handleCloseDialog} giverId={selectedConnection.giver?.rowKey} handleDeleteGiver={(rowKey?: string) => handleDeleteGiver(rowKey)} />
       </Container>
     </>
   );
