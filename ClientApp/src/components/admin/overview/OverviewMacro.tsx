@@ -62,10 +62,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     setOpenDialog(true)
   }
 
-  const handleDeleteGiver = (giverRowKey?: string) => {
-    console.log(giverRowKey)
-  }
-
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
       if (selectedConnection.giver?.rowKey === newGiver.rowKey) {
@@ -164,7 +160,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           selectedConnection={selectedConnection}
           connectGiverRecipient={connectGiverRecipient}
         />
-        <DeleteGiverDialog open={openDialog} handleClose={handleCloseDialog} giverId={selectedConnection.giver?.rowKey} handleDeleteGiver={(rowKey?: string) => handleDeleteGiver(rowKey)} />
+        <DeleteGiverDialog open={openDialog} handleClose={handleCloseDialog} giverData={{rowKey: selectedConnection.giver?.rowKey, partitionKey: selectedConnection.giver?.partitionKey, fullName: selectedConnection.giver?.fullName}} />
       </Container>
     </>
   );

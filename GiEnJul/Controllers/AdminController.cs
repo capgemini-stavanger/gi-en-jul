@@ -344,7 +344,7 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpDelete("giver")]
+        [HttpDelete("Giver")]
         [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {

@@ -2,11 +2,13 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   Container,
   Divider,
   Typography,
 } from "@material-ui/core";
 import {
+  Delete,
   ExpandMore,
   Group,
   Mail,
@@ -88,8 +90,10 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => 
           </AccordionDetails>
           <AccordionDetails>
             <Typography onClick={handleOpen}>
-              <Mail />
-              Slett giver
+              <Delete />
+              <Button>
+                Slett giver
+              </Button>
             </Typography>
           </AccordionDetails>
         </Accordion>
