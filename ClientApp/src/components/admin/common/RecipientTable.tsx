@@ -26,13 +26,13 @@ import EditFamily from "../../../common/components/EditFamily";
 
 type Props = {
   data: RecipientType[] | [];
-  refreshRecipients: () => void;
+  refreshData: () => void;
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  refreshRecipients,
+  refreshData,
   handleRecipientChange,
 }) => {
   const classes = useStyles();
@@ -191,7 +191,7 @@ const DatatableRecipient: React.FC<Props> = ({
         recipientToUpdate={selectedRecipient}
         onClose={() => { setOpen(false)}}
         open={open} 
-        refreshRecipients={() => refreshRecipients()}
+        refreshRecipients={() => refreshData()}
         />
       }
     </Container>

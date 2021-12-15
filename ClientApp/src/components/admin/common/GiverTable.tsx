@@ -14,25 +14,36 @@ import {
   Mail,
   Phone,
 } from "@material-ui/icons";
+import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { GiverType } from "../../../common/components/Types";
+import DeleteGiverDialog from "../overview/DeleteGiverDialog";
 import Circle from "./Circle";
 import useStyles from "./Styles";
 
 type Props = {
   data: GiverType[] | [];
-  handleOpen: () => void;
   handleGiverChange: (newGiver: GiverType) => void;
+  refreshData: () => void;
 };
 
-const Datatable: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => {
+const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) => {
   const classes = useStyles();
 
-  const [expanded, setExpanded] = React.useState<GiverType | false>(false);
+  const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? giver : false);
+    setSelectedGiver(isExpanded ? giver : false);
     handleGiverChange(giver);
   };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true)
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
+  }
 
   const formatFamily = (input: Number) => {
     if (input === 2) {
@@ -48,11 +59,12 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => 
   return (
     <Container>
       {data.map((giver) => (
-        <Accordion expanded={expanded===giver}
+        <Accordion expanded={selectedGiver === giver}
           onChange = {handleChange(giver)}
           key={giver.rowKey}
           className={classes.accordionContainer}
         >
+          
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
@@ -89,13 +101,18 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => 
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
-            <Typography onClick={handleOpen}>
+            <Typography onClick={handleOpenDialog}>
               <Delete />
               <Button>
                 Slett giver
               </Button>
             </Typography>
           </AccordionDetails>
+          <DeleteGiverDialog 
+          open={selectedGiver === giver && openDialog}
+          handleClose={handleCloseDialog} 
+          giverData={{rowKey: giver.rowKey, partitionKey:  giver.partitionKey, fullName: giver.fullName}} 
+          refreshData={refreshData} />
         </Accordion>
         
         ))}

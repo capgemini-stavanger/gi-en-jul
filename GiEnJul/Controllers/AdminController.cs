@@ -348,8 +348,26 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = "DeleteGiver")]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
+            var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+
+            if (giver.HasConfirmedMatch)
+            {
+                await DeleteConnectionAsync(giverDto.PartitionKey, giverDto.RowKey);
+            }
+
+            if (!(giver.MatchedRecipient is null))
+            {
+                var recipient = await _recipientRepository.GetRecipientAsync(giverDto.PartitionKey, giver.MatchedRecipient);
+
+                recipient.HasConfirmedMatch = false;
+                recipient.IsSuggestedMatch = false;
+                recipient.MatchedGiver = null;
+
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+            }
+
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
-            var deletedGiver = await _giverRepository.DeleteAsync(giverToDelete);
+            await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
         }
 

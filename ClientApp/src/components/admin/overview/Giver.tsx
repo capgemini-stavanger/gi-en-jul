@@ -7,11 +7,11 @@ import { GiverType } from "../../../common/components/Types";
 
 type Props = {
   data: GiverType[] | [];
-  handleOpen: () => void;
   handleGiverChange: (newGiver: GiverType) => void;
+  refreshData: () => void;
 };
 
-const Giver: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => {
+const Giver: React.FC<Props> = ({ data, handleGiverChange, refreshData }) => {
   const [query, setQuery] = useState("");
 
   const search = (input: GiverType[] | []) => {
@@ -42,7 +42,7 @@ const Giver: React.FC<Props> = ({ data, handleGiverChange, handleOpen }) => {
       <Datatable
         data={search(data)}
         handleGiverChange={handleGiverChange}
-        handleOpen={handleOpen}
+        refreshData={refreshData}
       ></Datatable>
     </Container>
   );

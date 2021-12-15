@@ -34,7 +34,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
-      .then((resp) => setGiverData(resp.data))
+      .then((resp) => {setGiverData(resp.data)})
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -53,14 +53,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     fetchRecipients();
     fetchGivers();
   }, []);
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false)
-  }
-
-  const handleOpenDialog = () => {
-    setOpenDialog(true)
-  }
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
@@ -142,7 +134,11 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Typography variant="h4" align="center">
               Givere
             </Typography>
-            <Giver data={giverData} handleGiverChange={handleGiverChange} handleOpen={handleOpenDialog}/>
+            <Giver 
+              data={giverData} 
+              handleGiverChange={handleGiverChange}
+              refreshData={() => fetchGivers()}
+              />
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h4" align="center">
@@ -150,7 +146,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              refreshRecipients={() => fetchRecipients()}
+              refreshData={() => fetchRecipients()}
               handleRecipientChange={handleRecipientChange}
               
             />
@@ -160,7 +156,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
           selectedConnection={selectedConnection}
           connectGiverRecipient={connectGiverRecipient}
         />
-        <DeleteGiverDialog open={openDialog} handleClose={handleCloseDialog} giverData={{rowKey: selectedConnection.giver?.rowKey, partitionKey: selectedConnection.giver?.partitionKey, fullName: selectedConnection.giver?.fullName}} />
       </Container>
     </>
   );
