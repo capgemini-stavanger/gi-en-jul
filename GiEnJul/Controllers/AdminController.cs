@@ -154,7 +154,7 @@ namespace GiEnJul.Controllers
                 giver = await _giverRepository.GetGiverAsync(location, recipient.MatchedGiver);
             }
 
-            if (recipient is null)
+            if (recipient is null || giver is null)
             {
                 return NotFound();
             }
@@ -309,6 +309,12 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+
+            if (recipientToDelete.IsSuggestedMatch)
+            {
+                await DeleteConnectionAsync(recipientToDelete.PartitionKey, recipientToDelete.RowKey);
+            }
+
             var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
 
             if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)

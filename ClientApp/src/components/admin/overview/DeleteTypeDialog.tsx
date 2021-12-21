@@ -15,7 +15,7 @@ import { isEqual } from "../../InputFields/Validators/Validators";
 
 interface IConfirmationDialog {
     open: boolean;
-    typeData: GiverType;
+    typeData: any;
     handleClose: () => void;
     refreshData: () => void;
     type?: string;
@@ -33,7 +33,7 @@ interface IConfirmationDialog {
     const { getAccessTokenSilently } = useAuth0();
     const [userAccessToken, setUserAccessToken] = useState<string>("");
     const apiservice = new ApiService(userAccessToken);
-    const [giverNameInput, setGiverNameInput] = useState("")
+    const [validationInput, setGiverNameInput] = useState("")
 
     const handleDeleteGiver = async () => {
       await apiservice
@@ -67,19 +67,19 @@ interface IConfirmationDialog {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Slett giver?"}
+          {`Slett ${type ? `${type=="Giver" ? "Giver" : "Familie"}` : "kobling"}?`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-              {`Bekreft ved å skrive givers fulle navn`}
+              {`Bekreft ved å skrive inn ${type ? `${type=="Giver" ? 'giveren sitt fulle navn' : 'familiens id'}` : ""}`}
           </DialogContentText>
-          <Input type="text" value={giverNameInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setGiverNameInput(e.target.value)}}  placeholder="Ola Norman" />
+          <Input type="text" value={validationInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setGiverNameInput(e.target.value)}}  placeholder={`${type=="Giver" ? 'Ola Normann' : "123"}`} />
         </DialogContent>
         <DialogActions>
-        <Button onClick={() => {handleClose(); setGiverNameInput("")}} autoFocus>
+        <Button onClick={() => {handleClose(); setGiverNameInput(""); console.log(typeData)}} autoFocus>
             Tilbake
           </Button>
-          <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, giverNameInput)} >
+          <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, validationInput) && !isEqual(typeData?.familyId, validationInput)} >
             Slett
           </Button>
         </DialogActions>
