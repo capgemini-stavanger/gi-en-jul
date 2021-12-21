@@ -112,7 +112,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           open={selectedGiver === giver && openDialog}
           handleClose={handleCloseDialog} 
           giverData={{rowKey: giver.rowKey, partitionKey:  giver.partitionKey, fullName: giver.fullName}} 
-          refreshData={refreshData} />
+          refreshData={refreshData} 
+          />
         </Accordion>
         
         ))}

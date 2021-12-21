@@ -137,12 +137,22 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(location, rowKey);
 
-            if (giver?.MatchedRecipient is null)
+            var recipient = await _recipientRepository.GetRecipientAsync(location, rowKey);
+
+            if (giver is null && recipient is null)
             {
                 return NotFound();
             }
 
-            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+            if (giver?.MatchedRecipient != null && recipient is null)
+            {
+                recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+            }
+
+            if (recipient?.MatchedGiver != null && giver is null)
+            {
+                giver = await _giverRepository.GetGiverAsync(location, recipient.MatchedGiver);
+            }
 
             if (recipient is null)
             {
@@ -164,7 +174,20 @@ namespace GiEnJul.Controllers
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-                
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+
+            if (!originalGiver.HasConfirmedMatch) return Ok();
+            
+            try
+            {
                 await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
             }
             catch (Exception e)
@@ -175,7 +198,7 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
-            
+
             return Ok();
         }
 
@@ -350,12 +373,12 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
 
-            if (giver.HasConfirmedMatch)
+            if (giver.IsSuggestedMatch)
             {
                 await DeleteConnectionAsync(giverDto.PartitionKey, giverDto.RowKey);
             }
 
-            if (!(giver.MatchedRecipient is null))
+            /*if (!(giver.MatchedRecipient is null))
             {
                 var recipient = await _recipientRepository.GetRecipientAsync(giverDto.PartitionKey, giver.MatchedRecipient);
 
@@ -364,7 +387,7 @@ namespace GiEnJul.Controllers
                 recipient.MatchedGiver = null;
 
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-            }
+            }*/
 
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
             await _giverRepository.DeleteAsync(giverToDelete);

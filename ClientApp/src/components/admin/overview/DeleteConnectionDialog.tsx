@@ -31,11 +31,11 @@ interface IConfirmationDialog {
     const { getAccessTokenSilently } = useAuth0();
     const [userAccessToken, setUserAccessToken] = useState<string>("");
     const apiservice = new ApiService(userAccessToken);
-    const [giverNameInput, setGiverNameInput] = useState("")
+    const [giverNameInput, setGiverNameInput] = useState("");
 
     const handleDeleteGiver = async (deleteGiverData?: deleteGiverType) => {
       await apiservice
-      .delete("admin/Giver", JSON.stringify( deleteGiverData ))
+      .put("admin/Connection", JSON.stringify( deleteGiverData ))
       .then((response) => {
         if (response.status === 200) {
           refreshData();

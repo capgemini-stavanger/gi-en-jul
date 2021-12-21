@@ -11,7 +11,6 @@ import Giver from "./Giver";
 import Recipient from "./Recipient";
 import Statistics from "./Statistics";
 import { GiverType, RecipientType, SelectedConnectionType } from "../../../common/components/Types";
-import DeleteGiverDialog from "./DeleteGiverDialog";
 
 const initState: SelectedConnectionType = {
   giver: undefined,
