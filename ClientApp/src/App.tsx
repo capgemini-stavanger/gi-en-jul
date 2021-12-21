@@ -2,7 +2,6 @@ import { Route } from "react-router";
 import AdminPage from "pages/login";
 import LoadingPage from "pages/LoadingPage";
 import Home from "pages/public";
-import Institution from "pages/institution";
 import RegistrationMacro from "components/register-as-giver/Macro";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
@@ -12,7 +11,6 @@ const App = () => {
     <>
       <Route path="/admin" component={AdminPage} />
       <Route exact path="/" component={Home} />
-      <Route path="/registrer-familie" component={Institution} />
       <Route path="/bli-giver" component={RegistrationMacro} />
       <Route path="/loading" component={LoadingPage} />
       <Route
