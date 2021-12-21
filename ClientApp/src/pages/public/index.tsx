@@ -12,6 +12,7 @@ import {ContactData} from "components/landing-page/Contact";
 import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
+import NavBarPublic from "components/shared/navbar/NavBarPublic";
 
 const Home = () => {
 
@@ -25,6 +26,7 @@ const Home = () => {
 
   return (
     <>
+      <NavBarPublic />
       <Container className={classes.root} maxWidth={false}>
         <Grid
           container

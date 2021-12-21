@@ -17,7 +17,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 
-const NavBar: FC = () => {
+const NavBarPublic: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const history = useHistory();
@@ -97,4 +97,4 @@ const NavBar: FC = () => {
     );
   }
 };
-export default NavBar;
+export default NavBarPublic;

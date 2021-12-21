@@ -9,7 +9,7 @@ import {
 import LogOutButton from "components/login/LogOutButton";
 import logo from "styling/img/logo_green.svg";
 import "components/shared/navbar/NavBarLoggedIn.css";
-import NavBar from "components/shared/navbar/NavBar";
+import NavBarPublic from "components/shared/navbar/NavBarPublic";
 
 export default class NavBarLoggedIn extends React.PureComponent<
   { role?: string },
@@ -37,7 +37,7 @@ export default class NavBarLoggedIn extends React.PureComponent<
       );
     } else {
       return(
-        <NavBar />
+        <NavBarPublic />
       )
     }
   }
