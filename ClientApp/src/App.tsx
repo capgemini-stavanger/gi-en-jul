@@ -1,8 +1,8 @@
 import { Route } from "react-router";
 import AdminPage from "pages/login";
 import LoadingPage from "pages/LoadingPage";
-import Home from "pages/public";
-import RegistrationMacro from "components/register-as-giver/Macro";
+import Home from "pages/landing-page";
+import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
 
