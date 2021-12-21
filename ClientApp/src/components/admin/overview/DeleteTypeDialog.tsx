@@ -9,23 +9,25 @@ import {
     Input,
   } from "@material-ui/core";
 import { FC, useEffect, useState } from "react";
-import { deleteGiverType } from "../../../common/components/Types";
+import { GiverType } from "../../../common/components/Types";
 import ApiService from "../../../common/functions/apiServiceClass";
-import { isEqual } from "./../../InputFields/Validators/Validators";
+import { isEqual } from "../../InputFields/Validators/Validators";
 
 interface IConfirmationDialog {
     open: boolean;
-    giverData?: deleteGiverType;
+    typeData: GiverType;
     handleClose: () => void;
     refreshData: () => void;
+    type?: string;
   }
 
 
   const DeleteGiverDialog: FC<IConfirmationDialog> = ({
     open,
-    giverData,
+    typeData,
     handleClose,
     refreshData,
+    type,
   }) => {
 
     const { getAccessTokenSilently } = useAuth0();
@@ -33,9 +35,9 @@ interface IConfirmationDialog {
     const apiservice = new ApiService(userAccessToken);
     const [giverNameInput, setGiverNameInput] = useState("")
 
-    const handleDeleteGiver = async (deleteGiverData?: deleteGiverType) => {
+    const handleDeleteGiver = async () => {
       await apiservice
-      .delete("admin/Giver", JSON.stringify( deleteGiverData ))
+      .delete(`admin/${type != null ? type : 'Connection'}`, JSON.stringify( {rowKey: typeData.rowKey, partitionKey:  typeData.partitionKey, fullName: typeData.fullName} ))
       .then((response) => {
         if (response.status === 200) {
           refreshData();
@@ -77,7 +79,7 @@ interface IConfirmationDialog {
         <Button onClick={() => {handleClose(); setGiverNameInput("")}} autoFocus>
             Tilbake
           </Button>
-          <Button onClick={() => {handleClose(); handleDeleteGiver(giverData); setGiverNameInput("")}} disabled={!isEqual(giverData?.fullName, giverNameInput)} >
+          <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, giverNameInput)} >
             Slett
           </Button>
         </DialogActions>

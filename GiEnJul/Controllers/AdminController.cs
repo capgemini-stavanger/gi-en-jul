@@ -378,17 +378,6 @@ namespace GiEnJul.Controllers
                 await DeleteConnectionAsync(giverDto.PartitionKey, giverDto.RowKey);
             }
 
-            /*if (!(giver.MatchedRecipient is null))
-            {
-                var recipient = await _recipientRepository.GetRecipientAsync(giverDto.PartitionKey, giver.MatchedRecipient);
-
-                recipient.HasConfirmedMatch = false;
-                recipient.IsSuggestedMatch = false;
-                recipient.MatchedGiver = null;
-
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
-            }*/
-
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
             await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();

@@ -17,7 +17,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { GiverType } from "../../../common/components/Types";
-import DeleteGiverDialog from "../overview/DeleteGiverDialog";
+import DeleteTypeDialog from "../overview/DeleteTypeDialog";
 import Circle from "./Circle";
 import useStyles from "./Styles";
 
@@ -108,11 +108,12 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               </Button>
             </Typography>
           </AccordionDetails>
-          <DeleteGiverDialog 
+          <DeleteTypeDialog 
           open={selectedGiver === giver && openDialog}
           handleClose={handleCloseDialog} 
-          giverData={{rowKey: giver.rowKey, partitionKey:  giver.partitionKey, fullName: giver.fullName}} 
+          typeData={giver} 
           refreshData={refreshData} 
+          type={"Giver"}
           />
         </Accordion>
         
