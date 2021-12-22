@@ -56,6 +56,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const refreshData = () => {
     fetchGivers();
     fetchRecipients();
+    setSelectedConnection(initState);
   }
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
@@ -150,7 +151,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              refreshData={() => fetchRecipients()}
+              refreshData={() => refreshData()}
               handleRecipientChange={handleRecipientChange}
               
             />

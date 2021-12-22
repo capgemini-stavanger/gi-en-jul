@@ -9,7 +9,6 @@ import {
     Input,
   } from "@material-ui/core";
 import { FC, useEffect, useState } from "react";
-import { GiverType } from "../../../common/components/Types";
 import ApiService from "../../../common/functions/apiServiceClass";
 import { isEqual } from "../../InputFields/Validators/Validators";
 
@@ -18,7 +17,7 @@ interface IConfirmationDialog {
     typeData: any;
     handleClose: () => void;
     refreshData: () => void;
-    type?: string;
+    type?: string | null;
   }
 
 
@@ -37,7 +36,7 @@ interface IConfirmationDialog {
 
     const handleDeleteGiver = async () => {
       await apiservice
-      .delete(`admin/${type != null ? type : 'Connection'}`, JSON.stringify( {rowKey: typeData.rowKey, partitionKey:  typeData.partitionKey, fullName: typeData.fullName} ))
+      .delete(`admin/${type != null ? type : 'Connection'}`, JSON.stringify( {rowKey: typeData.rowKey, partitionKey:  typeData.partitionKey} ))
       .then((response) => {
         if (response.status === 200) {
           refreshData();
@@ -71,12 +70,12 @@ interface IConfirmationDialog {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-              {`Bekreft ved å skrive inn ${type ? `${type=="Giver" ? 'giveren sitt fulle navn' : 'familiens id'}` : ""}`}
+              {`Bekreft ved å skrive inn ${type ? `${type=="Giver" ? 'giveren sitt fulle navn' : 'familiens id'}` : "fullt navn eller id"}`}
           </DialogContentText>
           <Input type="text" value={validationInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setGiverNameInput(e.target.value)}}  placeholder={`${type=="Giver" ? 'Ola Normann' : "123"}`} />
         </DialogContent>
         <DialogActions>
-        <Button onClick={() => {handleClose(); setGiverNameInput(""); console.log(typeData)}} autoFocus>
+        <Button onClick={() => {handleClose(); setGiverNameInput(""); console.log(typeData); console.log(type)}} autoFocus>
             Tilbake
           </Button>
           <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, validationInput) && !isEqual(typeData?.familyId, validationInput)} >

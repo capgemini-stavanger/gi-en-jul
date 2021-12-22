@@ -16,6 +16,7 @@ import {
   Phone,
   FiberManualRecord,
   Delete,
+  LinkOff,
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
@@ -43,6 +44,7 @@ const DatatableRecipient: React.FC<Props> = ({
   const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
   const [open, setOpen] = useState(false)
   const [openDialog, setOpenDialog] = useState(false);
+  const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
 
   const handleSelectedAccordion = (index: number) => {
@@ -196,8 +198,18 @@ const DatatableRecipient: React.FC<Props> = ({
               {recipient.referenceId}
             </Typography>
           </AccordionDetails>
+          { recipient.isSuggestedMatch &&
           <AccordionDetails>
-            <Typography onClick={handleOpenDialog}>
+            <Typography onClick={() => {setType(null); handleOpenDialog()}}>
+              <LinkOff />
+              <Button>
+                Koble fra giver og familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
+          }
+          <AccordionDetails>
+            <Typography onClick={() => {setType("Recipient"); handleOpenDialog()}}>
               <Delete />
               <Button>
                 Slett familie
@@ -219,7 +231,7 @@ const DatatableRecipient: React.FC<Props> = ({
           handleClose={handleCloseDialog} 
           typeData={selectedRecipient} 
           refreshData={refreshData} 
-          type={"Recipient"}
+          type={type}
           />
     </Container>
   );

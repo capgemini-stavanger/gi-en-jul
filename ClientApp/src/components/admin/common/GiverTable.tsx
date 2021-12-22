@@ -11,6 +11,7 @@ import {
   Delete,
   ExpandMore,
   Group,
+  LinkOff,
   Mail,
   Phone,
 } from "@material-ui/icons";
@@ -32,6 +33,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
 
   const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [type, setType] = useState<string | null>("");
   const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setSelectedGiver(isExpanded ? giver : false);
     handleGiverChange(giver);
@@ -100,8 +102,18 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               {giver.email}
             </Typography>
           </AccordionDetails>
+          { giver.isSuggestedMatch &&
           <AccordionDetails>
-            <Typography onClick={handleOpenDialog}>
+            <Typography onClick={() => {setType(null); handleOpenDialog()}}>
+              <LinkOff />
+              <Button>
+                Koble fra giver og familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
+          }
+          <AccordionDetails>
+            <Typography onClick={() => {setType("Giver"); handleOpenDialog()}}>
               <Delete />
               <Button>
                 Slett giver
@@ -113,7 +125,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           handleClose={handleCloseDialog} 
           typeData={giver} 
           refreshData={refreshData} 
-          type={"Giver"}
+          type={type}
           />
         </Accordion>
         
