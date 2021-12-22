@@ -13,6 +13,8 @@ import {
   Group,
   Mail,
   Phone,
+  FiberManualRecord,
+  Person,
 } from "@material-ui/icons";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
@@ -113,6 +115,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           handleClose={handleCloseDialog} 
           giverData={{rowKey: giver.rowKey, partitionKey:  giver.partitionKey, fullName: giver.fullName}} 
           refreshData={refreshData} />
+          {giver.isSuggestedMatch &&
+          <AccordionDetails>
+            <Typography>
+              <Person />
+              {`Tilkoblet Familie: ${giver.matchedFamilyId}`}
+            </Typography>
+          </AccordionDetails>
+}
         </Accordion>
         
         ))}

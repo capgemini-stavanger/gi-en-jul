@@ -77,12 +77,14 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
                 .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
                 .ForMember(dest => dest.MatchedRecipient, act => act.Ignore())
+                .ForMember(dest => dest.MatchedFamilyId, act => act.Ignore())
                 .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
             
 
             CreateMap<Models.Giver, Entities.Giver>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
                 .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
+                .ForMember(dest => dest.MatchedFamilyId, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.MatchedFamilyId))))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
 
@@ -100,6 +102,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.GiverEmail))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.GiverPhoneNumber))
                 .ForMember(dest => dest.MatchedRecipient, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1))) //Rowkey is "rid_gid"
+                .ForMember(dest => dest.MatchedFamilyId, opt => opt.MapFrom(src => src.FamilyId))
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.GiverLocation))
