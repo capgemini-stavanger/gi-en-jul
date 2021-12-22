@@ -12,6 +12,7 @@ import {
   Mail,
   Phone,
   FiberManualRecord,
+  Person,
 } from "@material-ui/icons";
 import React from "react";
 import { GiverType } from "../../../common/components/Types";
@@ -86,6 +87,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange }) => {
               {giver.email}
             </Typography>
           </AccordionDetails>
+          {giver.isSuggestedMatch &&
+          <AccordionDetails>
+            <Typography>
+              <Person />
+              {`Tilkoblet Familie: ${giver.matchedFamilyId}`}
+            </Typography>
+          </AccordionDetails>
+}
         </Accordion>
       ))}
     </Container>
