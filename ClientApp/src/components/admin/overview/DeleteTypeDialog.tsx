@@ -75,7 +75,7 @@ interface IConfirmationDialog {
           <Input type="text" value={validationInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setGiverNameInput(e.target.value)}}  placeholder={`${type=="Giver" ? 'Ola Normann' : "123"}`} />
         </DialogContent>
         <DialogActions>
-        <Button onClick={() => {handleClose(); setGiverNameInput(""); console.log(typeData); console.log(type)}} autoFocus>
+        <Button onClick={() => {handleClose(); setGiverNameInput("")}} autoFocus>
             Tilbake
           </Button>
           <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, validationInput) && !isEqual(typeData?.familyId, validationInput)} >
