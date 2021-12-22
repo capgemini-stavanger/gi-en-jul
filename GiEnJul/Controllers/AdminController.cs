@@ -142,18 +142,28 @@ namespace GiEnJul.Controllers
 
         [HttpDelete("Connection")]
         [Authorize(Policy = "DeleteConnection")]
-        public async Task<ActionResult> DeleteConnectionAsync(string location, string rowKey)
+        public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(location, rowKey);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, connectionDto.RowKey);
 
-            if (giver?.MatchedRecipient is null)
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, connectionDto.RowKey);
+
+            if (giver is null && recipient is null)
             {
                 return NotFound();
             }
 
-            var recipient = await _recipientRepository.GetRecipientAsync(location, giver.MatchedRecipient);
+            if (giver?.MatchedRecipient != null && recipient is null)
+            {
+                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, giver.MatchedRecipient);
+            }
 
-            if (recipient is null)
+            if (recipient?.MatchedGiver != null && giver is null)
+            {
+                giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, recipient.MatchedGiver);
+            }
+
+            if (recipient is null || giver is null)
             {
                 return NotFound();
             }
@@ -173,8 +183,6 @@ namespace GiEnJul.Controllers
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-                
-                await _connectionRepository.DeleteConnectionAsync(location, recipient.RowKey + "_" + giver.RowKey);
             }
             catch (Exception e)
             {
@@ -184,7 +192,22 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
+
+            if (!originalGiver.HasConfirmedMatch) return Ok();
             
+            try
+            {
+                await _connectionRepository.DeleteConnectionAsync(connectionDto.PartitionKey, recipient.RowKey + "_" + giver.RowKey);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+
             return Ok();
         }
 
@@ -292,11 +315,17 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpDelete("recipient")]
+        [HttpDelete("Recipient")]
         [Authorize(Policy = "DeleteRecipient")]
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+
+            if (recipientToDelete.IsSuggestedMatch)
+            {
+                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.PartitionKey, recipientDto.RowKey));
+            }
+
             var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
 
             if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)
@@ -326,7 +355,7 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPut("recipient")]
+        [HttpPut("Recipient")]
         [Authorize(Policy = "UpdateRecipient")]
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
@@ -361,20 +390,9 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
 
-            if (giver.HasConfirmedMatch)
+            if (giver.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(giverDto.PartitionKey, giverDto.RowKey);
-            }
-
-            if (!(giver.MatchedRecipient is null))
-            {
-                var recipient = await _recipientRepository.GetRecipientAsync(giverDto.PartitionKey, giver.MatchedRecipient);
-
-                recipient.HasConfirmedMatch = false;
-                recipient.IsSuggestedMatch = false;
-                recipient.MatchedGiver = null;
-
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.PartitionKey, giverDto.RowKey));
             }
 
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);

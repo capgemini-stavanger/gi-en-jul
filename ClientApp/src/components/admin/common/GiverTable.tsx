@@ -11,6 +11,7 @@ import {
   Delete,
   ExpandMore,
   Group,
+  LinkOff,
   Mail,
   Phone,
   FiberManualRecord,
@@ -19,7 +20,7 @@ import {
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
 import { GiverType } from "../../../common/components/Types";
-import DeleteGiverDialog from "../overview/DeleteGiverDialog";
+import DeleteTypeDialog from "../overview/DeleteTypeDialog";
 import Circle from "./Circle";
 import useStyles from "./Styles";
 
@@ -34,6 +35,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
 
   const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [type, setType] = useState<string | null>("");
   const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setSelectedGiver(isExpanded ? giver : false);
     handleGiverChange(giver);
@@ -102,27 +104,31 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               {giver.email}
             </Typography>
           </AccordionDetails>
+          { giver.isSuggestedMatch &&
           <AccordionDetails>
-            <Typography onClick={handleOpenDialog}>
+            <Typography onClick={() => {setType(null); handleOpenDialog()}}>
+              <LinkOff />
+              <Button>
+                Koble fra giver og familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
+          }
+          <AccordionDetails>
+            <Typography onClick={() => {setType("Giver"); handleOpenDialog()}}>
               <Delete />
               <Button>
                 Slett giver
               </Button>
             </Typography>
           </AccordionDetails>
-          <DeleteGiverDialog 
+          <DeleteTypeDialog 
           open={selectedGiver === giver && openDialog}
           handleClose={handleCloseDialog} 
-          giverData={{rowKey: giver.rowKey, partitionKey:  giver.partitionKey, fullName: giver.fullName}} 
-          refreshData={refreshData} />
-          {giver.isSuggestedMatch &&
-          <AccordionDetails>
-            <Typography>
-              <Person />
-              {`Tilkoblet Familie: ${giver.matchedFamilyId}`}
-            </Typography>
-          </AccordionDetails>
-}
+          typeData={giver} 
+          refreshData={refreshData} 
+          type={type}
+          />
         </Accordion>
         
         ))}

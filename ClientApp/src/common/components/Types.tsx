@@ -19,12 +19,6 @@ export interface SelectedConnectionType {
     rowKey: string;
     phoneNumber: string;
   }
-
-  export interface deleteGiverType {
-    fullName?: string;
-    rowKey?: string;
-    partitionKey?: string
-  }
   
   export interface RecipientType {
     contactEmail: string;
