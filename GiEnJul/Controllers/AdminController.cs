@@ -61,6 +61,15 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
+
+            var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
+
+            foreach (var giver in givers.Where(x => x.IsSuggestedMatch))
+            {
+                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipient);
+                giver.MatchedFamilyId = matchedRecipient.FamilyId;
+            }
+
             return givers
                 .OrderBy(x => x.HasConfirmedMatch)
                 .ThenBy(x => x.IsSuggestedMatch)
@@ -220,6 +229,7 @@ namespace GiEnJul.Controllers
 
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
+                giver.MatchedFamilyId = recipient.FamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;
@@ -292,6 +302,7 @@ namespace GiEnJul.Controllers
             {
                 giver.IsSuggestedMatch = false;
                 giver.MatchedRecipient = "";
+                giver.MatchedFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = false;
