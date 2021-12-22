@@ -79,7 +79,7 @@ interface IConfirmationDialog {
             Tilbake
           </Button>
           <Button onClick={() => {handleClose(); handleDeleteGiver(); setGiverNameInput("")}} disabled={!isEqual(typeData?.fullName, validationInput) && !isEqual(typeData?.familyId, validationInput)} >
-            { type && 'Slett' || 'Fjern kobling' }
+            { type && `Slett ${type=="Giver" ? "Giver" : "Familie"}` || 'Fjern kobling' }
           </Button>
         </DialogActions>
       </Dialog>
