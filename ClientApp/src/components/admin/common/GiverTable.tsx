@@ -75,7 +75,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             id="panel1bh-header"
           >
             <Typography className={classes.heading}>
-              {giver.fullName}
+              {giver.fullName}<br/>
             </Typography>
             <Typography className={classes.secondaryHeading}>
               <Group />
