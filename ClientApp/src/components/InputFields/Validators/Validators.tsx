@@ -23,6 +23,6 @@ export function isEmail(inputValue: string) {
   return validator.isEmail(inputValue.trim());
 }
 
-export function isEqual(inputValue1: string, inputValue2: string) {
-  return !!(inputValue1 == inputValue2);
+export function isEqual(inputValue1?: string, inputValue2?: string) {
+  return !!(inputValue1?.toLowerCase() == inputValue2?.toLowerCase());
 }

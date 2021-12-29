@@ -6,7 +6,8 @@ import {
   Divider,
   Typography,
   IconButton,
-  capitalize
+  capitalize,
+  Button
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -14,6 +15,8 @@ import {
   Mail,
   Phone,
   FiberManualRecord,
+  Delete,
+  LinkOff,
 } from "@material-ui/icons";
 import * as React from "react";
 import Gender from "../../../common/enums/Gender";
@@ -23,26 +26,37 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
 import * as Types from "../suggestedConnections/Types";
 import EditFamily from "../../../common/components/EditFamily";
+import DeleteTypeDialog from "../overview/DeleteTypeDialog";
 
 type Props = {
   data: RecipientType[] | [];
-  refreshRecipients: () => void;
+  refreshData: () => void;
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const DatatableRecipient: React.FC<Props> = ({
   data,
-  refreshRecipients,
+  refreshData,
   handleRecipientChange,
 }) => {
   const classes = useStyles();
 
   const [selectedRecipient, setSelectedRecipient] = useState({} as Types.RecipientType)
   const [open, setOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false);
+  const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
 
   const handleSelectedAccordion = (index: number) => {
     index != selected ? setSelected(index) : setSelected(-1)
+  }
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true)
+  }
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false)
   }
 
   const mergeRecipientTypes = (recipient: RecipientType) => {
@@ -184,6 +198,24 @@ const DatatableRecipient: React.FC<Props> = ({
               {recipient.referenceId}
             </Typography>
           </AccordionDetails>
+          { recipient.isSuggestedMatch &&
+          <AccordionDetails>
+            <Typography onClick={() => {setType(null); handleOpenDialog()}}>
+              <LinkOff />
+              <Button>
+                Koble fra giver og familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
+          }
+          <AccordionDetails>
+            <Typography onClick={() => {setType("Recipient"); handleOpenDialog()}}>
+              <Delete />
+              <Button>
+                Slett familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
         </Accordion>
       ))}
       { selectedRecipient.familyMembers &&
@@ -191,9 +223,16 @@ const DatatableRecipient: React.FC<Props> = ({
         recipientToUpdate={selectedRecipient}
         onClose={() => { setOpen(false)}}
         open={open} 
-        refreshRecipients={() => refreshRecipients()}
+        refreshRecipients={() => refreshData()}
         />
       }
+      <DeleteTypeDialog 
+          open={openDialog}
+          handleClose={handleCloseDialog} 
+          typeData={selectedRecipient} 
+          refreshData={refreshData} 
+          type={type}
+          />
     </Container>
   );
 };

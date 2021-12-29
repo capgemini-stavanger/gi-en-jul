@@ -20,6 +20,8 @@ type ConnectionDto = {
   fullName: string;
   phoneNumber: string;
   confirmed: boolean;
+  submitterFullName: string;
+  submitterEmail: string; 
 };
 
 enum Page {
@@ -84,6 +86,18 @@ const columns: GridColumns = [
     editable: false,
     flex: 4,
   },
+  {
+    field: "contactName",
+    headerName: "Kontaktperson",
+    editable: false,
+    flex: 4,
+  },
+  {
+    field: "contactMail", 
+    headerName: "Kontaktperson mail", 
+    editable: false, 
+    flex: 4, 
+  }
 ];
 
 const Table: FC<ITable> = ({ accessToken }) => {
@@ -106,6 +120,8 @@ const Table: FC<ITable> = ({ accessToken }) => {
             familySize: `${connection.personCount}`,
             giverName: connection.fullName,
             giverTelephone: connection.phoneNumber,
+            contactName: connection.submitterFullName,
+            contactMail: connection.submitterEmail,
           }))
         );
       })
