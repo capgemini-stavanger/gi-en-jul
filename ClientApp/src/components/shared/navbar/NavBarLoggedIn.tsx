@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import {
+import { 
   Container,
   Navbar,
   NavbarBrand,
   NavbarToggler,
-} from "reactstrap";
+ } from "reactstrap";
 import LogOutButton from "components/login/LogOutButton";
 import logo from "styling/img/logo_green.svg";
 import "components/shared/navbar/NavBarLoggedIn.css";
@@ -36,9 +36,7 @@ export default class NavBarLoggedIn extends React.PureComponent<
         </Navbar>
       );
     } else {
-      return(
-        <NavBarPublic />
-      )
+      return <NavBarPublic />;
     }
   }
 

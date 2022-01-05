@@ -1,4 +1,4 @@
-import Gender from "common/enums/Gender"
+import Gender from "common/enums/Gender";
 
 export interface GiverType {
   email: string;
@@ -48,9 +48,7 @@ export interface PersonType {
   comment: string;
 }
 
-
-
 export interface SelectedConnectionType {
-    giver?: GiverType;
-    recipient?: RecipientType;
-  }
+  giver?: GiverType;
+  recipient?: RecipientType;
+}
