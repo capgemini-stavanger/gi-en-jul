@@ -8,6 +8,7 @@ export interface GiverType {
   isSuggestedMatch: Boolean;
   location: string;
   matchedRecipient?: string;
+  matchedFamilyId?: string;
   maxReceivers: number;
   partitionKey: string;
   rowKey: string;

@@ -7,13 +7,13 @@ import { RecipientType} from "components/shared/Types";
 
 type Props = {
   data: RecipientType[] | [];
-  refreshRecipients: () => void;
+  refreshData: () => void;
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
 const Recipient: React.FC<Props> = ({
   data,
-  refreshRecipients,
+  refreshData,
   handleRecipientChange,
 }) => {
   const [query, setQuery] = useState("");
@@ -50,7 +50,7 @@ const Recipient: React.FC<Props> = ({
       </Grid>
       <Datatable
         data={search(data)}
-        refreshRecipients={() => refreshRecipients()}
+        refreshData={() => refreshData()}
         handleRecipientChange={handleRecipientChange}
       />
     </Container>

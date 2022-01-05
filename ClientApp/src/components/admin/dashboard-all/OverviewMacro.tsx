@@ -27,12 +27,13 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const [openDialog, setOpenDialog] = useState(false);
   const apiservice = new ApiService(accessToken); 
 
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
-      .then((resp) => setGiverData(resp.data))
+      .then((resp) => {setGiverData(resp.data)})
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -51,6 +52,12 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     fetchRecipients();
     fetchGivers();
   }, []);
+
+  const refreshData = () => {
+    fetchGivers();
+    fetchRecipients();
+    setSelectedConnection(initState);
+  }
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
@@ -132,7 +139,11 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             <Typography variant="h4" align="center">
               Givere
             </Typography>
-            <Giver data={giverData} handleGiverChange={handleGiverChange} />
+            <Giver 
+              data={giverData} 
+              handleGiverChange={handleGiverChange}
+              refreshData={() => refreshData()}
+              />
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h4" align="center">
@@ -140,8 +151,9 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
             </Typography>
             <Recipient
               data={recipientData}
-              refreshRecipients={() => fetchRecipients()}
+              refreshData={() => refreshData()}
               handleRecipientChange={handleRecipientChange}
+              
             />
           </Grid>
         </Grid>

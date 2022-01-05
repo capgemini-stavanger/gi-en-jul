@@ -34,17 +34,17 @@ import useStyles from "components/admin/Styles";
     refreshRecipients: () => void;
   }
 
-    const alertState: {
-      isLoading: boolean;
-      msg: string;
-      severity?: "error" | "info" | "success" | "warning";
-      open: boolean;
-    } = {
-      isLoading: false,
-      msg: "",
-      severity: undefined,
-      open: false,
-    };
+  const alertState: {
+    isLoading: boolean;
+    msg: string;
+    severity?: "error" | "info" | "success" | "warning";
+    open: boolean;
+  } = {
+    isLoading: false,
+    msg: "",
+    severity: undefined,
+    open: false,
+  };
 
   const EditFamilyDialog
   : FC<IEditFamilyDialog> = ({
