@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
-import getLocations from "../../common/constants/Locations";
+import getLocations from "common/constants/Locations";
 
 interface LocationProps {
   value: string;

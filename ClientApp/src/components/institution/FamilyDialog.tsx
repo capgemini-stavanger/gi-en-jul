@@ -5,9 +5,9 @@
      DialogContent,
      DialogTitle,
  } from "@material-ui/core";
- import {RecipientType, SelectedConnectionType} from "../../common/components/Types";
- import ApiService from "../../common/functions/apiServiceClass";
- import { useEffect, useState, useCallback} from "react";
+ import {RecipientType} from "components/shared/Types";
+ import ApiService from "common/functions/apiServiceClass";
+ import { useEffect, useState} from "react";
  import { DataGrid, GridColDef } from '@material-ui/data-grid';
 
 const columns: GridColDef[] = [

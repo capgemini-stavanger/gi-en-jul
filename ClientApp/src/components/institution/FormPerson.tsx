@@ -11,14 +11,12 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
-import { GENDERS } from "../../common/constants/Genders";
-import Gender from "../../common/enums/Gender";
-import InputValidator from "../InputFields/Validators/InputValidator";
-import { isNotNull, isInt } from "../InputFields/Validators/Validators";
-import IFormPerson from "./IFormPerson";
-import MessageDialog from "./MessageDialog";
-
-
+import { GENDERS } from "common/constants/Genders";
+import Gender from "common/enums/Gender";
+import InputValidator from "components/shared/input-fields/validators/InputValidator";
+import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
+import IFormPerson from "components/institution/IFormPerson";
+import MessageDialog from "components/institution/MessageDialog";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
