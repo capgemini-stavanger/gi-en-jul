@@ -8,6 +8,7 @@ using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
+using GiEnJul.Utilities.EmailTemplates;
 using GiEnJul.Utilities.ExcelClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace GiEnJul.Controllers
         private readonly IMapper _mapper;
         private readonly IEmailClient _emailClient;
         private readonly ISettings _settings;
+        private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
         public AdminController(
             IEventRepository eventRepository,
@@ -42,7 +44,8 @@ namespace GiEnJul.Controllers
             ILogger log,
             IMapper mapper,
             IEmailClient emailClient,
-            ISettings settings)
+            ISettings settings,
+            IEmailTemplateBuilder emailTemplateBuilder)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -53,6 +56,7 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
             _emailClient = emailClient;
             _settings = settings;
+            _emailTemplateBuilder = emailTemplateBuilder;
         }
 
         [HttpGet("Overview/Givers")]
@@ -225,7 +229,7 @@ namespace GiEnJul.Controllers
 
             try
             {
-                var eventDto = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+                var @event = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
 
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
@@ -238,7 +242,6 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
-                var title = "Gi en jul-familie - husk å bekrefte!";
                 var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
@@ -253,50 +256,21 @@ namespace GiEnJul.Controllers
                         familyTable += " ";
                     }
                 }
+                
+                var emailTemplatename = EmailTemplateName.AssignedFamily;
+                var emailValuesDict = new Dictionary<string, string> 
+                { 
+                    { "familyTable", familyTable }, 
+                    { "verifyLink", verifyLink },
+                    { "recipientNote", recipientNote },
+                };
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(@event, "eventDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
-                var body =
-                    $"Hei, {giver.FullName} <br/><br/> " +
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
 
-                    $"Da har vi en familie til deg! Når du har lest gjennom teksten er det viktig at du klikker på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. " +
-                    $"Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære. <br/><br/>" +
-
-                    $" <h3>OVERSIKT OVER FAMILIE OG GAVEØNSKER </h3>" +
-                    
-                    $"<ul>{familyTable}</ul>" +
-
-                    $"<strong>Middag:</strong>  {recipient.Dinner}<br/>" +
-                    $"<strong>Dessert:</strong> {recipient.Dessert}<br/>" +
-                    $"{recipientNote} <br/><br/> " +
-
-                    $"Juleeskene skal i år leveres {eventDto.DeliveryTime}, {eventDto.DeliveryDate} til {eventDto.DeliveryAddress}. <br/><br/>" +
-
-                    $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hver av familiemedlemmene. Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. " +
-                    $"Ekstra-middagen kan eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spagetti, eller noe annet du synes er passende. <br/><br/>" +
-
-                    $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Tips: <br/><br/>" +
-                    $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
-                    $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre.</li>" +
-                    $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
-                    $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! " +
-                    $"Merk også at dersom familien spiser halal, betyr det at de ikke spiser svin- og da heller ikke pålegg eller godteri og annet som inneholder svin og gelatin. <br/><br/>" +
-
-                    $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. " +
-                    $"Det er lurt å legge byttelapp oppi. Pakk gjerne i bananesker, eller andre esker som er lette å bære. <br/><br/>" +
-
-                    $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven. " +
-                    $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting. Dersom du har mye klær og/eller leker du ønsker å gi, men ikke matcher familien du har fått, "+ 
-                    $"kan du sende en mail til oss, så kan vi se om vi kan få gitt det til en passende familie.<br/><br/>" +
-
-                    $"Igjen tusen takk for at du er med på årets Gi en jul! Husk å følge med på <a href={eventDto.Facebook}>Facebook-eventet</a> hvor det kommer oppdateringer. <br/><br/>" +
-
-                    $"<b>Viktig</b>: Klikk på <a href='{verifyLink}'> denne linken </a> for å bekrefte at du gir familien en jul. <br/><br/>" +
-
-                    $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
-
-                    $"Hilsen {eventDto.ContactPerson} i Gi en jul {eventDto.City}";
-
-
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, title, body);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {

@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Helpers;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
+using GiEnJul.Utilities.Constants;
+using GiEnJul.Utilities.EmailTemplates;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using GiEnJul.Utilities.Constants;
 
 namespace GiEnJul.Controllers
 {
@@ -22,13 +25,15 @@ namespace GiEnJul.Controllers
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly IRecaptchaVerifier _recaptchaVerifier;
+        private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
         public GiverController(IGiverRepository giverRepository,
                                IEventRepository eventRepository,
                                IEmailClient emailClient,
                                ILogger log,
                                IMapper mapper,
-                               IRecaptchaVerifier recaptchaVerifier)
+                               IRecaptchaVerifier recaptchaVerifier,
+                               IEmailTemplateBuilder emailTemplateBuilder)
         {
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
@@ -36,6 +41,7 @@ namespace GiEnJul.Controllers
             _log = log;
             _mapper = mapper;
             _recaptchaVerifier = recaptchaVerifier;
+            _emailTemplateBuilder = emailTemplateBuilder;
         }
 
         // POST api/<GiverController>
@@ -49,10 +55,10 @@ namespace GiEnJul.Controllers
                 return Forbid();
             }
 
-            var eventDto = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
+            var eventModel = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
-            giver.EventName = eventDto.PartitionKey;
+            giver.EventName = eventModel.PartitionKey;
             giver.Email = giver.Email.Trim();
 
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
@@ -65,85 +71,19 @@ namespace GiEnJul.Controllers
                 familyRange = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
-            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventDto.PartitionKey, giverDto.Location);
-            bool waiting_list = num_givers > eventDto.GiverLimit;
+            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.PartitionKey, giverDto.Location);
+            bool waiting_list = num_givers > eventModel.GiverLimit;
 
-            var messageContent =
-                $"Hei! <br/><br/>" +
+            var emailValuesDict = new Dictionary<string, string> { { "familyRange", familyRange } };
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
 
-                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg, " +
-                $"vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering. <br/><br/>" +
-
-                $"Din informasjon:" +
-                $"<ul>" +
-                $"<li>Kommune: {giver.Location}</li>" +
-                $"<li>Navn: {giver.FullName}</li>" +
-                $"<li>Epost: {giver.Email}</li>" +
-                $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
-                $"<li>Familiestørrelse: {familyRange} personer</li>" +
-                $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
-                $"</ul></br>" +
-
-                $"Leveringsinformasjon:</br>" +
-                $"<ul>" +
-                $"<li>Dato: {eventDto.DeliveryDate}</li>" +
-                $"<li>Tid: {eventDto.DeliveryTime}</li>" +
-                $"<li>Sted: <a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a></li>" +
-                $"</ul></br>" +
-
-                $"Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien. <br/><br/>" +
-
-                $"Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. Middagen kan " +
-                $"eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spaghetti, eller noe annet du synes er passende. <br/><br/>" +
-
-                $"Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er: <br/>" +
-                $"<ul> <li> julestrømpe med godteri til barna </li><li> saft, juice, melk, te, kaffe </li>" +
-                $"<li> frukt </li><li> snacks og julegodteri</li><li> julekaker</li><li> pålegg: Nugatti, leverpostei, kjøttpålegg, ost og så videre..</li>" +
-                $"<li> servietter, lys og julepynt</li><li> brød, julekake</li></ul><br/>" +
-                $"Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke! <br/>" +
-
-                $"<h3>Innkjøp av julegaver </h3>" +
-                $"Husk at det er gaveønsker og ikke handleliste som må følges til punkt og prikke. Dersom ønskene er gavekort, kan du likevel kjøpe en gave du synes passer til alderen.<br/><br/>" +
-
-                $"Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre. " +
-                $"Det er lurt å legge byttelapp oppi esken. Pakk gjerne i bananesker, eller andre esker som er enkle å bære.<br/><br/>" +
-
-                $"NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven. " +
-                $"Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.<br/><br/>" +
-
-                $"Igjen vil vi si tusen takk for at du har meldt seg som giver! Vi håper du har fått informasjonen du trenger, <br/>" +
-                $"og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>nettsiden<a/>, og følg gjerne med på <a href={eventDto.Facebook}>Facebook<a/>. <br/><br/>" +
-
-                $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
-
-                $"Vennlig hilsen {eventDto.ContactPerson}";
-
-
-            var altMessageContent = 
-                $"Hei! <br/><br/>" +
-                $"Tusen takk for at du har meldt deg som giver til årets Gi en jul. <br/><br/>" + 
-                $"Grunnet stor pågang har du havnet på ventelisten. Det er dermed ikke sikkert at du vil bli tildelt en familie. <br/><br/>" +
-                $"Vi tar kontakt med deg dersom vi får inn en familie til deg. <br/><br/>" +
-
-                $"Din informasjon:" +
-                $"<ul>" +
-                $"<li>Kommune: {giver.Location}</li>" +
-                $"<li>Navn: {giver.FullName}</li>" +
-                $"<li>Epost: {giver.Email}</li>" +
-                $"<li>Telefonnummer: {giver.PhoneNumber}</li>" +
-                $"<li>Familiestørrelse: {familyRange} personer</li>" +
-                $"<li>Registreringsdato: {giver.RegistrationDate.ToShortDateString()}</li>" +
-                $"</ul></br>" +
-
-                $"<b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href=\"mailto:{eventDto.Email}\">{eventDto.Email}</a> <br/><br/>" +
-
-                $"Vennlig hilsen {eventDto.ContactPerson}";
-
-            var finalMessage = waiting_list ? altMessageContent : messageContent;
+            var templateId = waiting_list ? EmailTemplateName.WaitingList : EmailTemplateName.Registered;
+            var email = await _emailTemplateBuilder.GetEmailTemplate(templateId, emailValuesDict);
 
             try
             {
-                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, "Gi en jul - registrering og informasjon!", finalMessage);
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email.Subject, email.Content);
             }
             catch (Exception e)
             {
