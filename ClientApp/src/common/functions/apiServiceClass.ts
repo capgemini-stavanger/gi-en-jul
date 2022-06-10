@@ -1,4 +1,4 @@
-import axios, { AxiosPromise, AxiosResponse, AxiosError, Method } from "axios";
+import axios, { AxiosPromise, AxiosError, Method } from "axios";
 export interface IApiService {
   token: string;
   baseUrl: string;

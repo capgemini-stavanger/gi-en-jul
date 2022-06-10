@@ -27,6 +27,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<AutoIncrementRepository>().As<IAutoIncrementRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
             builder.RegisterType<RecaptchaVerifier>().As<IRecaptchaVerifier>().InstancePerLifetimeScope();
+            builder.RegisterType<EmailTemplateBuilder>().As<IEmailTemplateBuilder>().InstancePerLifetimeScope();
 
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)

@@ -1,5 +1,4 @@
 import { Grid, Typography } from "@material-ui/core";
-import * as React from "react";
 
 const information: string[] = [
   "Før du melder inn en familie må familien ha sagt ja til å bli med, og du har all informasjon som trengs nedenfor.",

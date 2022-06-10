@@ -11,6 +11,8 @@ namespace GiEnJul.Utilities.ExcelClasses
         public string GiverFullName { get; set; }
         public string GiverEmail { get; set; }
         public string GiverPhoneNumber { get; set; }
+        public string SubmitterFullName { get; set; }
+        public string SubmitterEmail { get; set; }
 
         public OrderedDictionary AsOrderedDictionary()
         {
@@ -23,6 +25,8 @@ namespace GiEnJul.Utilities.ExcelClasses
                 ["Giver navn"] = GiverFullName,
                 ["Giver epost"] = GiverEmail,
                 ["Giver mobil"] = GiverPhoneNumber,
+                ["Kontaktperson"] = SubmitterFullName,
+                ["Kontaktperson mail"] = SubmitterEmail,
             };
         }
     }

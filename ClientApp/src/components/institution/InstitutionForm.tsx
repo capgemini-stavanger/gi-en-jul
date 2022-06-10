@@ -8,27 +8,24 @@ import {
 import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import * as React from "react";
-import { useEffect, useState, useCallback} from "react";
-import { DESSERTS } from "../../common/constants/Desserts";
-import { DINNERS } from "../../common/constants/Dinners";
-import Gender from "../../common/enums/Gender";
-import ApiService from "../../common/functions/apiServiceClass";
-import InputValidator from "../InputFields/Validators/InputValidator";
+import { useState} from "react";
+import { DESSERTS } from "common/constants/Desserts";
+import { DINNERS } from "common/constants/Dinners";
+import Gender from "common/enums/Gender";
+import ApiService from "common/functions/apiServiceClass";
+import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import Tooltip from '@material-ui/core/Tooltip';
-import ConfirmationDialog from './ConfirmationDialog';
-import FamilyDialog from './FamilyDialog';
-
+import ConfirmationDialog from 'components/institution/ConfirmationDialog';
+import FamilyDialog from 'components/institution/FamilyDialog';
 import {
   isEmail,
   isNotNull,
   isPhoneNumber,
-} from "../InputFields/Validators/Validators";
+} from "components/shared/input-fields/validators/Validators";
 import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
-import IFormPerson, { getFormPerson } from "./IFormPerson";
-import Locations from "./InstitutionLocations";
-import useUser from "../../hooks/useUser";
+import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
+import useUser from "hooks/useUser";
 
 type PersonType = {
   Wish?: string;

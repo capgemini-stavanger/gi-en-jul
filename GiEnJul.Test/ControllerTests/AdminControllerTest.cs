@@ -3,6 +3,7 @@ using GiEnJul.Controllers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace GiEnJul.Test.ControllerTests
         private readonly Mock<IEmailClient> emailClientMock;
 
         public Mock<IConfiguration> ConfigMock { get; private set; }
+        public Mock<IEmailTemplateBuilder> mockEmailTemplateBuilder { get; set; }
+
         public readonly Settings settings;
 
         private AdminController _controller;
@@ -36,6 +39,7 @@ namespace GiEnJul.Test.ControllerTests
             MockConnectionRepo = new Mock<IConnectionRepository>();
             emailClientMock = new Mock<IEmailClient>();
             ConfigMock = new Mock<IConfiguration>();
+            mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
             settings = new Settings(ConfigMock.Object);
             _controller = new AdminController(MockEventRepo.Object,
                                               MockGiverRepo.Object,
@@ -45,7 +49,8 @@ namespace GiEnJul.Test.ControllerTests
                                               _log,
                                               _mapper,
                                               emailClientMock.Object,
-                                              settings);
+                                              settings,
+                                              mockEmailTemplateBuilder.Object);
         }
 
         public void Dispose()
@@ -57,6 +62,7 @@ namespace GiEnJul.Test.ControllerTests
             MockConnectionRepo.VerifyNoOtherCalls();
 
             emailClientMock.VerifyNoOtherCalls();
+            mockEmailTemplateBuilder.VerifyNoOtherCalls();
         }
 
         [Fact]
