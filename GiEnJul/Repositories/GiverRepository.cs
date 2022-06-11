@@ -1,7 +1,6 @@
 using AutoMapper;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
-using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -56,9 +55,8 @@ namespace GiEnJul.Repositories
         public async Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity)
         {
             var filter = TableQueryFilterHelper.GetUnsuggestedFilter(eventName, location);
-            var query = new TableQuery<Entities.Giver>().Where(filter);
 
-            var unsuggestedGivers = await GetAllByQueryAsync(query);
+            var unsuggestedGivers = await GetAllByQueryAsync(filter);
             
             return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
         }
@@ -66,9 +64,8 @@ namespace GiEnJul.Repositories
         public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetSuggestedFilter(eventName, location);
-            var query = new TableQuery<Entities.Giver>().Where(filter);
 
-            var suggestedGivers = await GetAllByQueryAsync(query);
+            var suggestedGivers = await GetAllByQueryAsync(filter);
 
             return _mapper.Map<List<Models.Giver>>(suggestedGivers);
         }
@@ -76,8 +73,7 @@ namespace GiEnJul.Repositories
         public async Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
-            var query = new TableQuery<Entities.Giver>().Where(filter);
-            var givers = await GetAllByQueryAsync(query);
+            var givers = await GetAllByQueryAsync(filter);
             return _mapper.Map<IEnumerable<Models.Giver>>(givers);
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Serilog;
+using System.Net.Http;
 
 namespace GiEnJul.Infrastructure
 {
@@ -19,6 +20,7 @@ namespace GiEnJul.Infrastructure
 
             builder.RegisterInstance(AutoMapperConfiguration.Initialize()).SingleInstance();
             builder.RegisterType<HasScopeHandler>().As<IAuthorizationHandler>().SingleInstance();
+            builder.RegisterInstance(new HttpClient()).SingleInstance();
             builder.RegisterType<PersonRepository>().As<IPersonRepository>().InstancePerLifetimeScope();
             builder.RegisterType<GiverRepository>().As<IGiverRepository>().InstancePerLifetimeScope();
             builder.RegisterType<ConnectionRepository>().As<IConnectionRepository>().InstancePerLifetimeScope();

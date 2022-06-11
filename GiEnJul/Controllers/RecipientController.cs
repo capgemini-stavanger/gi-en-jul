@@ -59,10 +59,10 @@ namespace GiEnJul.Controllers
                 await _personRepository.InsertOrReplaceBatchAsync(family);
                 return (insertedRecipient.FamilyId, insertedRecipient.ReferenceId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await _recipientRepository.DeleteAsync(insertedRecipient);
-                throw ex;
+                throw;
             }
         }
 

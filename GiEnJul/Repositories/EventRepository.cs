@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
-using Microsoft.Azure.Cosmos.Table;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -59,16 +59,9 @@ namespace GiEnJul.Repositories
             }
 
             // RowKey == location
-            var rowKeyFilter = TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, location);
+            var rowKeyFilter = $"RowKey eq '{location}'";
 
-            var query = new TableQuery<Event>().Where(
-                TableQuery.CombineFilters(
-                    rowKeyFilter,
-                    TableOperators.And,
-                    HasActiveDates()))
-                .Take(1);
-
-            var activeEvent = await GetAllByQueryAsync(query);
+            var activeEvent = await GetAllByQueryAsync(rowKeyFilter);
 
             if (activeEvent == null || !activeEvent.Any())
             {
@@ -81,9 +74,7 @@ namespace GiEnJul.Repositories
 
         public async Task<string[]> GetLocationsWithActiveEventAsync()
         {
-            var query = new TableQuery<Event>().Where(HasActiveDates());
-
-            var events = await GetAllByQueryAsync(query);
+            var events = await GetAllByQueryAsync(HasActiveDates());
 
             var locationArray = events.Select(x => x.RowKey).ToArray();
             Array.Sort(locationArray);
@@ -93,11 +84,11 @@ namespace GiEnJul.Repositories
         private string HasActiveDates()
         {
             // StartDate <= DateTime.Now
-            var startDatePassed = TableQuery.GenerateFilterConditionForDate("StartDate", QueryComparisons.LessThanOrEqual, DateTime.Now);
+            var startDatePassed = $"StartDate le {JsonConvert.SerializeObject(DateTime.Now)}";
             // EndDate >= DateTime.Now
-            var endDateNotPassed = TableQuery.GenerateFilterConditionForDate("EndDate", QueryComparisons.GreaterThanOrEqual, DateTime.Now);
+            var endDateNotPassed = $"EndDate gt {JsonConvert.SerializeObject(DateTime.Now)}";
 
-            return TableQuery.CombineFilters(startDatePassed, TableOperators.And, endDateNotPassed);
+            return string.Join(" and ", startDatePassed, endDateNotPassed);
         }
 
         public async Task<Models.Event> InsertOrReplaceAsync(Models.Event model)
@@ -108,9 +99,7 @@ namespace GiEnJul.Repositories
 
         public async Task<List<Models.Event>> GetContactsWithActiveEventAsync()
         {
-            var query = new TableQuery<Event>().Where(HasActiveDates());
-
-            var events = await GetAllByQueryAsync(query);
+            var events = await GetAllByQueryAsync(HasActiveDates());
 
             var modelEvents = _mapper.Map<List<Models.Event>>(events);
 
