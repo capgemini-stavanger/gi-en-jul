@@ -2,7 +2,6 @@
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos.Table;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -66,7 +65,7 @@ namespace GiEnJul.Test.ControllerTests
             return recipient;
         }
 
-        public TableBatchResult ArrangeOkPeopleRepositoryInsertResult()
+        public int ArrangeOkPeopleRepositoryInsertResult()
         {
             var people = new List<Entities.Person>
             {
@@ -74,8 +73,7 @@ namespace GiEnJul.Test.ControllerTests
                 new Entities.Person("recipientid") { Age = 47, Gender = 1 },
                 new Entities.Person("recipientid") { Wish = "sko", Age = 6, Gender = 2 }
             };
-            var peopleTableBatchResult = new TableBatchResult();
-            people.ForEach(p => peopleTableBatchResult.Add(new TableResult { Result = p }));
+            var peopleTableBatchResult = people.Count;
 
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
             mockPersonRepo.Setup(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>())).ReturnsAsync(peopleTableBatchResult);
