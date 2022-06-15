@@ -5,7 +5,9 @@ using AutoMapper;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Serilog;
-using Microsoft.Azure.Cosmos.Table;
+using Azure.Data.Tables;
+using Azure;
+using Azure.Core;
 
 namespace GiEnJul.Repositories
 {
@@ -32,11 +34,6 @@ namespace GiEnJul.Repositories
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or empty.", nameof(name));
             }
 
-            var context = new OperationContext()
-            {
-                UserHeaders = new Dictionary<string, string>()
-            };
-
             var attempts = 1;
             while (true) {
                 var result = await GetAsync(name, tableName);
@@ -50,22 +47,42 @@ namespace GiEnJul.Repositories
                     result.Value += 1;
                 }
 
-                context.UserHeaders["If-Match"] = result.ETag;
+                _httpClient.DefaultRequestHeaders.Add("If-Match", result.ETag.ToString());
 
                 try
                 {
-                    await InsertOrReplaceAsync(result, context);
+                    await InsertOrReplaceAsync(result);
                     return result.Value.ToString();
                 }
-                catch (StorageException e)
+                catch (RequestFailedException e)
                 {
                     attempts += 1;
-                    if (e.RequestInformation.HttpStatusCode != 412 || attempts > 3)
+                    if (e.Status != 412 || attempts > 3)
                     {
                         throw e;
                     }
                     await Task.Delay(50);
                 }
+                finally
+                {
+                    _httpClient.DefaultRequestHeaders.Remove("If-Match");
+                }
+            }
+        }
+
+        public class IfMatchPolicy : Azure.Core.Pipeline.HttpPipelineSynchronousPolicy
+        {
+            public IfMatchPolicy(ETag etag)
+            {
+                Etag = etag;
+            }
+
+            public ETag Etag { get; }
+
+            public override void OnSendingRequest(HttpMessage message)
+            {
+                message.Request.Headers.Add("If-Match", Etag.ToString());
+                base.OnSendingRequest(message);
             }
         }
     }

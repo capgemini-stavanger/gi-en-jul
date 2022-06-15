@@ -284,7 +284,7 @@ namespace GiEnJul.Controllers
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
                 _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
 
-                throw e;
+                throw;
             }
             return Ok();
         }

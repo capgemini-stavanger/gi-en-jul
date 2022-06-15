@@ -51,7 +51,7 @@ namespace GiEnJul.Controllers
             var recaptchaDto = await _recaptchaVerifier.VerifyAsync(giverDto.RecaptchaToken);
             if (!recaptchaDto.Success)
             {
-                _log.Information($"Recaptcha denied access based on the following response: {recaptchaDto}");
+                _log.Information("Recaptcha denied access based on the following response: {@recaptchaDto}", recaptchaDto);
                 return Forbid();
             }
 
@@ -89,7 +89,7 @@ namespace GiEnJul.Controllers
             {
                 _log.Error(e, "Could not send registration email to {@0}", giver.Email);
                 await _giverRepository.DeleteAsync(giverModel);
-                throw e;
+                throw;
             }
 
             return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);

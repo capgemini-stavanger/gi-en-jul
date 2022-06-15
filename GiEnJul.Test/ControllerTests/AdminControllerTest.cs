@@ -53,6 +53,7 @@ namespace GiEnJul.Test.ControllerTests
                                               mockEmailTemplateBuilder.Object);
         }
 
+        [Fact]
         public void Dispose()
         {
             MockEventRepo.VerifyNoOtherCalls();

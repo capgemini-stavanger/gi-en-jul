@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
+using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Serilog;
-using System.Threading.Tasks;
-using Microsoft.Azure.Cosmos.Table;
 using System.Collections.Generic;
-using GiEnJul.Helpers;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
 {
@@ -38,14 +37,8 @@ namespace GiEnJul.Repositories
         }
         public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent)
         {
-            var query = new TableQuery<Entities.Recipient>()
-            {
-                FilterString =
-                TableQuery.CombineFilters(
-                    TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{currentEvent}_{location}"),
-                    TableOperators.And,
-                    TableQuery.GenerateFilterConditionForBool("IsMatched", QueryComparisons.Equal, false))
-            };
+            var query = $"PartitionKey eq '{currentEvent}_{location}' and " +
+                        $"IsMatched eq false";
 
             var recipients = await GetAllByQueryAsync(query);
             return _mapper.Map<List<Models.Recipient>>(recipients);
@@ -66,9 +59,8 @@ namespace GiEnJul.Repositories
         public async Task<IList<Models.Recipient>> GetUnsuggestedAsync(string eventName, string location, int quantity)
         {
             var filter = TableQueryFilterHelper.GetUnsuggestedFilter(eventName, location);
-            var query = new TableQuery<Entities.Recipient>().Where(filter);
 
-            var unsuggestedRecipient = await GetAllByQueryAsync(query);
+            var unsuggestedRecipient = await GetAllByQueryAsync(filter);
 
             return _mapper.Map<IList<Models.Recipient>>(unsuggestedRecipient);
         }
@@ -76,25 +68,23 @@ namespace GiEnJul.Repositories
         public async Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetSuggestedFilter(eventName, location);
-            var query = new TableQuery<Entities.Recipient>().Where(filter);
 
-            var suggestedRecipient = await GetAllByQueryAsync(query);
+            var suggestedRecipient = await GetAllByQueryAsync(filter);
 
             return _mapper.Map<List<Models.Recipient>>(suggestedRecipient);
         }
         public async Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
-            var query = new TableQuery<Entities.Recipient>().Where(filter);
-            var recipients = await GetAllByQueryAsync(query);
+
+            var recipients = await GetAllByQueryAsync(filter);
             return _mapper.Map<List<Models.Recipient>>(recipients);
         }
 
         public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution)
         {
-            var filter = TableQuery.GenerateFilterCondition("Institution", QueryComparisons.Equal, institution);
-            var query = new TableQuery<Entities.Recipient>().Where(filter);
-            var recipients = await GetAllByQueryAsync(query);
+            var filter = $"Institution eq '{institution}'";
+            var recipients = await GetAllByQueryAsync(filter);
 
             return _mapper.Map<List<Models.Recipient>>(recipients);
         }

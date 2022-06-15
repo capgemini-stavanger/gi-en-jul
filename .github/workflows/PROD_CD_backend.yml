@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '3.1.x'
+  DOTNET_VERSION: '6.0.x'
   PACKAGE_PATH: 'Deploy'
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
         with:
           ref: master
 
-      - name: Set up .NET Core
+      - name: Set up .NET 6
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
