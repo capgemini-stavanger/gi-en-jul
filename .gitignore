@@ -354,3 +354,4 @@ MigrationBackup/
 /package.json
 /package-lock.json
 /scripts/filldb/db_tables/
+/ClientApp/.vscode/settings.json

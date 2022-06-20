@@ -1,51 +1,40 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-
-namespace GiEnJul.Helpers
+﻿namespace GiEnJul.Helpers
 {
     public static class TableQueryFilterHelper
     {
         public static string GetUnsuggestedFilter(string eventName, string location)
         {
-            var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
-            var notSuggestedFilter = TableQuery.GenerateFilterConditionForBool("IsSuggestedMatch", QueryComparisons.Equal, false);
-            var notConfirmedFilter = TableQuery.GenerateFilterConditionForBool("HasConfirmedMatch", QueryComparisons.Equal, false);
-            var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
-            var locationFilter = TableQuery.GenerateFilterCondition("Location", QueryComparisons.Equal, location);
+            var PKfilter = $"PartitionKey eq '{eventName}_{location}'";
+            var notSuggestedFilter = "IsSuggestedMatch eq false";
+            var notConfirmedFilter = "HasConfirmedMatch eq false";
+            var eventNameFilter = $"EventName eq '{eventName}'";
+            var locationFilter = $"Location eq '{location}'";
 
-            var filter = TableQuery
-                .CombineFilters(PKfilter, TableOperators.And, TableQuery
-                .CombineFilters(notSuggestedFilter, TableOperators.And, TableQuery
-                .CombineFilters(notConfirmedFilter, TableOperators.And, TableQuery
-                .CombineFilters(eventNameFilter, TableOperators.And, locationFilter))));
+            var filter = string.Join(" and ", PKfilter, notSuggestedFilter, notConfirmedFilter, eventNameFilter, locationFilter);
 
             return filter;
         }
 
         public static string GetSuggestedFilter(string eventName, string location)
         {
-            var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
-            var suggestedFilter = TableQuery.GenerateFilterConditionForBool("IsSuggestedMatch", QueryComparisons.Equal, true);
-            var notConfirmedFilter = TableQuery.GenerateFilterConditionForBool("HasConfirmedMatch", QueryComparisons.Equal, false);
-            var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
-            var locationFilter = TableQuery.GenerateFilterCondition("Location", QueryComparisons.Equal, location);
+            var PKfilter = $"PartitionKey eq '{eventName}_{location}'";
+            var notSuggestedFilter = "IsSuggestedMatch eq true";
+            var notConfirmedFilter = "HasConfirmedMatch eq false";
+            var eventNameFilter = $"EventName eq '{eventName}'";
+            var locationFilter = $"Location eq '{location}'";
 
-            var filter =  TableQuery
-                .CombineFilters(PKfilter, TableOperators.And, TableQuery
-                .CombineFilters(suggestedFilter, TableOperators.And, TableQuery
-                .CombineFilters(notConfirmedFilter, TableOperators.And, TableQuery
-                .CombineFilters(eventNameFilter, TableOperators.And, locationFilter))));
+            var filter = string.Join(" and ", PKfilter, notSuggestedFilter, notConfirmedFilter, eventNameFilter, locationFilter);
+
             return filter;
         }
 
         public static string GetAllByActiveEventsFilter(string eventName, string location)
         {
-            var PKfilter = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}");
-            var eventNameFilter = TableQuery.GenerateFilterCondition("EventName", QueryComparisons.Equal, eventName);
-            var locationFilter = TableQuery.GenerateFilterCondition("Location", QueryComparisons.Equal, location);
+            var PKfilter = $"PartitionKey eq '{eventName}_{location}'";
+            var eventNameFilter = $"EventName eq '{eventName}'";
+            var locationFilter = $"Location eq '{location}'";
 
-            var filter = TableQuery
-                .CombineFilters(PKfilter, TableOperators.And, TableQuery
-                .CombineFilters(eventNameFilter, TableOperators.And, locationFilter));
+            var filter = string.Join(" and ", PKfilter, eventNameFilter, locationFilter);
             return filter;
         }
     }

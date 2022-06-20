@@ -1,7 +1,6 @@
 using AutoMapper;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
-using Microsoft.Azure.Cosmos.Table;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace GiEnJul.Repositories
         Task DeleteConnectionAsync(string partitionKey, string rowKey);
         Task<IEnumerable<Connection>> GetAllByLocationEventAsync(string location, string eventName);
         Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location);
-        Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient);
+        bool ConnectionExists(Models.Giver giver, Models.Recipient recipient);
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
@@ -35,20 +34,15 @@ namespace GiEnJul.Repositories
 
         public async Task<IEnumerable<Connection>> GetAllByLocationEventAsync(string location, string eventName)
         {
-            var query = new TableQuery<Entities.Connection>()
-            {
-                FilterString =
-                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}")
-            };
+            var query = $"PartitionKey eq '{eventName}_{location}'";
+
             return await GetAllByQueryAsync(query);
         }
 
         public async Task<IEnumerable<(Models.Giver, Models.Recipient)>> GetAllConnectionsByLocation(string eventName, string location)
         {
-            var query = new TableQuery<Entities.Connection>()
-            {
-                FilterString = TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, $"{eventName}_{location}")
-            };
+            var query = $"PartitionKey eq '{eventName}_{location}'";
+
             var connections = await GetAllByQueryAsync(query);
 
             var GiverRecipientTuples = new List<(Models.Giver, Models.Recipient)>();
@@ -61,11 +55,9 @@ namespace GiEnJul.Repositories
             }
             return GiverRecipientTuples;
         }
-        public async Task<bool> ConnectionExists(Models.Giver giver, Models.Recipient recipient)
+        public bool ConnectionExists(Models.Giver giver, Models.Recipient recipient)
         {
-            var connection = await GetAsync(giver.PartitionKey, $"{recipient.RowKey}_{giver.RowKey}");
-
-            return connection != null;
+            return TryGet(giver.PartitionKey, $"{recipient.RowKey}_{giver.RowKey}", out _);
         }
     }
 }

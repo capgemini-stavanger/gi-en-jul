@@ -50,7 +50,7 @@ namespace GiEnJul.Controllers
             recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
 
-            if (await _connectionRepository.ConnectionExists(giver, recipient))
+            if (_connectionRepository.ConnectionExists(giver, recipient))
             {
                 return; 
             }
@@ -85,7 +85,7 @@ namespace GiEnJul.Controllers
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 _log.Error("An exception was thrown", e);
-                throw e;
+                throw;
             }
         }
     }
