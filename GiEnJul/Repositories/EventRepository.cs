@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
-using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -84,9 +84,9 @@ namespace GiEnJul.Repositories
         private string HasActiveDates()
         {
             // StartDate <= DateTime.Now
-            var startDatePassed = $"StartDate le {JsonConvert.SerializeObject(DateTime.Now)}";
+            var startDatePassed = $"StartDate le datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
             // EndDate >= DateTime.Now
-            var endDateNotPassed = $"EndDate gt {JsonConvert.SerializeObject(DateTime.Now)}";
+            var endDateNotPassed = $"EndDate gt datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
 
             return string.Join(" and ", startDatePassed, endDateNotPassed);
         }
