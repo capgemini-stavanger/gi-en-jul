@@ -84,9 +84,9 @@ namespace GiEnJul.Repositories
         private string HasActiveDates()
         {
             // StartDate <= DateTime.Now
-            var startDatePassed = $"StartDate le '{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
+            var startDatePassed = $"StartDate le datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
             // EndDate >= DateTime.Now
-            var endDateNotPassed = $"EndDate gt '{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
+            var endDateNotPassed = $"EndDate gt datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
 
             return string.Join(" and ", startDatePassed, endDateNotPassed);
         }
