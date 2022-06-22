@@ -309,7 +309,7 @@ namespace GiEnJul.Controllers
                 await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
                 await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
 
-                throw e;
+                throw;
             }
 
             return Ok();
@@ -338,7 +338,7 @@ namespace GiEnJul.Controllers
             catch (Exception ex)
             {
                 await _recipientRepository.InsertOrReplaceAsync(recipientOld);
-                throw ex;
+                throw;
             }
 
             return Ok();
