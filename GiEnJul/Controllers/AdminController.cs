@@ -229,8 +229,6 @@ namespace GiEnJul.Controllers
 
             try
             {
-                var @event = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
-
                 giver.IsSuggestedMatch = true;
                 giver.MatchedRecipient = connectionDto.RecipientRowKey;
                 giver.MatchedFamilyId = recipient.FamilyId;
@@ -247,27 +245,13 @@ namespace GiEnJul.Controllers
                 var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
-
-                var familyTable = "";
-                for (var i = 0; i<recipient.PersonCount; i++)
-                {
-                    if (recipient.FamilyMembers != null)
-                    {
-                        var member = recipient.FamilyMembers[i];
-                        familyTable += $"<li>{member.ToReadableString()} </li>";
-                        familyTable += " ";
-                    }
-                }
                 
-                var emailTemplatename = EmailTemplateName.AssignedFamily;
+                var emailTemplatename = EmailTemplateName.VerifyConnection;
                 var emailValuesDict = new Dictionary<string, string> 
                 { 
-                    { "familyTable", familyTable }, 
                     { "verifyLink", verifyLink },
-                    { "recipientNote", recipientNote },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(@event, "eventDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);

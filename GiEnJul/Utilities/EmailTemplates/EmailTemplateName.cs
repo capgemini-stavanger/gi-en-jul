@@ -4,6 +4,7 @@
     {
         Registered,
         WaitingList,
-        AssignedFamily
+        AssignedFamily,
+        VerifyConnection
     }
 }
