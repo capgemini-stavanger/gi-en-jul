@@ -242,7 +242,9 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
 
-                var verifyLink = $"{_settings.ReactAppUri}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+                var baseUrl = _settings.ReactAppUri.Split(';').Last();
+
+                var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 
