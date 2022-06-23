@@ -47,9 +47,12 @@ namespace GiEnJul.Controllers
             recipient.EventName = await _eventRepository.GetActiveEventForLocationAsync(recipient.Location);
             recipient.FamilyId = await _autoIncrementRepository.GetNext($"{recipient.EventName}_{recipient.Location}", "Recipient");
 
+            var exist = await _recipientRepository.RecipientDoesExist(recipient.ReferenceId);
+            if (exist) return BadRequest();
+            
             //Add Recipient to Table Storage
             var insertedRecipient = await _recipientRepository.InsertOrReplaceAsync(recipient);
-
+            
             try
             {
                 //Add familymembers to Table Storage
