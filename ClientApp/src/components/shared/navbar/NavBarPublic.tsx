@@ -28,20 +28,8 @@ const NavBarPublic = () => {
     setAnchorEl(() => null);
   };
 
-  const handleStavanger = () => {
-    history.push("/stavanger");
-  };
-
-  const handleSandnes = () => {
-    history.push("/sandnes");
-  };
-
-  const handleSola = () => {
-    history.push("/sola");
-  };
-
-  const handleGjesdal = () => {
-    history.push("/gjesdal");
+  const handleMunicipality = () => {
+    history.push("/kommune");
   };
 
   if (window.location.pathname === "/bli-giver") {
@@ -124,23 +112,8 @@ const NavBarPublic = () => {
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleStavanger} to="stavanger" smooth={true}>
-                    <Typography className={classes.drawerContent}>Stavanger</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleSandnes} to="sandnes" smooth={true}>
-                    <Typography className={classes.drawerContent}>Sandnes</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleSola} to="sola" smooth={true}>
-                    <Typography className={classes.drawerContent}>Sola</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleGjesdal} to="gjesdal" smooth={true}>
-                    <Typography className={classes.drawerContent}>Gjesdal</Typography>
+                  <Scroll onClick={handleMunicipality} to="municipality" smooth={true}>
+                    <Typography className={classes.drawerContent}>Kommuner</Typography>
                   </Scroll>
                 </ListItem>
               </List>
