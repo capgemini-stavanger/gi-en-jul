@@ -3,6 +3,7 @@ import ScrollToTop from "components/shared/ScrollToTop";
 import Companies from "components/landing-page/Companies";
 import How from "components/landing-page/How";
 import Questions from "components/landing-page/Questions";
+import Start from "components/landing-page/StartJul";
 import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
 import family from "styling/img/familyTop.svg";
@@ -48,6 +49,7 @@ const Home = () => {
         <Questions />
         <Companies />
         <Contact contacts={contacts}/>
+        <Start />
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
