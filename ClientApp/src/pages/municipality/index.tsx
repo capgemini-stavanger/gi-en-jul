@@ -1,21 +1,32 @@
-import { Container, Typography, Grid} from "@material-ui/core";
+import { Container, Grid} from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
+import Companies from "components/landing-page/Companies";
+import How from "components/landing-page/How";
+import Questions from "components/landing-page/Questions";
 import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
 import family from "styling/img/familyTop.svg";
 import snowDown from "styling/img/snow_down.svg";
+import Contact from "components/landing-page/Contact";
+import {ContactData} from "components/landing-page/Contact";
 import Footer from "components/shared/Footer";
+import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
+import City from "components/municipalities/City";
 
-const Gjesdal = () => {
-    const apiservice = new ApiService;
+const Municipality = () => {
+    const [cities, setMunicipalities] = useState<ContactData[]>([]);
     const classes = useStyles();
+    const apiservice = new ApiService;
+    useEffect(() => {
+        apiservice.get("event/contacts").then((response) => setMunicipalities(response.data));
+      }, []);
 
-    return(
+      return (
         <>
-      <NavBarPublic />
-      <Container className={classes.root} maxWidth={false}>
+        <NavBarPublic />
+        <Container className={classes.root} maxWidth={false}>
         <Grid
           container
           direction="column"
@@ -32,17 +43,12 @@ const Gjesdal = () => {
         <img className={classes.snowDown} src={snowDown}></img>
         </Grid>
         </Grid>
+        <City cities={cities}/>
         <ScrollToTop maxPagePosition={300} />
-        <Grid container justifyContent="center">
-            <Typography>
-                Her kan det skrives informasjon om Gi en Jul Gjesdal.
-            </Typography>
-        </Grid>
         <Footer/>
       </Container>
-    </>
-    )
-
+        </>
+      );
 };
 
-export default Gjesdal;
+export default Municipality;
