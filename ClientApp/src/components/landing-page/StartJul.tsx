@@ -3,7 +3,6 @@ import {
   Container,
   Grid,
 } from "@material-ui/core";
-import { FormatAlignJustify } from "@material-ui/icons";
 import useStyles from "./Styles";
 
 
@@ -21,7 +20,7 @@ return (
         <Grid container justifyContent="center">
             <div>
                 <Typography>
-                    Du kan ringe Karianne. 
+                    For å starte Gi en Jul i din kommune kan du ta kontakt med kontaktpersonen for Stavanger kommune.  
                 </Typography>
             </div>
         </Grid>
