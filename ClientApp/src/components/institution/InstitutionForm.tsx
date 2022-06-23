@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import HelpIcon from '@material-ui/icons/Help';
 import { useState} from "react";
 import { DESSERTS } from "common/constants/Desserts";
 import { DINNERS } from "common/constants/Dinners";
@@ -104,6 +104,8 @@ const initFormDataState: () => {
   specialNeeds: string;
   pid: string;
   contact: IContact;
+  pidError: boolean;
+  pidHelperText:string;
 } = () => ({
   persons: [getFormPerson()],
   location: "",
@@ -111,6 +113,8 @@ const initFormDataState: () => {
   dessert: initFoodFormData,
   specialNeeds: "",
   pid: "",
+  pidError: false,
+  pidHelperText: "",
   contact: {
     name: "",
     phoneNumber: "",
@@ -384,7 +388,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
         }
       })
       .catch((errorStack) => {
-        console.error(errorStack);
+        if (errorStack.response.data = formDataState.pid){
+           formDataState.pidError = true;
+           formDataState.pidHelperText ="PID/ID for denne familien eksisterer allerede."
+        }
+       console.error(errorStack);       
       });
 
     setState((prev) => ({
@@ -544,9 +552,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               id="PID"
               label="PID eller annen ID"
               placeholder="PID eller annen ID"
+              error = {formDataState.pidError}
+              helperText={formDataState.pidHelperText}
             />
             <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
-            { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
+            { state.displayText ? <HelpIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
             </Tooltip>
           </Grid>
           <Typography>
