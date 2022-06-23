@@ -6,6 +6,8 @@ import StartJul from "components/landing-page/StartJul";
 import Business from "components/landing-page/Business";
 import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
+import Stavanger from "pages/stavanger";
+import Sandnes from "pages/sandnes";
 import "custom.css";
 
 const App = () => {
