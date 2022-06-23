@@ -90,6 +90,13 @@ const NavBarPublic = () => {
                     </Typography>
                   </Scroll>
                 </ListItem>
+                <ListItem>
+                  <Scroll onClick={handleClose} to="start" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Hvordan starte Gi en Jul i din kommune
+                    </Typography>
+                  </Scroll>
+                </ListItem>
               </List>
             </Drawer>
             <Button
