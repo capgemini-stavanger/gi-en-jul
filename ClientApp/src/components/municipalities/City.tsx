@@ -43,9 +43,7 @@ const City: React.FC<Props> = ({ cities }) => {
             >
               <Typography>{val.city}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Information />
-            </AccordionDetails>
+            <AccordionDetails></AccordionDetails>
           </Accordion>
         </Grid>
       ))}
