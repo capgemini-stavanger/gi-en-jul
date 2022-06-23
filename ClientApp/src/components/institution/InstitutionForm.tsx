@@ -432,128 +432,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
           {state.alert.msg}
         </Alert>
       </Snackbar>
-      
+
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
             <Typography variant="h5">Tidligere registrerte familier </Typography>
             <Button onClick={openFamilyDialog} variant="contained" color="primary"> Klikk her for å se familieoversikt </Button>
-            <Grid item >
-              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
-            </Grid>
-            <Grid container spacing={1} direction="column">
-              <Grid item>
-                <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
-              </Grid>
-              <Grid item>
-                {formDataState.persons.map((person, i) => {
-                  return (
-                    <FormPerson
-                      setAlert={setAlert}
-                      key={person.uuid}
-                      person={person}
-                      viewErrorTrigger={state.viewErrorTrigger}
-                      updatePerson={(newPersonData: {
-                        [target: string]: unknown;
-                      }) => updatePerson(i, newPersonData)}
-                      deletePerson={() => deletePerson(i)}
-                    />
-                  );
-                })}
-              </Grid>
-              <Grid item>
-                <Button
-                  startIcon={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="currentColor"
-                      className="bi bi-plus"
-                      viewBox="0 0 16 16"
-                    >
-                      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                    </svg>
-                  }
-                  variant="contained"
-                  color="primary"
-                  onClick={addPerson}
-                >
-                  Legg til flere
-                </Button>
-              </Grid>
-            </Grid>
+            <Grid item>
+              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog} /> : <Typography> <br></br></Typography>}
           </Grid>
-          <Grid item>
-            <Grid container spacing={1} direction="column">
-              <Grid item>
-                <Typography variant="h5">Matønsker</Typography>
-              </Grid>
-              <Grid item>
-                <FormFood
-                  viewErrorTrigger={state.viewErrorTrigger}
-                  onInputChange={onDinnerInputChange}
-                  input={formDataState.dinner.input}
-                  radio={formDataState.dinner.radio}
-                  onRadioChange={onDinnerRadioChange}
-                  foods={DINNERS}
-                  required
-                  header={"Middag"}
-                  inputLabel="Annen middag (ikke fisk)"
-                  setIsValid={getValiditySetter("dinner")}
-                  name="dinner"
-                />
-              </Grid>
-              <Grid item>
-                <FormFood
-                  viewErrorTrigger={state.viewErrorTrigger}
-                  onInputChange={onDessertInputChange}
-                  input={formDataState.dessert.input}
-                  radio={formDataState.dessert.radio}
-                  onRadioChange={onDessertRadioChange}
-                  foods={DESSERTS}
-                  required
-                  header={"Dessert"}
-                  inputLabel="Annen dessert"
-                  setIsValid={getValiditySetter("dessert")}
-                  name="dessert"
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  variant="outlined"
-                  value={formDataState.specialNeeds}
-                  onChange={onSpecialNeedsChange}
-                  type="textarea"
-                  fullWidth
-                  label="Spesielle behov (Halal, vegetar, allergier)"
-                  multiline
-                  placeholder="Halal, vegetar, allergier"
-                  maxRows="24"
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Typography variant="h5">Deres ID på familien</Typography>
-            <TextField
-              variant="outlined"
-              onChange={onPidChange}
-              value={formDataState.pid}
-              name="pid"
-              id="PID"
-              label="PID eller annen ID"
-              placeholder="PID eller annen ID"
-            />
-            <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
-            { state.displayText ? <CheckCircleIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
-            </Tooltip>
-          </Grid>
-          <Typography>
-           {state.displayText &&
-           <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
-           }
-          </Typography>
           <Grid item container spacing={1} direction="column">
             <Grid item>
               <Typography variant="h5">Kontaktperson</Typography>
@@ -570,8 +457,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                     value={formDataState.contact.name}
                     name="cname"
                     id="kontaktnavn"
-                    label="Navn"
-                  />
+                    label="Navn" />
                 </Grid>
                 <Grid item>
                   <InputValidator
@@ -587,8 +473,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                     name="cphone"
                     id="kontaktperson"
                     label="Telefon"
-                    autoComplete="tel"
-                  />
+                    autoComplete="tel" />
                 </Grid>
               </Grid>
             </Grid>
@@ -606,11 +491,116 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                 name="cemail"
                 id="kontaktepost"
                 label="Epost"
-                autoComplete="email"
-              />
+                autoComplete="email" />
             </Grid>
           </Grid>
-          <Grid item className="mx-5">
+        </Grid>
+        <Grid container spacing={1} direction="column">
+          <Grid item>
+            <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
+          </Grid>
+          <Grid item>
+            {formDataState.persons.map((person, i) => {
+              return (
+                <FormPerson
+                  setAlert={setAlert}
+                  key={person.uuid}
+                  person={person}
+                  viewErrorTrigger={state.viewErrorTrigger}
+                  updatePerson={(newPersonData: {
+                    [target: string]: unknown;
+                  }) => updatePerson(i, newPersonData)}
+                  deletePerson={() => deletePerson(i)} />
+              );
+            })}
+          </Grid>
+          <Grid item>
+            <Button
+              startIcon={<svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="currentColor"
+                className="bi bi-plus"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+              </svg>}
+              variant="contained"
+              color="primary"
+              onClick={addPerson}
+            >
+              Legg til flere
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid container spacing={1} direction="column">
+          <Grid item>
+            <Typography variant="h5">Matønsker</Typography>
+          </Grid>
+          <Grid item>
+            <FormFood
+              viewErrorTrigger={state.viewErrorTrigger}
+              onInputChange={onDinnerInputChange}
+              input={formDataState.dinner.input}
+              radio={formDataState.dinner.radio}
+              onRadioChange={onDinnerRadioChange}
+              foods={DINNERS}
+              required
+              header={"Middag"}
+              inputLabel="Annen middag (ikke fisk)"
+              setIsValid={getValiditySetter("dinner")}
+              name="dinner" />
+          </Grid>
+          <Grid item>
+            <FormFood
+              viewErrorTrigger={state.viewErrorTrigger}
+              onInputChange={onDessertInputChange}
+              input={formDataState.dessert.input}
+              radio={formDataState.dessert.radio}
+              onRadioChange={onDessertRadioChange}
+              foods={DESSERTS}
+              required
+              header={"Dessert"}
+              inputLabel="Annen dessert"
+              setIsValid={getValiditySetter("dessert")}
+              name="dessert" />
+          </Grid>
+          <Grid item>
+            <TextField
+              variant="outlined"
+              value={formDataState.specialNeeds}
+              onChange={onSpecialNeedsChange}
+              type="textarea"
+              fullWidth
+              label="Spesielle behov (Halal, vegetar, allergier)"
+              multiline
+              placeholder="Halal, vegetar, allergier"
+              maxRows="24" />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Typography variant="h5">Deres ID på familien</Typography>
+        <TextField
+          variant="outlined"
+          onChange={onPidChange}
+          value={formDataState.pid}
+          name="pid"
+          id="PID"
+          label="PID eller annen ID"
+          placeholder="PID eller annen ID" />
+        <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
+          {state.displayText ? <CheckCircleIcon onClick={hideHelpText} /> : <HelpOutlineIcon onClick={displayHelpText} />}
+        </Tooltip>
+      </Grid>
+      <Typography>
+        {state.displayText &&
+          <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>}
+      </Typography>
+      <Grid item className="mx-5">
             <Button variant="contained" type="submit" color="primary">
               Send
             </Button>
@@ -620,8 +610,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               </div>
             )}
           </Grid>
-        </Grid>
-        <ConfirmationDialog open={state.dialog.open} familyId={state.dialog.familyId} referenceId={state.dialog.referenceId} handleClose={closeDialog} />
+      <ConfirmationDialog open={state.dialog.open} familyId={state.dialog.familyId} referenceId={state.dialog.referenceId} handleClose={closeDialog} />
       </form>
     </>
   );
