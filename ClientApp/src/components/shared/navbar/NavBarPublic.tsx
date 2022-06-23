@@ -28,7 +28,7 @@ const NavBarPublic = () => {
     setAnchorEl(() => null);
   };
 
-  if (window.location.pathname === "/bli-giver") {
+  if (window.location.pathname === "/bli-giver" )  {
     return (
       <>
         <AppBar className={classes.navContainer}>
@@ -77,7 +77,7 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleClose} to="companies" smooth={true}>
+                  <Scroll onClick={() => { history.push("/bedrift");}} to="top" smooth={true}>
                     <Typography className={classes.drawerContent}>
                       For bedrifter
                     </Typography>
