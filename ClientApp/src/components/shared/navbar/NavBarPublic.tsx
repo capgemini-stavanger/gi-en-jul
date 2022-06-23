@@ -28,6 +28,22 @@ const NavBarPublic = () => {
     setAnchorEl(() => null);
   };
 
+  const handleStavanger = () => {
+    history.push("/stavanger");
+  };
+
+  const handleSandnes = () => {
+    history.push("/sandnes");
+  };
+
+  const handleSola = () => {
+    history.push("/sola");
+  };
+
+  const handleGjesdal = () => {
+    history.push("/gjesdal");
+  };
+
   if (window.location.pathname === "/bli-giver") {
     return (
       <>
@@ -87,6 +103,34 @@ const NavBarPublic = () => {
                   <Scroll onClick={handleClose} to="contact" smooth={true}>
                     <Typography className={classes.drawerContent}>
                       Kontakt
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
+                  <Scroll onClick={handleStavanger} to="stavanger" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Stavanger
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
+                  <Scroll onClick={handleSandnes} to="sandnes" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Sandnes
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
+                  <Scroll onClick={handleSola} to="sola" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Sola
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
+                  <Scroll onClick={handleGjesdal} to="gjesdal" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Gjesdal
                     </Typography>
                   </Scroll>
                 </ListItem>
