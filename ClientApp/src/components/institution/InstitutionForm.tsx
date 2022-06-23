@@ -27,6 +27,7 @@ import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 
+
 type PersonType = {
   Wish?: string;
   Age: number;
@@ -133,6 +134,7 @@ interface props {
   accessToken: string;
 }
 
+
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
   const [showFamilyDialog, setShowFamilyDialog] = useState(false);
@@ -147,6 +149,28 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       persons: [...prev.persons, getFormPerson()],
     }));
   };
+
+  const nextFormDataState: () => {
+    persons: IFormPerson[];
+    location: string;
+    dinner: IFoodFormData;
+    dessert: IFoodFormData;
+    specialNeeds: string;
+    pid: string;
+    contact: IContact;
+  } = () => ({
+    persons: [getFormPerson()],
+    location: "",
+    dinner: initFoodFormData,
+    dessert: initFoodFormData,
+    specialNeeds: "",
+    pid: "",
+    contact: {
+      name: formDataState.contact.name,
+      phoneNumber: formDataState.contact.phoneNumber,
+      email: formDataState.contact.email,
+    },
+  });
 
 
   const { location, role, institution } = useUser();
@@ -311,7 +335,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const resetForm = () => {
     setState((prev) => ({ ...prev, viewErrorTrigger: 0 }));
     setValidFormState({ ...initValidFormState });
-    setFormDataState(initFormDataState());
+    setFormDataState(nextFormDataState());
   };
 
   const onSuccessSubmit = () => {
