@@ -20,6 +20,7 @@ namespace GiEnJul.Auth
             opt.AddPolicy("GetUnsuggestedGivers", policy => policy.RequireClaim("permissions", "get:unsuggestedgivers"));
             opt.AddPolicy("GetUnsuggestedRecipients", policy => policy.RequireClaim("permissions", "get:unsuggestedrecipients"));
             opt.AddPolicy("DeleteConnection", policy => policy.RequireClaim("permissions", "delete:connection"));
+            opt.AddPolicy("PostEmail", policy => policy.RequireClaim("permissions", "post:email"));
         }
     }
 }
