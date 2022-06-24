@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Information from "./information";
 
 export interface CityData {
   city: string;
