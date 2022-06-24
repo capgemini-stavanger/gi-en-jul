@@ -4,6 +4,7 @@ using GiEnJul.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -24,8 +25,9 @@ namespace GiEnJul.Controllers
             _emailClient = emailClient;
         }
 
-        // POST api/email/sendEmail
+        // POST api/email/send
         [HttpPost("send")]
+        [Authorize(Policy = "PostEmail")]
         public async Task<ActionResult> SendMail(PostEmailDto email)
         {
             _log.Information("Received email post with data {@0}", email);
