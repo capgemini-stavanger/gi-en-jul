@@ -47,7 +47,7 @@
     <None Update="Utilities\EmailTemplates\Files\familyTop.0ff49710.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Utilities\EmailTemplates\Files\EditorTemplate.html">
+    <None Update="Utilities\EmailTemplates\Files\Notification.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 	<None Update="Utilities\EmailTemplates\Files\Registered.html">
