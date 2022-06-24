@@ -1,25 +1,23 @@
 ﻿using AutoMapper;
+using Azure;
+using Azure.Core.Pipeline;
+using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
-using Azure.Data.Tables;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Azure.Core;
 using System.Linq;
-using Azure.Core.Pipeline;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
 {
     public class GenericRepository<T> where T : EntityBase, new()
     {
-        private readonly ISettings _settings;
+        protected readonly ISettings _settings;
 
         private TableClient _client { get; set; }
-
-        protected readonly HttpClient _httpClient;
 
         protected IMapper _mapper { get; set; }
         protected ILogger _log { get; set; }
@@ -30,13 +28,7 @@ namespace GiEnJul.Repositories
             _mapper = mapper;
             _log = log;
 
-            _httpClient = new HttpClient();
-            var options = new TableClientOptions
-            {
-                Transport = new HttpClientTransport(_httpClient)
-            };
-
-            var tableClient = new TableClient(settings.TableConnectionString, tableName, options);
+            var tableClient = new TableClient(settings.TableConnectionString, tableName);
             _client = tableClient;
 
             try
@@ -148,6 +140,25 @@ namespace GiEnJul.Repositories
             }
         }
 
+        /// <summary>
+        /// Update the entity if the etag matches
+        /// </summary>
+        /// <param name="entity">entity to update</param>
+        /// <returns>true if success, otherwise false</returns>
+        protected async Task<bool> UpdateIfMatch(T entity)
+        {
+            try
+            {
+                var result = await _client.UpdateEntityAsync(entity, entity.ETag);
+                return true;
+            }
+            catch (RequestFailedException e)
+            {
+                _log.Debug("{@0}", e);
+                return false;
+            }
+        }
+
         protected async Task<int> InsertOrReplaceBatchAsync(IEnumerable<T> entities)
         {
             var batchOperation = new List<TableTransactionAction>();
@@ -171,7 +182,7 @@ namespace GiEnJul.Repositories
 
         protected async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await GetAllByQueryAsync(String.Empty);
+            return await GetAllByQueryAsync(string.Empty);
         }
 
         protected async Task<IEnumerable<T>> GetAllByQueryAsync(string query)
