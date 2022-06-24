@@ -55,8 +55,9 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        // POST api/givers/{location}
-        [HttpPost("givers/{location}")]
+        // POST api/email/givers/location
+        [HttpPost("givers/location")]
+        [Authorize(Policy = "PostEmail")]
         public async Task<ActionResult> SendToGiversInLocation(PostLocationEmailDto email)
         {
             // Try-Catch for finding users based on location
