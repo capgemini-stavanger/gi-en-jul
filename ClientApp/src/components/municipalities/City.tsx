@@ -3,8 +3,12 @@ import {
   Typography,
   Container,
   Grid,
+  Accordion,
+  AccordionSummary,
 } from "@material-ui/core";
 import useStyles from "./Styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
 
 export interface CityData {
     city: String, 
@@ -14,43 +18,46 @@ export interface CityData {
     cities : CityData[]
   }
 
-
   const style = {
     greyImageFilter: {
         filter: "grayscale(100%)"
     }
   }
 
-  /*
-  handle button click method here 
-  */
 
   const City: React.FC<Props> = ({cities}) => {
     const classes = useStyles();
+    const [expanded, setExpanded] = React.useState<string | false> (false); 
+    const handleChange = (panel:string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel: false)
+    };
     
-
-    const MunicipalityPages = cities.map((municipality, index) =>
-    <div key={index}>
-    <Grid className={classes.municipalityItem}>
-        <Typography className={classes.municipalityHeader}>{municipality.city}</Typography>
-    </Grid>
-
-    </div>
-    );
-    //the names of the kommuner should be clickabe buttons 
     return (
         <Container id="municipality" className={classes.sectionContainer}>
             <div className={classes.headLineContainer}>
                 <Typography className={classes.textHeadline}>Kommuner</Typography>
             </div>
-            <Typography> <br /> {MunicipalityPages} </Typography>
-            
+            {Array.from(cities).map((val, index)=>
+            <Grid className={classes.municipalityItem} key={index}>
+              
+              <Accordion expanded={expanded === index.toString()} onChange={handleChange(index.toString())}>
+                <AccordionSummary
+                  className = {classes.municipalityItem}
+                  expandIcon={
+                    <ExpandMoreIcon />
+                  }
+                  >
+                    <Typography>{val.city}</Typography>
+                </AccordionSummary>
+              </Accordion>
+              
+            </Grid>
+            )}
         </Container>
     );
   };
 
   export default City;
-
 
 
 

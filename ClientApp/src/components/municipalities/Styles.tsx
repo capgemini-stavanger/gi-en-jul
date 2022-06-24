@@ -56,6 +56,16 @@ const useStyles = makeStyles((theme) => ({
     blueTextHeadline: {
       color: "#698BAC",
       fontSize: "180%",
+      textAlign: "center",
+      fontWeight: 500,
+      [theme.breakpoints.up("tablet")]: {
+        fontSize: "200%",
+      },
+    },
+    greenTextHeadLine: {
+      color: "#69A386",
+      fontSize: "180%",
+      textAlign: "center",
       fontWeight: 500,
       [theme.breakpoints.up("tablet")]: {
         fontSize: "200%",
