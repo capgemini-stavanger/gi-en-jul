@@ -50,6 +50,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
     setOpenDialog(false)
   }
 
+  
+
   return (
     <Container>
       {data.map((giver) => (
@@ -92,6 +94,9 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             <Typography>
               <Mail />
               {giver.email}
+              <Button>
+                Send email
+              </Button>
             </Typography>
           </AccordionDetails>
           { giver.isSuggestedMatch &&
