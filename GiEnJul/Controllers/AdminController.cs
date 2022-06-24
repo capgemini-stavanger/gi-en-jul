@@ -329,15 +329,19 @@ namespace GiEnJul.Controllers
                 if (valueNew == null) prop.SetValue(recipientNew, valueOld);
             }
 
-            await _recipientRepository.InsertOrReplaceAsync(recipientNew);
+            var childrenFromDb = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
+            var deleteChildren = childrenFromDb.Where(oldP => recipientNew.FamilyMembers.All(newP => oldP.RowKey != newP.RowKey)).ToList();
 
             try
             {
+                await _recipientRepository.InsertOrReplaceAsync(recipientNew);
                 await _personRepository.InsertOrReplaceBatchAsync(recipientNew.FamilyMembers);
+                if (deleteChildren.Count() > 0) {
+                    await _personRepository.DeleteBatchAsync(deleteChildren);
+                }
             }
             catch (Exception ex)
             {
-                await _recipientRepository.InsertOrReplaceAsync(recipientOld);
                 throw;
             }
 
