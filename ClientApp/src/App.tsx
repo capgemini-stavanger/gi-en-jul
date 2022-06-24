@@ -2,6 +2,7 @@ import { Route } from "react-router";
 import AdminPage from "pages/login";
 import LoadingPage from "pages/LoadingPage";
 import Home from "pages/landing-page";
+import Business from "components/landing-page/Business";
 import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
@@ -11,6 +12,7 @@ const App = () => {
     <>
       <Route path="/admin" component={AdminPage} />
       <Route exact path="/" component={Home} />
+      <Route path="/bedrift" component={Business} />
       <Route path="/bli-giver" component={RegistrationMacro} />
       <Route path="/loading" component={LoadingPage} />
       <Route
