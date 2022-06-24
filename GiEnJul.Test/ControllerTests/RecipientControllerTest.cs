@@ -107,6 +107,8 @@ namespace GiEnJul.Test.ControllerTests
             await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
+            mockRecipientRepo.Verify(x => x.RecipientDoesExist(It.IsAny<string>()), Times.Once());
+
         }
 
         [Fact]
@@ -126,6 +128,7 @@ namespace GiEnJul.Test.ControllerTests
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockPersonRepo.Verify(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>()), Times.Once());
             mockRecipientRepo.Verify(x => x.DeleteAsync(It.IsAny<Models.Recipient>()), Times.Once());
+            mockRecipientRepo.Verify(x => x.RecipientDoesExist(It.IsAny<string>()), Times.Once());
         }
 
         [Fact]
@@ -145,6 +148,7 @@ namespace GiEnJul.Test.ControllerTests
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockPersonRepo.Verify(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>()), Times.Once());
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
+            mockRecipientRepo.Verify(x => x.RecipientDoesExist(It.IsAny<string>()), Times.Once());
         }
     }
 }
