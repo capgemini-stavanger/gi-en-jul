@@ -43,7 +43,8 @@ const Municipality = () => {
         <img className={classes.snowDown} src={snowDown}></img>
         </Grid>
         </Grid>
-        <City cities={cities}/>
+        <City cities={cities} >
+        </City>
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
