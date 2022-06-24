@@ -49,9 +49,11 @@ namespace GiEnJul.Repositories
         {
             var query = $"ReferenceId eq '{referenceId}";
             var exists = await GetAllByQueryAsync(query);
-            if (_mapper.Map<List<Models.Recipient>>(exists).Count > 0) return true;
+            if (_mapper.Map<List<Models.Recipient>>(exists).Count > 0)
+                return true;
            
-            else return false;
+            else
+                return false;
             
         }
 
