@@ -50,11 +50,16 @@ const Municipality = () => {
         </Grid>
         </Grid>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <City cities={cities} >
         </City>
 =======
         <City cities={cities}/>
 >>>>>>> b531a44 (improvements for making it more dynamic)
+=======
+        <City cities={cities} >
+        </City>
+>>>>>>> e797592 (improved pages)
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
       </Container>
