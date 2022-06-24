@@ -28,6 +28,9 @@ namespace GiEnJul.Utilities
             var templatePath = string.Format("{0}Utilities{0}EmailTemplates{0}Files{0}", Path.DirectorySeparatorChar);
             var headerImage = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.0ff49710.svg");
             var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}{name}.html");
+            var style = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}TemplateStyle.css");
+            style = "<style>" + style + "</style>";
+            content = style + content;
 
             data.Add("headerImage", headerImage);
 

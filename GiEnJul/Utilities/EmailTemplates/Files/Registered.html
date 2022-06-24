@@ -1,13 +1,15 @@
-﻿<link rel="stylesheet" href="TemplateStyle.css" />
-
+﻿
 <div>
+    {headerImage}
+
+    <br />
     Hei!
-    <br />
-    <br />
+    <br /><br />
+
     Tusen takk for at du har meldt deg som giver til årets Gi en jul. Så snart vi har en familie til deg,
     vil du motta en epost med mer informasjon. Vi deler ut familier fortløpende, og inntil et par uker før innlevering.
-    <br />
-    <br />
+    <br /><br />
+
     Din informasjon:
     <ul>
         <li>Kommune: {giver.Location}</li>
@@ -18,6 +20,7 @@
         <li>Registreringsdato: {giver.RegistrationDate}</li>
     </ul>
     <br />
+
     Leveringsinformasjon:
     <br />
     <ul>
@@ -26,13 +29,14 @@
         <li>Sted: <a href={eventDto.DeliveryGPS}>{eventDto.DeliveryAddress}</a></li>
     </ul>
     <br />
+
     Juleeskene skal minst inneholde en julemiddag med dessert og en gave til hvert av familiemedlemmene. Du får vite mat- og gaveønsker når du får familien.
-    <br />
-    <br />
+    <br /><br />
+
     Dersom du ønsker, kan du bidra med én ekstra middag og/eller noe til julefrokosten. Middagen kan
     eksempelvis være pølse og potetmos, medisterkaker og poteter, kjøttdeig og spaghetti, eller noe annet du synes er passende.
-    <br />
-    <br />
+    <br /><br />
+
     Har du lyst til å legge mer oppi esken, er det selvsagt frivillig. Forslag til ekstra-ting, er:
     <br />
     <ul>
@@ -46,29 +50,29 @@
         <li> brød, julekake</li>
     </ul>
     <br />
+
     Pass på at ikke maten blir dårlig/sur, og vær obs på datostempel. Ikke kjøp alkoholholdig drikke!
     <br />
     <h3>Innkjøp av julegaver </h3>
     Husk at det er gaveønsker og ikke handleliste som må følges til punkt og prikke. Dersom ønskene er gavekort, kan du likevel kjøpe en gave du synes passer til alderen.
-    <br />
-    <br />
+    <br /><br />
+
     Gaver pakkes inn og merkes med til mor, til far, til jente x år, til gutt x år og så videre.
     Det er lurt å legge byttelapp oppi esken. Pakk gjerne i bananesker, eller andre esker som er enkle å bære.
-    <br />
-    <br />
+    <br /><br />
+
     NB! Dersom du ønsker å gi bort brukte leker eller tøy, er det viktig at dette er i god stand, og ikke erstatter julegaven.
     Vi støtter selvsagt gjenbruk, men dette er familier som sjeldent kan unne seg nye ting.
-    <br />
-    <br />
+    <br /> <br />
+
     Igjen vil vi si tusen takk for at du har meldt seg som giver! Vi håper du har fått informasjonen du trenger,
     <br />
     og lurer du på noe i mellomtiden ber vi deg ta en titt på ofte stilte spørsmål på <a href='https://gienjul.no'>
         nettsiden
     </a>, og følg gjerne med på <a href={eventDto.Facebook}>Facebook</a>.
-    <br />
-    <br />
+    <br /><br />
+
     <b>PS</b>: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende, ta kontakt med {eventDto.ContactPerson} på <a href="mailto:{eventDto.Email}">{eventDto.Email}</a>
-    <br />
-    <br />
+    <br /><br />
     Vennlig hilsen {eventDto.ContactPerson}
 </div>

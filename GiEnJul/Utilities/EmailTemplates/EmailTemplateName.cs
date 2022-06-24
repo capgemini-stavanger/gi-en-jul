@@ -5,6 +5,7 @@
         Registered,
         WaitingList,
         AssignedFamily,
-        VerifyConnection
+        VerifyConnection,
+        Notification
     }
 }
