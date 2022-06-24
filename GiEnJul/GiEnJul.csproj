@@ -53,6 +53,9 @@
 	<None Update="Utilities\EmailTemplates\Files\Registered.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
+	<None Update="Utilities\EmailTemplates\Files\VerifyConnection.html">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
 	<None Update="Utilities\EmailTemplates\Files\WaitingList.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
