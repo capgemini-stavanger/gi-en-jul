@@ -24,6 +24,7 @@ import useStyles from "components/admin/Styles";
 import formatFamily from "common/functions/GetFamilySize"
 import { Alert } from "@material-ui/lab";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
+import SendSingleEmail from "components/shared/EmailContentBox";
 
 type Props = {
   data: GiverType[] | [];
@@ -36,6 +37,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
 
   const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [open,setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
   const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setSelectedGiver(isExpanded ? giver : false);
@@ -94,9 +96,15 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             <Typography>
               <Mail />
               {giver.email}
-              <Button>
+              <Button onClick={() => {setOpen(true)}}>
                 Send email
               </Button>
+              <SendSingleEmail 
+              open = {open}
+              handleClose = {() => {setOpen(false)}}
+              giver = {giver}
+
+              ></SendSingleEmail>
             </Typography>
           </AccordionDetails>
           { giver.isSuggestedMatch &&
