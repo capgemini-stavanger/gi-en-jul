@@ -69,10 +69,9 @@ const DatatableRecipient: React.FC<Props> = ({
       {data.map((recipient, index) => (
         <Accordion
           expanded={selected == index}
-          key={recipient.rowKey}
+          key={index}
           className={classes.accordionContainer}
           onChange={() => { handleRecipientChange(recipient) }}
-
           onClick={() => { handleSelectedAccordion(index) }}
         >
           <AccordionSummary
@@ -120,8 +119,8 @@ const DatatableRecipient: React.FC<Props> = ({
           <AccordionDetails className={classes.largeColumn}>
             <Typography style={{ fontWeight: 550, fontSize: 18 }} >Familiesammensetning:</Typography>
           </AccordionDetails>
-          {recipient.familyMembers.map((person) => (
-            <div key={person.rowKey}>
+          {recipient.familyMembers.map((person, index) => (
+            <div key={index}>
               <AccordionDetails>
                 <Typography className={classes.smallColumn}>
                   {getGender(person.gender, person.age)}
