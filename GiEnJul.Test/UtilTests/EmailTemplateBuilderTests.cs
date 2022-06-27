@@ -5,6 +5,7 @@ using GiEnJul.Utilities.EmailTemplates;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace GiEnJul.Test.UtilTests
@@ -36,10 +37,16 @@ namespace GiEnJul.Test.UtilTests
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Recipient(), "recipient."));
 
+
+
             var result = await SUT.GetEmailTemplate(EmailTemplateName.AssignedFamily, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
-            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+
+            string pattern = @"<style>[\s\S]*?<\/style>";
+            Regex regex = new Regex(pattern);
+            string contentWithoutStyle = regex.Replace(result.Content, "");
+            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
 
         [Fact]
