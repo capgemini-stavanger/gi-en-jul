@@ -41,6 +41,6 @@ jobs:
       - name: Deploy with Azure webapp creds
         uses: azure/webapps-deploy@v2
         with:
-          app-name: gi-en-jul-app-service-dev
+          app-name: gienjul-app-service-dev
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_TEST }}
           package: ./${{ env.PACKAGE_PATH }}
