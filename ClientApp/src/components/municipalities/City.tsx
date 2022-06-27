@@ -5,9 +5,11 @@ import {
   Grid,
   Accordion,
   AccordionSummary,
+  AccordionDetails,
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Information from "./information";
 
 
 export interface CityData {
@@ -49,8 +51,10 @@ export interface CityData {
                   >
                     <Typography>{val.city}</Typography>
                 </AccordionSummary>
+                <AccordionDetails>
+                  <Typography><Information/></Typography>
+                </AccordionDetails>
               </Accordion>
-              
             </Grid>
             )}
         </Container>
