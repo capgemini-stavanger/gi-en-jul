@@ -121,12 +121,20 @@
     <value>Gi en jul - familie - husk å bekrefte!</value>
     <comment>When admin assigns a family to user</comment>
   </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Gi en jul - notifikasjon!</value>
+    <comment>When a notification is provided</comment>
+  </data>
   <data name="Registered" xml:space="preserve">
     <value>Gi en jul - registrering og informasjon!</value>
     <comment>When giver is registered</comment>
   </data>
+  <data name="VerifyConnection" xml:space="preserve">
+    <value>Gi en jul - godkjenn forespørsel!</value>
+    <comment>When giver connects with family</comment>
+  </data>
   <data name="WaitingList" xml:space="preserve">
-    <value>Gi en jul - registrering og informasjon!</value>
+    <value>Gi en jul - venteliste!</value>
     <comment>When giver is registered and on waiting list</comment>
   </data>
 </root>

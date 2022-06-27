@@ -7,6 +7,9 @@ using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities.EmailTemplates;
+using System.Collections.Generic;
+using GiEnJul.Utilities;
 
 namespace GiEnJul.Controllers
 {
@@ -19,18 +22,22 @@ namespace GiEnJul.Controllers
         private readonly IEmailClient _emailClient;
         private readonly IGiverRepository _giverRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
-        public EmailController(ILogger log, 
-                               IMapper mapper, 
-                               IEmailClient emailClient, 
-                               IGiverRepository giverRepository, 
-                               IEventRepository eventRepository)
+        public EmailController(
+            ILogger log, 
+            IMapper mapper, 
+            IEmailClient emailClient,
+            IGiverRepository giverRepository, 
+            IEventRepository eventRepository,
+            IEmailTemplateBuilder emailTemplateBuilder)
         {
             _log = log;
             _mapper = mapper;
             _emailClient = emailClient;
             _giverRepository = giverRepository;
             _eventRepository = eventRepository;
+            _emailTemplateBuilder = emailTemplateBuilder;
         }
 
         // POST api/email/send
@@ -45,7 +52,14 @@ namespace GiEnJul.Controllers
             }
             try
             {
-                await _emailClient.SendEmailAsync(email.EmailAddress, email.RecipientName, email.Subject, email.Content);
+                var emailTemplatename = EmailTemplateName.Notification;
+                var emailValuesDict = new Dictionary<string, string>
+                {
+                    { "content", email.Content},
+                };
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+
+                await _emailClient.SendEmailAsync(email.EmailAddress, email.RecipientName, email.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {
