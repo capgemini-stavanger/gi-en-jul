@@ -89,13 +89,13 @@ namespace GiEnJul.Test.UtilTests
         public async Task VerifyConnectionTemplate_ReplaceAllFields()
         {
             var data = new Dictionary<string, string>
-                {
-                    { "verifyLink", string.Empty },
-                };
+            {
+                { "verifyLink", string.Empty },
+            };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Recipient(), "recipient."));
 
-            var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
+            var result = await SUT.GetEmailTemplate(EmailTemplateName.VerifyConnection, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 

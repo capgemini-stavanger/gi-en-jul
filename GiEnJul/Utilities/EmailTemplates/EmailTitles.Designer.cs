@@ -70,6 +70,15 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - notifikasjon!.
+        /// </summary>
+        public static string Notification {
+            get {
+                return ResourceManager.GetString("Notification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gi en jul - registrering og informasjon!.
         /// </summary>
         public static string Registered {
@@ -79,7 +88,16 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gi en jul - registrering og informasjon!.
+        ///   Looks up a localized string similar to Gi en jul - godkjenn forespørsel!.
+        /// </summary>
+        public static string VerifyConnection {
+            get {
+                return ResourceManager.GetString("VerifyConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - venteliste!.
         /// </summary>
         public static string WaitingList {
             get {
