@@ -30,7 +30,6 @@ namespace GiEnJul.Test.UtilTests
             var data = new Dictionary<string, string>() 
             { 
                 { "familyTable", string.Empty },
-                { "verifyLink", string.Empty },
                 { "recipientNote", string.Empty }
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
@@ -40,6 +39,7 @@ namespace GiEnJul.Test.UtilTests
 
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.AssignedFamily, data);
+
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
@@ -76,6 +76,36 @@ namespace GiEnJul.Test.UtilTests
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.WaitingList, data);
+            Assert.False(string.IsNullOrEmpty(result.Subject));
+            Assert.False(string.IsNullOrEmpty(result.Content));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+        }
+
+        [Fact]
+        public async Task VerifyConnectionTemplate_ReplaceAllFields()
+        {
+            var data = new Dictionary<string, string>
+                {
+                    { "verifyLink", string.Empty },
+                };
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Recipient(), "recipient."));
+
+            var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
+            Assert.False(string.IsNullOrEmpty(result.Subject));
+            Assert.False(string.IsNullOrEmpty(result.Content));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+        }
+
+        [Fact]
+        public async Task NotificationTemplate_ReplaceAllFields()
+        {
+            var data = new Dictionary<string, string>()
+            {
+                { "content", string.Empty }
+            };
+
+            var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
             Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
