@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using GiEnJul.Repositories;
 
 namespace GiEnJul.Controllers
 {
@@ -13,16 +14,23 @@ namespace GiEnJul.Controllers
     [ApiController]
     public class EmailController : ControllerBase
     {
-
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly IEmailClient _emailClient;
+        private readonly IGiverRepository _giverRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public EmailController(ILogger log, IMapper mapper, IEmailClient emailClient)
+        public EmailController(ILogger log, 
+                               IMapper mapper, 
+                               IEmailClient emailClient, 
+                               IGiverRepository giverRepository, 
+                               IEventRepository eventRepository)
         {
             _log = log;
             _mapper = mapper;
             _emailClient = emailClient;
+            _giverRepository = giverRepository;
+            _eventRepository = eventRepository;
         }
 
         // POST api/email/send
@@ -43,6 +51,40 @@ namespace GiEnJul.Controllers
             {
                 _log.Error(e, "Could not send mail to {@0}", email.EmailAddress);
                 throw;
+            }
+            return Ok();
+        }
+
+        // POST api/email/givers/location
+        [HttpPost("givers/location")]
+        [Authorize(Policy = "PostEmail")]
+        public async Task<ActionResult> SendToGiversInLocation(PostLocationEmailDto email)
+        {
+            // Try-Catch for finding users based on location
+            string activeEvent;
+            try
+            {
+                activeEvent = await _eventRepository.GetActiveEventForLocationAsync(email.Location);
+            }
+            catch (System.Collections.Generic.KeyNotFoundException keyError)
+            {
+                _log.Error(keyError, "Could not find active event with key {@0}", email.Location);
+                throw;
+            }
+            var giversInLocation = await _giverRepository.GetGiversByLocationAsync(activeEvent, email.Location);
+
+            // Try-Catch for sending emails to each user in the given location
+            foreach (var giver in giversInLocation)
+            {
+                try
+                {
+                    await _emailClient.SendEmailAsync(giver.Email, giver.Email, email.Subject, email.Content);
+                }
+                catch (Exception e)
+                {
+                    _log.Error(e, "Could not send mail to {@0}\nmost likely not a valid email", giver.Email);
+                    throw;
+                }
             }
             return Ok();
         }
