@@ -19,9 +19,13 @@ namespace GiEnJul.Test.UtilTests
 
         public EmailTemplateBuilder SUT { get; private set; }
 
-        public void Dispose()
-        {
+        public void Dispose(){}
 
+        public string IgnoreHtmlStyle(string content)
+        {
+            string pattern = @"<style>[\s\S]*?<\/style>";
+            Regex regex = new Regex(pattern);
+            return regex.Replace(content, "");
         }
 
         [Fact]
@@ -30,22 +34,18 @@ namespace GiEnJul.Test.UtilTests
             var data = new Dictionary<string, string>() 
             { 
                 { "familyTable", string.Empty },
+                { "verifyLink", string.Empty },
                 { "recipientNote", string.Empty }
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Recipient(), "recipient."));
 
-
-
             var result = await SUT.GetEmailTemplate(EmailTemplateName.AssignedFamily, data);
-
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string pattern = @"<style>[\s\S]*?<\/style>";
-            Regex regex = new Regex(pattern);
-            string contentWithoutStyle = regex.Replace(result.Content, "");
+            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
             Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
 
@@ -62,7 +62,9 @@ namespace GiEnJul.Test.UtilTests
             var result = await SUT.GetEmailTemplate(EmailTemplateName.Registered, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
-            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+
+            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
+            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
 
         [Fact]
@@ -78,7 +80,9 @@ namespace GiEnJul.Test.UtilTests
             var result = await SUT.GetEmailTemplate(EmailTemplateName.WaitingList, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
-            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+
+            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
+            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
 
         [Fact]
@@ -94,7 +98,9 @@ namespace GiEnJul.Test.UtilTests
             var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
-            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+
+            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
+            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
 
         [Fact]
@@ -108,7 +114,9 @@ namespace GiEnJul.Test.UtilTests
             var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
-            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+
+            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
+            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
         }
     }
 }
