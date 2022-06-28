@@ -63,6 +63,13 @@ const NavBarPublic = () => {
                   <Close color="primary" />
                 </IconButton>
                 <ListItem>
+                  <Scroll onClick={() => {history.push("/");}} to="landing" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Hjem
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
                   <Scroll onClick={handleClose} to="how" smooth={true}>
                     <Typography className={classes.drawerContent}>
                       Hvordan fungerer gi en jul?
