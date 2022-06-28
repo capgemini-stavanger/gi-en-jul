@@ -91,7 +91,7 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleClose} to="start" smooth={true}>
+                  <Scroll onClick={() => {history.push("/startJul");}} to="start" smooth={true}>
                     <Typography className={classes.drawerContent}>
                       Hvordan starte Gi en Jul i din kommune
                     </Typography>

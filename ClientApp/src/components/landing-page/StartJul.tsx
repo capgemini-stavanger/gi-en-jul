@@ -6,7 +6,7 @@ import {
 import useStyles from "./Styles";
 
 
-const Start = () => {
+const StartJul = () => {
     const classes = useStyles();
 
 
@@ -28,4 +28,4 @@ return (
     );
 };
 
-export default Start;
+export default StartJul;
