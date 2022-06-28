@@ -96,31 +96,34 @@ const initState: {
   }
 };
 
-const initFormDataState: () => {
+interface IContactState {
   persons: IFormPerson[];
-  location: string;
+  location: string; 
   dinner: IFoodFormData;
   dessert: IFoodFormData;
   specialNeeds: string;
   pid: string;
-  contact: IContact;
   pidError: boolean;
-  pidHelperText:string;
-} = () => ({
-  persons: [getFormPerson()],
-  location: "",
-  dinner: initFoodFormData,
-  dessert: initFoodFormData,
-  specialNeeds: "",
-  pid: "",
-  pidError: false,
-  pidHelperText: "",
-  contact: {
-    name: "",
-    phoneNumber: "",
-    email: "",
-  },
-});
+  pidHelperText: string;
+  contact: IContact;
+}
+
+const initFormDataState: () => 
+  IContactState = () => ({
+    persons: [getFormPerson()],
+    location: "",
+    dinner: initFoodFormData,
+    dessert: initFoodFormData,
+    specialNeeds: "",
+    pid: "",
+    pidError: false,
+    pidHelperText: "",
+    contact: {
+      name: "",
+      phoneNumber: "",
+      email: "",
+    },
+  });
 
 type ValidFormEntry = {
   [valid: string]: boolean;
@@ -152,6 +155,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
+  const nextFormDataState: () => 
+  IContactState = () => {
+   let item = initFormDataState();
+   item.contact = {
+    name: formDataState.contact.name,
+    phoneNumber: formDataState.contact.phoneNumber,
+    email: formDataState.contact.email,
+   }
+   return item;
+  }
 
   const { location, role, institution } = useUser();
 
@@ -315,7 +328,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const resetForm = () => {
     setState((prev) => ({ ...prev, viewErrorTrigger: 0 }));
     setValidFormState({ ...initValidFormState });
-    setFormDataState(initFormDataState());
+    setFormDataState(nextFormDataState());
   };
 
   const onSuccessSubmit = () => {
@@ -449,6 +462,63 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Grid item >
               {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
             </Grid>
+            <Grid item container spacing={1} direction="column">
+            <Grid item>
+              <Typography variant="h5">Kontaktperson</Typography>
+            </Grid>
+            <Grid item>
+              <Grid container spacing={1}>
+                <Grid item>
+                  <InputValidator
+                    viewErrorTrigger={state.viewErrorTrigger}
+                    validators={[isNotNull]}
+                    setIsValids={getValiditySetter("contactName")}
+                    errorMessages={["Vennligst skriv inn et navn"]}
+                    onChange={getOnContactChange("name")}
+                    value={formDataState.contact.name}
+                    name="cname"
+                    id="kontaktnavn"
+                    label="Navn"
+                  />
+                </Grid>
+                <Grid item>
+                  <InputValidator
+                    viewErrorTrigger={state.viewErrorTrigger}
+                    validators={[isPhoneNumber, isNotNull]}
+                    setIsValids={getValiditySetter("contactPhoneNumber")}
+                    errorMessages={[
+                      "Telefonnummeret er ikke gyldig",
+                      "Vennligst skriv inn et telefonnummer",
+                    ]}
+                    onChange={getOnContactChange("phoneNumber")}
+                    value={formDataState.contact.phoneNumber}
+                    name="cphone"
+                    id="kontaktperson"
+                    label="Telefon"
+                    autoComplete="tel"
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={state.viewErrorTrigger}
+                validators={[isEmail, isNotNull]}
+                setIsValids={getValiditySetter("contactEmail")}
+                errorMessages={[
+                  "Eposten er ikke gyldig",
+                  "Vennligst skriv inn en epost",
+                ]}
+                onChange={getOnContactChange("email")}
+                value={formDataState.contact.email}
+                name="cemail"
+                id="kontaktepost"
+                label="Epost"
+                autoComplete="email"
+              />
+            </Grid>
+          </Grid>
+      
             <Grid container spacing={1} direction="column">
               <Grid item>
                 <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
@@ -564,62 +634,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
            <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
            }
           </Typography>
-          <Grid item container spacing={1} direction="column">
-            <Grid item>
-              <Typography variant="h5">Kontaktperson</Typography>
-            </Grid>
-            <Grid item>
-              <Grid container spacing={1}>
-                <Grid item>
-                  <InputValidator
-                    viewErrorTrigger={state.viewErrorTrigger}
-                    validators={[isNotNull]}
-                    setIsValids={getValiditySetter("contactName")}
-                    errorMessages={["Vennligst skriv inn et navn"]}
-                    onChange={getOnContactChange("name")}
-                    value={formDataState.contact.name}
-                    name="cname"
-                    id="kontaktnavn"
-                    label="Navn"
-                  />
-                </Grid>
-                <Grid item>
-                  <InputValidator
-                    viewErrorTrigger={state.viewErrorTrigger}
-                    validators={[isPhoneNumber, isNotNull]}
-                    setIsValids={getValiditySetter("contactPhoneNumber")}
-                    errorMessages={[
-                      "Telefonnummeret er ikke gyldig",
-                      "Vennligst skriv inn et telefonnummer",
-                    ]}
-                    onChange={getOnContactChange("phoneNumber")}
-                    value={formDataState.contact.phoneNumber}
-                    name="cphone"
-                    id="kontaktperson"
-                    label="Telefon"
-                    autoComplete="tel"
-                  />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                validators={[isEmail, isNotNull]}
-                setIsValids={getValiditySetter("contactEmail")}
-                errorMessages={[
-                  "Eposten er ikke gyldig",
-                  "Vennligst skriv inn en epost",
-                ]}
-                onChange={getOnContactChange("email")}
-                value={formDataState.contact.email}
-                name="cemail"
-                id="kontaktepost"
-                label="Epost"
-                autoComplete="email"
-              />
-            </Grid>
-          </Grid>
+
           <Grid item className="mx-5">
             <Button variant="contained" type="submit" color="primary">
               Send
