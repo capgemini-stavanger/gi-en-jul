@@ -1,11 +1,12 @@
 import {DefaultEditor} from "react-simple-wysiwyg"
 import React from "react";
-import { Button, Dialog, IconButton, Input, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
+import { Button, Dialog, Grid, IconButton, Input, TableBody, TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import { GiverType } from "./Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useAuth0 } from "@auth0/auth0-react";
 import { FC, useEffect, useState } from "react";
+import SendIcon from '@material-ui/icons/Send';
 
 
 interface ISendSingleEmail {
@@ -14,8 +15,6 @@ interface ISendSingleEmail {
     handleClose: () => void;
     giver: GiverType;
  }
-
-
 
 
 const SendSingleEmail: React.FC<ISendSingleEmail> = (
@@ -36,21 +35,18 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
       setHtml(e.target.value);
     }
 
-    
-
     async function getUserAccessToken(): Promise<string> {
         const accessToken = await getAccessTokenSilently();
         return accessToken;
       }
+  
     useEffect(() => {
     getUserAccessToken().then((resp: string) => {
         setUserAccessToken(resp);
-    });
+      });
     });
 
-    async function sendEmailPost() {
-        console.log('Sending email Post...');
-        
+    async function sendEmailPost() {    
         await apiservice
           .post("email/send", 
             JSON.stringify({
@@ -61,29 +57,25 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
             })
           )
           .then((response) => {
-            console.log(response)
+            if (response.status === 200) {
+              handleClose();
+            }
           })
           .catch((errorStack) => {
             console.error(errorStack);
           });
       }
-    function sendEmail(inputString:string, htmlInput : string) {
-    console.log(htmlInput);
-    console.log(inputString);
-    console.log(userAccessToken);
-    }
 
     return (
      <Dialog
-        open = {open}>
-          
+        open = {open}>    
             <TableCell rowSpan={10}>
                 <TableRow>
                     <TableCell>
                     <Typography variant="h6">Send email to {giver.email} </Typography>
                     <TextField fullWidth placeholder="Enter subject here" type="text" value={subjectInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setSubjectInput(e.target.value)}}/>
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="right">
                     <IconButton
                         onClick={handleClose}
                         aria-label="close" >
@@ -93,16 +85,24 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
                     
                 </TableRow>
                 <TableRow>
-                    <TableCell>
+                    <TableCell >
                     <Typography variant="h5">Innhold</Typography>
                         <DefaultEditor value={html} onChange={onChange} />
                     </TableCell>
+                    <TableCell></TableCell>
                 </TableRow>
                   
+                
+                <TableRow>
+                  <TableCell >
+                  <Button  variant="contained" endIcon={<SendIcon />} onClick={() => {sendEmailPost(); setSubjectInput("");setHtml("")}}>Send Email</Button>
+                  </TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
             </TableCell>
       
        
-        <Button onClick={() => {sendEmailPost(); setSubjectInput("");setHtml("")}}>Send Email</Button>
+        
       </Dialog>
     );
   }

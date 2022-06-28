@@ -25,6 +25,7 @@ import formatFamily from "common/functions/GetFamilySize"
 import { Alert } from "@material-ui/lab";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
 import SendSingleEmail from "components/shared/EmailContentBox";
+import SendIcon from '@material-ui/icons/Send';
 
 type Props = {
   data: GiverType[] | [];
@@ -45,11 +46,11 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
   };
 
   const handleOpenDialog = () => {
-    setOpenDialog(true)
+    setOpenDialog(true);
   }
 
   const handleCloseDialog = () => {
-    setOpenDialog(false)
+    setOpenDialog(false);
   }
 
   
@@ -93,14 +94,17 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
-            <Typography>
+            <Typography className={classes.emailText}>
               <Mail />
               {giver.email}
-              <Button onClick={() => {setOpen(true)}}>
-                Send email
+              </Typography>
+              <Typography className={classes.emailButton}>
+                
+              <Button variant="contained" onClick={() => {setOpen(true)}} endIcon={<SendIcon />}>
+              Send Email
               </Button>
               <SendSingleEmail 
-              open = {open}
+              open = {selectedGiver === giver && open}
               handleClose = {() => {setOpen(false)}}
               giver = {giver}
 
