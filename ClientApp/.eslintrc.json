@@ -67,7 +67,7 @@
         "@typescript-eslint/no-empty-function": "off", // No empty functions
         "@typescript-eslint/no-use-before-define": "off", // Use code before define
         "@typescript-eslint/no-explicit-any": "off", // Is "any" type acceptable at all?
-        "@typescript-eslint/no-unused-vars": "error", // Declared variabled is not used
+        "@typescript-eslint/no-unused-vars": "warn", // Declared variabled is not used
         "@typescript-eslint/array-type": "error", // No dead code
         "@typescript-eslint/no-extra-non-null-assertion": "error", // Prevents use of extra non-null assertion
         "@typescript-eslint/no-non-null-asserted-optional-chain": "error", // Prevents use non-null assertion in optional chaining

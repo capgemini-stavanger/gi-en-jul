@@ -79,15 +79,9 @@ const NavBarPublic = () => {
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Scroll
-                    onClick={() => {
-                      history.push("/bedrift");
-                    }}
-                    to="top"
-                    smooth={true}
-                  >
+                  <Link to="bedrift">
                     <Typography className={classes.drawerContent}>For bedrifter</Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="contact" smooth={true}>
@@ -95,17 +89,11 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll
-                    onClick={() => {
-                      history.push("/startJul");
-                    }}
-                    to="start"
-                    smooth={true}
-                  >
+                  <Link to="startJul">
                     <Typography className={classes.drawerContent}>
                       Hvordan starte Gi en Jul i din kommune
                     </Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
               </List>
             </Drawer>
