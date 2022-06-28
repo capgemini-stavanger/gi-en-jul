@@ -13,7 +13,7 @@ interface IAdminTab {
 }
 
 const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
-  const [step, setStep] = useState<string>("2");
+  const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
     setStep(newValue);
