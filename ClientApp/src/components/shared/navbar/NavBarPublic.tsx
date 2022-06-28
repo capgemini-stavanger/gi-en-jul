@@ -63,6 +63,13 @@ const NavBarPublic = () => {
                   <Close color="primary" />
                 </IconButton>
                 <ListItem>
+                  <Scroll onClick={() => {history.push("/");}} to="landing" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Hjem
+                    </Typography>
+                  </Scroll>
+                </ListItem>
+                <ListItem>
                   <Scroll onClick={handleClose} to="how" smooth={true}>
                     <Typography className={classes.drawerContent}>
                       Hvordan fungerer gi en jul?
@@ -90,6 +97,13 @@ const NavBarPublic = () => {
                     </Typography>
                   </Scroll>
                 </ListItem>
+                <ListItem>
+                  <Scroll onClick={() => {history.push("/startJul");}} to="start" smooth={true}>
+                    <Typography className={classes.drawerContent}>
+                      Hvordan starte Gi en Jul i din kommune
+                    </Typography>
+                  </Scroll>
+                </ListItem>
               </List>
             </Drawer>
             <Button
@@ -110,3 +124,5 @@ const NavBarPublic = () => {
   }
 };
 export default NavBarPublic;
+
+

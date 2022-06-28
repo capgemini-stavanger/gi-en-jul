@@ -27,7 +27,7 @@ const Home = () => {
   return (
     <>
       <NavBarPublic />
-      <Container className={classes.root} maxWidth={false}>
+      <Container id="landing" className={classes.root} maxWidth={false}>
         <Grid
           container
           direction="column"
