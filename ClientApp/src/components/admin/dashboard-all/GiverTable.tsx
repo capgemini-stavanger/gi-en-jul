@@ -24,7 +24,7 @@ import useStyles from "components/admin/Styles";
 import formatFamily from "common/functions/GetFamilySize"
 import { Alert } from "@material-ui/lab";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
-import SendSingleEmail from "components/shared/EmailContentBox";
+import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from '@material-ui/icons/Send';
 
 type Props = {
@@ -98,17 +98,15 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               <Mail />
               {giver.email}
               </Typography>
-              <Typography className={classes.emailButton}>
-                
+              <Typography className={classes.emailButton}> 
               <Button variant="contained" onClick={() => {setOpen(true)}} endIcon={<SendIcon />}>
               Send Email
               </Button>
-              <SendSingleEmail 
+              <SendEmailContent 
               open = {selectedGiver === giver && open}
               handleClose = {() => {setOpen(false)}}
               giver = {giver}
-
-              ></SendSingleEmail>
+              ></SendEmailContent>
             </Typography>
           </AccordionDetails>
           { giver.isSuggestedMatch &&

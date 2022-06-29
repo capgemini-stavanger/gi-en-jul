@@ -8,7 +8,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { FC, useEffect, useState } from "react";
 import SendIcon from '@material-ui/icons/Send';
 
-
 interface ISendSingleEmail {
 
     open: boolean;
@@ -17,7 +16,7 @@ interface ISendSingleEmail {
  }
 
 
-const SendSingleEmail: React.FC<ISendSingleEmail> = (
+const SendEmailContent: React.FC<ISendSingleEmail> = (
     {
         open,
         handleClose,
@@ -41,7 +40,7 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
       }
   
     useEffect(() => {
-    getUserAccessToken().then((resp: string) => {
+      getUserAccessToken().then((resp: string) => {
         setUserAccessToken(resp);
       });
     });
@@ -64,6 +63,8 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
           .catch((errorStack) => {
             console.error(errorStack);
           });
+          setSubjectInput("");
+          setHtml("");
       }
 
     return (
@@ -91,20 +92,16 @@ const SendSingleEmail: React.FC<ISendSingleEmail> = (
                     </TableCell>
                     <TableCell></TableCell>
                 </TableRow>
-                  
-                
+                                
                 <TableRow>
                   <TableCell >
-                  <Button  variant="contained" endIcon={<SendIcon />} onClick={() => {sendEmailPost(); setSubjectInput("");setHtml("")}}>Send Email</Button>
+                  <Button  variant="contained" endIcon={<SendIcon />} onClick={sendEmailPost}>Send Email</Button>
                   </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
-            </TableCell>
-      
-       
-        
+            </TableCell>      
       </Dialog>
     );
   }
 
-  export default SendSingleEmail;
+  export default SendEmailContent;
