@@ -108,7 +108,13 @@ const NavBarPublic = () => {
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="kommune">
+                  <Link
+                    to="kommune"
+                    onClick={() => {
+                      history.push("/kommune");
+                    }}
+                    style={{ textDecoration: "none" }}
+                  >
                     <Typography className={classes.drawerContent}>Kommuner</Typography>
                   </Link>
                 </ListItem>
