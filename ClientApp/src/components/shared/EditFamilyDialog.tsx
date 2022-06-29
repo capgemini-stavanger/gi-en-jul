@@ -231,7 +231,7 @@ const EditFamilyDialog : FC<IEditFamilyDialog> = ({
                                                 name: "kjonn",
                                                 id: "kjonn-header",
                                             }}
-                                            style={{ height: 22 }}
+                                            style={{ height: 25 }}
                                             value={familyMember.gender}
                                             onChange={(e) => {onChangeGender(fIndex, e)}}
                                             >

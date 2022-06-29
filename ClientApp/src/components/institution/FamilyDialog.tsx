@@ -72,9 +72,6 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken,institution, 
     }
 
     const refreshData = () => {
-        console.log("UPDATE RECIPIENTS BY FETCHING AGAIN")
-
-        // Make sure that this works
         fetchRecipients();
     }
     
