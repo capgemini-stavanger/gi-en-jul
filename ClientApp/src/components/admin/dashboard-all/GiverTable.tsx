@@ -24,6 +24,8 @@ import useStyles from "components/admin/Styles";
 import formatFamily from "common/functions/GetFamilySize"
 import { Alert } from "@material-ui/lab";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
+import SendEmailContent from "components/shared/SendEmailContent";
+import SendIcon from '@material-ui/icons/Send';
 
 type Props = {
   data: GiverType[] | [];
@@ -36,6 +38,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
 
   const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
   const [openDialog, setOpenDialog] = useState(false);
+  const [open,setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
   const handleChange = (giver:GiverType) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
     setSelectedGiver(isExpanded ? giver : false);
@@ -43,12 +46,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
   };
 
   const handleOpenDialog = () => {
-    setOpenDialog(true)
+    setOpenDialog(true);
   }
 
   const handleCloseDialog = () => {
-    setOpenDialog(false)
+    setOpenDialog(false);
   }
+
+  
 
   return (
     <Container>
@@ -89,9 +94,19 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             </Typography>
           </AccordionDetails>
           <AccordionDetails>
-            <Typography>
+            <Typography className={classes.emailText}>
               <Mail />
               {giver.email}
+              </Typography>
+              <Typography className={classes.emailButton}> 
+              <Button variant="contained" onClick={() => {setOpen(true)}} endIcon={<SendIcon />}>
+              Send Email
+              </Button>
+              <SendEmailContent 
+              open = {selectedGiver === giver && open}
+              handleClose = {() => {setOpen(false)}}
+              giver = {giver}
+              ></SendEmailContent>
             </Typography>
           </AccordionDetails>
           { giver.isSuggestedMatch &&

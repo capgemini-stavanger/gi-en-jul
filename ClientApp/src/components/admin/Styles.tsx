@@ -16,6 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexBasis: "33.33%",
       flexShrink: 0,
     },
+    emailButton: {
+      paddingLeft: "10px",
+    },
+    emailText: {
+      paddingTop: "6px",
+    },
     mediumColumn: {
       flexBasis: "30%",
     },
