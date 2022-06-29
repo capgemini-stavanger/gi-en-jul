@@ -4,16 +4,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./App";
-import registerServiceWorker from "./registerServiceWorker";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
-const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
-const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
-const apiurl: string = process.env.REACT_APP_API_URL!;
-const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY!;
+const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0 ?? "";
+const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0 ?? "";
+const apiurl: string = process.env.REACT_APP_API_URL ?? "";
+const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? "";
 
 declare module "@material-ui/core/styles/createBreakpoints" {
   interface BreakpointOverrides {
@@ -157,5 +156,3 @@ ReactDOM.render(
   </ThemeProvider>,
   document.getElementById("root")
 );
-
-registerServiceWorker();

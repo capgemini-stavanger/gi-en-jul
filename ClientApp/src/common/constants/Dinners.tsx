@@ -1,4 +1,1 @@
-export const DINNERS: string[] = [
-    "ribbe",
-    "pinnekjøtt",
-];
+export const DINNERS: string[] = ["ribbe", "pinnekjøtt"];

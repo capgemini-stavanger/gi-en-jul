@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "110%",
     },
   },
-  infoText:{
+  infoText: {
     fontSize: "85%",
     fontWeight: 400,
     margin: theme.spacing(1),
@@ -140,11 +140,11 @@ const useStyles = makeStyles((theme) => ({
     overflowWrap: "break-word",
     marginRight: "1.6em",
   },
-  captchaContainer:{
-    paddingBottom:theme.spacing(8),
+  captchaContainer: {
+    paddingBottom: theme.spacing(8),
   },
-  summaryInput:{
+  summaryInput: {
     marginBottom: "1.2em",
-  }
+  },
 }));
 export default useStyles;

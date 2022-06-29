@@ -1,22 +1,16 @@
-import {
-  Button,
-  Grid,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import HelpIcon from '@material-ui/icons/Help';
-import { useState} from "react";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import HelpIcon from "@material-ui/icons/Help";
+import { useState } from "react";
 import { DESSERTS } from "common/constants/Desserts";
 import { DINNERS } from "common/constants/Dinners";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import Tooltip from '@material-ui/core/Tooltip';
-import ConfirmationDialog from 'components/institution/ConfirmationDialog';
-import FamilyDialog from 'components/institution/FamilyDialog';
+import Tooltip from "@material-ui/core/Tooltip";
+import ConfirmationDialog from "components/institution/ConfirmationDialog";
+import FamilyDialog from "components/institution/FamilyDialog";
 import {
   isEmail,
   isNotNull,
@@ -32,7 +26,7 @@ type PersonType = {
   Age: number;
   Months: number;
   Gender: Gender;
-  Comment: String;
+  Comment: string;
 };
 
 type submittype = {
@@ -75,11 +69,10 @@ const initState: {
     open: boolean;
   };
   dialog: {
-    referenceId:string;
-    familyId:string;
+    referenceId: string;
+    familyId: string;
     open: boolean;
   };
-
 } = {
   viewErrorTrigger: 0,
   displayText: false,
@@ -93,12 +86,12 @@ const initState: {
     referenceId: "",
     familyId: "",
     open: false,
-  }
+  },
 };
 
 interface IContactState {
   persons: IFormPerson[];
-  location: string; 
+  location: string;
   dinner: IFoodFormData;
   dessert: IFoodFormData;
   specialNeeds: string;
@@ -108,22 +101,21 @@ interface IContactState {
   contact: IContact;
 }
 
-const initFormDataState: () => 
-  IContactState = () => ({
-    persons: [getFormPerson()],
-    location: "",
-    dinner: initFoodFormData,
-    dessert: initFoodFormData,
-    specialNeeds: "",
-    pid: "",
-    pidError: false,
-    pidHelperText: "",
-    contact: {
-      name: "",
-      phoneNumber: "",
-      email: "",
-    },
-  });
+const initFormDataState: () => IContactState = () => ({
+  persons: [getFormPerson()],
+  location: "",
+  dinner: initFoodFormData,
+  dessert: initFoodFormData,
+  specialNeeds: "",
+  pid: "",
+  pidError: false,
+  pidHelperText: "",
+  contact: {
+    name: "",
+    phoneNumber: "",
+    email: "",
+  },
+});
 
 type ValidFormEntry = {
   [valid: string]: boolean;
@@ -155,27 +147,23 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
-  const nextFormDataState: () => 
-  IContactState = () => {
-   let item = initFormDataState();
-   item.contact = {
-    name: formDataState.contact.name,
-    phoneNumber: formDataState.contact.phoneNumber,
-    email: formDataState.contact.email,
-   }
-   return item;
-  }
+  const nextFormDataState: () => IContactState = () => {
+    const item = initFormDataState();
+    item.contact = {
+      name: formDataState.contact.name,
+      phoneNumber: formDataState.contact.phoneNumber,
+      email: formDataState.contact.email,
+    };
+    return item;
+  };
 
-  const { location, role, institution } = useUser();
+  const { location, institution } = useUser();
 
   const closeDialog = () => {
     setDialog(false);
-  }
+  };
 
-  const updatePerson = (
-    index: number,
-    newPersonData: { [target: string]: unknown }
-  ) => {
+  const updatePerson = (index: number, newPersonData: { [target: string]: unknown }) => {
     setFormDataState((prev) => {
       prev.persons[index] = {
         ...prev.persons[index],
@@ -190,13 +178,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       prev.persons.splice(index, 1);
       return { ...prev };
     });
-  };
-
-  const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      location: e.target.value,
-    }));
   };
 
   const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -254,16 +235,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       pid: e.target.value,
     }));
 
-  const getOnContactChange =
-    (attr: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormDataState((prev) => ({
-        ...prev,
-        contact: {
-          ...prev.contact,
-          [attr]: e.target.value,
-        },
-      }));
-    };
+  const getOnContactChange = (attr: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        [attr]: e.target.value,
+      },
+    }));
+  };
 
   const getValiditySetter = (target: string) => (isValid: boolean) => {
     setValidFormState((prev) => {
@@ -288,11 +268,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
-  const setDialog = (
-    open?: boolean,
-    familyId?: string,
-    referenceId?: string
-  ) => {
+  const setDialog = (open?: boolean, familyId?: string, referenceId?: string) => {
     setState((prev) => ({
       ...prev,
       dialog: {
@@ -317,7 +293,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   const allIsValid = () => {
-    for (let isValid in validFormState) {
+    for (const isValid in validFormState) {
       if (!validFormState[isValid]) return false;
     }
     return formDataState.persons.every((p) => {
@@ -332,7 +308,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   const onSuccessSubmit = () => {
-    var message = formDataState.pid.length > 0 ? 'Familie #' + formDataState.pid + ' registrert!' : 'Familie registrert!';
     setDialog(true);
     resetForm();
   };
@@ -340,15 +315,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const displayHelpText = () => {
     setState((prev) => ({
       ...prev,
-      displayText : true,
+      displayText: true,
     }));
-  }
+  };
   const hideHelpText = () => {
     setState((prev) => ({
       ...prev,
-      displayText : false,
+      displayText: false,
     }));
-  }
+  };
 
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
@@ -361,7 +336,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       return;
     }
 
-    let personsList = Array<PersonType>();
+    const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
         Wish: person.wish,
@@ -373,7 +348,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       personsList.push(person1);
     });
 
-    let submit: submittype = {
+    const submit: submittype = {
       Dinner: getDinner(),
       Dessert: getDessert(),
       Note: formDataState.specialNeeds,
@@ -396,16 +371,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       .post("recipient", JSON.stringify(submit))
       .then((response) => {
         if (response.status === 200) {
-          setDialog(true, response.data.item1, response.data.item2)
+          setDialog(true, response.data.item1, response.data.item2);
           goodFetch = true;
         }
       })
       .catch((errorStack) => {
-        if (errorStack.response.data = formDataState.pid){
-           formDataState.pidError = true;
-           formDataState.pidHelperText ="PID/ID for denne familien eksisterer allerede."
+        if ((errorStack.response.data = formDataState.pid)) {
+          formDataState.pidError = true;
+          formDataState.pidHelperText = "PID/ID for denne familien eksisterer allerede.";
         }
-       console.error(errorStack);       
+        console.error(errorStack);
       });
 
     setState((prev) => ({
@@ -422,24 +397,18 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }
   };
 
-  const handleAlertClose = (
-    e: React.SyntheticEvent | React.MouseEvent,
-    reason?: string
-  ) => {
-    if(reason == 'clickaway')
-      return ;
+  const handleAlertClose = (e: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
+    if (reason == "clickaway") return;
     setAlert(false);
   };
 
-
-
   const closeFamilyDialog = () => {
     setShowFamilyDialog(false);
-  }
+  };
 
   const openFamilyDialog = () => {
     setShowFamilyDialog(true);
-  }
+  };
 
   return (
     <>
@@ -453,72 +422,84 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
           {state.alert.msg}
         </Alert>
       </Snackbar>
-      
+
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
             <Typography variant="h5">Tidligere registrerte familier </Typography>
-            <Button onClick={openFamilyDialog} variant="contained" color="primary"> Klikk her for å se familieoversikt </Button>
-            <Grid item >
-              {showFamilyDialog == true ? <FamilyDialog open={true} accessToken={accessToken} institution={institution} handleClose={closeFamilyDialog}/> : <Typography> <br></br></Typography> }
+            <Button onClick={openFamilyDialog} variant="contained" color="primary">
+              {" "}
+              Klikk her for å se familieoversikt{" "}
+            </Button>
+            <Grid item>
+              {showFamilyDialog == true ? (
+                <FamilyDialog
+                  open={true}
+                  accessToken={accessToken}
+                  institution={institution}
+                  handleClose={closeFamilyDialog}
+                />
+              ) : (
+                <Typography>
+                  {" "}
+                  <br></br>
+                </Typography>
+              )}
             </Grid>
             <Grid item container spacing={1} direction="column">
-            <Grid item>
-              <Typography variant="h5">Kontaktperson</Typography>
-            </Grid>
-            <Grid item>
-              <Grid container spacing={1}>
-                <Grid item>
-                  <InputValidator
-                    viewErrorTrigger={state.viewErrorTrigger}
-                    validators={[isNotNull]}
-                    setIsValids={getValiditySetter("contactName")}
-                    errorMessages={["Vennligst skriv inn et navn"]}
-                    onChange={getOnContactChange("name")}
-                    value={formDataState.contact.name}
-                    name="cname"
-                    id="kontaktnavn"
-                    label="Navn"
-                  />
-                </Grid>
-                <Grid item>
-                  <InputValidator
-                    viewErrorTrigger={state.viewErrorTrigger}
-                    validators={[isPhoneNumber, isNotNull]}
-                    setIsValids={getValiditySetter("contactPhoneNumber")}
-                    errorMessages={[
-                      "Telefonnummeret er ikke gyldig",
-                      "Vennligst skriv inn et telefonnummer",
-                    ]}
-                    onChange={getOnContactChange("phoneNumber")}
-                    value={formDataState.contact.phoneNumber}
-                    name="cphone"
-                    id="kontaktperson"
-                    label="Telefon"
-                    autoComplete="tel"
-                  />
+              <Grid item>
+                <Typography variant="h5">Kontaktperson</Typography>
+              </Grid>
+              <Grid item>
+                <Grid container spacing={1}>
+                  <Grid item>
+                    <InputValidator
+                      viewErrorTrigger={state.viewErrorTrigger}
+                      validators={[isNotNull]}
+                      setIsValids={getValiditySetter("contactName")}
+                      errorMessages={["Vennligst skriv inn et navn"]}
+                      onChange={getOnContactChange("name")}
+                      value={formDataState.contact.name}
+                      name="cname"
+                      id="kontaktnavn"
+                      label="Navn"
+                    />
+                  </Grid>
+                  <Grid item>
+                    <InputValidator
+                      viewErrorTrigger={state.viewErrorTrigger}
+                      validators={[isPhoneNumber, isNotNull]}
+                      setIsValids={getValiditySetter("contactPhoneNumber")}
+                      errorMessages={[
+                        "Telefonnummeret er ikke gyldig",
+                        "Vennligst skriv inn et telefonnummer",
+                      ]}
+                      onChange={getOnContactChange("phoneNumber")}
+                      value={formDataState.contact.phoneNumber}
+                      name="cphone"
+                      id="kontaktperson"
+                      label="Telefon"
+                      autoComplete="tel"
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
+              <Grid item>
+                <InputValidator
+                  viewErrorTrigger={state.viewErrorTrigger}
+                  validators={[isEmail, isNotNull]}
+                  setIsValids={getValiditySetter("contactEmail")}
+                  errorMessages={["Eposten er ikke gyldig", "Vennligst skriv inn en epost"]}
+                  onChange={getOnContactChange("email")}
+                  value={formDataState.contact.email}
+                  name="cemail"
+                  id="kontaktepost"
+                  label="Epost"
+                  autoComplete="email"
+                />
+              </Grid>
             </Grid>
-            <Grid item>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                validators={[isEmail, isNotNull]}
-                setIsValids={getValiditySetter("contactEmail")}
-                errorMessages={[
-                  "Eposten er ikke gyldig",
-                  "Vennligst skriv inn en epost",
-                ]}
-                onChange={getOnContactChange("email")}
-                value={formDataState.contact.email}
-                name="cemail"
-                id="kontaktepost"
-                label="Epost"
-                autoComplete="email"
-              />
-            </Grid>
-          </Grid>
-      
+
             <Grid container spacing={1} direction="column">
               <Grid item>
                 <Typography variant="h5">Du registrerer nå familie i {location}</Typography>
@@ -531,9 +512,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
-                      updatePerson={(newPersonData: {
-                        [target: string]: unknown;
-                      }) => updatePerson(i, newPersonData)}
+                      updatePerson={(newPersonData: { [target: string]: unknown }) =>
+                        updatePerson(i, newPersonData)
+                      }
                       deletePerson={() => deletePerson(i)}
                     />
                   );
@@ -622,17 +603,25 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               id="PID"
               label="PID eller annen ID"
               placeholder="PID eller annen ID"
-              error = {formDataState.pidError}
+              error={formDataState.pidError}
               helperText={formDataState.pidHelperText}
             />
             <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
-            { state.displayText ? <HelpIcon onClick={hideHelpText}/> : <HelpOutlineIcon  onClick={displayHelpText}/>}
+              {state.displayText ? (
+                <HelpIcon onClick={hideHelpText} />
+              ) : (
+                <HelpOutlineIcon onClick={displayHelpText} />
+              )}
             </Tooltip>
           </Grid>
           <Typography>
-           {state.displayText &&
-           <Typography> ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom.</Typography>
-           }
+            {state.displayText && (
+              <Typography>
+                {" "}
+                ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type
+                ID kan du la denne stå tom.
+              </Typography>
+            )}
           </Typography>
 
           <Grid item className="mx-5">
@@ -646,7 +635,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             )}
           </Grid>
         </Grid>
-        <ConfirmationDialog open={state.dialog.open} familyId={state.dialog.familyId} referenceId={state.dialog.referenceId} handleClose={closeDialog} />
+        <ConfirmationDialog
+          open={state.dialog.open}
+          familyId={state.dialog.familyId}
+          referenceId={state.dialog.referenceId}
+          handleClose={closeDialog}
+        />
       </form>
     </>
   );

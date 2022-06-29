@@ -1,4 +1,4 @@
-export default function formatFamily(input: Number) {
+export default function formatFamily(input: number) {
   if (input < 3) {
     return "< 3";
   }

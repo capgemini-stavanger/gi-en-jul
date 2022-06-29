@@ -1,9 +1,4 @@
-import {
-  DataGrid,
-  GridCellParams,
-  GridColumns,
-  GridRowData,
-} from "@material-ui/data-grid";
+import { DataGrid, GridCellParams, GridColumns, GridRowData } from "@material-ui/data-grid";
 import { FC, useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import useUser from "hooks/useUser";
@@ -21,7 +16,7 @@ type ConnectionDto = {
   phoneNumber: string;
   confirmed: boolean;
   submitterFullName: string;
-  submitterEmail: string; 
+  submitterEmail: string;
 };
 
 enum Page {
@@ -42,8 +37,7 @@ const ErrorTable = {
   rows: [
     {
       id: 1,
-      errortext:
-        "An error occurred while fetching from server. Please try again.",
+      errortext: "An error occurred while fetching from server. Please try again.",
     },
   ],
 };
@@ -93,20 +87,18 @@ const columns: GridColumns = [
     flex: 4,
   },
   {
-    field: "contactMail", 
-    headerName: "Kontaktperson mail", 
-    editable: false, 
-    flex: 4, 
-  }
+    field: "contactMail",
+    headerName: "Kontaktperson mail",
+    editable: false,
+    flex: 4,
+  },
 ];
 
 const Table: FC<ITable> = ({ accessToken }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
   const { location } = useUser();
-  const [connections, setConnections] = useState<
-    GridRowData[] | undefined | null
-  >(undefined);
+  const [connections, setConnections] = useState<GridRowData[] | undefined | null>(undefined);
 
   useEffect(() => {
     if (!location) return;
@@ -146,19 +138,13 @@ const Table: FC<ITable> = ({ accessToken }) => {
     case Page.Loading:
       return <DataGrid columns={columns} rows={[]} loading autoHeight />;
     case Page.Error:
-      return (
-        <DataGrid
-          columns={ErrorTable.columns}
-          rows={ErrorTable.rows}
-          autoHeight
-        />
-      );
+      return <DataGrid columns={ErrorTable.columns} rows={ErrorTable.rows} autoHeight />;
     case Page.Table:
       return (
         <DataGrid
           className={classes.root}
           columns={columns}
-          rows={connections!}
+          rows={connections ?? []}
           autoPageSize
           autoHeight
         />

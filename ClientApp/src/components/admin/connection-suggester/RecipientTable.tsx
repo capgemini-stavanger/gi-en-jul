@@ -62,7 +62,7 @@ function Row(props: RecipientRowProps) {
                   <TableRow>
                     <TableCell>Middag: {capitalize(recipient.dinner)}</TableCell>
                     <TableCell>Dessert: {capitalize(recipient.dessert)}</TableCell>
-                    <TableCell>{recipient.note ? "Kommentar: "+recipient.note : ""}</TableCell>
+                    <TableCell>{recipient.note ? "Kommentar: " + recipient.note : ""}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -75,19 +75,19 @@ function Row(props: RecipientRowProps) {
                     <TableCell>Kjønn</TableCell>
                     <TableCell>Alder</TableCell>
                     <TableCell>Ønske</TableCell>
-                    </TableRow>
+                  </TableRow>
                 </TableHead>
                 <TableBody>
                   {recipient.familyMembers.map((familyMember) => (
                     <TableRow key={familyMember.rowKey}>
-                      <TableCell>
-                        {getGender(familyMember.gender, familyMember.age)}
-                      </TableCell>
+                      <TableCell>{getGender(familyMember.gender, familyMember.age)}</TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell>
-                        {familyMember.wish ? familyMember.wish : "Giver kjøper alderstilpasset gave. "}
-                        <br/>
-                        {familyMember.comment ? "Kommentar: "+familyMember.comment : ""}
+                        {familyMember.wish
+                          ? familyMember.wish
+                          : "Giver kjøper alderstilpasset gave. "}
+                        <br />
+                        {familyMember.comment ? "Kommentar: " + familyMember.comment : ""}
                       </TableCell>
                     </TableRow>
                   ))}

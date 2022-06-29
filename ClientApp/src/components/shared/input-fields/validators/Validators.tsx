@@ -14,9 +14,7 @@ export function isInt(inputValue: string) {
 export function isPhoneNumber(inputValue: string) {
   // Returns true if norwegian number or foreign number starting with +{countryCode}
   inputValue = inputValue.trim();
-  return !!(
-    validator.isNumeric(inputValue)
-  );
+  return !!validator.isNumeric(inputValue);
 }
 
 export function isEmail(inputValue: string) {
