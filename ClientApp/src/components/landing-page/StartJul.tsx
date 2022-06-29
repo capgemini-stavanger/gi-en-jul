@@ -26,11 +26,15 @@ const StartJul = () => {
           <Grid item>
             <Typography className={classes.sectionContainer}>
 <<<<<<< HEAD
+<<<<<<< HEAD
               For å starte Gi en Jul i din kommune kan du ta kontakt med kontaktpersonen for
               Stavanger kommune.
 =======
                  For å starte Gi en jul i din kommune kan du ta kontakt med kontaktpersonen for Stavanger kommune.  
 >>>>>>> 5b8fccb (added onClick and styling)
+=======
+                 For å starte Gi en jul i din kommune kan du ta kontakt med kontaktpersonen for Stavanger kommune.  
+>>>>>>> c9587fa (added onClick and styling)
             </Typography>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
