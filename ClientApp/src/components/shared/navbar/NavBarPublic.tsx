@@ -77,11 +77,11 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleClose} to="questions" smooth={true}>
+                  <Link to="spørsmål">
                     <Typography className={classes.drawerContent}>
                       Ofte stilte spørsmål
                     </Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={() => { history.push("/bedrift");}} to="top" smooth={true}>
