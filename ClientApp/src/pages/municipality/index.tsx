@@ -19,7 +19,7 @@ import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import City from "components/municipalities/City";
+import City from "components/municipalities/city";
 
 const Municipality = () => {
     const [cities, setMunicipalities] = useState<ContactData[]>([]);
