@@ -44,7 +44,6 @@ const Home = () => {
         </Grid>
         </Grid>
         <How />
-        <Companies />
         <Contact contacts={contacts}/>
         <ScrollToTop maxPagePosition={300} />
         <Footer/>
