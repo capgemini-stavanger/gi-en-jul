@@ -56,15 +56,15 @@ const NavBarPublic = () => {
                   <Close color="primary" />
                 </IconButton>
                 <ListItem>
-                  <Scroll
+                  <Link
+                    to="/"
                     onClick={() => {
                       history.push("/");
                     }}
-                    to="landing"
-                    smooth={true}
+                    style={{ textDecoration: "none" }}
                   >
                     <Typography className={classes.drawerContent}>Hjem</Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="how" smooth={true}>
@@ -79,7 +79,13 @@ const NavBarPublic = () => {
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Link to="bedrift">
+                  <Link
+                    to="bedrift"
+                    style={{ textDecoration: "none" }}
+                    onClick={() => {
+                      history.push("/bedrift");
+                    }}
+                  >
                     <Typography className={classes.drawerContent}>For bedrifter</Typography>
                   </Link>
                 </ListItem>
@@ -89,7 +95,13 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Link to="startJul">
+                  <Link
+                    to="startJul"
+                    style={{ textDecoration: "none" }}
+                    onClick={() => {
+                      history.push("/startJul");
+                    }}
+                  >
                     <Typography className={classes.drawerContent}>
                       Hvordan starte Gi en Jul i din kommune
                     </Typography>
