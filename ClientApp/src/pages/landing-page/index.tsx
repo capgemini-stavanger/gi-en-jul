@@ -11,7 +11,6 @@ import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import Questions from "components/landing-page/Questions";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
