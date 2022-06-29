@@ -6,6 +6,7 @@ import {
 import useStyles from "./Styles";
 
 //få inn en string som input fra admin som skal være informasjonen om kommunen?
+//må kunne vite hvilken kommune som er expanded
 
 
 const Information = () => {

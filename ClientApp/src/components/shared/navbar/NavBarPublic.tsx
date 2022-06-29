@@ -28,10 +28,6 @@ const NavBarPublic = () => {
     setAnchorEl(() => null);
   };
 
-  const handleMunicipality = () => {
-    history.push("/kommune");
-  };
-
   if (window.location.pathname === "/bli-giver") {
     return (
       <>
@@ -95,11 +91,11 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleMunicipality} to="municipality" smooth={true}>
+                  <Link to="kommune">
                     <Typography className={classes.drawerContent}>
                       Kommuner
                     </Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
               </List>
             </Drawer>

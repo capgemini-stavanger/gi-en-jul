@@ -41,10 +41,9 @@ export interface CityData {
             </div>
             {Array.from(cities).map((val, index)=>
             <Grid className={classes.municipalityItem} key={index}>
-              
               <Accordion expanded={expanded === index.toString()} onChange={handleChange(index.toString())}>
                 <AccordionSummary
-                  className = {classes.municipalityItem}
+                  className = {classes.municipalitySummary}
                   expandIcon={
                     <ExpandMoreIcon />
                   }
@@ -52,7 +51,7 @@ export interface CityData {
                     <Typography>{val.city}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography><Information/></Typography>
+                  <Information/>
                 </AccordionDetails>
               </Accordion>
             </Grid>
