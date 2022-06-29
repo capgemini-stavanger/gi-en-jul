@@ -34,6 +34,7 @@ export default () =>
       cursor: "pointer",
       fontSize: "120%",
       fontWeight: 600,
+      color: theme.palette.primary.light,
       "&:hover": {
         color: theme.palette.primary.dark,
         fontWeight: 700,
