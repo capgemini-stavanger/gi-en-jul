@@ -108,12 +108,19 @@ const useStyles = makeStyles((theme) => ({
         objectFit: "cover",
         minWidth: "100%",
         justifyContent: "center",
+        margin: theme.spacing(1),
     },
     municipalityHeader: {
         color: theme.palette.primary.main,
         padding: theme.spacing(1.5),
         fontSize: "200%",
         textAlign: "center",
+    },
+    municipalitySummary: {
+      backgroundColor: theme.palette.primary.light,
+      borderRadius: "2em",
+      color: "white",
+
     }
 }));
 

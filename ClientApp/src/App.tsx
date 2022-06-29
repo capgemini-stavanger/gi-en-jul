@@ -7,6 +7,7 @@ import Business from "components/landing-page/Business";
 import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
+import Municipality from "pages/municipality";
 
 const App = () => {
   return (
