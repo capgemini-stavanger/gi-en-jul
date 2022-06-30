@@ -55,7 +55,7 @@ namespace GiEnJul.Controllers
         }
 
         // POST: /verify/giverGuid/recipientGuid/event_location
-        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}")]
+        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/verify")]
         public async Task VerifyConnection(string giverRowKey, string recipientRowKey, string partitionkey)
         {
             //Populate recipient and giver using keys
@@ -127,6 +127,24 @@ namespace GiEnJul.Controllers
                 _log.Error("An exception was thrown", e);
                 throw;
             }
+        }
+        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/deny")]
+        public async Task DenyConnection(string giverRowKey, string recipientRowKey, FeedbackGiverDto feedback)
+        {
+            // Deny connection
+            // Read whether to be DELETED as giver or not
+            // Read feedback
+
+            var _testing = feedback.DeleteGiver;
+            var _testing2 = feedback.FeedbackGiver;
+
+            Ok();
+        }
+
+        public class FeedbackGiverDto
+        {
+            public bool DeleteGiver { get; set; }
+            public string FeedbackGiver { get; set; }
         }
     }
 }

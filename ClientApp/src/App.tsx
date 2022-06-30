@@ -8,6 +8,7 @@ import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
 import Municipality from "pages/municipality";
+import DenyConnection from "pages/DenyConnection";
 
 const App = () => {
   return (
@@ -19,7 +20,11 @@ const App = () => {
       <Route path="/bli-giver" component={RegistrationMacro} />
       <Route path="/loading" component={LoadingPage} />
       <Route path="/kommune" component={Municipality} />
-      <Route path="/:giverRowKey/:recipientRowKey/:partitionKey" component={VerifyConnection} />
+      <Route
+        path="/:giverRowKey/:recipientRowKey/:partitionKey/verify"
+        component={VerifyConnection}
+      />
+      <Route path="/:giverRowKey/:recipientRowKey/:partitionKey/deny" component={DenyConnection} />
     </>
   );
 };
