@@ -21,6 +21,14 @@ export default () =>
         color: theme.palette.primary.dark,
       },
     },
+    confirmButton: {
+      position: "fixed",
+      justifyContent: "center",
+      cursor: "pointer",
+      "&:hover": {
+        color: theme.palette.primary.dark,
+      },
+    },
     smallLogo: {
       height: "40px",
       width: "40px",
