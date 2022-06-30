@@ -245,10 +245,22 @@ namespace GiEnJul.Controllers
                 var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
-                
+
+                var familyTable = "";
+                for (var i = 0; i < recipient.PersonCount; i++)
+                {
+                    if (recipient.FamilyMembers != null)
+                    {
+                        var member = recipient.FamilyMembers[i];
+                        familyTable += $"<li> {member.GetGenderAge()} </li>";
+                        familyTable += " ";
+                    }
+                }
+
                 var emailTemplatename = EmailTemplateName.VerifyConnection;
                 var emailValuesDict = new Dictionary<string, string> 
-                { 
+                {
+                    { "familyTable", familyTable },
                     { "verifyLink", verifyLink },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
