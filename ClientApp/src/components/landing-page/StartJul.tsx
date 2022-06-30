@@ -18,7 +18,9 @@ const StartJul = () => {
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography className={classes.sectionContainer}></Typography>
+            <Typography className={classes.sectionContainer}>
+              Dette er en side om hvordan du starter Gi en jul i din kommune
+            </Typography>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
           <Grid item>
