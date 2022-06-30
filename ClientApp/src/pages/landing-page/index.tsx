@@ -1,6 +1,5 @@
 import { Container, Grid } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
-import Companies from "components/landing-page/Companies";
 import How from "components/landing-page/How";
 import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
@@ -37,7 +36,7 @@ const Home = () => {
           </Grid>
         </Grid>
         <How />
-        <Contact contacts={contacts}/>
+        <Contact contacts={contacts} />
         <ScrollToTop maxPagePosition={300} />
         <Footer />
       </Container>

@@ -79,7 +79,7 @@
         "@typescript-eslint/camelcase": "off", // default has to be off for the next rule to work
         "@typescript-eslint/no-unnecessary-type-constraint": "off",
         "prettier/prettier": [
-          "error",
+          "warn",
           {
             "endOfLine": "auto"
           }
