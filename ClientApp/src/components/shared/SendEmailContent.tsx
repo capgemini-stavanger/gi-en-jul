@@ -15,7 +15,6 @@ interface ISendSingleEmail {
     giver: GiverType;
  }
 
-
 const SendEmailContent: React.FC<ISendSingleEmail> = (
     {
         open,
@@ -65,6 +64,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = (
           });
           setSubjectInput("");
           setHtml("");
+
       }
 
     return (
@@ -95,7 +95,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = (
                                 
                 <TableRow>
                   <TableCell >
-                  <Button  variant="contained" endIcon={<SendIcon />} onClick={sendEmailPost}>Send Email</Button>
+                    <Button  variant="contained" endIcon={<SendIcon />} onClick={sendEmailPost}>Send Email</Button>
                   </TableCell>
                   <TableCell></TableCell>
                 </TableRow>
