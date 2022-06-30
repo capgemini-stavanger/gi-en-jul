@@ -44,6 +44,7 @@ export interface PersonType {
   rowKey: string;
   wish: string;
   age: number;
+  months: number;
   gender: Gender;
   comment: string;
 }

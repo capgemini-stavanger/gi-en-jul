@@ -17,16 +17,16 @@ import {
   FiberManualRecord,
   Delete,
   LinkOff,
+  Edit,
 } from "@material-ui/icons";
 import * as React from "react";
 import { RecipientType } from "components/shared/Types";
 import useStyles from "components/admin/Styles";
-import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
-import EditFamily from "components/shared/EditFamily";
 import getGender from "common/functions/GetGender";
 import formatFamily from "common/functions/GetFamilySize"
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
+import EditFamilyDialog from "components/shared/EditFamilyDialog";
 
 type Props = {
   data: RecipientType[] | [];
@@ -107,13 +107,6 @@ const DatatableRecipient: React.FC<Props> = ({
                 style={{ color: "#ed8175" }}
               />
             )}
-            <Typography>
-            { !recipient.isSuggestedMatch &&
-              <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
-                <EditIcon/>
-              </IconButton>
-              }
-            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
@@ -173,6 +166,16 @@ const DatatableRecipient: React.FC<Props> = ({
             </Typography>
           </AccordionDetails>
           }
+          { !recipient.isSuggestedMatch &&
+          <AccordionDetails>
+            <Typography onClick={() => {setOpen(true); setSelectedRecipient(recipient)}}>
+              <Edit />
+              <Button>
+                Rediger familie
+              </Button>
+            </Typography>
+          </AccordionDetails>
+          }
           <AccordionDetails>
             <Typography onClick={() => {setType("Recipient"); handleOpenDialog()}}>
               <Delete />
@@ -183,14 +186,14 @@ const DatatableRecipient: React.FC<Props> = ({
           </AccordionDetails>
         </Accordion>
       ))}
-      { selectedRecipient.familyMembers &&
-      <EditFamily
-        recipientToUpdate={selectedRecipient}
-        onClose={() => { setOpen(false)}}
-        open={open} 
+
+      <EditFamilyDialog
+        open={open}
+        onClose = {() => { setOpen(false) }}
         refreshRecipients={() => refreshData()}
-        />
-      }
+        recipient={selectedRecipient}
+      />
+
       <DeleteTypeDialog 
           open={openDialog}
           handleClose={handleCloseDialog} 
