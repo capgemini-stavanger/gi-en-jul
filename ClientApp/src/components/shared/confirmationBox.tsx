@@ -23,7 +23,7 @@ const ConfirmationBox: React.FC<IConfirmation> = ({
   //make constants for variables needed in pop up box
 
   return (
-    <Dialog open={isOpen} fullWidth={true} justifyContent={"center"}>
+    <Dialog open={isOpen} fullWidth={true}>
       <div>
         <Typography className={classes.footerText} variant="h6">
           {text}
