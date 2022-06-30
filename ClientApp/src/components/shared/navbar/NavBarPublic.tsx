@@ -75,9 +75,7 @@ const NavBarPublic = () => {
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="questions" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Ofte stilte spørsmål
-                    </Typography>
+                    <Typography className={classes.drawerContent}>Ofte stilte spørsmål</Typography>
                   </Scroll>
                 </ListItem>
                 <ListItem>
