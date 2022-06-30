@@ -17,13 +17,12 @@ const How = () => {
           <ExpandMore color="primary" />
           <div className={classes.textContainer}>
             <Typography className={classes.paragraph}>
-              Gi en jul er et frivillig prosjekt i samarbeid med blant andre
-              barnevernet og NAV. <br />
-              Som giver gir du julemiddag og julegaver til en familie som
-              virkelig trenger det. Dette er foreldre og barn som ikke selv har
-              mulighet til å kjøpe en skikkelig julemiddag, julesnop eller
-              julegaver til hverandre. I år kan du melde deg som giver i Bodø,
-              Gjesdal, Sandnes, Sola eller Stavanger.
+              Gi en jul er et frivillig prosjekt i samarbeid med blant andre barnevernet og NAV.{" "}
+              <br />
+              Som giver gir du julemiddag og julegaver til en familie som virkelig trenger det.
+              Dette er foreldre og barn som ikke selv har mulighet til å kjøpe en skikkelig
+              julemiddag, julesnop eller julegaver til hverandre. I år kan du melde deg som giver i
+              Bodø, Gjesdal, Sandnes, Sola eller Stavanger.
             </Typography>
           </div>
         </div>
@@ -50,13 +49,11 @@ const How = () => {
             <img className={classes.stepsImage} src={step1}></img>
           </div>
           <div className={classes.headLineContainer}>
-            <Typography className={classes.blueTextHeadline}>
-              Steg 1{" "}
-            </Typography>
+            <Typography className={classes.blueTextHeadline}>Steg 1 </Typography>
             <div className={classes.textContainer}>
               <Typography className={classes.paragraph}>
-                Registrer deg som giver alene, med venner, familie eller
-                kolleger via “Bli giver” knappen øverst på denne siden.
+                Registrer deg som giver alene, med venner, familie eller kolleger via “Bli giver”
+                knappen øverst på denne siden.
               </Typography>
             </div>
           </div>
@@ -66,14 +63,11 @@ const How = () => {
             <img className={classes.stepsImage} src={step2}></img>
           </div>
           <div className={classes.headLineContainer}>
-            <Typography className={classes.blueTextHeadline}>
-              Steg 2{" "}
-            </Typography>
+            <Typography className={classes.blueTextHeadline}>Steg 2 </Typography>
             <div className={classes.textContainer}>
               <Typography className={classes.paragraph}>
-                Når julen nærmer seg, får du tildelt en anonym familie som du
-                handler til. Du mottar en liste med gaveønsker og hva de ønsker
-                å spise.
+                Når julen nærmer seg, får du tildelt en anonym familie som du handler til. Du mottar
+                en liste med gaveønsker og hva de ønsker å spise.
               </Typography>
             </div>
           </div>
@@ -84,13 +78,11 @@ const How = () => {
             <img className={classes.stepsImage} src={step3}></img>
           </div>
           <div className={classes.headLineContainer}>
-            <Typography className={classes.blueTextHeadline}>
-              Steg 3{" "}
-            </Typography>
+            <Typography className={classes.blueTextHeadline}>Steg 3 </Typography>
             <div className={classes.textContainer}>
               <Typography className={classes.paragraph}>
-                På innsamlingsdagen leverer du esken et angitt sted, og
-                barnevernet og andre kjører eskene ut til familiene.
+                På innsamlingsdagen leverer du esken et angitt sted, og barnevernet og andre kjører
+                eskene ut til familiene.
               </Typography>
             </div>
           </div>

@@ -15,13 +15,13 @@ interface IAdminTab {
 const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
   const [step, setStep] = useState<string>("1");
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: string) => {
+  const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setStep(newValue);
   };
 
   return (
     <>
-      <NavBarLoggedIn role="Admin"/>
+      <NavBarLoggedIn role="Admin" />
       <TabContext value={step}>
         <TabList onChange={handleChange} centered>
           <Tab label="Oversikt" value="1" />
@@ -32,16 +32,13 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <OverviewMacro location={location} accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <ConnectionSuggesterMacro
-            location={location}
-            accessToken={accessToken}
-          />
+          <ConnectionSuggesterMacro location={location} accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="3">
           <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
       </TabContext>
-      <ScrollToTop maxPagePosition={300}/>
+      <ScrollToTop maxPagePosition={300} />
     </>
   );
 };

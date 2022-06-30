@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   statisticsContainer: {
     position: "fixed",
-      marginTop: -theme.spacing(8),
+    marginTop: -theme.spacing(8),
     [theme.breakpoints.up("desktop")]: {
       marginTop: -theme.spacing(2),
     },
@@ -59,14 +59,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   modalStyle: {
-    position: "absolute", 
+    position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%,-50%)",
     width: 400,
     backgroundColor: "#e6e6e6",
     border: "2px solid #000",
-    margin: theme.spacing(5), 
+    margin: theme.spacing(5),
     padding: theme.spacing(1.5),
   },
 }));

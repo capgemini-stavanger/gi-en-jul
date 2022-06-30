@@ -11,13 +11,7 @@ interface IPager {
   step?: number;
 }
 
-const Pager: FC<IPager> = ({
-  onBack,
-  onContinue,
-  backText,
-  continueText,
-  step,
-}) => {
+const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText, step }) => {
   const classes = useStyles();
   if (isMobile()) {
     return (
@@ -67,19 +61,10 @@ const Pager: FC<IPager> = ({
     );
   } else {
     return (
-      <Grid
-        container
-        spacing={2}
-        justifyContent="center"
-        className={classes.buttons}
-      >
+      <Grid container spacing={2} justifyContent="center" className={classes.buttons}>
         {onBack && (
           <Grid item>
-            <Button
-              className={classes.buttonBack}
-              startIcon={<ArrowBackIos />}
-              onClick={onBack}
-            >
+            <Button className={classes.buttonBack} startIcon={<ArrowBackIos />} onClick={onBack}>
               {backText}
             </Button>
           </Grid>

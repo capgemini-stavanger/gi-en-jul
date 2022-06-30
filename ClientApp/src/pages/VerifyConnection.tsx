@@ -15,11 +15,10 @@ interface RouteParameters {
   partitionKey: string;
 }
 
-interface VerifyConnection extends RouteComponentProps<RouteParameters> {}
+type VerifyConnection = RouteComponentProps<RouteParameters>;
 
 const VerifyConnection: React.FC<VerifyConnection> = () => {
-  const { giverRowKey, recipientRowKey, partitionKey } =
-    useParams<RouteParameters>();
+  const { giverRowKey, recipientRowKey, partitionKey } = useParams<RouteParameters>();
 
   const [content, setContent] = useState(<LoadingPage />);
 
@@ -34,12 +33,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
         if (response.status == 200) {
           setContent(
             <Container className={classes.summaryDesign}>
-              <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Grid container direction="column" justifyContent="center" alignItems="center">
                 <Grid item>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
@@ -49,15 +43,14 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       Tusen takk for at du skal Gi en jul! <br />
                     </Typography>
                     <Typography className={classes.paragraph}>
-                      Familiene setter utrolig stor pris på det, og det blir mange tårevåte øyeblikk når de får eskene sine. Håper at du koser deg med handlingen! Hilsen oss i Gi en jul.
+                      Familiene setter utrolig stor pris på det, og det blir mange tårevåte øyeblikk
+                      når de får eskene sine. Håper at du koser deg med handlingen! Hilsen oss i Gi
+                      en jul.
                     </Typography>
                   </Container>
                 </Grid>
                 <Grid item className={classes.imageContainer}>
-                  <img
-                    className={classes.backgroundImage}
-                    src={snowmanFull}
-                  ></img>
+                  <img className={classes.backgroundImage} src={snowmanFull}></img>
                 </Grid>
               </Grid>
             </Container>
@@ -73,12 +66,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
               >
                 Finn kontaktinformasjon
               </Button>
-              <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Grid container direction="column" justifyContent="center" alignItems="center">
                 <Grid item>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
@@ -89,22 +77,19 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       du skal gjøre!
                     </Typography>
                     <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer så vi fikk
-                      ikke registrert din bekreftelse som giver. Ta kontakt med
-                      Gi en jul der du bor så skal vi registrere ditt bidrag.
+                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
+                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
+                      registrere ditt bidrag.
                     </Typography>
                     <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det
-                      blir mange tårevåte øyeblikk når familiene får eskene
-                      sine. Håper du koser deg med finne en fin gave
+                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
+                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
+                      gave
                     </Typography>
                   </Container>
                 </Grid>
                 <Grid item className={classes.imageContainer}>
-                  <img
-                    className={classes.backgroundImage}
-                    src={snowmanFull}
-                  ></img>
+                  <img className={classes.backgroundImage} src={snowmanFull}></img>
                 </Grid>
               </Grid>
             </Container>
@@ -122,12 +107,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
             >
               Finn kontaktinformasjon
             </Button>
-            <Grid
-              container
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-            >
+            <Grid container direction="column" justifyContent="center" alignItems="center">
               <Grid item>
                 <img className={classes.imageSnow} src={snowDown}></img>
               </Grid>
@@ -138,22 +118,18 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                     du skal gjøre!
                   </Typography>
                   <Typography className={classes.paragraphBold}>
-                    Det har desverre sjedd noe feil i våre systemer så vi fikk
-                    ikke registrert din bekreftelse som giver. Ta kontakt med Gi
-                    en jul der du bor så skal vi registrere ditt bidrag.
+                    Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
+                    bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi registrere
+                    ditt bidrag.
                   </Typography>
                   <Typography className={classes.paragraph}>
-                    Vit at familiene setter utrolig stor pris på dette, og det
-                    blir mange tårevåte øyeblikk når familiene får eskene sine.
-                    Håper du koser deg med finne en fin gave
+                    Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
+                    øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin gave
                   </Typography>
                 </Container>
               </Grid>
               <Grid item className={classes.imageContainer}>
-                <img
-                  className={classes.backgroundImage}
-                  src={snowmanFull}
-                ></img>
+                <img className={classes.backgroundImage} src={snowmanFull}></img>
               </Grid>
             </Grid>
           </Container>

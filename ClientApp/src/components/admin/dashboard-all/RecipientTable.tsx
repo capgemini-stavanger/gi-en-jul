@@ -5,9 +5,8 @@ import {
   Container,
   Divider,
   Typography,
-  IconButton,
   capitalize,
-  Button
+  Button,
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -17,16 +16,16 @@ import {
   FiberManualRecord,
   Delete,
   LinkOff,
+  Edit,
 } from "@material-ui/icons";
 import * as React from "react";
 import { RecipientType } from "components/shared/Types";
 import useStyles from "components/admin/Styles";
-import EditIcon from '@material-ui/icons/Edit';
 import { useState } from "react";
-import EditFamily from "components/shared/EditFamily";
 import getGender from "common/functions/GetGender";
-import formatFamily from "common/functions/GetFamilySize"
+import formatFamily from "common/functions/GetFamilySize";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
+import EditFamilyDialog from "components/shared/EditFamilyDialog";
 
 type Props = {
   data: RecipientType[] | [];
@@ -34,35 +33,30 @@ type Props = {
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
-const DatatableRecipient: React.FC<Props> = ({
-  data,
-  refreshData,
-  handleRecipientChange,
-}) => {
+const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipientChange }) => {
   const classes = useStyles();
 
-  const [selectedRecipient, setSelectedRecipient] = useState({} as RecipientType)
-  const [open, setOpen] = useState(false)
+  const [selectedRecipient, setSelectedRecipient] = useState({} as RecipientType);
+  const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
 
   const handleSelectedAccordion = (index: number) => {
-    index != selected ? setSelected(index) : setSelected(-1)
-  }
+    index != selected ? setSelected(index) : setSelected(-1);
+  };
 
   const handleOpenDialog = () => {
-    setOpenDialog(true)
-  }
+    setOpenDialog(true);
+  };
 
   const handleCloseDialog = () => {
-    setOpenDialog(false)
-  }
+    setOpenDialog(false);
+  };
 
   const mergeRecipientTypes = (recipient: RecipientType) => {
     return Object.assign({} as RecipientType, recipient);
-  }
-  
+  };
 
   return (
     <Container>
@@ -71,17 +65,24 @@ const DatatableRecipient: React.FC<Props> = ({
           expanded={selected == index}
           key={index}
           className={classes.accordionContainer}
-          onChange={() => { handleRecipientChange(recipient) }}
-          onClick={() => { handleSelectedAccordion(index) }}
+          onChange={() => {
+            handleRecipientChange(recipient);
+          }}
+          onClick={() => {
+            handleSelectedAccordion(index);
+          }}
         >
           <AccordionSummary
-            onClick={() => {setSelectedRecipient(mergeRecipientTypes(recipient),)}}
+            onClick={() => {
+              setSelectedRecipient(mergeRecipientTypes(recipient));
+            }}
             expandIcon={<ExpandMore />}
             aria-controls="panel1bh-content"
             id="panel1bh-header"
           >
             <Typography className={classes.heading}>
-              {"id: " + recipient.familyId}<br/>
+              {"id: " + recipient.familyId}
+              <br />
               {recipient.referenceId && "ref: " + recipient.referenceId}
             </Typography>
             <Typography className={classes.secondaryHeading}>
@@ -91,33 +92,17 @@ const DatatableRecipient: React.FC<Props> = ({
             {recipient.isSuggestedMatch ? (
               //Styling should be in a seperate file
               !recipient.hasConfirmedMatch ? (
-                <FiberManualRecord
-                  fontSize="large"
-                  style={{ color: "#f4cf8a" }}
-                />
+                <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />
               ) : (
-                <FiberManualRecord
-                  fontSize="large"
-                  style={{ color: "#49a591" }}
-                />
+                <FiberManualRecord fontSize="large" style={{ color: "#49a591" }} />
               )
             ) : (
-              <FiberManualRecord
-                fontSize="large"
-                style={{ color: "#ed8175" }}
-              />
+              <FiberManualRecord fontSize="large" style={{ color: "#ed8175" }} />
             )}
-            <Typography>
-            { !recipient.isSuggestedMatch &&
-              <IconButton aria-label="expand row" size="small" onClick={() => {setOpen(true); setSelected(-1)}}>
-                <EditIcon/>
-              </IconButton>
-              }
-            </Typography>
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
-            <Typography style={{ fontWeight: 550, fontSize: 18 }} >Familiesammensetning:</Typography>
+            <Typography style={{ fontWeight: 550, fontSize: 18 }}>Familiesammensetning:</Typography>
           </AccordionDetails>
           {recipient.familyMembers.map((person, index) => (
             <div key={index}>
@@ -125,15 +110,12 @@ const DatatableRecipient: React.FC<Props> = ({
                 <Typography className={classes.smallColumn}>
                   {getGender(person.gender, person.age)}
                 </Typography>
-                <Typography className={classes.smallColumn}>
-                  {" "}
-                  {person.age} år{" "}
-                </Typography>
+                <Typography className={classes.smallColumn}> {person.age} år </Typography>
                 <Typography className={classes.largeColumn}>
                   {" "}
                   {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
-                  <br/>
-                  {person.comment  ? "Kommentar: "+person.comment : ""}
+                  <br />
+                  {person.comment ? "Kommentar: " + person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
@@ -144,8 +126,9 @@ const DatatableRecipient: React.FC<Props> = ({
               Matønsker:{" "}
             </Typography>
             <Typography className={classes.largeColumn}>
-              Middag: {capitalize(recipient.dinner)}, Dessert: {capitalize(recipient.dessert)} <br/>
-              {recipient.note  ? "Kommentar på mat: "+recipient.note : ""}
+              Middag: {capitalize(recipient.dinner)}, Dessert: {capitalize(recipient.dessert)}{" "}
+              <br />
+              {recipient.note ? "Kommentar på mat: " + recipient.note : ""}
             </Typography>
           </AccordionDetails>
           <Divider />
@@ -163,41 +146,74 @@ const DatatableRecipient: React.FC<Props> = ({
               {recipient.referenceId}
             </Typography>
           </AccordionDetails>
-          { recipient.isSuggestedMatch &&
+          {recipient.isSuggestedMatch && (
+            <AccordionDetails>
+              <Typography
+                onClick={() => {
+                  setType(null);
+                  handleOpenDialog();
+                }}
+              >
+                <LinkOff />
+                <Button>Koble fra giver og familie</Button>
+              </Typography>
+            </AccordionDetails>
+          )}
           <AccordionDetails>
-            <Typography onClick={() => {setType(null); handleOpenDialog()}}>
+            <Typography
+              onClick={() => {
+                setType(null);
+                handleOpenDialog();
+              }}
+            >
               <LinkOff />
-              <Button>
-                Koble fra giver og familie
-              </Button>
+              <Button>Koble fra giver og familie</Button>
             </Typography>
           </AccordionDetails>
-          }
+
+          {!recipient.isSuggestedMatch && (
+            <AccordionDetails>
+              <Typography
+                onClick={() => {
+                  setOpen(true);
+                  setSelectedRecipient(recipient);
+                }}
+              >
+                <Edit />
+                <Button>Rediger familie</Button>
+              </Typography>
+            </AccordionDetails>
+          )}
           <AccordionDetails>
-            <Typography onClick={() => {setType("Recipient"); handleOpenDialog()}}>
+            <Typography
+              onClick={() => {
+                setType("Recipient");
+                handleOpenDialog();
+              }}
+            >
               <Delete />
-              <Button>
-                Slett familie
-              </Button>
+              <Button>Slett familie</Button>
             </Typography>
           </AccordionDetails>
         </Accordion>
       ))}
-      { selectedRecipient.familyMembers &&
-      <EditFamily
-        recipientToUpdate={selectedRecipient}
-        onClose={() => { setOpen(false)}}
-        open={open} 
+
+      <EditFamilyDialog
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
         refreshRecipients={() => refreshData()}
-        />
-      }
-      <DeleteTypeDialog 
-          open={openDialog}
-          handleClose={handleCloseDialog} 
-          typeData={selectedRecipient} 
-          refreshData={refreshData} 
-          type={type}
-          />
+        recipient={selectedRecipient}
+      />
+
+      <DeleteTypeDialog
+        open={openDialog}
+        handleClose={handleCloseDialog}
+        typeData={selectedRecipient}
+        refreshData={refreshData}
+        type={type}
+      />
     </Container>
   );
 };

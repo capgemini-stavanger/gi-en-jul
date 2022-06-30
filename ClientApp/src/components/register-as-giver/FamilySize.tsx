@@ -36,14 +36,11 @@ const FamilySize: React.FC<Props> = ({
   const classes = useStyles();
   return (
     <>
-      <Typography className={classes.subHeading}>
-        Familiesammensetning
-      </Typography>
+      <Typography className={classes.subHeading}>Familiesammensetning</Typography>
       <Typography className={classes.infoText}>
-        En familie kan bestå av en ungdom opp til 23 år som er alene, en
-        aleneforelder med fem barn og alt mellom og over. Vi kan ikke garantere at du
-        får familiestørrelsen du ønsker, og dersom det er «samme for deg/dere»
-        er det fint om du klikker på alternativet 6+.{" "}
+        En familie kan bestå av en ungdom opp til 23 år som er alene, en aleneforelder med fem barn
+        og alt mellom og over. Vi kan ikke garantere at du får familiestørrelsen du ønsker, og
+        dersom det er «samme for deg/dere» er det fint om du klikker på alternativet 6+.{" "}
       </Typography>
       <Container className={classes.form}>
         <Grid

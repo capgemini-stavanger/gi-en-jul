@@ -1,7 +1,88 @@
 {
     "parser": "@typescript-eslint/parser",
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+    ],
+    "plugins": ["react-hooks"],
     "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module"
-    }
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "project": "./tsconfig.json"
+    },
+    "settings": {
+        "react": {
+            "version" : "detect"
+        }
+    },
+    "ignorePatterns":[
+        // Build and Packages
+        "/node_modules/**",
+        "/lib/**",
+        "/build/**",
+        // Test files
+        "/**/*.test.tsx",
+        "/**/*.test.ts",
+        "/**/*.test.jsx",
+        "/**/*.test.js",
+        "/coverage/**",
+        // Ignore specific files
+        "/**/package.json",
+        "/**/serviceWorker.ts",
+        "/**/webpack.config.js",
+        "/**/tsconfig.js",
+        "/**/lib.tsconfig.js",
+        "/**/.DS_STORE",
+        "/**/.env",
+        // Log Files
+        "/**/npm-debug.log*",
+        "/**/yarn-debug.log*",
+        "/**/yarn-error.log*",
+        // Unsupported files
+        "*.eot",
+        "*.svg",
+        "*.ttf",
+        "*.woff",
+        "*.png",
+        "*.jpeg",
+        "*.md",
+        "*.pnp",
+        "*.js.pnp",
+        // Stylings
+        "*.css",
+        "*.scss"
+    ],
+    "rules": {
+        "no-console": ["warn", { "allow": ["warn", "error", "info"] }],
+        "@typescript-eslint/interface-name-prefix": "off", //Should interfaces have a name Prefix
+        "react/prop-types": "off", // deactivate reacts prop types. We use typescript instead
+        "react/require-default-props": "off", // deactivate reacts default props
+        "react-hooks/exhaustive-deps": "off",
+        "react/react-in-jsx-scope": "off",
+        "@typescript-eslint/explicit-function-return-type": "off", // Defined functions should define return type?
+        "@typescript-eslint/no-empty-function": "off", // No empty functions
+        "@typescript-eslint/no-use-before-define": "off", // Use code before define
+        "@typescript-eslint/no-explicit-any": "off", // Is "any" type acceptable at all?
+        "@typescript-eslint/no-unused-vars": "error", // Declared variabled is not used
+        "@typescript-eslint/array-type": "error", // No dead code
+        "@typescript-eslint/no-extra-non-null-assertion": "error", // Prevents use of extra non-null assertion
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "error", // Prevents use non-null assertion in optional chaining
+        "@typescript-eslint/prefer-optional-chain": "error", // Prefer optional chaining over && expressions
+        "@typescript-eslint/require-array-sort-compare": "error", // If use of sort(), compare function required
+        "@typescript-eslint/default-param-last": "error", // optional and or default should be last
+        "no-unused-expressions": "off", // default has to be off for next rule to work
+        "@typescript-eslint/no-unused-expressions": "off", // No unused expressions (dead code) → Turned off due to && expressions errors
+        "@typescript-eslint/camelcase": "off", // default has to be off for the next rule to work
+        "@typescript-eslint/no-unnecessary-type-constraint": "off",
+        "prettier/prettier": [
+          "error",
+          {
+            "endOfLine": "auto"
+          }
+        ]
+      }
 }

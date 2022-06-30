@@ -1,14 +1,8 @@
-import {
-  Box,
-  Container,
-  createStyles,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
+import { Box, Container, createStyles, makeStyles } from "@material-ui/core";
 import * as React from "react";
 import DotLoader from "common/constants/DotLoader";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     loader: {
       minHeight: "70%",

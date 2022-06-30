@@ -9,7 +9,7 @@ import FamilySize from "components/register-as-giver/FamilySize";
 import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
-import NavBarPublic from "components/shared/navbar/NavBarPublic"
+import NavBarPublic from "components/shared/navbar/NavBarPublic";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -28,9 +28,7 @@ const RegistrationMacro = () => {
   const [state, setState] = useState(initState);
   const [formDataState, setFormDataState] = useState(initFormDataState);
 
-  const [locationOptions, setLocationOptions] = useState<string[] | undefined>(
-    undefined
-  );
+  const [locationOptions, setLocationOptions] = useState<string[] | undefined>(undefined);
 
   useEffect(() => {
     getLocations().then((locationArray) => setLocationOptions(locationArray));
@@ -64,9 +62,7 @@ const RegistrationMacro = () => {
     setFormDataState((prev) => ({ ...prev, phoneNumber: event.target.value }));
   };
 
-  const handleLocationChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
+  const handleLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFormDataState((prev) => ({ ...prev, location: event.target.value }));
   };
 
@@ -137,10 +133,7 @@ const RegistrationMacro = () => {
         );
       case 5:
         return (
-          <Confirmation
-            values={formDataState}
-            confirmationOK={state.confirmationOK}
-          ></Confirmation>
+          <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
         );
       default:
         return null;
@@ -150,10 +143,7 @@ const RegistrationMacro = () => {
     <>
       {state.step === 5 ? (
         <Container className={classes.summaryDesign}>
-          <Confirmation
-            values={formDataState}
-            confirmationOK={state.confirmationOK}
-          ></Confirmation>
+          <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
         </Container>
       ) : (
         <>
