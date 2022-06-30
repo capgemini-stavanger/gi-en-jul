@@ -35,9 +35,7 @@ function LoginRedirector() {
     case "NoLocation":
       return (
         <ErrorPage
-          ErrorText={
-            "Du har ikke blitt tildelt en lokasjon enda, tilkall din GiEnJul admin"
-          }
+          ErrorText={"Du har ikke blitt tildelt en lokasjon enda, tilkall din GiEnJul admin"}
         />
       );
     case "Loading":
@@ -45,9 +43,7 @@ function LoginRedirector() {
     case "Unspecified":
       return (
         <ErrorPage
-          ErrorText={
-            "Du har ikke blitt tildelt en rolle enda, tilkall din GiEnJul admin"
-          }
+          ErrorText={"Du har ikke blitt tildelt en rolle enda, tilkall din GiEnJul admin"}
         />
       );
     case "Admin":

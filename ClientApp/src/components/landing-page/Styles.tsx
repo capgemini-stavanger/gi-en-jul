@@ -14,20 +14,19 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: "18em",
     },
   },
-  textLink:{
-    textDecorationLine: 'underline',
-    cursor: 'pointer'
+  textLink: {
+    textDecorationLine: "underline",
+    cursor: "pointer",
   },
-  familyImage:{
+  familyImage: {
     justifySelf: "center",
     zIndex: 2,
     width: "100%",
     height: "100%",
     position: "relative",
     objectFit: "cover",
-
   },
-  snowDown:{
+  snowDown: {
     marginTop: -theme.spacing(8),
     marginBottom: -theme.spacing(15),
     objectFit: "cover",
@@ -91,11 +90,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     color: "white",
   },
-  imgContainer:{
+  imgContainer: {
     overflow: "hidden",
     height: "100%",
   },
-  stepsImage:{
+  stepsImage: {
     objectFit: "none",
     width: "346px",
     height: "278px",
@@ -112,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "120%",
     },
   },
-  textContainer:{
+  textContainer: {
     maxWidth: "30em",
     textAlign: "center",
     margin: theme.spacing(1),

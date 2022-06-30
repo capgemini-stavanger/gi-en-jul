@@ -27,27 +27,21 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             Hjertelig takk {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg
-            som giver til årets Gi en jul og har sendt en oppsummering av din
-            registrering til
+            Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg som giver til årets Gi
+            en jul og har sendt en oppsummering av din registrering til
           </Typography>
-          <Typography className={classes.paragraphBold}>
-            {values.email}
-          </Typography>
+          <Typography className={classes.paragraphBold}>{values.email}</Typography>
           <Typography className={classes.paragraph}>
-            Når det nærmer seg jul vil du motta mer informasjon som ønskelister,
-            sted og tidspunkt for innlevering av ditt bidrag.
+            Når det nærmer seg jul vil du motta mer informasjon som ønskelister, sted og tidspunkt
+            for innlevering av ditt bidrag.
           </Typography>
         </>
       ) : (
         <>
-          <Typography className={classes.headingBold}>
-            {" "}
-            Ånei! {values.fullname}!
-          </Typography>
+          <Typography className={classes.headingBold}> Ånei! {values.fullname}!</Typography>
           <Typography className={classes.paragraph}>
-            Desverre har det skjedd en feil og vi har ikke fått registrert
-            deg. Gjerne prøv igjen senere og ta kontakt på epost dersom feilen vedvarer.
+            Desverre har det skjedd en feil og vi har ikke fått registrert deg. Gjerne prøv igjen
+            senere og ta kontakt på epost dersom feilen vedvarer.
           </Typography>
         </>
       ),
@@ -65,12 +59,7 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
         Hovedsiden
       </Button>
       <img className={classes.smallLogo} src={logo}></img>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Grid container direction="column" justifyContent="center" alignItems="center">
         <Grid item>
           <img className={classes.imageSnow} src={snowDown}></img>
         </Grid>

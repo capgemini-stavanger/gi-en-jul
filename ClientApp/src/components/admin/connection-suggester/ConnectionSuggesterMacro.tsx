@@ -1,10 +1,4 @@
-import {
-  Button,
-  Grid,
-  Slide,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, Slide, Snackbar, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import GiverSuggestions from "components/admin/connection-suggester/GiverTable";
 import RecipientSuggestions from "components/admin/connection-suggester/RecipientTable";
@@ -45,7 +39,7 @@ const initialState: ConnectionSuggestionProps = {
 const initialSnackBar: ISnackBar = {
   textContent: "",
   open: false,
-  severity: "success"
+  severity: "success",
 };
 
 const slideTransition = (props: TransitionProps) => {
@@ -73,11 +67,15 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           setState((prev) => ({
             ...prev,
             recipients: response.data,
-            refreshing: false
-          }))
+            refreshing: false,
+          }));
         } else {
           setState(initialState);
-          setSnackbarContent({textContent:"Kunne ikke hente familier, prøv igjen senere.", open:true, severity: "error"});
+          setSnackbarContent({
+            textContent: "Kunne ikke hente familier, prøv igjen senere.",
+            open: true,
+            severity: "error",
+          });
         }
       });
   };
@@ -91,10 +89,14 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
         if (response.status == 200) {
           setState((prev) => ({ ...prev, givers: response.data }));
         } else {
-          setSnackbarContent({textContent:"Kunne ikke hente givere, prøv igjen senere.", open:true, severity: "error"});
+          setSnackbarContent({
+            textContent: "Kunne ikke hente givere, prøv igjen senere.",
+            open: true,
+            severity: "error",
+          });
         }
       });
-    }
+  };
 
   useEffect(() => {
     getSuggestedRecipients();
@@ -132,7 +134,11 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           getSuggestedRecipients();
           getSuggestedGivers();
         } else {
-          setSnackbarContent({textContent:"Kunne ikke foreslå kobling, prøv igjen senere.", open:true, severity: "error"});
+          setSnackbarContent({
+            textContent: "Kunne ikke foreslå kobling, prøv igjen senere.",
+            open: true,
+            severity: "error",
+          });
         }
       });
   };
@@ -150,10 +156,7 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
           <Typography variant="h4" align="center">
             Givere
           </Typography>
-          <GiverSuggestions
-            selectGiver={updateSelectedGiver}
-            givers={state.givers}
-          />
+          <GiverSuggestions selectGiver={updateSelectedGiver} givers={state.givers} />
         </Grid>
         <Grid item xs={2}>
           <Button

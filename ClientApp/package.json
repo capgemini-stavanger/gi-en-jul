@@ -27,7 +27,6 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "env-cmd": "^10.1.0",
-    "eslint": "^7.32.0",
     "history": "4.10.1",
     "html-to-draftjs": "^1.5.0",
     "jest-matchmedia-mock": "^1.1.0",
@@ -42,6 +41,7 @@
     "react-draft-wysiwyg": "^1.14.7",
     "react-dropdown": "^1.9.2",
     "react-google-recaptcha-v3": "^1.9.5",
+    "react-hooks": "^1.0.1",
     "react-redux": "^7.2.4",
     "react-router": "5.1.2",
     "react-router-dom": "5.1.2",
@@ -69,13 +69,18 @@
     "@types/react-router-dom": "5.1.0",
     "@types/reactstrap": "8.0.6",
     "@types/uuid": "^8.3.1",
-    "@typescript-eslint/parser": "^4.28.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "cross-env": "6.0.3",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-flowtype": "^3.13.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.1.0",
     "eslint-plugin-react": "^7.24.0",
     "nan": "^2.14.1",
+    "prettier": "^2.7.1",
     "typescript": "4.3.5"
   },
   "scripts": {
@@ -92,7 +97,8 @@
     "extends": "react-app"
   },
   "overrides": {
-     "autoprefixer": "10.4.5" },
+    "autoprefixer": "10.4.5"
+  },
   "browserslist": [
     ">0.2%",
     "not dead",

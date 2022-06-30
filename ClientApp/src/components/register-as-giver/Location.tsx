@@ -15,10 +15,7 @@ interface Props {
   locationOptions: string[];
   step: number;
 }
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1, maximum-scale=1"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />;
 
 const Location: React.FC<Props> = ({
   nextStep,
@@ -53,10 +50,7 @@ const Location: React.FC<Props> = ({
           className={classes.form}
         >
           <Grid item>
-            <form
-              onSubmit={nextStep}
-              onError={(errors) => console.error(errors)}
-            >
+            <form onSubmit={nextStep} onError={(errors) => console.error(errors)}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 type="select"

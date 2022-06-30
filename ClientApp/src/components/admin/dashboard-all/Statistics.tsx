@@ -26,10 +26,14 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         ...prevState,
         totalGivers: givers.length,
         totalRecipints: recipients.length,
-        suggestedMatch: givers.filter((giver) => giver.isSuggestedMatch === true && giver.hasConfirmedMatch === false).length,
+        suggestedMatch: givers.filter(
+          (giver) => giver.isSuggestedMatch === true && giver.hasConfirmedMatch === false
+        ).length,
         confirmedMatch: givers.filter((giver) => giver.hasConfirmedMatch === true).length,
-        giversWithoutRecipient: (givers.filter((giver) => giver.isSuggestedMatch === false).length),
-        recipientsWithoutGiver: (recipients.filter((recipient) => recipient.isSuggestedMatch === false).length),
+        giversWithoutRecipient: givers.filter((giver) => giver.isSuggestedMatch === false).length,
+        recipientsWithoutGiver: recipients.filter(
+          (recipient) => recipient.isSuggestedMatch === false
+        ).length,
       };
     });
   };
@@ -46,10 +50,7 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
       className={classes.statisticsContainer}
     >
       <Grid item className={classes.infoContainer}>
-        <Typography variant="h4">
-          {" "}
-          {statistics?.totalRecipints} familier
-        </Typography>
+        <Typography variant="h4"> {statistics?.totalRecipints} familier</Typography>
         <Typography className={classes.textWarning}>
           {" "}
           {statistics?.recipientsWithoutGiver} uten giver
@@ -67,15 +68,13 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         <Typography>
           <FiberManualRecord fontSize="large" style={{ color: "#f4cf8a" }} />{" "}
           {statistics?.suggestedMatch}
-          <FiberManualRecord fontSize="large" color="primary" />{" "}
-          {statistics?.confirmedMatch}
+          <FiberManualRecord fontSize="large" color="primary" /> {statistics?.confirmedMatch}
         </Typography>
       </Grid>
       <Grid item className={classes.explanationContainer}>
         <Typography variant="h4">Forklaring</Typography>
         <Typography>
-          <FiberManualRecord fontSize="large" color="primary" /> = bekreftet
-          kobling
+          <FiberManualRecord fontSize="large" color="primary" /> = bekreftet kobling
         </Typography>
         <br />
         <Typography>
@@ -88,8 +87,7 @@ const Statistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         </Typography>
         <br />
         <Typography>
-          <FiberManualRecord fontSize="large" color="error" /> = ikke koblet
-          enda
+          <FiberManualRecord fontSize="large" color="error" /> = ikke koblet enda
         </Typography>
       </Grid>
     </Grid>

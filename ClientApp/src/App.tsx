@@ -19,10 +19,7 @@ const App = () => {
       <Route path="/spørsmål" component={FAQs} />
       <Route path="/bli-giver" component={RegistrationMacro} />
       <Route path="/loading" component={LoadingPage} />
-      <Route
-        path="/:giverRowKey/:recipientRowKey/:partitionKey"
-        component={VerifyConnection}
-      />
+      <Route path="/:giverRowKey/:recipientRowKey/:partitionKey" component={VerifyConnection} />
     </>
   );
 };

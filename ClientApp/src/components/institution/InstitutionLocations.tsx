@@ -1,9 +1,4 @@
-import {
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-} from "@material-ui/core";
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@material-ui/core";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import getLocations from "common/constants/Locations";
@@ -36,7 +31,7 @@ const Location: FC<LocationProps> = ({
   }, [viewErrorTrigger]);
 
   useEffect(() => {
-    let isValid = !!value;
+    const isValid = !!value;
     if (setIsValidLocation) setIsValidLocation(isValid);
     setIsErr(viewError && !isValid);
   }, [value, setIsValidLocation, setIsErr, viewError]);
@@ -66,12 +61,7 @@ const Location: FC<LocationProps> = ({
           onChange={extendedOnChange}
         >
           {locationList.map((l) => (
-            <FormControlLabel
-              key={`loc_${l}`}
-              value={l}
-              control={<Radio />}
-              label={l}
-            />
+            <FormControlLabel key={`loc_${l}`} value={l} control={<Radio />} label={l} />
           ))}
         </RadioGroup>
       </div>

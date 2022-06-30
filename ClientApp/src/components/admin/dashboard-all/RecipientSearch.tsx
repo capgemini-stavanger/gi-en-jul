@@ -3,7 +3,7 @@ import { Search } from "@material-ui/icons";
 import React, { useState } from "react";
 import useStyles from "./Styles";
 import Datatable from "./RecipientTable";
-import { RecipientType} from "components/shared/Types";
+import { RecipientType } from "components/shared/Types";
 
 type Props = {
   data: RecipientType[] | [];
@@ -11,11 +11,7 @@ type Props = {
   handleRecipientChange: (newRecipient: RecipientType) => void;
 };
 
-const Recipient: React.FC<Props> = ({
-  data,
-  refreshData,
-  handleRecipientChange,
-}) => {
+const Recipient: React.FC<Props> = ({ data, refreshData, handleRecipientChange }) => {
   const [query, setQuery] = useState("");
 
   const search = (input: RecipientType[] | []) => {
@@ -30,7 +26,7 @@ const Recipient: React.FC<Props> = ({
     );
   };
 
-  const classes= useStyles();
+  const classes = useStyles();
 
   return (
     <Container>
@@ -38,8 +34,7 @@ const Recipient: React.FC<Props> = ({
         <Grid item>
           <Search />
         </Grid>
-        <Grid item
-        >
+        <Grid item>
           <TextField
             placeholder="Søk etter familie"
             value={query}

@@ -2,14 +2,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useEffect, useReducer } from "react";
 
-const domainEnvUrl: string = `https://${process.env
-  .REACT_APP_DEV_TENANT_AUTH0!}/api/v2/`;
+const domainEnvUrl = `https://${process.env.REACT_APP_DEV_TENANT_AUTH0 ?? ""}/api/v2/`;
 
 interface IState {
   managementAccessToken: string;
   location?: string;
   role?: string;
-  institution?: string
+  institution?: string;
   //Event
 }
 
