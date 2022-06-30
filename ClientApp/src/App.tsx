@@ -7,7 +7,6 @@ import Business from "components/landing-page/Business";
 import RegistrationMacro from "pages/register-as-giver";
 import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
-import FAQs from "pages/faqs";
 
 const App = () => {
   return (
@@ -16,7 +15,6 @@ const App = () => {
       <Route exact path="/" component={Home} />
       <Route path="/bedrift" component={Business} />
       <Route path="/startJul" component={StartJul} />
-      <Route path="/spørsmål" component={FAQs} />
       <Route path="/bli-giver" component={RegistrationMacro} />
       <Route path="/loading" component={LoadingPage} />
       <Route path="/:giverRowKey/:recipientRowKey/:partitionKey" component={VerifyConnection} />
