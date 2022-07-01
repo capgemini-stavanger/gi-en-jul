@@ -1,39 +1,41 @@
-import { Box, Dialog, Typography } from "@material-ui/core";
+import { Dialog, Typography } from "@material-ui/core";
 import useStyles from "components/shared/Styles";
 import React from "react";
-import { Button, Container } from "reactstrap";
-import { useState } from "react";
-
-//make interface and props for variables
-//make button for OK
+import { Button } from "reactstrap";
 
 interface IConfirmation {
-  isOpen: boolean;
+  open: boolean;
   text: string;
   handleClose: () => void;
+  handleResponse: (response: boolean) => void;
 }
 
-const ConfirmationBox: React.FC<IConfirmation> = ({
-  isOpen,
-  handleClose,
-  text,
-}) => {
+const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleResponse, text }) => {
   const classes = useStyles();
 
-  //make constants for variables needed in pop up box
-
   return (
-    <Dialog open={isOpen} fullWidth={true}>
+    <Dialog open={open}>
       <div>
         <Typography className={classes.footerText} variant="h6">
           {text}
         </Typography>
         <Button
           variant="contained"
-          onClick={handleClose}
-          className={classes.confirmButton}
+          onClick={() => {
+            handleResponse(false);
+            handleClose();
+          }}
         >
-          Close
+          Nei
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            handleResponse(true);
+            handleClose();
+          }}
+        >
+          Ja
         </Button>
       </div>
     </Dialog>
