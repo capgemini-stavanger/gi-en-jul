@@ -33,28 +33,30 @@ const City: React.FC<Props> = ({ cities }) => {
       <div className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>Kommuner</Typography>
       </div>
-      {Array.from(cities).map((val, index) => (
-        <Grid className={classes.municipalityItem} key={index}>
-          <Accordion
-            expanded={expanded === index.toString()}
-            onChange={handleChange(index.toString())}
-          >
-            <AccordionSummary
-              className={classes.municipalitySummary}
-              expandIcon={<ExpandMoreIcon />}
+      <Grid container justifyContent="center">
+        {Array.from(cities).map((val, index) => (
+          <Grid className={classes.municipalityItem} key={index}>
+            <Accordion
+              expanded={expanded === index.toString()}
+              onChange={handleChange(index.toString())}
             >
-              <Typography>{val.city}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Information
-                municipality={val.city}
-                image={val.image}
-                information={val.information}
-              />
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
-      ))}
+              <AccordionSummary
+                className={classes.municipalitySummary}
+                expandIcon={<ExpandMoreIcon className={classes.municipalitySummary} />}
+              >
+                <Typography>{val.city}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Information
+                  municipality={val.city}
+                  image={val.image}
+                  information={val.information}
+                />
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 };
