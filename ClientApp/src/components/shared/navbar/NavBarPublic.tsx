@@ -56,15 +56,15 @@ const NavBarPublic = () => {
                   <Close color="primary" />
                 </IconButton>
                 <ListItem>
-                  <Scroll
+                  <Link
+                    to="/"
                     onClick={() => {
                       history.push("/");
                     }}
-                    to="landing"
-                    smooth={true}
+                    style={{ textDecoration: "none" }}
                   >
                     <Typography className={classes.drawerContent}>Hjem</Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="how" smooth={true}>
@@ -79,15 +79,15 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll
+                  <Link
+                    to="bedrift"
+                    style={{ textDecoration: "none" }}
                     onClick={() => {
                       history.push("/bedrift");
                     }}
-                    to="top"
-                    smooth={true}
                   >
                     <Typography className={classes.drawerContent}>For bedrifter</Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
                 <ListItem>
                   <Scroll onClick={handleClose} to="contact" smooth={true}>
@@ -95,17 +95,17 @@ const NavBarPublic = () => {
                   </Scroll>
                 </ListItem>
                 <ListItem>
-                  <Scroll
+                  <Link
+                    to="startJul"
+                    style={{ textDecoration: "none" }}
                     onClick={() => {
                       history.push("/startJul");
                     }}
-                    to="start"
-                    smooth={true}
                   >
                     <Typography className={classes.drawerContent}>
                       Hvordan starte Gi en Jul i din kommune
                     </Typography>
-                  </Scroll>
+                  </Link>
                 </ListItem>
               </List>
             </Drawer>

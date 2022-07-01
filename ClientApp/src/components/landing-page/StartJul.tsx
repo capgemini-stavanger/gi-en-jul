@@ -19,8 +19,7 @@ const StartJul = () => {
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <Typography className={classes.sectionContainer}>
-              For å starte Gi en jul i din kommune kan du ta kontakt med kontaktpersonen for
-              Stavanger kommune.
+              Dette er en side om hvordan du starter Gi en jul i din kommune
             </Typography>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
