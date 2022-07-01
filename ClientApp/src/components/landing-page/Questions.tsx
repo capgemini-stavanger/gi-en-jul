@@ -35,12 +35,6 @@ const Questions = () => {
                 className={classes.questionSummary}
                 expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
               >
-                <AccordionSummary />
-                className={classes.questionSummary}
-                expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
-                <AccordionSummary />
-                className={classes.questionSummary}
-                expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
                 <Typography>{val.question}</Typography>
               </AccordionSummary>
               <AccordionDetails>
