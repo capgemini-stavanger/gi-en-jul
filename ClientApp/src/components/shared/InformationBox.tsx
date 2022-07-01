@@ -1,4 +1,4 @@
-import { Dialog, Typography } from "@material-ui/core";
+import { Dialog, Grid, Typography } from "@material-ui/core";
 import useStyles from "components/shared/Styles";
 import React from "react";
 import { Button } from "reactstrap";
@@ -14,15 +14,18 @@ const InformationBox: React.FC<IInforrmation> = ({ open, handleClose, text }) =>
 
   return (
     <Dialog open={open}>
-      <div>
-        <Typography className={classes.footerText} variant="h6">
-          {text}
-        </Typography>
-
-        <Button variant="contained" onClick={handleClose} className={classes.confirmButton}>
-          Close
-        </Button>
-      </div>
+      <Grid container direction="column">
+        <Grid item>
+          <Typography className={classes.footerText} variant="h6">
+            {text}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" onClick={handleClose}>
+            Close
+          </Button>
+        </Grid>
+      </Grid>
     </Dialog>
   );
 };

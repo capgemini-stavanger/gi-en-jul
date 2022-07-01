@@ -1,4 +1,4 @@
-import { Dialog, Typography } from "@material-ui/core";
+import { Dialog, Grid, Typography } from "@material-ui/core";
 import useStyles from "components/shared/Styles";
 import React from "react";
 import { Button } from "reactstrap";
@@ -15,29 +15,39 @@ const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleRes
 
   return (
     <Dialog open={open}>
-      <div>
-        <Typography className={classes.footerText} variant="h6">
-          {text}
-        </Typography>
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleResponse(false);
-            handleClose();
-          }}
-        >
-          Nei
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            handleResponse(true);
-            handleClose();
-          }}
-        >
-          Ja
-        </Button>
-      </div>
+      <Grid direction="row">
+        <Grid item>
+          <Typography className={classes.footerText} variant="h6">
+            {text}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Grid direction="row">
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleResponse(false);
+                  handleClose();
+                }}
+              >
+                Nei
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleResponse(true);
+                  handleClose();
+                }}
+              >
+                Ja
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </Dialog>
   );
 };

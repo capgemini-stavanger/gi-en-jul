@@ -120,7 +120,6 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
             </TableCell>
             <TableCell></TableCell>
           </TableRow>
-
           <TableRow>
             <TableCell>
               <Button variant="contained" endIcon={<SendIcon />} onClick={sendEmailPost}>
