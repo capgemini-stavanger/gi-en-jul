@@ -4,7 +4,7 @@ import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
 import family from "styling/img/familyTop.svg";
 import snowDown from "styling/img/snow_down.svg";
-import { ContactData } from "components/landing-page/Contact";
+import { CityData } from "components/municipalities/City";
 import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
@@ -12,7 +12,7 @@ import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import City from "components/municipalities/City";
 
 const Municipality = () => {
-  const [cities, setMunicipalities] = useState<ContactData[]>([]);
+  const [cities, setMunicipalities] = useState<CityData[]>([]);
   const classes = useStyles();
   const apiservice = new ApiService();
   useEffect(() => {
