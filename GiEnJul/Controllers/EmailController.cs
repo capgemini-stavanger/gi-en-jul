@@ -40,6 +40,18 @@ namespace GiEnJul.Controllers
             _emailTemplateBuilder = emailTemplateBuilder;
         }
 
+        // The notification template is used to wrap content with styling
+        private async Task<EmailTemplate> NotificationEmailTemplateBuilder(string content)
+        {
+            var emailTemplatename = EmailTemplateName.Notification;
+            var emailValuesDict = new Dictionary<string, string>
+                {
+                    { "content", content},
+                };
+            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+            return emailTemplate;
+        }
+
         // POST api/email/send
         [HttpPost("send")]
         [Authorize(Policy = "PostEmail")]
@@ -52,14 +64,8 @@ namespace GiEnJul.Controllers
             }
             try
             {
-                var emailTemplatename = EmailTemplateName.Notification;
-                var emailValuesDict = new Dictionary<string, string>
-                {
-                    { "content", email.Content},
-                };
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
-
-                await _emailClient.SendEmailAsync(email.EmailAddress, email.RecipientName, email.Subject, emailTemplate.Content);
+                var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content);
+                await _emailClient.SendEmailAsync(email.EmailAddress, email.RecipientName, email.Subject, notificationTemplate.Content);
             }
             catch (Exception e)
             {
@@ -92,7 +98,8 @@ namespace GiEnJul.Controllers
             {
                 try
                 {
-                    await _emailClient.SendEmailAsync(giver.Email, giver.Email, email.Subject, email.Content);
+                    var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content);
+                    await _emailClient.SendEmailAsync(giver.Email, giver.Email, email.Subject, notificationTemplate.Content);
                 }
                 catch (Exception e)
                 {
