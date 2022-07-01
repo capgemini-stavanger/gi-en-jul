@@ -26,6 +26,8 @@ import getGender from "common/functions/GetGender";
 import formatFamily from "common/functions/GetFamilySize";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
+import SendEmailContent from "components/shared/SendEmailContent";
+import SendIcon from "@material-ui/icons/Send";
 
 type Props = {
   data: RecipientType[] | [];
@@ -38,6 +40,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
 
   const [selectedRecipient, setSelectedRecipient] = useState({} as RecipientType);
   const [open, setOpen] = useState(false);
+  const [openMailDialog, setOpenMailDialog] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
@@ -142,6 +145,17 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
               <Phone /> {recipient.contactPhoneNumber}
               <br />
               <Mail /> {recipient.contactEmail}
+              <Typography className={classes.emailButton}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setOpenMailDialog(true), setSelectedRecipient(recipient);
+                  }}
+                  endIcon={<SendIcon />}
+                >
+                  Send Email
+                </Button>
+              </Typography>
               <br />
               {recipient.referenceId}
             </Typography>
@@ -197,6 +211,15 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
           </AccordionDetails>
         </Accordion>
       ))}
+
+      <SendEmailContent
+        open={selectedRecipient && openMailDialog}
+        handleClose={() => {
+          setOpenMailDialog(false);
+        }}
+        email={selectedRecipient.contactEmail}
+        fullName={selectedRecipient.contactFullName}
+      />
 
       <EditFamilyDialog
         open={open}

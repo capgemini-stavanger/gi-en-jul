@@ -98,13 +98,6 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               >
                 Send Email
               </Button>
-              <SendEmailContent
-                open={selectedGiver === giver && open}
-                handleClose={() => {
-                  setOpen(false);
-                }}
-                giver={giver}
-              ></SendEmailContent>
             </Typography>
           </AccordionDetails>
           {giver.isSuggestedMatch && (
@@ -131,6 +124,16 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               <Button>Slett giver</Button>
             </Typography>
           </AccordionDetails>
+
+          <SendEmailContent
+            open={selectedGiver === giver && open}
+            handleClose={() => {
+              setOpen(false);
+            }}
+            email={giver.email}
+            fullName={giver.fullName}
+          />
+
           <DeleteTypeDialog
             open={selectedGiver === giver && openDialog}
             handleClose={handleCloseDialog}

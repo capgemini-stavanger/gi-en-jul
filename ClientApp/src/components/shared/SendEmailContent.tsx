@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { GiverType } from "./Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
@@ -19,10 +18,13 @@ import SendIcon from "@material-ui/icons/Send";
 interface ISendSingleEmail {
   open: boolean;
   handleClose: () => void;
-  giver: GiverType;
+  email: string;
+  fullName: string;
 }
 
-const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, giver }) => {
+const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email, fullName }) => {
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
   const [html, setHtml] = React.useState("");
   const [subjectInput, setSubjectInput] = React.useState("");
   const { getAccessTokenSilently } = useAuth0();
@@ -45,19 +47,25 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, giver
   });
 
   async function sendEmailPost() {
+    if (subjectInput == "") {
+      setError(true);
+      setErrorText("Please enter a subject");
+    }
     await apiservice
       .post(
         "email/send",
         JSON.stringify({
-          EmailAddress: giver.email,
+          EmailAddress: email,
           Subject: subjectInput,
           Content: html,
-          RecipientName: giver.fullName,
+          RecipientName: fullName,
         })
       )
       .then((response) => {
         if (response.status === 200) {
           handleClose();
+          setError(false);
+          setErrorText("");
         }
       })
       .catch((errorStack) => {
@@ -72,11 +80,14 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, giver
       <TableCell rowSpan={10}>
         <TableRow>
           <TableCell>
-            <Typography variant="h6">Send email to {giver.email} </Typography>
+            <Typography variant="h6">Send email to {email} </Typography>
             <TextField
               fullWidth
               placeholder="Enter subject here"
               type="text"
+              variant="outlined"
+              error={error}
+              helperText={errorText}
               value={subjectInput}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setSubjectInput(e.target.value);
