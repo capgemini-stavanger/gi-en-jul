@@ -11,7 +11,6 @@ const Information: React.FC<Props> = ({ municipality }) => {
   return (
     <Container id="information" className={classes.sectionContainer}>
       <div>
-        <Typography>Her skal det stå informasjon om kommunen.</Typography>
         <Typography>{municipality}</Typography>
       </div>
     </Container>
