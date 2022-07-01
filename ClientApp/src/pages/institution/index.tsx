@@ -14,8 +14,8 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
     <>
       <NavBarLoggedIn role={"Institution"} />
       <Container className={classes.root}>
-      <RegistrationInfo />
-      <RegistrationForm accessToken={accessToken} />
+        <RegistrationInfo />
+        <RegistrationForm accessToken={accessToken} />
       </Container>
     </>
   );

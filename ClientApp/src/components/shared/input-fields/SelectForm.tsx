@@ -54,14 +54,11 @@ const SelectForm: FC<ISelect> = ({
         return <option value="">Ingen alternativer</option>;
       }
     } else {
-      return (
-        options &&
-        options.map((o) => (
-          <MenuItem key={`${name}_${o.text}`} value={o.value}>
-            {o.text}
-          </MenuItem>
-        ))
-      );
+      return options?.map((o) => (
+        <MenuItem key={`${name}_${o.text}`} value={o.value}>
+          {o.text}
+        </MenuItem>
+      ));
     }
   }, [value, options, isMob]);
 

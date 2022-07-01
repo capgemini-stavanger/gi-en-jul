@@ -4,8 +4,8 @@ export interface GiverType {
   email: string;
   eventName: string;
   fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
+  hasConfirmedMatch: boolean;
+  isSuggestedMatch: boolean;
   location: string;
   matchedRecipient?: string;
   matchedFamilyId?: string;
@@ -34,8 +34,8 @@ export interface RecipientType {
   familyMembers: PersonType[];
 
   eventName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
+  hasConfirmedMatch: boolean;
+  isSuggestedMatch: boolean;
   location: string;
   matchedGiver?: GiverType;
 }
@@ -44,6 +44,7 @@ export interface PersonType {
   rowKey: string;
   wish: string;
   age: number;
+  months: number;
   gender: Gender;
   comment: string;
 }

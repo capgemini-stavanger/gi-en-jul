@@ -20,7 +20,11 @@ import MessageDialog from "components/institution/MessageDialog";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
-  setAlert: (open?: boolean, message?:string, severity?:"error" | "info" | "success" | "warning") => void;
+  setAlert: (
+    open?: boolean,
+    message?: string,
+    severity?: "error" | "info" | "success" | "warning"
+  ) => void;
   viewErrorTrigger: number;
   person: IFormPerson;
 }
@@ -59,13 +63,12 @@ const InstitutionPerson: FC<IPersonProps> = ({
     updatePerson({ comment: message });
   };
 
-  const getSetter =
-    (target: keyof typeof state) => (value: typeof state[typeof target]) => {
-      setState((prev) => {
-        prev[target] = value;
-        return prev;
-      });
-    };
+  const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
+    setState((prev) => {
+      prev[target] = value;
+      return prev;
+    });
+  };
 
   useEffect(() => {
     updatePerson({
@@ -73,10 +76,9 @@ const InstitutionPerson: FC<IPersonProps> = ({
     });
   }, [state.validWishInput, person.wish]);
 
-
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
-    let intAge = Math.floor(parseInt(strAge));
+    const intAge = Math.floor(parseInt(strAge));
     strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
@@ -95,7 +97,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strMonths = e.target.value;
-    let intMonths = Math.floor(parseInt(strMonths));
+    const intMonths = Math.floor(parseInt(strMonths));
     strMonths = intMonths.toString();
     if (intMonths !== NaN) {
       if (intMonths > 11) {
@@ -110,20 +112,20 @@ const InstitutionPerson: FC<IPersonProps> = ({
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    let newGender = parseInt(e.target.value);
+    const newGender = parseInt(e.target.value);
     if (newGender !== NaN && newGender !== Gender.Unspecified) {
       updatePerson({ gender: newGender, isValidGender: true });
     }
   };
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.value;
+    const newInput = e.target.value;
     getSetter("wishInput")(newInput);
     updatePerson({ wish: newInput });
   };
 
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.checked;
+    const newInput = e.target.checked;
     getSetter("ageWish")(newInput);
     updatePerson({ wish: undefined });
   };
@@ -146,19 +148,19 @@ const InstitutionPerson: FC<IPersonProps> = ({
           onChange={onAgeChange}
         />
       </Grid>
-      {(parseInt(person.age) < 1 || !person.age) &&
-      <Grid item xs={1}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isInt]}
-          name="months"
-          type="number"
-          label="Måneder"
-          value={person.months || "0"}
-          onChange={onMonthsChange}
-        />
-      </Grid>
-}
+      {(parseInt(person.age) < 1 || !person.age) && (
+        <Grid item xs={1}>
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            validators={[isInt]}
+            name="months"
+            type="number"
+            label="Måneder"
+            value={person.months || "0"}
+            onChange={onMonthsChange}
+          />
+        </Grid>
+      )}
       <Grid item xs={2}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
@@ -175,21 +177,21 @@ const InstitutionPerson: FC<IPersonProps> = ({
           fullWidth
         />
       </Grid>
-      { !state.ageWish &&
-      <Grid item xs={2}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
-          setIsValids={getSetter("validWishInput")}
-          name="wish"
-          label="Gaveønske (husk størrelse)"
-          disabled={state.ageWish}
-          value={state.wishInput}
-          onChange={onWishInputChange}
-          fullWidth
-        />
-      </Grid>
-}
+      {!state.ageWish && (
+        <Grid item xs={2}>
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
+            setIsValids={getSetter("validWishInput")}
+            name="wish"
+            label="Gaveønske (husk størrelse)"
+            disabled={state.ageWish}
+            value={state.wishInput}
+            onChange={onWishInputChange}
+            fullWidth
+          />
+        </Grid>
+      )}
       <Grid item xs={2}>
         <FormControlLabel
           control={
@@ -205,34 +207,28 @@ const InstitutionPerson: FC<IPersonProps> = ({
         />
       </Grid>
       <Grid item xs={2}>
-      <Link
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowMessageDialog(true);
-        }}
-      >
-        { person.comment.length == 0 &&
-        <Typography>
-          Legg til en kommentar for denne personen
-        </Typography> ||
-        <Typography>
-          Se/endre kommentaren for denne personen
-        </Typography>
-        }
-      </Link>
+        <Link
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            setShowMessageDialog(true);
+          }}
+        >
+          {(person.comment.length == 0 && (
+            <Typography>Legg til en kommentar for denne personen</Typography>
+          )) || <Typography>Se/endre kommentaren for denne personen</Typography>}
+        </Link>
       </Grid>
       <Grid>
-      <MessageDialog
-        open={state.dialogOpen}
-        onClose={() => setShowMessageDialog(false)}
-        setMessage={setValidMessage}
-        message={person.comment}
-        setAlert={setAlert}
-      />
+        <MessageDialog
+          open={state.dialogOpen}
+          onClose={() => setShowMessageDialog(false)}
+          setMessage={setValidMessage}
+          message={person.comment}
+          setAlert={setAlert}
+        />
       </Grid>
     </Grid>
-    
   );
 };
 

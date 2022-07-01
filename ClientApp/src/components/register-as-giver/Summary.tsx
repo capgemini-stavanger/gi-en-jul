@@ -91,7 +91,7 @@ const SummaryRegistration: React.FC<Props> = ({
   const [isValidsState, setIsValidsState] = useState({ ...initIsValidsState });
 
   const allIsValid = () => {
-    for (let isValid in isValidsState) {
+    for (const isValid in isValidsState) {
       if (!isValidsState[isValid]) return false;
     }
     return true;
@@ -109,7 +109,7 @@ const SummaryRegistration: React.FC<Props> = ({
 
   const submit = async () => {
     if (!executeRecaptcha) return;
-    let recaptchaToken = await executeRecaptcha("register_giver");
+    const recaptchaToken = await executeRecaptcha("register_giver");
     await apiservice
       .post(
         "giver",
@@ -127,9 +127,8 @@ const SummaryRegistration: React.FC<Props> = ({
           callingback(true);
         }
       })
-      .catch((errorStack) => {
+      .catch(() => {
         callingback(false);
-        console.log(errorStack);
       });
   };
 
@@ -164,10 +163,7 @@ const SummaryRegistration: React.FC<Props> = ({
     }));
   };
 
-  const getPrivacyState = useCallback(
-    () => isValidsState.isValidPrivacy,
-    [isValidsState]
-  );
+  const getPrivacyState = useCallback(() => isValidsState.isValidPrivacy, [isValidsState]);
 
   useEffect(() => {
     if (!state.viewErrorTrigger) return;
@@ -181,9 +177,8 @@ const SummaryRegistration: React.FC<Props> = ({
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
       <Typography className={classes.infoText}>
-        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før
-        du sender inn. Sjekk gjerne at telefonnummer og epostadresse er riktig
-        skrevet.{" "}
+        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før du sender inn. Sjekk
+        gjerne at telefonnummer og epostadresse er riktig skrevet.{" "}
       </Typography>
       <Container>
         <Grid container className={classes.form}>
@@ -353,17 +348,11 @@ const SummaryRegistration: React.FC<Props> = ({
           <div className={classes.captchaContainer}>
             <Typography variant="caption" gutterBottom>
               Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
-              <Link
-                color="textSecondary"
-                href="https://policies.google.com/privacy"
-              >
+              <Link color="textSecondary" href="https://policies.google.com/privacy">
                 personvernerklæring
               </Link>{" "}
               og{" "}
-              <Link
-                color="textSecondary"
-                href="https://policies.google.com/terms"
-              >
+              <Link color="textSecondary" href="https://policies.google.com/terms">
                 vilkår for bruk
               </Link>{" "}
               gjelder.

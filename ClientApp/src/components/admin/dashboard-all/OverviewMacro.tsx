@@ -1,10 +1,6 @@
-import { Container, Grid, Typography} from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import ConnectButton from "./ConnectButton";
 import Giver from "./GiverSearch";
@@ -21,19 +17,18 @@ interface IOverviewMacro {
   accessToken: string;
 }
 
-  
 const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
-  const [selectedConnection, setSelectedConnection] =
-    useState<SelectedConnectionType>(initState);
+  const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
   const [giverData, setGiverData] = useState<GiverType[] | []>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const apiservice = new ApiService(accessToken); 
+  const apiservice = new ApiService(accessToken);
 
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
-      .then((resp) => {setGiverData(resp.data)})
+      .then((resp) => {
+        setGiverData(resp.data);
+      })
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -42,7 +37,8 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     await apiservice
       .get("admin/Overview/Recipients", { params: { location: location } })
       .then((resp) => {
-        setRecipientData(resp.data)})
+        setRecipientData(resp.data);
+      })
       .catch((errorStack) => {
         console.error(errorStack);
       });
@@ -57,7 +53,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     fetchGivers();
     fetchRecipients();
     setSelectedConnection(initState);
-  }
+  };
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
@@ -126,24 +122,19 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   return (
     <>
       <Container>
-        <Grid
-          container
-          direction="row"
-          justifyContent="center"
-          alignItems="flex-start"
-        >
+        <Grid container direction="row" justifyContent="center" alignItems="flex-start">
           <Grid item xs={2}>
-            <Statistics givers={giverData} recipients={recipientData}/>
+            <Statistics givers={giverData} recipients={recipientData} />
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h4" align="center">
               Givere
             </Typography>
-            <Giver 
-              data={giverData} 
+            <Giver
+              data={giverData}
               handleGiverChange={handleGiverChange}
               refreshData={() => refreshData()}
-              />
+            />
           </Grid>
           <Grid item xs={5}>
             <Typography variant="h4" align="center">
@@ -153,7 +144,6 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
               data={recipientData}
               refreshData={() => refreshData()}
               handleRecipientChange={handleRecipientChange}
-              
             />
           </Grid>
         </Grid>
