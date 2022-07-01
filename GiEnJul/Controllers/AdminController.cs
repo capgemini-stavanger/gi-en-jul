@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ClosedXML.Extensions;
 using GiEnJul.Clients;
+using GiEnJul.Auth;
 using GiEnJul.Dtos;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
@@ -60,7 +61,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Givers")]
-        [Authorize(Policy = "ReadGiver")]
+        [Authorize(Policy = Policy.ReadGiver)]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -82,7 +83,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("Overview/Recipients")]
-        [Authorize(Policy = "ReadRecipient")]
+        [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -98,7 +99,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("excel/delivery/{location}")]
-        [Authorize(Policy = "DownloadDeliveryExcel")]
+        [Authorize(Policy = Policy.DownloadDeliveryExcel)]
         public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -108,7 +109,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("connections/{location}")]
-        [Authorize(Policy = "ReadConnection")]
+        [Authorize(Policy = Policy.ReadConnection)]
         public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
         {
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -118,7 +119,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("event")]
-        [Authorize(Policy = "AddEvent")]
+        [Authorize(Policy = Policy.AddEvent)]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
             if (eventDto.StartDate <= DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
@@ -133,7 +134,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPut("person/{person_rowkey}/wish")]
-        [Authorize(Policy = "UpdateWish")]
+        [Authorize(Policy = Policy.UpdateWish)]
         public async Task<ActionResult> PutWishAsync(string person_rowkey, [FromBody] string wish)  
         {
             var person = await _personRepository.GetPersonByRowKey(person_rowkey);
@@ -145,7 +146,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpDelete("Connection")]
-        [Authorize(Policy = "DeleteConnection")]
+        [Authorize(Policy = Policy.DeleteConnection)]
         public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, connectionDto.RowKey);
@@ -216,7 +217,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AddConnection")]
+        [Authorize(Policy = Policy.AddConnection)]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
@@ -276,7 +277,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpDelete("Recipient")]
-        [Authorize(Policy = "DeleteRecipient")]
+        [Authorize(Policy = Policy.DeleteRecipient)]
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
             var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
@@ -316,7 +317,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPut("Recipient")]
-        [Authorize(Policy = "UpdateRecipient")]
+        [Authorize(Policy = Policy.UpdateRecipient)]
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
@@ -349,7 +350,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpDelete("Giver")]
-        [Authorize(Policy = "DeleteGiver")]
+        [Authorize(Policy = Policy.DeleteGiver)]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
             var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
@@ -366,7 +367,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
-        [Authorize(Policy = "GetUnsuggestedGivers")]
+        [Authorize(Policy = Policy.GetUnsuggestedGivers)]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();
@@ -386,7 +387,7 @@ namespace GiEnJul.Controllers
 
         [HttpGet("Suggestions/Recipient/{quantity}")]
         [HttpGet("Suggestions/Recipient")]
-        [Authorize(Policy = "GetUnsuggestedRecipients")]
+        [Authorize(Policy = Policy.GetUnsuggestedRecipients)]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
             if (quantity < 1) throw new ArgumentOutOfRangeException();

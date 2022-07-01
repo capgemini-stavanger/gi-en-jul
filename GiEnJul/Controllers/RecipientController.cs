@@ -1,5 +1,6 @@
 ﻿using GiEnJul.Dtos;
 using GiEnJul.Models;
+using GiEnJul.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
@@ -40,7 +41,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "AddRecipient")]
+        [Authorize(Policy = Policy.AddRecipient)]
         public async Task<ActionResult<(string FamilyId,string ReferenceId)>> PostAsync([FromBody] PostRecipientDto recipientDto)
         {
             var recipient = _mapper.Map<Recipient>(recipientDto);
@@ -73,7 +74,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "ReadRecipient")]
+        [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByInstitutionAsync([FromQuery] string institution)
         {
         

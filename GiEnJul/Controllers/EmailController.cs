@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
@@ -42,7 +43,7 @@ namespace GiEnJul.Controllers
 
         // POST api/email/send
         [HttpPost("send")]
-        [Authorize(Policy = "PostEmail")]
+        [Authorize(Policy = Policy.PostEmail)]
         public async Task<ActionResult> SendMail(PostEmailDto email)
         {
             _log.Information("Received email post with data {@0}", email);
@@ -71,7 +72,7 @@ namespace GiEnJul.Controllers
 
         // POST api/email/givers/location
         [HttpPost("givers/location")]
-        [Authorize(Policy = "PostEmail")]
+        [Authorize(Policy = Policy.PostEmail)]
         public async Task<ActionResult> SendToGiversInLocation(PostLocationEmailDto email)
         {
             // Try-Catch for finding users based on location
