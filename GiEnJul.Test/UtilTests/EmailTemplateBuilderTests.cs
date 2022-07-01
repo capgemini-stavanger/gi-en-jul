@@ -91,6 +91,7 @@ namespace GiEnJul.Test.UtilTests
             var data = new Dictionary<string, string>
             {
                 { "verifyLink", string.Empty },
+                { "denyLink", string.Empty },
                 { "familyTable", string.Empty },
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
