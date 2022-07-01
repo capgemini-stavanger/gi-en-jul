@@ -136,16 +136,14 @@ namespace GiEnJul.Controllers
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
 
-            // Check that both exists
             if (giver is null || recipient is null)
             {
-                return NotFound("Giver or Recipient not found"); // INSERT MESSAGE
+                return NotFound("Giver or Recipient not found"); 
             }
 
-            // Not allowed to deny after connecting
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return NotFound("Connection exists already"); // INSERT MESSAGE
+                return NotFound("Connection exists already");
             }
 
             var originalGiver = giver.ShallowCopy();

@@ -60,12 +60,12 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
 
   return (
     <>
-      {!feedbackSubmitted ? (
-        <Container className={classes.summaryDesign}>
-          <Grid container direction="column" justifyContent="center" alignItems="center">
-            <Grid item>
-              <img className={classes.imageSnow} src={snowDown}></img>
-            </Grid>
+      <Container className={classes.summaryDesign}>
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Grid item>
+            <img className={classes.imageSnow} src={snowDown}></img>
+          </Grid>
+          {!feedbackSubmitted ? (
             <Grid item>
               <Container className={classes.giverForm}>
                 <Typography className={classes.headingBold}>
@@ -98,33 +98,23 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                 </Button>
               </Container>
             </Grid>
-            <Grid item className={classes.imageContainer}>
-              <img className={classes.backgroundImage} src={snowmanFull}></img>
-            </Grid>
-          </Grid>
-        </Container>
-      ) : (
-        <Container className={classes.summaryDesign}>
-          <Grid container direction="column" justifyContent="center" alignItems="center">
-            <Grid item>
-              <img className={classes.imageSnow} src={snowDown}></img>
-            </Grid>
+          ) : (
             <Grid item>
               <Container className={classes.giverForm}>
                 <Typography className={classes.headingBold}>
-                  Tusen takk for feedback <br />
+                  Takk for tilbakemeldingen! <br />
                 </Typography>
                 <Typography className={classes.paragraph}>
-                  Om det skulle være noe mer, vennligst kontakt oss.
+                  Om det er noe mer du lurer på, vennligst ta kontakt
                 </Typography>
               </Container>
             </Grid>
-            <Grid item className={classes.imageContainer}>
-              <img className={classes.backgroundImage} src={snowmanFull}></img>
-            </Grid>
+          )}
+          <Grid item className={classes.imageContainer}>
+            <img className={classes.backgroundImage} src={snowmanFull}></img>
           </Grid>
-        </Container>
-      )}
+        </Grid>
+      </Container>
     </>
   );
 };
