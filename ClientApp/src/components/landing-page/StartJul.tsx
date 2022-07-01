@@ -13,13 +13,13 @@ const StartJul = () => {
       <Container id="start" className={classes.root} maxWidth={false}>
         <div className={classes.headLineContainer}>
           <Typography className={classes.textHeadline}>
-            Hvordan du starter Gi en Jul i din kommune
+            Hvordan du starter Gi en jul i din kommune
           </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <Typography className={classes.sectionContainer}>
-              For å starte Gi en Jul i din kommune kan du ta kontakt med kontaktpersonen for
+              For å starte Gi en jul i din kommune kan du ta kontakt med kontaktpersonen for
               Stavanger kommune.
             </Typography>
             <img className={classes.familyImage} src={family}></img>
