@@ -25,5 +25,6 @@ namespace GiEnJul.Models
         public string Instagram { get; set; }
         public string Image { get; set; }
         public string PhoneNumber {  get; set; }
+      
     }
 }

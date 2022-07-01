@@ -23,6 +23,7 @@ export interface ContactData {
   instagram: string;
   image: string;
   phoneNumber: string;
+  information: string; //denne må være her til den nye tabellen for CMS kommer
 }
 
 interface Props {
