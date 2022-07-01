@@ -13,6 +13,8 @@ import Information from "./information";
 
 export interface CityData {
   city: string;
+  image: string;
+  information: string;
 }
 
 interface Props {
@@ -44,7 +46,11 @@ const City: React.FC<Props> = ({ cities }) => {
               <Typography>{val.city}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Information municipality={val.city} />
+              <Information
+                municipality={val.city}
+                image={val.image}
+                information={val.information}
+              />
             </AccordionDetails>
           </Accordion>
         </Grid>

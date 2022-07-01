@@ -17,6 +17,20 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(4),
     },
   },
+  howImage: {
+    objectFit: "cover",
+    MaxHeight: "100%",
+    width: "100%",
+    height: "8em",
+    padding: theme.spacing(0),
+    bottom: theme.spacing(0),
+    display: "flex",
+    alignItems: "flex-end",
+  },
+  informationCard: {
+    width: "280%",
+    height: "80%",
+  },
   headLineContainer: {
     textAlign: "center",
     margin: theme.spacing(1),
