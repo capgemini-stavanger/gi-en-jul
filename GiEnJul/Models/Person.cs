@@ -16,6 +16,11 @@
             return $"<strong>{GenderToString()} {Age} år:</strong> {(string.IsNullOrEmpty(Wish) ? "  Her du kan selv finne alderstilpasset gave" : Wish)} {(string.IsNullOrEmpty(Comment) ? " " : ", Kommentar til gave: "+Comment)}";
         }
 
+        public string GetGenderAge()
+        {
+            return $"<strong>{GenderToString()} {Age} år</strong>";
+        }
+
         private string GenderToString()
         {
             switch (Gender)
