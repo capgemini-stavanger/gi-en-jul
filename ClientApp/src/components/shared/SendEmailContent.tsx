@@ -133,7 +133,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
         handleClose={() => {
           setOpenConfBox(false);
         }}
-        text={"You just sent a mail"}
+        text={confText}
       />
     </>
   );
