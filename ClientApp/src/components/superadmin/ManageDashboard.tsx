@@ -1,4 +1,4 @@
-import { Button, Tab, Typography } from "@material-ui/core";
+import { Tab, Typography } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
@@ -12,41 +12,29 @@ function ManageDashboard() {
     setStep(newValue);
   };
 
-  function handleClick() {
-    alert("You clicked the button!");
-  }
-
-  const options = ["FAQ", "Kommune Informasjon", "Slett Brukere", "Legg til Bruker"];
-  const tabList = options.map((option, index) => {
-    return <Tab key={index} label={option} value={String(index + 1)} />;
-  });
-
-  const activeLocations = ["Stavanger", "Sola", "Sandnes", "Gjesdal"];
-
   return (
     <Container className={classes.root}>
-      <Typography className={classes.heading} align="center" variant="h1">
+      <Typography className={classes.heading} align="center" variant="h3">
         ManageDashboard
       </Typography>
       <TabContext value={step}>
         <TabList onChange={handleChange} centered>
-          {tabList}
+          <Tab label="FAQ" value="1" />
+          <Tab label="Kommune Informasjon" value="2" />
+          <Tab label="Legg til Brukere" value="3" />
+          <Tab label="Slett Brukere" value="4" />
         </TabList>
         <TabPanel value="1">
-          {/* todo: component for changing the FAQ values */}
-          <Typography>component for changing the FAQ values </Typography>
+          <Typography>Placeholder - FAQ</Typography>
         </TabPanel>
         <TabPanel value="2">
-          {/* todo: component for changing the Kommune Information values */}
-          <Typography>component for changing the Kommune Information values </Typography>
+          <Typography>Placeholder - Kommune Informasjon</Typography>
         </TabPanel>
         <TabPanel value="3">
-          {/* todo: component for deleting existing users */}
-          <Typography>component for deleting existing users </Typography>
+          <Typography>Placeholder - Legg til Brukere</Typography>
         </TabPanel>
         <TabPanel value="4">
-          {/* todo: component for adding new users */}
-          <Typography>component for adding new users </Typography>
+          <Typography>Placeholder - Slett Brukere</Typography>
         </TabPanel>
       </TabContext>
     </Container>
