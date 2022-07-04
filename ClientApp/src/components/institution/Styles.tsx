@@ -11,6 +11,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "15px",
     margin: "auto",
   },
+  suggestionPopover: {
+    padding: "15px",
+    margin: "auto",
+  },
 }));
 
 export default useStyles;
