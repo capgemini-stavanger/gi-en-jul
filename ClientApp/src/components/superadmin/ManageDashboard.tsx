@@ -21,8 +21,7 @@ function ManageDashboard() {
         <TabList onChange={handleChange} centered>
           <Tab label="FAQ" value="1" />
           <Tab label="Kommune Informasjon" value="2" />
-          <Tab label="Legg til Brukere" value="3" />
-          <Tab label="Slett Brukere" value="4" />
+          <Tab label="Legg til/Slett Brukere" value="3" />
         </TabList>
         <TabPanel value="1">
           <Typography>Placeholder - FAQ</Typography>
@@ -31,10 +30,7 @@ function ManageDashboard() {
           <Typography>Placeholder - Kommune Informasjon</Typography>
         </TabPanel>
         <TabPanel value="3">
-          <Typography>Placeholder - Legg til Brukere</Typography>
-        </TabPanel>
-        <TabPanel value="4">
-          <Typography>Placeholder - Slett Brukere</Typography>
+          <Typography>Placeholder - Legg til/Slett Brukere</Typography>
         </TabPanel>
       </TabContext>
     </Container>
