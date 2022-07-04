@@ -12,7 +12,7 @@ const SuggestionPopover: React.FC = () => {
   const [chosenSuggestions, setChosenSuggestions] = useState([false, false, false]);
   const suggestionData = ["Genser", "Bukse", "Gavekort"];
 
-  const open = Boolean(anchorEl); // Why does this work?
+  const open = Boolean(anchorEl);
   const openPopover = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
