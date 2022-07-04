@@ -12,7 +12,6 @@ const SuggestionPopover: React.FC = () => {
   const [chosenSuggestions, setChosenSuggestions] = useState([false, false, false]);
   const suggestionData = ["Genser", "Bukse", "Gavekort"];
 
-  const open = Boolean(anchorEl);
   const openPopover = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
@@ -39,7 +38,7 @@ const SuggestionPopover: React.FC = () => {
         <EmojiObjectsOutlinedIcon />
       </Button>
       <Popover
-        open={open}
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={closePopover}
         anchorOrigin={{
