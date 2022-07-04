@@ -28,6 +28,7 @@ function LoginRedirector() {
     else if (role === "Unspecified") return "Unspecified";
     else if (role === "Admin") return "Admin";
     else if (role === "Institution") return "Institution";
+    else if (role === "SuperAdmin") return "SuperAdmin";
     else return "Error";
   }
 
@@ -45,6 +46,12 @@ function LoginRedirector() {
         <ErrorPage
           ErrorText={"Du har ikke blitt tildelt en rolle enda, tilkall din GiEnJul admin"}
         />
+      );
+    case "SuperAdmin":
+      return (
+        <>
+          <AdminTab accessToken={userAccessToken} location={location ?? ""} />
+        </>
       );
     case "Admin":
       return (
