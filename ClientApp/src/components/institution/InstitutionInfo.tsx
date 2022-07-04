@@ -1,4 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
+import SuggestionPopover from "./SuggestionPopover";
 
 const information: string[] = [
   "Før du melder inn en familie må familien ha sagt ja til å bli med, og du har all informasjon som trengs nedenfor.",
@@ -17,7 +18,10 @@ const RegistrationInfo = () => {
   return (
     <Grid container spacing={3} direction="column">
       <Grid item>
-        <Typography variant="h3">Registrer familie</Typography>
+        <Typography variant="h3">
+          Registrer familie
+          <SuggestionPopover />
+        </Typography>
       </Grid>
       <Grid item>
         <Typography variant="h6">
