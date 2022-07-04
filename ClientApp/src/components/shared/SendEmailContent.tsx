@@ -69,7 +69,6 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
       .then((response) => {
         if (response.status === 200) {
           handleClose();
-          // todo: Open dialog box here, all good
           setConfText("Sendte mail til: " + fullName + " <" + email + ">");
           setOpenConfBox(true);
           setError(false);
@@ -78,7 +77,6 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
       })
       .catch((errorStack) => {
         console.error(errorStack);
-        // todo: open dialog box here, not good
         setConfText("Problem oppsto under sending av mail!");
         setOpenConfBox(true);
       });
