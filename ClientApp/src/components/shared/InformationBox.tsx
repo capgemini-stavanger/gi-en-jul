@@ -21,9 +21,13 @@ const InformationBox: React.FC<IInforrmation> = ({ open, handleClose, text }) =>
           </Typography>
         </Grid>
         <Grid item>
-          <Button variant="contained" onClick={handleClose}>
-            Close
-          </Button>
+          <Grid container direction="row" justifyContent="center">
+            <Grid item>
+              <Button variant="contained" onClick={handleClose}>
+                Close
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Dialog>
