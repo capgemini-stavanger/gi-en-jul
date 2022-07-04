@@ -1,4 +1,4 @@
-import { Tab } from "@material-ui/core";
+import { Tab, Typography } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import ScrollToTop from "components/shared/ScrollToTop";
