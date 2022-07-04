@@ -19,14 +19,17 @@ const SuggestionPopover: React.FC = () => {
   const closePopover = () => {
     setAnchorEl(null);
   };
-
-  const handleToggle = (index: number) => (e: React.MouseEvent<HTMLInputElement>) => {
+  const handleToggle = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const editSuggestion = [...chosenSuggestions];
-    editSuggestion[index] = !editSuggestion[index];
+    editSuggestion[index] = e.target.checked;
     setChosenSuggestions(editSuggestion);
-
-    // Use prev
-    // Remove event if not used?
+  };
+  const resetChosenSuggestions = () => {
+    setChosenSuggestions([false, false, false]);
+  };
+  const submitWishlist = () => {
+    setAnchorEl(null);
+    resetChosenSuggestions();
   };
 
   return (
@@ -48,13 +51,17 @@ const SuggestionPopover: React.FC = () => {
         <List>
           {suggestionData.map((onske, index) => {
             return (
-              <ListItem key={index} button={true} onClick={handleToggle(index)}>
-                {onske} <Checkbox checked={chosenSuggestions[index]}></Checkbox>
+              <ListItem key={index}>
+                {onske}
+                <Checkbox
+                  checked={chosenSuggestions[index]}
+                  onChange={handleToggle(index)}
+                ></Checkbox>
               </ListItem>
             );
           })}
         </List>
-        <Button> Add to wishlist </Button>
+        <Button onClick={submitWishlist}> Add to wishlist </Button>
       </Popover>
     </>
   );
