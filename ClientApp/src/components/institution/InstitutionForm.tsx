@@ -310,19 +310,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
-  const displayHelpText = () => {
-    setState((prev) => ({
-      ...prev,
-      displayText: true,
-    }));
-  };
-  const hideHelpText = () => {
-    setState((prev) => ({
-      ...prev,
-      displayText: false,
-    }));
-  };
-
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
 
