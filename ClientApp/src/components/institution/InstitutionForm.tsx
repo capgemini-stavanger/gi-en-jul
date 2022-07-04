@@ -1,14 +1,11 @@
 import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import HelpIcon from "@material-ui/icons/Help";
 import { useState } from "react";
 import { DESSERTS } from "common/constants/Desserts";
 import { DINNERS } from "common/constants/Dinners";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import Tooltip from "@material-ui/core/Tooltip";
 import ConfirmationDialog from "components/institution/ConfirmationDialog";
 import FamilyDialog from "components/institution/FamilyDialog";
 import {
@@ -20,6 +17,7 @@ import FormFood from "./FormFood";
 import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
+import CustomTooltip from "./CustomTooltip";
 
 type PersonType = {
   Wish?: string;
@@ -312,19 +310,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
-  const displayHelpText = () => {
-    setState((prev) => ({
-      ...prev,
-      displayText: true,
-    }));
-  };
-  const hideHelpText = () => {
-    setState((prev) => ({
-      ...prev,
-      displayText: false,
-    }));
-  };
-
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
 
@@ -426,7 +411,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       <form className="thisclass" onSubmit={onSubmitForm}>
         <Grid container spacing={4} direction="column">
           <Grid item>
-            <Typography variant="h5">Tidligere registrerte familier </Typography>
+            <Typography variant="h5">
+              Tidligere registrerte familier{" "}
+              <CustomTooltip
+                iconType={false}
+                content="Her kan du se oversikten over alle registrerte familier i din kommune, i tillegg til å redigere familier"
+              />
+            </Typography>
             <Button onClick={openFamilyDialog} variant="contained" color="primary">
               {" "}
               Klikk her for å se familieoversikt{" "}
@@ -606,23 +597,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               error={formDataState.pidError}
               helperText={formDataState.pidHelperText}
             />
-            <Tooltip title="Display ID info" aria-label="Display ID info" placement="right">
-              {state.displayText ? (
-                <HelpIcon onClick={hideHelpText} />
-              ) : (
-                <HelpOutlineIcon onClick={displayHelpText} />
-              )}
-            </Tooltip>
+            <CustomTooltip
+              iconType={false}
+              content="ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom."
+            />
           </Grid>
-          <Typography>
-            {state.displayText && (
-              <Typography>
-                {" "}
-                ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type
-                ID kan du la denne stå tom.
-              </Typography>
-            )}
-          </Typography>
 
           <Grid item className="mx-5">
             <Button variant="contained" type="submit" color="primary">
