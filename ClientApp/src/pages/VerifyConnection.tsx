@@ -28,7 +28,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
 
   useEffect(() => {
     apiservice
-      .post(`verify/${giverRowKey}/${recipientRowKey}/${partitionKey}`, {})
+      .post(`connection/${giverRowKey}/${recipientRowKey}/${partitionKey}/verify`, {})
       .then((response) => {
         if (response.status == 200) {
           setContent(

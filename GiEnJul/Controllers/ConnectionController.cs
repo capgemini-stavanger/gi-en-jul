@@ -11,13 +11,14 @@ using System;
 using System.Threading.Tasks;
 using GiEnJul.Utilities.EmailTemplates;
 using System.Collections.Generic;
+using GiEnJul.Dtos;
+using System.Linq;
 
 namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
-    [Route("api/verify")]
     [ApiController]
-    public class VerifyConnectionController : ControllerBase
+    public class ConnectionController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
         private readonly IGiverRepository _giverRepository;
@@ -30,7 +31,7 @@ namespace GiEnJul.Controllers
         private readonly IEmailClient _emailClient;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
-        public VerifyConnectionController(
+        public ConnectionController(
             IEventRepository eventRepository,
             IGiverRepository giverRepository,
             IRecipientRepository recipientRepository,
@@ -55,7 +56,7 @@ namespace GiEnJul.Controllers
         }
 
         // POST: /verify/giverGuid/recipientGuid/event_location
-        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}")]
+        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/verify")]
         public async Task VerifyConnection(string giverRowKey, string recipientRowKey, string partitionkey)
         {
             //Populate recipient and giver using keys
@@ -127,6 +128,55 @@ namespace GiEnJul.Controllers
                 _log.Error("An exception was thrown", e);
                 throw;
             }
+        }
+
+        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/deny")]
+        public async Task<ActionResult> DenyConnection(string giverRowKey, string recipientRowKey, string partitionkey, PostFeedbackGiverDto feedback)
+        {
+            var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
+            var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
+
+            if (giver is null || recipient is null)
+            {
+                return NotFound("Giver or Recipient not found"); 
+            }
+
+            if (_connectionRepository.ConnectionExists(giver, recipient))
+            {
+                return NotFound("Connection exists already");
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = null;
+
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = null;
+
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound("Unable to update connection");
+            }
+
+            if (feedback.DeleteGiver) // Delete giver
+            {
+                await _giverRepository.DeleteAsync(giver);
+            }
+
+            return Ok();
         }
     }
 }

@@ -243,7 +243,8 @@ namespace GiEnJul.Controllers
 
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-                var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}";
+                var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/verify";
+                var denyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/deny";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 
@@ -263,6 +264,7 @@ namespace GiEnJul.Controllers
                 {
                     { "familyTable", familyTable },
                     { "verifyLink", verifyLink },
+                    { "denyLink", denyLink },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
