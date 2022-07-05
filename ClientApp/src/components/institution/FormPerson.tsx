@@ -18,7 +18,7 @@ import { isNotNull, isInt } from "components/shared/input-fields/validators/Vali
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
 import FormWish, { getFormWish } from "./FormWish";
-import { initFormDataState } from "./InstitutionForm";
+import RegistrationForm, { initFormDataState } from "./InstitutionForm";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
@@ -29,6 +29,8 @@ interface IPersonProps {
   ) => void;
   viewErrorTrigger: number;
   person: IFormPerson;
+  // updateWish: (newWishData: { [target: string]: unknown }) => void;
+  deleteWish: () => void;
 }
 
 const initState: { [data: string]: any } = {
@@ -43,6 +45,7 @@ const initState: { [data: string]: any } = {
 
 const InstitutionPerson: FC<IPersonProps> = ({
   updatePerson,
+  deleteWish,
   deletePerson,
   setAlert,
   viewErrorTrigger,
@@ -120,10 +123,11 @@ const InstitutionPerson: FC<IPersonProps> = ({
       updatePerson({ gender: newGender, isValidGender: true });
     }
   };
-
+  /*
   const deleteWish = (index: number) => {
     person.wishes.splice(index, 1);
   };
+  */
 
   const addWish = () => {
     person.wishes.push(getFormWish());
@@ -185,7 +189,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
             cat={wish.cat}
             viewErrorTrigger={state.viewErrorTrigger}
             updateWish={(newWishData: { [target: string]: unknown }) => updatePerson(newWishData)}
-            deleteWish={() => deleteWish(i)}
+            deleteWish={() => deleteWish()}
           />
         );
       })}
