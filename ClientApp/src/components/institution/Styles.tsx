@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "15px",
     margin: "auto",
   },
+  divider: {
+    background: theme.palette.primary.light,
+  },
 }));
 
 export default useStyles;
