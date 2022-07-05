@@ -12,12 +12,12 @@ namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SuperAdminController : ControllerBase
+    public class CmsController : ControllerBase
     {
         private readonly ICmsRepository _cmsRepository;
         private readonly IMapper _mapper;
 
-        public SuperAdminController(
+        public CmsController(
             ICmsRepository cmsRepository,
             IMapper mapper)
         {
