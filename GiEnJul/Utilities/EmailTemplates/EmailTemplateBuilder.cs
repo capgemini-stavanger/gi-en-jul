@@ -30,7 +30,7 @@ namespace GiEnJul.Utilities
             var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}{name}.html");
             var style = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}TemplateStyle.css");
             style = "<style>" + style + "</style>";
-            content = style + content;
+            content = "<!DOCTYPE html> <html>" + style + content + "</html>";
 
             data.Add("headerImage", headerImage);
 
