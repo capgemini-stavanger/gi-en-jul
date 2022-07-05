@@ -26,13 +26,34 @@ namespace GiEnJul.Utilities
 
             var resourceManager = new ResourceManager(typeof(EmailTitles));
             var templatePath = string.Format("{0}Utilities{0}EmailTemplates{0}Files{0}", Path.DirectorySeparatorChar);
-            var headerImage = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.0ff49710.svg");
             var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}{name}.html");
-            var style = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}TemplateStyle.css");
-            style = "<style>" + style + "</style>";
-            content = "<!DOCTYPE html> <html>" + style + content + "</html>";
 
-            data.Add("headerImage", headerImage);
+            // Read style, apply to body
+            string[] emailCSS = { // Read from css file instead
+                "background-color: rgb(224, 243, 244);",
+                "color: rgba(0, 0, 0, 0.54);",
+                "max-width: 70em;",
+                "padding: 15px;",
+                "margin: auto;",
+
+            };
+            var emailStyle = "";
+            for (int i = 0; i < emailCSS.Length; i++)
+            {
+                emailStyle += emailCSS[i];
+            }
+            emailStyle = "\"" + emailStyle + "\"";
+
+            // Read image
+            var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.png");
+            var imgString = Convert.ToBase64String(imgFile);
+            var imgSrc = "\"data:image/png;base64,"+imgString+"\"";
+            var img = "<img src=" + imgSrc + "/>";
+
+            // Combine
+            var body = "<div style=" + emailStyle + ">" + img + content + "</div>";
+
+            content = "<!DOCTYPE html> <html>" + body + "</html>";
 
             foreach (var item in data)
             {
