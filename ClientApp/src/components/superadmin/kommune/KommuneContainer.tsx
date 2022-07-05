@@ -15,6 +15,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
       .then((resp) => {
         // temp
         console.log(resp.data);
+        console.log(activeLocations);
         setActiveLocations(resp.data);
       })
       .catch((errorStack) => {

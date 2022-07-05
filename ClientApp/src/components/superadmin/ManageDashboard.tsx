@@ -1,6 +1,6 @@
 import { Tab, Typography } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import ApiService from "common/functions/apiServiceClass";
+// import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
 import { Container } from "reactstrap";
@@ -13,7 +13,7 @@ interface IManageDashboard {
 const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
   const classes = useStyles();
   const [tab, setTab] = useState<string>("1");
-  const apiservice = new ApiService(accessToken);
+  // const apiservice = new ApiService(accessToken);
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);
