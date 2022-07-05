@@ -11,7 +11,7 @@ export interface IFormWish {
 }
 
 interface IWishProps {
-  cat: IFormWish;
+  cat: string;
   viewErrorTrigger: number;
   updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
@@ -49,12 +49,13 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
   };
 
   return (
-    <Grid container spacing={5} alignItems="center">
+    <Grid container spacing={6} alignItems="center">
       <Grid item>
         <IconButton color="secondary" onClick={deleteWish}>
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
+
       {!state.ageWish && (
         <Grid item xs={1}>
           <InputValidator
