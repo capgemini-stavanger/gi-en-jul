@@ -13,9 +13,9 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
     apiservice
       .get("events/contacts", {})
       .then((resp) => {
-        // temp
-        console.log(resp.data);
-        console.log(activeLocations);
+        // TEMP
+        alert(resp.data);
+        alert(activeLocations);
         setActiveLocations(resp.data);
       })
       .catch((errorStack) => {
