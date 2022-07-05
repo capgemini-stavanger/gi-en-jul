@@ -18,6 +18,7 @@ import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 import CustomTooltip from "./CustomTooltip";
+import InstitutionWish from "./FormWish";
 
 type PersonType = {
   Wish?: string;
@@ -511,6 +512,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   );
                 })}
               </Grid>
+              <InstitutionWish />
               <Grid item>
                 <Button
                   startIcon={

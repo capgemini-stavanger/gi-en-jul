@@ -9,7 +9,7 @@ interface IWishProps {
   wish: IFormWish;
 }
 
-const InstitutionWish: FC<IFormWish> = ({}) => {
+const InstitutionWish = ({}) => {
   return (
     <Grid>
       <Grid item>
@@ -18,3 +18,4 @@ const InstitutionWish: FC<IFormWish> = ({}) => {
     </Grid>
   );
 };
+export default InstitutionWish;
