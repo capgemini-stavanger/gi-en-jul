@@ -28,14 +28,14 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-         [HttpGet("getall")]
+         [HttpGet("GetAll")]
          [Authorize(Policy = Policy.SuperAdmin)]
            public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
          {
             var content = await _cmsRepository.GetCmsByContentType(contentType);
             return content;
          }
-        [HttpGet("Getsingle")]
+        [HttpGet("GetSingle")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable> GetSingleContent([FromQuery] string contentType, string index)
         {
@@ -43,7 +43,7 @@ namespace GiEnJul.Controllers
             return content;
         }
 
-        [HttpPost("insert")]
+        [HttpPost("Insert")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
         {
