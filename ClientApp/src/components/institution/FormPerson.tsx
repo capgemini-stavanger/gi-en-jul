@@ -7,6 +7,7 @@ import {
   SvgIcon,
   IconButton,
   Typography,
+  Button,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
@@ -17,6 +18,7 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
+import { Categories, ICategories } from "./mockDatabase";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
@@ -184,7 +186,11 @@ const InstitutionPerson: FC<IPersonProps> = ({
             validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
             setIsValids={getSetter("validWishInput")}
             name="wish"
-            label="Gaveønske (husk størrelse)"
+            type="select"
+            label="Gaveønske"
+            options={Categories.map((o: ICategories) => {
+              return { value: o.type, text: o.type };
+            })}
             disabled={state.ageWish}
             value={state.wishInput}
             onChange={onWishInputChange}
