@@ -1,18 +1,20 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Checkbox, FormControlLabel, Grid, IconButton, SvgIcon } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
 import { useState } from "react";
+import ClearIcon from "@material-ui/icons/Clear";
 
-interface IFormWish {
+export interface IFormWish {
   cat: string;
   size?: string;
 }
 
 interface IWishProps {
-  // wish: IFormWish;
+  cat: IFormWish;
   viewErrorTrigger: number;
   updateWish: (newWishData: { [target: string]: unknown }) => void;
+  deleteWish: () => void;
 }
 
 const initState: { [data: string]: any } = {
@@ -20,7 +22,11 @@ const initState: { [data: string]: any } = {
   ageWish: false,
 };
 
-const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish }) => {
+export const getFormWish: () => IFormWish = () => ({
+  cat: "",
+});
+
+const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, deleteWish }) => {
   const [state, setState] = useState({ ...initState });
 
   const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
@@ -36,10 +42,21 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish })
     updateWish({ wish: newInput });
   };
 
+  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.checked;
+    getSetter("ageWish")(newInput);
+    updateWish({ wish: undefined });
+  };
+
   return (
-    <Grid>
+    <Grid container spacing={5} alignItems="center">
+      <Grid item>
+        <IconButton color="secondary" onClick={deleteWish}>
+          <SvgIcon component={ClearIcon} />
+        </IconButton>
+      </Grid>
       {!state.ageWish && (
-        <Grid item>
+        <Grid item xs={1}>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             validators={[isNotNull]}
@@ -56,6 +73,20 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish })
           ></InputValidator>
         </Grid>
       )}
+      <Grid item xs={2}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={state.ageWish}
+              onChange={onAgeWishChange}
+              name="isAgeWish"
+              color="primary"
+            />
+          }
+          className="my-0"
+          label="Giver kjøper alderstilpasset gave"
+        />
+      </Grid>
     </Grid>
   );
 };

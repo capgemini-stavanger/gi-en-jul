@@ -18,15 +18,19 @@ import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 import CustomTooltip from "./CustomTooltip";
-import InstitutionWish from "./FormWish";
+import { getFormWish, IFormWish } from "./FormWish";
 import FormWish from "./FormWish";
 
 type PersonType = {
-  Wish?: string;
+  Wish?: string; //person typen må ha liste av wishtype/IFormWish
   Age: number;
   Months: number;
   Gender: Gender;
   Comment: string;
+};
+
+type WishType = {
+  Cat?: string; //category
 };
 
 type submittype = {
@@ -41,6 +45,7 @@ type submittype = {
   Institution?: string;
   ReferenceId?: string;
   FamilyMembers?: PersonType[];
+  WishList?: WishType[]; //trenger ikke denne dersom persontype inneholder en liste av ønsker
 };
 
 interface IFoodFormData {
@@ -90,7 +95,8 @@ const initState: {
 };
 
 interface IContactState {
-  persons: IFormPerson[];
+  persons: IFormPerson[]; //kan hente ut persons.wishes (liste inni listen)
+  wishes: IFormWish[];
   location: string;
   dinner: IFoodFormData;
   dessert: IFoodFormData;
@@ -103,6 +109,7 @@ interface IContactState {
 
 const initFormDataState: () => IContactState = () => ({
   persons: [getFormPerson()],
+  wishes: [getFormWish()],
   location: "",
   dinner: initFoodFormData,
   dessert: initFoodFormData,
@@ -147,6 +154,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
+  //denne funksjonen bruker når en person trykker på legg til gaveønske, men 1 gaveønske skal være inkludert i legg til familiemedlem knappen.
+  const addWish = () => {
+    setFormDataState((prev) => ({
+      ...prev,
+      wishes: [...prev.wishes, getFormWish()],
+    }));
+  };
+
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
     item.contact = {
@@ -173,9 +188,26 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     });
   };
 
+  const updateWish = (index: number, newWishData: { [target: string]: unknown }) => {
+    setFormDataState((prev) => {
+      prev.wishes[index] = {
+        ...prev.wishes[index],
+        ...newWishData,
+      } as IFormWish;
+      return { ...prev };
+    });
+  };
+
   const deletePerson = (index: number) => {
     setFormDataState((prev) => {
       prev.persons.splice(index, 1);
+      return { ...prev };
+    });
+  };
+
+  const deleteWish = (index: number) => {
+    setFormDataState((prev) => {
+      prev.wishes.splice(index, 1);
       return { ...prev };
     });
   };
@@ -335,6 +367,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       personsList.push(person1);
     });
 
+    const wishesList = Array<WishType>();
+    formDataState.wishes.forEach((wish) => {
+      const wish1: WishType = {
+        Cat: wish.cat,
+      };
+      wishesList.push(wish1);
+    });
+
     const submit: submittype = {
       Dinner: getDinner(),
       Dessert: getDessert(),
@@ -346,6 +386,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
+      WishList: wishesList,
     };
 
     setState((prev) => ({
@@ -513,18 +554,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   );
                 })}
               </Grid>
-              {formDataState.persons.map((p, i) => {
-                return (
-                  <FormWish
-                    key={p.uuid}
-                    viewErrorTrigger={state.viewErrorTrigger}
-                    updateWish={(newWishData: { [target: string]: unknown }) =>
-                      updatePerson(i, newWishData)
-                    }
-                  />
-                );
-              })}
-
               <Grid item>
                 <Button
                   startIcon={
@@ -546,6 +575,43 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   Legg til flere
                 </Button>
               </Grid>
+            </Grid>
+
+            <Grid item>
+              {formDataState.wishes.map((p, i) => {
+                return (
+                  <FormWish
+                    key={p.cat}
+                    cat={p}
+                    viewErrorTrigger={state.viewErrorTrigger}
+                    updateWish={(newWishData: { [target: string]: unknown }) =>
+                      updateWish(i, newWishData)
+                    }
+                    deleteWish={() => deleteWish(i)}
+                  />
+                );
+              })}
+            </Grid>
+            <Grid item>
+              <Button
+                startIcon={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    className="bi bi-plus"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                  </svg>
+                }
+                variant="contained"
+                color="primary"
+                onClick={addWish}
+              >
+                Legg til gaveønske for denne personen
+              </Button>
             </Grid>
           </Grid>
           <Grid item>

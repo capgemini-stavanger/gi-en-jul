@@ -179,39 +179,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
           fullWidth
         />
       </Grid>
-      {!state.ageWish && (
-        <Grid item xs={2}>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
-            setIsValids={getSetter("validWishInput")}
-            name="wish"
-            type="select"
-            label="Gaveønske"
-            options={Categories.map((o: ICategories) => {
-              return { value: o.type, text: o.type };
-            })}
-            disabled={state.ageWish}
-            value={state.wishInput}
-            onChange={onWishInputChange}
-            fullWidth
-          />
-        </Grid>
-      )}
-      <Grid item xs={2}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.ageWish}
-              onChange={onAgeWishChange}
-              name="isAgeWish"
-              color="primary"
-            />
-          }
-          className="my-0"
-          label="Giver kjøper alderstilpasset gave"
-        />
-      </Grid>
+
       <Grid item xs={2}>
         <Link
           href="#"

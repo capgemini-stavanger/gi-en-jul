@@ -11,6 +11,7 @@ interface IFormPerson {
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
+  //mulig løsning: legge til en ønskeliste her av typen IWishForm
 }
 
 export const getFormPerson: () => IFormPerson = () => ({
