@@ -9,9 +9,9 @@ const information: string[] = [
 
 const RegistrationInfoRemake = () => {
   return (
-    <Grid container spacing={7} direction="column">
+    <Grid container direction="column" spacing={5}>
       <Grid item>
-        <Grid container direction="row" justifyContent="center">
+        <Grid container justifyContent="center">
           <Grid item>
             <Typography variant="h3">Registrer familie</Typography>
             <Typography>Tusen takk for at du melder inn familie til Gi en jul.</Typography>
