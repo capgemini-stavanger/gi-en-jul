@@ -137,6 +137,7 @@ const initValidFormState: ValidFormEntry = {
 };
 interface props {
   accessToken: string;
+  //  deleteWish: (index: number) => void;
 }
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
@@ -550,6 +551,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         updatePerson(i, newPersonData)
                       }
                       deletePerson={() => deletePerson(i)}
+                      deleteWish={() => deleteWish(i)}
                     />
                   );
                 })}
