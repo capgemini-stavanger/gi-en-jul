@@ -42,7 +42,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
         <TabPanel value="4">
-          <ManageDashboard />
+          <ManageDashboard accessToken={accessToken} />
         </TabPanel>
       </TabContext>
       <ScrollToTop maxPagePosition={300} />

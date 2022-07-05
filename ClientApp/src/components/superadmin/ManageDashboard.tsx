@@ -1,15 +1,22 @@
 import { Tab, Typography } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
+import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
 import { Container } from "reactstrap";
+import KommuneContainer from "./kommune/KommuneContainer";
 
-function ManageDashboard() {
+interface IManageDashboard {
+  accessToken: string;
+}
+
+const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
   const classes = useStyles();
-  const [step, setStep] = useState<string>("1");
+  const [tab, setTab] = useState<string>("1");
+  const apiservice = new ApiService(accessToken);
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
-    setStep(newValue);
+    setTab(newValue);
   };
 
   return (
@@ -17,7 +24,7 @@ function ManageDashboard() {
       <Typography className={classes.heading} align="center" variant="h3">
         ManageDashboard
       </Typography>
-      <TabContext value={step}>
+      <TabContext value={tab}>
         <TabList onChange={handleChange} centered>
           <Tab label="FAQ" value="1" />
           <Tab label="Kommune Informasjon" value="2" />
@@ -27,7 +34,7 @@ function ManageDashboard() {
           <Typography>Placeholder - FAQ</Typography>
         </TabPanel>
         <TabPanel value="2">
-          <Typography>Placeholder - Kommune Informasjon</Typography>
+          <KommuneContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="3">
           <Typography>Placeholder - Legg til/Slett Brukere</Typography>
@@ -35,6 +42,6 @@ function ManageDashboard() {
       </TabContext>
     </Container>
   );
-}
+};
 
 export default ManageDashboard;
