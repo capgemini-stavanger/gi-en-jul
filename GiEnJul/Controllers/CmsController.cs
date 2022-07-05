@@ -26,7 +26,6 @@ namespace GiEnJul.Controllers
         }
 
          [HttpGet("GetAll")]
-         [Authorize(Policy = Policy.SuperAdmin)]
          public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
          {
             var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
@@ -34,7 +33,6 @@ namespace GiEnJul.Controllers
          }
 
         [HttpGet("GetSingle")]
-        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable> GetSingleContent([FromQuery] string contentType, string index)
         {
             var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index); 
