@@ -1,12 +1,11 @@
 import {
   capitalize,
-  Checkbox,
   Link,
-  FormControlLabel,
   Grid,
   SvgIcon,
   IconButton,
   Typography,
+  Tab,
   Button,
 } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -18,7 +17,8 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
-import { Categories, ICategories } from "./mockDatabase";
+import FormWish, { getFormWish } from "./FormWish";
+import { initFormDataState } from "./InstitutionForm";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
@@ -38,6 +38,7 @@ const initState: { [data: string]: any } = {
   validWishInput: false,
   dialogOpen: false,
   comment: "",
+  wishes: [getFormWish()],
 };
 
 const InstitutionPerson: FC<IPersonProps> = ({
@@ -120,16 +121,12 @@ const InstitutionPerson: FC<IPersonProps> = ({
     }
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("wishInput")(newInput);
-    updatePerson({ wish: newInput });
+  const deleteWish = (index: number) => {
+    person.wishes.splice(index, 1);
   };
 
-  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.checked;
-    getSetter("ageWish")(newInput);
-    updatePerson({ wish: undefined });
+  const addWish = () => {
+    person.wishes.push(getFormWish());
   };
 
   return (
@@ -139,6 +136,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
+
       <Grid item xs={1}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
@@ -180,6 +178,40 @@ const InstitutionPerson: FC<IPersonProps> = ({
         />
       </Grid>
 
+      {initFormDataState().wishes.map((wish, i) => {
+        return (
+          <FormWish
+            key={wish.cat}
+            cat={wish.cat}
+            viewErrorTrigger={state.viewErrorTrigger}
+            updateWish={(newWishData: { [target: string]: unknown }) => updatePerson(newWishData)}
+            deleteWish={() => deleteWish(i)}
+          />
+        );
+      })}
+
+      <Grid item>
+        <Button
+          startIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              className="bi bi-plus"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
+          }
+          variant="contained"
+          color="primary"
+          onClick={addWish}
+        >
+          Legg til gaveønske for denne personen
+        </Button>
+      </Grid>
+
       <Grid item xs={2}>
         <Link
           href="#"
@@ -207,3 +239,10 @@ const InstitutionPerson: FC<IPersonProps> = ({
 };
 
 export default InstitutionPerson;
+
+//flytte komponenten inn
+//flytte knappen inn ?
+//metodene som trengs- skriv om til liste inni FormPerson slik at de ikke trengs:
+//addWish
+//deleteWish
+//updateWish: kan heller bruke updateperson slik at updatewish ikke trengs
