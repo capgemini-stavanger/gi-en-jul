@@ -135,6 +135,19 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Models.Event, GetContactsDto>()
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
+
+            //Cms mapping
+            CreateMap<Dtos.PostCmsDto, Models.Cms>();
+
+            CreateMap<Models.Cms, Entities.Cms>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.ContentType))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.Index))
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Cms, Models.Cms>()
+                .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.RowKey));
         }
     }
 }
