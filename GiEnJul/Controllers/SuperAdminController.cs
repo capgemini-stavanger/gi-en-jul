@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using GiEnJul.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using GiEnJul.Auth;
 using GiEnJul.Dtos;
+using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
-using System.Collections;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
 {
@@ -14,13 +14,10 @@ namespace GiEnJul.Controllers
     [ApiController]
     public class SuperAdminController : ControllerBase
     {
-
         private readonly ICmsRepository _cmsRepository;
         private readonly IMapper _mapper;
 
-
         public SuperAdminController(
-
             ICmsRepository cmsRepository,
             IMapper mapper)
         {
@@ -30,16 +27,17 @@ namespace GiEnJul.Controllers
 
          [HttpGet("GetAll")]
          [Authorize(Policy = Policy.SuperAdmin)]
-           public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
+         public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
          {
-            var content = await _cmsRepository.GetCmsByContentType(contentType);
+            var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
             return content;
          }
+
         [HttpGet("GetSingle")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable> GetSingleContent([FromQuery] string contentType, string index)
         {
-            var content = await _cmsRepository.GetSingleCmsByContentTypeAndIndex(contentType, index); 
+            var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index); 
             return content;
         }
 
