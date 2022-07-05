@@ -19,6 +19,7 @@ import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 import CustomTooltip from "./CustomTooltip";
 import InstitutionWish from "./FormWish";
+import FormWish from "./FormWish";
 
 type PersonType = {
   Wish?: string;
@@ -512,7 +513,18 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   );
                 })}
               </Grid>
-              <InstitutionWish />
+              {formDataState.persons.map((p, i) => {
+                return (
+                  <FormWish
+                    key={p.uuid}
+                    viewErrorTrigger={state.viewErrorTrigger}
+                    updateWish={(newWishData: { [target: string]: unknown }) =>
+                      updatePerson(i, newWishData)
+                    }
+                  />
+                );
+              })}
+
               <Grid item>
                 <Button
                   startIcon={
