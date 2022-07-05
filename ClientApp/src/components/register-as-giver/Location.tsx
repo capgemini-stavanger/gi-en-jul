@@ -1,6 +1,5 @@
 import { Container, Grid, Typography } from "@material-ui/core";
-import React, { useCallback, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import IFormData from "./IFormData";
@@ -9,6 +8,7 @@ import useStyles from "./Styles";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
+  prevStep: (event: React.FormEvent) => void;
   values: IFormData;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
@@ -19,13 +19,13 @@ interface Props {
 
 const Location: React.FC<Props> = ({
   nextStep,
+  prevStep,
   values,
   handleLocationChange,
   placeHolder,
   locationOptions,
   step,
 }) => {
-  const history = useHistory();
   const [isValid, setIsValid] = useState(false);
   const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
 
@@ -74,9 +74,9 @@ const Location: React.FC<Props> = ({
           </Grid>
           <Grid item>
             <Pager
-              onBack={useCallback(() => history.push("/"), [history])}
+              onBack={prevStep}
               onContinue={extendedNextStep}
-              continueText={"Start registrering"}
+              continueText={"Neste Steg"}
               step={step}
             />
           </Grid>

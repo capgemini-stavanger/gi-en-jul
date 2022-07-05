@@ -1,13 +1,10 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback } from "react";
-import { useHistory } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import IFormData from "./IFormData";
 import useStyles from "components/register-as-giver/Styles";
 import snowmanFull from "styling/img/snowmanFull.svg";
 import snowDown from "styling/img/snow_down2.svg";
-import logo from "styling/img/logo_green.svg";
-import { ArrowForwardIos } from "@material-ui/icons";
 
 type Props = {
   values: IFormData;
@@ -15,7 +12,6 @@ type Props = {
 };
 
 const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
-  const history = useHistory();
   const classes = useStyles();
 
   const getMessage = useCallback(
@@ -50,15 +46,6 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
 
   return (
     <>
-      <Button
-        size="large"
-        endIcon={<ArrowForwardIos />}
-        className={classes.buttonMainPage}
-        onClick={React.useCallback(() => history.push("/"), [history])}
-      >
-        Hovedsiden
-      </Button>
-      <img className={classes.smallLogo} src={logo}></img>
       <Grid container direction="column" justifyContent="center" alignItems="center">
         <Grid item>
           <img className={classes.imageSnow} src={snowDown}></img>

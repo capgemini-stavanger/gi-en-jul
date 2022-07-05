@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import Confirmation from "components/register-as-giver/Confirmation";
 import ContactInfo from "components/register-as-giver/ContactInfo";
 import Location from "components/register-as-giver/Location";
@@ -10,6 +10,8 @@ import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
+import bli_giver from "styling/img/bli_giver.svg";
+import GiverType from "components/register-as-giver/GiverType";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -77,14 +79,14 @@ const RegistrationMacro = () => {
   const classes = useStyles();
 
   const getStepPage = () => {
-    if (locationOptions === undefined) {
-      return <LoadingPage />;
-    }
     switch (state.step) {
       case 1:
+        return <GiverType nextStep={nextStep} step={state.step} />;
+      case 2:
         return (
           <Location
             nextStep={nextStep}
+            prevStep={prevStep}
             handleLocationChange={handleLocationChange}
             values={formDataState}
             placeHolder={"Velg et sted..."}
@@ -92,7 +94,7 @@ const RegistrationMacro = () => {
             step={state.step}
           />
         );
-      case 2:
+      case 3:
         return (
           <ContactInfo
             nextStep={nextStep}
@@ -104,7 +106,7 @@ const RegistrationMacro = () => {
             step={state.step}
           />
         );
-      case 3:
+      case 4:
         return (
           <FamilySize
             nextStep={nextStep}
@@ -115,7 +117,7 @@ const RegistrationMacro = () => {
             step={state.step}
           />
         );
-      case 4:
+      case 5:
         return (
           <SummaryRegistration
             nextStep={nextStep}
@@ -131,29 +133,25 @@ const RegistrationMacro = () => {
             step={state.step}
           />
         );
-      case 5:
+      case 6:
         return (
           <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
         );
       default:
-        return null;
+        return <LoadingPage />;
     }
   };
   return (
     <>
-      {state.step === 5 ? (
-        <Container className={classes.summaryDesign}>
-          <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
+      <Container className={classes.root} maxWidth={false}>
+        <NavBarPublic />
+        {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}
+        <Container className={state.step === 6 ? classes.summaryDesign : classes.giverForm}>
+          {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}
+          {state.step === 6 ? null : <img src={bli_giver}></img>}
+          {getStepPage()}
         </Container>
-      ) : (
-        <>
-          <NavBarPublic />
-          <Container className={classes.giverForm}>
-            <Typography className={classes.heading}>Bli giver</Typography>
-            {getStepPage()}
-          </Container>
-        </>
-      )}
+      </Container>
     </>
   );
 };
