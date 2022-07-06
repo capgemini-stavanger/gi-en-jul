@@ -13,16 +13,16 @@ interface IBusinessInformation {
 interface businessInfo {
   question: string;
   info: string;
-  partitionKey: string;
-  rowKey: string;
+  contentType: string;
+  index: string;
   timestamp: string;
 }
 
 const initBusinessInfo: businessInfo = {
   question: "",
   info: "",
-  partitionKey: "",
-  rowKey: "",
+  contentType: "Bedrift",
+  index: "",
   timestamp: "",
 };
 
@@ -45,9 +45,12 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
     apiservice
       .get("cms/getall", { params: { contentType: "Bedrift" } })
       .then((response) => {
-        if (response.data[0] == undefined) {
+        if (response.data.length > 0) {
           setBusinessInfo(response.data[0]);
           setHtml(response.data[0].info);
+        } else {
+          setBusinessInfo(initBusinessInfo);
+          setHtml("");
         }
       })
       .catch((error) => {
@@ -58,14 +61,15 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
   const saveBusinessInformation = () => {
     apiservice
       .post("cms/insert", {
-        ContentType: businessInfo?.partitionKey,
-        Index: businessInfo?.rowKey,
+        ContentType: "Bedrift",
+        Index: businessInfo.index,
         Info: html,
       })
       .then((response) => {
         if (response.status === 200) {
           setBusinessInfo({ ...businessInfo, info: html });
           setOpenEditor(false);
+          getBusinessInformation();
         }
       })
       .catch((error) => {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -29,7 +30,11 @@ namespace GiEnJul.Controllers
          public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
          {
             var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
-            return content;
+            if (content.Any())
+            {
+                return content;
+            }
+            return null;
          }
 
         [HttpGet("GetSingle")]

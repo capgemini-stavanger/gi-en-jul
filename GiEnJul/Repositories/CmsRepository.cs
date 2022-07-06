@@ -3,6 +3,7 @@ using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -10,7 +11,7 @@ namespace GiEnJul.Repositories
 
     public interface ICmsRepository
     {
-        Task<IEnumerable> GetCmsByContentTypeAsync(string contentType);
+        Task<IEnumerable<Models.Cms>> GetCmsByContentTypeAsync(string contentType);
         Task<Models.Cms> InsertOrReplaceAsync(Models.Cms cms);
         Task<IEnumerable> GetSingleCmsByContentTypeAsync(string contentType, string index);
     }
@@ -25,11 +26,11 @@ namespace GiEnJul.Repositories
             var query = $"PartitionKey eq '{contentType}' and RowKey eq '{index}' ";
             return await GetAllByQueryAsync(query);
         }
-        public async Task<IEnumerable> GetCmsByContentTypeAsync(string contentType)
+        public async Task<IEnumerable<Models.Cms>> GetCmsByContentTypeAsync(string contentType)
         {
             var partitionKeyFiler = $"PartitionKey eq '{contentType}'";
             var cmsContent = await GetAllByQueryAsync(partitionKeyFiler);
-            return cmsContent;
+            return _mapper.Map<IEnumerable<Models.Cms>>(cmsContent);
         }
 
         public async Task<Models.Cms> InsertOrReplaceAsync(Models.Cms cms)
