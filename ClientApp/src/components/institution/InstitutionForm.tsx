@@ -156,12 +156,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   //denne funksjonen bruker når en person trykker på legg til gaveønske, men 1 gaveønske skal være inkludert i legg til familiemedlem knappen.
+  /*
   const addWish = () => {
     setFormDataState((prev) => ({
       ...prev,
       wishes: [...prev.wishes, getFormWish()],
     }));
   };
+  */
 
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
@@ -188,7 +190,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       return { ...prev };
     });
   };
-
+  /*
   const updateWish = (index: number, newWishData: { [target: string]: unknown }) => {
     setFormDataState((prev) => {
       prev.wishes[index] = {
@@ -198,6 +200,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       return { ...prev };
     });
   };
+  */
 
   const deletePerson = (index: number) => {
     setFormDataState((prev) => {
@@ -205,13 +208,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       return { ...prev };
     });
   };
-
+  /*
   const deleteWish = (index: number) => {
     setFormDataState((prev) => {
       prev.wishes.splice(index, 1);
       return { ...prev };
     });
   };
+  */
 
   const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDataState((prev) => ({
@@ -367,14 +371,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       };
       personsList.push(person1);
     });
-
+    /*
     const wishesList = Array<WishType>();
-    formDataState.wishes.forEach((wish) => {
+    formDataState.persons.forEach((wish) => {
       const wish1: WishType = {
-        Cat: wish.cat,
+        Cat: wish,
       };
       wishesList.push(wish1);
     });
+    */
 
     const submit: submittype = {
       Dinner: getDinner(),
@@ -387,7 +392,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
-      WishList: wishesList,
     };
 
     setState((prev) => ({
@@ -551,7 +555,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         updatePerson(i, newPersonData)
                       }
                       deletePerson={() => deletePerson(i)}
-                      deleteWish={() => deleteWish(i)}
                     />
                   );
                 })}

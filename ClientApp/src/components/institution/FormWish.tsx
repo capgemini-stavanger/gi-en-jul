@@ -13,8 +13,7 @@ export interface IFormWish {
 interface IWishProps {
   cat: string;
   viewErrorTrigger: number;
-  updateWish: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  // updateWish: (newWishData: { [target: string]: unknown }) => void;
+  updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
 }
 
@@ -40,13 +39,13 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
     getSetter("wishInput")(newInput);
-    //  updateWish();
+    updateWish({ wish: newInput });
   };
 
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked;
     getSetter("ageWish")(newInput);
-    //  updateWish();
+    updateWish({ wish: newInput });
   };
 
   return (
