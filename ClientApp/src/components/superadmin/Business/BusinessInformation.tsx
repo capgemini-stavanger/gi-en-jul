@@ -56,8 +56,8 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
   const saveBusinessInformation = () => {
     apiservice
       .post("cms/insert", {
-        ContentType: businessInfo?.partitionKey,
-        Index: businessInfo?.rowKey,
+        ContentType: businessInfo.partitionKey,
+        Index: businessInfo.rowKey,
         Info: html,
       })
       .then((response) => {
