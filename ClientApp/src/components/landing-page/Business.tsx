@@ -6,7 +6,6 @@ import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
-import { useAuth0 } from "@auth0/auth0-react";
 
 interface bedriftInfo {
   question: string;
@@ -26,20 +25,10 @@ const initBedriftInfo: bedriftInfo = {
 
 const Business = () => {
   const classes = useStyles();
-  const { getAccessTokenSilently } = useAuth0();
-  const [userAccessToken, setUserAccessToken] = useState<string>("");
-  const apiservice = new ApiService(userAccessToken);
+  const apiservice = new ApiService();
   const [bedriftInfo, setBedriftInfo] = useState<bedriftInfo>(initBedriftInfo);
 
-  async function getUserAccessToken(): Promise<string> {
-    const accessToken = await getAccessTokenSilently();
-    return accessToken;
-  }
-
   useEffect(() => {
-    getUserAccessToken().then((resp: string) => {
-      setUserAccessToken(resp);
-    });
     getBedriftInformation();
   }, []);
 
