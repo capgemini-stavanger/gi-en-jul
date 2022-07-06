@@ -40,7 +40,7 @@ const initState: { [data: string]: any } = {
   validWishInput: false,
   dialogOpen: false,
   comment: "",
-  wishes: [getFormWish()],
+  wishes: [],
 };
 
 const InstitutionPerson: FC<IPersonProps> = ({
@@ -102,6 +102,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
   };
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(person);
     let strMonths = e.target.value;
     const intMonths = Math.floor(parseInt(strMonths));
     strMonths = intMonths.toString();
@@ -122,6 +123,12 @@ const InstitutionPerson: FC<IPersonProps> = ({
     if (newGender !== NaN && newGender !== Gender.Unspecified) {
       updatePerson({ gender: newGender, isValidGender: true });
     }
+  };
+
+  const updateWish = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newWish = e.target.value;
+    getSetter("wishInput")(newWish);
+    updatePerson({ wish: newWish });
   };
   /*
   const deleteWish = (index: number) => {
@@ -182,14 +189,15 @@ const InstitutionPerson: FC<IPersonProps> = ({
         />
       </Grid>
 
-      {initFormDataState().wishes.map((wish, i) => {
+      {person.wishes.map((wish, i) => {
         return (
           <FormWish
             key={wish.cat}
             cat={wish.cat}
             viewErrorTrigger={state.viewErrorTrigger}
-            updateWish={(newWishData: { [target: string]: unknown }) => updatePerson(newWishData)}
-            deleteWish={() => deleteWish()}
+            updateWish={updateWish}
+            //  updateWish={(newWishData: { [target: string]: unknown }) => updatePerson(newWishData)}
+            deleteWish={deleteWish}
           />
         );
       })}
