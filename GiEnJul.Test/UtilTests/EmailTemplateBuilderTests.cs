@@ -21,13 +21,6 @@ namespace GiEnJul.Test.UtilTests
 
         public void Dispose(){}
 
-        public string IgnoreHtmlStyle(string content)
-        {
-            string pattern = @"<style>[\s\S]*?<\/style>";
-            Regex regex = new Regex(pattern);
-            return regex.Replace(content, "");
-        }
-
         [Fact]
         public async Task AssignedFamilyTemplate_ReplacesAllFields()
         {
@@ -45,8 +38,7 @@ namespace GiEnJul.Test.UtilTests
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
-            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
 
         [Fact]
@@ -63,8 +55,7 @@ namespace GiEnJul.Test.UtilTests
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
-            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
 
         [Fact]
@@ -81,8 +72,7 @@ namespace GiEnJul.Test.UtilTests
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
-            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
 
         [Fact]
@@ -101,8 +91,7 @@ namespace GiEnJul.Test.UtilTests
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
-            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
 
         [Fact]
@@ -117,8 +106,7 @@ namespace GiEnJul.Test.UtilTests
             Assert.False(string.IsNullOrEmpty(result.Subject));
             Assert.False(string.IsNullOrEmpty(result.Content));
 
-            string contentWithoutStyle = IgnoreHtmlStyle(result.Content);
-            Assert.False(contentWithoutStyle.Contains('{') || contentWithoutStyle.Contains('}'));
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
     }
 }
