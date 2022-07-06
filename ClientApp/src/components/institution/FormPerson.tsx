@@ -17,7 +17,7 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
-import FormWish, { getFormWish } from "./FormWish";
+import FormWish, { getFormWish, IFormWish } from "./FormWish";
 import RegistrationForm, { initFormDataState } from "./InstitutionForm";
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -29,8 +29,6 @@ interface IPersonProps {
   ) => void;
   viewErrorTrigger: number;
   person: IFormPerson;
-  // updateWish: (newWishData: { [target: string]: unknown }) => void;
-  deleteWish: () => void;
 }
 
 const initState: { [data: string]: any } = {
@@ -45,7 +43,6 @@ const initState: { [data: string]: any } = {
 
 const InstitutionPerson: FC<IPersonProps> = ({
   updatePerson,
-  deleteWish,
   deletePerson,
   setAlert,
   viewErrorTrigger,
@@ -125,19 +122,22 @@ const InstitutionPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newWish = e.target.value;
-    getSetter("wishInput")(newWish);
-    updatePerson({ wish: newWish });
+  const updateWish = (newWishData: { [target: string]: unknown }) => {
+    const newList = person.wishes.push({ cat: newWishData.toString() });
+    updatePerson({ wishes: newList }); //skal bare pushe til listen
   };
-  /*
+
   const deleteWish = (index: number) => {
-    person.wishes.splice(index, 1);
+    const newList = person.wishes.slice(0, index);
+    const resultList = newList.push(person.wishes.slice(index - 1, person.wishes.size));
+    console.log(newList);
+    updatePerson({ wishes: newList });
   };
-  */
 
   const addWish = () => {
-    person.wishes.push(getFormWish());
+    const newList = [...person.wishes];
+    newList.push(getFormWish());
+    updatePerson({ wishes: newList });
   };
 
   return (
@@ -195,9 +195,8 @@ const InstitutionPerson: FC<IPersonProps> = ({
             key={wish.cat}
             cat={wish.cat}
             viewErrorTrigger={state.viewErrorTrigger}
-            updateWish={updateWish}
-            //  updateWish={(newWishData: { [target: string]: unknown }) => updatePerson(newWishData)}
-            deleteWish={deleteWish}
+            updateWish={(newWishData: { [target: string]: unknown }) => updateWish(newWishData)}
+            deleteWish={() => deleteWish(i)}
           />
         );
       })}
