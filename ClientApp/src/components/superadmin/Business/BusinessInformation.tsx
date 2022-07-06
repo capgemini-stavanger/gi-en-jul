@@ -45,8 +45,10 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
     apiservice
       .get("cms/getall", { params: { contentType: "Bedrift" } })
       .then((response) => {
-        setBusinessInfo(response.data[0]);
-        setHtml(response.data[0].info);
+        if (response.data[0] == undefined) {
+          setBusinessInfo(response.data[0]);
+          setHtml(response.data[0].info);
+        }
       })
       .catch((error) => {
         console.error(error);
