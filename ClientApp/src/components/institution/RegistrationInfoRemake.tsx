@@ -1,4 +1,5 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { Container } from "reactstrap";
 
 const information: string[] = [
   "Før du melder inn en familie må familien ha sagt ja til å bli med, og du har all informasjon som trengs nedenfor.",
@@ -29,5 +30,25 @@ const RegistrationInfoRemake = () => {
     </Grid>
   );
 };
-
 export default RegistrationInfoRemake;
+
+/*
+    <Grid container direction="column" spacing={5}>
+      <Grid item>
+        <Grid container justifyContent="center">
+          <Grid item>
+            <Typography variant="h3">Registrer familie</Typography>
+            <Typography>Tusen takk for at du melder inn familie til Gi en jul.</Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item>
+        <Grid container direction="row" spacing={3} justifyContent="center">
+          <Grid item> COMPONENT 1 </Grid>
+          <Grid item> COMPONENT 2 </Grid>
+          <Grid item> COMPONENT 3 </Grid>
+          <Grid item> COMPONENT 4 </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+*/

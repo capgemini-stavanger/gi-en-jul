@@ -22,7 +22,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
             {/* CONTACT PERSON FORM */}
             <Grid container direction="column" spacing={5}>
               <Grid item>
-                <Grid container justifyContent="center">
+                <Grid container>
                   <Grid item>
                     <Typography variant="h5">Kontaktperson *</Typography>
                     <Typography>Vennligst fyll ut navn, telefon og email</Typography>
@@ -30,7 +30,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid container direction="row" spacing={3} justifyContent="center">
+                <Grid container direction="row" spacing={3}>
                   <Grid item>
                     <TextField label="Navn" variant="outlined"></TextField>
                   </Grid>
@@ -46,51 +46,14 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
           </Grid>
           <Divider className={classes.divider}></Divider>
           <Grid item>
-            {/* FAMILY FORM */}
-            <Grid container direction="column" spacing={5}>
-              <Grid item>
-                <Grid container justifyContent="center">
-                  <Grid item>
-                    <Typography variant="h5">Familie *</Typography>
-                    <Typography>Vennligst fyll familiens informasjon og gaveønsker</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container direction="row" spacing={3} justifyContent="center">
-                  <Grid item>COMPONENT 1</Grid>
-                  <Grid item>COMPONENT 2</Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container justifyContent="center">
-                  <Grid item>
-                    <Grid container direction="column" spacing={2}>
-                      <Grid item>FORM PERSON 1</Grid>
-                      <Grid item>FORM PERSON 2</Grid>
-                      <Grid item>
-                        <Button> ADD PERSON </Button>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider className={classes.divider}></Divider>
-          <Grid item>
             {/* FOOD WISHES FORM */}
             <Grid container direction="column" spacing={5}>
               <Grid item>
-                <Grid container justifyContent="center">
-                  <Grid item>
-                    <Typography variant="h5">Matønsker *</Typography>
-                    <Typography>Vennligst fyll ut familiens matønsker</Typography>
-                  </Grid>
-                </Grid>
+                <Typography variant="h5">Matønsker *</Typography>
+                <Typography>Vennligst fyll ut familiens matønsker</Typography>
               </Grid>
               <Grid item>
-                <Grid container direction="row" spacing={3} justifyContent="center">
+                <Grid container direction="row" spacing={3}>
                   <Grid item>
                     <Typography>Middag*</Typography>
                     Mat 1 <Radio /> <br />
@@ -113,10 +76,39 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
           </Grid>
           <Divider className={classes.divider}></Divider>
           <Grid item>
+            {/* FAMILY FORM */}
+            <Grid container direction="column" spacing={5}>
+              <Grid item>
+                <Typography variant="h5">Familie *</Typography>
+                <Typography>Vennligst fyll familiens informasjon og gaveønsker</Typography>
+              </Grid>
+              <Grid item>
+                <Grid container direction="row" spacing={3}>
+                  <Grid item>COMPONENT 1</Grid>
+                  <Grid item>COMPONENT 2</Grid>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Grid container>
+                  <Grid item>
+                    <Grid container direction="column" spacing={2}>
+                      <Grid item>FORM PERSON 1</Grid>
+                      <Grid item>FORM PERSON 2</Grid>
+                      <Grid item>
+                        <Button> ADD PERSON </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider className={classes.divider}></Divider>
+          <Grid item>
             {/* FAMILY ID */}
             <Grid container direction="column" spacing={5}>
               <Grid item>
-                <Grid container justifyContent="center">
+                <Grid container>
                   <Grid item>
                     <Typography variant="h5"> Family ID *</Typography>
                     <Typography>Hvis familien har PID..</Typography>
@@ -124,7 +116,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                 </Grid>
               </Grid>
               <Grid item>
-                <Grid container justifyContent="center">
+                <Grid container>
                   <Grid item>
                     <TextField variant="outlined" size="small" />
                   </Grid>
