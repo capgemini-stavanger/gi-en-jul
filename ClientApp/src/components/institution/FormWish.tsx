@@ -4,8 +4,10 @@ import { isNotNull } from "components/shared/input-fields/validators/Validators"
 import { Categories, ICategories } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
+import { v4 as uuidv4 } from "uuid";
 
 export interface IFormWish {
+  //  uuid?: string;
   cat: string;
   size?: string;
 }
@@ -49,7 +51,7 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
   };
 
   return (
-    <Grid container spacing={6} alignItems="center">
+    <Grid container spacing={6} alignItems="center" direction="row">
       <Grid item>
         <IconButton color="secondary" onClick={deleteWish}>
           <SvgIcon component={ClearIcon} />
@@ -57,7 +59,7 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
       </Grid>
 
       {!state.ageWish && (
-        <Grid item xs={1}>
+        /* person.wishes.map(wish => {    }) */ <Grid item xs={1}>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             validators={[isNotNull]}

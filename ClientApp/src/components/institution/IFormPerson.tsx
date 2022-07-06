@@ -13,7 +13,6 @@ interface IFormPerson {
   isValidGender: boolean;
   isValidWish: boolean;
   wishes: IFormWish[];
-  //mulig løsning: legge til en ønskeliste her av typen IWishForm
 }
 
 export const getFormPerson: () => IFormPerson = () => ({
@@ -26,7 +25,7 @@ export const getFormPerson: () => IFormPerson = () => ({
   isValidAge: true,
   isValidGender: false,
   isValidWish: false,
-  wishes: [], //kanskje getFormWish
+  wishes: [],
 });
 
 export default IFormPerson;

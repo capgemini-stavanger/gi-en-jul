@@ -1,13 +1,4 @@
-import {
-  capitalize,
-  Link,
-  Grid,
-  SvgIcon,
-  IconButton,
-  Typography,
-  Tab,
-  Button,
-} from "@material-ui/core";
+import { capitalize, Link, Grid, SvgIcon, IconButton, Typography, Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -18,7 +9,7 @@ import { isNotNull, isInt } from "components/shared/input-fields/validators/Vali
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
 import FormWish, { getFormWish, IFormWish } from "./FormWish";
-import RegistrationForm, { initFormDataState } from "./InstitutionForm";
+
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
@@ -31,6 +22,10 @@ interface IPersonProps {
   person: IFormPerson;
 }
 
+type WishType = {
+  Cat?: string;
+};
+
 const initState: { [data: string]: any } = {
   ageWish: false,
   commentSelect: false,
@@ -38,7 +33,7 @@ const initState: { [data: string]: any } = {
   validWishInput: false,
   dialogOpen: false,
   comment: "",
-  wishes: [],
+  wishes: [getFormWish()],
 };
 
 const InstitutionPerson: FC<IPersonProps> = ({
@@ -73,11 +68,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
     });
   };
 
-  useEffect(() => {
-    updatePerson({
-      isValidWish: state.validWishInput || person.wish === undefined,
-    });
-  }, [state.validWishInput, person.wish]);
+  useEffect(() => {}, [person.wish]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
@@ -99,7 +90,6 @@ const InstitutionPerson: FC<IPersonProps> = ({
   };
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(person);
     let strMonths = e.target.value;
     const intMonths = Math.floor(parseInt(strMonths));
     strMonths = intMonths.toString();
@@ -123,15 +113,14 @@ const InstitutionPerson: FC<IPersonProps> = ({
   };
 
   const updateWish = (newWishData: { [target: string]: unknown }) => {
-    const newList = person.wishes.push({ cat: newWishData.toString() });
-    updatePerson({ wishes: newList }); //skal bare pushe til listen
+    console.log("wish", newWishData);
+    //const newList = person.wishes.push({ cat: newWishData.toString() });
+    updatePerson(newWishData);
   };
 
   const deleteWish = (index: number) => {
-    const newList = person.wishes.slice(0, index);
-    const resultList = newList.push(person.wishes.slice(index - 1, person.wishes.size));
-    console.log(newList);
-    updatePerson({ wishes: newList });
+    const newList = person.wishes.splice(index, 1);
+    updatePerson({ ...newList });
   };
 
   const addWish = () => {
@@ -141,7 +130,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
   };
 
   return (
-    <Grid container spacing={5} alignItems="center">
+    <Grid container spacing={5} alignItems="center" direction="row">
       <Grid item>
         <IconButton color="secondary" onClick={deletePerson}>
           <SvgIcon component={ClearIcon} />
@@ -189,13 +178,15 @@ const InstitutionPerson: FC<IPersonProps> = ({
         />
       </Grid>
 
-      {person.wishes.map((wish, i) => {
+      {state.wishes.map((wish: IFormWish, i: number) => {
         return (
           <FormWish
-            key={wish.cat}
+            key={i}
             cat={wish.cat}
             viewErrorTrigger={state.viewErrorTrigger}
-            updateWish={(newWishData: { [target: string]: unknown }) => updateWish(newWishData)}
+            updateWish={(wish) => {
+              updateWish(wish);
+            }}
             deleteWish={() => deleteWish(i)}
           />
         );
@@ -250,10 +241,3 @@ const InstitutionPerson: FC<IPersonProps> = ({
 };
 
 export default InstitutionPerson;
-
-//flytte komponenten inn
-//flytte knappen inn ?
-//metodene som trengs- skriv om til liste inni FormPerson slik at de ikke trengs:
-//addWish
-//deleteWish
-//updateWish: kan heller bruke updateperson slik at updatewish ikke trengs
