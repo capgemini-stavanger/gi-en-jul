@@ -1,0 +1,13 @@
+{
+  "Body": [
+    "background-color: rgb(224, 243, 244);",
+    "color: rgba(0, 0, 0, 0.54);",
+    "max-width: 70em;",
+    "padding: 15px;",
+    "margin: auto;",
+  ],
+  "Image": [
+    "display: block;",
+    "margin: auto;",
+  ],
+}
