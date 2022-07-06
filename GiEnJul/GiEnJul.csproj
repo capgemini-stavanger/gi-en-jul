@@ -50,9 +50,6 @@
     <None Update="Utilities\EmailTemplates\Files\familyTop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilities\EmailTemplates\Files\logo_green.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Utilities\EmailTemplates\Files\Notification.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

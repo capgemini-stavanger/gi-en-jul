@@ -37,12 +37,7 @@ namespace GiEnJul.Utilities
                 "margin: auto;",
 
             };
-            var emailStyle = "";
-            for (int i = 0; i < emailCSS.Length; i++)
-            {
-                emailStyle += emailCSS[i];
-            }
-            emailStyle = "\"" + emailStyle + "\"";
+            var emailStyle = $"\"{string.Join("", emailCSS)}\"";
 
             // Read image
             var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.png");
@@ -51,9 +46,7 @@ namespace GiEnJul.Utilities
             var img = "<img src=" + imgSrc + "/>";
 
             // Combine
-            var body = "<div style=" + emailStyle + ">" + img + content + "</div>";
-
-            content = "<!DOCTYPE html> <html>" + body + "</html>";
+            content = $"<!DOCTYPE html><html><div style={emailStyle}>{img}{content}</div></ html>";
 
             foreach (var item in data)
             {
