@@ -1,14 +1,14 @@
-import { Container, Grid, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import { Grid, Typography } from "@material-ui/core";
+import React, { useState, useCallback } from "react";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";
+import { useHistory } from "react-router-dom";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
-  prevStep: (event: React.FormEvent) => void;
   values: IFormData;
   handleLocationChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   placeHolder: string;
@@ -19,7 +19,6 @@ interface Props {
 
 const Location: React.FC<Props> = ({
   nextStep,
-  prevStep,
   values,
   handleLocationChange,
   placeHolder,
@@ -28,6 +27,8 @@ const Location: React.FC<Props> = ({
 }) => {
   const [isValid, setIsValid] = useState(false);
   const [viewErrorTrigger, setViewErrorTrigger] = useState(0);
+
+  const history = useHistory();
 
   const extendedNextStep = (e: React.FormEvent) => {
     if (!isValid) {
@@ -41,47 +42,45 @@ const Location: React.FC<Props> = ({
     <>
       <Typography className={classes.subHeading}>Hvor vil du gi?</Typography>
       <Typography className={classes.infoText}>Velg hvor du ønsker å Gi en jul </Typography>
-      <Container>
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-between"
-          alignItems="stretch"
-          className={classes.form}
-        >
-          <Grid item>
-            <form onSubmit={nextStep} onError={(errors) => console.error(errors)}>
-              <InputValidator
-                viewErrorTrigger={viewErrorTrigger}
-                type="select"
-                fullWidth
-                placeholder={placeHolder}
-                validators={[isNotNull]}
-                label="Lokasjon*"
-                name="location-input"
-                value={values.location}
-                id="location-input"
-                onChange={handleLocationChange}
-                errorMessages={["Hvor vil du spre glede?"]}
-                setIsValids={[setIsValid]}
-                options={
-                  locationOptions.length !== 0
-                    ? locationOptions.map((loc) => ({ value: loc, text: loc }))
-                    : [{ value: "", text: "Ingen lokasjoner" }]
-                }
-              />
-            </form>
-          </Grid>
-          <Grid item>
-            <Pager
-              onBack={prevStep}
-              onContinue={extendedNextStep}
-              continueText={"Neste Steg"}
-              step={step}
+      <Grid
+        container
+        direction="column"
+        justifyContent="space-evenly"
+        alignItems="stretch"
+        className={classes.form}
+      >
+        <Grid item>
+          <form onSubmit={nextStep} onError={(errors) => console.error(errors)}>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              type="select"
+              fullWidth
+              placeholder={placeHolder}
+              validators={[isNotNull]}
+              label="Lokasjon*"
+              name="location-input"
+              value={values.location}
+              id="location-input"
+              onChange={handleLocationChange}
+              errorMessages={["Hvor vil du spre glede?"]}
+              setIsValids={[setIsValid]}
+              options={
+                locationOptions.length !== 0
+                  ? locationOptions.map((loc) => ({ value: loc, text: loc }))
+                  : [{ value: "", text: "Ingen lokasjoner" }]
+              }
             />
-          </Grid>
+          </form>
         </Grid>
-      </Container>
+        <Grid item>
+          <Pager
+            onBack={useCallback(() => history.push("/"), [history])}
+            onContinue={extendedNextStep}
+            continueText={"Neste Steg"}
+            step={step}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

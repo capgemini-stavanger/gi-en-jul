@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import {
@@ -79,92 +79,90 @@ const ContactInfo: React.FC<Props> = ({
       <Typography className={classes.infoText}>
         Vi trenger din kontaktinformasjon for å kunne gi deg en familie
       </Typography>
-      <Container>
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-between"
-          alignItems="stretch"
-          className={classes.form}
-        >
-          <Grid item>
-            <InputValidator
-              autoFocus
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValids={getValiditySetter("isValidFullName")}
-              label="Fullt navn*"
-              margin="normal"
-              fullWidth
-              name="fullname"
-              autoComplete="name"
-              value={values.fullname ? values.fullname : ""}
-              onChange={handlefullnameChange}
-              validators={[isNotNull]}
-              errorMessages={["Vi vil gjerne vite hvem som gir en jul"]}
-            />
-            <InputValidator
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValids={getValiditySetter("isValidEmail")}
-              label="Epost*"
-              onChange={handleEmailChange}
-              name="email"
-              type="email"
-              value={values.email ? values.email : ""}
-              validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
-              errorMessages={[
-                "Eposten er ikke lik..",
-                "Eposten din ser litt rar ut, er den skrevet riktig?",
-                "Vi trenger din epost for å sende deg viktig informasjon",
-              ]}
-              autoComplete="email"
-              margin="normal"
-              fullWidth
-            />
-            <InputValidator
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValids={getValiditySetter("isValidEmail")}
-              label="Bekreft epost*"
-              onChange={handleConfirmEmailChange}
-              name="email"
-              value={confimationEmail ? confimationEmail : ""}
-              validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
-              errorMessages={[
-                "Eposten er ikke lik..",
-                "Eposten din ser litt rar ut, er den skrevet riktig?",
-                "Vi trenger din epost for å sende deg viktig informasjon",
-              ]}
-              autoComplete="email"
-              margin="normal"
-              fullWidth
-            />
-            <InputValidator
-              viewErrorTrigger={state.viewErrorTrigger}
-              setIsValids={getValiditySetter("isValidPhone")}
-              label="Telefonnummer*"
-              onChange={handleTlfChange}
-              name="phoneNumber"
-              type="tel"
-              value={values.phoneNumber ? values.phoneNumber : ""}
-              validators={[isPhoneNumber, isNotNull]}
-              errorMessages={[
-                "Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?",
-                "Vi trenger ditt telefonnummer for å kunne kontakte deg",
-              ]}
-              autoComplete="tel"
-              margin="normal"
-              fullWidth
-            />
-          </Grid>
-          <Grid item>
-            <Pager
-              onBack={prevStep}
-              onContinue={extendedNextStep}
-              continueText={"Hvem vil du gi til?"}
-              step={step}
-            />
-          </Grid>
+      <Grid
+        container
+        direction="column"
+        justifyContent="space-evenly"
+        alignItems="stretch"
+        className={classes.form}
+      >
+        <Grid item>
+          <InputValidator
+            autoFocus
+            viewErrorTrigger={state.viewErrorTrigger}
+            setIsValids={getValiditySetter("isValidFullName")}
+            label="Fullt navn*"
+            margin="normal"
+            fullWidth
+            name="fullname"
+            autoComplete="name"
+            value={values.fullname ? values.fullname : ""}
+            onChange={handlefullnameChange}
+            validators={[isNotNull]}
+            errorMessages={["Vi vil gjerne vite hvem som gir en jul"]}
+          />
+          <InputValidator
+            viewErrorTrigger={state.viewErrorTrigger}
+            setIsValids={getValiditySetter("isValidEmail")}
+            label="Epost*"
+            onChange={handleEmailChange}
+            name="email"
+            type="email"
+            value={values.email ? values.email : ""}
+            validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
+            errorMessages={[
+              "Eposten er ikke lik..",
+              "Eposten din ser litt rar ut, er den skrevet riktig?",
+              "Vi trenger din epost for å sende deg viktig informasjon",
+            ]}
+            autoComplete="email"
+            margin="normal"
+            fullWidth
+          />
+          <InputValidator
+            viewErrorTrigger={state.viewErrorTrigger}
+            setIsValids={getValiditySetter("isValidEmail")}
+            label="Bekreft epost*"
+            onChange={handleConfirmEmailChange}
+            name="email"
+            value={confimationEmail ? confimationEmail : ""}
+            validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
+            errorMessages={[
+              "Eposten er ikke lik..",
+              "Eposten din ser litt rar ut, er den skrevet riktig?",
+              "Vi trenger din epost for å sende deg viktig informasjon",
+            ]}
+            autoComplete="email"
+            margin="normal"
+            fullWidth
+          />
+          <InputValidator
+            viewErrorTrigger={state.viewErrorTrigger}
+            setIsValids={getValiditySetter("isValidPhone")}
+            label="Telefonnummer*"
+            onChange={handleTlfChange}
+            name="phoneNumber"
+            type="tel"
+            value={values.phoneNumber ? values.phoneNumber : ""}
+            validators={[isPhoneNumber, isNotNull]}
+            errorMessages={[
+              "Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?",
+              "Vi trenger ditt telefonnummer for å kunne kontakte deg",
+            ]}
+            autoComplete="tel"
+            margin="normal"
+            fullWidth
+          />
         </Grid>
-      </Container>
+        <Grid item>
+          <Pager
+            onBack={prevStep}
+            onContinue={extendedNextStep}
+            continueText={"Neste Steg"}
+            step={step}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

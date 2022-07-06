@@ -179,9 +179,9 @@ const InputValidator: FC<InputValidatorProps> = ({
           autoComplete={autoComplete}
           fullWidth={fullWidth}
           autoFocus={autoFocus}
-          size={size}
           multiline={multiline}
           maxRows={maxRows}
+          size={size}
           placeholder={placeholder}
         />
       );
