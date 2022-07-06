@@ -42,8 +42,7 @@ namespace GiEnJul.Utilities
             // Read image
             var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.png");
             var imgString = Convert.ToBase64String(imgFile);
-            var imgSrc = "\"data:image/png;base64,"+imgString+"\"";
-            var img = "<img src=" + imgSrc + "/>";
+            var img = $"<img src=\"data:image/png;base64,{imgString}\"/>";
 
             // Combine
             content = $"<!DOCTYPE html><html><div style={emailStyle}>{img}{content}</div></ html>";
