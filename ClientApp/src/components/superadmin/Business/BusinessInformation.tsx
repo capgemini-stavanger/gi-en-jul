@@ -21,7 +21,7 @@ interface businessInfo {
 const initBusinessInfo: businessInfo = {
   question: "",
   info: "",
-  partitionKey: "",
+  partitionKey: "Bedrift",
   rowKey: "",
   timestamp: "",
 };
