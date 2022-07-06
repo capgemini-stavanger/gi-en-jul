@@ -18,19 +18,14 @@ import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 import CustomTooltip from "./CustomTooltip";
-import { getFormWish, IFormWish } from "./FormWish";
-import FormWish from "./FormWish";
+import { IFormWish } from "./FormWish";
 
 type PersonType = {
-  Wish?: string; //person typen må ha liste av wishtype/IFormWish
+  Wish?: string;
   Age: number;
   Months: number;
   Gender: Gender;
   Comment: string;
-};
-
-type WishType = {
-  Cat?: string; //category
 };
 
 type submittype = {
@@ -45,7 +40,7 @@ type submittype = {
   Institution?: string;
   ReferenceId?: string;
   FamilyMembers?: PersonType[];
-  WishList?: WishType[]; //trenger ikke denne dersom persontype inneholder en liste av ønsker
+  //WishList?: WishType[];
 };
 
 interface IFoodFormData {
@@ -95,8 +90,7 @@ const initState: {
 };
 
 interface IContactState {
-  persons: IFormPerson[]; //kan hente ut persons.wishes (liste inni listen)
-  // wishes: IFormWish[];
+  persons: IFormPerson[];
   location: string;
   dinner: IFoodFormData;
   dessert: IFoodFormData;
@@ -109,7 +103,6 @@ interface IContactState {
 
 export const initFormDataState: () => IContactState = () => ({
   persons: [getFormPerson()],
-  // wishes: [getFormWish()],
   location: "",
   dinner: initFoodFormData,
   dessert: initFoodFormData,
@@ -137,7 +130,6 @@ const initValidFormState: ValidFormEntry = {
 };
 interface props {
   accessToken: string;
-  //  deleteWish: (index: number) => void;
 }
 
 const RegistrationForm: React.FC<props> = ({ accessToken }) => {
@@ -155,16 +147,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
-  //denne funksjonen bruker når en person trykker på legg til gaveønske, men 1 gaveønske skal være inkludert i legg til familiemedlem knappen.
-  /*
-  const addWish = () => {
-    setFormDataState((prev) => ({
-      ...prev,
-      wishes: [...prev.wishes, getFormWish()],
-    }));
-  };
-  */
-
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
     item.contact = {
@@ -181,7 +163,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setDialog(false);
   };
 
-  const updatePerson = (index: number, newPersonData: { [target: string]: unknown }) => {
+  const updatePerson = (index: number, newPersonData: any) => {
+    console.log(newPersonData);
+    console.log(formDataState.persons);
+    console.log("før", formDataState.persons[index]);
+    formDataState.persons[index].wishes = [{ cat: newPersonData.wish } as IFormWish];
     setFormDataState((prev) => {
       prev.persons[index] = {
         ...prev.persons[index],
@@ -189,18 +175,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       } as IFormPerson;
       return { ...prev };
     });
+    console.log("etter", formDataState.persons[index]);
   };
-  /*
-  const updateWish = (index: number, newWishData: { [target: string]: unknown }) => {
-    setFormDataState((prev) => {
-      prev.wishes[index] = {
-        ...prev.wishes[index],
-        ...newWishData,
-      } as IFormWish;
-      return { ...prev };
-    });
-  };
-  */
 
   const deletePerson = (index: number) => {
     setFormDataState((prev) => {
@@ -208,14 +184,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       return { ...prev };
     });
   };
-  /*
-  const deleteWish = (index: number) => {
-    setFormDataState((prev) => {
-      prev.wishes.splice(index, 1);
-      return { ...prev };
-    });
-  };
-  */
 
   const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDataState((prev) => ({
@@ -371,15 +339,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       };
       personsList.push(person1);
     });
-    /*
-    const wishesList = Array<WishType>();
-    formDataState.persons.forEach((wish) => {
-      const wish1: WishType = {
-        Cat: wish,
-      };
-      wishesList.push(wish1);
-    });
-    */
 
     const submit: submittype = {
       Dinner: getDinner(),
@@ -551,9 +510,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
-                      updatePerson={(newPersonData: { [target: string]: unknown }) =>
-                        updatePerson(i, newPersonData)
-                      }
+                      updatePerson={(wish) => {
+                        updatePerson(i, wish);
+                      }}
                       deletePerson={() => deletePerson(i)}
                     />
                   );
@@ -577,7 +536,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   color="primary"
                   onClick={addPerson}
                 >
-                  Legg til flere
+                  Legg til flere familiemedlemmer
                 </Button>
               </Grid>
             </Grid>

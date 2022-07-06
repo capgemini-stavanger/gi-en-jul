@@ -19,9 +19,9 @@ export interface ISizes {
 
 export const Categories: ICategories[] = [
   { type: "Klær", sub1: "kjole" },
-  { type: "Fottøy", sub1: "Sko" },
-  { type: "Klær", sub1: "støvler" },
-  { type: "Gavekort", sub1: "Sentrum" },
+  { type: "Sko", sub1: "støvler" },
+  { type: "Gavekort", sub1: "sentrum" },
+  { type: "Annet", sub1: "" },
 ];
 
 export const Sizes: ISizes[] = [
