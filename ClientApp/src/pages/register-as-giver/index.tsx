@@ -10,7 +10,7 @@ import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import bli_giver from "styling/img/bli_giver.svg";
+import bli_giver from "styling/img/bli_giver.png";
 
 const initFormDataState: IFormData = {
   location: "",
