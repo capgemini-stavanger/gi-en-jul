@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
 import { Container } from "reactstrap";
+import BusinessInformation from "./Business/BusinessInformation";
 import KommuneContainer from "./kommune/KommuneContainer";
 
 interface IManageDashboard {
@@ -28,7 +29,8 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
         <TabList onChange={handleChange} centered>
           <Tab label="FAQ" value="1" />
           <Tab label="Kommune Informasjon" value="2" />
-          <Tab label="Legg til/Slett Brukere" value="3" />
+          <Tab label="Bedrift" value="3" />
+          <Tab label="Legg til/Slett Brukere" value="34" />
         </TabList>
         <TabPanel value="1">
           <Typography>Placeholder - FAQ</Typography>
@@ -37,6 +39,9 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
           <KommuneContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="3">
+          <BusinessInformation accessToken={accessToken} />
+        </TabPanel>
+        <TabPanel value="4">
           <Typography>Placeholder - Legg til/Slett Brukere</Typography>
         </TabPanel>
       </TabContext>

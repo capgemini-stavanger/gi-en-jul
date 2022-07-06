@@ -3,9 +3,45 @@ import useStyles from "components/landing-page/Styles";
 import family from "styling/img/familyTop.svg";
 import snowDown from "styling/img/snow_down.svg";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
+import parse from "html-react-parser";
+import { useEffect, useState } from "react";
+import ApiService from "common/functions/apiServiceClass";
+
+interface businessInfo {
+  question: string;
+  info: string;
+  partitionKey: string;
+  rowKey: string;
+  timestamp: string;
+}
+
+const initBusinessInfo: businessInfo = {
+  question: "",
+  info: "",
+  partitionKey: "",
+  rowKey: "",
+  timestamp: "",
+};
 
 const Business = () => {
   const classes = useStyles();
+  const apiservice = new ApiService();
+  const [businessInfo, setBedriftInfo] = useState<businessInfo>(initBusinessInfo);
+
+  useEffect(() => {
+    getBedriftInformation();
+  }, []);
+
+  const getBedriftInformation = () => {
+    apiservice
+      .get("cms/getall", { params: { contentType: "Bedrift" } })
+      .then((response) => {
+        setBedriftInfo(response.data[0]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -16,13 +52,7 @@ const Business = () => {
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography className={classes.sectionContainer}>
-              Dersom du ønsker å få med kolleger og gi en jul, registrerer du dere som givere som
-              vanlig. Andre måter å bidra på er å gi et pengebeløp som kan benyttes til gavekort på
-              en opplevelse for barn, eller noe annet vi kan putte i eskene, som konfekt, godteri og
-              lignende. Ta kontakt med kontaktpersonen i din kommune, så kan vi snakkes mer om
-              hvordan din bedrift kan bidra.
-            </Typography>
+            <Typography className={classes.sectionContainer}>{parse(businessInfo.info)}</Typography>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
           <Grid item>

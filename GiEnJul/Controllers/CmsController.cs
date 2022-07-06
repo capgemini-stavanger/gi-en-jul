@@ -43,10 +43,12 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
         {
-            if (content.ContentType == "FAQ" || content.ContentType == "Bedrift")
+            if (string.IsNullOrWhiteSpace(content.Index) &&
+                (content.ContentType == "FAQ" || content.ContentType == "Bedrift"))
             {
-                content.Index = Guid.NewGuid().ToString();
+                content.Index = Guid.NewGuid().ToString(); 
             }
+
             await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
             return Ok();
         }
