@@ -4,7 +4,7 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
 import { Container } from "reactstrap";
-import BedriftInformation from "./Bedrift/BedriftInformation";
+import BusinessInformation from "./Business/BusinessInformation";
 import KommuneContainer from "./kommune/KommuneContainer";
 
 interface IManageDashboard {
@@ -39,7 +39,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
           <KommuneContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="3">
-          <BedriftInformation accessToken={accessToken} />
+          <BusinessInformation accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="4">
           <Typography>Placeholder - Legg til/Slett Brukere</Typography>

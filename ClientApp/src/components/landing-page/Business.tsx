@@ -7,7 +7,7 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 
-interface bedriftInfo {
+interface businessInfo {
   question: string;
   info: string;
   partitionKey: string;
@@ -15,7 +15,7 @@ interface bedriftInfo {
   timestamp: string;
 }
 
-const initBedriftInfo: bedriftInfo = {
+const initBusinessInfo: businessInfo = {
   question: "",
   info: "",
   partitionKey: "",
@@ -26,7 +26,7 @@ const initBedriftInfo: bedriftInfo = {
 const Business = () => {
   const classes = useStyles();
   const apiservice = new ApiService();
-  const [bedriftInfo, setBedriftInfo] = useState<bedriftInfo>(initBedriftInfo);
+  const [businessInfo, setBedriftInfo] = useState<businessInfo>(initBusinessInfo);
 
   useEffect(() => {
     getBedriftInformation();
@@ -52,7 +52,7 @@ const Business = () => {
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography className={classes.sectionContainer}>{parse(bedriftInfo.info)}</Typography>
+            <Typography className={classes.sectionContainer}>{parse(businessInfo.info)}</Typography>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
           <Grid item>
