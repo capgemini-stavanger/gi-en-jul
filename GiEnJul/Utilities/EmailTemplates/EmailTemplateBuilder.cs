@@ -1,4 +1,5 @@
 ﻿using GiEnJul.Utilities.EmailTemplates;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,28 +25,26 @@ namespace GiEnJul.Utilities
             if (data == null)
                 data = new Dictionary<string, string>();
 
+            // Read HTML
             var resourceManager = new ResourceManager(typeof(EmailTitles));
             var templatePath = string.Format("{0}Utilities{0}EmailTemplates{0}Files{0}", Path.DirectorySeparatorChar);
             var content = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}{templatePath}{name}.html");
 
-            // Read style, apply to body
-            string[] emailCSS = { // Read from css file instead
-                "background-color: rgb(224, 243, 244);",
-                "color: rgba(0, 0, 0, 0.54);",
-                "max-width: 70em;",
-                "padding: 15px;",
-                "margin: auto;",
+            // Read CSS
+            StreamReader r = new StreamReader($"{AppContext.BaseDirectory}{templatePath}EmailCssStyles.json");
+            string jsonString = r.ReadToEnd();
+            var styles = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(jsonString);
 
-            };
-            var emailStyle = $"\"{string.Join("", emailCSS)}\"";
+            var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
+            var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
 
-            // Read image
+            // Read Image
             var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.png");
             var imgString = Convert.ToBase64String(imgFile);
-            var img = $"<img src=\"data:image/png;base64,{imgString}\"/>";
+            var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
 
             // Combine
-            content = $"<!DOCTYPE html><html><div style={emailStyle}>{img}{content}</div></ html>";
+            content = $"<!DOCTYPE html><html><div style={bodyStyle}>{img}{content}</div></html>";
 
             foreach (var item in data)
             {

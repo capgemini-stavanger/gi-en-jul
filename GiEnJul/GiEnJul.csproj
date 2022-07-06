@@ -44,9 +44,6 @@
     <None Update="Utilities\EmailTemplates\Files\AssignedFamily.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilities\EmailTemplates\Files\familyTop.0ff49710.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Utilities\EmailTemplates\Files\familyTop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -55,9 +52,6 @@
     </None>
 	<None Update="Utilities\EmailTemplates\Files\Registered.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</None>
-	<None Update="Utilities\EmailTemplates\Files\TemplateStyle.css">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
 	<None Update="Utilities\EmailTemplates\Files\VerifyConnection.html">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
