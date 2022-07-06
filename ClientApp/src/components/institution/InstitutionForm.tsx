@@ -96,7 +96,7 @@ const initState: {
 
 interface IContactState {
   persons: IFormPerson[]; //kan hente ut persons.wishes (liste inni listen)
-  wishes: IFormWish[];
+  // wishes: IFormWish[];
   location: string;
   dinner: IFoodFormData;
   dessert: IFoodFormData;
@@ -109,7 +109,7 @@ interface IContactState {
 
 export const initFormDataState: () => IContactState = () => ({
   persons: [getFormPerson()],
-  wishes: [getFormWish()],
+  // wishes: [getFormWish()],
   location: "",
   dinner: initFoodFormData,
   dessert: initFoodFormData,

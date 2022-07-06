@@ -2,7 +2,7 @@ import { Checkbox, FormControlLabel, Grid, IconButton, SvgIcon } from "@material
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
-import { useState } from "react";
+import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 
 export interface IFormWish {
@@ -13,7 +13,8 @@ export interface IFormWish {
 interface IWishProps {
   cat: string;
   viewErrorTrigger: number;
-  updateWish: (newWishData: { [target: string]: unknown }) => void;
+  updateWish: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  // updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
 }
 
@@ -39,13 +40,13 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
     getSetter("wishInput")(newInput);
-    updateWish({ wish: newInput });
+    //  updateWish();
   };
 
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked;
     getSetter("ageWish")(newInput);
-    updateWish({ wish: undefined });
+    //  updateWish();
   };
 
   return (
