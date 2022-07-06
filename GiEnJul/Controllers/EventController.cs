@@ -23,7 +23,7 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-        // GET api/Events/ActiveLocations
+        // GET api/Event/ActiveLocations
         [HttpGet("ActiveLocations")]
         public async Task<string[]> GetActiveLocationsAsync()
         {
