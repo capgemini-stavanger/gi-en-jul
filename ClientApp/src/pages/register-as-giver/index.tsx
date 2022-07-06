@@ -139,7 +139,7 @@ const RegistrationMacro = () => {
   };
   return (
     <>
-      <Container className={classes.root} maxWidth={false}>
+      <Container className={classes.fillBackground} maxWidth={false}>
         <NavBarPublic />
         <Container className={state.step === 5 ? classes.summaryDesign : classes.giverForm}>
           {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}

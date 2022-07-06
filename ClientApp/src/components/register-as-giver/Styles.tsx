@@ -1,8 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    // THIS IS BAD PRACTICE (STOLEN FROM LANDING-PAGE ROOT)
+  fillBackground: {
     backgroundColor: theme.palette.secondary.light,
     backgroundSize: "cover",
     padding: theme.spacing(2),
