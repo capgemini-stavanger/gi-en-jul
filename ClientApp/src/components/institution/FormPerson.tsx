@@ -1,13 +1,4 @@
-import {
-  capitalize,
-  Link,
-  Grid,
-  SvgIcon,
-  IconButton,
-  Typography,
-  Button,
-  withStyles,
-} from "@material-ui/core";
+import { capitalize, Link, Grid, SvgIcon, IconButton, Typography, Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -31,10 +22,6 @@ interface IPersonProps {
   viewErrorTrigger: number;
   person: IFormPerson;
 }
-
-type WishType = {
-  Cat?: string;
-};
 
 const initState: { [data: string]: any } = {
   ageWish: false,
@@ -126,7 +113,6 @@ const InstitutionPerson: FC<IPersonProps> = ({
   const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
     const newList = [...person.wishes];
     newList[index].cat = newWishData.wish + "";
-    console.log("newList:", newList);
     updatePersonWish({ wishes: newList });
   };
 

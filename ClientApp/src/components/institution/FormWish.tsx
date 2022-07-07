@@ -16,7 +16,6 @@ interface IWishProps {
   viewErrorTrigger: number;
   updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
-  // wishes: IFormWish[];
 }
 
 const initState: { [data: string]: any } = {
@@ -61,8 +60,6 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
       </Grid>
       <Grid item xs={1}>
         {!state.ageWish && (
-          //må legge ønsket til i wishes og sende hele arrayet til parent update person
-          //     <Grid item xs={1}>
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
             validators={[isNotNull]}

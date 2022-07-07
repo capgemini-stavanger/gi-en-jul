@@ -1,6 +1,6 @@
 import Gender from "common/enums/Gender";
 import { v4 as uuidv4 } from "uuid";
-import { getFormWish, IFormWish } from "./FormWish";
+import { IFormWish } from "./FormWish";
 
 interface IFormPerson {
   uuid: string;

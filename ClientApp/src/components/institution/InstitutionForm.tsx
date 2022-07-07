@@ -40,7 +40,6 @@ type submittype = {
   Institution?: string;
   ReferenceId?: string;
   FamilyMembers?: PersonType[];
-  //WishList?: WishType[];
 };
 
 interface IFoodFormData {
@@ -517,7 +516,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
                       updatePersonWish={(wish) => {
-                        updatePersonWishes(i, wish); //en ny prop?
+                        updatePersonWishes(i, wish);
                       }}
                       updatePerson={(newPersonData: { [target: string]: unknown }) =>
                         updatePerson(i, newPersonData)
