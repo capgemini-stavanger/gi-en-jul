@@ -1,24 +1,14 @@
-import {
-  Box,
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  TextField,
-} from "@material-ui/core";
+import { Box, Container, Grid, IconButton, TextField } from "@material-ui/core";
 import { RecipientType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import EditIcon from "@material-ui/icons/Edit";
-import useStyles from "./Styles";
+import useStyles from "../Styles";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "Familie ID", type: "number", width: 200 },
+  { field: "id", headerName: "Familie ID", width: 200 },
   { field: "refId", headerName: "Referanse ID", width: 200 },
   { field: "contactName", headerName: "Kontaktperson navn", width: 200 },
   { field: "contactMail", headerName: "Kontaktperson mail", width: 200 },
@@ -33,21 +23,16 @@ interface IRegistrationOverview {
 const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, institution }) => {
   const apiservice = new ApiService(accessToken);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
-
-  /*
   const [familyIdInput, setFamilyIdInput] = useState("");
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editRecipient, setEditRecipient] = useState({} as RecipientType);
-  */
 
   const classes = useStyles();
 
   const fetchRecipients = () => {
-    console.log(institution);
     apiservice
       .get("Recipient", { params: { Institution: institution } })
       .then((resp) => {
-        console.log(resp);
         setRecipientData(resp.data);
       })
       .catch((errorStack) => {
@@ -57,10 +42,8 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
 
   useEffect(() => {
     fetchRecipients();
-    console.log(recipientData);
   }, []);
 
-  /*
   const onFamilyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFamilyIdInput(e.target.value);
 
@@ -83,7 +66,6 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
   const refreshData = () => {
     fetchRecipients();
   };
-  */
 
   const rows = [];
   for (let i = 0; i < recipientData.length; i++) {
@@ -98,7 +80,32 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
 
   return (
     <Container className={classes.root}>
-      <DataGrid rows={rows} columns={columns} autoPageSize pagination />
+      <Grid container direction="row" justifyContent="center">
+        <Grid item>
+          <Box style={{ height: "600px", width: "1000px" }}>
+            <DataGrid rows={rows} columns={columns} autoPageSize pagination />
+          </Box>
+          <Box sx={{ ml: 5 }}>
+            <TextField
+              type="number"
+              label="Family ID"
+              value={familyIdInput}
+              onChange={onFamilyInputChange}
+            />
+            <IconButton aria-label="expand row" size="small" onClick={onEditFamily}>
+              <EditIcon />
+            </IconButton>
+          </Box>
+          <EditFamilyDialog
+            open={showEditDialog}
+            onClose={() => {
+              setShowEditDialog(false);
+            }}
+            refreshRecipients={() => refreshData()}
+            recipient={editRecipient}
+          />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

@@ -2,17 +2,17 @@ import { Tab } from "@material-ui/core";
 import React, { useState } from "react";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import RegistrationFormRemake from "components/institution/RegistrationFormRemake";
-import RegistrationOverview from "components/institution/RegistrationOverview";
+import RegistrationFormRemake from "components/institution/NewDesign/RegistrationFormRemake";
+import RegistrationOverview from "components/institution/NewDesign/RegistrationOverview";
 import useUser from "hooks/useUser";
 
 interface IInstitutionMacro {
   accessToken: string;
 }
 const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
-  const [step, setStep] = useState<string>("2");
+  const [step, setStep] = useState<string>("1");
 
-  const { location, institution } = useUser();
+  const { institution } = useUser();
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setStep(newValue);
