@@ -1,4 +1,13 @@
-import { capitalize, Link, Grid, SvgIcon, IconButton, Typography, Button } from "@material-ui/core";
+import {
+  capitalize,
+  Link,
+  Grid,
+  SvgIcon,
+  IconButton,
+  Typography,
+  Button,
+  withStyles,
+} from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -33,7 +42,7 @@ const initState: { [data: string]: any } = {
   validWishInput: false,
   dialogOpen: false,
   comment: "",
-  wishes: [getFormWish()],
+  wishes: [],
 };
 
 const InstitutionPerson: FC<IPersonProps> = ({
@@ -68,7 +77,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
     });
   };
 
-  useEffect(() => {}, [person.wish]);
+  useEffect(() => {}, [person.wishes]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
@@ -112,21 +121,29 @@ const InstitutionPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (newWishData: { [target: string]: unknown }) => {
-    console.log("wish", newWishData);
-    //const newList = person.wishes.push({ cat: newWishData.toString() });
-    updatePerson(newWishData);
+  const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
+    const newList = [...person.wishes];
+    newList[index].cat = newWishData.wish + "";
+    console.log("newList:", newList);
+    updatePerson({ wishes: newList });
   };
 
   const deleteWish = (index: number) => {
-    const newList = person.wishes.splice(index, 1);
-    updatePerson({ ...newList });
+    const newList = [...person.wishes];
+    const head = newList.slice(0, index);
+    const tail = newList.slice(index + 1, newList.length);
+    const newWishList = head.concat(tail);
+    person.wishes = newWishList;
+    updatePerson({ wishes: newWishList });
   };
 
   const addWish = () => {
     const newList = [...person.wishes];
+    if (newList.length >= 5) return;
     newList.push(getFormWish());
+
     updatePerson({ wishes: newList });
+    //legg til if wishes.length = 5 remove button.
   };
 
   return (
@@ -178,17 +195,16 @@ const InstitutionPerson: FC<IPersonProps> = ({
         />
       </Grid>
 
-      {state.wishes.map((wish: IFormWish, i: number) => {
+      {person.wishes.map((wish: IFormWish, i: number) => {
         return (
           <FormWish
-            key={i}
+            key={wish.id}
             cat={wish.cat}
             viewErrorTrigger={state.viewErrorTrigger}
             updateWish={(wish) => {
-              updateWish(wish);
+              updateWish(wish, i);
             }}
             deleteWish={() => deleteWish(i)}
-            person={person}
           />
         );
       })}
