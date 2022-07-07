@@ -1,11 +1,19 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  fillBackground: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    padding: theme.spacing(2),
+    height: "100vh",
+  },
   giverForm: {
     paddingTop: theme.spacing(10),
     padding: theme.spacing(3),
+    display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     maxWidth: "500px",
   },
   summaryDesign: {
@@ -27,12 +35,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
   },
   subHeading: {
-    fontSize: "170%",
+    fontSize: "130%",
     fontWeight: 500,
     margin: theme.spacing(1),
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
     [theme.breakpoints.up("tablet")]: {
-      fontSize: "200%",
+      fontSize: "160%",
     },
   },
   form: {
@@ -49,9 +57,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "transparent",
   },
   buttonBack: {
+    color: theme.palette.error.main,
+    padding: theme.spacing(1.2),
+    textTransform: "none",
+  },
+  buttonStep: {
     color: theme.palette.primary.main,
     padding: theme.spacing(1.2),
     textTransform: "none",
+    borderColor: theme.palette.primary.main,
   },
   buttonNext: {
     color: "white",
@@ -95,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 400,
     margin: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    color: theme.palette.text.secondary,
   },
   icon: {
     alignItems: "center",

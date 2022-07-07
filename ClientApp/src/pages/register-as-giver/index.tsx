@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import Confirmation from "components/register-as-giver/Confirmation";
 import ContactInfo from "components/register-as-giver/ContactInfo";
 import Location from "components/register-as-giver/Location";
@@ -10,6 +10,7 @@ import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
+import bli_giver from "styling/img/bli_giver.png";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -77,9 +78,6 @@ const RegistrationMacro = () => {
   const classes = useStyles();
 
   const getStepPage = () => {
-    if (locationOptions === undefined) {
-      return <LoadingPage />;
-    }
     switch (state.step) {
       case 1:
         return (
@@ -136,24 +134,19 @@ const RegistrationMacro = () => {
           <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
         );
       default:
-        return null;
+        return <LoadingPage />;
     }
   };
   return (
     <>
-      {state.step === 5 ? (
-        <Container className={classes.summaryDesign}>
-          <Confirmation values={formDataState} confirmationOK={state.confirmationOK}></Confirmation>
+      <Container className={classes.fillBackground} maxWidth={false}>
+        <NavBarPublic />
+        <Container className={state.step === 5 ? classes.summaryDesign : classes.giverForm}>
+          {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}
+          {state.step === 5 ? null : <img src={bli_giver}></img>}
+          {getStepPage()}
         </Container>
-      ) : (
-        <>
-          <NavBarPublic />
-          <Container className={classes.giverForm}>
-            <Typography className={classes.heading}>Bli giver</Typography>
-            {getStepPage()}
-          </Container>
-        </>
-      )}
+      </Container>
     </>
   );
 };

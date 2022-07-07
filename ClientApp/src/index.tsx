@@ -89,9 +89,6 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       root: {
         borderRadius: "2em",
-        "&:focus": {
-          borderRadius: "2em",
-        },
       },
     },
     MuiPaper: {

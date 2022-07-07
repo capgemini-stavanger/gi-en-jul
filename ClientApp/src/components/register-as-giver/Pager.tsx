@@ -72,7 +72,8 @@ const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText, step })
         {onContinue && (
           <Grid item>
             <Button
-              className={classes.buttonNext}
+              variant="outlined"
+              className={step === 4 ? classes.buttonNext : classes.buttonStep}
               endIcon={<ArrowForwardIos />}
               onClick={onContinue}
             >
