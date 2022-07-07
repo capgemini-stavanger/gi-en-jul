@@ -1,35 +1,19 @@
-import { Typography, CardMedia, Card, Grid } from "@material-ui/core";
+import { Typography, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
-import dummyImg from "styling/img/dummy-image.jpg";
+import parse from "html-react-parser";
 
 interface Props {
-  municipality: string;
-  image: string;
+  location: string;
   information: string;
 }
 
-const style = {
-  greyImageFilter: {
-    filter: "grayscale(100%)",
-  },
-};
-
-const Information: React.FC<Props> = ({ municipality, image, information }) => {
+const Information: React.FC<Props> = ({ location, information }) => {
   const classes = useStyles();
 
   return (
     <Grid id="information" className={classes.sectionContainer}>
-      <Typography>{municipality}</Typography>
-      <Card className={classes.informationCard}>
-        {
-          <CardMedia
-            style={style.greyImageFilter}
-            className={classes.howImage}
-            image={image || dummyImg}
-          />
-        }
-      </Card>
-      <Typography>{information}</Typography>
+      <Typography>{location}</Typography>
+      <Typography>{parse(information)}</Typography>
     </Grid>
   );
 };

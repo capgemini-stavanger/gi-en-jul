@@ -9,19 +9,18 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Information from "./information";
+import Information from "./Information";
 
-export interface CityData {
-  city: string;
-  image: string;
+export interface LocationData {
+  location: string;
   information: string;
 }
 
 interface Props {
-  cities: CityData[];
+  locations: LocationData[];
 }
 
-const City: React.FC<Props> = ({ cities }) => {
+const Kommune: React.FC<Props> = ({ locations }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const handleChange = (panel: string) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
@@ -34,7 +33,7 @@ const City: React.FC<Props> = ({ cities }) => {
         <Typography className={classes.textHeadline}>Kommuner</Typography>
       </div>
       <Grid container justifyContent="center">
-        {Array.from(cities).map((val, index) => (
+        {Array.from(locations).map((val, index) => (
           <Grid className={classes.municipalityItem} key={index}>
             <Accordion
               expanded={expanded === index.toString()}
@@ -44,14 +43,10 @@ const City: React.FC<Props> = ({ cities }) => {
                 className={classes.municipalitySummary}
                 expandIcon={<ExpandMoreIcon className={classes.municipalitySummary} />}
               >
-                <Typography>{val.city}</Typography>
+                <Typography>{val.location}</Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Information
-                  municipality={val.city}
-                  image={val.image}
-                  information={val.information}
-                />
+                <Information location={val.location} information={val.information} />
               </AccordionDetails>
             </Accordion>
           </Grid>
@@ -61,4 +56,4 @@ const City: React.FC<Props> = ({ cities }) => {
   );
 };
 
-export default City;
+export default Kommune;
