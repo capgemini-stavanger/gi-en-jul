@@ -18,9 +18,6 @@ interface IKommuneInfoResponse {
 const Municipality = () => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [locationInfos, setLocationInfos] = useState(new Map<string, string>());
-  // const updateMap = (location: string, info: string) => {
-  //   setLocationInfos(new Map(locationInfos.set(location, info)));
-  // };
   const [locationData, setLocationData] = useState<LocationData[]>([]);
 
   const classes = useStyles();
