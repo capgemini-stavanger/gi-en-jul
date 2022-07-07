@@ -1,10 +1,11 @@
-import { Button, Container, Typography } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
 import React from "react";
 import { useEffect, useState } from "react";
 import { DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
+import ConfirmationBox from "components/shared/confirmationBox";
 
 interface IBusinessInformation {
   accessToken: string;
@@ -32,6 +33,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
   const [businessInfo, setBusinessInfo] = useState<businessInfo>(initBusinessInfo);
   const [html, setHtml] = React.useState("");
   const [openEditor, setOpenEditor] = useState(false);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   useEffect(() => {
     getBusinessInformation();
@@ -77,33 +79,73 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
       });
   };
 
+  const handleResponse = (response: boolean) => {
+    if (response) {
+      saveBusinessInformation();
+    } else {
+      setOpenEditor(false);
+    }
+  };
+
+  const handleOpen = () => {
+    setOpenConfirmation(true);
+  };
+
+  const handleClose = () => {
+    setOpenConfirmation(false);
+  };
+
   return (
     <Container>
-      <Typography className={classes.heading} align="center" variant="h3">
-        Forhåndsvisning av bedriftinformasjon
-      </Typography>
-      <br></br>
-      <Typography variant="h5" className={classes.heading}>
-        <Typography>{parse(html)}</Typography>
-        <br></br>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setOpenEditor(true);
-          }}
-        >
-          Rediger tekst
-        </Button>
-      </Typography>
-      <br></br>
-      <br></br>
+      <Grid container direction="column" spacing={1}>
+        <Grid item>
+          <Typography className={classes.heading} align="center" variant="h3">
+            Forhåndsvisning av bedriftinformasjon
+          </Typography>
+          <Typography variant="h5" className={classes.heading}>
+            <Typography>{parse(html)}</Typography>
+          </Typography>
+        </Grid>
+        <Grid item className={classes.businessButton}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpenEditor(true);
+            }}
+          >
+            Rediger tekst
+          </Button>
+        </Grid>
+      </Grid>
+
       {openEditor && (
         <Typography>
           <DefaultEditor value={html} onChange={onChange} />
-          <br></br>
-          <Button variant="contained" onClick={saveBusinessInformation}>
-            Lagre endringer
-          </Button>
+
+          <Grid container direction="row" spacing={2}>
+            <Grid item className={classes.businessButton}>
+              <Button variant="contained" onClick={handleOpen}>
+                Lagre endringer
+              </Button>
+            </Grid>
+            <Grid item className={classes.businessButton}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setOpenEditor(false);
+                }}
+              >
+                Avbryt
+              </Button>
+            </Grid>
+          </Grid>
+
+          <ConfirmationBox
+            open={openConfirmation}
+            text={"Ønsker du å lagre endringene?"}
+            handleClose={handleClose}
+            handleResponse={handleResponse}
+          />
         </Typography>
       )}
     </Container>
