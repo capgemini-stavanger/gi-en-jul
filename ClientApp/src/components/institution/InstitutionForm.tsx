@@ -163,10 +163,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setDialog(false);
   };
 
-  const updatePerson = (index: number, newPersonData: any) => {
+  const updatePersonWishes = (index: number, newPersonData: any) => {
     formDataState.persons[index].wishes = [{ cat: newPersonData.wish } as IFormWish];
-
-    console.log("før", formDataState.persons[index]);
     setFormDataState((prev) => {
       prev.persons[index] = {
         ...prev.persons[index],
@@ -174,7 +172,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       } as IFormPerson;
       return { ...prev };
     });
-    console.log("etter", formDataState.persons[index]);
+  };
+
+  const updatePerson = (index: number, newPersonData: { [target: string]: unknown }) => {
+    setFormDataState((prev) => {
+      prev.persons[index] = {
+        ...prev.persons[index],
+        ...newPersonData,
+      } as IFormPerson;
+      return { ...prev };
+    });
   };
 
   const deletePerson = (index: number) => {
@@ -509,9 +516,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
-                      updatePerson={(wish) => {
-                        updatePerson(i, wish);
+                      updatePersonWish={(wish) => {
+                        updatePersonWishes(i, wish); //en ny prop?
                       }}
+                      updatePerson={(newPersonData: { [target: string]: unknown }) =>
+                        updatePerson(i, newPersonData)
+                      }
                       deletePerson={() => deletePerson(i)}
                     />
                   );

@@ -21,6 +21,7 @@ import FormWish, { getFormWish, IFormWish } from "./FormWish";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
+  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
   setAlert: (
     open?: boolean,
@@ -47,6 +48,7 @@ const initState: { [data: string]: any } = {
 
 const InstitutionPerson: FC<IPersonProps> = ({
   updatePerson,
+  updatePersonWish,
   deletePerson,
   setAlert,
   viewErrorTrigger,
@@ -125,7 +127,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
     const newList = [...person.wishes];
     newList[index].cat = newWishData.wish + "";
     console.log("newList:", newList);
-    updatePerson({ wishes: newList });
+    updatePersonWish({ wishes: newList });
   };
 
   const deleteWish = (index: number) => {
@@ -134,16 +136,14 @@ const InstitutionPerson: FC<IPersonProps> = ({
     const tail = newList.slice(index + 1, newList.length);
     const newWishList = head.concat(tail);
     person.wishes = newWishList;
-    updatePerson({ wishes: newWishList });
+    updatePersonWish({ wishes: newWishList });
   };
 
   const addWish = () => {
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
     newList.push(getFormWish());
-
-    updatePerson({ wishes: newList });
-    //legg til if wishes.length = 5 remove button.
+    updatePersonWish({ wishes: newList });
   };
 
   return (
