@@ -188,6 +188,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
               updateWish(wish);
             }}
             deleteWish={() => deleteWish(i)}
+            person={person}
           />
         );
       })}
