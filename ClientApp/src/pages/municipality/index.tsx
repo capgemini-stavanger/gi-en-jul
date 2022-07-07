@@ -1,27 +1,26 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
-import logo from "styling/img/logo_background.svg";
 import family from "styling/img/familyTop.svg";
 import snowDown from "styling/img/snow_down.svg";
-import { LocationData } from "components/municipalities/Kommune";
+import { LocationData } from "components/municipalities/Kommunes";
 import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import Kommunes from "components/municipalities/Kommune";
+import Kommunes from "components/municipalities/Kommunes";
 
 interface IKommuneInfoResponse {
-  rowKey: string;
+  index: string;
   info: string;
 }
 
 const Municipality = () => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [locationInfos, setLocationInfos] = useState(new Map<string, string>());
-  const updateMap = (location: string, info: string) => {
-    setLocationInfos(new Map(locationInfos.set(location, info)));
-  };
+  // const updateMap = (location: string, info: string) => {
+  //   setLocationInfos(new Map(locationInfos.set(location, info)));
+  // };
   const [locationData, setLocationData] = useState<LocationData[]>([]);
 
   const classes = useStyles();
@@ -43,9 +42,11 @@ const Municipality = () => {
       .get("Cms/getall", { params: { contentType: "Kommune" } })
       .then((resp) => {
         // Updates a dictionary with {location: information} pairs
+        const tempLocationInfoMap: Map<string, string> = new Map();
         resp.data.forEach((obj: IKommuneInfoResponse) => {
-          updateMap(obj.rowKey, obj.info);
+          tempLocationInfoMap.set(obj.index, obj.info);
         });
+        setLocationInfos(tempLocationInfoMap);
       })
       .catch((errorStack) => {
         console.error(errorStack);
@@ -65,33 +66,27 @@ const Municipality = () => {
     });
   };
 
-  useEffect(() => {
-    fetchActiveLocations();
-    fetchKommuneInformation();
-  }, []);
+  useEffect(fetchActiveLocations, []);
+  useEffect(fetchKommuneInformation, []);
   useEffect(buildLocationData, [activeLocations, locationInfos]);
 
   return (
     <>
       <NavBarPublic />
       <Container className={classes.root} maxWidth={false}>
-        <div className={classes.headLineContainer}>
+        <Grid className={classes.headLineContainer}>
           <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
-        </div>
-        <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item>Empty grid item</Grid>
         </Grid>
-        <Kommunes locations={locationData} />
+        <Grid item>
+          <Kommunes locations={locationData} />
+          <img className={classes.familyImage} src={family}></img>
+        </Grid>
+        <Grid item>
+          <img className={classes.snowDown} src={snowDown}></img>
+        </Grid>
         <ScrollToTop maxPagePosition={300} />
         <Footer />
       </Container>
-      <Button
-        onClick={() => {
-          console.log(activeLocations, locationInfos, locationData);
-        }}
-      >
-        asdfasdfasdfasdf
-      </Button>
     </>
   );
 };
