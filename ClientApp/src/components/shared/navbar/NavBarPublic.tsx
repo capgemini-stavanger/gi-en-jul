@@ -16,6 +16,7 @@ import useStyles from "components/shared/Styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
+import { Navbar, NavbarBrand } from "reactstrap";
 
 const NavBarPublic = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -31,7 +32,7 @@ const NavBarPublic = () => {
   if (window.location.pathname === "/bli-giver") {
     return (
       <>
-        <AppBar className={classes.navContainer}>
+        <Navbar className={classes.navContainer}>
           <Toolbar className={classes.toolBar}>
             <IconButton>
               <Link to="/">
@@ -39,14 +40,14 @@ const NavBarPublic = () => {
               </Link>
             </IconButton>
           </Toolbar>
-        </AppBar>
+        </Navbar>
       </>
     );
   } else {
     return (
       <>
-        <AppBar className={classes.navContainer}>
-          <Toolbar className={classes.toolBar}>
+        <Navbar className={classes.navContainer}>
+          <NavbarBrand className={classes.toolBar}>
             <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
               <MenuIcon />
             </IconButton>
@@ -128,8 +129,8 @@ const NavBarPublic = () => {
             >
               Bli giver
             </Button>
-          </Toolbar>
-        </AppBar>
+          </NavbarBrand>
+        </Navbar>
       </>
     );
   }
