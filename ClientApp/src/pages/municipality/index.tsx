@@ -63,8 +63,10 @@ const Municipality = () => {
     });
   };
 
-  useEffect(fetchActiveLocations, []);
-  useEffect(fetchKommuneInformation, []);
+  useEffect(() => {
+    fetchActiveLocations();
+    fetchKommuneInformation();
+  }, []);
   useEffect(buildLocationData, [activeLocations, locationInfos]);
 
   return (
@@ -84,6 +86,13 @@ const Municipality = () => {
         <ScrollToTop maxPagePosition={300} />
         <Footer />
       </Container>
+      <Button
+        onClick={() => {
+          console.log(activeLocations, locationInfos, locationData);
+        }}
+      >
+        asdfasdfasdfasdf
+      </Button>
     </>
   );
 };
