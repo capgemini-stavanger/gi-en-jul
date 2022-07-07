@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
@@ -9,7 +9,7 @@ import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import Kommune from "components/municipalities/Kommune";
+import Kommunes from "components/municipalities/Kommune";
 
 interface IKommuneInfoResponse {
   rowKey: string;
@@ -65,29 +65,33 @@ const Municipality = () => {
     });
   };
 
-  useEffect(fetchActiveLocations, []);
-  useEffect(fetchKommuneInformation, []);
+  useEffect(() => {
+    fetchActiveLocations();
+    fetchKommuneInformation();
+  }, []);
   useEffect(buildLocationData, [activeLocations, locationInfos]);
 
   return (
     <>
       <NavBarPublic />
       <Container className={classes.root} maxWidth={false}>
+        <div className={classes.headLineContainer}>
+          <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
+        </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item>
-            <img className={classes.logo} src={logo}></img>
-          </Grid>
-          <Grid item>
-            <img className={classes.familyImage} src={family}></img>
-          </Grid>
-          <Grid item>
-            <img className={classes.snowDown} src={snowDown}></img>
-          </Grid>
+          <Grid item>Empty grid item</Grid>
         </Grid>
-        <Kommune locations={locationData} />
+        <Kommunes locations={locationData} />
         <ScrollToTop maxPagePosition={300} />
         <Footer />
       </Container>
+      <Button
+        onClick={() => {
+          console.log(activeLocations, locationInfos, locationData);
+        }}
+      >
+        asdfasdfasdfasdf
+      </Button>
     </>
   );
 };
