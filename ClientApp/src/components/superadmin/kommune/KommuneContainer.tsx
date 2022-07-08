@@ -1,4 +1,4 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect, ChangeEvent } from "react";
 import KommuneInformation from "./KommuneInformation";
@@ -27,6 +27,20 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
       });
   };
   useEffect(fetchActiveLocations, []);
+
+  const deleteLocation = () => {
+    apiservice
+      .post("Cms/deleteSingle", {
+        ContentType: "Kommune",
+        Index: selectedLocation,
+        Question: "",
+        Info: "",
+      })
+
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
 
   const handleChange = (event: ChangeEvent<IChangeEvent>) => {
     setSelectedLocation(event.target.value as string);
@@ -62,6 +76,9 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
         </Grid>
         <Grid item>
           <KommuneInformation accessToken={accessToken} location={selectedLocation} />
+        </Grid>
+        <Grid item>
+          <Button onClick={deleteLocation}>Slett informasjon om valgt kommune</Button>
         </Grid>
       </Grid>
     </>

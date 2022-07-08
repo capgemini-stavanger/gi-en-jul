@@ -14,11 +14,12 @@ namespace GiEnJul.Repositories
         Task<IEnumerable<Models.Cms>> GetCmsByContentTypeAsync(string contentType);
         Task<Models.Cms> InsertOrReplaceAsync(Models.Cms cms);
         Task<IEnumerable> GetSingleCmsByContentTypeAsync(string contentType, string index);
+        Task<Entities.Cms> DeleteEntry(string contentType, string index);
     }
 
     public class CmsRepository : GenericRepository<Cms>, ICmsRepository
     {
-        public CmsRepository(ISettings settings, IMapper mapper, ILogger log, string tableName ="Cms") : base(settings, tableName, mapper, log)
+        public CmsRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Cms") : base(settings, tableName, mapper, log)
         { }
 
         public async Task<IEnumerable> GetSingleCmsByContentTypeAsync(string contentType, string index)
@@ -38,5 +39,18 @@ namespace GiEnJul.Repositories
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Cms>(cms));
             return _mapper.Map<Models.Cms>(inserted);
         }
+
+        public Task<Entities.Cms> DeleteEntry(string contentType, string index)
+        {
+            try
+            {
+                var deleted = DeleteAsync(contentType, index);
+                return deleted;
+            }
+            catch { return null; }
+            
+        }
+
+
     }
 }
