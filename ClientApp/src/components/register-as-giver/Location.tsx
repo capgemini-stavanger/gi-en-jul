@@ -5,7 +5,7 @@ import { isNotNull } from "components/shared/input-fields/validators/Validators"
 import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
@@ -71,6 +71,16 @@ const Location: React.FC<Props> = ({
               }
             />
           </form>
+        </Grid>
+        <Grid item>
+          <Link
+            to="/bedrift"
+            onClick={() => {
+              history.push("/bedrift");
+            }}
+          >
+            <Typography align="center">Vil du registrere en bedrift? Trykk her</Typography>
+          </Link>
         </Grid>
         <Grid item>
           <Pager
