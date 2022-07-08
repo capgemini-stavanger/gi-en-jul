@@ -30,6 +30,29 @@ interface props {
   accessToken: string;
 }
 
+interface IPersonProps {
+  updatePerson: (newPersonData: { [target: string]: unknown }) => void;
+  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
+  deletePerson: () => void;
+  setAlert: (
+    open?: boolean,
+    message?: string,
+    severity?: "error" | "info" | "success" | "warning"
+  ) => void;
+  viewErrorTrigger: number;
+  person: IFormPerson;
+}
+
+const initState: { [data: string]: any } = {
+  ageWish: false,
+  commentSelect: false,
+  wishInput: "",
+  validWishInput: false,
+  dialogOpen: false,
+  comment: "",
+  wishes: [],
+};
+
 const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
   const classes = useStyles();
   const { location, institution } = useUser();
