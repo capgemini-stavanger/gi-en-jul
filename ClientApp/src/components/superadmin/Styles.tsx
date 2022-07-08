@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme: Theme) =>
       top: "0",
       margin: "0.3em",
     },
+    businessButton: {
+      marginBottom: "20px",
+      marginTop: "10px",
+    },
   })
 );
 

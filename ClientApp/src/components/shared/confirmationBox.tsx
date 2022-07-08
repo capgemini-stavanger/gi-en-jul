@@ -34,7 +34,7 @@ const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleRes
                 Nei
               </Button>
             </Grid>
-            <Grid item>
+            <Grid item className={classes.confirmationBoxButton}>
               <Button
                 variant="contained"
                 onClick={() => {

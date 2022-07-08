@@ -78,4 +78,7 @@ export default () =>
       fontSize: "100%",
       fontWeight: 500,
     },
+    confirmationBoxButton: {
+      paddingLeft: "10px",
+    },
   }))();
