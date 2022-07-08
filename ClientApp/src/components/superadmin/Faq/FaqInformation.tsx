@@ -4,6 +4,7 @@ import { Box, Button, Grid, TextField } from "@material-ui/core";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/confirmationBox";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
+import useStyles from "components/superadmin/Styles";
 
 interface IFaqInformation {
   accessToken: string;
@@ -12,6 +13,7 @@ interface IFaqInformation {
 
 const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
   const apiservice = new ApiService(accessToken);
+  const classes = useStyles();
 
   const [faq, setFaq] = useState("");
   const [html, setHtml] = useState("");
@@ -125,17 +127,24 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
               }}
             />
             <DefaultEditor value={html} onChange={onChange} />
-            <Button variant="contained" onClick={handleSaveClick}>
-              Lagre endringer
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setOpenEditor(false);
-              }}
-            >
-              Avbryt
-            </Button>
+            <Grid container direction="row" spacing={2}>
+              <Grid item>
+                <Button variant="contained" onClick={handleSaveClick}>
+                  Lagre endringer
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setOpenAddFaqEditor(false);
+                  }}
+                >
+                  Avbryt
+                </Button>
+              </Grid>
+            </Grid>
+
             <ConfirmationBox
               open={openConfirmBox}
               text={"Er du sikker på at du ønsker å oppdatere teksten?"}
@@ -151,17 +160,25 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
           <Grid item>
             <DefaultEditor value={html} onChange={onChange} />
             <br />
-            <Button variant="contained" onClick={handleSaveClick}>
-              Lagre endringer
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setOpenEditor(false);
-              }}
-            >
-              Avbryt
-            </Button>
+            <Grid container direction="row" spacing={2}>
+              <Grid item>
+                {" "}
+                <Button variant="contained" onClick={handleSaveClick}>
+                  Lagre endringer
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setOpenEditor(false);
+                  }}
+                >
+                  Avbryt
+                </Button>
+              </Grid>
+            </Grid>
+
             <ConfirmationBox
               open={openConfirmBox}
               text={"Er du sikker på at du ønsker å oppdatere teksten?"}

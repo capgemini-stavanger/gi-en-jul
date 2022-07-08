@@ -78,7 +78,6 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
     <Grid container direction="column">
       <Typography variant="h5"> Ofte stile spørsmål</Typography>
       <Grid item>
-        {" "}
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
