@@ -19,7 +19,6 @@ const Municipality = () => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [locationInfos, setLocationInfos] = useState(new Map<string, string>());
   const [locationData, setLocationData] = useState<LocationData[]>([]);
-
   const classes = useStyles();
   const apiservice = new ApiService();
 
