@@ -1,4 +1,3 @@
-import * as React from "react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   Typography,
@@ -10,14 +9,34 @@ import {
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import { faq } from "common/constants/FAQs";
+import { useEffect, useState } from "react";
+import ApiService from "common/functions/apiServiceClass";
+
+interface Question {
+  question: string; // question
+  index: string; // answer
+}
 
 const Questions = () => {
   const classes = useStyles();
-  //Method used to filter which panel to activate
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+  // Method used to filter which panel to activate
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [questions, setQuestions] = useState<Question[] | false>(false);
   const handleChange = (panel: string) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
+  const apiservice = new ApiService();
+  const fetchQuestions = () => {
+    apiservice
+      .get("/ActiveLocations", {})
+      .then((resp) => {
+        setActiveLocations(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
+  useEffect(fetchQuestions, []);
 
   return (
     <Container id="questions" className={classes.sectionContainer}>

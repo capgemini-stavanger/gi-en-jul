@@ -18,7 +18,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
   const fetchActiveLocations = () => {
     apiservice
-      .get("Event/ActiveLocations", {})
+      .get("Cms/GetSingle", {
       .then((resp) => {
         setActiveLocations(resp.data);
       })
