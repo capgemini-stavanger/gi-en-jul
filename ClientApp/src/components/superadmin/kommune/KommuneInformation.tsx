@@ -18,11 +18,16 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
   const [openEditor, setOpenEditor] = useState(false);
 
   const fetchInformation = () => {
+    if (!location) {
+      // location is not set (location starts as an empty string in the parent)
+      return;
+    }
     apiservice
       .get("Cms/GetSingle", {
         params: { contentType: "Kommune", index: location },
       })
       .then((resp) => {
+        // response an array-wrapped object
         setKommuneInformation(resp.data[0].info);
         setHtml(resp.data[0].info);
       })

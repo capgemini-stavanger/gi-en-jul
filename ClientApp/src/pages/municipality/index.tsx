@@ -23,7 +23,6 @@ const Municipality = () => {
     setLocationInfos(new Map(locationInfos.set(location, info)));
   };
   const [locationData, setLocationData] = useState<LocationData[]>([]);
-
   const classes = useStyles();
   const apiservice = new ApiService();
 
