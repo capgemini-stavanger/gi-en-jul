@@ -4,6 +4,7 @@ import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
 import { Container } from "reactstrap";
 import BusinessInformation from "./Business/BusinessInformation";
+import FaqContainer from "./Faq/FaqContainer";
 import KommuneContainer from "./kommune/KommuneContainer";
 
 interface IManageDashboard {
@@ -31,7 +32,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
           <Tab label="Legg til/Slett Brukere" value="34" />
         </TabList>
         <TabPanel value="1">
-          <Typography>Placeholder - FAQ</Typography>
+          <FaqContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
           <KommuneContainer accessToken={accessToken} />
