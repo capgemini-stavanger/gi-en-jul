@@ -103,7 +103,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
             Forhåndsvisning av bedriftinformasjon
           </Typography>
           <Typography variant="h5" className={classes.heading}>
-            <Typography>{parse(html)}</Typography>
+            <Typography>{parse(businessInfo.info)}</Typography>
           </Typography>
         </Grid>
         <Grid item className={classes.businessButton}>
