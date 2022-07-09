@@ -8,13 +8,13 @@ import {
   Grid,
 } from "@material-ui/core";
 import useStyles from "./Styles";
-import { faq } from "common/constants/FAQs";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
+import DotLoader from "common/constants/DotLoader";
 
 interface Question {
   question: string; // question
-  index: string; // answer
+  info: string; // answer
 }
 
 const Questions = () => {
@@ -46,24 +46,28 @@ const Questions = () => {
         <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
       </div>
       <Grid container justifyContent="center">
-        {Array.from(faq).map((val, index) => (
-          <Grid className={classes.questionItem} key={index}>
-            <Accordion
-              expanded={expanded === index.toString()}
-              onChange={handleChange(index.toString())}
-            >
-              <AccordionSummary
-                className={classes.questionSummary}
-                expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+        {questions ? (
+          Array.from(questions).map((val, index) => (
+            <Grid className={classes.questionItem} key={index}>
+              <Accordion
+                expanded={expanded === index.toString()}
+                onChange={handleChange(index.toString())}
               >
-                <Typography>{val.question}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>{val.answer}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        ))}
+                <AccordionSummary
+                  className={classes.questionSummary}
+                  expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+                >
+                  <Typography>{val.question}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>{val.info}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+          ))
+        ) : (
+          <DotLoader />
+        )}
       </Grid>
     </Container>
   );
