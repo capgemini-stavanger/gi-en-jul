@@ -28,9 +28,11 @@ const Questions = () => {
   const apiservice = new ApiService();
   const fetchQuestions = () => {
     apiservice
-      .get("/ActiveLocations", {})
+      .get("Cms/Getall", {
+        params: { contentType: "FAQ" },
+      })
       .then((resp) => {
-        setActiveLocations(resp.data);
+        setQuestions(resp.data);
       })
       .catch((errorStack) => {
         console.error(errorStack);
