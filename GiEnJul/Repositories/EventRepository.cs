@@ -19,6 +19,7 @@ namespace GiEnJul.Repositories
         Task<(int, string)> GetGiverLimitAndEventNameForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
         Task<Models.Event> GetEventByUserLocationAsync(string location);
+        Task<List<Models.Event>> GetAllEventsAsync();
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -70,6 +71,16 @@ namespace GiEnJul.Repositories
             _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
             return activeEvent.First();
+        }
+
+        public async Task<List<Models.Event>> GetAllEventsAsync()
+        {   
+            // TODO: fix GetAllAsync, and use it instead
+            var query = $"PartitionKey ne '{string.Empty}'";
+            var events = await GetAllByQueryAsync(query);
+            var modelEvents = _mapper.Map<List<Models.Event>>(events);
+
+            return modelEvents;
         }
 
         public async Task<string[]> GetLocationsWithActiveEventAsync()

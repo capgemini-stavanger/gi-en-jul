@@ -4,9 +4,11 @@ using GiEnJul.Dtos;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GiEnJul.Auth;
 
 namespace GiEnJul.Controllers
 {
@@ -30,6 +32,14 @@ namespace GiEnJul.Controllers
         public async Task<string[]> GetActiveLocationsAsync()
         {
             return await _eventRepository.GetLocationsWithActiveEventAsync();
+        }
+
+        // GET api/Event/GetAll
+        [HttpGet("GetAll")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<List<Models.Event>> GetAllEvents()
+        {
+            return await _eventRepository.GetAllEventsAsync();
         }
 
         [HttpGet("contacts")]
