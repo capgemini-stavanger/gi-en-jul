@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using GiEnJul.Auth;
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
@@ -37,5 +39,21 @@ namespace GiEnJul.Controllers
             return _mapper.Map<List<GetContactsDto>>(contacts);
 
         }
+
+        //POST api/Event/createEvent 
+        [HttpPost("create")]
+        [Authorize(Policy= Policy.SuperAdmin)]
+        public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
+        {
+
+            var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
+            if (entity == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+
+        }
+        
     }
 }
