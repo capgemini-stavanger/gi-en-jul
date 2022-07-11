@@ -179,7 +179,7 @@ const FormPersonRemake: FC<IPersonProps> = ({
 
           <Grid item>
             <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-              Legg til gaveønske
+              Legg til gaveønske (Maks 5)
             </Button>
           </Grid>
 
