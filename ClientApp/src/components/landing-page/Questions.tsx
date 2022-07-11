@@ -1,4 +1,3 @@
-import * as React from "react";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   Typography,
@@ -9,15 +8,37 @@ import {
   Grid,
 } from "@material-ui/core";
 import useStyles from "./Styles";
-import { faq } from "common/constants/FAQs";
+import { useEffect, useState } from "react";
+import ApiService from "common/functions/apiServiceClass";
+import DotLoader from "common/constants/DotLoader";
+
+interface Question {
+  question: string; // question
+  info: string; // answer
+}
 
 const Questions = () => {
   const classes = useStyles();
-  //Method used to filter which panel to activate
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+  // Method used to filter which panel to activate
+  const [expanded, setExpanded] = useState<string | false>(false);
+  const [questions, setQuestions] = useState<Question[] | false>(false);
   const handleChange = (panel: string) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
+  const apiservice = new ApiService();
+  const fetchQuestions = () => {
+    apiservice
+      .get("Cms/Getall", {
+        params: { contentType: "FAQ" },
+      })
+      .then((resp) => {
+        setQuestions(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
+  useEffect(fetchQuestions, []);
 
   return (
     <Container id="questions" className={classes.sectionContainer}>
@@ -25,24 +46,28 @@ const Questions = () => {
         <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
       </div>
       <Grid container justifyContent="center">
-        {Array.from(faq).map((val, index) => (
-          <Grid className={classes.questionItem} key={index}>
-            <Accordion
-              expanded={expanded === index.toString()}
-              onChange={handleChange(index.toString())}
-            >
-              <AccordionSummary
-                className={classes.questionSummary}
-                expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+        {questions ? (
+          Array.from(questions).map((val, index) => (
+            <Grid className={classes.questionItem} key={index}>
+              <Accordion
+                expanded={expanded === index.toString()}
+                onChange={handleChange(index.toString())}
               >
-                <Typography>{val.question}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>{val.answer}</Typography>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-        ))}
+                <AccordionSummary
+                  className={classes.questionSummary}
+                  expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+                >
+                  <Typography>{val.question}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>{val.info}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+          ))
+        ) : (
+          <DotLoader />
+        )}
       </Grid>
     </Container>
   );
