@@ -42,8 +42,6 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
       .post("Cms/deleteSingle", {
         ContentType: "Kommune",
         Index: location,
-        Question: "",
-        Info: "",
       })
       .then(() => {
         setKommuneInformation("");
