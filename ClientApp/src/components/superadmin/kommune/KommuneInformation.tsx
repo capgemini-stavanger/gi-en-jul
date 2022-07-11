@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
@@ -36,6 +36,21 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
       });
   };
   useEffect(fetchInformation, [location]);
+
+  const deleteLocation = () => {
+    apiservice
+      .post("Cms/deleteSingle", {
+        ContentType: "Kommune",
+        Index: location,
+      })
+      .then(() => {
+        setKommuneInformation("");
+        setHtml("");
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
 
   function onChange(e: ContentEditableEvent) {
     setHtml(e.target.value);
@@ -91,6 +106,9 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
           </Button>
         </>
       )}
+      <Grid item>
+        <Button onClick={deleteLocation}>Slett informasjon om valgt kommune</Button>
+      </Grid>
 
       <ConfirmationBox
         open={openConfirmBox}

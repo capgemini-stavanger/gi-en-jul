@@ -26,21 +26,21 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-         [HttpGet("GetAll")]
-         public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
-         {
+        [HttpGet("GetAll")]
+        public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
+        {
             var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
             if (content.Any())
             {
                 return content;
             }
             return null;
-         }
+        }
 
         [HttpGet("GetSingle")]
         public async Task<IEnumerable> GetSingleContent([FromQuery] string contentType, string index)
         {
-            var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index); 
+            var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index);
             return content;
         }
 
@@ -51,12 +51,23 @@ namespace GiEnJul.Controllers
             if (string.IsNullOrWhiteSpace(content.Index) &&
                 (content.ContentType == "FAQ" || content.ContentType == "Bedrift"))
             {
-                content.Index = Guid.NewGuid().ToString(); 
+                content.Index = Guid.NewGuid().ToString();
             }
 
             await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
             return Ok();
         }
-         
+
+        [HttpPost("deleteSingle")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)
+        {
+            var content = await _cmsRepository.DeleteEntry(entity.ContentType, entity.Index);
+            if (content == null)
+            {
+                return BadRequest();
+            }
+            return Ok(content); 
+        }
     }
 }
