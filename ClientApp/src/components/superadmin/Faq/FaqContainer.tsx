@@ -1,7 +1,6 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
-import useStyles from "components/superadmin/Styles";
 import React, { useEffect, useState, ChangeEvent } from "react";
 import FaqInformation from "./FaqInformation";
 
