@@ -27,6 +27,10 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
     if (index.length > 0) {
       setShowButtons(true);
     }
+    if (!index) {
+      // FAQ is not set (FAQ starts as an empty string in the parent)
+      return;
+    }
     apiservice
       .get("Cms/GetSingle", {
         params: { contentType: "FAQ", index: index },

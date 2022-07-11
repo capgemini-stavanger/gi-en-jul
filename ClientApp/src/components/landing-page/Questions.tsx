@@ -11,6 +11,7 @@ import useStyles from "./Styles";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import DotLoader from "common/constants/DotLoader";
+import parse from "html-react-parser";
 
 interface Question {
   question: string; // question
@@ -60,7 +61,7 @@ const Questions = () => {
                   <Typography>{val.question}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Typography>{val.info}</Typography>
+                  <Typography>{parse(val.info)}</Typography>
                 </AccordionDetails>
               </Accordion>
             </Grid>
