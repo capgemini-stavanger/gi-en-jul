@@ -40,7 +40,7 @@ namespace GiEnJul.Repositories
             return _mapper.Map<Models.Cms>(inserted);
         }
 
-        public Task<Entities.Cms> DeleteEntry(string contentType, string index)
+        public async Task<Entities.Cms> DeleteEntry(string contentType, string index)
         {
             try
             {
