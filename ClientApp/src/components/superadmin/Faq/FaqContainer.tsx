@@ -23,7 +23,6 @@ interface IChangeEvent {
 }
 
 const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
-  const classes = useStyles();
   const apiservice = new ApiService(accessToken);
   const [faq, setFaq] = useState<faqInfo[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>("");
