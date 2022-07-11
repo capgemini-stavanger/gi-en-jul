@@ -44,7 +44,7 @@ namespace GiEnJul.Repositories
         {
             try
             {
-                var deleted = DeleteAsync(contentType, index);
+                var deleted = await DeleteAsync(contentType, index);
                 return deleted;
             }
             catch { return null; }
