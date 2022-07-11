@@ -1,19 +1,8 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Container,
-  Grid,
-  MenuItem,
-  Select,
-  Typography,
-} from "@material-ui/core";
+import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
 import useStyles from "components/superadmin/Styles";
 import React, { useEffect, useState, ChangeEvent } from "react";
-import { Button } from "reactstrap";
 import FaqInformation from "./FaqInformation";
 
 interface IFaqInformation {
@@ -28,25 +17,15 @@ interface faqInfo {
   timestamp: string;
 }
 
-const initFaqInfo: faqInfo = {
-  question: "",
-  info: "",
-  contentType: "FAQ",
-  index: "",
-  timestamp: "",
-};
-
 interface IChangeEvent {
   name?: string | undefined;
   value: unknown;
 }
 
-const initFaqList: faqInfo[] = [];
-
 const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
-  const [faq, setFaq] = useState<faqInfo[]>(initFaqList);
+  const [faq, setFaq] = useState<faqInfo[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>("");
 
   const getFaqInformation = () => {
@@ -78,16 +57,19 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
     <Grid container direction="column">
       <Typography variant="h5"> Ofte stile spørsmål</Typography>
       <Grid item>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={selectedItem}
-          label="Location"
-          onChange={handleChanges}
-          fullWidth
-        >
-          {menuItems}
-        </Select>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Velg et spørsmål</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={selectedItem}
+            label="Velg et spørsmål"
+            onChange={handleChanges}
+            fullWidth
+          >
+            {menuItems}
+          </Select>
+        </FormControl>
       </Grid>
       <Grid item>
         <FaqInformation accessToken={accessToken} index={selectedItem} />

@@ -21,8 +21,12 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
   const [openEditor, setOpenEditor] = useState(false);
   const [openAddFaqEditor, setOpenAddFaqEditor] = useState(false);
   const [faqQuestion, setFaqQuestion] = useState("");
+  const [showButtons, setShowButtons] = useState(false);
 
   const fetchInformation = () => {
+    if (index.length > 0) {
+      setShowButtons(true);
+    }
     apiservice
       .get("Cms/GetSingle", {
         params: { contentType: "FAQ", index: index },
@@ -36,56 +40,70 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
       });
   };
   useEffect(fetchInformation, [index]);
+
   function onChange(e: ContentEditableEvent) {
     setHtml(e.target.value);
   }
+
+  const handleDeleteClick = () => {
+    setOpenConfirmBox(true);
+  };
   const handleSaveClick = () => {
     setOpenConfirmBox(true);
+  };
+  const handleConfirmDelete = (response: boolean) => {
+    if (response) {
+      apiservice
+        .post("Cms/deleteSingle", {
+          ContentType: "FAQ",
+          Index: index,
+        })
+        .then(() => {
+          setFaq("");
+          setHtml("");
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+        });
+    }
   };
 
   const handleSaveResponse = (response: boolean) => {
     if (response) {
-      saveFaqformation();
+      apiservice
+        .post("cms/insert", {
+          ContentType: "FAQ",
+          Index: index,
+          Info: html,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setOpenEditor(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   };
   const addNewFaqResponse = (response: boolean) => {
     if (response) {
-      makeNewFaq();
+      apiservice
+        .post("cms/insert", {
+          ContentType: "FAQ",
+          Index: "",
+          Info: html,
+          question: faqQuestion,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setOpenEditor(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-  };
-  const saveFaqformation = () => {
-    apiservice
-      .post("cms/insert", {
-        ContentType: "FAQ",
-        Index: index,
-        Info: html,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setOpenEditor(false);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const makeNewFaq = () => {
-    apiservice
-      .post("cms/insert", {
-        ContentType: "FAQ",
-        Index: "",
-        Info: html,
-        question: faqQuestion,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setOpenEditor(false);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
   };
 
   return (
@@ -94,16 +112,35 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
         <Grid item>
           <Box>{parse(faq)}</Box>
         </Grid>
-        <Grid item>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setOpenEditor(true);
-            }}
-          >
-            Rediger tekst
-          </Button>
-        </Grid>
+        {showButtons && (
+          <>
+            <Grid item>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setOpenEditor(true);
+                }}
+              >
+                Rediger tekst
+              </Button>
+              <Button
+                className={classes.deleteButton}
+                variant="contained"
+                onClick={handleDeleteClick}
+              >
+                Slett spørsmål og svar
+              </Button>
+              <ConfirmationBox
+                open={openConfirmBox}
+                text={"Er du sikker på at du ønsker å slette dette ofte stilte spørsmålet?"}
+                handleClose={() => {
+                  setOpenConfirmBox(false);
+                }}
+                handleResponse={handleConfirmDelete}
+              />
+            </Grid>
+          </>
+        )}
         <Grid item>
           <Button
             variant="contained"
@@ -111,7 +148,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
               setOpenAddFaqEditor(true), setHtml("");
             }}
           >
-            Legg til spørsmål og svar
+            Legg til nytt spørsmål og svar
           </Button>
         </Grid>
         {openAddFaqEditor && (
