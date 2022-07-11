@@ -9,7 +9,7 @@ export interface EventContent {
   endDate: string; // YYYY-MM-DDThh:mm:ssZ
   deliveryAddress: string;
   deliveryDate: string;
-  deliveryGPS: null; // unused
+  deliveryGPS: null;
   deliveryTime: string;
   contactPerson: string;
   giverLimit: number;
