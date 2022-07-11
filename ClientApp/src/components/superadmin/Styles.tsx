@@ -59,6 +59,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: "20px",
       marginTop: "10px",
     },
+    deleteButton: {
+      marginLeft: "10px",
+    },
   })
 );
 
