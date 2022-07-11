@@ -10,6 +10,7 @@ namespace GiEnJul.Infrastructure
         public string RecaptchaSecret { get; }
         public string ReactAppUri { get; }
         public MailSettings MailSettings { get; }
+        public Auth0Settings Auth0Settings { get; }
     }
 
     public class Settings : ISettings
@@ -43,6 +44,20 @@ namespace GiEnJul.Infrastructure
                 return settings;
             }
         }
+        public Auth0Settings Auth0Settings { get
+            {
+                var section = _configuration.GetSection("Auth0");
+                var auth0 = new Auth0Settings
+                {
+                    Domain = section.GetValue<string>("Domain"),
+                    AzureAudience = section.GetValue<string>("AzureAudience"),
+                    LocalAudience = section.GetValue<string>("LocalAudience"),
+                    ManagementClientId = section.GetValue<string>("ManagementClientId"),
+                    ManagementClientSecret = section.GetValue<string>("ManagementClientSecret"),
+                };
+                return auth0;
+            } 
+        }
     }
 
     public class MailSettings
@@ -54,5 +69,12 @@ namespace GiEnJul.Infrastructure
         public int Port { get; set; }
     }
 
-
+    public class Auth0Settings
+    {
+        public string Domain { get; set; }
+        public string LocalAudience { get; set; }
+        public string AzureAudience { get; set; }
+        public string ManagementClientId { get; set; }
+        public string ManagementClientSecret { get; set; }
+    }
 }
