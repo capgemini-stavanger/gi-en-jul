@@ -37,9 +37,10 @@ namespace GiEnJul.Controllers
         // GET api/Event/GetAll
         [HttpGet("GetAll")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<List<Models.Event>> GetAllEvents()
+        public async Task<List<Entities.Event>> GetAllEvents()
         {
-            return await _eventRepository.GetAllEventsAsync();
+            var events = await _eventRepository.GetAllEventsAsync();
+            return _mapper.Map<List<Entities.Event>>(events);
         }
 
         [HttpGet("contacts")]

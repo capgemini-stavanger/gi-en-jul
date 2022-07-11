@@ -74,10 +74,13 @@ namespace GiEnJul.Repositories
         }
 
         public async Task<List<Models.Event>> GetAllEventsAsync()
-        {   
-            // TODO: fix GetAllAsync, and use it instead
-            var query = $"PartitionKey ne '{string.Empty}'";
-            var events = await GetAllByQueryAsync(query);
+        {
+            // Old, but works:
+            // var query = $"PartitionKey ne '{string.Empty}'";
+            // var events = await GetAllByQueryAsync(query);
+            // var modelEvents = _mapper.Map<List<Models.Event>>(events);
+
+            var events = await GetAllAsync();
             var modelEvents = _mapper.Map<List<Models.Event>>(events);
 
             return modelEvents;

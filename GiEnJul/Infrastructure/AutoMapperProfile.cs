@@ -127,11 +127,13 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.EventName))
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.City));
 
+            CreateMap<Entities.Event, Models.Event>()
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
+
             CreateMap<Models.Event, Entities.Event>()
                 .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
                 .ForMember(dest => dest.ETag, opt => opt.Ignore());
-
-            CreateMap<Entities.Event, Models.Event>();
 
             CreateMap<Models.Event, GetContactsDto>()
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
