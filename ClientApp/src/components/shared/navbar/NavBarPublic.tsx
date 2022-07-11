@@ -66,7 +66,6 @@ const NavBarPublic = () => {
                     }}
                     className={classes.drawerContent}
                     label="For bedrifter"
-                    value="2"
                   ></Tab>
 
                   <Tab
@@ -75,7 +74,6 @@ const NavBarPublic = () => {
                     }}
                     className={classes.drawerContent}
                     label="Start Gi en jul i din kommune"
-                    value="3"
                   ></Tab>
 
                   <Tab
