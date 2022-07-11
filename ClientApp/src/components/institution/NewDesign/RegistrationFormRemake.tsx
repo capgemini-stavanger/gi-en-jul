@@ -3,7 +3,6 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import RegistrationInfoRemake from "./RegistrationInfoRemake";
 import useStyles from "../Styles";
 import {
-  initState,
   initFormDataState,
   initValidFormState,
   PersonType,
@@ -11,6 +10,7 @@ import {
   IFormPerson,
   getFormPerson,
   IContactState,
+  initState,
 } from "components/institution/NewDesign/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
@@ -25,33 +25,11 @@ import { DESSERTS } from "common/constants/Desserts";
 import CustomTooltip from "../CustomTooltip";
 import FormPersonRemake from "./FormPersonRemake";
 import ApiService from "common/functions/apiServiceClass";
+import { IFormWish } from "../FormWish";
 
 interface props {
   accessToken: string;
 }
-
-interface IPersonProps {
-  updatePerson: (newPersonData: { [target: string]: unknown }) => void;
-  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
-  deletePerson: () => void;
-  setAlert: (
-    open?: boolean,
-    message?: string,
-    severity?: "error" | "info" | "success" | "warning"
-  ) => void;
-  viewErrorTrigger: number;
-  person: IFormPerson;
-}
-
-const initState: { [data: string]: any } = {
-  ageWish: false,
-  commentSelect: false,
-  wishInput: "",
-  validWishInput: false,
-  dialogOpen: false,
-  comment: "",
-  wishes: [],
-};
 
 const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
   const classes = useStyles();
@@ -60,7 +38,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
 
   const [state, setState] = useState(initState);
   const [formDataState, setFormDataState] = useState(initFormDataState());
-  const [validFormState, setValidFormState] = useState(initValidFormState);
+  const [validFormState, setValidFormState] = useState(initValidFormState); //denne har ... i orginal
 
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
@@ -283,6 +261,17 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
+  const updatePersonWishes = (index: number, newPersonData: any) => {
+    formDataState.persons[index].wishes = [{ wish: newPersonData.wish } as IFormWish];
+    setFormDataState((prev) => {
+      prev.persons[index] = {
+        ...prev.persons[index],
+        ...newPersonData,
+      } as IFormPerson;
+      return { ...prev };
+    });
+  };
+
   return (
     <>
       <Container className={classes.root}>
@@ -472,6 +461,9 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                             key={person.uuid}
                             person={person}
                             viewErrorTrigger={state.viewErrorTrigger}
+                            updatePersonWish={(wish) => {
+                              updatePersonWishes(i, wish);
+                            }}
                             updatePerson={(newPersonData: { [target: string]: unknown }) =>
                               updatePerson(i, newPersonData)
                             }

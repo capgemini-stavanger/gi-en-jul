@@ -112,7 +112,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
 
   const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
     const newList = [...person.wishes];
-    newList[index].cat = newWishData.wish + "";
+    newList[index].wish = newWishData.wish + "";
     updatePersonWish({ wishes: newList });
   };
 
@@ -185,7 +185,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
         return (
           <FormWish
             key={wish.id}
-            cat={wish.cat}
+            wish={wish.wish}
             viewErrorTrigger={state.viewErrorTrigger}
             updateWish={(wish) => {
               updateWish(wish, i);
