@@ -4,15 +4,16 @@ import { isNotNull } from "components/shared/input-fields/validators/Validators"
 import { Categories, ICategories } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
+import useStyles from "./Styles";
 
 export interface IFormWish {
   id: string;
-  cat: string;
+  wish: string;
   size?: string;
 }
 
 interface IWishProps {
-  cat: string;
+  wish: string;
   viewErrorTrigger: number;
   updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
@@ -26,11 +27,13 @@ const initState: { [data: string]: any } = {
 
 export const getFormWish: () => IFormWish = () => ({
   id: Math.random().toString(),
-  cat: "",
+  wish: "",
 });
 
 const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, deleteWish }) => {
   const [state, setState] = useState({ ...initState });
+
+  const classes = useStyles();
 
   const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
     setState((prev) => {
@@ -58,7 +61,7 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
-      <Grid item xs={1}>
+      <Grid item>
         {!state.ageWish && (
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
@@ -72,7 +75,7 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
             disabled={state.ageWish}
             value={state.wishInput}
             onChange={(e) => onWishInputChange(e)}
-            fullWidth
+            className={classes.mediumWidth}
           ></InputValidator>
         )}
       </Grid>

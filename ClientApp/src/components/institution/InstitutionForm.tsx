@@ -163,7 +163,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
 
   const updatePersonWishes = (index: number, newPersonData: any) => {
-    formDataState.persons[index].wishes = [{ cat: newPersonData.wish } as IFormWish];
+    formDataState.persons[index].wishes = [{ wish: newPersonData.wish } as IFormWish];
     setFormDataState((prev) => {
       prev.persons[index] = {
         ...prev.persons[index],
