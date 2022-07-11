@@ -32,7 +32,7 @@ export default () =>
     },
     drawerContent: {
       cursor: "pointer",
-      fontSize: "120%",
+      fontSize: "70%",
       fontWeight: 600,
       color: theme.palette.primary.light,
       "&:hover": {
@@ -60,6 +60,18 @@ export default () =>
     navIcon: {
       color: theme.palette.primary.light,
       marginTop: theme.spacing(-1),
+    },
+    giverButton: {
+      backgroundColor: theme.palette.primary.main,
+      position: "absolute",
+      color: "white",
+      top: "10px",
+      right: "20px",
+      textTransform: "none",
+      padding: theme.spacing(1.5, 2, 1.5, 2),
+      "&:hover": {
+        backgroundColor: theme.palette.primary.dark,
+      },
     },
     buttonNext: {
       position: "inherit",

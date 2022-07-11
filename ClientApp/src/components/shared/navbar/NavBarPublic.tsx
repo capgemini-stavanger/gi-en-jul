@@ -1,4 +1,15 @@
-import { Button, IconButton, Toolbar, Drawer, List, ListItem, Typography } from "@material-ui/core";
+import {
+  Button,
+  IconButton,
+  Toolbar,
+  Drawer,
+  List,
+  ListItem,
+  Typography,
+  Tab,
+  Box,
+  Grid,
+} from "@material-ui/core";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Link as Scroll } from "react-scroll";
@@ -8,16 +19,15 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { Navbar, NavbarBrand } from "reactstrap";
+import { TabContext, TabList } from "@material-ui/lab";
 
 const NavBarPublic = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tab, setTab] = useState<string>("1");
   const classes = useStyles();
   const history = useHistory();
-  const handleEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(() => event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(() => null);
+
+  const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
+    setTab(newValue);
   };
 
   if (window.location.pathname === "/bli-giver") {
@@ -39,89 +49,57 @@ const NavBarPublic = () => {
       <>
         <Navbar className={classes.navContainer}>
           <NavbarBrand className={classes.toolBar}>
-            <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
-              <List className={classes.drawerMenu}>
-                <IconButton onClick={handleClose} className={classes.closeButton}>
-                  <Close color="primary" />
-                </IconButton>
-                <ListItem>
-                  <Link
-                    to="/"
+            <TabContext value={tab}>
+              <div>
+                <TabList onChange={handleChange} centered className={classes.toolBar}>
+                  <Tab
                     onClick={() => {
                       history.push("/");
                     }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Hjem</Typography>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="how" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Hvordan fungerer gi en jul?
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="questions" smooth={true}>
-                    <Typography className={classes.drawerContent}>Ofte stilte spørsmål</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    to="bedrift"
-                    style={{ textDecoration: "none" }}
+                    className={classes.drawerContent}
+                    label="Hjem"
+                  ></Tab>
+
+                  <Tab
                     onClick={() => {
                       history.push("/bedrift");
                     }}
-                  >
-                    <Typography className={classes.drawerContent}>For bedrifter</Typography>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="contact" smooth={true}>
-                    <Typography className={classes.drawerContent}>Kontakt</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    to="startJul"
-                    style={{ textDecoration: "none" }}
+                    className={classes.drawerContent}
+                    label="For bedrifter"
+                    value="2"
+                  ></Tab>
+
+                  <Tab
                     onClick={() => {
                       history.push("/startJul");
                     }}
-                  >
-                    <Typography className={classes.drawerContent}>
-                      Hvordan starte Gi en Jul i din kommune
-                    </Typography>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    to="kommune"
+                    className={classes.drawerContent}
+                    label="Start Gi en jul i din kommune"
+                    value="3"
+                  ></Tab>
+
+                  <Tab
                     onClick={() => {
-                      history.push("/kommune");
+                      history.push("kommune");
                     }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Kommuner</Typography>
-                  </Link>
-                </ListItem>
-              </List>
-            </Drawer>
-            <Button
-              size="large"
-              endIcon={<ArrowForwardIos />}
-              className={classes.buttonNext}
-              onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
-            >
-              Bli giver
-            </Button>
+                    className={classes.drawerContent}
+                    label="Kommuner"
+                  ></Tab>
+                </TabList>
+              </div>
+            </TabContext>
           </NavbarBrand>
         </Navbar>
+        <Box alignItems={"right"}>
+          <Button
+            size="large"
+            className={classes.giverButton}
+            endIcon={<ArrowForwardIos />}
+            onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+          >
+            Bli giver
+          </Button>
+        </Box>
       </>
     );
   }
