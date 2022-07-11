@@ -42,6 +42,17 @@ const useStyles = makeStyles((theme) => ({
   mediumWidth: {
     width: "150px",
   },
+  greenHeart: {
+    color: theme.palette.primary.main,
+    fontSize: "3em",
+  },
+  greenBox: {
+    backgroundColor: theme.palette.secondary.main,
+    width: "450px",
+    height: "160px",
+    borderRadius: "2em",
+    padding: "20px",
+  },
 }));
 
 export default useStyles;

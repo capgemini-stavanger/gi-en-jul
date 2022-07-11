@@ -26,6 +26,7 @@ import CustomTooltip from "../CustomTooltip";
 import FormPersonRemake from "./FormPersonRemake";
 import ApiService from "common/functions/apiServiceClass";
 import { IFormWish } from "../FormWish";
+import FamilyInformationBox from "./FamilyInformationBox";
 
 interface props {
   accessToken: string;
@@ -448,8 +449,19 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                     justifyContent="space-around"
                     alignItems="center"
                   >
-                    <Grid item>COMPONENT 1</Grid>
-                    <Grid item>COMPONENT 2</Grid>
+                    <Grid item>
+                      <FamilyInformationBox
+                        header="Detaljerte ønsker"
+                        info="Dersom barnet ikke har ønsker kan du skrive noe om interesser, som fotball, hobbyting,
+                        turn osv."
+                      />
+                    </Grid>
+                    <Grid item>
+                      <FamilyInformationBox
+                        header="Tydelige setninger"
+                        info="Et sammendrag av familiens info og ønsker blir sendt til giver. Skriv derfor utfyllende og fullstendige setninger."
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
                 <Grid item>
