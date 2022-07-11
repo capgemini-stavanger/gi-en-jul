@@ -45,15 +45,12 @@ namespace GiEnJul.Controllers
         [Authorize(Policy= Policy.SuperAdmin)]
         public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
         {
-
             var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
             if (entity == null)
             {
                 return BadRequest();
             }
             return Ok();
-
-        }
-        
+        } 
     }
 }
