@@ -25,9 +25,10 @@ interface Props {
   accessToken: string;
 }
 
-const EventInformation: React.FC<Props> = ({ event, accessToken }) => {
-  const updateEvent = () => {};
-  const deleteEvent = () => {};
+const EventInformation: React.FC<Props> = () => {
+  // const EventInformation: React.FC<Props> = ({ event, accessToken }) => {
+  //   const updateEvent = () => {};
+  //   const deleteEvent = () => {};
 
   return (
     <Grid container>
