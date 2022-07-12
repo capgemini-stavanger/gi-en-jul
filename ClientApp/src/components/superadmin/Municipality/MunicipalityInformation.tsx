@@ -12,7 +12,7 @@ interface IMunicipalityInformation {
 
 const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({ accessToken, location }) => {
   const apiservice = new ApiService(accessToken);
-  const [kommuneInformation, setKommuneInformation] = useState("");
+  const [MunicipalityInformation, setKommuneInformation] = useState("");
   const [html, setHtml] = useState("");
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
   const [openEditor, setOpenEditor] = useState(false);
@@ -88,7 +88,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({ accessTok
 
   return (
     <>
-      <Box>{parse(kommuneInformation)}</Box>
+      <Box>{parse(MunicipalityInformation)}</Box>
 
       <Button
         variant="contained"
