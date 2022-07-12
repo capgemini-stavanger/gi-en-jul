@@ -93,6 +93,18 @@ namespace GiEnJul.Controllers
         {
             var active = await _municipalityRepository.GetAllActive();
             return active.ToList();
+
+        [HttpPost]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
+        {
+            var names = await _municipalityRepository.GetAll();
+            if (!names.Where(x => x.RowKey == content.Name).Any())
+                return BadRequest("RowKey does not exists");
+
+            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+            return Ok();
         }
+    }
     }
 }
