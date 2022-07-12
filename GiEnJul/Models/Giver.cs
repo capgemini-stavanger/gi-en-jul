@@ -24,7 +24,8 @@ namespace GiEnJul.Models
         public bool HasConfirmedMatch { get; set; } = false;
 
         //Handle feedback on denying connection
-        public string Feedback { get; set; }
+        public string CancelFeedback { get; set; }
+        public DateTime? CancelDate { get; set; }
 
         public Giver ShallowCopy() 
         {

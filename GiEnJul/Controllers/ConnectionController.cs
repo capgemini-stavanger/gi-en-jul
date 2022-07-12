@@ -138,15 +138,20 @@ namespace GiEnJul.Controllers
 
             if (giver is null || recipient is null)
             {
-                return NotFound("Giver or Recipient not found"); 
+                return NotFound("Giver or Recipient not found");
             }
-
-            if (_connectionRepository.ConnectionExists(giver, recipient))
+            if (giver.MatchedRecipient != recipient.MatchedGiver)
             {
-                return BadRequest("Connection exists already");
+                return BadRequest("Incorrect match between giver and recipient");
             }
-
-            // Add more fail-checking, f.ex if connection is broken off already?
+            if(!giver.IsSuggestedMatch || giver.HasConfirmedMatch)
+            {
+                return BadRequest("Giver is not waiting to connect anymore");
+            }
+            if (!recipient.IsSuggestedMatch || recipient.HasConfirmedMatch)
+            {
+                return BadRequest("Recipient is not waiting to connect anymore");
+            }
 
             var originalGiver = giver.ShallowCopy();
             var originalRecipient = recipient.ShallowCopy();
@@ -154,27 +159,25 @@ namespace GiEnJul.Controllers
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
             giver.MatchedRecipient = null;
-
-            // Add feedback based on condition
-            giver.Feedback = feedback.FeedbackGiver;
-
-            // Create email template for the giver
-                // ..
-
-            // Question; Is there anything that can happen while on pending(?)
-            // -> Unmatched automatically
-            // -> Connection with someone else who responded?
-            // -> Does anyone else recieve waiting list information?
+            giver.CancelFeedback = feedback.FeedbackGiver;
+            giver.CancelDate = DateTime.UtcNow;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
             recipient.MatchedGiver = null;
 
+            var emailTemplatename = EmailTemplateName.Notification;
+            var emailValuesDict = new Dictionary<string, string>
+                {
+                    { "content", "Dette er en bekreftelse på at du har avslått koblingen..."},
+                };
+            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-                // Send out email as well
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {

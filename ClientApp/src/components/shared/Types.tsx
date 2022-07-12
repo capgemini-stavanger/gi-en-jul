@@ -13,6 +13,8 @@ export interface GiverType {
   partitionKey: string;
   rowKey: string;
   phoneNumber: string;
+  cancelFeedback: string;
+  cancelDate: Date;
 }
 
 export interface RecipientType {
