@@ -25,6 +25,7 @@ namespace GiEnJul.Test.ControllerTests
 
         public Mock<IConfiguration> ConfigMock { get; private set; }
         public Mock<IEmailTemplateBuilder> mockEmailTemplateBuilder { get; set; }
+        public Mock<IAuthorization> AuthMock { get; private set; }
 
         public readonly Settings settings;
 
@@ -41,6 +42,7 @@ namespace GiEnJul.Test.ControllerTests
             ConfigMock = new Mock<IConfiguration>();
             mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
             settings = new Settings(ConfigMock.Object);
+            AuthMock = new Mock<IAuthorization>();
             _controller = new AdminController(MockEventRepo.Object,
                                               MockGiverRepo.Object,
                                               MockRecipientRepo.Object,
@@ -50,7 +52,8 @@ namespace GiEnJul.Test.ControllerTests
                                               _mapper,
                                               emailClientMock.Object,
                                               settings,
-                                              mockEmailTemplateBuilder.Object);
+                                              mockEmailTemplateBuilder.Object,
+                                              AuthMock.Object);
         }
 
         [Fact]

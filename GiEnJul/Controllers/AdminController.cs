@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ClosedXML.Extensions;
-using GiEnJul.Clients;
 using GiEnJul.Auth;
+using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
@@ -35,6 +35,7 @@ namespace GiEnJul.Controllers
         private readonly IEmailClient _emailClient;
         private readonly ISettings _settings;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
+        private readonly IAuthorization _authorization;
 
         public AdminController(
             IEventRepository eventRepository,
@@ -46,7 +47,8 @@ namespace GiEnJul.Controllers
             IMapper mapper,
             IEmailClient emailClient,
             ISettings settings,
-            IEmailTemplateBuilder emailTemplateBuilder)
+            IEmailTemplateBuilder emailTemplateBuilder,
+            IAuthorization authorization)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -58,12 +60,13 @@ namespace GiEnJul.Controllers
             _emailClient = emailClient;
             _settings = settings;
             _emailTemplateBuilder = emailTemplateBuilder;
+            _authorization = authorization;
         }
 
         [HttpGet("Overview/Givers")]
         [Authorize(Policy = Policy.ReadGiver)]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
-        {
+        {            
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
 
@@ -319,8 +322,9 @@ namespace GiEnJul.Controllers
                     deleteCount += 1;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                _log.Error(e, "unable to delete entity {@0}", recipientDto);
                 await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
                 await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
 
@@ -364,8 +368,9 @@ namespace GiEnJul.Controllers
                     await _personRepository.DeleteBatchAsync(deleteChildren);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _log.Error(ex, "unable to update entity {@0}", recipientDto);
                 throw;
             }
 

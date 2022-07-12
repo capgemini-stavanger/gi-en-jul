@@ -4,11 +4,9 @@ using GiEnJul.Dtos;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GiEnJul.Auth;
 
 namespace GiEnJul.Controllers
 {
