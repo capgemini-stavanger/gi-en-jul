@@ -29,7 +29,6 @@ namespace GiEnJul.Test.ControllerTests
 
         public readonly Settings settings;
 
-
         private AdminController _controller;
 
         public AdminControllerTest()

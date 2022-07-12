@@ -34,7 +34,6 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<Auth0ManagementClient>().As<IAuth0ManagementClient>().SingleInstance();
             builder.RegisterType<Authorization>().As<IAuthorization>().InstancePerLifetimeScope();
 
-
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)
                                 .WriteTo.Console()

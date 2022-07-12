@@ -322,8 +322,9 @@ namespace GiEnJul.Controllers
                     deleteCount += 1;
                 }
             }
-            catch
+            catch (Exception e)
             {
+                _log.Error(e, "unable to delete entity {@0}", recipientDto);
                 await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
                 await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
 
@@ -367,8 +368,9 @@ namespace GiEnJul.Controllers
                     await _personRepository.DeleteBatchAsync(deleteChildren);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _log.Error(ex, "unable to update entity {@0}", recipientDto);
                 throw;
             }
 
