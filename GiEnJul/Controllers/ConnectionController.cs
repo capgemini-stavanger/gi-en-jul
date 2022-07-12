@@ -143,8 +143,10 @@ namespace GiEnJul.Controllers
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return NotFound("Connection exists already");
+                return BadRequest("Connection exists already");
             }
+
+            // Add more fail-checking, f.ex if connection is broken off already?
 
             var originalGiver = giver.ShallowCopy();
             var originalRecipient = recipient.ShallowCopy();
@@ -152,6 +154,17 @@ namespace GiEnJul.Controllers
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
             giver.MatchedRecipient = null;
+
+            // Add feedback based on condition
+            giver.Feedback = feedback.FeedbackGiver;
+
+            // Create email template for the giver
+                // ..
+
+            // Question; Is there anything that can happen while on pending(?)
+            // -> Unmatched automatically
+            // -> Connection with someone else who responded?
+            // -> Does anyone else recieve waiting list information?
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
@@ -161,6 +174,7 @@ namespace GiEnJul.Controllers
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                // Send out email as well
             }
             catch (Exception e)
             {

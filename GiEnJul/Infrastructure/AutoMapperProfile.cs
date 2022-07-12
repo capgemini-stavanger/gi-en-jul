@@ -81,8 +81,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
                 .ForMember(dest => dest.MatchedRecipient, act => act.Ignore())
                 .ForMember(dest => dest.MatchedFamilyId, act => act.Ignore())
-                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
-            
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
+                .ForMember(dest => dest.Feedback, opt => opt.Ignore());
+
 
             CreateMap<Models.Giver, Entities.Giver>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))

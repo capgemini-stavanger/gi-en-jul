@@ -28,5 +28,8 @@ namespace GiEnJul.Entities
         //Match with family, default is false
         public Boolean IsSuggestedMatch { get; set; } = false;
         public Boolean HasConfirmedMatch { get; set; } = false;
+
+        //Handle feedback on denying connection
+        public string Feedback { get; set; }
     }
 }
