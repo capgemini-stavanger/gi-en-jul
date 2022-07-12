@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using GiEnJul.Auth;
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GiEnJul.Auth;
 
 namespace GiEnJul.Controllers
 {
@@ -30,6 +34,15 @@ namespace GiEnJul.Controllers
             return await _eventRepository.GetLocationsWithActiveEventAsync();
         }
 
+        // GET api/Event/GetAll
+        [HttpGet("GetAll")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<List<Entities.Event>> GetAllEvents()
+        {
+            var events = await _eventRepository.GetAllEventsAsync();
+            return _mapper.Map<List<Entities.Event>>(events);
+        }
+
         [HttpGet("contacts")]
         public async Task<List<GetContactsDto>> GetActiveContactsAsync()
         {
@@ -37,5 +50,18 @@ namespace GiEnJul.Controllers
             return _mapper.Map<List<GetContactsDto>>(contacts);
 
         }
+
+        //POST api/Event/createEvent 
+        [HttpPost("create")]
+        [Authorize(Policy= Policy.SuperAdmin)]
+        public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
+        {
+            var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
+            if (entity == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        } 
     }
 }

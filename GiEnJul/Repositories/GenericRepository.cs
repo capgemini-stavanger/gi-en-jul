@@ -182,8 +182,25 @@ namespace GiEnJul.Repositories
 
         protected async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await GetAllByQueryAsync(string.Empty);
+            try
+            {
+                var entities = new List<T>();
+                var queryResult = _client.QueryAsync<T>(t => true);
+                await foreach (var item in queryResult)
+                {
+                    entities.Add(item);
+                }
+
+                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _client.Name);
+                return entities;
+            }
+            catch (Exception e)
+            {
+                _log.Error(e,  "Exception while fetching entities, in table:{0}", _client.Name);
+                throw;
+            }
         }
+
 
         protected async Task<IEnumerable<T>> GetAllByQueryAsync(string query)
         {
