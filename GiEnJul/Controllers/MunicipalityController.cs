@@ -55,18 +55,15 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-       
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
-            try
-            {
-                await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            var names = await _municipalityRepository.GetAll();
+            if (!names.Where(x => x.RowKey == content.Name).Any())
+                return BadRequest("RowKey does not exists");
+
+            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+            return Ok();
         }
     }
 }
