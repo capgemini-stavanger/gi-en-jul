@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.secondary.light,
     backgroundSize: "cover",
-    padding: theme.spacing(5),
+    padding: theme.spacing(7),
   },
   logo: {
     marginTop: theme.spacing(10),
