@@ -21,6 +21,7 @@ import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
 import { useAuth0 } from "@auth0/auth0-react";
+import ConfirmationBox from "./confirmationBox";
 
 interface IEditFamilyDialog {
   onClose: () => void;
@@ -42,13 +43,17 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   const apiservice = new ApiService(userAccessToken);
 
   const [recipientData, setRecipientData] = useState(recipient);
+  const [openUpdateConfirmBox, setOpenUpdateConfirmBox] = useState(false);
+  const [openCloseConfirmBox, setOpenCloseConfirmBox] = useState(false);
 
   useEffect(() => {
-    setRecipientData(recipient); // Set when loading the component
-    getUserAccessToken().then((resp: string) => {
-      setUserAccessToken(resp);
-    });
-  }, [open]); // By using the parameter, it only happens when RECIPIENT changes, which is every time it is loaded
+    if (open) {
+      setRecipientData(recipient);
+      getUserAccessToken().then((resp: string) => {
+        setUserAccessToken(resp);
+      });
+    }
+  }, [open]);
 
   async function getUserAccessToken(): Promise<string> {
     const accessToken = await getAccessTokenSilently();
@@ -177,14 +182,15 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
         console.error(errorStack);
       });
   };
-  const updateFamily = () => {
-    if (confirm("Are you sure you want to update the family?")) {
+
+  const handleUpdateResponse = (response: boolean) => {
+    if (response) {
       updateRecipient();
       onClose();
     }
   };
-  const closeEditing = () => {
-    if (confirm("Are you sure you want to exit? Updates will be lost")) {
+  const handleCloseResponse = (response: boolean) => {
+    if (response) {
       onClose();
     }
   };
@@ -196,7 +202,11 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
         <DialogTitle id="dialog-title" disableTypography>
           Rediger Familie
         </DialogTitle>
-        <IconButton className={classes.rightMiddleAlign} aria-label="close" onClick={closeEditing}>
+        <IconButton
+          className={classes.rightMiddleAlign}
+          aria-label="close"
+          onClick={() => setOpenCloseConfirmBox(true)}
+        >
           <CloseIcon />
         </IconButton>
 
@@ -310,9 +320,26 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
         </Box>
 
         <DialogActions>
-          <Button onClick={updateFamily}>Oppdater Familie</Button>
+          <Button onClick={() => setOpenUpdateConfirmBox(true)}>Oppdater Familie</Button>
         </DialogActions>
       </Dialog>
+
+      <ConfirmationBox
+        open={openUpdateConfirmBox}
+        text={"Er du sikker på at du ønsker å lagre endringene til familien?"}
+        handleClose={() => {
+          setOpenUpdateConfirmBox(false);
+        }}
+        handleResponse={handleUpdateResponse}
+      />
+      <ConfirmationBox
+        open={openCloseConfirmBox}
+        text={"Er du sikker på at du ønsker å avbryte? Endringene vil gå tapt."}
+        handleClose={() => {
+          setOpenCloseConfirmBox(false);
+        }}
+        handleResponse={handleCloseResponse}
+      />
     </>
   );
 };

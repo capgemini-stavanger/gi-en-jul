@@ -319,7 +319,7 @@ namespace GiEnJul.Controllers
                     deleteCount += 1;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 await _personRepository.InsertOrReplaceBatchAsync(personsToDelete.GetRange(0, deleteCount));
                 await _recipientRepository.InsertOrReplaceAsync(recipientToDelete);
@@ -336,6 +336,15 @@ namespace GiEnJul.Controllers
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
             var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+
+            if (recipientOld.IsSuggestedMatch)
+            {
+                return BadRequest("Familie har allerede en foreslått tilkobling");
+            }
+            if (recipientOld.HasConfirmedMatch)
+            {
+                return BadRequest("Familie har allerede en tilkobling");
+            }
 
             foreach (var prop in recipientOld.GetType().GetProperties())
             {
@@ -355,7 +364,7 @@ namespace GiEnJul.Controllers
                     await _personRepository.DeleteBatchAsync(deleteChildren);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
