@@ -1,12 +1,4 @@
-import {
-  capitalize,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  SvgIcon,
-  IconButton,
-  Box,
-} from "@material-ui/core";
+import { capitalize, Grid, SvgIcon, IconButton, Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -16,9 +8,11 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
 import useStyles from "../Styles";
+import FormWish, { getFormWish, IFormWish } from "../FormWish";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
+  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
   viewErrorTrigger: number;
   person: IFormPerson;
@@ -26,13 +20,17 @@ interface IPersonProps {
 
 const initState: { [data: string]: any } = {
   ageWish: false,
+  commentSelect: false,
   wishInput: "",
   validWishInput: false,
-  commentInput: "",
+  dialogOpen: false,
+  comment: "",
+  wishes: [],
 };
 
 const FormPersonRemake: FC<IPersonProps> = ({
   updatePerson,
+  updatePersonWish,
   deletePerson,
   viewErrorTrigger,
   person,
@@ -48,11 +46,7 @@ const FormPersonRemake: FC<IPersonProps> = ({
     });
   };
 
-  useEffect(() => {
-    updatePerson({
-      isValidWish: state.validWishInput || person.wish === undefined,
-    });
-  }, [state.validWishInput, person.wish]);
+  useEffect(() => {}, [person.wishes]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
@@ -96,16 +90,26 @@ const FormPersonRemake: FC<IPersonProps> = ({
     }
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("wishInput")(newInput);
-    updatePerson({ wish: newInput });
+  const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
+    const newList = [...person.wishes];
+    newList[index].wish = newWishData.wish + "";
+    updatePersonWish({ wishes: newList });
   };
 
-  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.checked;
-    getSetter("ageWish")(newInput);
-    updatePerson({ wish: undefined });
+  const deleteWish = (index: number) => {
+    const newList = [...person.wishes];
+    const head = newList.slice(0, index);
+    const tail = newList.slice(index + 1, newList.length);
+    const newWishList = head.concat(tail);
+    person.wishes = newWishList;
+    updatePersonWish({ wishes: newWishList });
+  };
+
+  const addWish = () => {
+    const newList = [...person.wishes];
+    if (newList.length >= 5 && !state.ageWish) return;
+    newList.push(getFormWish());
+    updatePersonWish({ wishes: newList });
   };
 
   const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,96 +119,99 @@ const FormPersonRemake: FC<IPersonProps> = ({
   };
 
   return (
-    <Grid container direction="row" spacing={5} alignItems="center" justifyContent="space-around">
+    <Grid container direction="column" spacing={5}>
       <Grid item>
-        <IconButton color="secondary" onClick={deletePerson}>
-          <SvgIcon component={ClearIcon} />
-        </IconButton>
-      </Grid>
-      <Grid item>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isInt]}
-          name="age"
-          type="number"
-          label="Alder"
-          value={person.age || "0"}
-          onChange={onAgeChange}
-          className={classes.smallWidth}
-        />
-      </Grid>
-      {(parseInt(person.age) < 1 || !person.age) && (
-        <Grid item>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[isInt]}
-            name="months"
-            type="number"
-            label="Måneder"
-            value={person.months || "0"}
-            onChange={onMonthsChange}
-            className={classes.smallWidth}
-          />
-        </Grid>
-      )}
-      <Grid item>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
-          name="gender"
-          type="select"
-          label="Kjønn"
-          variant={"outlined"}
-          value={person.gender ? person.gender : ""}
-          onChange={onGenderChange}
-          options={GENDERS.map((o) => {
-            return { value: o.value, text: capitalize(o.text) };
-          })}
-          className={classes.mediumWidth}
-        />
-      </Grid>
-      {!state.ageWish && (
-        <Grid item>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
-            setIsValids={getSetter("validWishInput")}
-            name="wish"
-            label="Gaveønske"
-            disabled={state.ageWish}
-            value={state.wishInput}
-            onChange={onWishInputChange}
-            className={classes.mediumWidth}
-          />
-        </Grid>
-      )}
-      <Grid item>
-        <Box className={classes.mediumWidth}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={state.ageWish}
-                onChange={onAgeWishChange}
-                name="isAgeWish"
-                color="primary"
+        <Grid
+          container
+          direction="row"
+          spacing={5}
+          alignItems="center"
+          justifyContent="space-around"
+        >
+          <Grid item>
+            <IconButton color="secondary" onClick={deletePerson}>
+              <SvgIcon component={ClearIcon} />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              validators={[isInt]}
+              name="age"
+              type="number"
+              label="Alder"
+              value={person.age || "0"}
+              onChange={onAgeChange}
+              className={classes.smallWidth}
+            />
+          </Grid>
+          {(parseInt(person.age) < 1 || !person.age) && (
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isInt]}
+                name="months"
+                type="number"
+                label="Måneder"
+                value={person.months || "0"}
+                onChange={onMonthsChange}
+                className={classes.smallWidth}
               />
-            }
-            className="my-0"
-            label="Giver kjøper alderstilpasset gave"
-          />
-        </Box>
-      </Grid>
-      <Grid item>
+            </Grid>
+          )}
+
+          <Grid item>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              validators={[isNotNull]}
+              name="gender"
+              type="select"
+              label="Kjønn"
+              variant={"outlined"}
+              value={person.gender ? person.gender : ""}
+              onChange={onGenderChange}
+              options={GENDERS.map((o) => {
+                return { value: o.value, text: capitalize(o.text) };
+              })}
+              className={classes.mediumWidth}
+            />
+          </Grid>
+
+          <Grid item>
+            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+              Legg til gaveønske (Maks 5)
+            </Button>
+          </Grid>
+
+          <Grid item>
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[]}
+                name="comment"
+                label="Kommentar"
+                value={state.commentInput}
+                onChange={onCommentInputChange}
+                className={classes.mediumWidth}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+
         <Grid item>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[]}
-            name="comment"
-            label="Kommentar"
-            value={state.commentInput}
-            onChange={onCommentInputChange}
-            className={classes.mediumWidth}
-          />
+          {person.wishes.map((wish: IFormWish, i: number) => {
+            return (
+              <FormWish
+                key={wish.id}
+                wish={wish.wish}
+                viewErrorTrigger={state.viewErrorTrigger}
+                updateWish={(wish) => {
+                  updateWish(wish, i);
+                }}
+                deleteWish={() => deleteWish(i)}
+              />
+            );
+          })}
         </Grid>
       </Grid>
     </Grid>

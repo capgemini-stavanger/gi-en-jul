@@ -18,6 +18,7 @@ import FormPerson from "./FormPerson";
 import IFormPerson, { getFormPerson } from "components/institution/IFormPerson";
 import useUser from "hooks/useUser";
 import CustomTooltip from "./CustomTooltip";
+import { IFormWish } from "./FormWish";
 
 type PersonType = {
   Wish?: string;
@@ -99,7 +100,7 @@ interface IContactState {
   contact: IContact;
 }
 
-const initFormDataState: () => IContactState = () => ({
+export const initFormDataState: () => IContactState = () => ({
   persons: [getFormPerson()],
   location: "",
   dinner: initFoodFormData,
@@ -159,6 +160,17 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const closeDialog = () => {
     setDialog(false);
+  };
+
+  const updatePersonWishes = (index: number, newPersonData: any) => {
+    formDataState.persons[index].wishes = [{ wish: newPersonData.wish } as IFormWish];
+    setFormDataState((prev) => {
+      prev.persons[index] = {
+        ...prev.persons[index],
+        ...newPersonData,
+      } as IFormPerson;
+      return { ...prev };
+    });
   };
 
   const updatePerson = (index: number, newPersonData: { [target: string]: unknown }) => {
@@ -503,6 +515,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                       key={person.uuid}
                       person={person}
                       viewErrorTrigger={state.viewErrorTrigger}
+                      updatePersonWish={(wish) => {
+                        updatePersonWishes(i, wish);
+                      }}
                       updatePerson={(newPersonData: { [target: string]: unknown }) =>
                         updatePerson(i, newPersonData)
                       }
@@ -529,7 +544,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   color="primary"
                   onClick={addPerson}
                 >
-                  Legg til flere
+                  Legg til flere familiemedlemmer
                 </Button>
               </Grid>
             </Grid>

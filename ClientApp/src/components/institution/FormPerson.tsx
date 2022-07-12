@@ -1,13 +1,4 @@
-import {
-  capitalize,
-  Checkbox,
-  Link,
-  FormControlLabel,
-  Grid,
-  SvgIcon,
-  IconButton,
-  Typography,
-} from "@material-ui/core";
+import { capitalize, Link, Grid, SvgIcon, IconButton, Typography, Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -17,8 +8,11 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
 import MessageDialog from "components/institution/MessageDialog";
+import FormWish, { getFormWish, IFormWish } from "./FormWish";
+
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
+  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
   setAlert: (
     open?: boolean,
@@ -36,10 +30,12 @@ const initState: { [data: string]: any } = {
   validWishInput: false,
   dialogOpen: false,
   comment: "",
+  wishes: [],
 };
 
 const InstitutionPerson: FC<IPersonProps> = ({
   updatePerson,
+  updatePersonWish,
   deletePerson,
   setAlert,
   viewErrorTrigger,
@@ -70,11 +66,7 @@ const InstitutionPerson: FC<IPersonProps> = ({
     });
   };
 
-  useEffect(() => {
-    updatePerson({
-      isValidWish: state.validWishInput || person.wish === undefined,
-    });
-  }, [state.validWishInput, person.wish]);
+  useEffect(() => {}, [person.wishes]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
@@ -118,25 +110,36 @@ const InstitutionPerson: FC<IPersonProps> = ({
     }
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("wishInput")(newInput);
-    updatePerson({ wish: newInput });
+  const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
+    const newList = [...person.wishes];
+    newList[index].wish = newWishData.wish + "";
+    updatePersonWish({ wishes: newList });
   };
 
-  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.checked;
-    getSetter("ageWish")(newInput);
-    updatePerson({ wish: undefined });
+  const deleteWish = (index: number) => {
+    const newList = [...person.wishes];
+    const head = newList.slice(0, index);
+    const tail = newList.slice(index + 1, newList.length);
+    const newWishList = head.concat(tail);
+    person.wishes = newWishList;
+    updatePersonWish({ wishes: newWishList });
+  };
+
+  const addWish = () => {
+    const newList = [...person.wishes];
+    if (newList.length >= 5) return;
+    newList.push(getFormWish());
+    updatePersonWish({ wishes: newList });
   };
 
   return (
-    <Grid container spacing={5} alignItems="center">
+    <Grid container spacing={5} alignItems="center" direction="row">
       <Grid item>
         <IconButton color="secondary" onClick={deletePerson}>
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>
+
       <Grid item xs={1}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
@@ -177,35 +180,43 @@ const InstitutionPerson: FC<IPersonProps> = ({
           fullWidth
         />
       </Grid>
-      {!state.ageWish && (
-        <Grid item xs={2}>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
-            setIsValids={getSetter("validWishInput")}
-            name="wish"
-            label="Gaveønske (husk størrelse)"
-            disabled={state.ageWish}
-            value={state.wishInput}
-            onChange={onWishInputChange}
-            fullWidth
+
+      {person.wishes.map((wish: IFormWish, i: number) => {
+        return (
+          <FormWish
+            key={wish.id}
+            wish={wish.wish}
+            viewErrorTrigger={state.viewErrorTrigger}
+            updateWish={(wish) => {
+              updateWish(wish, i);
+            }}
+            deleteWish={() => deleteWish(i)}
           />
-        </Grid>
-      )}
-      <Grid item xs={2}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.ageWish}
-              onChange={onAgeWishChange}
-              name="isAgeWish"
-              color="primary"
-            />
+        );
+      })}
+
+      <Grid item>
+        <Button
+          startIcon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              className="bi bi-plus"
+              viewBox="0 0 16 16"
+            >
+              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+            </svg>
           }
-          className="my-0"
-          label="Giver kjøper alderstilpasset gave"
-        />
+          variant="contained"
+          color="primary"
+          onClick={addWish}
+        >
+          Legg til gaveønske for denne personen
+        </Button>
       </Grid>
+
       <Grid item xs={2}>
         <Link
           href="#"
