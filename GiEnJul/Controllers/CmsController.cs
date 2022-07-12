@@ -58,6 +58,19 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpPost("Insertforadmin/{location}")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> UpdateMunicipality([FromBody] PostCmsDto content , string location )
+        {
+            if (content.Index != location)
+            {
+                return BadRequest("Wrong municipality");
+            }
+
+            await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
+            return Ok();
+        }
+
         [HttpPost("deleteSingle")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)

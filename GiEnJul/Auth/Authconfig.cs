@@ -20,6 +20,7 @@ namespace GiEnJul.Auth
         public const string DeleteConnection = "DeleteConnection";
         public const string PostEmail = "PostEmail";
         public const string SuperAdmin = "SuperAdmin";
+        public const string UpdateMunicipality = "UpdateMunicipality";
     }
 
     public static class Authconfig
@@ -42,6 +43,7 @@ namespace GiEnJul.Auth
             opt.AddPolicy(Policy.DeleteConnection, policy => policy.RequireClaim("permissions", "delete:connection"));
             opt.AddPolicy(Policy.PostEmail, policy => policy.RequireClaim("permissions", "post:email"));
             opt.AddPolicy(Policy.SuperAdmin, policy => policy.RequireClaim("permissions", "superadmin"));
+            opt.AddPolicy(Policy.UpdateMunicipality, policy => policy.RequireClaim("permissions", "update:municipality"));
         }
     }
 }
