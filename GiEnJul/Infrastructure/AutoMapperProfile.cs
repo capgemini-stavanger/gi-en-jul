@@ -172,6 +172,20 @@ namespace GiEnJul.Infrastructure
             CreateMap<Entities.Cms, Models.Cms>()
                 .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.RowKey));
+
+
+            //Municipality mapping 
+            CreateMap<Dtos.PostMunicipalityDto, Models.Municipality>();
+
+            CreateMap<Models.Municipality, Entities.Municipality>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Municipality, Models.Municipality>()
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.RowKey));
         }
     }
 }
