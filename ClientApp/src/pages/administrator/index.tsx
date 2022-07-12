@@ -6,21 +6,20 @@ import CompletedMacro from "components/admin/dashboard-completed/Macro";
 import OverviewMacro from "components/admin/dashboard-all/OverviewMacro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
-import useUser from "hooks/useUser";
 import ManageDashboard from "components/superadmin/ManageDashboard";
 
 interface IAdminTab {
   accessToken: string;
   location: string;
+  role: string;
 }
 
-const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
+const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setStep(newValue);
   };
-  const { role } = useUser();
 
   return (
     <>
@@ -30,7 +29,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <Tab label="Oversikt" value="1" />
           <Tab label="Foreslåtte koblinger" value="2" />
           <Tab label="Fullførte koblinger" value="3" />
-          <Tab hidden={role != "SuperAdmin"} label="Manage" value="4" />
+          <Tab label="Manage" value="4" />
         </TabList>
         <TabPanel value="1">
           <OverviewMacro location={location} accessToken={accessToken} />
@@ -42,7 +41,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location }) => {
           <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
         <TabPanel value="4">
-          <ManageDashboard accessToken={accessToken} />
+          <ManageDashboard accessToken={accessToken} role={role} location={location} />
         </TabPanel>
       </TabContext>
       <ScrollToTop maxPagePosition={300} />

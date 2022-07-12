@@ -8,9 +8,10 @@ import ConfirmationBox from "components/shared/confirmationBox";
 interface IKommuneInformation {
   accessToken: string;
   location: string;
+  role: string;
 }
 
-const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, location }) => {
+const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, location, role }) => {
   const apiservice = new ApiService(accessToken);
   const [kommuneInformation, setKommuneInformation] = useState("");
   const [html, setHtml] = useState("");
@@ -107,7 +108,9 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
         </>
       )}
       <Grid item>
-        <Button onClick={deleteLocation}>Slett informasjon om valgt kommune</Button>
+        <Button hidden={role != "SuperAdmin"} onClick={deleteLocation}>
+          Slett informasjon om valgt kommune
+        </Button>
       </Grid>
 
       <ConfirmationBox

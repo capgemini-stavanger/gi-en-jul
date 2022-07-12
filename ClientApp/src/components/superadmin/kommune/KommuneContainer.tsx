@@ -5,6 +5,8 @@ import KommuneInformation from "./KommuneInformation";
 
 interface IKommuneContainer {
   accessToken: string;
+  assignedLocation: string;
+  role: string;
 }
 
 interface IChangeEvent {
@@ -12,7 +14,7 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
+const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLocation, role }) => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const apiservice = new ApiService(accessToken);
@@ -20,7 +22,12 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
     apiservice
       .get("Event/ActiveLocations", {})
       .then((resp) => {
-        setActiveLocations(resp.data);
+        if (role == "Admin") {
+          setActiveLocations([assignedLocation]);
+          setSelectedLocation(assignedLocation);
+        } else {
+          setActiveLocations(resp.data);
+        }
       })
       .catch((errorStack) => {
         console.error(errorStack);
@@ -61,7 +68,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken }) => {
           </Box>
         </Grid>
         <Grid item>
-          <KommuneInformation accessToken={accessToken} location={selectedLocation} />
+          <KommuneInformation accessToken={accessToken} role={role} location={selectedLocation} />
         </Grid>
       </Grid>
     </>

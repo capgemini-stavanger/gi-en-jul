@@ -9,12 +9,14 @@ import EventsContainer from "./Events/EventsContainer";
 import KommuneContainer from "./kommune/KommuneContainer";
 
 interface IManageDashboard {
+  role: string;
+  location: string;
   accessToken: string;
 }
 
-const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
+const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, role }) => {
   const classes = useStyles();
-  const [tab, setTab] = useState<string>("1");
+  const [tab, setTab] = useState<string>("2");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);
@@ -22,22 +24,19 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken }) => {
 
   return (
     <Container className={classes.root}>
-      <Typography className={classes.heading} align="center" variant="h3">
-        ManageDashboard
-      </Typography>
       <TabContext value={tab}>
         <TabList onChange={handleChange} centered>
-          <Tab label="FAQ" value="1" />
+          <Tab hidden={role != "SuperAdmin"} label="FAQ" value="1" />
           <Tab label="Kommune Informasjon" value="2" />
-          <Tab label="Bedrift" value="3" />
-          <Tab label="Legg til/Slett Brukere" value="4" />
-          <Tab label="Administrer Kommuner og Eventer" value="5" />
+          <Tab hidden={role != "SuperAdmin"} label="Bedrift" value="3" />
+          <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="4" />
+          <Tab hidden={role != "SuperAdmin"} label="Administrer Kommuner og Eventer" value="5" />
         </TabList>
         <TabPanel value="1">
           <FaqContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <KommuneContainer accessToken={accessToken} />
+          <KommuneContainer accessToken={accessToken} role={role} assignedLocation={location} />
         </TabPanel>
         <TabPanel value="3">
           <BusinessInformation accessToken={accessToken} />
