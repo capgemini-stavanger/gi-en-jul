@@ -50,54 +50,64 @@ const NavBarPublic = () => {
         <Navbar className={classes.navContainer}>
           <NavbarBrand className={classes.toolBar}>
             <TabContext value={tab}>
-              <div>
-                <TabList onChange={handleChange} centered className={classes.toolBar}>
-                  <Tab
-                    onClick={() => {
-                      history.push("/");
-                    }}
-                    className={classes.drawerContent}
-                    label="Hjem"
-                  ></Tab>
+              <TabList onChange={handleChange} centered className={classes.toolBar}>
+                <Grid container justifyContent="center" direction="row" spacing={10}>
+                  <Grid item>
+                    <Tab
+                      onClick={() => {
+                        history.push("/");
+                      }}
+                      className={classes.drawerContent}
+                      label="Hjem"
+                    ></Tab>
+                  </Grid>
 
-                  <Tab
-                    onClick={() => {
-                      history.push("/bedrift");
-                    }}
-                    className={classes.drawerContent}
-                    label="For bedrifter"
-                  ></Tab>
+                  <Grid item>
+                    <Tab
+                      onClick={() => {
+                        history.push("/bedrift");
+                      }}
+                      className={classes.drawerContent}
+                      label="For bedrifter"
+                    ></Tab>
+                  </Grid>
 
-                  <Tab
-                    onClick={() => {
-                      history.push("/startJul");
-                    }}
-                    className={classes.drawerContent}
-                    label="Start Gi en jul i din kommune"
-                  ></Tab>
+                  <Grid item>
+                    <Tab
+                      onClick={() => {
+                        history.push("/startJul");
+                      }}
+                      className={classes.drawerContent}
+                      label="Start Gi en jul i din kommune"
+                    ></Tab>
+                  </Grid>
 
-                  <Tab
-                    onClick={() => {
-                      history.push("kommune");
-                    }}
-                    className={classes.drawerContent}
-                    label="Kommuner"
-                  ></Tab>
-                </TabList>
-              </div>
+                  <Grid item>
+                    <Tab
+                      onClick={() => {
+                        history.push("kommune");
+                      }}
+                      className={classes.drawerContent}
+                      label="Kommuner"
+                    ></Tab>
+                  </Grid>
+                </Grid>
+              </TabList>
             </TabContext>
           </NavbarBrand>
         </Navbar>
-        <Box alignItems={"right"}>
-          <Button
-            size="large"
-            className={classes.giverButton}
-            endIcon={<ArrowForwardIos />}
-            onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
-          >
-            Bli giver
-          </Button>
-        </Box>
+        <Grid item>
+          <Box alignItems={"right"}>
+            <Button
+              size="large"
+              className={classes.giverButton}
+              endIcon={<ArrowForwardIos />}
+              onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+            >
+              Bli giver
+            </Button>
+          </Box>
+        </Grid>
       </>
     );
   }
