@@ -28,6 +28,7 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<EventRepository>().As<IEventRepository>().InstancePerLifetimeScope();
             builder.RegisterType<AutoIncrementRepository>().As<IAutoIncrementRepository>().InstancePerLifetimeScope();
             builder.RegisterType<CmsRepository>().As<ICmsRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<MunicipalityRepository>().As<IMunicipalityRepository>().InstancePerLifetimeScope();
             builder.RegisterType<EmailClient>().As<IEmailClient>().InstancePerLifetimeScope();
             builder.RegisterType<RecaptchaVerifier>().As<IRecaptchaVerifier>().InstancePerLifetimeScope();
             builder.RegisterType<EmailTemplateBuilder>().As<IEmailTemplateBuilder>().InstancePerLifetimeScope();
