@@ -4,6 +4,7 @@ using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -14,7 +15,8 @@ namespace GiEnJul.Repositories
         Task<int> DeleteBatchAsync(IEnumerable<Models.Person> models);
         Task<Person> InsertOrReplaceAsync(Models.Person model);
         Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models);
-        Task<List<Models.Person>> GetAllByRecipientId(string rowKey);
+        Task<List<Models.Person>> GetAllByRecipientId(string partitionKey);
+        Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds);
         Task<Models.Person> GetPersonByRowKey(string rowKey);
 
     }
@@ -56,6 +58,15 @@ namespace GiEnJul.Repositories
 
             var persons = await GetAllByQueryAsync(query);
             return _mapper.Map<Models.Person>(persons.FirstOrDefault());
+        }
+
+        public async Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds)
+        {
+            var queries = recipientIds.Select(i => $"PartitionKey eq '{i}'");
+            var combinedQuery = string.Join(" or ", queries);
+
+            var persons = await GetAllByQueryAsync(combinedQuery);
+            return _mapper.Map<List<Models.Person>>(persons);
         }
     }
 }
