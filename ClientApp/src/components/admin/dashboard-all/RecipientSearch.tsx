@@ -6,7 +6,6 @@ import Datatable from "./RecipientTable";
 import { RecipientType } from "components/shared/Types";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import { CONNECTION_COLORS } from "common/constants/ConnectionColors";
-import { PersonType } from "components/institution/NewDesign/RegistrationFormTypes";
 
 type Props = {
   data: RecipientType[] | [];
