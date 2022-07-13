@@ -1,7 +1,6 @@
-import { Grid, TextField, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import useStyles from "../Styles";
 import { FC } from "react";
-import { red } from "@material-ui/core/colors";
 import { FiberManualRecord } from "@material-ui/icons";
 
 interface IFormBoxInfo {
