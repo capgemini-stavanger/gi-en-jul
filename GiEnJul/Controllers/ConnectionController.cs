@@ -136,14 +136,14 @@ namespace GiEnJul.Controllers
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
 
-            if (giver is null || recipient is null)
-            {
-                return NotFound("Giver or Recipient not found"); 
-            }
-
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return NotFound("Connection exists already");
+                return BadRequest("Connection already exists");
+            }
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Connection between giver and recipient cannot be made");
             }
 
             var originalGiver = giver.ShallowCopy();
@@ -152,15 +152,26 @@ namespace GiEnJul.Controllers
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
             giver.MatchedRecipient = null;
+            giver.CancelFeedback = feedback.FeedbackGiver;
+            giver.CancelDate = DateTime.UtcNow;
+            giver.CancelFamilyId = recipient.FamilyId;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
             recipient.MatchedGiver = null;
 
+            var emailTemplatename = EmailTemplateName.Notification;
+            var emailValuesDict = new Dictionary<string, string>
+                {
+                    { "content", "Dette er en bekreftelse på at du har avslått koblingen..."},
+                };
+            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {

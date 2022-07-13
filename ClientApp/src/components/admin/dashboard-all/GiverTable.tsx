@@ -30,6 +30,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
+
   const handleChange =
     (giver: GiverType) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
       setSelectedGiver(isExpanded ? giver : false);
@@ -124,6 +125,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               <Button>Slett giver</Button>
             </Typography>
           </AccordionDetails>
+          {giver.cancelFeedback && (
+            <AccordionDetails>
+              Avslo Kobling! (Indikert ved hul rød sirkel(?)) <br />
+              &nbsp; Feedback: {giver.cancelFeedback} <br />
+              &nbsp; Dato: {new Date(giver.cancelDate).toLocaleString("no-NO")} <br />
+              &nbsp; Familie ID: {giver.cancelFamilyId}
+            </AccordionDetails>
+          )}
 
           <SendEmailContent
             open={selectedGiver === giver && open}
