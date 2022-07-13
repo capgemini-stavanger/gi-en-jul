@@ -53,6 +53,27 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     padding: "20px",
   },
+  formInfoBoxText: {
+    fontSize: "1.2rem",
+    color: theme.palette.primary.dark,
+  },
+  infoBoxCircle: {
+    position: "static",
+    color: theme.palette.secondary.main,
+  },
+  infoBoxCircleText: {
+    position: "relative",
+    top: "60%",
+    left: "20%",
+    fontSize: "1.5rem",
+    color: theme.palette.primary.dark,
+  },
+  titleText: {
+    fontWeight: "bold",
+    fontSize: "2.5rem",
+    paddingBottom: "15px",
+    marginLeft: "20px",
+  },
 }));
 
 export default useStyles;
