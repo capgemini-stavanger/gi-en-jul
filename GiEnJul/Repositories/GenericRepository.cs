@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Azure;
-using Azure.Core.Pipeline;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
@@ -8,7 +7,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -201,7 +199,6 @@ namespace GiEnJul.Repositories
             }
         }
 
-
         protected async Task<IEnumerable<T>> GetAllByQueryAsync(string query)
         {
             try
@@ -224,6 +221,38 @@ namespace GiEnJul.Repositories
                 _log.Error(e,  "Exception while fetching entities, in table:{0}", _client.Name);
                 throw;
             }
+        }
+
+        protected async Task<IEnumerable<T>> GetAllByPartitionKey(IEnumerable<string> partitionKeys)
+        {
+            return await GetAllByParamList(partitionKeys, "PartitionKey");
+        }
+
+        protected async Task<IEnumerable<T>> GetAllByRowKey(IEnumerable<string> rowKeys)
+        {
+            return await GetAllByParamList(rowKeys, "RowKey");
+        }
+
+        protected async Task<IEnumerable<T>> GetAllByParamList(IEnumerable<string> paramList, string paramName)
+        {
+            var result = new List<T>();
+            var idsToProcess = paramList.ToList();
+
+            while (idsToProcess.Any())
+            {
+                var batchIds = idsToProcess
+                                .Take(50)
+                                .ToList();
+
+                var queries = batchIds.Select(i => $"{paramName} eq '{i}'");
+                var combinedQuery = string.Join(" or ", queries);
+
+                var persons = await GetAllByQueryAsync(combinedQuery);
+                result.AddRange(persons);
+                idsToProcess.RemoveRange(0, batchIds.Count);
+            }
+
+            return result;
         }
     }
 }

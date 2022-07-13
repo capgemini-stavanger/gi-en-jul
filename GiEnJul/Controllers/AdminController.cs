@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -92,10 +91,15 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
-            foreach (var recipient in recipients)
-            {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            }
+
+            var ids = recipients.Select(r => r.RowKey).ToList();
+            var persons = await _personRepository.GetAllByRecipientIds(ids);
+
+            recipients
+                .ForEach(r => r.FamilyMembers = 
+                            persons.Where(p => p.PartitionKey == r.RowKey)
+                .ToList());
+
             return recipients
                 .OrderBy(x => x.HasConfirmedMatch)
                 .ThenBy(x => x.IsSuggestedMatch)
@@ -426,29 +430,10 @@ namespace GiEnJul.Controllers
 
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
 
-            var sw = new Stopwatch();
-            sw.Start();
             var ids = suggestions.Select(r => r.RowKey).ToList();
-            List<Person> persons = new List<Person>();
-
-            while (ids.Any())
-            {
-                var prc = ids.Take(50);
-                ids.RemoveRange(0, prc.Count());
-                var newPers = await _personRepository.GetAllByRecipientIds(prc);
-                persons.AddRange(newPers);
-            }
+            var persons = await _personRepository.GetAllByRecipientIds(ids);
 
             suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.PartitionKey == r.RowKey).ToList());
-            sw.Stop();
-            _log.Information($"Time passed 1: {sw.ElapsedMilliseconds}");
-            sw.Restart();
-            foreach (var recipient in suggestions)
-            {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            }
-            sw.Stop();
-            _log.Information($"Time passed 2: {sw.ElapsedMilliseconds}");
             return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
     }

@@ -62,11 +62,8 @@ namespace GiEnJul.Repositories
 
         public async Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds)
         {
-            var queries = recipientIds.Select(i => $"PartitionKey eq '{i}'");
-            var combinedQuery = string.Join(" or ", queries);
-
-            var persons = await GetAllByQueryAsync(combinedQuery);
-            return _mapper.Map<List<Models.Person>>(persons);
+            var result = await GetAllByPartitionKey(recipientIds);
+            return _mapper.Map<List<Models.Person>>(result);
         }
     }
 }
