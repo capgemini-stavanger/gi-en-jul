@@ -136,25 +136,14 @@ namespace GiEnJul.Controllers
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
             var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
 
-            if (giver is null || recipient is null)
+            if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return NotFound("Giver or Recipient not found");
+                return BadRequest("Connection already exists");
             }
-            if (giver.MatchedRecipient != recipient.RowKey)
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
             {
-                return BadRequest("Givers matched recipient does not correspond with recipient");
-            }
-            if (recipient.MatchedGiver != giver.RowKey)
-            {
-                return BadRequest("Recipients matched giver does not correspond with giver");
-            }
-            if (!giver.IsSuggestedMatch || giver.HasConfirmedMatch)
-            {
-                return BadRequest("Giver is not waiting to connect anymore");
-            }
-            if (!recipient.IsSuggestedMatch || recipient.HasConfirmedMatch)
-            {
-                return BadRequest("Recipient is not waiting to connect anymore");
+                return BadRequest("Connection between giver and recipient cannot be made");
             }
 
             var originalGiver = giver.ShallowCopy();
