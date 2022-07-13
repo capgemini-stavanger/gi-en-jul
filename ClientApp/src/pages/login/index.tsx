@@ -50,13 +50,13 @@ function LoginRedirector() {
     case "SuperAdmin":
       return (
         <>
-          <AdminTab accessToken={userAccessToken} location={location ?? ""} />
+          <AdminTab accessToken={userAccessToken} role={role ?? ""} location={location ?? ""} />
         </>
       );
     case "Admin":
       return (
         <>
-          <AdminTab accessToken={userAccessToken} location={location ?? ""} />
+          <AdminTab accessToken={userAccessToken} role={role ?? ""} location={location ?? ""} />
         </>
       );
     case "Institution":

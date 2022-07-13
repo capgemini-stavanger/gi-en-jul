@@ -8,9 +8,17 @@ import ConfirmationBox from "components/shared/confirmationBox";
 interface IKommuneInformation {
   accessToken: string;
   location: string;
+  role: string;
+  assignedLocation: string;
 }
 
-const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, location }) => {
+const KommuneInformation: React.FC<IKommuneInformation> = ({
+  accessToken,
+  location,
+  role,
+  // eslint-disable-next-line
+  assignedLocation,
+}) => {
   const apiservice = new ApiService(accessToken);
   const [kommuneInformation, setKommuneInformation] = useState("");
   const [html, setHtml] = useState("");
@@ -57,21 +65,40 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
   }
 
   const saveKommuneInformation = () => {
-    apiservice
-      .post("cms/insert", {
-        ContentType: "Kommune",
-        Index: location,
-        Info: html,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          setKommuneInformation(html);
-          setOpenEditor(false);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (role == "SuperAdmin") {
+      apiservice
+        .post("cms/insert", {
+          ContentType: "Kommune",
+          Index: location,
+          Info: html,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setKommuneInformation(html);
+            setOpenEditor(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    if (role == "Admin") {
+      apiservice
+        .post(`cms/Insertforadmin/${assignedLocation}`, {
+          ContentType: "Kommune",
+          Index: location,
+          Info: html,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setKommuneInformation(html);
+            setOpenEditor(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   const handleSaveClick = () => {
@@ -107,7 +134,9 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({ accessToken, locati
         </>
       )}
       <Grid item>
-        <Button onClick={deleteLocation}>Slett informasjon om valgt kommune</Button>
+        <Button hidden={role != "SuperAdmin"} onClick={deleteLocation}>
+          Slett informasjon om valgt kommune
+        </Button>
       </Grid>
 
       <ConfirmationBox
