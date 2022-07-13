@@ -41,17 +41,10 @@ namespace GiEnJul.Controllers
         {
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
-                return BadRequest("RowKey already exists");            
+                return BadRequest("RowKey already exists, use post request to edit");            
             
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
-        }
-
-        [HttpGet]
-        public async Task<List<Entities.Municipality>> GetAll()
-        {
-            var municipalities = await _municipalityRepository.GetAll();
-            return _mapper.Map<List<Entities.Municipality>>(municipalities); 
         }
 
         [HttpPost]
@@ -64,6 +57,42 @@ namespace GiEnJul.Controllers
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
+        }
+        //denne er ikke så bra, den må bruke lokasjonen til admin brukeren 
+        [HttpPost("/information")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> EditInformation([FromBody] PostMunicipalityDto content, string info)
+        {
+           
+            var names = await _municipalityRepository.GetAll();
+            if (!names.Where(x => x.RowKey == content.Name).Any())
+                return BadRequest("RowKey does not exists");
+
+            var infos = await _municipalityRepository.GetAll();
+            try
+            {
+                await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content.Information == info));
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest("Could not update information");
+            }
+
+        }
+
+        [HttpGet]
+        public async Task<List<Entities.Municipality>> GetAll()
+        {
+            var municipalities = await _municipalityRepository.GetAll();
+            return _mapper.Map<List<Entities.Municipality>>(municipalities);
+        }
+
+        [HttpGet("active")]
+        public async Task<List<Entities.Municipality>> getActive()
+        {
+            var active = await _municipalityRepository.GetAllActive();
+            return active.ToList();
         }
     }
 }

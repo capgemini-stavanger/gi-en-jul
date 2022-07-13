@@ -15,6 +15,7 @@ namespace GiEnJul.Repositories
         Task<Entities.Municipality> DeleteEntry(string rowKey);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
         Task<IEnumerable<Entities.Municipality>> GetAll();
+        Task<IEnumerable<Municipality>> GetAllActive();
     }
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
@@ -46,6 +47,13 @@ namespace GiEnJul.Repositories
         public async Task<IEnumerable<Entities.Municipality>> GetAll()
         {
             return await GetAllAsync();
+        }
+
+        public async Task<IEnumerable<Municipality>> GetAllActive()
+        {
+            var all = await GetAllAsync();
+            var active = all.Where(x => x.IsActive == true);
+            return active;
         }
     }
 }
