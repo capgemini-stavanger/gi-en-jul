@@ -60,6 +60,14 @@ namespace GiEnJul.Controllers
                 return BadRequest();
             }
             return Ok();
-        } 
+        }
+
+        // Get api/Event/DistinctEventNames
+        [HttpGet("DistinctEventNames")]
+        public async Task<string[]> GetAllEventNames()
+        {
+            var eventNames = await _eventRepository.GetAllUniqueEventNames();
+            return eventNames;
+        }
     }
 }
