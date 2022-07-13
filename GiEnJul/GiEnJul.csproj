@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>GiEnJul</RootNamespace>
+    <UserSecretsId>b744da0b-6d55-49e8-ab44-778cf5b19a00</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
