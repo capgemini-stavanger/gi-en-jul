@@ -140,11 +140,15 @@ namespace GiEnJul.Controllers
             {
                 return NotFound("Giver or Recipient not found");
             }
-            if (giver.MatchedRecipient != recipient.MatchedGiver)
+            if (giver.MatchedRecipient != recipient.RowKey)
             {
-                return BadRequest("Incorrect match between giver and recipient");
+                return BadRequest("Givers matched recipient does not correspond with recipient");
             }
-            if(!giver.IsSuggestedMatch || giver.HasConfirmedMatch)
+            if (recipient.MatchedGiver != giver.RowKey)
+            {
+                return BadRequest("Recipients matched giver does not correspond with giver");
+            }
+            if (!giver.IsSuggestedMatch || giver.HasConfirmedMatch)
             {
                 return BadRequest("Giver is not waiting to connect anymore");
             }
@@ -161,6 +165,7 @@ namespace GiEnJul.Controllers
             giver.MatchedRecipient = null;
             giver.CancelFeedback = feedback.FeedbackGiver;
             giver.CancelDate = DateTime.UtcNow;
+            giver.CancelFamilyId = recipient.FamilyId;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;

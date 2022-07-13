@@ -129,7 +129,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             <AccordionDetails>
               Avslo Kobling! (Indikert ved hul rød sirkel(?)) <br />
               &nbsp; Feedback: {giver.cancelFeedback} <br />
-              &nbsp; Dato: {new Date(giver.cancelDate).toLocaleString("no-NO")}
+              &nbsp; Dato: {new Date(giver.cancelDate).toLocaleString("no-NO")} <br />
+              &nbsp; Familie ID: {giver.cancelFamilyId}
             </AccordionDetails>
           )}
 

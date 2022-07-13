@@ -15,6 +15,7 @@ export interface GiverType {
   phoneNumber: string;
   cancelFeedback: string;
   cancelDate: Date;
+  cancelFamilyId: string;
 }
 
 export interface RecipientType {

@@ -32,5 +32,6 @@ namespace GiEnJul.Entities
         //Handle feedback on denying connection
         public string CancelFeedback { get; set; }
         public DateTime? CancelDate { get; set; }
+        public string CancelFamilyId { get; set; }
     }
 }
