@@ -60,6 +60,7 @@ namespace GiEnJul.Controllers
             var giver = _mapper.Map<Giver>(giverDto);
             giver.EventName = eventModel.PartitionKey;
             giver.Email = giver.Email.Trim();
+            giver.RegistrationDate = DateTime.UtcNow;
 
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
