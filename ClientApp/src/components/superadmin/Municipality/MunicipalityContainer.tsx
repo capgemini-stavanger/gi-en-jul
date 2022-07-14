@@ -81,6 +81,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
       fetchActiveLocations();
       fetchAllLocations();
     });
+    setOpen(false);
   };
 
   const handleChangeActive = (event: ChangeEvent<IChangeEvent>) => {
@@ -248,6 +249,5 @@ export default MunicipalityContainer;
 - legg til email i table 
 - flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
--legg til kommune: 
-trenger knapp for submit/lagre som bruker api put metoden og setter open til false.
+
 */
