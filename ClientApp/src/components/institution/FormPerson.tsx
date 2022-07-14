@@ -98,12 +98,6 @@ const FormPerson: FC<IPersonProps> = ({
     updatePerson({ wishes: newList });
   };
 
-  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("commentInput")(newInput);
-    updatePerson({ comment: newInput });
-  };
-
   return (
     <Box className={classes.personBox}>
       <Box className={classes.numberBox}>{personIndex + 1}</Box>
