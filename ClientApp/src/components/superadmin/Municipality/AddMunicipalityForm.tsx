@@ -8,7 +8,7 @@ export interface IMunicipalityFormData {
   country: string;
   name: string;
   image?: string;
-  information?: string;
+  info?: string;
   email?: string;
   isActive: boolean;
 }
@@ -17,7 +17,7 @@ export const getFormAddMunicipality: () => IMunicipalityFormData = () => ({
   country: "",
   name: "",
   image: "",
-  information: "",
+  info: "",
   email: "",
   isActive: false,
 });
@@ -26,13 +26,16 @@ interface props {
   values: IMunicipalityFormData;
   open: boolean;
   handleClose: () => void;
-  handleAddMunicipality: (data: any) => void;
+  handleAddMunicipality: (data: IMunicipalityFormData) => void;
 }
 
-const initState = {
-  country: "",
+const initState: IMunicipalityFormData = {
+  country: "Norge",
   name: "",
-  info: "",
+  image: undefined,
+  info: undefined,
+  email: undefined,
+  isActive: false,
 };
 
 const MunicipalityForm: React.FC<props> = ({ open, handleClose, handleAddMunicipality }) => {

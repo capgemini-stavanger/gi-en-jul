@@ -35,9 +35,9 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
+        public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
@@ -47,9 +47,9 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
+        public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
             if (!names.Where(x => x.RowKey == content.Name).Any())
