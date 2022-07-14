@@ -91,10 +91,15 @@ namespace GiEnJul.Controllers
         {
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
-            foreach (var recipient in recipients)
-            {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            }
+
+            var ids = recipients.Select(r => r.RowKey).ToList();
+            var persons = await _personRepository.GetAllByRecipientIds(ids);
+
+            recipients
+                .ForEach(r => r.FamilyMembers = 
+                            persons.Where(p => p.PartitionKey == r.RowKey)
+                .ToList());
+
             return recipients
                 .OrderBy(x => x.HasConfirmedMatch)
                 .ThenBy(x => x.IsSuggestedMatch)
@@ -425,10 +430,10 @@ namespace GiEnJul.Controllers
 
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
 
-            foreach (var recipient in suggestions)
-            {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            }
+            var ids = suggestions.Select(r => r.RowKey).ToList();
+            var persons = await _personRepository.GetAllByRecipientIds(ids);
+
+            suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.PartitionKey == r.RowKey).ToList());
             return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
     }
