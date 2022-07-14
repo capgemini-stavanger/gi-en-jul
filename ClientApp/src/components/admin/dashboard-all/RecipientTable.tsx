@@ -7,6 +7,8 @@ import {
   Typography,
   capitalize,
   Button,
+  Box,
+  TextField,
 } from "@material-ui/core";
 import {
   ExpandMore,
@@ -28,6 +30,8 @@ import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
+import ConfirmationBox from "components/shared/confirmationBox";
+import ApiService from "common/functions/apiServiceClass";
 
 type Props = {
   data: RecipientType[] | [];
@@ -45,6 +49,9 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
   const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
   const [deleteObj, setDeleteObj] = useState({});
+  const [comment, setComment] = useState("");
+  const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
+  const apiservice = new ApiService();
 
   const handleSelectedAccordion = (index: number) => {
     index != selected ? setSelected(index) : setSelected(-1);
@@ -63,6 +70,25 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
     return Object.assign({} as RecipientType, recipient);
   };
 
+  const saveComment = () => {
+    if (selectedRecipient) {
+      apiservice
+        .post("admin/recipient/addcomment", {
+          recipientPartitionKey: selectedRecipient.partitionKey,
+          recipientRowKey: selectedRecipient.rowKey,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            selectedRecipient.comment = comment;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
   return (
     <Container>
       {data.map((recipient, index) => (
@@ -72,8 +98,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
           className={classes.accordionContainer}
           onChange={() => {
             handleRecipientChange(recipient);
-          }}
-          onClick={() => {
+            setComment(recipient.comment);
             handleSelectedAccordion(index);
           }}
         >
@@ -203,6 +228,37 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
               <Delete />
               <Button>Slett familie</Button>
             </Typography>
+            <Divider />
+            <Box>
+              <TextField
+                id="outlined-multiline-static"
+                variant="outlined"
+                label="Kommentar"
+                multiline
+                rows={4}
+                value={comment ? comment : ""}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setComment(e.target.value);
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setOpenConfirmationComment(true);
+                }}
+              >
+                Lagre
+              </Button>
+
+              <ConfirmationBox
+                open={openConfirmationComment}
+                text={"Ønsker du å lagre kommentaren?"}
+                handleResponse={saveComment}
+                handleClose={() => {
+                  setOpenConfirmationComment(false);
+                }}
+              />
+            </Box>
           </AccordionDetails>
         </Accordion>
       ))}

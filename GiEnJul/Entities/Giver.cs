@@ -33,5 +33,8 @@ namespace GiEnJul.Entities
         public string CancelFeedback { get; set; }
         public DateTime? CancelDate { get; set; }
         public string CancelFamilyId { get; set; }
+
+        //Add comment on Giver
+        public string Comment { get; set; }
     }
 }

@@ -16,6 +16,7 @@ export interface GiverType {
   cancelFeedback: string;
   cancelDate: Date;
   cancelFamilyId: string;
+  comment: string;
 }
 
 export interface RecipientType {
@@ -41,6 +42,7 @@ export interface RecipientType {
   isSuggestedMatch: boolean;
   location: string;
   matchedGiver?: GiverType;
+  comment: string;
 }
 export interface PersonType {
   recipientId: string;

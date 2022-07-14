@@ -29,6 +29,9 @@ namespace GiEnJul.Models
         public DateTime? CancelDate { get; set; }
         public string CancelFamilyId { get; set; }
 
+        //Add comment to giver
+        public string Comment { get; set; }
+
         public Giver ShallowCopy() 
         {
             return (Giver) this.MemberwiseClone();
