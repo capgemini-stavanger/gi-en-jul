@@ -9,7 +9,15 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { Delete, ExpandMore, Group, LinkOff, Mail, Phone } from "@material-ui/icons";
+import {
+  Delete,
+  ExpandMore,
+  Group,
+  LinkOff,
+  Mail,
+  Phone,
+  ChatBubbleOutline,
+} from "@material-ui/icons";
 import React, { useState } from "react";
 import { GiverType } from "components/shared/Types";
 import Circle from "components/admin/dashboard-all/Circle";
@@ -105,6 +113,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             ) : (
               <Circle color="red" />
             )}
+            {giver.comment && <ChatBubbleOutline />}
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
