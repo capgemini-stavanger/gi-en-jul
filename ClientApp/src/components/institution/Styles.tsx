@@ -89,6 +89,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     backgroundColor: theme.palette.primary.dark,
     color: "white",
+    borderRadius: "2px",
   },
   formBox: {
     flexGrow: 1,
