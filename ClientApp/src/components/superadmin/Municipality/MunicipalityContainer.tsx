@@ -1,8 +1,6 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
-import { PersonalVideo } from "@material-ui/icons";
 import ApiService from "common/functions/apiServiceClass";
 import CustomTooltip from "components/institution/CustomTooltip";
-import { initValidFormState } from "components/institution/NewDesign/RegistrationFormTypes";
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { Button } from "reactstrap";
 import AddMunicipalityForm, {
@@ -19,16 +17,8 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const initState = {
-  viewErrorTrigger: 0,
-};
-
-interface IAddMunicipalityState {
-  values: IMunicipalityFormData;
-}
-
-const initFormDataState: () => IAddMunicipalityState = () => ({
-  values: getFormAddMunicipality(),
+const initFormDataState: () => IMunicipalityFormData = () => ({
+  ...getFormAddMunicipality(),
 });
 
 const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
@@ -69,13 +59,26 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   };
   useEffect(fetchAllLocations, []);
 
-  const addMunicipality = (data: any) => {
-    apiservice.put("municipality", {
-      Country: data.country,
-      Name: data.name,
-      IsActive: "true",
-    });
+  const addMunicipality = (data: IMunicipalityFormData) => {
+    apiservice
+      .post("municipality", {
+        Country: data.country,
+        Name: data.name,
+        IsActive: "false",
+      })
+      .then(() => {
+        fetchActiveLocations();
+        fetchAllLocations();
+      });
+
     setOpen(false);
+  };
+
+  const deleteMunicipality = () => {
+    apiservice.delete(`municipality/${selectedLocationAll}`, null).then(() => {
+      fetchActiveLocations();
+      fetchAllLocations();
+    });
   };
 
   const handleChangeActive = (event: ChangeEvent<IChangeEvent>) => {
@@ -104,7 +107,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 
   return (
     <>
-      <Grid container direction="row">
+      <Grid container direction="row" spacing={5}>
         <Grid item>
           <Box width="250px">
             <FormControl fullWidth>
@@ -140,6 +143,29 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
             </FormControl>
           </Box>
         </Grid>
+
+        <Grid item>
+          <Box width="250px">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Velg kommune du vil slette</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedLocationAll}
+                label="Location"
+                onChange={handleChangeAll}
+                fullWidth
+              >
+                {itemsAll}
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
+
+        <Grid item>
+          <Button onClick={deleteMunicipality}>Slett</Button>
+        </Grid>
+
         <Grid item>
           <Button
             onClick={() => {
@@ -150,11 +176,11 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
           </Button>
 
           <AddMunicipalityForm
-            key={formDataState.values.name}
-            values={formDataState.values}
+            key={formDataState.name}
+            values={formDataState}
             open={open}
             handleClose={() => setOpen(false)}
-            handleAddMunicipality={(data: any) => addMunicipality(data)}
+            handleAddMunicipality={(data: IMunicipalityFormData) => addMunicipality(data)}
           />
 
           <CustomTooltip
@@ -178,5 +204,6 @@ export default MunicipalityContainer;
 - legg til email i table 
 - flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
+-confirmation when a kommune has been added
 
 */
