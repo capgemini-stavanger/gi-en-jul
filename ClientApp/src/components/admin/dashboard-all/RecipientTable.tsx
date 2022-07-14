@@ -19,6 +19,7 @@ import {
   Delete,
   LinkOff,
   Edit,
+  ChatBubbleOutline,
 } from "@material-ui/icons";
 import * as React from "react";
 import { RecipientType } from "components/shared/Types";
@@ -127,6 +128,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
             ) : (
               <FiberManualRecord fontSize="large" style={{ color: "#ed8175" }} />
             )}
+            {recipient.comment && <ChatBubbleOutline />}
           </AccordionSummary>
           <Divider />
           <AccordionDetails className={classes.largeColumn}>
