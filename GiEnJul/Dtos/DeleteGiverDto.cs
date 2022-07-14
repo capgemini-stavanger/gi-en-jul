@@ -2,7 +2,7 @@ namespace GiEnJul.Dtos
 {
     public class DeleteGiverDto
     {
-        public string RowKey { get; set; }
-        public string PartitionKey { get; set; }
+        public string GiverId { get; set; }
+        public string Event { get; set; }
     }
 }

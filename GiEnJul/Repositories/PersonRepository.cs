@@ -17,7 +17,7 @@ namespace GiEnJul.Repositories
         Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models);
         Task<List<Models.Person>> GetAllByRecipientId(string partitionKey);
         Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds);
-        Task<Models.Person> GetPersonByRowKey(string rowKey);
+        Task<Models.Person> GetPersonById(string personId);
 
     }
 
@@ -52,7 +52,7 @@ namespace GiEnJul.Repositories
             return _mapper.Map<List<Models.Person>>(persons);
         }
 
-        public async Task<Models.Person> GetPersonByRowKey(string rowKey)
+        public async Task<Models.Person> GetPersonById(string rowKey)
         {
             var query = $"RowKey eq '{rowKey}'";
 

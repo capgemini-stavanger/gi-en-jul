@@ -56,13 +56,13 @@ namespace GiEnJul.Controllers
         }
 
         // POST: /verify/giverGuid/recipientGuid/event_location
-        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/verify")]
-        public async Task VerifyConnection(string giverRowKey, string recipientRowKey, string partitionkey)
+        [HttpPost("{giverId}/{recipientId}/{event}/verify")]
+        public async Task VerifyConnection(string giverId, string recipientId, string @event)
         {
             //Populate recipient and giver using keys
-            var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
-            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
-            var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
+            var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
+            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
+            var giver = await _giverRepository.GetGiverAsync(@event, giverId);
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
@@ -74,7 +74,7 @@ namespace GiEnJul.Controllers
                 throw new InvalidConnectionCreationException();
             }
 
-            (string partitionKey, string rowKey) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            (string @event, string connectedIds) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
 
             try
             {
@@ -84,7 +84,7 @@ namespace GiEnJul.Controllers
                 recipient.HasConfirmedMatch = true;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
-                var @event = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+                var eventModel = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
                 var familyTable = "";
                 for (var i = 0; i < recipient.PersonCount; i++)
@@ -104,7 +104,7 @@ namespace GiEnJul.Controllers
                     { "recipientNote", recipientNote },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(@event, "eventDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
@@ -114,12 +114,12 @@ namespace GiEnJul.Controllers
             catch (InvalidConnectionCreationException e)
             {
                 _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
-                throw e;
+                throw;
             }
             catch (Exception e)
             {
                 //Undo all operations
-                await _connectionRepository.DeleteConnectionAsync(connection.partitionKey, connection.rowKey);
+                await _connectionRepository.DeleteConnectionAsync(connection.@event, connection.connectedIds);
                 giver.HasConfirmedMatch = false;
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 recipient.HasConfirmedMatch = false;
@@ -130,11 +130,11 @@ namespace GiEnJul.Controllers
             }
         }
 
-        [HttpPost("{giverRowKey}/{recipientRowKey}/{partitionkey}/deny")]
-        public async Task<ActionResult> DenyConnection(string giverRowKey, string recipientRowKey, string partitionkey, PostFeedbackGiverDto feedback)
+        [HttpPost("{giverId}/{recipientId}/{event}/deny")]
+        public async Task<ActionResult> DenyConnection(string giverId, string recipientId, string @event, PostFeedbackGiverDto feedback)
         {
-            var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
-            var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
+            var giver = await _giverRepository.GetGiverAsync(@event, giverId);
+            var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {

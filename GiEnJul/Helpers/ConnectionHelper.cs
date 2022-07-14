@@ -11,8 +11,8 @@ namespace GiEnJul.Helpers
             return
                 recipient.IsSuggestedMatch &&
                 giver.IsSuggestedMatch &&
-                giver.MatchedRecipient == recipient.RowKey &&
-                recipient.MatchedGiver == giver.RowKey &&
+                giver.MatchedRecipient == recipient.RecipientId &&
+                recipient.MatchedGiver == giver.GiverId &&
                 CanSuggestConnection(giver, recipient);
         }
 
@@ -26,7 +26,7 @@ namespace GiEnJul.Helpers
                 throw new ArgumentNullException(nameof(recipient));
             
             return
-                giver.PartitionKey == recipient.PartitionKey &&
+                giver.Event == recipient.Event &&
                 giver.Location == recipient.Location &&
                 giver.EventName == recipient.EventName;
         }

@@ -152,7 +152,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       age: 0,
       months: 0,
       gender: 9,
-      partitionKey: recipientData.rowKey,
+      recipientId: recipientData.recipientId,
       wish: "",
     } as PersonType;
 

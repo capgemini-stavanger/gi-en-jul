@@ -61,7 +61,7 @@ namespace GiEnJul.Controllers
             {
                 //Add familymembers to Table Storage
                 var family = _mapper.Map<List<Person>>(recipientDto.FamilyMembers);
-                family.ForEach(person => person.PartitionKey = insertedRecipient.RowKey);
+                family.ForEach(person => person.RecipientId = insertedRecipient.RecipientId);
 
                 await _personRepository.InsertOrReplaceBatchAsync(family);
                 return (insertedRecipient.FamilyId, insertedRecipient.ReferenceId);
@@ -81,7 +81,7 @@ namespace GiEnJul.Controllers
             var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
             foreach (var recipient in recipients)
             {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
             }
             return recipients;
         }

@@ -74,7 +74,7 @@ namespace GiEnJul.Controllers
 
             foreach (var giver in givers.Where(x => x.IsSuggestedMatch))
             {
-                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipient);
+                var matchedRecipient = recipients.Find(x => x.RecipientId == giver.MatchedRecipient);
                 giver.MatchedFamilyId = matchedRecipient.FamilyId;
             }
 
@@ -92,12 +92,12 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
 
-            var ids = recipients.Select(r => r.RowKey).ToList();
+            var ids = recipients.Select(r => r.RecipientId).ToList();
             var persons = await _personRepository.GetAllByRecipientIds(ids);
 
             recipients
                 .ForEach(r => r.FamilyMembers = 
-                            persons.Where(p => p.PartitionKey == r.RowKey)
+                            persons.Where(p => p.RecipientId == r.RecipientId)
                 .ToList());
 
             return recipients
@@ -141,11 +141,11 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPut("person/{person_rowkey}/wish")]
+        [HttpPut("person/{personId}/wish")]
         [Authorize(Policy = Policy.UpdateWish)]
-        public async Task<ActionResult> PutWishAsync(string person_rowkey, [FromBody] string wish)  
+        public async Task<ActionResult> PutWishAsync(string personId, [FromBody] string wish)  
         {
-            var person = await _personRepository.GetPersonByRowKey(person_rowkey);
+            var person = await _personRepository.GetPersonById(personId);
             person.Wish = wish.Any() ? wish : null;
 
             await _personRepository.InsertOrReplaceAsync(person);
@@ -157,9 +157,11 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteConnection)]
         public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, connectionDto.RowKey);
+            var giverId = connectionDto.ConnectedIds.Substring(connectionDto.ConnectedIds.IndexOf('_') + 1);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, giverId);
 
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, connectionDto.RowKey);
+            var recipientId = connectionDto.ConnectedIds.Substring(0, connectionDto.ConnectedIds.IndexOf('_'));
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, recipientId);
 
             if (giver is null && recipient is null)
             {
@@ -168,12 +170,12 @@ namespace GiEnJul.Controllers
 
             if (giver?.MatchedRecipient != null && recipient is null)
             {
-                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, giver.MatchedRecipient);
+                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, giver.MatchedRecipient);
             }
 
             if (recipient?.MatchedGiver != null && giver is null)
             {
-                giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, recipient.MatchedGiver);
+                giver = await _giverRepository.GetGiverAsync(connectionDto.Event, recipient.MatchedGiver);
             }
 
             if (recipient is null || giver is null)
@@ -210,7 +212,7 @@ namespace GiEnJul.Controllers
             
             try
             {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.PartitionKey, recipient.RowKey + "_" + giver.RowKey);
+                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.EventName);
             }
             catch (Exception e)
             {
@@ -228,8 +230,8 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.AddConnection)]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
 
             if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
             {
@@ -239,20 +241,20 @@ namespace GiEnJul.Controllers
             try
             {
                 giver.IsSuggestedMatch = true;
-                giver.MatchedRecipient = connectionDto.RecipientRowKey;
+                giver.MatchedRecipient = connectionDto.RecipientId;
                 giver.MatchedFamilyId = recipient.FamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;
-                recipient.MatchedGiver = connectionDto.GiverRowKey;
+                recipient.MatchedGiver = connectionDto.GiverId;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
 
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-                var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/verify";
-                var denyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/deny";
+                var verifyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/verify";
+                var denyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/deny";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 
@@ -302,14 +304,14 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteRecipient)]
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
-            var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.Event, recipientDto.RecipientId);
 
             if (recipientToDelete.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.PartitionKey, recipientDto.RowKey));
+                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.Event, recipientDto.RecipientId));
             }
 
-            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
+            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RecipientId);
 
             if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)
             {
@@ -344,7 +346,7 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
-            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.Event, recipientDto.RecipientId);
 
             if (recipientOld.IsSuggestedMatch)
             {
@@ -362,8 +364,8 @@ namespace GiEnJul.Controllers
                 if (valueNew == null) prop.SetValue(recipientNew, valueOld);
             }
 
-            var childrenFromDb = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
-            var deleteChildren = childrenFromDb.Where(oldP => recipientNew.FamilyMembers.All(newP => oldP.RowKey != newP.RowKey)).ToList();
+            var childrenFromDb = await _personRepository.GetAllByRecipientId(recipientDto.RecipientId);
+            var deleteChildren = childrenFromDb.Where(oldP => recipientNew.FamilyMembers.All(newP => oldP.PersonId != newP.PersonId)).ToList();
 
             try
             {
@@ -386,14 +388,14 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteGiver)]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var giver = await _giverRepository.GetGiverAsync(giverDto.Event, giverDto.GiverId);
 
             if (giver.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.PartitionKey, giverDto.RowKey));
+                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.Event, giverDto.GiverId));
             }
 
-            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.Event, giverDto.GiverId);
             await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
         }
@@ -430,10 +432,10 @@ namespace GiEnJul.Controllers
 
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
 
-            var ids = suggestions.Select(r => r.RowKey).ToList();
+            var ids = suggestions.Select(r => r.RecipientId).ToList();
             var persons = await _personRepository.GetAllByRecipientIds(ids);
 
-            suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.PartitionKey == r.RowKey).ToList());
+            suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
             return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
     }

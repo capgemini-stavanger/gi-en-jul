@@ -30,6 +30,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
+  const [deleteObj, setDeleteObj] = useState({});
 
   const handleChange =
     (giver: GiverType) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
@@ -37,7 +38,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
       handleGiverChange(giver);
     };
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (deleteObj: any = {}) => {
+    setDeleteObj(deleteObj);
     setOpenDialog(true);
   };
 
@@ -51,7 +53,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
         <Accordion
           expanded={selectedGiver === giver}
           onChange={handleChange(giver)}
-          key={giver.rowKey}
+          key={giver.giverId}
           className={classes.accordionContainer}
         >
           <AccordionSummary
@@ -106,7 +108,12 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               <Typography
                 onClick={() => {
                   setType(null);
-                  handleOpenDialog();
+                  handleOpenDialog({
+                    event: giver.event,
+                    connectedIds: `${giver.matchedRecipient}_${giver.giverId}`,
+                    fullName: giver.fullName,
+                    familyId: giver.matchedFamilyId,
+                  });
                 }}
               >
                 <LinkOff />
@@ -118,7 +125,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             <Typography
               onClick={() => {
                 setType("Giver");
-                handleOpenDialog();
+                handleOpenDialog(giver);
               }}
             >
               <Delete />
@@ -146,7 +153,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           <DeleteTypeDialog
             open={selectedGiver === giver && openDialog}
             handleClose={handleCloseDialog}
-            typeData={giver}
+            typeData={deleteObj}
             refreshData={refreshData}
             type={type}
           />

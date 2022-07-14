@@ -4,8 +4,9 @@ namespace GiEnJul.Models
 {
     public class Giver
     {
-        public string RowKey { get; set; }
-        public string PartitionKey { get; set; }
+        //Event_Municipality, corresponds to partitionKey for the Table Entity
+        public string Event { get; set; }
+        public string GiverId { get; set; }
 
         public int MaxReceivers { get; set; }
         public string Location { get; set; }

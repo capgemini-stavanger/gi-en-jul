@@ -2,12 +2,12 @@ namespace GiEnJul.Dtos
 {
     public class DeleteConnectionDto
     {
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set; }
-        public DeleteConnectionDto(string partitionKey, string rowKey)
+        public string Event { get; set; }
+        public string ConnectedIds { get; set; } //recId_givId
+        public DeleteConnectionDto(string @event, string connctedIds)
         {
-            PartitionKey = partitionKey;
-            RowKey = rowKey;
+            Event = @event;
+            ConnectedIds = connctedIds;
         }
     }
 }

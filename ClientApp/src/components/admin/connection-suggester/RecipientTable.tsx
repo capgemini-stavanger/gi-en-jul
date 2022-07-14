@@ -31,7 +31,7 @@ function Row(props: RecipientRowProps) {
     <>
       <TableRow
         onClick={() => {
-          props.onClick(recipient.rowKey, recipient.partitionKey);
+          props.onClick(recipient.recipientId, recipient.event);
           setOpen(!open);
         }}
         style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}
@@ -79,7 +79,7 @@ function Row(props: RecipientRowProps) {
                 </TableHead>
                 <TableBody>
                   {recipient.familyMembers.map((familyMember) => (
-                    <TableRow key={familyMember.rowKey}>
+                    <TableRow key={familyMember.personId}>
                       <TableCell>{getGender(familyMember.gender, familyMember.age)}</TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell>
@@ -138,11 +138,11 @@ export default function RecipientSuggestions(props: TableProps) {
       <TableBody className={classes.clickableTableBody}>
         {props.recipients.map((recipient) => (
           <Row
-            key={recipient.rowKey}
+            key={recipient.recipientId}
             recipient={recipient}
-            selected={selectedRow === recipient.rowKey}
+            selected={selectedRow === recipient.recipientId}
             onClick={() => {
-              setSelectedRow(recipient.rowKey);
+              setSelectedRow(recipient.recipientId);
               props.selectRecipient(recipient);
             }}
           />

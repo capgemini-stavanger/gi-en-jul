@@ -25,7 +25,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     const body = events.map((event, i) => {
       return (
         <Grid item container direction="row" key={i}>
-          <Grid item>{event.rowKey}</Grid>
+          <Grid item>{event.municipality}</Grid>
           <Grid item>{event.startDate}</Grid>
           <Grid item>{event.endDate}</Grid>
         </Grid>

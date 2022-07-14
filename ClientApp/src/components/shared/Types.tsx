@@ -10,8 +10,8 @@ export interface GiverType {
   matchedRecipient?: string;
   matchedFamilyId?: string;
   maxReceivers: number;
-  partitionKey: string;
-  rowKey: string;
+  event: string;
+  giverId: string;
   phoneNumber: string;
   cancelFeedback: string;
   cancelDate: Date;
@@ -19,8 +19,8 @@ export interface GiverType {
 }
 
 export interface RecipientType {
-  rowKey: string;
-  partitionKey: string;
+  recipientId: string;
+  event: string;
   familyId: string;
 
   dinner: string;
@@ -43,8 +43,8 @@ export interface RecipientType {
   matchedGiver?: GiverType;
 }
 export interface PersonType {
-  partitionKey: string;
-  rowKey: string;
+  recipientId: string;
+  personId: string;
   wish: string;
   age: number;
   months: number;

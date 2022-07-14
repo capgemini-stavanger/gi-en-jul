@@ -57,7 +57,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
 
   const handleGiverChange = useCallback((newGiver: GiverType) => {
     if (!newGiver.isSuggestedMatch && !newGiver.hasConfirmedMatch) {
-      if (selectedConnection.giver?.rowKey === newGiver.rowKey) {
+      if (selectedConnection.giver?.giverId === newGiver.giverId) {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
@@ -78,7 +78,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
 
   const handleRecipientChange = useCallback((newRecipient: RecipientType) => {
     if (!newRecipient.isSuggestedMatch && !newRecipient.hasConfirmedMatch) {
-      if (selectedConnection.recipient?.rowKey === newRecipient.rowKey) {
+      if (selectedConnection.recipient?.recipientId === newRecipient.recipientId) {
         setSelectedConnection((prevState) => {
           return {
             ...prevState,
@@ -101,10 +101,9 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: selectedConnection.giver?.rowKey,
-          GiverPartitionKey: selectedConnection.giver?.partitionKey,
-          RecipientRowKey: selectedConnection.recipient?.rowKey,
-          RecipientPartitionKey: selectedConnection.recipient?.partitionKey,
+          GiverId: selectedConnection.giver?.giverId,
+          Event: selectedConnection.giver?.event,
+          RecipientId: selectedConnection.recipient?.recipientId,
         })
       )
       .then((response) => {
