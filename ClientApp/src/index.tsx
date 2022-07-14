@@ -91,6 +91,7 @@ export const theme = createTheme({
         borderRadius: "2em",
       },
     },
+    /* Accordion Shadow removed
     MuiPaper: {
       elevation1: {
         boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
@@ -102,11 +103,24 @@ export const theme = createTheme({
         borderRadius: "2em",
       },
     },
+    */
     MuiListItem: {
       root: {
         justifyContent: "center",
       },
     },
+    MuiAccordion: {
+      root: {},
+    },
+    MuiAccordionSummary: {
+      root: {
+        cursor: "default",
+        "&:hover:not(.Mui-disabled)": {
+          cursor: "default",
+        },
+      },
+    },
+    /* Rounded Accordion removed
     MuiAccordion: {
       root: {
         overflow: "hidden",
@@ -133,6 +147,7 @@ export const theme = createTheme({
         },
       },
     },
+    */
   },
 });
 

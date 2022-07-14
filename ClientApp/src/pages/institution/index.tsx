@@ -2,8 +2,8 @@ import { Tab } from "@material-ui/core";
 import React, { useState } from "react";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import RegistrationFormRemake from "components/institution/NewDesign/RegistrationFormRemake";
-import RegistrationOverview from "components/institution/NewDesign/RegistrationOverview";
+import RegistrationForm from "components/institution/RegistrationForm";
+import RegistrationOverview from "components/institution/RegistrationOverview";
 import useUser from "hooks/useUser";
 
 interface IInstitutionMacro {
@@ -27,7 +27,7 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
           <Tab label="Oversikt" value="2" />
         </TabList>
         <TabPanel value="1">
-          <RegistrationFormRemake accessToken={accessToken} />
+          <RegistrationForm accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
           <RegistrationOverview accessToken={accessToken} institution={institution} />

@@ -74,6 +74,36 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "15px",
     marginLeft: "20px",
   },
+
+  // GRID STUFF
+  personBox: {
+    height: "150px",
+  },
+  numberBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    backgroundColor: theme.palette.primary.dark,
+    color: "white",
+  },
+  wishBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+    backgroundColor: "#F4F4F4",
+  },
+
+  // New Accordion Testing
+  accColor: {
+    backgroundColor: "#F4F4F4",
+  },
+  expandButton: {
+    position: "absolute",
+    right: "0",
+    top: "0",
+  },
 }));
 
 export default useStyles;
