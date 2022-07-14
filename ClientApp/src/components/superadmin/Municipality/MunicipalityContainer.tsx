@@ -24,11 +24,11 @@ const initState = {
 };
 
 interface IAddMunicipalityState {
-  values: IMunicipalityFormData[];
+  values: IMunicipalityFormData;
 }
 
 const initFormDataState: () => IAddMunicipalityState = () => ({
-  values: [getFormAddMunicipality()],
+  values: getFormAddMunicipality(),
 });
 
 const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
@@ -38,19 +38,8 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   const [selectedLocationActive, setSelectedLocationActive] = useState<string>("");
   const [selectedLocationAll, setSelectedLocationAll] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
-
-  const [state, setState] = useState(initState);
-  const [formDataState, setFormDataState] = useState(initFormDataState());
-  const [validFormState, setValidFormState] = useState({ ...initValidFormState });
-
+  const [formDataState] = useState(initFormDataState());
   const apiservice = new ApiService(accessToken);
-
-  //bruke denne til å oppdatere spesifikke verdier i komponent form.
-  const updateValues = (newMunicipalityData: any) => {
-    setFormDataState((prev) => {
-      return { ...prev };
-    });
-  };
 
   const fetchActiveLocations = () => {
     apiservice
@@ -86,6 +75,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
       Name: data.name,
       IsActive: "true",
     });
+    setOpen(false);
   };
 
   const handleChangeActive = (event: ChangeEvent<IChangeEvent>) => {
@@ -94,11 +84,6 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 
   const handleChangeAll = (event: ChangeEvent<IChangeEvent>) => {
     setSelectedLocationAll(event.target.value as string);
-  };
-
-  const handleAddMunicipality = (data: any) => {
-    addMunicipality(data);
-    updateValues(data);
   };
 
   const itemsActive = activeLocations.map((location, index) => {
@@ -163,20 +148,15 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
           >
             Legg til ny kommune
           </Button>
-          {formDataState.values.map((values, i) => {
-            return (
-              <AddMunicipalityForm
-                key={values.name} //kan kun ha en kommune med hvert navn.
-                handleChange={(newMunicipalityData: any) => {
-                  updateValues(newMunicipalityData);
-                }}
-                values={values}
-                open={open}
-                handleClose={() => setOpen(false)}
-                handleAddMunicipality={(data: any) => handleAddMunicipality(data)}
-              />
-            );
-          })}
+
+          <AddMunicipalityForm
+            key={formDataState.values.name}
+            values={formDataState.values}
+            open={open}
+            handleClose={() => setOpen(false)}
+            handleAddMunicipality={(data: any) => addMunicipality(data)}
+          />
+
           <CustomTooltip
             iconType={true}
             content={
@@ -198,6 +178,5 @@ export default MunicipalityContainer;
 - legg til email i table 
 - flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
--legg til kommune: 
-trenger knapp for submit/lagre som bruker api put metoden og setter open til false.
+
 */

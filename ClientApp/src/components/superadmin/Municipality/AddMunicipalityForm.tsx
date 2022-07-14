@@ -23,7 +23,6 @@ export const getFormAddMunicipality: () => IMunicipalityFormData = () => ({
 });
 
 interface props {
-  handleChange: (newCountryData: { [target: string]: unknown }) => void;
   values: IMunicipalityFormData;
   open: boolean;
   handleClose: () => void;
@@ -103,7 +102,10 @@ const MunicipalityForm: React.FC<props> = ({ open, handleClose, handleAddMunicip
             <Grid item>
               <Button
                 onClick={() => {
-                  handleAddMunicipality(state);
+                  {
+                    handleAddMunicipality(state);
+                    setState(initState);
+                  }
                 }}
               >
                 Lagre
