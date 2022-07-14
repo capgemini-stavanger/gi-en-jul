@@ -1,5 +1,4 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
-import { PersonalVideo } from "@material-ui/icons";
 import ApiService from "common/functions/apiServiceClass";
 import CustomTooltip from "components/institution/CustomTooltip";
 import React, { useState, useEffect, ChangeEvent } from "react";
@@ -249,5 +248,6 @@ export default MunicipalityContainer;
 - legg til email i table 
 - flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
+-confirmation when a kommune has been added
 
 */
