@@ -96,15 +96,14 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     }
   }, []);
 
-  const connectGiverRecipient = async () => {
+  const connectGiverRecipient = async () => {debugger;
     await apiservice
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: selectedConnection.giver?.giverId,
-          GiverPartitionKey: selectedConnection.giver?.event,
-          RecipientRowKey: selectedConnection.recipient?.recipientId,
-          RecipientPartitionKey: selectedConnection.recipient?.event,
+          GiverId: selectedConnection.giver?.giverId,
+          Event: selectedConnection.giver?.event,
+          RecipientId: selectedConnection.recipient?.recipientId,
         })
       )
       .then((response) => {

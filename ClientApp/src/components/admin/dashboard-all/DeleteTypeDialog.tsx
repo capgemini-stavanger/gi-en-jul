@@ -20,7 +20,7 @@ interface IConfirmationDialog {
   type?: string | null;
 }
 
-const DeleteGiverDialog: FC<IConfirmationDialog> = ({
+const DeleteTypeDialog: FC<IConfirmationDialog> = ({
   open,
   typeData,
   handleClose,
@@ -34,10 +34,7 @@ const DeleteGiverDialog: FC<IConfirmationDialog> = ({
 
   const handleDeleteGiver = async () => {
     await apiservice
-      .delete(
-        `admin/${type != null ? type : "Connection"}`,
-        JSON.stringify({ rowKey: typeData.rowKey, partitionKey: typeData.partitionKey })
-      )
+      .delete(`admin/${type != null ? type : "Connection"}`, JSON.stringify({ ...typeData }))
       .then((response) => {
         if (response.status === 200) {
           refreshData();
@@ -115,4 +112,4 @@ const DeleteGiverDialog: FC<IConfirmationDialog> = ({
   );
 };
 
-export default DeleteGiverDialog;
+export default DeleteTypeDialog;

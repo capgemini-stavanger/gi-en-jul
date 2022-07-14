@@ -120,9 +120,9 @@ const ConnectionSuggesterMacro: React.FC<ConnectionSuggesterMacro> = ({
       .post(
         "admin/",
         JSON.stringify({
-          GiverRowKey: state.selectedGiver.giverId,
+          GiverId: state.selectedGiver.giverId,
           Event: state.selectedGiver.event,
-          RecipientRowKey: state.selectedRecipient.recipientId,
+          RecipientId: state.selectedRecipient.recipientId,
         })
       )
       .then((response) => {

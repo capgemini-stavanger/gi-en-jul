@@ -44,12 +44,14 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
   const [openDialog, setOpenDialog] = useState(false);
   const [type, setType] = useState<string | null>("");
   const [selected, setSelected] = useState(-1);
+  const [deleteObj, setDeleteObj] = useState({});
 
   const handleSelectedAccordion = (index: number) => {
     index != selected ? setSelected(index) : setSelected(-1);
   };
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (deleteObj: any = {}) => {
+    setDeleteObj(deleteObj);
     setOpenDialog(true);
   };
 
@@ -165,7 +167,12 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
               <Typography
                 onClick={() => {
                   setType(null);
-                  handleOpenDialog();
+                  handleOpenDialog({
+                    event: recipient.event,
+                    connectedIds: `${recipient.recipientId}_${recipient.matchedGiver?.giverId}`,
+                    fullName: recipient.matchedGiver?.fullName,
+                    familyId: recipient.familyId,
+                  });
                 }}
               >
                 <LinkOff />
@@ -190,7 +197,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
             <Typography
               onClick={() => {
                 setType("Recipient");
-                handleOpenDialog();
+                handleOpenDialog(recipient);
               }}
             >
               <Delete />
@@ -221,7 +228,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
       <DeleteTypeDialog
         open={openDialog}
         handleClose={handleCloseDialog}
-        typeData={selectedRecipient}
+        typeData={deleteObj}
         refreshData={refreshData}
         type={type}
       />

@@ -157,9 +157,11 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteConnection)]
         public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, connectionDto.RowKey);
+            var giverId = connectionDto.ConnectedIds.Substring(connectionDto.ConnectedIds.IndexOf('_') + 1);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, giverId);
 
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, connectionDto.RowKey);
+            var recipientId = connectionDto.ConnectedIds.Substring(0, connectionDto.ConnectedIds.IndexOf('_'));
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, recipientId);
 
             if (giver is null && recipient is null)
             {
@@ -168,12 +170,12 @@ namespace GiEnJul.Controllers
 
             if (giver?.MatchedRecipient != null && recipient is null)
             {
-                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.PartitionKey, giver.MatchedRecipient);
+                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, giver.MatchedRecipient);
             }
 
             if (recipient?.MatchedGiver != null && giver is null)
             {
-                giver = await _giverRepository.GetGiverAsync(connectionDto.PartitionKey, recipient.MatchedGiver);
+                giver = await _giverRepository.GetGiverAsync(connectionDto.Event, recipient.MatchedGiver);
             }
 
             if (recipient is null || giver is null)
@@ -210,7 +212,7 @@ namespace GiEnJul.Controllers
             
             try
             {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.PartitionKey, recipient.RecipientId + "_" + giver.EventName);
+                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.EventName);
             }
             catch (Exception e)
             {
@@ -228,8 +230,8 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.AddConnection)]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverRowKey);
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientRowKey);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
 
             if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
             {
@@ -239,12 +241,12 @@ namespace GiEnJul.Controllers
             try
             {
                 giver.IsSuggestedMatch = true;
-                giver.MatchedRecipient = connectionDto.RecipientRowKey;
+                giver.MatchedRecipient = connectionDto.RecipientId;
                 giver.MatchedFamilyId = recipient.FamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;
-                recipient.MatchedGiver = connectionDto.GiverRowKey;
+                recipient.MatchedGiver = connectionDto.GiverId;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);

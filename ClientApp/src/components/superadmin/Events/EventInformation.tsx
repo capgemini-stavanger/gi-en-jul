@@ -1,10 +1,8 @@
 import { Grid } from "@material-ui/core";
 
 export interface EventContent {
-  partitionKey: string; // used when fetching event
-  rowKey: string; // used when fetching event
-  eventName: string; // used when creating event
-  city: string; // used when creating event
+  eventName: string;
+  municipality: string;
   startDate: string; // YYYY-MM-DDThh:mm:ssZ
   endDate: string; // YYYY-MM-DDThh:mm:ssZ
   deliveryAddress: string;
