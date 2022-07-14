@@ -1,7 +1,8 @@
-import { capitalize, Grid, SvgIcon, IconButton, Button } from "@material-ui/core";
+import { capitalize, Grid, SvgIcon, IconButton, Button, Box, Container } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
-import { FC, useEffect, useState } from "react";
+import { useState } from "react";
+import { FC, useEffect } from "react";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
@@ -16,17 +17,8 @@ interface IPersonProps {
   deletePerson: () => void;
   viewErrorTrigger: number;
   person: IFormPerson;
+  personIndex: number;
 }
-
-const initState: { [data: string]: any } = {
-  ageWish: false,
-  commentSelect: false,
-  wishInput: "",
-  validWishInput: false,
-  dialogOpen: false,
-  comment: "",
-  wishes: [],
-};
 
 const FormPerson: FC<IPersonProps> = ({
   updatePerson,
@@ -34,17 +26,11 @@ const FormPerson: FC<IPersonProps> = ({
   deletePerson,
   viewErrorTrigger,
   person,
+  personIndex,
 }) => {
   const classes = useStyles();
 
-  const [state, setState] = useState({ ...initState });
-
-  const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
-    setState((prev) => {
-      prev[target] = value;
-      return prev;
-    });
-  };
+  const [showWishes, setShowWishes] = useState(true);
 
   useEffect(() => {}, [person.wishes]);
 
@@ -107,45 +93,29 @@ const FormPerson: FC<IPersonProps> = ({
 
   const addWish = () => {
     const newList = [...person.wishes];
-    if (newList.length >= 5 && !state.ageWish) return;
+    if (newList.length >= 5) return;
     newList.push(getFormWish());
     updatePersonWish({ wishes: newList });
   };
 
-  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("commentInput")(newInput);
-    updatePerson({ comment: newInput });
-  };
-
   return (
-    <Grid container direction="column" spacing={5}>
-      <Grid item>
-        <Grid
-          container
-          direction="row"
-          spacing={5}
-          alignItems="center"
-          justifyContent="space-around"
-        >
-          <Grid item>
-            <IconButton color="secondary" onClick={deletePerson}>
-              <SvgIcon component={ClearIcon} />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <InputValidator
-              viewErrorTrigger={viewErrorTrigger}
-              validators={[isInt]}
-              name="age"
-              type="number"
-              label="Alder"
-              value={person.age || "0"}
-              onChange={onAgeChange}
-              className={classes.smallWidth}
-            />
-          </Grid>
-          {(parseInt(person.age) < 1 || !person.age) && (
+    <Box className={classes.personBox}>
+      <Box className={classes.numberBox}>{personIndex + 1}</Box>
+      <Container className={classes.formBox}>
+        <Box className={classes.formBoxHeader}>
+          <Grid container direction="row" spacing={2} alignItems="center">
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isInt]}
+                name="age"
+                type="number"
+                label="Alder"
+                value={person.age || "0"}
+                onChange={onAgeChange}
+                className={classes.smallWidth}
+              />
+            </Grid>
             <Grid item>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
@@ -158,63 +128,61 @@ const FormPerson: FC<IPersonProps> = ({
                 className={classes.smallWidth}
               />
             </Grid>
-          )}
-
-          <Grid item>
-            <InputValidator
-              viewErrorTrigger={viewErrorTrigger}
-              validators={[isNotNull]}
-              name="gender"
-              type="select"
-              label="Kjønn"
-              variant={"outlined"}
-              value={person.gender ? person.gender : ""}
-              onChange={onGenderChange}
-              options={GENDERS.map((o) => {
-                return { value: o.value, text: capitalize(o.text) };
-              })}
-              className={classes.mediumWidth}
-            />
-          </Grid>
-
-          <Grid item>
-            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-              Legg til gaveønske (Maks 5)
-            </Button>
-          </Grid>
-
-          <Grid item>
             <Grid item>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
-                validators={[]}
-                name="comment"
-                label="Kommentar"
-                value={state.commentInput}
-                onChange={onCommentInputChange}
+                validators={[isNotNull]}
+                name="gender"
+                type="select"
+                label="Kjønn"
+                variant={"outlined"}
+                value={person.gender ? person.gender : ""}
+                onChange={onGenderChange}
+                options={GENDERS.map((o) => {
+                  return { value: o.value, text: capitalize(o.text) };
+                })}
                 className={classes.mediumWidth}
               />
             </Grid>
+            <Grid item>
+              <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+                Legg til gaveønske (Maks 5)
+              </Button>
+            </Grid>
+            <Grid item>
+              <IconButton color="primary" onClick={deletePerson}>
+                <SvgIcon component={ClearIcon} />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              {showWishes ? (
+                <Button onClick={() => setShowWishes(false)}>HIDE</Button>
+              ) : (
+                <Button onClick={() => setShowWishes(true)}>SHOW</Button>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-
-        <Grid item>
-          {person.wishes.map((wish: IFormWish, i: number) => {
-            return (
-              <FormWish
-                key={wish.id}
-                wish={wish.wish}
-                viewErrorTrigger={state.viewErrorTrigger}
-                updateWish={(wish) => {
-                  updateWish(wish, i);
-                }}
-                deleteWish={() => deleteWish(i)}
-              />
-            );
-          })}
-        </Grid>
-      </Grid>
-    </Grid>
+        </Box>
+        {showWishes && (
+          <Box className={classes.formBoxWishes}>
+            {person.wishes.map((wish: IFormWish, i: number) => {
+              return (
+                <FormWish
+                  key={wish.id}
+                  wish={wish.wish}
+                  viewErrorTrigger={viewErrorTrigger}
+                  updateWish={(wish) => {
+                    updateWish(wish, i);
+                  }}
+                  deleteWish={() => deleteWish(i)}
+                  wishIndex={i}
+                />
+              );
+            })}
+          </Box>
+        )}
+      </Container>
+    </Box>
   );
 };
 

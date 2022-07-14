@@ -474,6 +474,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                               updatePerson(i, newPersonData)
                             }
                             deletePerson={() => deletePerson(i)}
+                            personIndex={i}
                           />
                         );
                       })}

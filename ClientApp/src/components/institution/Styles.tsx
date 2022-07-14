@@ -75,34 +75,49 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "20px",
   },
 
-  // GRID STUFF
+  // New Attempt
   personBox: {
-    height: "150px",
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: "1em",
   },
   numberBox: {
+    width: "100px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
     backgroundColor: theme.palette.primary.dark,
     color: "white",
+    borderRadius: "2px",
   },
-  wishBox: {
+  formBox: {
+    backgroundColor: "#F4F4F4",
+    flexGrow: 1,
+    marginLeft: "10px",
+    borderRadius: "2px",
+  },
+  formBoxHeader: {
+    height: "150px",
+    display: "flex",
+    alignItems: "center",
+  },
+  formBoxWishes: {},
+  wishSpacing: {
+    marginBottom: "1em",
+  },
+  wishNumberCircle: {
+    padding: "3px",
+    width: "30px",
+    height: "30px",
+    borderRadius: "50px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100%",
-    backgroundColor: "#F4F4F4",
+    backgroundColor: theme.palette.primary.dark,
   },
-
-  // New Accordion Testing
-  accColor: {
-    backgroundColor: "#F4F4F4",
-  },
-  expandButton: {
-    position: "absolute",
-    right: "0",
-    top: "0",
+  wishNumber: {
+    color: "white",
+    fontSize: "24px",
   },
 }));
 
