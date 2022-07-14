@@ -1,4 +1,12 @@
-import { Checkbox, FormControlLabel, Grid, IconButton, SvgIcon } from "@material-ui/core";
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  SvgIcon,
+  Typography,
+} from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
@@ -17,6 +25,7 @@ interface IWishProps {
   viewErrorTrigger: number;
   updateWish: (newWishData: { [target: string]: unknown }) => void;
   deleteWish: () => void;
+  wishIndex: number;
 }
 
 const initState: { [data: string]: any } = {
@@ -30,7 +39,12 @@ export const getFormWish: () => IFormWish = () => ({
   wish: "",
 });
 
-const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, deleteWish }) => {
+const InstitutionWish: React.FC<IWishProps> = ({
+  viewErrorTrigger,
+  updateWish,
+  deleteWish,
+  wishIndex,
+}) => {
   const [state, setState] = useState({ ...initState });
 
   const classes = useStyles();
@@ -55,11 +69,11 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
   };
 
   return (
-    <Grid container spacing={6} alignItems="center" direction="row">
+    <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>
       <Grid item>
-        <IconButton color="secondary" onClick={deleteWish}>
-          <SvgIcon component={ClearIcon} />
-        </IconButton>
+        <Box className={classes.wishNumberCircle}>
+          <Typography className={classes.wishNumber}>{wishIndex + 1}</Typography>
+        </Box>
       </Grid>
       <Grid item>
         {!state.ageWish && (
@@ -79,7 +93,7 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
           ></InputValidator>
         )}
       </Grid>
-      <Grid item xs={2}>
+      <Grid item>
         <FormControlLabel
           control={
             <Checkbox
@@ -92,6 +106,11 @@ const InstitutionWish: React.FC<IWishProps> = ({ viewErrorTrigger, updateWish, d
           className="my-0"
           label="Giver kjøper alderstilpasset gave"
         />
+      </Grid>
+      <Grid item>
+        <IconButton color="primary" onClick={deleteWish}>
+          <SvgIcon component={ClearIcon} />
+        </IconButton>
       </Grid>
     </Grid>
   );
