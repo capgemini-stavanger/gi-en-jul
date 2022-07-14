@@ -173,18 +173,6 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
               </Typography>
             </AccordionDetails>
           )}
-          <AccordionDetails>
-            <Typography
-              onClick={() => {
-                setType(null);
-                handleOpenDialog();
-              }}
-            >
-              <LinkOff />
-              <Button>Koble fra giver og familie</Button>
-            </Typography>
-          </AccordionDetails>
-
           {!recipient.isSuggestedMatch && (
             <AccordionDetails>
               <Typography
