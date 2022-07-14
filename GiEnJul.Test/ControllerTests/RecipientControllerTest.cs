@@ -57,8 +57,8 @@ namespace GiEnJul.Test.ControllerTests
                 Note = "",
                 EventName = "Jul21",
                 Location = "Stavanger",
-                PartitionKey = "Jul21_Stavanger",
-                RowKey = Guid.NewGuid().ToString()
+                Event = "Jul21_Stavanger",
+                RecipientId = Guid.NewGuid().ToString()
             };
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
             mockRecipientRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>())).ReturnsAsync(recipient);

@@ -58,7 +58,7 @@ namespace GiEnJul.Controllers
             var eventModel = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
-            giver.EventName = eventModel.PartitionKey;
+            giver.EventName = eventModel.EventName;
             giver.Email = giver.Email.Trim();
 
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
@@ -71,7 +71,7 @@ namespace GiEnJul.Controllers
                 familyRange = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
-            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.PartitionKey, giverDto.Location);
+            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.EventName, giverDto.Location);
             bool waiting_list = num_givers > eventModel.GiverLimit;
 
             var emailValuesDict = new Dictionary<string, string> { { "familyRange", familyRange } };

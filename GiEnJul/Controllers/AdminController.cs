@@ -74,7 +74,7 @@ namespace GiEnJul.Controllers
 
             foreach (var giver in givers.Where(x => x.IsSuggestedMatch))
             {
-                var matchedRecipient = recipients.Find(x => x.RowKey == giver.MatchedRecipient);
+                var matchedRecipient = recipients.Find(x => x.RecipientId == giver.MatchedRecipient);
                 giver.MatchedFamilyId = matchedRecipient.FamilyId;
             }
 
@@ -92,12 +92,12 @@ namespace GiEnJul.Controllers
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
 
-            var ids = recipients.Select(r => r.RowKey).ToList();
+            var ids = recipients.Select(r => r.RecipientId).ToList();
             var persons = await _personRepository.GetAllByRecipientIds(ids);
 
             recipients
                 .ForEach(r => r.FamilyMembers = 
-                            persons.Where(p => p.PartitionKey == r.RowKey)
+                            persons.Where(p => p.RecipientId == r.RecipientId)
                 .ToList());
 
             return recipients
@@ -210,7 +210,7 @@ namespace GiEnJul.Controllers
             
             try
             {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.PartitionKey, recipient.RowKey + "_" + giver.RowKey);
+                await _connectionRepository.DeleteConnectionAsync(connectionDto.PartitionKey, recipient.RecipientId + "_" + giver.EventName);
             }
             catch (Exception e)
             {
@@ -247,12 +247,12 @@ namespace GiEnJul.Controllers
                 recipient.MatchedGiver = connectionDto.GiverRowKey;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
 
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-                var verifyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/verify";
-                var denyLink = $"{baseUrl}/{giver.RowKey}/{recipient.RowKey}/{giver.PartitionKey}/deny";
+                var verifyLink = $"{baseUrl}/{giver.EventName}/{recipient.RecipientId}/{giver.GiverId}/verify";
+                var denyLink = $"{baseUrl}/{giver.EventName}/{recipient.RecipientId}/{giver.GiverId}/deny";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 
@@ -344,7 +344,7 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
         {
             var recipientNew = _mapper.Map<Recipient>(recipientDto);
-            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.Event, recipientDto.RecipientId);
 
             if (recipientOld.IsSuggestedMatch)
             {
@@ -362,8 +362,8 @@ namespace GiEnJul.Controllers
                 if (valueNew == null) prop.SetValue(recipientNew, valueOld);
             }
 
-            var childrenFromDb = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
-            var deleteChildren = childrenFromDb.Where(oldP => recipientNew.FamilyMembers.All(newP => oldP.RowKey != newP.RowKey)).ToList();
+            var childrenFromDb = await _personRepository.GetAllByRecipientId(recipientDto.RecipientId);
+            var deleteChildren = childrenFromDb.Where(oldP => recipientNew.FamilyMembers.All(newP => oldP.PersonId != newP.PersonId)).ToList();
 
             try
             {
@@ -430,10 +430,10 @@ namespace GiEnJul.Controllers
 
             var suggestions = SuggestionHelper.GetRandomSuggestions(unmatchedRecipients, quantity);
 
-            var ids = suggestions.Select(r => r.RowKey).ToList();
+            var ids = suggestions.Select(r => r.RecipientId).ToList();
             var persons = await _personRepository.GetAllByRecipientIds(ids);
 
-            suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.PartitionKey == r.RowKey).ToList());
+            suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
             return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
     }

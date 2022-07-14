@@ -61,7 +61,7 @@ namespace GiEnJul.Controllers
         {
             //Populate recipient and giver using keys
             var recipient = await _recipientRepository.GetRecipientAsync(partitionkey, recipientRowKey);
-            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RowKey);
+            recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
             var giver = await _giverRepository.GetGiverAsync(partitionkey, giverRowKey);
 
             if (_connectionRepository.ConnectionExists(giver, recipient))

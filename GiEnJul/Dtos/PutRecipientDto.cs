@@ -6,9 +6,9 @@ namespace GiEnJul.Dtos
     public class PutRecipientDto
     {
         [Required]
-        public string RowKey { get; set; }
+        public string RecipientId { get; set; }
         [Required]
-        public string PartitionKey { get; set; }
+        public string Event { get; set; }
         [Required]
         public string Dinner { get; set; }
         [Required]

@@ -7,8 +7,6 @@ namespace GiEnJul.Entities
         //PK - EventName
         //RK - City
 
-        public string EventName { get; set; }
-        public string City { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string DeliveryAddress { get; set; }

@@ -97,7 +97,7 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositoryThrowsException_ControllerReturnsBadRequest()
         {
             //Arrange
-            var fakeEvent = new Models.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit=40 };
+            var fakeEvent = new Models.Event { Municipality = "Stavanger", EventName = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit=40 };
             mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent);
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
@@ -113,10 +113,10 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
-            var fakeEvent = new Models.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
+            var fakeEvent = new Models.Event { Municipality = "Stavanger", EventName = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
             mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent);
 
-            var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
+            var fakeModel = new Models.Giver { EventName = Guid.NewGuid().ToString(), GiverId = $"{fakeEvent.Municipality}_{fakeEvent.EventName}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
             mockGiverRepo.Setup(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(It.IsAny<int>());
 
