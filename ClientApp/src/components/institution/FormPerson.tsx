@@ -1,4 +1,4 @@
-import { capitalize, Link, Grid, SvgIcon, IconButton, Typography, Button } from "@material-ui/core";
+import { capitalize, Grid, SvgIcon, IconButton, Button } from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { FC, useEffect, useState } from "react";
@@ -7,18 +7,13 @@ import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import IFormPerson from "components/institution/IFormPerson";
-import MessageDialog from "components/institution/MessageDialog";
+import useStyles from "./Styles";
 import FormWish, { getFormWish, IFormWish } from "./FormWish";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
-  setAlert: (
-    open?: boolean,
-    message?: string,
-    severity?: "error" | "info" | "success" | "warning"
-  ) => void;
   viewErrorTrigger: number;
   person: IFormPerson;
 }
@@ -33,31 +28,16 @@ const initState: { [data: string]: any } = {
   wishes: [],
 };
 
-const InstitutionPerson: FC<IPersonProps> = ({
+const FormPerson: FC<IPersonProps> = ({
   updatePerson,
   updatePersonWish,
   deletePerson,
-  setAlert,
   viewErrorTrigger,
   person,
 }) => {
+  const classes = useStyles();
+
   const [state, setState] = useState({ ...initState });
-
-  const setShowMessageDialog = (show: boolean) => {
-    setState((prev) => ({
-      ...prev,
-      dialogOpen: show,
-    }));
-  };
-
-  const setValidMessage = (message: string) => {
-    setState((prev) => ({
-      ...prev,
-      comment: message,
-    }));
-    getSetter("comment")(message);
-    updatePerson({ comment: message });
-  };
 
   const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
     setState((prev) => {
@@ -127,120 +107,115 @@ const InstitutionPerson: FC<IPersonProps> = ({
 
   const addWish = () => {
     const newList = [...person.wishes];
-    if (newList.length >= 5) return;
+    if (newList.length >= 5 && !state.ageWish) return;
     newList.push(getFormWish());
     updatePersonWish({ wishes: newList });
   };
 
+  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    getSetter("commentInput")(newInput);
+    updatePerson({ comment: newInput });
+  };
+
   return (
-    <Grid container spacing={5} alignItems="center" direction="row">
+    <Grid container direction="column" spacing={5}>
       <Grid item>
-        <IconButton color="secondary" onClick={deletePerson}>
-          <SvgIcon component={ClearIcon} />
-        </IconButton>
-      </Grid>
+        <Grid
+          container
+          direction="row"
+          spacing={5}
+          alignItems="center"
+          justifyContent="space-around"
+        >
+          <Grid item>
+            <IconButton color="secondary" onClick={deletePerson}>
+              <SvgIcon component={ClearIcon} />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              validators={[isInt]}
+              name="age"
+              type="number"
+              label="Alder"
+              value={person.age || "0"}
+              onChange={onAgeChange}
+              className={classes.smallWidth}
+            />
+          </Grid>
+          {(parseInt(person.age) < 1 || !person.age) && (
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isInt]}
+                name="months"
+                type="number"
+                label="Måneder"
+                value={person.months || "0"}
+                onChange={onMonthsChange}
+                className={classes.smallWidth}
+              />
+            </Grid>
+          )}
 
-      <Grid item xs={1}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isInt]}
-          name="age"
-          type="number"
-          label="Alder"
-          value={person.age || "0"}
-          onChange={onAgeChange}
-        />
-      </Grid>
-      {(parseInt(person.age) < 1 || !person.age) && (
-        <Grid item xs={1}>
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[isInt]}
-            name="months"
-            type="number"
-            label="Måneder"
-            value={person.months || "0"}
-            onChange={onMonthsChange}
-          />
+          <Grid item>
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              validators={[isNotNull]}
+              name="gender"
+              type="select"
+              label="Kjønn"
+              variant={"outlined"}
+              value={person.gender ? person.gender : ""}
+              onChange={onGenderChange}
+              options={GENDERS.map((o) => {
+                return { value: o.value, text: capitalize(o.text) };
+              })}
+              className={classes.mediumWidth}
+            />
+          </Grid>
+
+          <Grid item>
+            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+              Legg til gaveønske (Maks 5)
+            </Button>
+          </Grid>
+
+          <Grid item>
+            <Grid item>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[]}
+                name="comment"
+                label="Kommentar"
+                value={state.commentInput}
+                onChange={onCommentInputChange}
+                className={classes.mediumWidth}
+              />
+            </Grid>
+          </Grid>
         </Grid>
-      )}
-      <Grid item xs={2}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
-          name="gender"
-          type="select"
-          label="Kjønn"
-          variant={"outlined"}
-          value={person.gender ? person.gender : ""}
-          onChange={onGenderChange}
-          options={GENDERS.map((o) => {
-            return { value: o.value, text: capitalize(o.text) };
+
+        <Grid item>
+          {person.wishes.map((wish: IFormWish, i: number) => {
+            return (
+              <FormWish
+                key={wish.id}
+                wish={wish.wish}
+                viewErrorTrigger={state.viewErrorTrigger}
+                updateWish={(wish) => {
+                  updateWish(wish, i);
+                }}
+                deleteWish={() => deleteWish(i)}
+              />
+            );
           })}
-          fullWidth
-        />
-      </Grid>
-
-      {person.wishes.map((wish: IFormWish, i: number) => {
-        return (
-          <FormWish
-            key={wish.id}
-            wish={wish.wish}
-            viewErrorTrigger={state.viewErrorTrigger}
-            updateWish={(wish) => {
-              updateWish(wish, i);
-            }}
-            deleteWish={() => deleteWish(i)}
-          />
-        );
-      })}
-
-      <Grid item>
-        <Button
-          startIcon={
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="currentColor"
-              className="bi bi-plus"
-              viewBox="0 0 16 16"
-            >
-              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-            </svg>
-          }
-          variant="contained"
-          color="primary"
-          onClick={addWish}
-        >
-          Legg til gaveønske for denne personen
-        </Button>
-      </Grid>
-
-      <Grid item xs={2}>
-        <Link
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowMessageDialog(true);
-          }}
-        >
-          {(person.comment.length == 0 && (
-            <Typography>Legg til en kommentar for denne personen</Typography>
-          )) || <Typography>Se/endre kommentaren for denne personen</Typography>}
-        </Link>
-      </Grid>
-      <Grid>
-        <MessageDialog
-          open={state.dialogOpen}
-          onClose={() => setShowMessageDialog(false)}
-          setMessage={setValidMessage}
-          message={person.comment}
-          setAlert={setAlert}
-        />
+        </Grid>
       </Grid>
     </Grid>
   );
 };
 
-export default InstitutionPerson;
+export default FormPerson;
