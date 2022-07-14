@@ -117,7 +117,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     newRecipient.familyMembers.push({
       age: 0,
       gender: 9,
-      partitionKey: recipientToUpdate.rowKey,
+      recipientId: recipientToUpdate.recipientId,
       wish: "",
     } as PersonType);
     setNewRecipient((prev) => {

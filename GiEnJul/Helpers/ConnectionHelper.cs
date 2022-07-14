@@ -12,7 +12,7 @@ namespace GiEnJul.Helpers
                 recipient.IsSuggestedMatch &&
                 giver.IsSuggestedMatch &&
                 giver.MatchedRecipient == recipient.RecipientId &&
-                recipient.MatchedGiver == giver.EventName &&
+                recipient.MatchedGiver == giver.GiverId &&
                 CanSuggestConnection(giver, recipient);
         }
 

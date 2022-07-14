@@ -2,8 +2,8 @@
 {
     public class GiverDataTableDto
     {
-        public string RowKey { get; set; }
-        public string PartitionKey { get; set; }
+        public string GiverId { get; set; }
+        public string Event { get; set; }
 
         public int MaxReceivers { get; set; }
         public string Location { get; set; }

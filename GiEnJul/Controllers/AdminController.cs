@@ -228,8 +228,8 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.AddConnection)]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.GiverPartitionKey, connectionDto.GiverRowKey);
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.RecipientPartitionKey, connectionDto.RecipientRowKey);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverRowKey);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientRowKey);
 
             if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
             {
@@ -251,8 +251,8 @@ namespace GiEnJul.Controllers
 
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-                var verifyLink = $"{baseUrl}/{giver.EventName}/{recipient.RecipientId}/{giver.GiverId}/verify";
-                var denyLink = $"{baseUrl}/{giver.EventName}/{recipient.RecipientId}/{giver.GiverId}/deny";
+                var verifyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/verify";
+                var denyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/deny";
 
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
 

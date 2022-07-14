@@ -66,7 +66,7 @@ const FamilyDialog: React.FC<IFamilyDialog> = ({ open, accessToken, institution,
   };
 
   const onEditFamily = () => {
-    if (editRecipient["rowKey"]) {
+    if (editRecipient["recipientId"]) {
       setShowEditDialog(true);
     }
   };

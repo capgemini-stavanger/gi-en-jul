@@ -51,7 +51,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
         <Accordion
           expanded={selectedGiver === giver}
           onChange={handleChange(giver)}
-          key={giver.rowKey}
+          key={giver.giverId}
           className={classes.accordionContainer}
         >
           <AccordionSummary

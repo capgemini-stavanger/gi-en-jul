@@ -107,8 +107,8 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
             CreateMap<Models.Giver, Dtos.GiverDataTableDto>()
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.GiverId))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Event));
+                .ForMember(dest => dest.GiverId, opt => opt.MapFrom(src => src.GiverId))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.Event));
 
             //Connection mapping
             CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
