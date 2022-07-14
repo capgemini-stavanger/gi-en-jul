@@ -7,6 +7,7 @@ import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
 import EventsContainer from "./Events/EventsContainer";
 import KommuneContainer from "./kommune/KommuneContainer";
+import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 
 interface IManageDashboard {
   role: string;
@@ -29,8 +30,9 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <Tab hidden={role != "SuperAdmin"} label="FAQ" value="1" />
           <Tab label="Kommune Informasjon" value="2" />
           <Tab hidden={role != "SuperAdmin"} label="Bedrift" value="3" />
-          <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="4" />
-          <Tab hidden={role != "SuperAdmin"} label="Administrer Kommuner og Eventer" value="5" />
+          <Tab hidden={role != "SuperAdmin"} label="Hvordan starte Gi en jul" value="4" />
+          <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="5" />
+          <Tab hidden={role != "SuperAdmin"} label="Administrer Kommuner og Eventer" value="6" />
         </TabList>
         <TabPanel value="1">
           <FaqContainer accessToken={accessToken} />
@@ -42,9 +44,12 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <BusinessInformation accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="4">
-          <Typography>Placeholder - Legg til/Slett Brukere</Typography>
+          <HowToStartGiEnJul accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="5">
+          <Typography>Placeholder - Legg til/Slett Brukere</Typography>
+        </TabPanel>
+        <TabPanel value="6">
           <Grid container direction="column">
             <Grid item>municipality managing placeholder</Grid>
             <Grid item>
