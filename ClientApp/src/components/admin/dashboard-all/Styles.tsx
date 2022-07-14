@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   waitingButton: {
     color: theme.palette.primary.main,
     padding: theme.spacing(1.5),
@@ -68,6 +68,63 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     margin: theme.spacing(5),
     padding: theme.spacing(1.5),
+  },
+
+  // New styles
+  entireDashboard: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  oversiktBox: {
+    width: "200px",
+    height: "800px",
+    backgroundColor: "green",
+    flexShrink: 0,
+  },
+  dashboardBox: {
+    flexGrow: 1,
+  },
+  infoBox: {
+    display: "flex",
+    flexDirection: "row",
+    height: "300px",
+  },
+  tableBox: {
+    display: "flex",
+    flexDirection: "row",
+    height: "500px",
+  },
+  dashboardInfo: {
+    flexGrow: 1,
+  },
+  dashboardConnectBox: {
+    flexGrow: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dashBoardConnection: {
+    backgroundColor: "gray",
+    width: "400px",
+    height: "200px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  giverTable: {
+    flexGrow: 1,
+    backgroundColor: "pink",
+    marginRight: "1em",
+  },
+  recipientTable: {
+    flexGrow: 1,
+    backgroundColor: "pink",
+  },
+  accordionNormal: {
+    backgroundColor: "gray",
+  },
+  accordionSelected: {
+    backgroundColor: "green",
   },
 }));
 
