@@ -1,4 +1,5 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { PersonalVideo } from "@material-ui/icons";
 import ApiService from "common/functions/apiServiceClass";
 import CustomTooltip from "components/institution/CustomTooltip";
 import React, { useState, useEffect, ChangeEvent } from "react";
@@ -239,3 +240,14 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 };
 
 export default MunicipalityContainer;
+
+//TO-DO:
+/*
+- knapp for slett valgt kommune + api delete metode frontend 
+- rediger kommune: info gjøres i informasjonskomponenten. Skal noe annet endres er det isåfall: isActive, Image, email, country? 
+- legg til email i table 
+- flytt rediger informasjon med teksteditor til denne tab/pagen. 
+
+-legg til kommune: 
+trenger knapp for submit/lagre som bruker api put metoden og setter open til false.
+*/
