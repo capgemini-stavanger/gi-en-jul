@@ -44,7 +44,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
                 .ForMember(dest => dest.MatchedGiver, act => act.Ignore())
                 .ForMember(dest => dest.FamilyId, act => act.Ignore())
-                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count))
+                .ForMember(dest => dest.comment, act => act.Ignore());
 
             CreateMap<Dtos.PutRecipientDto, Models.Recipient>()
                 .ForMember(dest => dest.EventName, act => act.Ignore())
@@ -58,7 +59,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.ContactFullName, act => act.Ignore())
                 .ForMember(dest => dest.ContactEmail, act => act.Ignore())
                 .ForMember(dest => dest.ContactPhoneNumber, act => act.Ignore())
-                .ForMember(dest => dest.Institution, act => act.Ignore());
+                .ForMember(dest => dest.Institution, act => act.Ignore())
+                .ForMember(dest => dest.comment, act => act.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
                 .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
@@ -84,7 +86,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
-                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore());
+                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
 
             CreateMap<Models.Giver, Entities.Giver>()
@@ -115,7 +118,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
-                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore());
+                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
 
             CreateMap<Entities.Connection, Models.Recipient>()
@@ -126,7 +130,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ReceiverLocation))
-                .ForMember(dest => dest.FamilyMembers, act => act.Ignore());
+                .ForMember(dest => dest.FamilyMembers, act => act.Ignore())
+                .ForMember(dest => dest.comment, act => act.Ignore());
 
             //Event mapping
             CreateMap<Dtos.PostEventDto, Models.Event>()
