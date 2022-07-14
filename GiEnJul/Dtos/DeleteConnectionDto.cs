@@ -4,10 +4,10 @@ namespace GiEnJul.Dtos
     {
         public string Event { get; set; }
         public string ConnectedIds { get; set; } //recId_givId
-        public DeleteConnectionDto(string @event, string rowKey)
+        public DeleteConnectionDto(string @event, string connctedIds)
         {
             Event = @event;
-            ConnectedIds = rowKey;
+            ConnectedIds = connctedIds;
         }
     }
 }

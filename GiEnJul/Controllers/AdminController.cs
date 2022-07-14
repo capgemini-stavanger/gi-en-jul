@@ -141,11 +141,11 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPut("person/{person_rowkey}/wish")]
+        [HttpPut("person/{personId}/wish")]
         [Authorize(Policy = Policy.UpdateWish)]
-        public async Task<ActionResult> PutWishAsync(string person_rowkey, [FromBody] string wish)  
+        public async Task<ActionResult> PutWishAsync(string personId, [FromBody] string wish)  
         {
-            var person = await _personRepository.GetPersonByRowKey(person_rowkey);
+            var person = await _personRepository.GetPersonById(personId);
             person.Wish = wish.Any() ? wish : null;
 
             await _personRepository.InsertOrReplaceAsync(person);
@@ -304,14 +304,14 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteRecipient)]
         public async Task<ActionResult> DeleteRecipientAsync([FromBody] DeleteRecipientDto recipientDto)
         {
-            var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.PartitionKey, recipientDto.RowKey);
+            var recipientToDelete = await _recipientRepository.GetRecipientAsync(recipientDto.Event, recipientDto.RecipientId);
 
             if (recipientToDelete.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.PartitionKey, recipientDto.RowKey));
+                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.Event, recipientDto.RecipientId));
             }
 
-            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RowKey);
+            var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RecipientId);
 
             if (recipientToDelete.PersonCount == 0 || personsToDelete.Count() == 0)
             {
@@ -388,14 +388,14 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DeleteGiver)]
         public async Task<ActionResult> DeleteGiverAsync([FromBody] DeleteGiverDto giverDto)
         {
-            var giver = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var giver = await _giverRepository.GetGiverAsync(giverDto.Event, giverDto.GiverId);
 
             if (giver.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.PartitionKey, giverDto.RowKey));
+                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.Event, giverDto.GiverId));
             }
 
-            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.PartitionKey, giverDto.RowKey);
+            var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.Event, giverDto.GiverId);
             await _giverRepository.DeleteAsync(giverToDelete);
             return Ok();
         }

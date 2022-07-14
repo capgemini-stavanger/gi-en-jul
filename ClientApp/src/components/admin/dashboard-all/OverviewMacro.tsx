@@ -96,7 +96,7 @@ const OverviewMacro: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
     }
   }, []);
 
-  const connectGiverRecipient = async () => {debugger;
+  const connectGiverRecipient = async () => {
     await apiservice
       .post(
         "admin/",
