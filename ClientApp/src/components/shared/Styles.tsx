@@ -45,7 +45,7 @@ export default () =>
       justifyContent: "space-between",
       position: "absolute",
       top: "-5%",
-      marginLeft: "16%",
+      marginLeft: "19%",
       border: "none",
       boxShadow: "none",
       padding: theme.spacing(2),
@@ -96,5 +96,8 @@ export default () =>
     },
     confirmationBoxButton: {
       paddingLeft: "10px",
+    },
+    navbarBackground: {
+      color: "white",
     },
   }))();

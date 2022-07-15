@@ -3,7 +3,7 @@ export const isMobile = () => {
   if ("maxTouchPoints" in navigator) {
     hasTouchScreen = navigator.maxTouchPoints > 0;
   } else if ("msMaxTouchPoints" in navigator) {
-    hasTouchScreen = navigator.msMaxTouchPoints > 0;
+    hasTouchScreen = navigator.maxTouchPoints > 0;
   } else {
     const mQ = matchMedia("(pointer:coarse)");
     if (mQ && mQ.media === "(pointer:coarse)") {
