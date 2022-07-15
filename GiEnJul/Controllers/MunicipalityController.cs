@@ -51,7 +51,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPut]
-        [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
@@ -60,27 +60,6 @@ namespace GiEnJul.Controllers
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
-        }
-        
-        [HttpPost("/information")]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> EditInformation([FromBody] PostMunicipalityDto content, string info)
-        {
-           
-            var names = await _municipalityRepository.GetAll();
-            if (!names.Where(x => x.RowKey == content.Name).Any())
-                return BadRequest("RowKey does not exists");
-
-            var infos = await _municipalityRepository.GetAll();
-            try
-            {
-                await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content.Information == info));
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest("Could not update information");
-            }
         }
 
         [HttpGet]
