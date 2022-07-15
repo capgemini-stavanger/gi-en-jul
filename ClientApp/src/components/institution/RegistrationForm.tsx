@@ -11,6 +11,7 @@ import {
   getFormPerson,
   IContactState,
   initState,
+  IFormWish,
 } from "components/institution/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
@@ -25,7 +26,6 @@ import { DESSERTS } from "common/constants/Desserts";
 import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
-import { IFormWish } from "./FormWish";
 import FamilyInformationBox from "./FamilyInformationBox";
 
 interface props {
@@ -186,7 +186,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
-        Wish: person.wishes.join(", "), // Parse WISHES into WISH
+        Wish: "", // Send in IFormWishes[] object
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,

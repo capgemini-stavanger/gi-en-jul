@@ -1,6 +1,5 @@
 import Gender from "common/enums/Gender";
 import { v4 as uuidv4 } from "uuid";
-import { getFormWish, IFormWish } from "./FormWish";
 
 interface IContact {
   name: string;
@@ -22,7 +21,11 @@ export interface IFormPerson {
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
-  wishes: IFormWish[]; // Form holds a list of wishes
+  wishes: IFormWish[];
+}
+
+export interface IFormWish {
+  wish: string;
 }
 
 export interface IContactState {
@@ -38,7 +41,7 @@ export interface IContactState {
 }
 
 export type PersonType = {
-  Wish?: string;
+  Wish?: string; // Will be changed to a LIST of IFormWishes
   Age: number;
   Months: number;
   Gender: Gender;
@@ -100,11 +103,14 @@ export const getFormPerson: () => IFormPerson = () => ({
   months: "0",
   gender: Gender.Unspecified,
   comment: "",
-  wish: "",
   isValidAge: true,
   isValidGender: false,
   isValidWish: true,
   wishes: [getFormWish()],
+});
+
+export const getFormWish: () => IFormWish = () => ({
+  wish: "",
 });
 
 export const initFormDataState: () => IContactState = () => ({

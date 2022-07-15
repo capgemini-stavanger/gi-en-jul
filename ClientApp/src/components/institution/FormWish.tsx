@@ -14,10 +14,6 @@ import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 
-export interface IFormWish {
-  wish: string;
-}
-
 interface IWishProps {
   wish: string;
   viewErrorTrigger: number;
@@ -31,10 +27,6 @@ const initState: { [data: string]: any } = {
   ageWish: false,
   wishList: [],
 };
-
-export const getFormWish: () => IFormWish = () => ({
-  wish: "",
-});
 
 const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 

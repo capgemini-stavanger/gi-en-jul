@@ -7,11 +7,11 @@ import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
-import IFormPerson from "components/institution/IFormPerson";
 import useStyles from "./Styles";
-import FormWish, { getFormWish, IFormWish } from "./FormWish";
+import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import { IFormWish, IFormPerson, getFormWish } from "./RegistrationFormTypes";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
