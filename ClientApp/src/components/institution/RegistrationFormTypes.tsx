@@ -19,11 +19,11 @@ export interface IFormPerson {
   months: string;
   gender: Gender;
   comment: string;
-  wish?: string; // Age-adjusted gift if undefined
+  wish?: string; // Becomes a boolean for age-adjusted
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
-  wishes: IFormWish[];
+  wishes: IFormWish[]; // Form holds a list of wishes
 }
 
 export interface IContactState {
@@ -104,7 +104,7 @@ export const getFormPerson: () => IFormPerson = () => ({
   wish: "",
   isValidAge: true,
   isValidGender: false,
-  isValidWish: false,
+  isValidWish: true,
   wishes: [getFormWish()],
 });
 

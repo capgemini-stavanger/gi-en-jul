@@ -173,6 +173,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
 
+    console.log(formDataState);
+
     if (!allIsValid()) {
       setState((prev) => ({
         ...prev,
@@ -184,7 +186,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
-        Wish: person.wish,
+        Wish: person.wish, // Parse WISHES into WISH
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
@@ -217,6 +219,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
+
+    console.log(submit);
 
     setState((prev) => ({
       ...prev,

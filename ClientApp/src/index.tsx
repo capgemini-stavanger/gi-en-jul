@@ -79,11 +79,6 @@ export const theme = createTheme({
         backgroundColor: "white",
       },
     },
-    MuiFormControl: {
-      marginNormal: {
-        marginTop: "30px",
-      },
-    },
     MuiInputLabel: {
       root: {
         marginBottom: "-5px",
