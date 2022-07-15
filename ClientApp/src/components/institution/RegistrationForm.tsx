@@ -172,8 +172,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const onSubmitForm = async (e: any) => {
     e.preventDefault();
 
-    console.log(formDataState);
-
     if (!allIsValid()) {
       setState((prev) => ({
         ...prev,
@@ -193,8 +191,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       };
       personsList.push(person1);
     });
-
-    console.log(personsList);
 
     const getDinner = () => {
       return formDataState.dinner.radio === "annet"
