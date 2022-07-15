@@ -4,7 +4,8 @@ import { ChangeEvent, useState } from "react";
 interface Props {
   choices: string[];
   labelNote: string;
-  passSelectedValue: (value: string) => void;
+  updateValue: (value: string) => void;
+  selectedValue: string;
 }
 
 interface IChangeEvent {
@@ -12,13 +13,12 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const EventDropdown: React.FC<Props> = ({ choices, labelNote, passSelectedValue }) => {
-  const [selectedValue, setSelectedValue] = useState<string>("");
+const EventDropdown: React.FC<Props> = ({ choices, labelNote, updateValue, selectedValue }) => {
   const handleChange = (event: ChangeEvent<IChangeEvent>) => {
-    setSelectedValue(event.target.value as string);
-    passSelectedValue(event.target.value as string);
+    updateValue(event.target.value as string);
   };
-  const menuItems = choices.map((object, index) => {
+  // adding "" as an option for the dropdown
+  const menuItems = ["", ...choices].map((object, index) => {
     return (
       <MenuItem key={index} value={object}>
         {object}
