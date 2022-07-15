@@ -176,6 +176,11 @@ namespace GiEnJul.Infrastructure
 
             //Municipality mapping 
             CreateMap<Dtos.PostMunicipalityDto, Models.Municipality>();
+            CreateMap<Dtos.DeleteMunicipalityDto, Models.Municipality>()
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+                .ForMember(dest => dest.Image, opt => opt.Ignore())
+                .ForMember(dest => dest.Information, opt => opt.Ignore());
+            
 
             CreateMap<Models.Municipality, Entities.Municipality>()
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))

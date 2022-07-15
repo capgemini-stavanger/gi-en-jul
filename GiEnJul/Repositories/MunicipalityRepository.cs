@@ -12,10 +12,10 @@ namespace GiEnJul.Repositories
 {
     public interface IMunicipalityRepository
     {
-        Task<Entities.Municipality> DeleteEntry(string rowKey);
+        Task<Entities.Municipality> DeleteEntry(Models.Municipality municipality);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
-        Task<IEnumerable<Entities.Municipality>> GetAll();
-        Task<IEnumerable<Municipality>> GetAllActive();
+        Task<IEnumerable<Municipality>> GetAll();
+      
     }
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
@@ -23,14 +23,12 @@ namespace GiEnJul.Repositories
         public MunicipalityRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Municipality") : base(settings, tableName, mapper, log)
         { }
 
-        public async Task<Municipality> DeleteEntry(string rowKey)
+        public async Task<Municipality> DeleteEntry(Models.Municipality municipality)
         {
             try
             {
-                var all = (List<Municipality>)(await GetAll());
-                var entity = all.Where(x => x.RowKey == rowKey).SingleOrDefault();
-                var entry = await DeleteAsync(entity);
-                return entry;
+                var response= await DeleteAsync(municipality.Country, municipality.Name);
+                return response;
             }
             catch
             {
@@ -44,16 +42,9 @@ namespace GiEnJul.Repositories
             return _mapper.Map<Models.Municipality>(inserted);
         }
 
-        public async Task<IEnumerable<Entities.Municipality>> GetAll()
+        public async Task<IEnumerable<Municipality>> GetAll()
         {
             return await GetAllAsync();
-        }
-
-        public async Task<IEnumerable<Municipality>> GetAllActive()
-        {
-            var all = await GetAllAsync();
-            var active = all.Where(x => x.IsActive == true);
-            return active;
         }
     }
 }
