@@ -17,6 +17,7 @@ import {
   Mail,
   Phone,
   ChatBubbleOutline,
+  CheckSharp,
 } from "@material-ui/icons";
 import React, { useState } from "react";
 import { GiverType } from "components/shared/Types";
@@ -41,8 +42,10 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
-  const [deleteObj, setDeleteObj] = useState({});
+  const [dialogPayload, setDialogPayload] = useState({});
   const [comment, setComment] = useState("");
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [dialogText, setDialogText] = useState("Er du sikker?");
   const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
   const apiservice = new ApiService();
 
@@ -54,7 +57,7 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
     };
 
   const handleOpenDialog = (deleteObj: any = {}) => {
-    setDeleteObj(deleteObj);
+    setDialogPayload(deleteObj);
     setOpenDialog(true);
   };
 
@@ -79,6 +82,28 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           console.error(err);
         });
     }
+  };
+
+  const openConfirmConnectionDialog = (giver: GiverType) => {
+    setType(null);
+    setDialogText(
+      `Er du sikker på at du vil godta på vegne av ${giver.fullName} [${giver.email}]?`
+    );
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmConnction = (giver: GiverType) => {
+    apiservice
+      .post("connection/confirm", {
+        giverId: giver.giverId,
+        recipientId: giver.matchedRecipient,
+        event: giver.event,
+      })
+      .then((r) => {
+        if (r.status === 200) {
+          giver.hasConfirmedMatch = true;
+        }
+      });
   };
 
   return (
@@ -187,6 +212,14 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
               </Typography>
             </AccordionDetails>
           )}
+          {!giver.hasConfirmedMatch && giver.isSuggestedMatch && (
+            <AccordionDetails>
+              <Typography onClick={() => openConfirmConnectionDialog(giver)}>
+                <CheckSharp />
+                <Button>Godta kobling</Button>
+              </Typography>
+            </AccordionDetails>
+          )}
           <AccordionDetails>
             <Typography
               onClick={() => {
@@ -219,9 +252,17 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
           <DeleteTypeDialog
             open={selectedGiver === giver && openDialog}
             handleClose={handleCloseDialog}
-            typeData={deleteObj}
+            typeData={dialogPayload}
             refreshData={refreshData}
             type={type}
+          />
+          <ConfirmationBox
+            open={selectedGiver === giver && confirmDialogOpen}
+            handleClose={() => {
+              setConfirmDialogOpen(false);
+            }}
+            text={dialogText}
+            handleResponse={() => confirmConnction(giver)}
           />
         </Accordion>
       ))}

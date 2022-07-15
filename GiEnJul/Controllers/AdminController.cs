@@ -212,7 +212,7 @@ namespace GiEnJul.Controllers
             
             try
             {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.EventName);
+                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
             }
             catch (Exception e)
             {

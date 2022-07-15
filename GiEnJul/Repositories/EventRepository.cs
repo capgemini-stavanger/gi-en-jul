@@ -70,7 +70,7 @@ namespace GiEnJul.Repositories
             }
             _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
-            return activeEvent.First();
+            return activeEvent.First(x => x.StartDate < DateTime.Now && x.EndDate > DateTime.Now);
         }
 
         public async Task<List<Models.Event>> GetAllEventsAsync()

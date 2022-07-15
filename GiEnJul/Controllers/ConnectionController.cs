@@ -13,6 +13,8 @@ using GiEnJul.Utilities.EmailTemplates;
 using System.Collections.Generic;
 using GiEnJul.Dtos;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using GiEnJul.Auth;
 
 namespace GiEnJul.Controllers
 {
@@ -188,6 +190,13 @@ namespace GiEnJul.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost("confirm")]
+        //[Authorize(Policy = Policy.AddConnection)]
+        public async Task ConfirmConnection(ConfirmConnectionDto connectionDto)
+        {
+            await VerifyConnection(connectionDto.GiverId, connectionDto.RecipientId, connectionDto.Event);
         }
     }
 }
