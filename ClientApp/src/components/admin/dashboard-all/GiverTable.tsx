@@ -2,12 +2,22 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   Container,
   Divider,
+  TextField,
   Typography,
 } from "@material-ui/core";
-import { Delete, ExpandMore, Group, LinkOff, Mail, Phone } from "@material-ui/icons";
+import {
+  Delete,
+  ExpandMore,
+  Group,
+  LinkOff,
+  Mail,
+  Phone,
+  ChatBubbleOutline,
+} from "@material-ui/icons";
 import React, { useState } from "react";
 import { GiverType } from "components/shared/Types";
 import Circle from "components/admin/dashboard-all/Circle";
@@ -16,6 +26,8 @@ import formatFamily from "common/functions/GetFamilySize";
 import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
+import ApiService from "common/functions/apiServiceClass";
+import ConfirmationBox from "components/shared/confirmationBox";
 
 type Props = {
   data: GiverType[] | [];
@@ -25,17 +37,20 @@ type Props = {
 
 const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) => {
   const classes = useStyles();
-
   const [selectedGiver, setSelectedGiver] = useState<GiverType | false>(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string | null>("");
   const [deleteObj, setDeleteObj] = useState({});
+  const [comment, setComment] = useState("");
+  const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
+  const apiservice = new ApiService();
 
   const handleChange =
     (giver: GiverType) => (event: React.ChangeEvent<any>, isExpanded: boolean) => {
       setSelectedGiver(isExpanded ? giver : false);
       handleGiverChange(giver);
+      setComment(giver.comment);
     };
 
   const handleOpenDialog = (deleteObj: any = {}) => {
@@ -45,6 +60,25 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const saveComment = () => {
+    if (selectedGiver) {
+      apiservice
+        .post("admin/giver/addcomment", {
+          event: selectedGiver.event,
+          giverId: selectedGiver.giverId,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            selectedGiver.comment = comment;
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
   };
 
   return (
@@ -79,12 +113,44 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
             ) : (
               <Circle color="red" />
             )}
+            {giver.comment && <ChatBubbleOutline />}
           </AccordionSummary>
           <Divider />
           <AccordionDetails>
             <Typography>
               <Phone /> {giver.phoneNumber}
             </Typography>
+            <Divider />
+            <Box>
+              <TextField
+                id="outlined-multiline-static"
+                variant="outlined"
+                label="Kommentar"
+                multiline
+                rows={4}
+                value={comment}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setComment(e.target.value);
+                }}
+              />
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setOpenConfirmationComment(true);
+                }}
+              >
+                Lagre
+              </Button>
+
+              <ConfirmationBox
+                open={openConfirmationComment}
+                text={"Ønsker du å lagre kommentaren?"}
+                handleResponse={saveComment}
+                handleClose={() => {
+                  setOpenConfirmationComment(false);
+                }}
+              />
+            </Box>
           </AccordionDetails>
           <AccordionDetails>
             <Typography className={classes.emailText}>

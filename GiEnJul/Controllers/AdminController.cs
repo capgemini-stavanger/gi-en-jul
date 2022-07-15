@@ -400,6 +400,42 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpPost("Giver/addcomment")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> AddCommentGiverAsync([FromBody] PostCommentGiverDto content) 
+        {
+            var giver = await _giverRepository.GetGiverAsync(content.Event,content.GiverId);
+            giver.Comment = content.Comment;
+
+            try 
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        [HttpPost("Recipient/addcomment")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> AddCommentRecipientAsync([FromBody] PostCommentRecipientDto content)
+        {
+            var recipient = await _recipientRepository.GetRecipientAsync(content.Event, content.RecipientId);
+            recipient.Comment = content.Comment;
+
+            try
+            {
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
         [HttpGet("Suggestions/Giver/{quantity}")]
         [HttpGet("Suggestions/Giver")]
         [Authorize(Policy = Policy.GetUnsuggestedGivers)]

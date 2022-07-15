@@ -39,5 +39,8 @@ namespace GiEnJul.Entities
         //Match with family, default is false
         public bool IsSuggestedMatch { get; set; } = false;
         public bool HasConfirmedMatch { get; set; } = false;
+
+        //Add comment
+        public string Comment { get; set; }
     }
 }
