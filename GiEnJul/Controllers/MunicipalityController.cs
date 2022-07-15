@@ -23,16 +23,19 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
 
-        [HttpDelete("{rowKey}")]
+        [HttpDelete]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> DeleteSingleContent(string rowKey)
+        public async Task<ActionResult> DeleteSingleContent([FromBody] DeleteMunicipalityDto content)
         {
-            var content = await _municipalityRepository.DeleteEntry(rowKey);
-            if (content == null)
+            try
             {
-                return BadRequest();
+                await _municipalityRepository.DeleteEntry(_mapper.Map<Models.Municipality>(content));
+                return Ok();
             }
-            return Ok();
+            catch
+            {
+                return BadRequest("Could not delete entry");
+            }
         }
 
         [HttpPost]
@@ -41,9 +44,9 @@ namespace GiEnJul.Controllers
         {
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
-                return BadRequest("RowKey already exists, use post request to edit");            
+                return BadRequest("RowKey already exists, use put request to edit");            
             
-            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));  
             return Ok();
         }
 
@@ -58,7 +61,7 @@ namespace GiEnJul.Controllers
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
         }
-        //denne er ikke så bra, den må bruke lokasjonen til admin brukeren 
+        
         [HttpPost("/information")]
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> EditInformation([FromBody] PostMunicipalityDto content, string info)
@@ -78,33 +81,40 @@ namespace GiEnJul.Controllers
             {
                 return BadRequest("Could not update information");
             }
-
         }
 
         [HttpGet]
         public async Task<List<Entities.Municipality>> GetAll()
         {
-            var municipalities = await _municipalityRepository.GetAll();
+            var municipalities = await _municipalityRepository.GetAll();  
             return _mapper.Map<List<Entities.Municipality>>(municipalities);
         }
 
-        [HttpGet("active")]
-        public async Task<List<Entities.Municipality>> getActive()
+        [HttpGet("active")] 
+        public async Task<List<string>> getActiveNames()
         {
-            var active = await _municipalityRepository.GetAllActive();
-            return active.ToList();
-
-        [HttpPost]
-        [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
-        {
-            var names = await _municipalityRepository.GetAll();
-            if (!names.Where(x => x.RowKey == content.Name).Any())
-                return BadRequest("RowKey does not exists");
-
-            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
-            return Ok();
+            var all = await _municipalityRepository.GetAll();
+            var active = new List<string>();
+            foreach (var municipality in all)
+            {
+                if (municipality.IsActive)
+                {
+                    active.Add(municipality.RowKey);
+                }
+            }
+            return active;
         }
-    }
+
+        [HttpGet("names")]
+        public async Task<List<string>> GetAllNames()
+        {
+            var entities = await _municipalityRepository.GetAll();
+            var names = new List<string>();
+            foreach(var entity in entities)
+            {
+                names.Add(entity.RowKey);
+            }
+            return names;
+        } 
     }
 }

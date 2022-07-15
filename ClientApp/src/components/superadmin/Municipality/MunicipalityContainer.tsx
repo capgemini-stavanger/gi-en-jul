@@ -29,6 +29,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   const [selectedLocationAll, setSelectedLocationAll] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [formDataState] = useState(initFormDataState());
+  const [Country] = useState<string>("Norge");
   const apiservice = new ApiService(accessToken);
 
   const fetchActiveLocations = () => {
@@ -42,10 +43,6 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
       });
   };
   useEffect(fetchActiveLocations, []);
-
-  const handleChange = (event: ChangeEvent<IChangeEvent>) => {
-    setSelectedLocation(event.target.value as string);
-  };
 
   const fetchAllLocations = () => {
     apiservice
@@ -75,7 +72,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   };
 
   const deleteMunicipality = () => {
-    apiservice.delete(`municipality/${selectedLocationAll}`, null).then(() => {
+    apiservice.delete("municipality", { Country: Country, Name: selectedLocationAll }).then(() => {
       fetchActiveLocations();
       fetchAllLocations();
     });
