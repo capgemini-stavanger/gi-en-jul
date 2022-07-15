@@ -23,7 +23,6 @@ const initFormDataState: () => IMunicipalityFormData = () => ({
 
 const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
   const [allLocations, setLocations] = useState<string[]>([]);
   const [selectedLocationActive, setSelectedLocationActive] = useState<string>("");
   const [selectedLocationAll, setSelectedLocationAll] = useState<string>("");
@@ -196,10 +195,6 @@ export default MunicipalityContainer;
 
 //TO-DO:
 /*
-- knapp for slett valgt kommune + api delete metode frontend 
-- rediger kommune: info gjøres i informasjonskomponenten. Skal noe annet endres er det isåfall: isActive, Image, email, country? 
-- legg til email i table 
-- flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
 -confirmation when a kommune has been added
 
