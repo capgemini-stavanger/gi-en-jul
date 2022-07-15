@@ -2,8 +2,8 @@
 {
     public class PostCommentGiverDto
     {
-        public string giverPartitionKey { get; set; }
-        public string giverRowKey { get; set; }
-        public string comment { get; set; }
+        public string Event { get; set; }
+        public string GiverId { get; set; }
+        public string Comment { get; set; }
     }
 }

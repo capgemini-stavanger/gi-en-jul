@@ -49,7 +49,8 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
         {
             if (string.IsNullOrWhiteSpace(content.Index) &&
-                (content.ContentType == "FAQ" || content.ContentType == "Bedrift"))
+                (content.ContentType == "FAQ" || content.ContentType == "Bedrift" 
+                || content.ContentType == "HowToStart"))
             {
                 content.Index = Guid.NewGuid().ToString();
             }

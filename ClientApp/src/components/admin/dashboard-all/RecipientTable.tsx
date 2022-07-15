@@ -75,8 +75,8 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
     if (selectedRecipient) {
       apiservice
         .post("admin/recipient/addcomment", {
-          recipientPartitionKey: selectedRecipient.partitionKey,
-          recipientRowKey: selectedRecipient.rowKey,
+          event: selectedRecipient.event,
+          recipientId: selectedRecipient.recipientId,
           comment: comment,
         })
         .then((resp) => {

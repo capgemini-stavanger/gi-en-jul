@@ -2,8 +2,8 @@
 {
     public class PostCommentRecipientDto
     {
-        public string recipientPartitionKey { get; set; }
-        public string recipientRowKey { get; set; }
-        public string comment { get; set; }
+        public string Event { get; set; }
+        public string RecipientId { get; set; }
+        public string Comment { get; set; }
     }
 }

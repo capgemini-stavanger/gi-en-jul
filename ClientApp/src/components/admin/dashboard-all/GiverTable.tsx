@@ -66,8 +66,8 @@ const Datatable: React.FC<Props> = ({ data, handleGiverChange, refreshData }) =>
     if (selectedGiver) {
       apiservice
         .post("admin/giver/addcomment", {
-          giverPartitionKey: selectedGiver.partitionKey,
-          giverRowKey: selectedGiver.rowKey,
+          event: selectedGiver.event,
+          giverId: selectedGiver.giverId,
           comment: comment,
         })
         .then((resp) => {

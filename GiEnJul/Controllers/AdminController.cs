@@ -401,11 +401,11 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("Giver/addcomment")]
-        
+        [Authorize(Policy = Policy.DeleteGiver)]
         public async Task<ActionResult> AddCommentGiverAsync([FromBody] PostCommentGiverDto content) 
         {
-            var giver = await _giverRepository.GetGiverAsync(content.giverPartitionKey,content.giverRowKey);
-            giver.Comment = content.comment;
+            var giver = await _giverRepository.GetGiverAsync(content.Event,content.GiverId);
+            giver.Comment = content.Comment;
 
             try 
             {
@@ -419,11 +419,11 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("Recipient/addcomment")]
-        
+        [Authorize(Policy = Policy.DeleteGiver)]
         public async Task<ActionResult> AddCommentRecipientAsync([FromBody] PostCommentRecipientDto content)
         {
-            var recipient = await _recipientRepository.GetRecipientAsync(content.recipientPartitionKey, content.recipientRowKey);
-            recipient.comment = content.comment;
+            var recipient = await _recipientRepository.GetRecipientAsync(content.Event, content.RecipientId);
+            recipient.comment = content.Comment;
 
             try
             {
