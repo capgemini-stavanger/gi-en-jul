@@ -9,7 +9,7 @@ namespace GiEnJul.Dtos
         [Required]
         public string EventName { get; set; }
         [Required]
-        public string City { get; set; }
+        public string Municipality { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
