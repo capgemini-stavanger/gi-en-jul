@@ -1,4 +1,6 @@
 ﻿using Auth0.ManagementApi;
+using Auth0.ManagementApi.Models;
+using GiEnJul.Dtos;
 using GiEnJul.Infrastructure;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -15,12 +17,15 @@ namespace GiEnJul.Clients
     {
         Task<string> GetTokenAsync();
         Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
+        Task<User> CreateUser(CreateUserDto userDto);
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
     {
         private readonly ISettings _settings;
         private readonly HttpClient _client;
+        private readonly ManagementApiClient _managementApiClient;
+
         private static MemoryCache _tokenCache = new MemoryCache("tokenCache");
         private static MemoryCache _metadataCache = new MemoryCache("metadataCache");
 
@@ -28,6 +33,7 @@ namespace GiEnJul.Clients
         {
             _settings = settings;
             _client = client;
+            _managementApiClient = new ManagementApiClient("", settings.Auth0Settings.Domain);
         }
 
         public async Task<string> GetTokenAsync()
@@ -68,15 +74,42 @@ namespace GiEnJul.Clients
             if (!forceUpdate && cachedMD != null)
                 return cachedMD;
 
-            var token = await GetTokenAsync(); ;
-            var client2 = new ManagementApiClient(token, _settings.Auth0Settings.Domain);
-            var us = await client2.Users.GetAsync(userId);
+            var token = await GetTokenAsync();
+            _managementApiClient.UpdateAccessToken(token);
+            var us = await _managementApiClient.Users.GetAsync(userId);
 
             var userMetadata = (JObject)us.UserMetadata;
             var metadataDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(userMetadata.ToString());
 
             _metadataCache.Add(userId, metadataDict, DateTime.Now.AddMinutes(10));
             return metadataDict;
+        }
+
+        public async Task<User> CreateUser(CreateUserDto userDto)
+        {
+            var token  = await GetTokenAsync();
+            var newUser = new UserCreateRequest { 
+                Connection = "Username-Password-Authentication", 
+                Email = userDto.Email, 
+                Password= userDto.Password, 
+                NickName = userDto.Email.Split('@')[0],
+                AppMetadata = GenerateMetadata(MetaDataType.app_metadata, userDto),
+                UserMetadata = GenerateMetadata(MetaDataType.user_metadata, userDto)
+            };
+            _managementApiClient.UpdateAccessToken(token);
+            return await _managementApiClient.Users.CreateAsync(newUser);
+        }
+
+        private JObject GenerateMetadata(MetaDataType type, CreateUserDto userDto)
+        {
+            if (type == MetaDataType.user_metadata)
+                return JObject.FromObject(new Dictionary<string, string>() {
+                    { "role", userDto.Role},
+                    { "institution", userDto.Institution}
+                });
+            return JObject.FromObject(new Dictionary<string, string>() {
+                    { "location", userDto.Location}
+                });
         }
     }
 }
