@@ -115,6 +115,7 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: "pink",
     marginRight: "1em",
+    overflow: "scroll",
   },
   recipientTable: {
     flexGrow: 1,
