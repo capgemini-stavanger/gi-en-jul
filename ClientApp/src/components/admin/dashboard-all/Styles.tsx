@@ -118,7 +118,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   recipientTable: {
     flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+  },
+  test1: {
+    backgroundColor: "yellow",
+    flexGrow: 1,
+  },
+  test2: {
     backgroundColor: "pink",
+    flexGrow: 1,
   },
   accordionNormal: {
     backgroundColor: "gray",
