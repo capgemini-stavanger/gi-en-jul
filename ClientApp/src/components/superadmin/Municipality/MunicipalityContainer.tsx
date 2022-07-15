@@ -243,10 +243,6 @@ export default MunicipalityContainer;
 
 //TO-DO:
 /*
-- knapp for slett valgt kommune + api delete metode frontend 
-- rediger kommune: info gjøres i informasjonskomponenten. Skal noe annet endres er det isåfall: isActive, Image, email, country? 
-- legg til email i table 
-- flytt rediger informasjon med teksteditor til denne tab/pagen. 
 
 -confirmation when a kommune has been added
 
