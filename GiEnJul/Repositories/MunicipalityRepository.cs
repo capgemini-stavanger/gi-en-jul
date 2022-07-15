@@ -47,12 +47,5 @@ namespace GiEnJul.Repositories
         {
             return await GetAllAsync();
         }
-
-        public async Task<IEnumerable<Municipality>> GetAllActive()
-        {
-            var all = await GetAllAsync();
-            var active = all.Where(x => x.IsActive == true);
-            return active;
-        }
     }
 }
