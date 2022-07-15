@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   Typography,
 } from "@material-ui/core";
@@ -30,8 +31,7 @@ const GiverSearchRemake: React.FC<Props> = ({
 
   return (
     <>
-      <Accordion
-        expanded={personExpanded}
+      <Box
         className={
           giverIndex == selectedGiverIndex ? classes.accordionSelected : classes.accordionNormal
         }
@@ -40,26 +40,78 @@ const GiverSearchRemake: React.FC<Props> = ({
           setSelectedGiverIndex();
         }}
       >
-        <AccordionSummary>
-          <Typography>{giverData.fullName}</Typography>
-          {personExpanded ? (
-            <Button onClick={() => setPersonExpanded(false)}>
-              <ExpandLessIcon />
-            </Button>
-          ) : (
-            <Button onClick={() => setPersonExpanded(true)}>
-              <ExpandMoreIcon />
-            </Button>
-          )}
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+        {personExpanded ? (
+          <Button onClick={() => setPersonExpanded(false)}>
+            <ExpandLessIcon />
+          </Button>
+        ) : (
+          <Button onClick={() => setPersonExpanded(true)}>
+            <ExpandMoreIcon />
+          </Button>
+        )}
+      </Box>
     </>
   );
 };
 export default React.memo(GiverSearchRemake);
+
+// https://github.com/caseywebdev/react-list
+
+// Faster, but look into rendering instead
+/*
+<Box
+  className={
+    giverIndex == selectedGiverIndex ? classes.accordionSelected : classes.accordionNormal
+  }
+  onClick={(event) => {
+    event.stopPropagation();
+    setSelectedGiverIndex();
+  }}
+>
+  <Box>
+    {personExpanded ? (
+      <Button onClick={() => setPersonExpanded(false)}>
+        <ExpandLessIcon />
+      </Button>
+    ) : (
+      <Button onClick={() => setPersonExpanded(true)}>
+        <ExpandMoreIcon />
+      </Button>
+    )}
+  </Box>
+  {personExpanded && <Box>EXPANDED</Box>}
+</Box>
+*/
+
+// Accordion seems too slow for this many entries, check list instead
+/*
+<Accordion
+  expanded={personExpanded}
+  className={
+    giverIndex == selectedGiverIndex ? classes.accordionSelected : classes.accordionNormal
+  }
+  onClick={(event) => {
+    event.stopPropagation();
+    setSelectedGiverIndex();
+  }}
+>
+  <AccordionSummary>
+    <Typography>{giverData.fullName}</Typography>
+    {personExpanded ? (
+      <Button onClick={() => setPersonExpanded(false)}>
+        <ExpandLessIcon />
+      </Button>
+    ) : (
+      <Button onClick={() => setPersonExpanded(true)}>
+        <ExpandMoreIcon />
+      </Button>
+    )}
+  </AccordionSummary>
+  <AccordionDetails>
+    <Typography>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+      sit amet blandit leo lobortis eget.
+    </Typography>
+  </AccordionDetails>
+</Accordion>
+*/
