@@ -186,7 +186,6 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ForMember(dest => dest.Information, opt => opt.Ignore())
                 .ForMember(dest => dest.Email, opt => opt.Ignore());
-            
 
             CreateMap<Models.Municipality, Entities.Municipality>()
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))

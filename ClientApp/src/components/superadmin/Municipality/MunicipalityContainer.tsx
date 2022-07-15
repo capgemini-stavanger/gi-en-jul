@@ -7,6 +7,8 @@ import AddMunicipalityForm, {
   getFormAddMunicipality,
   IMunicipalityFormData,
 } from "./AddMunicipalityForm";
+import ConfirmationBox from "components/shared/confirmationBox";
+import InformationBox from "components/shared/InformationBox";
 
 interface props {
   accessToken: string;
@@ -27,6 +29,8 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   const [selectedLocationActive, setSelectedLocationActive] = useState<string>("");
   const [selectedLocationAll, setSelectedLocationAll] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
   const [formDataState] = useState(initFormDataState());
   const [Country] = useState<string>("Norge");
   const apiservice = new ApiService(accessToken);
@@ -65,6 +69,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
       .then(() => {
         fetchActiveLocations();
         fetchAllLocations();
+        setOpenAdd(true);
       });
 
     setOpen(false);
@@ -100,6 +105,25 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
       </MenuItem>
     );
   });
+
+  const handleResponseConfirm = (response: boolean) => {
+    if (response) {
+      deleteMunicipality();
+    }
+    handleCloseConfirm(true);
+  };
+
+  const handleCloseConfirm = (response: boolean) => {
+    if (response) {
+      setOpenConfirm(false);
+    }
+  };
+
+  const handleCloseAdd = (response: boolean) => {
+    if (response) {
+      setOpenAdd(false);
+    }
+  };
 
   return (
     <>
@@ -159,8 +183,23 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
         </Grid>
 
         <Grid item>
-          <Button onClick={deleteMunicipality}>Slett</Button>
+          <Button
+            onClick={() => {
+              deleteMunicipality;
+              setOpenConfirm(true);
+            }}
+          >
+            Slett
+          </Button>
         </Grid>
+        <ConfirmationBox
+          open={openConfirm}
+          text={"Er du sikker på at du vil slette denne kommunen?"}
+          handleClose={() => {
+            handleCloseConfirm(false);
+          }}
+          handleResponse={handleResponseConfirm}
+        />
 
         <Grid item>
           <Button
@@ -171,12 +210,20 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
             Legg til ny kommune
           </Button>
 
+          <InformationBox
+            open={openAdd}
+            text={"Kommunen har blitt lagt til"}
+            handleClose={() => handleCloseAdd(true)}
+          />
+
           <AddMunicipalityForm
             key={formDataState.name}
             values={formDataState}
             open={open}
             handleClose={() => setOpen(false)}
             handleAddMunicipality={(data: IMunicipalityFormData) => addMunicipality(data)}
+            openAdd={openAdd}
+            handleOpenAdd={() => setOpenAdd(openAdd)}
           />
 
           <CustomTooltip
@@ -192,10 +239,3 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 };
 
 export default MunicipalityContainer;
-
-//TO-DO:
-/*
-
--confirmation when a kommune has been added
-
-*/

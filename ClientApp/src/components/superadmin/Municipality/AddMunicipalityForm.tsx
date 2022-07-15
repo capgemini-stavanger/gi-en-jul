@@ -25,8 +25,11 @@ export const getFormAddMunicipality: () => IMunicipalityFormData = () => ({
 interface props {
   values: IMunicipalityFormData;
   open: boolean;
+  openAdd: boolean;
+
   handleClose: () => void;
   handleAddMunicipality: (data: IMunicipalityFormData) => void;
+  handleOpenAdd: (response: boolean) => void;
 }
 
 const initState: IMunicipalityFormData = {
@@ -38,14 +41,20 @@ const initState: IMunicipalityFormData = {
   isActive: false,
 };
 
-const MunicipalityForm: React.FC<props> = ({ open, handleClose, handleAddMunicipality }) => {
+const MunicipalityForm: React.FC<props> = ({
+  open,
+  openAdd,
+  handleOpenAdd,
+  handleClose,
+  handleAddMunicipality,
+}) => {
   const [state, setState] = useState(initState);
 
   const classes = useStyles();
 
   return (
     <>
-      <Dialog open={open} className={classes.dialogBox}>
+      <Dialog open={open} className={classes.dialogBox} fullWidth>
         <Typography>Legg til ny kommune</Typography>
 
         <Grid container direction="column" justifyContent="space-evenly" alignItems="stretch">
@@ -102,12 +111,14 @@ const MunicipalityForm: React.FC<props> = ({ open, handleClose, handleAddMunicip
             <Grid item>
               <Button onClick={handleClose}>Avbryt</Button>
             </Grid>
+
             <Grid item>
               <Button
                 onClick={() => {
                   {
                     handleAddMunicipality(state);
                     setState(initState);
+                    handleOpenAdd(openAdd);
                   }
                 }}
               >
