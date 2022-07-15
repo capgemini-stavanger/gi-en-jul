@@ -179,7 +179,8 @@ namespace GiEnJul.Infrastructure
             CreateMap<Dtos.DeleteMunicipalityDto, Models.Municipality>()
                 .ForMember(dest => dest.IsActive, opt => opt.Ignore())
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
-                .ForMember(dest => dest.Information, opt => opt.Ignore());
+                .ForMember(dest => dest.Information, opt => opt.Ignore())
+                .ForMember(dest => dest.Email, opt => opt.Ignore());
             
 
             CreateMap<Models.Municipality, Entities.Municipality>()
