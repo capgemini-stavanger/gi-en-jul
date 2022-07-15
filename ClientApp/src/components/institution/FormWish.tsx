@@ -15,9 +15,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 
 export interface IFormWish {
-  id: string;
   wish: string;
-  size?: string;
 }
 
 interface IWishProps {
@@ -35,9 +33,10 @@ const initState: { [data: string]: any } = {
 };
 
 export const getFormWish: () => IFormWish = () => ({
-  id: Math.random().toString(),
   wish: "",
 });
+
+const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 
 const InstitutionWish: React.FC<IWishProps> = ({
   viewErrorTrigger,
@@ -63,8 +62,8 @@ const InstitutionWish: React.FC<IWishProps> = ({
   };
 
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.checked;
-    getSetter("ageWish")(newInput);
+    const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
+    getSetter("ageWish")(e.target.checked);
     updateWish({ wish: newInput });
   };
 
@@ -74,24 +73,6 @@ const InstitutionWish: React.FC<IWishProps> = ({
         <Box className={classes.wishNumberCircle}>
           <Typography className={classes.wishNumber}>{wishIndex + 1}</Typography>
         </Box>
-      </Grid>
-      <Grid item>
-        {!state.ageWish && (
-          <InputValidator
-            viewErrorTrigger={viewErrorTrigger}
-            validators={[isNotNull]}
-            name="wish"
-            type="select"
-            label="gaveønske"
-            options={Categories.map((o: ICategories) => {
-              return { value: o.type, text: o.type };
-            })}
-            disabled={state.ageWish}
-            value={state.wishInput}
-            onChange={(e) => onWishInputChange(e)}
-            className={classes.mediumWidth}
-          ></InputValidator>
-        )}
       </Grid>
       <Grid item>
         <FormControlLabel
@@ -106,6 +87,24 @@ const InstitutionWish: React.FC<IWishProps> = ({
           className="my-0"
           label="Giver kjøper alderstilpasset gave"
         />
+      </Grid>
+      <Grid item>
+        {!state.ageWish && (
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            validators={[isNotNull]}
+            name="wish"
+            type="select"
+            label="Gaveønske"
+            options={Categories.map((o: ICategories) => {
+              return { value: o.type, text: o.type };
+            })}
+            disabled={state.ageWish}
+            value={state.wishInput}
+            onChange={(e) => onWishInputChange(e)}
+            className={classes.mediumWidth}
+          ></InputValidator>
+        )}
       </Grid>
       <Grid item>
         <IconButton color="primary" onClick={deleteWish}>

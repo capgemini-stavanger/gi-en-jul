@@ -10,6 +10,8 @@ import { isNotNull, isInt } from "components/shared/input-fields/validators/Vali
 import IFormPerson from "components/institution/IFormPerson";
 import useStyles from "./Styles";
 import FormWish, { getFormWish, IFormWish } from "./FormWish";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -116,18 +118,20 @@ const FormPerson: FC<IPersonProps> = ({
                 className={classes.smallWidth}
               />
             </Grid>
-            <Grid item>
-              <InputValidator
-                viewErrorTrigger={viewErrorTrigger}
-                validators={[isInt]}
-                name="months"
-                type="number"
-                label="Måneder"
-                value={person.months || "0"}
-                onChange={onMonthsChange}
-                className={classes.smallWidth}
-              />
-            </Grid>
+            {parseInt(person.age) == 0 && (
+              <Grid item>
+                <InputValidator
+                  viewErrorTrigger={viewErrorTrigger}
+                  validators={[isInt]}
+                  name="months"
+                  type="number"
+                  label="Måneder"
+                  value={person.months || "0"}
+                  onChange={onMonthsChange}
+                  className={classes.smallWidth}
+                />
+              </Grid>
+            )}
             <Grid item>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
@@ -150,15 +154,14 @@ const FormPerson: FC<IPersonProps> = ({
               </Button>
             </Grid>
             <Grid item>
-              <IconButton color="primary" onClick={deletePerson}>
-                <SvgIcon component={ClearIcon} />
-              </IconButton>
-            </Grid>
-            <Grid item>
               {showWishes ? (
-                <Button onClick={() => setShowWishes(false)}>HIDE</Button>
+                <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
+                  <ExpandLessIcon />
+                </Button>
               ) : (
-                <Button onClick={() => setShowWishes(true)}>SHOW</Button>
+                <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
+                  <ExpandMoreIcon />
+                </Button>
               )}
             </Grid>
           </Grid>
@@ -168,7 +171,7 @@ const FormPerson: FC<IPersonProps> = ({
             {person.wishes.map((wish: IFormWish, i: number) => {
               return (
                 <FormWish
-                  key={wish.id}
+                  key={i}
                   wish={wish.wish}
                   viewErrorTrigger={viewErrorTrigger}
                   updateWish={(wish) => {
@@ -182,6 +185,11 @@ const FormPerson: FC<IPersonProps> = ({
           </Box>
         )}
       </Container>
+      <Box className={classes.deleteBox}>
+        <IconButton color="primary" onClick={deletePerson}>
+          <SvgIcon component={ClearIcon} />
+        </IconButton>
+      </Box>
     </Box>
   );
 };

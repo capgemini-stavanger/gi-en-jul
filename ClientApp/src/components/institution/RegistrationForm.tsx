@@ -186,7 +186,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
-        Wish: person.wish, // Parse WISHES into WISH
+        Wish: person.wishes.join(", "), // Parse WISHES into WISH
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
@@ -194,6 +194,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       };
       personsList.push(person1);
     });
+
+    console.log(personsList);
 
     const getDinner = () => {
       return formDataState.dinner.radio === "annet"
@@ -219,8 +221,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
     };
-
-    console.log(submit);
 
     setState((prev) => ({
       ...prev,

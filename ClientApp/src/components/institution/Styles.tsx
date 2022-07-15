@@ -83,18 +83,37 @@ const useStyles = makeStyles((theme) => ({
   },
   numberBox: {
     width: "100px",
+    height: "156px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: theme.palette.primary.dark,
     color: "white",
-    borderRadius: "2px",
   },
   formBox: {
-    backgroundColor: "#F4F4F4",
     flexGrow: 1,
-    marginLeft: "10px",
-    borderRadius: "2px",
+    borderStyle: "solid",
+    borderColor: theme.palette.primary.dark,
+    position: "relative",
+  },
+  hideParent: {
+    display: "flex",
+  },
+  hideBox: {
+    flexGrow: 1,
+    justifyContent: "right",
+  },
+  hideButton: {
+    position: "absolute",
+    right: "20px",
+    top: "50px",
+  },
+  deleteBox: {
+    width: "100px",
+    height: "156px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   formBoxHeader: {
     height: "150px",
