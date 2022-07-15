@@ -11,6 +11,7 @@ import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import bli_giver from "styling/img/bli_giver.png";
+import Stepper from "components/register-as-giver/Stepper";
 
 const initFormDataState: IFormData = {
   location: "",
@@ -143,6 +144,7 @@ const RegistrationMacro = () => {
         <NavBarPublic />
         <Container className={state.step === 5 ? classes.summaryDesign : classes.giverForm}>
           {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}
+          <Stepper state={state.step} />
           {state.step === 5 ? null : <img src={bli_giver}></img>}
           {getStepPage()}
         </Container>
