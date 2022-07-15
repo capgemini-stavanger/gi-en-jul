@@ -143,10 +143,10 @@ namespace GiEnJul.Controllers
 
         [HttpPut("person/{personId}/wish")]
         [Authorize(Policy = Policy.UpdateWish)]
-        public async Task<ActionResult> PutWishAsync(string personId, [FromBody] string wish)  
+        public async Task<ActionResult> PutWishAsync(string personId, [FromBody] IEnumerable<string> wish)  
         {
             var person = await _personRepository.GetPersonById(personId);
-            person.Wish = wish.Any() ? wish : null;
+            person.Wishes = wish.Any() ? wish : null;
 
             await _personRepository.InsertOrReplaceAsync(person);
 

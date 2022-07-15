@@ -11,7 +11,6 @@ import {
   getFormPerson,
   IContactState,
   initState,
-  IFormWish,
 } from "components/institution/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
@@ -186,7 +185,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
-        Wish: "", // Send in IFormWishes[] object
+        Wishes: person.wishes,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
@@ -264,17 +263,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   };
   const onSuccessSubmit = () => {
     resetForm();
-  };
-
-  const updatePersonWishes = (index: number, newPersonData: any) => {
-    formDataState.persons[index].wishes = [{ wish: newPersonData.wish } as IFormWish];
-    setFormDataState((prev) => {
-      prev.persons[index] = {
-        ...prev.persons[index],
-        ...newPersonData,
-      } as IFormPerson;
-      return { ...prev };
-    });
   };
 
   return (
@@ -471,9 +459,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                             key={person.uuid}
                             person={person}
                             viewErrorTrigger={state.viewErrorTrigger}
-                            updatePersonWish={(wish) => {
-                              updatePersonWishes(i, wish);
-                            }}
                             updatePerson={(newPersonData: { [target: string]: unknown }) =>
                               updatePerson(i, newPersonData)
                             }

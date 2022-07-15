@@ -17,7 +17,7 @@ import useStyles from "./Styles";
 interface IWishProps {
   wish: string;
   viewErrorTrigger: number;
-  updateWish: (newWishData: { [target: string]: unknown }) => void;
+  updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
 }
@@ -25,7 +25,6 @@ interface IWishProps {
 const initState: { [data: string]: any } = {
   wishInput: "",
   ageWish: false,
-  wishList: [],
 };
 
 const ageAppropriateString = "Giver kjøper alderstilpasset gave";
@@ -47,17 +46,22 @@ const InstitutionWish: React.FC<IWishProps> = ({
     });
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    getSetter("wishInput")(newInput);
-    updateWish({ wish: newInput });
-  };
-
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
+    updateWish(newInput);
+
     getSetter("ageWish")(e.target.checked);
-    updateWish({ wish: newInput });
   };
+
+  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateWish(newInput);
+
+    getSetter("wishInput")(newInput);
+  };
+
+  // As we get new input fields, we update the wishInput by adding the strings together
+  // Example; "Sko" could be paired with "Størrelse: 42", like "Sko, Størrelse: 42"
 
   return (
     <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>

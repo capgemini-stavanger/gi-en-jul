@@ -21,11 +21,7 @@ export interface IFormPerson {
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
-  wishes: IFormWish[];
-}
-
-export interface IFormWish {
-  wish: string;
+  wishes: string[];
 }
 
 export interface IContactState {
@@ -41,7 +37,7 @@ export interface IContactState {
 }
 
 export type PersonType = {
-  Wish?: string; // Will be changed to a LIST of IFormWishes
+  Wishes: string[];
   Age: number;
   Months: number;
   Gender: Gender;
@@ -106,11 +102,7 @@ export const getFormPerson: () => IFormPerson = () => ({
   isValidAge: true,
   isValidGender: false,
   isValidWish: true,
-  wishes: [getFormWish()],
-});
-
-export const getFormWish: () => IFormWish = () => ({
-  wish: "",
+  wishes: [""],
 });
 
 export const initFormDataState: () => IContactState = () => ({

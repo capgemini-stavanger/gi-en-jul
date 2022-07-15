@@ -11,11 +11,10 @@ import useStyles from "./Styles";
 import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IFormWish, IFormPerson, getFormWish } from "./RegistrationFormTypes";
+import { IFormPerson } from "./RegistrationFormTypes";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
-  updatePersonWish: (newWishData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
   viewErrorTrigger: number;
   person: IFormPerson;
@@ -24,7 +23,6 @@ interface IPersonProps {
 
 const FormPerson: FC<IPersonProps> = ({
   updatePerson,
-  updatePersonWish,
   deletePerson,
   viewErrorTrigger,
   person,
@@ -78,10 +76,10 @@ const FormPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (newWishData: { [target: string]: unknown }, index: number) => {
+  const updateWish = (newWishData: string, index: number) => {
     const newList = [...person.wishes];
-    newList[index].wish = newWishData.wish + "";
-    updatePersonWish({ wishes: newList });
+    newList[index] = newWishData;
+    updatePerson({ wishes: newList });
   };
 
   const deleteWish = (index: number) => {
@@ -90,14 +88,14 @@ const FormPerson: FC<IPersonProps> = ({
     const tail = newList.slice(index + 1, newList.length);
     const newWishList = head.concat(tail);
     person.wishes = newWishList;
-    updatePersonWish({ wishes: newWishList });
+    updatePerson({ wishes: newWishList });
   };
 
   const addWish = () => {
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
-    newList.push(getFormWish());
-    updatePersonWish({ wishes: newList });
+    newList.push("");
+    updatePerson({ wishes: newList });
   };
 
   return (
@@ -168,12 +166,12 @@ const FormPerson: FC<IPersonProps> = ({
         </Box>
         {showWishes && (
           <Box className={classes.formBoxWishes}>
-            {person.wishes.map((wish: IFormWish, i: number) => {
+            {person.wishes.map((wish: string, i: number) => {
               return (
                 <FormWish
                   key={i}
-                  wish={wish.wish}
                   viewErrorTrigger={viewErrorTrigger}
+                  wish={wish}
                   updateWish={(wish) => {
                     updateWish(wish, i);
                   }}
