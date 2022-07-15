@@ -1,3 +1,4 @@
+/*
 import { Button, Grid, Snackbar, TextField, Typography } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import { useState } from "react";
@@ -641,3 +642,5 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 };
 
 export default RegistrationForm;
+*/
+export default null;

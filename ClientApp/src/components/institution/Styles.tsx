@@ -74,6 +74,70 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "15px",
     marginLeft: "20px",
   },
+
+  // New Attempt
+  personBox: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: "1em",
+  },
+  numberBox: {
+    width: "100px",
+    height: "156px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.primary.dark,
+    color: "white",
+  },
+  formBox: {
+    flexGrow: 1,
+    borderStyle: "solid",
+    borderColor: theme.palette.primary.dark,
+    position: "relative",
+  },
+  hideParent: {
+    display: "flex",
+  },
+  hideBox: {
+    flexGrow: 1,
+    justifyContent: "right",
+  },
+  hideButton: {
+    position: "absolute",
+    right: "20px",
+    top: "50px",
+  },
+  deleteBox: {
+    width: "100px",
+    height: "156px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  formBoxHeader: {
+    height: "150px",
+    display: "flex",
+    alignItems: "center",
+  },
+  formBoxWishes: {},
+  wishSpacing: {
+    marginBottom: "1em",
+  },
+  wishNumberCircle: {
+    padding: "3px",
+    width: "30px",
+    height: "30px",
+    borderRadius: "50px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.primary.dark,
+  },
+  wishNumber: {
+    color: "white",
+    fontSize: "24px",
+  },
 }));
 
 export default useStyles;

@@ -46,7 +46,7 @@ namespace GiEnJul.Controllers
         {
             var currentEventName = await _eventRepository.GetActiveEventForLocationAsync(recipientDto.Location);
             var recipient = _mapper.Map<Recipient>(recipientDto);
-            var currentEvent = $"{recipient.EventName}_{recipient.Location}";
+            var currentEvent = $"{currentEventName}_{recipient.Location}";
 
             //post mapping as this data must be fetched
             recipient.FamilyId = await _autoIncrementRepository.GetNext(currentEvent, "Recipient");

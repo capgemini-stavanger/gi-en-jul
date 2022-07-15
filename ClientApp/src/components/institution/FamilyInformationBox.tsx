@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
-import useStyles from "../Styles";
+import useStyles from "./Styles";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import { FC } from "react";
 

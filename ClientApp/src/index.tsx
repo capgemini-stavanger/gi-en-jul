@@ -51,13 +51,13 @@ export const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#49a591", // Dark green
+      main: "#327C6D", // Dark green
     },
     secondary: {
-      main: "#d9f0f2", // Light blue
+      main: "#D9F0F2", // Light green
     },
     error: {
-      main: "#ed8175", // Light red
+      main: "#E36152", // Light red
     },
     warning: {
       main: "#f4cf8a", //Yellow
@@ -72,39 +72,61 @@ export const theme = createTheme({
   typography: {
     fontFamily: "Quicksand",
   },
+
   overrides: {
-    MuiButton: {
+    MuiInputBase: {
       root: {
-        borderRadius: "2em",
-        textTransform: "none",
+        backgroundColor: "white",
+      },
+    },
+    MuiInputLabel: {
+      root: {
+        marginBottom: "-5px",
+        transform: "none",
+      },
+      shrink: {
+        transform: "translate(14px, -18px) scale(1) !important",
+      },
+    },
+    MuiOutlinedInput: {
+      root: {
+        borderRadius: "1em",
+        "& $notchedOutline": {
+          top: "0px",
+        },
       },
     },
     MuiSelect: {
       select: {
         "&:focus": {
-          borderRadius: "2em",
+          borderRadius: "1em",
         },
       },
     },
-    MuiOutlinedInput: {
+    MuiButton: {
       root: {
         borderRadius: "2em",
+        textTransform: "none",
+      },
+      outlined: {
+        borderRadius: "0.5em",
       },
     },
-    MuiPaper: {
-      elevation1: {
-        boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
-        "&:hover": {
-          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
-        },
-      },
-      rounded: {
-        borderRadius: "2em",
-      },
-    },
+    /*
     MuiListItem: {
       root: {
         justifyContent: "center",
+      },
+    },
+    MuiAccordion: {
+      root: {},
+    },
+    MuiAccordionSummary: {
+      root: {
+        cursor: "default",
+        "&:hover:not(.Mui-disabled)": {
+          cursor: "default",
+        },
       },
     },
     MuiAccordion: {
@@ -132,8 +154,64 @@ export const theme = createTheme({
           borderRadius: "2em",
         },
       },
-    },
+    */
   },
+
+  /* Accordion Shadow removed
+    MuiPaper: {
+      elevation1: {
+        boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
+        "&:hover": {
+          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+        },
+      },
+      rounded: {
+        borderRadius: "2em",
+      },
+    },
+    */
+  /*
+    MuiAccordion: {
+      root: {},
+    },
+    MuiAccordionSummary: {
+      root: {
+        cursor: "default",
+        "&:hover:not(.Mui-disabled)": {
+          cursor: "default",
+        },
+      },
+    },
+    */
+  /* Rounded Accordion removed
+    MuiAccordion: {
+      root: {
+        overflow: "hidden",
+      },
+      rounded: {
+        borderBottomLeftRadius: "2em",
+        borderBottomRightRadius: "2em",
+        borderTopLeftRadius: "2em",
+        borderTopRightRadius: "2em",
+        borderRadius: "2em",
+        "&:last-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em",
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
+        },
+        "&:first-child": {
+          borderBottomLeftRadius: "2em",
+          borderBottomRightRadius: "2em",
+          borderTopLeftRadius: "2em",
+          borderTopRightRadius: "2em",
+          borderRadius: "2em",
+        },
+      },
+    },
+    */
+  //},
 });
 
 ReactDOM.render(
