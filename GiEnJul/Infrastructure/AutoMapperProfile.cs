@@ -67,8 +67,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.RecipientId))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Event))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RecipientId) ? Guid.NewGuid().ToString() : src.RecipientId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Event) ? $"{src.Location}_{src.EventName}" : src.Event))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.PersonCount));
