@@ -9,6 +9,8 @@ import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "components/register-as-giver/Styles";
 import NewEventBox from "./NewEventBox";
+import { ContactSupportOutlined } from "@material-ui/icons";
+import InformationBox from "components/shared/InformationBox";
 
 interface Props {
   accessToken: string;
@@ -18,6 +20,8 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const classes = useStyles();
   const [events, setEvents] = useState<EventContent[]>([]);
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
+  const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
+  const [informationBoxInfo, setInformationBoxInfo] = useState<string>("");
   const [uniqueEventNames, setUniqueEventNames] = useState<string[]>([]);
   const [selectedEventName, setSelectedEventName] = useState<string>("");
   const [newEventName, setNewEventName] = useState<string>("");
@@ -63,13 +67,35 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const handleAddClick = () => {
     setAddState(true);
   };
-  const handleAddNewEvent = () => {
-    const e = EventContentInit();
-    e.eventName = selectedEventName;
-    setEvents([...events, e]);
+  const createNewEvent = (newEvent: EventContent) => {
+    postNewEvent(newEvent);
+    setEvents([...events, newEvent]);
   };
   const handleEventChange = (updatedEvent: EventContent, id: any) => {
-    console.log("Update happened from event with id: " + id);
+    console.log("Update happened from event with index: " + id);
+  };
+  const handleEventDeletion = (index: number) => {
+    events.splice(index, 1);
+    setEvents(events);
+
+    buildBody();
+  };
+  const postNewEvent = (event: EventContent) => {
+    apiservice
+      .post(
+        "Event/create",
+        JSON.stringify({
+          ...event,
+        })
+      )
+      .then((resp) => {
+        if (resp.status == 200) {
+          setInformationBoxInfo("Nytt event ble laget");
+        } else {
+          setInformationBoxInfo("Det skjedde en feil ved laging av event");
+        }
+        setOpenInformationBox(true);
+      });
   };
   const fetchEvents = () => {
     apiservice
@@ -86,8 +112,13 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       .filter((e) => e.eventName === selectedEventName)
       .map((event, i) => {
         return (
-          <Grid item container direction="row" key={i}>
-            <EventInformation event={event} handleEventChange={handleEventChange} id={i} />
+          <Grid item container direction="row" key={event.eventName + event.municipality}>
+            <EventInformation
+              event={event}
+              handleEventChange={handleEventChange}
+              id={i}
+              onDelete={handleEventDeletion}
+            />
           </Grid>
         );
       });
@@ -149,11 +180,23 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       <Grid item container direction="column">
         {eventBody}
       </Grid>
+
+      <InformationBox
+        open={openInformationBox}
+        text={informationBoxInfo}
+        handleClose={() => {
+          setOpenInformationBox(false);
+        }}
+      />
       <Grid item>
         {selectedEventName === "" ? (
           ""
         ) : (
-          <NewEventBox handleSaveEvent={handleAddNewEvent} eventId={events.length} />
+          <NewEventBox
+            handleSaveEvent={createNewEvent}
+            eventId={events.length}
+            eventName={selectedEventName}
+          />
         )}
       </Grid>
     </Grid>

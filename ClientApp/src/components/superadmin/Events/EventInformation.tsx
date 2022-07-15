@@ -8,10 +8,8 @@ import EventErrors from "./CustomEventErrors";
 import ConfirmationBox from "components/shared/confirmationBox";
 
 export interface EventContent {
-  // partitionKey: string; // eventName (Jul{YY})
   eventName: string; // Jul{YY}
-  // rowKey: string; // city (location)
-  city: string; // location
+  municipality: string; // location
   startDate: string; // YYYY-MM-DDThh:mm:ssZ
   endDate: string; // YYYY-MM-DDThh:mm:ssZ
   deliveryAddress: string;
@@ -23,16 +21,14 @@ export interface EventContent {
   email: string;
   // facebook: string; //url
   // instagram: string; // url
-  // image: string; // url
+  // image: string; // url to contact person image
   phoneNumber: string;
 }
 
-export const EventContentInit = (): EventContent => {
+export const EventContentInit = (eventName: string): EventContent => {
   return {
-    // partitionKey: "", // eventName (Jul{YY})
-    eventName: "", // Jul{YY}
-    // rowKey: "", // city (location)
-    city: "", // location
+    eventName: eventName, // Jul{YY}
+    municipality: "", // location
     startDate: "", // YYYY-MM-DDThh:mm:ssZ
     endDate: "", // YYYY-MM-DDThh:mm:ssZ
     deliveryAddress: "",
@@ -44,18 +40,19 @@ export const EventContentInit = (): EventContent => {
     email: "",
     // facebook: "", //url
     // instagram: "", // url
-    // image: "", // url
+    // image: "", // url to contact person image
     phoneNumber: "",
   };
 };
 
 interface Props {
   event: EventContent;
-  handleEventChange: (updatedEvent: EventContent, id: any) => void;
-  id: any;
+  handleEventChange: (updatedEvent: EventContent, id: number) => void;
+  onDelete: (id: number) => void;
+  id: number;
 }
 
-const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => {
+const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete, id }) => {
   const classes = useStyles();
   const [activeEdit, setActiveEdit] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<EventContent>(event);
@@ -68,20 +65,44 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
     }
     setOpenConfirmation(false);
   };
+  const phFunc = (s: string) => {
+    return true;
+  };
   const handleSaveClick = () => {
     setActiveEdit(false);
     setOpenConfirmation(true);
   };
-  const handleEditClick = () => {
-    setActiveEdit(true);
-  };
+  const saveButton = (
+    <Button variant="contained" onClick={handleSaveClick}>
+      Lagre
+    </Button>
+  );
   const handleCancelClick = () => {
     setFormValues(event); // reset values
     setActiveEdit(false);
   };
-  const phFunc = (s: string) => {
-    return true;
+  const cancelButton = (
+    <Button variant="contained" onClick={handleCancelClick}>
+      Avbryt
+    </Button>
+  );
+  const handleEditClick = () => {
+    setActiveEdit(true);
   };
+  const editButton = (
+    <Button variant="contained" onClick={handleEditClick}>
+      Rediger
+    </Button>
+  );
+  const handleDeleteClick = () => {
+    onDelete(id);
+  };
+  const deleteButton = (
+    <Button variant="contained" onClick={handleDeleteClick}>
+      Slett
+    </Button>
+  );
+
   const form: JSX.Element[] = [
     // eventName
     <Grid key={0} item>
@@ -97,7 +118,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
         value={formValues.eventName}
         name="eventName"
         label="Eventnavn"
-        disabled={!activeEdit}
+        disabled={true}
       />
     </Grid>,
     // municipality
@@ -108,10 +129,10 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
         errorMessages={[EventErrors.emptyString, EventErrors.keyCombinationExists]}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const copy = { ...formValues };
-          copy.city = e.target.value;
+          copy.municipality = e.target.value;
           setFormValues(copy);
         }}
-        value={formValues.city}
+        value={formValues.municipality}
         name="Kommune"
         label="Kommune"
         disabled={!activeEdit}
@@ -193,7 +214,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
         errorMessages={[EventErrors.emptyString]}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const copy = { ...formValues };
-          copy.deliveryAddress = e.target.value;
+          copy.contactPerson = e.target.value;
           setFormValues(copy);
         }}
         value={formValues.contactPerson}
@@ -246,21 +267,6 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
     </Grid>,
   ];
 
-  const saveButton = (
-    <Button variant="contained" onClick={handleSaveClick}>
-      Lagre
-    </Button>
-  );
-  const cancelButton = (
-    <Button variant="contained" onClick={handleCancelClick}>
-      Avbryt
-    </Button>
-  );
-  const editButton = (
-    <Button variant="contained" onClick={handleEditClick}>
-      Rediger
-    </Button>
-  );
   return (
     <Grid container direction="row">
       {form}
@@ -280,9 +286,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, id }) => 
         ) : (
           editButton
         )}
-        <Button>
-          <ClearIcon className={classes.icon}></ClearIcon>
-        </Button>
+        {deleteButton}
       </Grid>
     </Grid>
   );

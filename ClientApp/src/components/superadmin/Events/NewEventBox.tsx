@@ -5,11 +5,12 @@ import EventInformation, { EventContent, EventContentInit } from "./EventInforma
 
 interface Props {
   handleSaveEvent: (event: EventContent) => void;
+  eventName: string;
   eventId: any;
 }
 
-const NewEventBox: React.FC<Props> = ({ handleSaveEvent, eventId }) => {
-  const [newEvent, setNewEvent] = useState<EventContent>(EventContentInit());
+const NewEventBox: React.FC<Props> = ({ handleSaveEvent, eventName }) => {
+  const [newEvent, setNewEvent] = useState<EventContent>(EventContentInit(eventName));
   const [open, setOpen] = useState<boolean>(false);
   const [openConfirmationBox, setOpenConfirmationBox] = useState<boolean>(false);
   const handleAddClick = () => {
@@ -23,21 +24,26 @@ const NewEventBox: React.FC<Props> = ({ handleSaveEvent, eventId }) => {
   };
   const handleSaveResponse = (response: boolean) => {
     if (response) {
-      handleSave();
-      setOpenConfirmationBox(false);
+      handleSaveEvent(newEvent); // send new element to parent
+      setOpen(false); // close container
+      setOpenConfirmationBox(false); // close confirmation box
     } else {
       setOpenConfirmationBox(false);
     }
   };
-  const handleSave = () => {
-    handleSaveEvent(newEvent);
+  const handleEventChange = (event: EventContent) => {
+    setNewEvent(event);
   };
-  const handleEventChange = (event: EventContent) => {};
   return (
     <>
       {open ? (
         <Container>
-          <EventInformation event={newEvent} handleEventChange={handleEventChange} id={eventId} />
+          <EventInformation
+            event={newEvent}
+            handleEventChange={handleEventChange}
+            id={0}
+            onDelete={() => {}}
+          />
           <Button onClick={handleSaveClick}>Lagre event</Button>
           <Button onClick={handleClose}>Avbryt</Button>
           <ConfirmationBox

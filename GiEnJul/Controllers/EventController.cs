@@ -35,10 +35,10 @@ namespace GiEnJul.Controllers
         // GET api/Event/GetAll
         [HttpGet("GetAll")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<List<Entities.Event>> GetAllEvents()
+        public async Task<List<Models.Event>> GetAllEvents()
         {
             var events = await _eventRepository.GetAllEventsAsync();
-            return _mapper.Map<List<Entities.Event>>(events);
+            return events;
         }
 
         [HttpGet("contacts")]
@@ -51,7 +51,8 @@ namespace GiEnJul.Controllers
 
         //POST api/Event/createEvent 
         [HttpPost("create")]
-        [Authorize(Policy= Policy.SuperAdmin)]
+        // temp comment
+//        [Authorize(Policy= Policy.SuperAdmin)]
         public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
         {
             var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
