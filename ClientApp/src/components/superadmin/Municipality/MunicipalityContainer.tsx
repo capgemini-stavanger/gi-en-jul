@@ -240,10 +240,3 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 };
 
 export default MunicipalityContainer;
-
-//TO-DO:
-/*
-
--confirmation when a kommune has been added
-
-*/
