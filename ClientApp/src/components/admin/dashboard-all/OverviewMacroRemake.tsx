@@ -62,7 +62,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   return (
     <>
       <Box className={classes.entireDashboard}>
-        <Box className={classes.oversiktBox}></Box>
+        <Box className={classes.oversiktBox}>Oversikt/Ny Component</Box>
         <Container>
           <Box className={classes.dashboardBox}>
             <Box className={classes.infoBox}>
@@ -71,11 +71,12 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                 <Typography>Good stuff</Typography>
               </Box>
               <Box className={classes.dashboardConnectBox}>
-                <Box className={classes.dashBoardConnection}>Valgt Kobling</Box>
+                <Box className={classes.dashBoardConnection}>Valgt Kobling/Ny Component</Box>
               </Box>
             </Box>
             <Box className={classes.tableBox}>
               <Box className={classes.giverTable}>
+                GIVER FILTER
                 {giverData.map((giver, index) => {
                   return (
                     <GiverSearchRemake
@@ -88,7 +89,10 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   );
                 })}
               </Box>
-              <Box className={classes.recipientTable}></Box>
+              <Box className={classes.recipientTable}>
+                <Box className={classes.test1}>SUGGESTIONS</Box>
+                <Box className={classes.test2}>RECIPIENT</Box>
+              </Box>
             </Box>
           </Box>
         </Container>
