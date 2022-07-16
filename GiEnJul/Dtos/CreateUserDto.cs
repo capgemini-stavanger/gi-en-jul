@@ -6,7 +6,7 @@
         public string Password { get; set; }
         public string Location { get; set; }
         public string Role { get; set; }
-        public string? Institution { get; set; }
+        public string Institution { get; set; }
     }
 
     public enum MetaDataType
