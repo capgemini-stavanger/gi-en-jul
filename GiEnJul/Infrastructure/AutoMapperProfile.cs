@@ -118,9 +118,6 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.Event));
 
             //Connection mapping
-            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
-                .ForMember(dest => dest.Check, opt => opt.Ignore());
-
             CreateMap<Entities.Connection, Models.Giver>()
                 .ForMember(dest => dest.GiverId, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1)))
                 .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.PartitionKey))
