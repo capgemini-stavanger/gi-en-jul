@@ -2,12 +2,15 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GiEnJul.Auth;
 using GiEnJul.Infrastructure;
+using GiEnJul.Utilities;
+using GiEnJul.Utilities.ScheduledJobs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
 using Serilog;
 using System;
 using System.Linq;
@@ -44,9 +47,19 @@ namespace GiEnJul
                 options.Audience = section.GetValue<string>(_env.IsDevelopment() ? "LocalAudience" : "AzureAudience");
             }
             );
+
             services.AddAuthorization(options =>
                 Authconfig.SetPolicies(options)
             );
+
+            services.AddQuartz(q =>
+                { 
+                    q.UseMicrosoftDependencyInjectionJobFactory();
+                    q.AddScheduledJob<CleanupConnectionsJob>(Configuration);
+                });
+
+            services.AddQuartzHostedService(
+                q => q.WaitForJobsToComplete = true);
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
