@@ -1,17 +1,16 @@
 import { Box, Container, Typography } from "@material-ui/core";
-
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType } from "components/shared/Types";
 import { useStyles } from "./Styles";
-import GiverSearchRemake from "./GiverSearchRemake";
+import GiverTableRemake from "./GiverTableRemake";
 
 interface IOverviewMacro {
   location: string;
   accessToken: string;
 }
 
-// TESTING
+/*
 interface SelectedConnectionType {
   giver?: GiverType;
   recipient?: RecipientType;
@@ -20,17 +19,18 @@ const initState: SelectedConnectionType = {
   giver: undefined,
   recipient: undefined,
 };
+*/
 
 const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
-  const [giverData, setGiverData] = useState<GiverType[] | []>([]);
+  const [giverData, setGiverData] = useState<GiverType[]>([]);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const apiservice = new ApiService(accessToken);
 
-  // TESTING
   const [selectedGiverIndex, setSelectedGiverIndex] = useState(-1);
-  const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
+  // DO WE NEED A SELECTED IF WE KNOW THE INDEX OF SELECTED?
 
-  // GOES INTO NEW COMPONENT
+  //const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
+
   const classes = useStyles();
 
   async function fetchGivers() {
@@ -75,23 +75,15 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               </Box>
             </Box>
             <Box className={classes.tableBox}>
-              <Box className={classes.giverTable}>
-                GIVER FILTER
-                {giverData.map((giver, index) => {
-                  return (
-                    <GiverSearchRemake
-                      key={index}
-                      giverData={giver}
-                      giverIndex={index}
-                      selectedGiverIndex={selectedGiverIndex}
-                      setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
-                    />
-                  );
-                })}
-              </Box>
+              {/* SHOULD THE COMPONENT BE GENERAL FOR GIVER AND RECIPIENT? */}
+              <GiverTableRemake
+                giverData={giverData}
+                selectedGiverIndex={selectedGiverIndex}
+                setSelectedGiverIndex={(idx) => setSelectedGiverIndex(idx)}
+              />
               <Box className={classes.recipientTable}>
-                <Box className={classes.test1}>SUGGESTIONS</Box>
-                <Box className={classes.test2}>RECIPIENT</Box>
+                <Box className={classes.suggestionData}>SUGGESTIONS</Box>
+                <Box className={classes.recipientData}>RECIPIENT</Box>
               </Box>
             </Box>
           </Box>
