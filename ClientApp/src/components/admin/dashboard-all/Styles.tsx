@@ -77,7 +77,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   oversiktBox: {
     width: "200px",
-    height: "800px",
+    height: "700px",
     backgroundColor: "green",
     flexShrink: 0,
   },
@@ -87,12 +87,11 @@ export const useStyles = makeStyles((theme) => ({
   infoBox: {
     display: "flex",
     flexDirection: "row",
-    height: "300px",
+    height: "200px",
   },
   tableBox: {
     display: "flex",
     flexDirection: "row",
-    height: "500px",
   },
   dashboardInfo: {
     flexGrow: 1,
@@ -106,7 +105,7 @@ export const useStyles = makeStyles((theme) => ({
   dashBoardConnection: {
     backgroundColor: "gray",
     width: "400px",
-    height: "200px",
+    height: "150px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -115,18 +114,16 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: "pink",
     marginRight: "1em",
-    overflow: "scroll",
   },
   recipientTable: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
   },
-  test1: {
+  suggestionData: {
     backgroundColor: "yellow",
-    flexGrow: 1,
   },
-  test2: {
+  recipientData: {
     backgroundColor: "pink",
     flexGrow: 1,
   },
