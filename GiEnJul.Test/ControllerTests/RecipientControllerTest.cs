@@ -1,4 +1,5 @@
-﻿using GiEnJul.Controllers;
+﻿using GiEnJul.Clients;
+using GiEnJul.Controllers;
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,8 @@ namespace GiEnJul.Test.ControllerTests
         private Mock<IPersonRepository> mockPersonRepo { get; set; }
         private Mock<IEventRepository> mockEventRepo { get; set; }
         private Mock<IAutoIncrementRepository> mockAutoIncrementRepo { get; set; }
+        public Mock<IAuth0ManagementClient> MockAuth0ManagementClient { get; }
+
         private RecipientController _controller;
 
         //Run before each test
@@ -25,13 +28,15 @@ namespace GiEnJul.Test.ControllerTests
             mockPersonRepo = new Mock<IPersonRepository>();
             mockEventRepo = new Mock<IEventRepository>();
             mockAutoIncrementRepo = new Mock<IAutoIncrementRepository>();
+            MockAuth0ManagementClient = new Mock<IAuth0ManagementClient>();
             _controller = new RecipientController(
                 mockRecipientRepo.Object, 
                 mockPersonRepo.Object, 
                 mockEventRepo.Object, 
                 mockAutoIncrementRepo.Object, 
                 _log, 
-                _mapper
+                _mapper,
+                MockAuth0ManagementClient.Object
             );
         }
 

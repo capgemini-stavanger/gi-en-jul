@@ -1,4 +1,4 @@
-import { Box, Container, Grid, IconButton } from "@material-ui/core";
+import { Box, Button, Container, Grid, IconButton } from "@material-ui/core";
 import { RecipientType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
@@ -120,21 +120,34 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
     return rows;
   };
 
+  const downloadExcel = () => {
+    apiservice.downloadFile("Recipient/excel", "file.xlsx").catch((ex) => {
+      console.error("Error while trying to download excel", ex);
+    });
+  };
+
   return (
     <Container className={classes.root}>
       <Grid container direction="row" justifyContent="center">
-        <Grid item>
-          <Box style={{ height: "600px", width: "1200px" }}>
-            <DataGrid rows={rowData} columns={columns} autoPageSize pagination />
-          </Box>
-          <EditFamilyDialog
-            open={showEditDialog}
-            onClose={() => {
-              setShowEditDialog(false);
-            }}
-            refreshRecipients={() => refreshData()}
-            recipient={editRecipient}
-          />
+        <Grid container direction="column" spacing={1}>
+          <Grid container direction="row">
+            <Button color="primary" onClick={downloadExcel}>
+              Last ned Excel
+            </Button>
+          </Grid>
+          <Grid item>
+            <Box style={{ height: "600px", width: "1200px" }}>
+              <DataGrid rows={rowData} columns={columns} autoPageSize pagination />
+            </Box>
+            <EditFamilyDialog
+              open={showEditDialog}
+              onClose={() => {
+                setShowEditDialog(false);
+              }}
+              refreshRecipients={() => refreshData()}
+              recipient={editRecipient}
+            />
+          </Grid>
         </Grid>
       </Grid>
     </Container>
