@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Grid,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -11,9 +12,14 @@ import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import ErrorOutlineOutlinedIcon from "@material-ui/icons/ErrorOutlineOutlined";
+import {
+  ChatBubbleOutline,
+  ErrorOutlineOutlined,
+  CheckCircleOutline,
+  CancelOutlined,
+  PeopleOutline,
+} from "@material-ui/icons";
+import formatFamily from "common/functions/GetFamilySize";
 
 type Props = {
   giverData: GiverType;
@@ -48,25 +54,53 @@ const GiverDataCard: React.FC<Props> = ({
         }}
       >
         <AccordionSummary>
-          <Typography>{giverData.fullName}</Typography>
-          {giverData.isSuggestedMatch ? (
-            !giverData.hasConfirmedMatch ? (
-              <ErrorOutlineOutlinedIcon style={{ color: "yellow" }} />
-            ) : (
-              <CheckCircleOutlineIcon style={{ color: "green" }} />
-            )
-          ) : (
-            <CancelOutlinedIcon style={{ color: "red" }} />
-          )}
-          {personExpanded ? (
-            <Button onClick={() => setPersonExpanded(false)}>
-              <ExpandLessIcon />
-            </Button>
-          ) : (
-            <Button onClick={() => setPersonExpanded(true)}>
-              <ExpandMoreIcon />
-            </Button>
-          )}
+          <Grid container xs={12} justifyContent="space-between">
+            <Grid item xs={2}>
+              <Typography>{giverData.fullName}</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography>
+                <PeopleOutline />
+                {formatFamily(giverData.maxReceivers)}
+              </Typography>
+            </Grid>
+            <Grid item xs={2}>
+              {giverData.isSuggestedMatch ? (
+                !giverData.hasConfirmedMatch ? (
+                  <Typography>
+                    <ErrorOutlineOutlined style={{ color: "yellow" }} />
+                    Foreslått
+                  </Typography>
+                ) : (
+                  <Typography>
+                    <CheckCircleOutline style={{ color: "green" }} />
+                    Koblet
+                  </Typography>
+                )
+              ) : (
+                <Typography>
+                  <CancelOutlined style={{ color: "red" }} />
+                  Ikke koblet
+                </Typography>
+              )}
+            </Grid>
+            <Grid item xs={2}>
+              {
+                !giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
+              }
+            </Grid>
+            <Grid item xs={1}>
+              {personExpanded ? (
+                <Button onClick={() => setPersonExpanded(false)}>
+                  <ExpandLessIcon />
+                </Button>
+              ) : (
+                <Button onClick={() => setPersonExpanded(true)}>
+                  <ExpandMoreIcon />
+                </Button>
+              )}
+            </Grid>
+          </Grid>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
