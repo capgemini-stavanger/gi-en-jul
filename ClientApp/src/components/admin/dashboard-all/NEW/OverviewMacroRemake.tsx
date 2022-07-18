@@ -1,16 +1,15 @@
-import { Box, Container, Typography } from "@material-ui/core";
+import { Box, Button, Container, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType } from "components/shared/Types";
-import { useStyles } from "./Styles";
-import GiverTableRemake from "./GiverTableRemake";
+import { useStyles } from "../Styles";
+import DataTable from "./DataTable";
 
 interface IOverviewMacro {
   location: string;
   accessToken: string;
 }
 
-/*
 interface SelectedConnectionType {
   giver?: GiverType;
   recipient?: RecipientType;
@@ -19,7 +18,6 @@ const initState: SelectedConnectionType = {
   giver: undefined,
   recipient: undefined,
 };
-*/
 
 const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const [giverData, setGiverData] = useState<GiverType[]>([]);
@@ -29,7 +27,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   const [selectedGiverIndex, setSelectedGiverIndex] = useState(-1);
   // DO WE NEED A SELECTED IF WE KNOW THE INDEX OF SELECTED?
 
-  //const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
+  const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
 
   const classes = useStyles();
 
@@ -59,6 +57,15 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     fetchGivers();
   }, []);
 
+  const handleSelectedGiver = (giver: GiverType) => {
+    setSelectedConnection((prevState) => {
+      return {
+        ...prevState,
+        giver: giver,
+      };
+    });
+  };
+
   return (
     <>
       <Box className={classes.entireDashboard}>
@@ -69,6 +76,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               <Box className={classes.dashboardInfo}>
                 <Typography variant="h4">Dashboard</Typography>
                 <Typography>Good stuff</Typography>
+                <Button onClick={() => console.log(selectedConnection)}> CHECK </Button>
               </Box>
               <Box className={classes.dashboardConnectBox}>
                 <Box className={classes.dashBoardConnection}>Valgt Kobling/Ny Component</Box>
@@ -76,10 +84,12 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
             </Box>
             <Box className={classes.tableBox}>
               {/* SHOULD THE COMPONENT BE GENERAL FOR GIVER AND RECIPIENT? */}
-              <GiverTableRemake
+              <DataTable
                 giverData={giverData}
                 selectedGiverIndex={selectedGiverIndex}
+                setSelectedGiver={(giver) => handleSelectedGiver(giver)}
                 setSelectedGiverIndex={(idx) => setSelectedGiverIndex(idx)}
+                giverTable={true}
               />
               <Box className={classes.recipientTable}>
                 <Box className={classes.suggestionData}>SUGGESTIONS</Box>

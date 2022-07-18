@@ -7,8 +7,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "./Styles";
-import { GiverType } from "../../shared/Types";
+import useStyles from "../Styles";
+import { GiverType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
@@ -16,14 +16,18 @@ type Props = {
   giverData: GiverType;
   giverIndex: number;
   selectedGiverIndex: number;
+  setSelectedGiver: () => void;
   setSelectedGiverIndex: () => void;
+  giverTable: boolean;
 };
 
-const GiverDataRemake: React.FC<Props> = ({
+const DataCard: React.FC<Props> = ({
   giverData,
   giverIndex,
   selectedGiverIndex,
+  setSelectedGiver,
   setSelectedGiverIndex,
+  giverTable,
 }) => {
   const classes = useStyles();
 
@@ -38,6 +42,7 @@ const GiverDataRemake: React.FC<Props> = ({
         }
         onClick={(event) => {
           event.stopPropagation();
+          setSelectedGiver();
           setSelectedGiverIndex();
         }}
       >
@@ -63,4 +68,4 @@ const GiverDataRemake: React.FC<Props> = ({
     </>
   );
 };
-export default GiverDataRemake;
+export default DataCard;

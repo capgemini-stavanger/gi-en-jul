@@ -1,20 +1,24 @@
 import { Box, Button, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import useStyles from "./Styles";
-import { GiverType } from "../../shared/Types";
+import useStyles from "../Styles";
+import { GiverType } from "../../../shared/Types";
 import { Virtuoso } from "react-virtuoso";
-import GiverDataRemake from "./GiverDataRemake";
+import DataCard from "./DataCard";
 
 type Props = {
   giverData: GiverType[];
   selectedGiverIndex: number;
+  setSelectedGiver: (giver: GiverType) => void;
   setSelectedGiverIndex: (idx: number) => void;
+  giverTable: boolean; // Determines the content of the component
 };
 
-const GiverTableRemake: React.FC<Props> = ({
+const DataTable: React.FC<Props> = ({
   giverData,
   selectedGiverIndex,
+  setSelectedGiver,
   setSelectedGiverIndex,
+  giverTable,
 }) => {
   const classes = useStyles();
 
@@ -31,16 +35,17 @@ const GiverTableRemake: React.FC<Props> = ({
       <Box className={classes.giverTable}>
         GIVER FILTER
         <Button onClick={() => setTestFilter(testFilter.slice(5, 20))}> FILTER </Button>
-        <Button onClick={() => console.log(selectedGiverIndex)}> CHECK </Button>
         <Virtuoso
           style={{ height: "450px" }}
           totalCount={testFilter.length}
           itemContent={(index) => (
-            <GiverDataRemake
+            <DataCard
               giverData={testFilter[index]}
               giverIndex={index}
               selectedGiverIndex={selectedGiverIndex}
+              setSelectedGiver={() => setSelectedGiver(testFilter[index])}
               setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
+              giverTable={giverTable}
             />
           )}
         />
@@ -48,4 +53,4 @@ const GiverTableRemake: React.FC<Props> = ({
     </>
   );
 };
-export default GiverTableRemake;
+export default DataTable;
