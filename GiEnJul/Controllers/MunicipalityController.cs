@@ -82,11 +82,8 @@ namespace GiEnJul.Controllers
         public async Task<List<string>> GetAllNames()
         {
             var entities = await _municipalityRepository.GetAll();
-            var names = new List<string>();
-            foreach(var entity in entities)
-            {
-                names.Add(entity.RowKey);
-            }
+            var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            var names = municipalities.Select(m => m.Name);
             return names;
         } 
     }
