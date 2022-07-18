@@ -73,14 +73,8 @@ namespace GiEnJul.Controllers
         public async Task<List<string>> getActiveNames()
         {
             var all = await _municipalityRepository.GetAll();
-            var active = new List<string>();
-            foreach (var municipality in all)
-            {
-                if (municipality.IsActive)
-                {
-                    active.Add(municipality.RowKey);
-                }
-            }
+            var municipalities = _mapper.Map<List<Models.Municipality>>(all);
+            var active = municipalities.Where(m => m.IsActive).Select(m => m.Name).ToList();
             return active;
         }
 
