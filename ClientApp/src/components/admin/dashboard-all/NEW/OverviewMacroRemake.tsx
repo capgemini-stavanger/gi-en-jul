@@ -1,21 +1,17 @@
 import { Box, Button, Container, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
-import { GiverType, RecipientType } from "components/shared/Types";
+import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
 import { useStyles } from "../Styles";
 import GiverDataTable from "./GiverDataTable";
 import RecipientDataTable from "./RecipientDataTable";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import OverviewStatistics from "./OverviewStatistics";
+import OverviewConnection from "./OverviewConnection";
 
 interface IOverviewMacro {
   location: string;
   accessToken: string;
-}
-
-interface SelectedConnectionType {
-  giver?: GiverType;
-  recipient?: RecipientType;
 }
 const initState: SelectedConnectionType = {
   giver: undefined,
@@ -86,20 +82,16 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     const suggestedFamilies: RecipientType[] = [];
 
     // Get one random of each family size
-
     FAMILY_SIZES.map((sizeObj) => {
       const sizeFilteredList = recipientData.filter(
         (family) => rounUpFamilyMembers(family.familyMembers.length) == sizeObj.value
       );
-
       const randomFamily = sizeFilteredList[Math.floor(Math.random() * sizeFilteredList.length)];
-
       suggestedFamilies.push(randomFamily);
     });
 
     setSuggestionData(suggestedFamilies);
   };
-
   const rounUpFamilyMembers = (famSize: number) => {
     const matchFamilySize = FAMILY_SIZES.find((famObj) => famObj.value >= famSize)?.value;
 
@@ -115,6 +107,29 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     });
   };
 
+  const connectGiverRecipient = async () => {
+    await apiservice
+      .post(
+        "admin/",
+        JSON.stringify({
+          GiverId: selectedConnection.giver?.giverId,
+          Event: selectedConnection.giver?.event,
+          RecipientId: selectedConnection.recipient?.recipientId,
+        })
+      )
+      .then((response) => {
+        //use this for sending a response to the user
+        if (response.status === 200) {
+          fetchRecipients();
+          fetchGivers();
+          setSelectedConnection(initState);
+        }
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
+
   return (
     <>
       <Box className={classes.entireDashboard}>
@@ -124,13 +139,15 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         <Container>
           <Box className={classes.dashboardBox}>
             <Box className={classes.infoBox}>
-              <Box className={classes.dashboardInfo}>
+              <Box>
                 <Typography variant="h4">Dashboard</Typography>
-                <Typography>Good stuff</Typography>
+                <Typography>Finn, søk og koble sammen familier og givere</Typography>
                 <Button onClick={() => console.log(selectedConnection)}> CHECK </Button>
               </Box>
               <Box className={classes.dashboardConnectBox}>
-                <Box className={classes.dashBoardConnection}>Valgt Kobling/Ny Component</Box>
+                <Box className={classes.dashBoardConnection}>
+                  <OverviewConnection connection={selectedConnection} />
+                </Box>
               </Box>
             </Box>
             <Box className={classes.tableBox}>
@@ -143,17 +160,6 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                 />
               </Box>
               <Box className={classes.recipientTable}>
-                {suggestionData.length > 0 && (
-                  <Box className={classes.suggestionData}>
-                    SUGGESTION
-                    <RecipientDataTable
-                      recipientData={suggestionData}
-                      selectedRecipientIndex={selectedSuggestionIndex}
-                      setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
-                      setSelectedRecipientIndex={(index) => handleVisualSelection(index, true)}
-                    />
-                  </Box>
-                )}
                 <Box className={classes.recipientData}>
                   <RecipientDataTable
                     recipientData={recipientData}
@@ -164,6 +170,18 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                 </Box>
               </Box>
             </Box>
+            {/*
+            {suggestionData.length > 0 && (
+              <Box className={classes.suggestionData}>
+                <RecipientDataTable
+                  recipientData={suggestionData}
+                  selectedRecipientIndex={selectedSuggestionIndex}
+                  setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
+                  setSelectedRecipientIndex={(index) => handleVisualSelection(index, true)}
+                />
+              </Box>
+            )}
+            */}
           </Box>
         </Container>
       </Box>

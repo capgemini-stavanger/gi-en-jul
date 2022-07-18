@@ -71,7 +71,6 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   // New styles
-
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
@@ -87,34 +86,27 @@ export const useStyles = makeStyles((theme) => ({
   },
   infoBox: {
     display: "flex",
-    flexDirection: "row",
-    height: "200px",
+    flexDirection: "column",
+    marginBottom: "2em",
   },
-
   tableBox: {
     display: "flex",
     flexDirection: "row",
-    height: "600px",
+    height: "500px",
   },
-
-  dashboardInfo: {
-    flexGrow: 1,
-  },
-
   dashboardConnectBox: {
-    flexGrow: 1,
     display: "flex",
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
-
   dashBoardConnection: {
-    backgroundColor: "gray",
-    width: "400px",
-    height: "150px",
+    flexGrow: 1,
+    height: "100px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#E3E2E2",
   },
   giverTable: {
     flexGrow: 1,
@@ -124,24 +116,30 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
+    backgroundColor: "#E3E2E2",
+    borderRadius: "1em",
+    padding: "1em",
   },
-
   suggestionData: {
     marginBottom: "1em",
-
     height: "200px",
   },
-
   recipientData: {
     flexGrow: 1,
   },
-
   accordionNormal: {
     backgroundColor: "#DBEDE9",
   },
-
   accordionSelected: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.light,
+  },
+  tableHeadingSpace: {
+    marginBottom: "1em",
+  },
+  gridBox: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 }));
 
