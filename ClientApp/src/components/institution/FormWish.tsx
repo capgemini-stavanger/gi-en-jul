@@ -11,6 +11,8 @@ interface IWishProps {
   updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
+  updateSize: (newSizeData: string) => void;
+  updateComment: (newCommentData: string) => void;
 }
 
 export interface IFormWish {
@@ -41,6 +43,8 @@ const InstitutionWish: React.FC<IWishProps> = ({
   updateWish,
   deleteWish,
   wishIndex,
+  updateSize,
+  updateComment,
 }) => {
   const [state, setState] = useState({ ...initState });
 
@@ -77,6 +81,18 @@ const InstitutionWish: React.FC<IWishProps> = ({
     getSetter("ageWish")(e.target.checked);
   };
   */
+
+  const onSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateSize(newInput);
+    getSetter("size")(newInput);
+  };
+
+  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateComment(newInput);
+    getSetter("comment")(newInput);
+  };
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
