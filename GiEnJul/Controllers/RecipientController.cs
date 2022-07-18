@@ -1,14 +1,18 @@
-﻿using GiEnJul.Dtos;
-using GiEnJul.Models;
+﻿using AutoMapper;
+using ClosedXML.Extensions;
 using GiEnJul.Auth;
+using GiEnJul.Dtos;
+using GiEnJul.Models;
+using GiEnJul.Repositories;
+using GiEnJul.Utilities;
+using GiEnJul.Utilities.ExcelClasses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
-using System.Threading.Tasks;
-using AutoMapper;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
-using GiEnJul.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
 {
@@ -82,13 +86,39 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByInstitutionAsync([FromQuery] string institution)
         {
-        
             var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
-            foreach (var recipient in recipients)
-            {
-                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
-            }
+            var recipientIds = recipients.Select(r => r.RecipientId);
+            var persons = await _personRepository.GetAllByRecipientIds(recipientIds);
+
+            recipients.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
+
             return recipients;
+        }
+
+        [HttpGet("excel")]
+        [Authorize(Policy = Policy.ReadRecipient)]
+        public async Task<FileStreamResult> GetExcelListForInstitutionAsync([FromQuery] string institution)
+        {
+            var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
+            if (!recipients.Any())
+                throw new Exception("No recipients found");
+
+            var recipientIds = recipients.Select(r => r.RecipientId);
+            var persons = await _personRepository.GetAllByRecipientIds(recipientIds);
+
+            recipients.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
+
+            var excelRecipients = _mapper.Map<List<SubmittedFamiliesExcel>>(recipients);
+            var excelPersons = _mapper.Map<List<SubmittedPersonExcel>>(persons.OrderBy(p => p.RecipientId));
+            excelPersons.ForEach(p =>
+            {
+                var recipient = recipients.Single(r => r.RecipientId == p.RecipientId);
+                p.ReferenceId = recipient.ReferenceId;
+                p.FamilyId = recipient.FamilyId;
+            });
+
+            using var wb = ExcelGenerator.GenerateForRecipients(excelRecipients, excelPersons);
+            return wb.Deliver($"Gi_en_jul_{institution}.xlsx");
         }
     }
 }
