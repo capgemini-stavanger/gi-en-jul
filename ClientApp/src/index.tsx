@@ -93,14 +93,13 @@ export const theme = createTheme({
         fill: "black",
       },
     },
-    MuiButton: {
 
     MuiInputBase: {
-
       root: {
         backgroundColor: "white",
       },
     },
+
     MuiInputLabel: {
       root: {
         marginBottom: "-5px",
