@@ -92,6 +92,7 @@ export const useStyles = makeStyles((theme) => ({
   tableBox: {
     display: "flex",
     flexDirection: "row",
+    height: "600px",
   },
   dashboardInfo: {
     flexGrow: 1,
@@ -122,6 +123,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   suggestionData: {
     backgroundColor: "yellow",
+    marginBottom: "1em",
+    flexGrow: 1,
   },
   recipientData: {
     backgroundColor: "pink",

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType } from "components/shared/Types";
 import { useStyles } from "../Styles";
-import DataTable from "./DataTable";
+import GiverDataTable from "./GiverDataTable";
+import RecipientDataTable from "./RecipientDataTable";
 
 interface IOverviewMacro {
   location: string;
@@ -20,16 +21,18 @@ const initState: SelectedConnectionType = {
 };
 
 const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
-  const [giverData, setGiverData] = useState<GiverType[]>([]);
-  const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const apiservice = new ApiService(accessToken);
+  const classes = useStyles();
+
+  const [giverData, setGiverData] = useState<GiverType[]>([]);
+  const [recipientData, setRecipientData] = useState<RecipientType[]>([]);
+  const [suggestionData, setSuggestionData] = useState<RecipientType[]>([]);
 
   const [selectedGiverIndex, setSelectedGiverIndex] = useState(-1);
-  // DO WE NEED A SELECTED IF WE KNOW THE INDEX OF SELECTED?
+  const [selectedRecipientIndex, setSelectedRecipientIndex] = useState(-1);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
 
   const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
-
-  const classes = useStyles();
 
   async function fetchGivers() {
     await apiservice
@@ -57,11 +60,39 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     fetchGivers();
   }, []);
 
+  const handleVisualSelection = (index: number, suggestionTable: boolean) => {
+    // Need to reset the visual selection of the other table, since they have seperate indexes
+    if (suggestionTable) {
+      setSelectedSuggestionIndex(index);
+      setSelectedRecipientIndex(-1);
+    } else {
+      setSelectedRecipientIndex(index);
+      setSelectedSuggestionIndex(-1);
+    }
+  };
+
   const handleSelectedGiver = (giver: GiverType) => {
     setSelectedConnection((prevState) => {
       return {
         ...prevState,
         giver: giver,
+      };
+    });
+    findSuggestions(giver);
+  };
+  const findSuggestions = (giver: GiverType) => {
+    const suggestData = recipientData.slice(0, 3);
+    setSuggestionData(suggestData);
+
+    const filterSize = giver.maxReceivers;
+    //const filterData = recipientData.filter((family) => family.maxReceivers == filterSize);
+  };
+
+  const handleSelectedRecipient = (recipient: RecipientType) => {
+    setSelectedConnection((prevState) => {
+      return {
+        ...prevState,
+        recipient: recipient,
       };
     });
   };
@@ -83,17 +114,34 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               </Box>
             </Box>
             <Box className={classes.tableBox}>
-              {/* SHOULD THE COMPONENT BE GENERAL FOR GIVER AND RECIPIENT? */}
-              <DataTable
-                giverData={giverData}
-                selectedGiverIndex={selectedGiverIndex}
-                setSelectedGiver={(giver) => handleSelectedGiver(giver)}
-                setSelectedGiverIndex={(idx) => setSelectedGiverIndex(idx)}
-                giverTable={true}
-              />
+              <Box className={classes.giverTable}>
+                <GiverDataTable
+                  giverData={giverData}
+                  selectedGiverIndex={selectedGiverIndex}
+                  setSelectedGiver={(giver) => handleSelectedGiver(giver)}
+                  setSelectedGiverIndex={(index) => setSelectedGiverIndex(index)}
+                />
+              </Box>
               <Box className={classes.recipientTable}>
-                <Box className={classes.suggestionData}>SUGGESTIONS</Box>
-                <Box className={classes.recipientData}>RECIPIENT</Box>
+                {suggestionData.length > 0 && (
+                  <Box className={classes.suggestionData}>
+                    SUGGESTION
+                    <RecipientDataTable
+                      recipientData={suggestionData}
+                      selectedRecipientIndex={selectedSuggestionIndex}
+                      setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
+                      setSelectedRecipientIndex={(index) => handleVisualSelection(index, true)}
+                    />
+                  </Box>
+                )}
+                <Box className={classes.recipientData}>
+                  <RecipientDataTable
+                    recipientData={recipientData}
+                    selectedRecipientIndex={selectedRecipientIndex}
+                    setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
+                    setSelectedRecipientIndex={(index) => handleVisualSelection(index, false)}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>
