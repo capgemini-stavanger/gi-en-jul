@@ -8,6 +8,7 @@ import FaqContainer from "./Faq/FaqContainer";
 import EventsContainer from "./Events/EventsContainer";
 import KommuneContainer from "./kommune/KommuneContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
+import MunicipalityContainer from "./Municipality/MunicipalityContainer";
 
 interface IManageDashboard {
   role: string;
@@ -51,7 +52,9 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
         </TabPanel>
         <TabPanel value="6">
           <Grid container direction="column">
-            <Grid item>municipality managing placeholder</Grid>
+            <Grid item>
+              <MunicipalityContainer accessToken={accessToken} />
+            </Grid>
             <Grid item>
               <EventsContainer accessToken={accessToken} />
             </Grid>

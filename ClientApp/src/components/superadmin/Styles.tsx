@@ -62,6 +62,10 @@ const useStyles = makeStyles((theme: Theme) =>
     deleteButton: {
       marginLeft: "10px",
     },
+    dialogBox: {
+      width: "1000px",
+      margin: "auto",
+    },
   })
 );
 
