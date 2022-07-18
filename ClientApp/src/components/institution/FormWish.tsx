@@ -78,6 +78,18 @@ const InstitutionWish: React.FC<IWishProps> = ({
     updateWish(state.totalWish.toString());
   };
 
+  const onSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateSize(newInput);
+    getSetter("size")(newInput);
+  };
+
+  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateComment(newInput);
+    getSetter("comment")(newInput);
+  };
+
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
     state.totalWish[0] = newInput;
