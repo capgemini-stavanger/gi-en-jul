@@ -5,6 +5,8 @@ import { GiverType, RecipientType } from "components/shared/Types";
 import { useStyles } from "../Styles";
 import GiverDataTable from "./GiverDataTable";
 import RecipientDataTable from "./RecipientDataTable";
+import { FAMILY_SIZES } from "common/constants/FamilySizes";
+import OverviewStatistics from "./OverviewStatistics";
 
 interface IOverviewMacro {
   location: string;
@@ -78,14 +80,30 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         giver: giver,
       };
     });
-    findSuggestions(giver);
+    findSuggestions();
   };
-  const findSuggestions = (giver: GiverType) => {
-    const suggestData = recipientData.slice(0, 3);
-    setSuggestionData(suggestData);
+  const findSuggestions = () => {
+    const suggestedFamilies: RecipientType[] = [];
 
-    const filterSize = giver.maxReceivers;
-    //const filterData = recipientData.filter((family) => family.maxReceivers == filterSize);
+    // Get one random of each family size
+
+    FAMILY_SIZES.map((sizeObj) => {
+      const sizeFilteredList = recipientData.filter(
+        (family) => rounUpFamilyMembers(family.familyMembers.length) == sizeObj.value
+      );
+
+      const randomFamily = sizeFilteredList[Math.floor(Math.random() * sizeFilteredList.length)];
+
+      suggestedFamilies.push(randomFamily);
+    });
+
+    setSuggestionData(suggestedFamilies);
+  };
+
+  const rounUpFamilyMembers = (famSize: number) => {
+    const matchFamilySize = FAMILY_SIZES.find((famObj) => famObj.value >= famSize)?.value;
+
+    return matchFamilySize;
   };
 
   const handleSelectedRecipient = (recipient: RecipientType) => {
@@ -100,7 +118,9 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   return (
     <>
       <Box className={classes.entireDashboard}>
-        <Box className={classes.oversiktBox}>Oversikt/Ny Component</Box>
+        <Box className={classes.oversiktBox}>
+          <OverviewStatistics givers={giverData} recipients={recipientData} />
+        </Box>
         <Container>
           <Box className={classes.dashboardBox}>
             <Box className={classes.infoBox}>

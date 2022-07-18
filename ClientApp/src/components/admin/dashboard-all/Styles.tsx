@@ -71,6 +71,7 @@ export const useStyles = makeStyles((theme) => ({
   },
 
   // New styles
+
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
@@ -78,7 +79,7 @@ export const useStyles = makeStyles((theme) => ({
   oversiktBox: {
     width: "200px",
     height: "700px",
-    backgroundColor: "green",
+    backgroundColor: "#DBEDE9",
     flexShrink: 0,
   },
   dashboardBox: {
@@ -89,20 +90,24 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     height: "200px",
   },
+
   tableBox: {
     display: "flex",
     flexDirection: "row",
     height: "600px",
   },
+
   dashboardInfo: {
     flexGrow: 1,
   },
+
   dashboardConnectBox: {
     flexGrow: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
   },
+
   dashBoardConnection: {
     backgroundColor: "gray",
     width: "400px",
@@ -113,7 +118,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   giverTable: {
     flexGrow: 1,
-    backgroundColor: "pink",
     marginRight: "1em",
   },
   recipientTable: {
@@ -121,20 +125,23 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+
   suggestionData: {
-    backgroundColor: "yellow",
     marginBottom: "1em",
-    flexGrow: 1,
+
+    height: "200px",
   },
+
   recipientData: {
-    backgroundColor: "pink",
     flexGrow: 1,
   },
+
   accordionNormal: {
-    backgroundColor: "gray",
+    backgroundColor: "#DBEDE9",
   },
+
   accordionSelected: {
-    backgroundColor: "green",
+    backgroundColor: theme.palette.primary.main,
   },
 }));
 
