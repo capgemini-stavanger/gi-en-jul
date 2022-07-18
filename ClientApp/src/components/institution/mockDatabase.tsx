@@ -25,6 +25,13 @@ export const Categories: ICategories[] = [
 ];
 
 export const Sizes: ISizes[] = [
-  { type: "letters", s1: "XS", s2: "S", s3: "M", s4: "L", s5: "XL" },
-  { type: "shoesEU", s1: "35", s2: "36", s3: "37", s4: "38", s5: "39", s6: "40" },
+  { type: "XXXS" },
+  { type: "XXS" },
+  { type: "XS", s1: "XS", s2: "S", s3: "M", s4: "L", s5: "XL" },
+  { type: "S", s1: "35", s2: "36", s3: "37", s4: "38", s5: "39", s6: "40" },
+  { type: "M" },
+  { type: "L" },
+  { type: "XL" },
+  { type: "XXL" },
+  { type: "3XL" },
 ];

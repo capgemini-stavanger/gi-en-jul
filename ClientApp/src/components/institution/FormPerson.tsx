@@ -81,6 +81,23 @@ const FormPerson: FC<IPersonProps> = ({
     newList[index] = newWishData;
     updatePerson({ wishes: newList });
   };
+  //kan også brukes for lokasjon.
+  const updateSize = (newSizeData: string, index: number) => {
+    const newList = [...person.wishes];
+    const thisElementSeparated = newList[index].split(",");
+    thisElementSeparated[1] = newSizeData;
+
+    newList[index] = thisElementSeparated.toString();
+    updateWish(newList.toString(), index);
+  };
+
+  const updateComment = (newCommentData: string, index: number) => {
+    const newList = [...person.wishes];
+    const thisElementSeparated = newList[index].split(",");
+    thisElementSeparated[2] = newCommentData;
+    newList[index] = thisElementSeparated.toString();
+    updateWish(newList.toString(), index);
+  };
 
   const deleteWish = (index: number) => {
     const newList = [...person.wishes];
@@ -96,6 +113,7 @@ const FormPerson: FC<IPersonProps> = ({
     if (newList.length >= 5) return;
     newList.push("");
     updatePerson({ wishes: newList });
+    console.log("wishes", person.wishes);
   };
 
   return (
@@ -171,12 +189,17 @@ const FormPerson: FC<IPersonProps> = ({
                 <FormWish
                   key={i}
                   viewErrorTrigger={viewErrorTrigger}
-                  wish={wish}
                   updateWish={(wish) => {
                     updateWish(wish, i);
                   }}
                   deleteWish={() => deleteWish(i)}
                   wishIndex={i}
+                  updateSize={(size) => {
+                    updateSize(size, i);
+                  }}
+                  updateComment={(comment) => {
+                    updateComment(comment, i);
+                  }}
                 />
               );
             })}

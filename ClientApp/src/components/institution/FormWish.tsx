@@ -9,22 +9,28 @@ import {
 } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
-import { Categories, ICategories } from "./mockDatabase";
+import { Categories, ICategories, ISizes, Sizes } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 
 interface IWishProps {
-  wish: string;
   viewErrorTrigger: number;
   updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
+  updateSize: (newSizeData: string) => void;
+  updateComment: (newCommentData: string) => void;
 }
 
 const initState: { [data: string]: any } = {
   wishInput: "",
   ageWish: false,
+  size: "",
+  comment: "",
+  isClothes: false,
+  isShoes: false,
+  isGiftcard: false,
 };
 
 const ageAppropriateString = "Giver kjøper alderstilpasset gave";
@@ -34,6 +40,8 @@ const InstitutionWish: React.FC<IWishProps> = ({
   updateWish,
   deleteWish,
   wishIndex,
+  updateSize,
+  updateComment,
 }) => {
   const [state, setState] = useState({ ...initState });
 
@@ -49,14 +57,24 @@ const InstitutionWish: React.FC<IWishProps> = ({
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
     updateWish(newInput);
-
     getSetter("ageWish")(e.target.checked);
+  };
+
+  const onSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateSize(newInput);
+    getSetter("size")(newInput);
+  };
+
+  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newInput = e.target.value;
+    updateComment(newInput);
+    getSetter("comment")(newInput);
   };
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
     updateWish(newInput);
-
     getSetter("wishInput")(newInput);
   };
 
@@ -102,11 +120,39 @@ const InstitutionWish: React.FC<IWishProps> = ({
           ></InputValidator>
         )}
       </Grid>
+
       <Grid item>
-        <IconButton color="primary" onClick={deleteWish}>
-          <SvgIcon component={ClearIcon} />
-        </IconButton>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          name="size"
+          id="størrelse"
+          label="Størrelse"
+          options={Sizes.map((s: ISizes) => {
+            return { value: s.type, text: s.type };
+          })}
+          // disabled={state.ageWish} denne skal være disabled hver gang kategorien ikke er klær
+          value={state.size}
+          onChange={(e) => onSizeInputChange(e)}
+          className={classes.smallWidth}
+        ></InputValidator>
       </Grid>
+
+      <Grid item>
+        <InputValidator
+          viewErrorTrigger={viewErrorTrigger}
+          validators={[isNotNull]}
+          name="comment"
+          id="kommentar"
+          label="Kommentar"
+          value={state.comment}
+          onChange={(e) => onCommentInputChange(e)}
+          className={classes.mediumWidth}
+        ></InputValidator>
+      </Grid>
+      <IconButton color="primary" onClick={deleteWish}>
+        <SvgIcon component={ClearIcon} />
+      </IconButton>
     </Grid>
   );
 };
