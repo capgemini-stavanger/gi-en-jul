@@ -1,5 +1,4 @@
 import { Button, IconButton, Tab, Box, Grid, Toolbar, AppBar } from "@material-ui/core";
-import React, { useState } from "react";
 import { isMobile } from "common/functions/IsMobile";
 import logo from "styling/img/logo_green.svg";
 import useStyles from "components/shared/Styles";
@@ -9,9 +8,9 @@ import { Navbar, NavbarBrand } from "reactstrap";
 import { TabContext, TabList } from "@material-ui/lab";
 import NavBarBusiness from "./NavBarBusiness";
 import NavbarMobile from "./NavBarMobile";
+import React from "react";
 
 const NavBarPublic = () => {
-  const [tab] = useState<string>("1");
   const classes = useStyles();
   const history = useHistory();
 
@@ -39,7 +38,7 @@ const NavBarPublic = () => {
         <Box className={classes.navbarBackground}>
           <Navbar className={classes.navContainer}>
             <NavbarBrand className={classes.toolBar}>
-              <TabContext value={tab}>
+              <TabContext value={"1"}>
                 <TabList centered className={classes.toolBar}>
                   <Grid container justifyContent="center" direction="row" spacing={10}>
                     <Grid item>
@@ -81,7 +80,6 @@ const NavBarPublic = () => {
                         label="Start Gi en jul i din kommune"
                       ></Tab>
                     </Grid>
-
                     <Grid item>
                       <Tab
                         onClick={() => {
