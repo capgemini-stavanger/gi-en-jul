@@ -161,5 +161,11 @@ const useStyles = makeStyles((theme) => ({
   summaryInput: {
     marginBottom: "1.2em",
   },
+  stepperBox: {
+    width: "100%",
+  },
+  stepperBackground: {
+    backgroundColor: theme.palette.secondary.light,
+  },
 }));
 export default useStyles;

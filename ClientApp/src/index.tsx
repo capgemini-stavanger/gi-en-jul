@@ -74,11 +74,32 @@ export const theme = createTheme({
   },
 
   overrides: {
+    MuiStepConnector: {
+      line: { borderColor: "#49a591" },
+    },
+    MuiStepIcon: {
+      root: {
+        width: "1.5em",
+        height: "1.5em",
+        color: "transparent",
+        border: "2px solid #49a591",
+        borderRadius: "50%",
+        "&$active": {
+          color: "#49a591",
+          border: "none",
+        },
+      },
+      text: {
+        fill: "black",
+      },
+    },
+
     MuiInputBase: {
       root: {
         backgroundColor: "white",
       },
     },
+
     MuiInputLabel: {
       root: {
         marginBottom: "-5px",
