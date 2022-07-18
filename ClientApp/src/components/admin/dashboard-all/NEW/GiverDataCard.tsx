@@ -11,7 +11,9 @@ import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Circle from "components/admin/dashboard-all/Circle";
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import ErrorOutlineOutlinedIcon from "@material-ui/icons/ErrorOutlineOutlined";
 
 type Props = {
   giverData: GiverType;
@@ -48,14 +50,13 @@ const GiverDataCard: React.FC<Props> = ({
         <AccordionSummary>
           <Typography>{giverData.fullName}</Typography>
           {giverData.isSuggestedMatch ? (
-            //Styling should be in a seperate file
             !giverData.hasConfirmedMatch ? (
-              <Circle color="yellow" />
+              <ErrorOutlineOutlinedIcon style={{ color: "yellow" }} />
             ) : (
-              <Circle color="green" />
+              <CheckCircleOutlineIcon style={{ color: "green" }} />
             )
           ) : (
-            <Circle color="red" />
+            <CancelOutlinedIcon style={{ color: "red" }} />
           )}
           {personExpanded ? (
             <Button onClick={() => setPersonExpanded(false)}>
