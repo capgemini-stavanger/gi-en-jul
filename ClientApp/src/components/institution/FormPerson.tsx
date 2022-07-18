@@ -117,23 +117,6 @@ const FormPerson: FC<IPersonProps> = ({
     updatePerson({ wishes: newList });
     console.log("wishes", person.wishes);
   };
-  //kan også brukes for lokasjon.
-  const updateSize = (newSizeData: string, index: number) => {
-    const newList = [...person.wishes];
-    const thisElementSeparated = newList[index].split(",");
-    thisElementSeparated[1] = newSizeData;
-
-    newList[index] = thisElementSeparated.toString();
-    updateWish(newList.toString(), index);
-  };
-
-  const updateComment = (newCommentData: string, index: number) => {
-    const newList = [...person.wishes];
-    const thisElementSeparated = newList[index].split(",");
-    thisElementSeparated[2] = newCommentData;
-    newList[index] = thisElementSeparated.toString();
-    updateWish(newList.toString(), index);
-  };
 
   const deleteWish = (index: number) => {
     const newList = [...person.wishes];
