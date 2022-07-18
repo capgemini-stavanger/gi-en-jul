@@ -38,22 +38,6 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({ accessTok
   };
   useEffect(fetchInformation, [location]);
 
-  const editLocation = () => {
-    apiservice
-      .post("municipality", {
-        //endrer en kommune som allerede ligger inne, badrequest hvis den ikke finnes.
-        Country: "Norge",
-        Name: location,
-      })
-      .then(() => {
-        setKommuneInformation("");
-        setHtml("");
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  };
-
   function onChange(e: ContentEditableEvent) {
     setHtml(e.target.value);
   }
