@@ -128,11 +128,21 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
         <>
           <DefaultEditor value={html} onChange={onChange} />
           <br />
+
           <Button variant="contained" onClick={handleSaveClick}>
             Lagre endringer
           </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpenEditor(false);
+            }}
+          >
+            Avbryt
+          </Button>
         </>
       )}
+
       <Grid item>
         <Button hidden={role != "SuperAdmin"} onClick={deleteLocation}>
           Slett informasjon om valgt kommune
