@@ -19,16 +19,14 @@ type Props = {
   selectedGiverIndex: number;
   setSelectedGiver: () => void;
   setSelectedGiverIndex: () => void;
-  giverTable: boolean;
 };
 
-const DataCard: React.FC<Props> = ({
+const GiverDataCard: React.FC<Props> = ({
   giverData,
   giverIndex,
   selectedGiverIndex,
   setSelectedGiver,
   setSelectedGiverIndex,
-  giverTable,
 }) => {
   const classes = useStyles();
 
@@ -79,4 +77,4 @@ const DataCard: React.FC<Props> = ({
     </>
   );
 };
-export default DataCard;
+export default GiverDataCard;
