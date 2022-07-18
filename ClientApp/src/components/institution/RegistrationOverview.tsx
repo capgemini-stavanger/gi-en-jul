@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import EditIcon from "@material-ui/icons/Edit";
-import useStyles from "../Styles";
+import useStyles from "./Styles";
 
 interface IDatagridFamily {
   id: string;

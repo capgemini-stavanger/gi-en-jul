@@ -1,7 +1,7 @@
 import { Button, Container, Divider, Grid, TextField, Typography } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import RegistrationInfoRemake from "./RegistrationInfoRemake";
-import useStyles from "../Styles";
+import RegistrationInfo from "./RegistrationInfo";
+import useStyles from "./Styles";
 import {
   initFormDataState,
   initValidFormState,
@@ -11,7 +11,7 @@ import {
   getFormPerson,
   IContactState,
   initState,
-} from "components/institution/NewDesign/RegistrationFormTypes";
+} from "components/institution/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
 import {
@@ -19,20 +19,19 @@ import {
   isPhoneNumber,
   isEmail,
 } from "components/shared/input-fields/validators/Validators";
-import FormFood from "../FormFood";
+import FormFood from "./FormFood";
 import { DINNERS } from "common/constants/Dinners";
 import { DESSERTS } from "common/constants/Desserts";
-import CustomTooltip from "../CustomTooltip";
-import FormPersonRemake from "./FormPersonRemake";
+import CustomTooltip from "./CustomTooltip";
+import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
-import { IFormWish } from "../FormWish";
 import FamilyInformationBox from "./FamilyInformationBox";
 
 interface props {
   accessToken: string;
 }
 
-const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
+const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const classes = useStyles();
   const { location, institution } = useUser();
   const apiservice = new ApiService(accessToken);
@@ -184,7 +183,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
     const personsList = Array<PersonType>();
     formDataState.persons.forEach((person) => {
       const person1: PersonType = {
-        Wish: person.wish,
+        Wishes: person.wishes,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
@@ -262,17 +261,6 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
-  const updatePersonWishes = (index: number, newPersonData: any) => {
-    formDataState.persons[index].wishes = [{ wish: newPersonData.wish } as IFormWish];
-    setFormDataState((prev) => {
-      prev.persons[index] = {
-        ...prev.persons[index],
-        ...newPersonData,
-      } as IFormPerson;
-      return { ...prev };
-    });
-  };
-
   return (
     <>
       <Container className={classes.root}>
@@ -280,7 +268,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
           <Grid container direction="column" spacing={10}>
             {/* REGISTRATION INFO FORM, NOT A SEPERATE COMPONENT? */}
             <Grid item>
-              <RegistrationInfoRemake />
+              <RegistrationInfo />
             </Grid>
             <Divider className={classes.gridDivider}></Divider>
             <Grid item>
@@ -442,13 +430,7 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                   <Typography>Vennligst fyll familiens informasjon og gaveønsker</Typography>
                 </Grid>
                 <Grid item>
-                  <Grid
-                    container
-                    direction="row"
-                    spacing={3}
-                    justifyContent="space-around"
-                    alignItems="center"
-                  >
+                  <Grid container direction="row" justifyContent="space-around" alignItems="center">
                     <Grid item>
                       <FamilyInformationBox
                         header="Detaljerte ønsker"
@@ -469,17 +451,15 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
                     <Grid item>
                       {formDataState.persons.map((person, i) => {
                         return (
-                          <FormPersonRemake
+                          <FormPerson
                             key={person.uuid}
                             person={person}
                             viewErrorTrigger={state.viewErrorTrigger}
-                            updatePersonWish={(wish) => {
-                              updatePersonWishes(i, wish);
-                            }}
                             updatePerson={(newPersonData: { [target: string]: unknown }) =>
                               updatePerson(i, newPersonData)
                             }
                             deletePerson={() => deletePerson(i)}
+                            personIndex={i}
                           />
                         );
                       })}
@@ -514,4 +494,4 @@ const RegistrationFormRemake: React.FC<props> = ({ accessToken }) => {
   );
 };
 
-export default RegistrationFormRemake;
+export default RegistrationForm;

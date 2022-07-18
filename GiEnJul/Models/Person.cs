@@ -1,4 +1,7 @@
-﻿namespace GiEnJul.Models
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace GiEnJul.Models
 {
     public class Person
     {
@@ -7,7 +10,7 @@
         //RowKey
         public string PersonId { get; set; }
 
-        public string Wish { get; set; }
+        public IEnumerable<string> Wishes { get; set; }
         public int Age { get; set; }
         public int Months {  get; set; }
         public Gender Gender { get; set; }
@@ -15,7 +18,7 @@
 
         public string ToReadableString()
         {
-            return $"<strong>{GenderToString()} {Age} år:</strong> {(string.IsNullOrEmpty(Wish) ? "  Her du kan selv finne alderstilpasset gave" : Wish)} {(string.IsNullOrEmpty(Comment) ? " " : ", Kommentar til gave: "+Comment)}";
+            return $"<strong>{GenderToString()} {Age} år:</strong> {(!Wishes.Any() ? "  Her du kan selv finne alderstilpasset gave" : Wishes)} {(string.IsNullOrEmpty(Comment) ? " " : ", Kommentar til gave: "+Comment)}";
         }
 
         public string GetGenderAge()

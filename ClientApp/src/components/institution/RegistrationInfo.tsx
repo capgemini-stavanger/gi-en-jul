@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@material-ui/core";
 import FormInformationBox from "./FormInformationBox";
-import useStyles from "../Styles";
+import useStyles from "./Styles";
 
 const informationList: string[] = [
   "Før du melder inn en familie må familien ha sagt ja til å bli med, og du har all informasjon som trengs nedenfor.",
@@ -9,7 +9,7 @@ const informationList: string[] = [
   "Alderstilpasset gave betyr at giveren selv kan finne noe som passer til alderen.",
 ];
 
-const RegistrationInfoRemake = () => {
+const RegistrationInfo = () => {
   const classes = useStyles();
   return (
     <Grid container direction="column" spacing={5}>
@@ -35,4 +35,4 @@ const RegistrationInfoRemake = () => {
     </Grid>
   );
 };
-export default RegistrationInfoRemake;
+export default RegistrationInfo;

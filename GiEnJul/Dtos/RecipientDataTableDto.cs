@@ -25,7 +25,7 @@ namespace GiEnJul.Dtos
         public class PersonDataTableDto
         {
             public string PersonId { get; set; }
-            public string Wish { get; set; }
+            public IEnumerable<string> Wishes { get; set; }
             public int Age { get; set; }
             public Gender Gender { get; set; }
             public string Comment { get; set; }

@@ -69,9 +69,9 @@ namespace GiEnJul.Test.ControllerTests
         {
             var people = new List<Entities.Person>
             {
-                new Entities.Person("recipientid") { Wish = "leke", Age = 4, Gender = 2 },
+                new Entities.Person("recipientid") { Wishes = "leke", Age = 4, Gender = 2 },
                 new Entities.Person("recipientid") { Age = 47, Gender = 1 },
-                new Entities.Person("recipientid") { Wish = "sko", Age = 6, Gender = 2 }
+                new Entities.Person("recipientid") { Wishes = "sko", Age = 6, Gender = 2 }
             };
             var peopleTableBatchResult = people.Count;
 
@@ -89,7 +89,7 @@ namespace GiEnJul.Test.ControllerTests
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wishes = new[]{"wish"} } } }));
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
         }
 
@@ -104,7 +104,7 @@ namespace GiEnJul.Test.ControllerTests
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wishes = new[]{"wish"} } } }));
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockRecipientRepo.Verify(x => x.RecipientDoesExist(It.IsAny<string>()), Times.Once());
@@ -123,7 +123,7 @@ namespace GiEnJul.Test.ControllerTests
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Action & Assert
-            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } }));
+            await Assert.ThrowsAsync<Exception>(() => _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wishes = new[] { "wish" } } } }));
             mockEventRepo.Verify(x => x.GetActiveEventForLocationAsync(It.IsAny<string>()), Times.Once());
             mockRecipientRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Recipient>()), Times.Once());
             mockPersonRepo.Verify(x => x.InsertOrReplaceBatchAsync(It.IsAny<IEnumerable<Models.Person>>()), Times.Once());
@@ -141,7 +141,7 @@ namespace GiEnJul.Test.ControllerTests
             mockAutoIncrementRepo.Setup(x => x.GetNext(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("5");
 
             // Act
-            var result = await _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wish = "wish" } } });
+            var result = await _controller.PostAsync(new PostRecipientDto { ContactEmail = "mail@mail.no", ContactFullName = "con nam", ContactPhoneNumber = "90909090", Dessert = "dessert", Dinner = "dinner", Institution = "nav", Location = "Stavanger", Note = "", ReferenceId = "123", FamilyMembers = { new PostPersonDto { Age = 44, Gender = Models.Gender.Female, Wishes = new[] { "wish" } } } });
 
             //Assert
             Assert.IsType<ActionResult<(string, string)>>(result);

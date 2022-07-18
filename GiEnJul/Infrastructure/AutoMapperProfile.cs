@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using GiEnJul.Dtos;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace GiEnJul.Infrastructure
 {
@@ -19,13 +21,15 @@ namespace GiEnJul.Infrastructure
 
             CreateMap<Entities.Person, Models.Person>()
                 .ForMember(dest => dest.PersonId, opt => opt.MapFrom(src => src.RowKey))
-                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.PartitionKey));
+                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Wishes, opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<string>>(src.Wishes)));
 
             CreateMap<Models.Person, Entities.Person>()
                 .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.PersonId) ? Guid.NewGuid().ToString() : src.PersonId))
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.RecipientId))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
-                .ForMember(x => x.ETag, opt => opt.Ignore());
+                .ForMember(x => x.ETag, opt => opt.Ignore())
+                .ForMember(dest => dest.Wishes, opt => opt.MapFrom(src => JsonConvert.SerializeObject(src.Wishes)));
 
             CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Item1.HasConfirmedMatch))
@@ -67,8 +71,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.RecipientId))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Event))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RecipientId) ? Guid.NewGuid().ToString() : src.RecipientId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Event) ? $"{src.EventName}_{src.Location}" : src.Event))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.PersonCount));

@@ -12,7 +12,7 @@ namespace GiEnJul.Entities
         public Person(string recipientId) : base(recipientId, Guid.NewGuid().ToString())
         { }
 
-        public string Wish { get; set; }
+        public string Wishes { get; set; }
         public int Age { get; set; }
         public int Months { get; set; }
         // Following ISO/IEC 5218:2004 gender is stored as:
