@@ -38,9 +38,9 @@ namespace GiEnJul.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
+        public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
@@ -80,7 +80,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("names")]
-        public async Task<List<string>> GetAllNames()
+        public async Task<IEnumerable<string>> GetAllNames()
         {
             var entities = await _municipalityRepository.GetAll();
             var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
