@@ -15,7 +15,7 @@ namespace GiEnJul.Repositories
         Task<Entities.Municipality> DeleteEntry(Models.Municipality municipality);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
         Task<IEnumerable<Municipality>> GetAll();
-        Task<IEnumerable<Municipality>> GetAllActive();
+     //   Task<IEnumerable<Municipality>> GetAllActive();
       
     }
 

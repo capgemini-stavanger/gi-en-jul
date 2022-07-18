@@ -1,7 +1,6 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect, ChangeEvent } from "react";
-import MunicipalityInformation from "../Municipality/MunicipalityInformation";
 import KommuneInformation from "./KommuneInformation";
 
 interface IKommuneContainer {

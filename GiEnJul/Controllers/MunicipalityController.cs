@@ -52,7 +52,7 @@ namespace GiEnJul.Controllers
 
         [HttpPut]
         [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
+        public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
             if (!names.Where(x => x.RowKey == content.Name).Any())
