@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
-import { Categories, ICategories, ISizes, Sizes } from "./mockDatabase";
+import { Categories, ICategories } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
@@ -19,8 +19,6 @@ interface IWishProps {
   updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
-  updateSize: (newSizeData: string) => void;
-  updateComment: (newCommentData: string) => void;
 }
 
 const initState: { [data: string]: any } = {
@@ -31,6 +29,7 @@ const initState: { [data: string]: any } = {
   isClothes: false,
   isShoes: false,
   isGiftcard: false,
+  totalWish: "",
 };
 
 const ageAppropriateString = "Giver kjøper alderstilpasset gave";
@@ -40,8 +39,6 @@ const InstitutionWish: React.FC<IWishProps> = ({
   updateWish,
   deleteWish,
   wishIndex,
-  updateSize,
-  updateComment,
 }) => {
   const [state, setState] = useState({ ...initState });
 
@@ -54,22 +51,35 @@ const InstitutionWish: React.FC<IWishProps> = ({
     });
   };
 
+  //kan også brukes for lokasjon.
+  const getOnSizeInputChange =
+    (newSizeData: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setState((prev) => ({
+        ...prev,
+        ...prev.size,
+        [newSizeData]: e.target.value,
+      }));
+      state.totalWish = state.wishInput + "," + state.size;
+      updateWish(state.totalWish);
+      console.log("updateSize", state.totalWish);
+    };
+
+  const getOnCommentInputChange =
+    (newCommentData: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setState((prev) => ({
+        ...prev,
+        ...prev.comment,
+        [newCommentData]: e.target.value,
+      }));
+      state.totalWish = state.totalWish + "," + state.comment;
+      updateWish(state.totalWish);
+      console.log("updatecomment", state.totalWish); //denne overskriver
+    };
+
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
     updateWish(newInput);
     getSetter("ageWish")(e.target.checked);
-  };
-
-  const onSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    updateSize(newInput);
-    getSetter("size")(newInput);
-  };
-
-  const onCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    updateComment(newInput);
-    getSetter("comment")(newInput);
   };
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -125,15 +135,12 @@ const InstitutionWish: React.FC<IWishProps> = ({
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          name="size"
+          onChange={getOnSizeInputChange("size")}
+          value={state.size}
+          name="csize"
           id="størrelse"
           label="Størrelse"
-          options={Sizes.map((s: ISizes) => {
-            return { value: s.type, text: s.type };
-          })}
           // disabled={state.ageWish} denne skal være disabled hver gang kategorien ikke er klær
-          value={state.size}
-          onChange={(e) => onSizeInputChange(e)}
           className={classes.smallWidth}
         ></InputValidator>
       </Grid>
@@ -142,14 +149,16 @@ const InstitutionWish: React.FC<IWishProps> = ({
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          name="comment"
+          onChange={getOnCommentInputChange("comment")}
+          value={state.comment}
+          name="ccomment"
           id="kommentar"
           label="Kommentar"
-          value={state.comment}
-          onChange={(e) => onCommentInputChange(e)}
+          // disabled={state.ageWish} denne skal være disabled hver gang kategorien ikke er klær
           className={classes.mediumWidth}
         ></InputValidator>
       </Grid>
+
       <IconButton color="primary" onClick={deleteWish}>
         <SvgIcon component={ClearIcon} />
       </IconButton>
