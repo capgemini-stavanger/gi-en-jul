@@ -54,8 +54,9 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
-            var names = await _municipalityRepository.GetAll();
-            if (!names.Where(x => x.RowKey == content.Name).Any())
+            var entities = await _municipalityRepository.GetAll();
+            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
@@ -73,14 +74,8 @@ namespace GiEnJul.Controllers
         public async Task<List<string>> getActiveNames()
         {
             var all = await _municipalityRepository.GetAll();
-            var active = new List<string>();
-            foreach (var municipality in all)
-            {
-                if (municipality.IsActive)
-                {
-                    active.Add(municipality.RowKey);
-                }
-            }
+            var municipalities = _mapper.Map<List<Models.Municipality>>(all);
+            var active = municipalities.Where(m => m.IsActive).Select(m => m.Name).ToList();
             return active;
         }
 
@@ -88,11 +83,8 @@ namespace GiEnJul.Controllers
         public async Task<List<string>> GetAllNames()
         {
             var entities = await _municipalityRepository.GetAll();
-            var names = new List<string>();
-            foreach(var entity in entities)
-            {
-                names.Add(entity.RowKey);
-            }
+            var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            var names = municipalities.Select(m => m.Name);
             return names;
         } 
     }
