@@ -54,8 +54,9 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContent([FromBody] PostMunicipalityDto content)
         {
-            var names = await _municipalityRepository.GetAll();
-            if (!names.Where(x => x.RowKey == content.Name).Any())
+            var entities = await _municipalityRepository.GetAll();
+            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
