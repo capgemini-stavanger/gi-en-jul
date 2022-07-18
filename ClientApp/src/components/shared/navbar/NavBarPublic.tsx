@@ -1,26 +1,32 @@
 import {
-  AppBar,
   Button,
   IconButton,
+  Tab,
+  Box,
+  Grid,
+  Typography,
   Toolbar,
+  AppBar,
   Drawer,
   List,
   ListItem,
-  Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Link as Scroll } from "react-scroll";
+import { isMobile } from "common/functions/IsMobile";
 import logo from "styling/img/logo_green.svg";
 import useStyles from "components/shared/Styles";
-import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { Navbar, NavbarBrand } from "reactstrap";
+import { TabContext, TabList } from "@material-ui/lab";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const NavBarPublic = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [tab] = useState<string>("1");
   const classes = useStyles();
   const history = useHistory();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(() => event.currentTarget);
   };
@@ -28,21 +34,7 @@ const NavBarPublic = () => {
     setAnchorEl(() => null);
   };
 
-  if (window.location.pathname === "/bli-giver") {
-    return (
-      <>
-        <AppBar className={classes.navContainer}>
-          <Toolbar className={classes.toolBar}>
-            <IconButton>
-              <Link to="/">
-                <img className={classes.smallLogo} src={logo}></img>
-              </Link>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      </>
-    );
-  } else {
+  if (isMobile()) {
     return (
       <>
         <AppBar className={classes.navContainer}>
@@ -67,18 +59,6 @@ const NavBarPublic = () => {
                   </Link>
                 </ListItem>
                 <ListItem>
-                  <Scroll onClick={handleClose} to="how" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Hvordan fungerer gi en jul?
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="questions" smooth={true}>
-                    <Typography className={classes.drawerContent}>Ofte stilte spørsmål</Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
                   <Link
                     to="bedrift"
                     style={{ textDecoration: "none" }}
@@ -88,11 +68,6 @@ const NavBarPublic = () => {
                   >
                     <Typography className={classes.drawerContent}>For bedrifter</Typography>
                   </Link>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="contact" smooth={true}>
-                    <Typography className={classes.drawerContent}>Kontakt</Typography>
-                  </Scroll>
                 </ListItem>
                 <ListItem>
                   <Link
@@ -130,6 +105,98 @@ const NavBarPublic = () => {
             </Button>
           </Toolbar>
         </AppBar>
+      </>
+    );
+  } else if (window.location.pathname === "/bli-giver") {
+    return (
+      <>
+        <AppBar className={classes.navContainer}>
+          <Toolbar className={classes.toolBar}>
+            <IconButton>
+              <Link to="/">
+                <img className={classes.smallLogo} src={logo}></img>
+              </Link>
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Box className={classes.navbarBackground}>
+          <Navbar className={classes.navContainer}>
+            <NavbarBrand className={classes.toolBar}>
+              <TabContext value={tab}>
+                <TabList centered className={classes.toolBar}>
+                  <Grid container justifyContent="center" direction="row" spacing={10}>
+                    <Grid item>
+                      <IconButton
+                        onClick={() => {
+                          history.push("/");
+                        }}
+                      >
+                        <img className={classes.smallLogo} src={logo}></img>
+                      </IconButton>
+                    </Grid>
+
+                    <Grid item>
+                      <Tab
+                        onClick={() => {
+                          history.push("/");
+                        }}
+                        className={classes.drawerContent}
+                        label="Hjem"
+                      ></Tab>
+                    </Grid>
+
+                    <Grid item>
+                      <Tab
+                        onClick={() => {
+                          history.push("/bedrift");
+                        }}
+                        className={classes.drawerContent}
+                        label="For bedrifter"
+                      ></Tab>
+                    </Grid>
+
+                    <Grid item>
+                      <Tab
+                        onClick={() => {
+                          history.push("/startJul");
+                        }}
+                        className={classes.drawerContent}
+                        label="Start Gi en jul i din kommune"
+                      ></Tab>
+                    </Grid>
+
+                    <Grid item>
+                      <Tab
+                        onClick={() => {
+                          history.push("kommune");
+                        }}
+                        className={classes.drawerContent}
+                        label="Kommuner"
+                      ></Tab>
+                    </Grid>
+                  </Grid>
+                </TabList>
+              </TabContext>
+            </NavbarBrand>
+          </Navbar>
+          <Grid item>
+            <Box alignItems={"right"}>
+              <Button
+                size="large"
+                className={classes.giverButton}
+                endIcon={<ArrowForwardIos />}
+                onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+              >
+                Bli giver
+              </Button>
+            </Box>
+          </Grid>
+        </Box>
       </>
     );
   }

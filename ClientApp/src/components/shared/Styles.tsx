@@ -32,17 +32,20 @@ export default () =>
     },
     drawerContent: {
       cursor: "pointer",
-      fontSize: "120%",
-      fontWeight: 600,
-      color: theme.palette.primary.light,
+      fontSize: "75%",
+      fontWeight: 800,
+      color: "black",
       "&:hover": {
         color: theme.palette.primary.dark,
-        fontWeight: 700,
+        fontWeight: 1000,
       },
     },
     navContainer: {
       backgroundColor: "rgba(0, 0, 0, 0)",
+      justifyContent: "space-between",
       position: "absolute",
+      top: "-5%",
+      marginLeft: "19%",
       border: "none",
       boxShadow: "none",
       padding: theme.spacing(2),
@@ -60,6 +63,19 @@ export default () =>
     navIcon: {
       color: theme.palette.primary.light,
       marginTop: theme.spacing(-1),
+    },
+    giverButton: {
+      backgroundColor: theme.palette.primary.main,
+      position: "absolute",
+      color: "white",
+      top: "2%",
+      right: "5%",
+      marginRight: "5%",
+      textTransform: "none",
+      padding: theme.spacing(1.5, 2, 1.5, 2),
+      "&:hover": {
+        backgroundColor: theme.palette.primary.dark,
+      },
     },
     buttonNext: {
       position: "inherit",
@@ -80,5 +96,8 @@ export default () =>
     },
     confirmationBoxButton: {
       paddingLeft: "10px",
+    },
+    navbarBackground: {
+      color: "white",
     },
   }))();
