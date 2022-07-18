@@ -11,6 +11,7 @@ import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Circle from "components/admin/dashboard-all/Circle";
 
 type Props = {
   giverData: GiverType;
@@ -48,6 +49,16 @@ const DataCard: React.FC<Props> = ({
       >
         <AccordionSummary>
           <Typography>{giverData.fullName}</Typography>
+          {giverData.isSuggestedMatch ? (
+            //Styling should be in a seperate file
+            !giverData.hasConfirmedMatch ? (
+              <Circle color="yellow" />
+            ) : (
+              <Circle color="green" />
+            )
+          ) : (
+            <Circle color="red" />
+          )}
           {personExpanded ? (
             <Button onClick={() => setPersonExpanded(false)}>
               <ExpandLessIcon />

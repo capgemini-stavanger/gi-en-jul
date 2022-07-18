@@ -24,11 +24,6 @@ const DataTable: React.FC<Props> = ({
 
   const [testFilter, setTestFilter] = useState<GiverType[]>([]);
 
-  // INVESTIGATE THIS SOLUTION
-  useEffect(() => {
-    setTestFilter([...giverData]);
-  }, [giverData]);
-
   // INVESTIGATE THE INDEX SOLUTION -> Once filtered, the index does not correspond entierly (?)
   return (
     <>
@@ -37,13 +32,13 @@ const DataTable: React.FC<Props> = ({
         <Button onClick={() => setTestFilter(testFilter.slice(5, 20))}> FILTER </Button>
         <Virtuoso
           style={{ height: "450px" }}
-          totalCount={testFilter.length}
+          totalCount={giverData.length}
           itemContent={(index) => (
             <DataCard
-              giverData={testFilter[index]}
+              giverData={giverData[index]}
               giverIndex={index}
               selectedGiverIndex={selectedGiverIndex}
-              setSelectedGiver={() => setSelectedGiver(testFilter[index])}
+              setSelectedGiver={() => setSelectedGiver(giverData[index])}
               setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
               giverTable={giverTable}
             />
