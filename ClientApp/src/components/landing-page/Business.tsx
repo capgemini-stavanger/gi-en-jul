@@ -6,6 +6,7 @@ import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
+import { Link, useHistory } from "react-router-dom";
 
 interface businessInfo {
   question: string;
@@ -27,6 +28,7 @@ const Business = () => {
   const classes = useStyles();
   const apiservice = new ApiService();
   const [businessInfo, setBedriftInfo] = useState<businessInfo>(initBusinessInfo);
+  const history = useHistory();
 
   useEffect(() => {
     getBedriftInformation();
@@ -53,6 +55,18 @@ const Business = () => {
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <Typography className={classes.sectionContainer}>{parse(businessInfo.info)}</Typography>
+            <Link
+              to="/bli-giver"
+              onClick={() => {
+                history.push("/");
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              {" "}
+              <Typography>
+                Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
+              </Typography>
+            </Link>
             <img className={classes.familyImage} src={family}></img>
           </Grid>
           <Grid item>
