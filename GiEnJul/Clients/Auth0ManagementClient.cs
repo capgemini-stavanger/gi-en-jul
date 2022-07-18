@@ -2,6 +2,7 @@
 using Auth0.ManagementApi.Models;
 using GiEnJul.Dtos;
 using GiEnJul.Infrastructure;
+using GiEnJul.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -79,8 +80,10 @@ namespace GiEnJul.Clients
             var us = await _managementApiClient.Users.GetAsync(userId);
 
             var userMetadata = (JObject)us.UserMetadata;
-            var metadataDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(userMetadata.ToString());
+            var appMetadata = (JObject)us.AppMetadata;
+            var metadataDict = userMetadata.ToObject<Dictionary<string, string>>();
 
+            metadataDict.CombineWith(appMetadata.ToObject<Dictionary<string, string>>(), CombineStrategy.takeFirst);
             _metadataCache.Add(userId, metadataDict, DateTime.Now.AddMinutes(10));
             return metadataDict;
         }

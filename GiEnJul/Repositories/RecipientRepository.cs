@@ -18,6 +18,7 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution);
+        Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location);
         Task<bool> RecipientDoesExist(string referenceId);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
@@ -98,6 +99,14 @@ namespace GiEnJul.Repositories
         {
             var filter = $"Institution eq '{institution}'";
             var recipients = await GetAllByQueryAsync(filter);
+
+            return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location)
+        {
+            var query = $"Institution eq '{institution}' and PartitionKey eq '{eventName}_{location}'";
+            var recipients = await GetAllByQueryAsync(query);
 
             return _mapper.Map<List<Models.Recipient>>(recipients);
         }

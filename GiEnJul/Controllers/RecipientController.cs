@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using ClosedXML.Extensions;
 using GiEnJul.Auth;
+using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Helpers;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
@@ -26,6 +28,7 @@ namespace GiEnJul.Controllers
         private readonly IAutoIncrementRepository _autoIncrementRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
+        private readonly IAuth0ManagementClient _managementClient;
 
         public RecipientController(
             IRecipientRepository recipientRepository,
@@ -33,7 +36,8 @@ namespace GiEnJul.Controllers
             IEventRepository eventRepository,
             IAutoIncrementRepository autoIncrementRepository,
             ILogger log,
-            IMapper mapper
+            IMapper mapper,
+            IAuth0ManagementClient managementClient
             )
         {
             _recipientRepository = recipientRepository;
@@ -42,6 +46,7 @@ namespace GiEnJul.Controllers
             _autoIncrementRepository = autoIncrementRepository;
             _log = log;
             _mapper = mapper;
+            _managementClient = managementClient;
         }
 
         [HttpPost]
@@ -86,7 +91,11 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByInstitutionAsync([FromQuery] string institution)
         {
-            var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
+            var metadata = await _managementClient.GetUserMetadata(ClaimsHelper.GetUserId(User));
+            var location = metadata["location"];
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+
+            var recipients = await _recipientRepository.GetRecipientsByInstitutionAndEventAsync(institution, eventName, location);
             var recipientIds = recipients.Select(r => r.RecipientId);
             var persons = await _personRepository.GetAllByRecipientIds(recipientIds);
 
@@ -97,9 +106,15 @@ namespace GiEnJul.Controllers
 
         [HttpGet("excel")]
         [Authorize(Policy = Policy.ReadRecipient)]
-        public async Task<FileStreamResult> GetExcelListForInstitutionAsync([FromQuery] string institution)
+        public async Task<FileStreamResult> GetExcelListForInstitutionAsync()
         {
-            var recipients = await _recipientRepository.GetRecipientsByInstitutionAsync(institution);
+            var metadata = await _managementClient.GetUserMetadata(ClaimsHelper.GetUserId(User));
+            var institution = metadata["institution"];
+            var location = metadata["location"];
+
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
+
+            var recipients = await _recipientRepository.GetRecipientsByInstitutionAndEventAsync(institution, eventName, location);
             if (!recipients.Any())
                 throw new Exception("No recipients found");
 
