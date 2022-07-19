@@ -81,7 +81,7 @@ const GiverDataTable: React.FC<Props> = ({
 
   return (
     <>
-      <Grid container direction="row" xs={12}>
+      <Grid container direction="row">
         <Grid item xs={2}>
           <Typography variant="h5">Givere</Typography>
         </Grid>

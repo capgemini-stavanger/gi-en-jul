@@ -141,6 +141,36 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  borderInCards: {
+    borderTop: "1px solid rgba(0, 0, 0, 0.15)",
+  },
+  underlineText: {
+    textDecoration: "underline",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+  commentBox: {
+    display: "inline-block",
+    right: "2%",
+    bottom: "2%",
+  },
+  commentField: { width: "250px" },
+  commentBoxButton: {
+    position: "sticky",
+    right: "2%",
+    bottom: "2%",
+    borderRadius: "0.5em",
+    height: "1.6em",
+    width: "1em",
+    marginBottom: "0.3em",
+    marginRight: "0.3em",
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 export default useStyles;

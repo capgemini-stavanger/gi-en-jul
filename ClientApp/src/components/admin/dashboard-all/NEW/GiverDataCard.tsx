@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Grid,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -18,6 +19,8 @@ import {
   CheckCircleOutline,
   CancelOutlined,
   PeopleOutline,
+  Phone,
+  LinkOutlined,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 
@@ -39,6 +42,7 @@ const GiverDataCard: React.FC<Props> = ({
   const classes = useStyles();
 
   const [personExpanded, setPersonExpanded] = useState(false);
+  const [comment, setComment] = useState("");
 
   return (
     <>
@@ -53,8 +57,8 @@ const GiverDataCard: React.FC<Props> = ({
           setSelectedGiverIndex();
         }}
       >
-        <AccordionSummary>
-          <Grid container xs={12} justifyContent="space-between">
+        <AccordionSummary style={{ height: "73px" }}>
+          <Grid container justifyContent="space-between">
             <Grid item xs={2}>
               <Typography>{giverData.fullName}</Typography>
             </Grid>
@@ -64,7 +68,7 @@ const GiverDataCard: React.FC<Props> = ({
                 {formatFamily(giverData.maxReceivers)}
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               {giverData.isSuggestedMatch ? (
                 !giverData.hasConfirmedMatch ? (
                   <Typography>
@@ -84,7 +88,7 @@ const GiverDataCard: React.FC<Props> = ({
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
               {
                 !giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
               }
@@ -103,10 +107,59 @@ const GiverDataCard: React.FC<Props> = ({
           </Grid>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
+          <Grid container direction="column" spacing={2}>
+            <Grid item style={{ paddingTop: "0px", paddingBottom: "40px" }}>
+              <Typography>{giverData.phoneNumber}</Typography>
+              <Typography>{giverData.email}</Typography>
+              <Button style={{ padding: "0" }} className={classes.underlineText}>
+                Sendt epost
+              </Button>
+            </Grid>
+            <Grid item style={{ paddingBottom: "10px" }} className={classes.borderInCards}>
+              <Grid container direction="row" spacing={5}>
+                <Grid item>
+                  <Grid container direction="column">
+                    <Grid item>
+                      <Typography>
+                        <LinkOutlined />
+                        <Button className={classes.underlineText}>Godta kobling</Button>
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography>
+                        <LinkOutlined />
+                        <Button className={classes.underlineText}>
+                          Koble fra giver og familie
+                        </Button>
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography>
+                        <LinkOutlined />
+                        <Button className={classes.underlineText}>Slett giver</Button>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.commentBox}>
+                    <TextField
+                      className={classes.commentField}
+                      id="outlined-multiline-static"
+                      variant="outlined"
+                      label="Kommentar"
+                      multiline
+                      rows={4}
+                      value={comment}
+                    />
+                    <Button variant="contained" className={classes.commentBoxButton}>
+                      Lagre
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         </AccordionDetails>
       </Accordion>
     </>
