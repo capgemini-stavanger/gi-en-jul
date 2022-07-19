@@ -57,13 +57,13 @@ const GiverDataCard: React.FC<Props> = ({
           setSelectedGiverIndex();
         }}
       >
-        <AccordionSummary style={{ height: "73px" }}>
+        <AccordionSummary className={classes.accordionSummary}>
           <Grid container justifyContent="space-between">
             <Grid item xs={2}>
-              <Typography>{giverData.fullName}</Typography>
+              <Typography className={classes.boldText}>{giverData.fullName}</Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography>
+              <Typography className={classes.boldText}>
                 <PeopleOutline />
                 {formatFamily(giverData.maxReceivers)}
               </Typography>
@@ -71,18 +71,18 @@ const GiverDataCard: React.FC<Props> = ({
             <Grid item xs={3}>
               {giverData.isSuggestedMatch ? (
                 !giverData.hasConfirmedMatch ? (
-                  <Typography>
+                  <Typography className={classes.boldText}>
                     <ErrorOutlineOutlined style={{ color: "yellow" }} />
                     Foreslått
                   </Typography>
                 ) : (
-                  <Typography>
+                  <Typography className={classes.boldText}>
                     <CheckCircleOutline style={{ color: "green" }} />
                     Koblet
                   </Typography>
                 )
               ) : (
-                <Typography>
+                <Typography className={classes.boldText}>
                   <CancelOutlined style={{ color: "red" }} />
                   Ikke koblet
                 </Typography>
@@ -115,7 +115,7 @@ const GiverDataCard: React.FC<Props> = ({
                 Sendt epost
               </Button>
             </Grid>
-            <Grid item style={{ paddingBottom: "10px" }} className={classes.borderInCards}>
+            <Grid item style={{ paddingTop: "40px" }} className={classes.borderInCards}>
               <Grid container direction="row" spacing={10}>
                 <Grid item xs={6}>
                   <Grid container direction="column">

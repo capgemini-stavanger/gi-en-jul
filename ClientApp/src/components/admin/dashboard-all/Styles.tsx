@@ -134,7 +134,7 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: "#f4f5f4",
   },
   accordionSelected: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.secondary.main,
   },
   tableHeadingSpace: {
     marginBottom: "1em",
@@ -152,6 +152,9 @@ export const useStyles = makeStyles((theme) => ({
     "&:hover": {
       textDecoration: "underline",
     },
+  },
+  boldText: {
+    fontWeight: "bold",
   },
   commentBox: {
     paddingTop: "1em",
@@ -182,6 +185,13 @@ export const useStyles = makeStyles((theme) => ({
   inputSmall: {
     width: "100px",
     height: "40px",
+  },
+  accordionSummary: {
+    height: "73px",
+  },
+  personTable: {
+    borderBottom: "1px solid rgba(0, 0, 0, 0.15)",
+    padding: "0.5em",
   },
 }));
 
