@@ -29,7 +29,7 @@ const initState: { [data: string]: any } = {
   isClothes: false,
   isShoes: false,
   isGiftcard: false,
-  totalWish: "",
+  totalWish: [],
 };
 
 const ageAppropriateString = "Giver kjøper alderstilpasset gave";
@@ -51,30 +51,17 @@ const InstitutionWish: React.FC<IWishProps> = ({
     });
   };
 
-  //kan også brukes for lokasjon.
-  const getOnSizeInputChange =
-    (newSizeData: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setState((prev) => ({
-        ...prev,
-        ...prev.size,
-        [newSizeData]: e.target.value,
-      }));
-      state.totalWish = state.wishInput + "," + state.size;
-      updateWish(state.totalWish);
-      console.log("updateSize", state.totalWish);
-    };
+  const getOnSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    state.totalWish[1] = e.target.value;
+    getSetter("size")(state.totalWish[1]);
+    updateWish(state.totalWish.toString());
+  };
 
-  const getOnCommentInputChange =
-    (newCommentData: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      setState((prev) => ({
-        ...prev,
-        ...prev.comment,
-        [newCommentData]: e.target.value,
-      }));
-      state.totalWish = state.totalWish + "," + state.comment;
-      updateWish(state.totalWish);
-      console.log("updatecomment", state.totalWish); //denne overskriver
-    };
+  const getOnCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    state.totalWish[2] = e.target.value;
+    getSetter("comment")(state.totalWish[2]);
+    updateWish(state.totalWish.toString());
+  };
 
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
@@ -84,12 +71,10 @@ const InstitutionWish: React.FC<IWishProps> = ({
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
+    state.totalWish[0] = newInput;
     updateWish(newInput);
     getSetter("wishInput")(newInput);
   };
-
-  // As we get new input fields, we update the wishInput by adding the strings together
-  // Example; "Sko" could be paired with "Størrelse: 42", like "Sko, Størrelse: 42"
 
   return (
     <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>
@@ -119,7 +104,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
             validators={[isNotNull]}
             name="wish"
             type="select"
-            label="Gaveønske"
+            label="Kategori"
             options={Categories.map((o: ICategories) => {
               return { value: o.type, text: o.type };
             })}
@@ -132,29 +117,30 @@ const InstitutionWish: React.FC<IWishProps> = ({
       </Grid>
 
       <Grid item>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
-          onChange={getOnSizeInputChange("size")}
-          value={state.size}
-          name="csize"
-          id="størrelse"
-          label="Størrelse"
-          // disabled={state.ageWish} denne skal være disabled hver gang kategorien ikke er klær
-          className={classes.smallWidth}
-        ></InputValidator>
+        {state.isClothes ||
+          (state.isShoes && (
+            <InputValidator
+              viewErrorTrigger={viewErrorTrigger}
+              validators={[isNotNull]}
+              onChange={(e) => getOnSizeInputChange(e)}
+              value={state.size}
+              name="csize"
+              id="størrelse"
+              label="Størrelse"
+              className={classes.smallWidth}
+            ></InputValidator>
+          ))}
       </Grid>
 
       <Grid item>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
-          onChange={getOnCommentInputChange("comment")}
+          onChange={(e) => getOnCommentInputChange(e)}
           value={state.comment}
           name="ccomment"
           id="kommentar"
           label="Kommentar"
-          // disabled={state.ageWish} denne skal være disabled hver gang kategorien ikke er klær
           className={classes.mediumWidth}
         ></InputValidator>
       </Grid>

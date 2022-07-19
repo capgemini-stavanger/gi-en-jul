@@ -1,6 +1,6 @@
 export interface ICategories {
   type: string;
-  sub1: string;
+  sub1?: string;
 }
 
 export interface ISizes {
@@ -21,17 +21,6 @@ export const Categories: ICategories[] = [
   { type: "Klær", sub1: "kjole" },
   { type: "Sko", sub1: "støvler" },
   { type: "Gavekort", sub1: "sentrum" },
+  { type: "Leker" },
   { type: "Annet", sub1: "" },
-];
-
-export const Sizes: ISizes[] = [
-  { type: "XXXS" },
-  { type: "XXS" },
-  { type: "XS", s1: "XS", s2: "S", s3: "M", s4: "L", s5: "XL" },
-  { type: "S", s1: "35", s2: "36", s3: "37", s4: "38", s5: "39", s6: "40" },
-  { type: "M" },
-  { type: "L" },
-  { type: "XL" },
-  { type: "XXL" },
-  { type: "3XL" },
 ];
