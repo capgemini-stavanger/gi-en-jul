@@ -5,14 +5,12 @@ import EventInformation from "components/superadmin/Events/EventInformation";
 import {
   EventContent,
   EventContentDto,
-  EventContentInit,
   EventContent2Dto,
   Dto2EventContent,
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddIcon from "@material-ui/icons/Add";
-import useStyles from "components/register-as-giver/Styles";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
 import ConfirmationBox from "components/shared/confirmationBox";
@@ -22,7 +20,6 @@ interface Props {
 }
 
 const EventsContainer: React.FC<Props> = ({ accessToken }) => {
-  const classes = useStyles();
   const [events, setEvents] = useState(new Map<string, EventContent>());
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
@@ -50,12 +47,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     events.forEach((event, id) => {
       existingCombinations.push(id);
     });
-    console.log("checking if combinattion: ");
-    console.log(combination);
-    console.log("already exists in the list:");
-    console.log(existingCombinations);
     const exists: boolean = existingCombinations.includes(combination);
-    console.log(exists);
     return exists;
   };
   const handleConfirmationResponse = (response: boolean) => {
@@ -189,7 +181,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   };
   const buildBody = () => {
     const eventsList: EventContent[] = [];
-    events.forEach((event, id) => eventsList.push(event));
+    events.forEach((event) => eventsList.push(event));
     const body = eventsList
       .filter((e) => e.eventName === selectedEventName)
       .map((event) => {

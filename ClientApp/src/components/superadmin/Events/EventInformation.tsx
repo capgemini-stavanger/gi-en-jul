@@ -1,6 +1,6 @@
 import { Button, Grid } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useStyles from "components/superadmin/Events/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
 import ConfirmationBox from "components/shared/confirmationBox";
@@ -51,7 +51,7 @@ const getValidators = (field: string) => {
       return [EV.emptyString, EV.notAPhoneNumber];
   }
   return [
-    (s: string) => {
+    () => {
       return true;
     },
   ];
@@ -98,12 +98,10 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
   const [formValues, setFormValues] = useState<EventContent>(event);
   const [openSaveConfirmation, setOpenSaveConfirmation] = useState<boolean>(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState<boolean>(false);
-  const [deleteConfirmationText, setDeleteConfirmationText] = useState<string>("");
   const [openInformation, setOpenInformation] = useState<boolean>(false);
   const [validEventState, setValidEventState] = useState({
     ...initValidEventState,
   });
-  const [allFieldsValid, setAllFieldsValid] = useState<boolean>(false);
   const everythingValid = () => {
     return Object.values(validEventState).every((value) => {
       return value === true;
@@ -174,7 +172,6 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
     </Button>
   );
   const handleDeleteClick = () => {
-    setDeleteConfirmationText("Er du sikker på at du ønsker å slette dette eventet?");
     setOpenDeleteConfirmation(true);
   };
   const deleteButton = (

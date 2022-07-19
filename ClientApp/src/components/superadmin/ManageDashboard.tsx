@@ -56,6 +56,9 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
               <MunicipalityContainer accessToken={accessToken} />
             </Grid>
             <Grid item>
+              <Typography>Add-Users Placeholder</Typography>
+            </Grid>
+            <Grid item>
               <EventsContainer accessToken={accessToken} />
             </Grid>
           </Grid>
