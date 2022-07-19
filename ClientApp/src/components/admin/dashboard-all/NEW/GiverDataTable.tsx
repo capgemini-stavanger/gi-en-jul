@@ -157,14 +157,14 @@ const GiverDataTable: React.FC<Props> = ({
       <Divider />
 
       <Virtuoso
-        totalCount={giverData.length}
+        totalCount={allFilters(giverData).length}
         style={{ height: 500 }}
         itemContent={(index) => (
           <GiverDataCard
-            giverData={giverData[index]}
+            giverData={allFilters(giverData)[index]}
             giverIndex={index}
             selectedGiverIndex={selectedGiverIndex}
-            setSelectedGiver={() => setSelectedGiver(giverData[index])}
+            setSelectedGiver={() => setSelectedGiver(allFilters(giverData)[index])}
             setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
           />
         )}

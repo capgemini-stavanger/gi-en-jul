@@ -1,16 +1,27 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { SelectedConnectionType } from "components/shared/Types";
 import useStyles from "../Styles";
 import { PeopleOutline } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
+import ConfirmationBox from "components/shared/confirmationBox";
 
 type IStatistics = {
   connection: SelectedConnectionType;
+  connectGiverRecipient: () => void;
 };
 
-const OverviewConnection: React.FC<IStatistics> = ({ connection }) => {
+const OverviewConnection: React.FC<IStatistics> = ({ connection, connectGiverRecipient }) => {
   const classes = useStyles();
+
+  const [openConfirmBox, setOpenConfirmBox] = useState(false);
+
+  const handleConfirmation = (response: boolean) => {
+    if (response) {
+      connectGiverRecipient();
+      setOpenConfirmBox(false);
+    }
+  };
 
   return (
     <Grid container direction="row" alignItems="center">
@@ -39,10 +50,20 @@ const OverviewConnection: React.FC<IStatistics> = ({ connection }) => {
             variant="contained"
             color="primary"
             disabled={!connection.giver || !connection.recipient}
-            onClick={() => console.log("CLICK")}
+            onClick={() => {
+              setOpenConfirmBox(true);
+            }}
           >
             <Typography>Koble sammen</Typography>
           </Button>
+          <ConfirmationBox
+            open={openConfirmBox}
+            text={"Er du sikker på at du vil koble sammen giver og familie?"}
+            handleClose={() => {
+              setOpenConfirmBox(false);
+            }}
+            handleResponse={handleConfirmation}
+          />
         </Box>
       </Grid>
       <Grid item xs={4}>

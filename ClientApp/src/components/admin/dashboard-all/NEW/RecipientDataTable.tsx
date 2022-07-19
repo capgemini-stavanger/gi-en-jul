@@ -38,22 +38,29 @@ const RecipientDataTable: React.FC<Props> = ({
   const [familySize, setFamilySize] = useState(-1);
   const [color, setColor] = useState("alle");
 
-  const searchFilter = (input: GiverType[]) => {
+  const searchFilter = (input: RecipientType[]) => {
     return input.filter(
       (input) =>
-        input.fullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.email?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.phoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1
+        input.contactEmail?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.contactFullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.contactPhoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.institution?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.familyId.toString()?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
-  const familyFilter = (input: GiverType[]) => {
+  const rounUpFamilyMembers = (famSize: number) => {
+    const matchFamilySize = FAMILY_SIZES.find((famObj) => famObj.value >= famSize)?.value;
+    return matchFamilySize;
+  };
+  const familyFilter = (input: RecipientType[]) => {
     if (familySize == -1) {
       return input; // Unfiltered
     } else {
-      return input.filter((input) => input.maxReceivers == familySize);
+      return input.filter((input) => rounUpFamilyMembers(input.familyMembers.length) == familySize);
     }
   };
-  const colorFilter = (input: GiverType[]) => {
+  const colorFilter = (input: RecipientType[]) => {
     if (color == "Rød") {
       return input.filter((input) => !input.isSuggestedMatch && !input.hasConfirmedMatch);
     } else if (color == "Gul") {
@@ -65,7 +72,7 @@ const RecipientDataTable: React.FC<Props> = ({
     }
   };
 
-  const allFilters = (input: GiverType[]) => {
+  const allFilters = (input: RecipientType[]) => {
     let filteredInput = input;
     filteredInput = searchFilter(filteredInput);
     filteredInput = familyFilter(filteredInput);
@@ -156,14 +163,14 @@ const RecipientDataTable: React.FC<Props> = ({
       <Divider />
 
       <Virtuoso
-        totalCount={recipientData.length}
+        totalCount={allFilters(recipientData).length}
         style={{ height: 500 }}
         itemContent={(index) => (
           <RecipientDataCard
-            recipientData={recipientData[index]}
+            recipientData={allFilters(recipientData)[index]}
             recipientIndex={index}
             selectedRecipientIndex={selectedRecipientIndex}
-            setSelectedRecipient={() => setSelectedRecipient(recipientData[index])}
+            setSelectedRecipient={() => setSelectedRecipient(allFilters(recipientData)[index])}
             setSelectedRecipientIndex={() => setSelectedRecipientIndex(index)}
           />
         )}

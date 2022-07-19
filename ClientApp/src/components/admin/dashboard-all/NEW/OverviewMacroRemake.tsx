@@ -8,6 +8,7 @@ import RecipientDataTable from "./RecipientDataTable";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import OverviewStatistics from "./OverviewStatistics";
 import OverviewConnection from "./OverviewConnection";
+import RecipientDataCard from "./RecipientDataCard";
 
 interface IOverviewMacro {
   location: string;
@@ -57,6 +58,12 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     fetchRecipients();
     fetchGivers();
   }, []);
+
+  const refreshData = () => {
+    fetchGivers();
+    fetchRecipients();
+    setSelectedConnection(initState);
+  };
 
   const handleVisualSelection = (index: number, suggestionTable: boolean) => {
     // Need to reset the visual selection of the other table, since they have seperate indexes
@@ -142,11 +149,14 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               <Box>
                 <Typography variant="h4">Dashboard</Typography>
                 <Typography>Finn, søk og koble sammen familier og givere</Typography>
-                <Button onClick={() => console.log(selectedConnection)}> CHECK </Button>
+                <Button onClick={() => console.log(suggestionData)}> CHECK </Button>
               </Box>
               <Box className={classes.dashboardConnectBox}>
                 <Box className={classes.dashBoardConnection}>
-                  <OverviewConnection connection={selectedConnection} />
+                  <OverviewConnection
+                    connection={selectedConnection}
+                    connectGiverRecipient={connectGiverRecipient}
+                  />
                 </Box>
               </Box>
             </Box>
@@ -170,18 +180,19 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                 </Box>
               </Box>
             </Box>
-            {/*
             {suggestionData.length > 0 && (
               <Box className={classes.suggestionData}>
-                <RecipientDataTable
-                  recipientData={suggestionData}
-                  selectedRecipientIndex={selectedSuggestionIndex}
-                  setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
-                  setSelectedRecipientIndex={(index) => handleVisualSelection(index, true)}
-                />
+                {suggestionData.map((suggestion, index) => {
+                  <RecipientDataCard
+                    recipientData={suggestion}
+                    recipientIndex={index}
+                    selectedRecipientIndex={selectedSuggestionIndex}
+                    setSelectedRecipient={() => handleSelectedRecipient(suggestion)}
+                    setSelectedRecipientIndex={() => handleVisualSelection(index, false)}
+                  />;
+                })}
               </Box>
             )}
-            */}
           </Box>
         </Container>
       </Box>
