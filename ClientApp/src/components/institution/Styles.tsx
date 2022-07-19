@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     width: "70px",
   },
   mediumWidth: {
+    justifyContent: "align",
     width: "150px",
   },
   greenHeart: {

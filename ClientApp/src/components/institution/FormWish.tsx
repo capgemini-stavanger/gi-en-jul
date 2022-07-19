@@ -21,14 +21,24 @@ interface IWishProps {
   wishIndex: number;
 }
 
+export interface IFormWish {
+  id: string;
+  wish: string;
+}
+
+export const getFormWish: () => IFormWish = () => ({
+  id: Math.random().toString(),
+  wish: "",
+});
+
 const initState: { [data: string]: any } = {
   wishInput: "",
   ageWish: false,
   size: "",
+  location: "",
   comment: "",
-  isClothes: false,
-  isShoes: false,
-  isGiftcard: false,
+  sizeDisabled: true,
+  locationDisabled: true,
   totalWish: [],
 };
 
@@ -57,6 +67,12 @@ const InstitutionWish: React.FC<IWishProps> = ({
     updateWish(state.totalWish.toString());
   };
 
+  const getOnLocationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    state.totalWish[1] = e.target.value;
+    getSetter("location")(state.totalWish[1]);
+    updateWish(state.totalWish.toString());
+  };
+
   const getOnCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     state.totalWish[2] = e.target.value;
     getSetter("comment")(state.totalWish[2]);
@@ -74,6 +90,16 @@ const InstitutionWish: React.FC<IWishProps> = ({
     state.totalWish[0] = newInput;
     updateWish(newInput);
     getSetter("wishInput")(newInput);
+    if (newInput == "Klær" || newInput == "Sko") {
+      getSetter("locationDisabled")(true);
+      getSetter("sizeDisabled")(false);
+    } else if (newInput == "Gavekort") {
+      getSetter("sizeDisabled")(true);
+      getSetter("locationDisabled")(false);
+    } else {
+      getSetter("sizeDisabled")(true);
+      getSetter("locationDisabled")(true);
+    }
   };
 
   return (
@@ -117,25 +143,41 @@ const InstitutionWish: React.FC<IWishProps> = ({
       </Grid>
 
       <Grid item>
-        {state.isClothes ||
-          (state.isShoes && (
-            <InputValidator
-              viewErrorTrigger={viewErrorTrigger}
-              validators={[isNotNull]}
-              onChange={(e) => getOnSizeInputChange(e)}
-              value={state.size}
-              name="csize"
-              id="størrelse"
-              label="Størrelse"
-              className={classes.smallWidth}
-            ></InputValidator>
-          ))}
+        {!state.locationDisabled && (
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            validators={[isNotNull]}
+            onChange={(e) => getOnLocationInputChange(e)}
+            disabled={state.locationDisabled}
+            value={state.location}
+            name="clocation"
+            id="lokasjon"
+            label="Lokasjon"
+            className={classes.mediumWidth}
+          ></InputValidator>
+        )}
+      </Grid>
+
+      <Grid item>
+        {!state.sizeDisabled && (
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            validators={[isNotNull]}
+            onChange={(e) => getOnSizeInputChange(e)}
+            disabled={state.sizeDisabled}
+            value={state.size}
+            name="csize"
+            id="størrelse"
+            label="Størrelse"
+            className={classes.mediumWidth}
+          ></InputValidator>
+        )}
       </Grid>
 
       <Grid item>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
+          validators={[]}
           onChange={(e) => getOnCommentInputChange(e)}
           value={state.comment}
           name="ccomment"
