@@ -51,7 +51,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPut]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
+       // [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
             var entities = await _municipalityRepository.GetAll();
