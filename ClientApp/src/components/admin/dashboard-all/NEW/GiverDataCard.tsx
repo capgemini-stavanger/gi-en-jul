@@ -116,8 +116,8 @@ const GiverDataCard: React.FC<Props> = ({
               </Button>
             </Grid>
             <Grid item style={{ paddingBottom: "10px" }} className={classes.borderInCards}>
-              <Grid container direction="row" spacing={5}>
-                <Grid item>
+              <Grid container direction="row" spacing={10}>
+                <Grid item xs={6}>
                   <Grid container direction="column">
                     <Grid item>
                       <Typography>
@@ -141,7 +141,7 @@ const GiverDataCard: React.FC<Props> = ({
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item>
+                <Grid item xs={6}>
                   <Box className={classes.commentBox}>
                     <TextField
                       className={classes.commentField}
@@ -149,7 +149,7 @@ const GiverDataCard: React.FC<Props> = ({
                       variant="outlined"
                       label="Kommentar"
                       multiline
-                      rows={4}
+                      minRows={4}
                       value={comment}
                     />
                     <Button variant="contained" className={classes.commentBoxButton}>
