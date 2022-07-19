@@ -55,7 +55,7 @@ const RecipientDataCard: React.FC<Props> = ({
         }}
       >
         <AccordionSummary>
-          <Grid container xs={12} justifyContent="space-between">
+          <Grid container justifyContent="space-between">
             <Grid item xs={2}>
               <Typography>ID: {recipientData.familyId}</Typography>
             </Grid>
