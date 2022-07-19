@@ -185,7 +185,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
 
   const form: JSX.Element[] = [
     // eventName
-    <Grid key={0} item>
+    <Grid className={classes.eventBox} key={0} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("eventName")}
@@ -204,7 +204,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // municipality
-    <Grid key={1} item>
+    <Grid className={classes.eventBox} key={1} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("municipality")}
@@ -223,7 +223,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // startDate
-    <Grid key={2} item>
+    <Grid className={classes.eventBox} key={2} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("startDate")}
@@ -242,7 +242,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // endDate
-    <Grid key={3} item>
+    <Grid className={classes.eventBox} key={3} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("endDate")}
@@ -261,7 +261,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // deliveryAddress
-    <Grid key={4} item>
+    <Grid className={classes.eventBox} key={4} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryAddress")}
@@ -279,7 +279,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // deliveryDate
-    <Grid key={5} item>
+    <Grid className={classes.eventBox} key={5} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryDate")}
@@ -297,7 +297,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
         disabled={!activeEdit}
       />
     </Grid>,
-    <Grid key={"deliveryTime"} item>
+    <Grid className={classes.eventBox} key={"deliveryTime"} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryTime")}
@@ -316,7 +316,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     // contactPerson
-    <Grid key={6} item>
+    <Grid className={classes.eventBox} key={6} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("contactPerson")}
@@ -335,7 +335,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     //giverLimit
-    <Grid key={7} item>
+    <Grid className={classes.eventBox} key={7} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("giverLimit")}
@@ -354,7 +354,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     //email
-    <Grid key={8} item>
+    <Grid className={classes.eventBox} key={8} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("email")}
@@ -373,7 +373,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       />
     </Grid>,
     //phoneNumber
-    <Grid key={9} item>
+    <Grid className={classes.eventBox} key={9} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("phoneNumber")}
@@ -394,7 +394,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
   ];
 
   return (
-    <Grid container direction="row">
+    <Grid container direction="row" className={classes.eventContainers}>
       {form}
       <Grid item>
         <InformationBox

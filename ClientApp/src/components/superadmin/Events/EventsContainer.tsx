@@ -11,6 +11,7 @@ import {
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
+import AddIcon from "@material-ui/icons/Add";
 import useStyles from "components/register-as-giver/Styles";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
@@ -222,7 +223,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   useEffect(buildBody, [events, selectedEventName]);
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" spacing={5}>
       <Grid item container direction="row">
         <Grid item>
           <EventDropdown
@@ -294,7 +295,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
               setOpenNewEventBox(true);
             }}
           >
-            Nytt event
+            <AddIcon />
           </Button>
         )}
       </Grid>
