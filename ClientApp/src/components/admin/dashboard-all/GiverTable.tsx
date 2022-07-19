@@ -28,7 +28,7 @@ import DeleteTypeDialog from "components/admin/dashboard-all/DeleteTypeDialog";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
 import ApiService from "common/functions/apiServiceClass";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 type Props = {
   data: GiverType[] | [];

@@ -13,7 +13,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import AddIcon from "@material-ui/icons/Add";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface Props {
   accessToken: string;

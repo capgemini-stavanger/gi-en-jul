@@ -1,5 +1,5 @@
 import { Button, Container } from "@material-ui/core";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import { useState } from "react";
 import useStyles from "./Styles";
 import { EventContent, EventContentInit } from "./EventType";

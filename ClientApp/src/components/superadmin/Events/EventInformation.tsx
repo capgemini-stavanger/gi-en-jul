@@ -3,7 +3,7 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { useState } from "react";
 import useStyles from "components/superadmin/Events/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import { EventContent } from "./EventType";
 

@@ -21,7 +21,7 @@ import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
 import { useAuth0 } from "@auth0/auth0-react";
-import ConfirmationBox from "./confirmationBox";
+import ConfirmationBox from "./ConfirmationBox";
 
 interface IEditFamilyDialog {
   onClose: () => void;

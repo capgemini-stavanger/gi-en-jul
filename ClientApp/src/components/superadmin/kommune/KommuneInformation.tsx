@@ -3,7 +3,7 @@ import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface IKommuneInformation {
   accessToken: string;

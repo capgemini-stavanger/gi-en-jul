@@ -5,7 +5,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface iHowtoStartGiEnJul {
   accessToken: string;
