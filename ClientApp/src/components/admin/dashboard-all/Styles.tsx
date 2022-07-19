@@ -150,20 +150,15 @@ export const useStyles = makeStyles((theme) => ({
     },
   },
   commentBox: {
-    display: "inline-block",
-    right: "2%",
-    bottom: "2%",
+    paddingTop: "1em",
   },
   commentField: { width: "250px" },
   commentBoxButton: {
-    position: "sticky",
-    right: "2%",
-    bottom: "2%",
+    marginLeft: "0.5em",
     borderRadius: "0.5em",
     height: "1.6em",
     width: "1em",
-    marginBottom: "0.3em",
-    marginRight: "0.3em",
+
     backgroundColor: theme.palette.primary.main,
     color: "white",
     "&:hover": {
