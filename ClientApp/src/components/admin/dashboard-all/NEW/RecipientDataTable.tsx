@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Grid,
   InputLabel,
   MenuItem,
@@ -16,6 +17,8 @@ import RecipientDataCard from "./RecipientDataCard";
 import { Search } from "@material-ui/icons";
 import { CONNECTION_COLORS } from "common/constants/ConnectionColors";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 
 type Props = {
   recipientData: RecipientType[];
@@ -81,66 +84,80 @@ const RecipientDataTable: React.FC<Props> = ({
   return (
     <>
       <Grid container direction="row" alignItems="center" className={classes.tableHeadingSpace}>
-        <Grid item xs={3}>
-          <Typography variant="h5">Familier</Typography>
+        <Grid item xs={2}>
+          <Box className={classes.gridBoxCenter}>
+            <Typography variant="h5">Familier</Typography>
+          </Box>
         </Grid>
-        <Grid item xs={3}>
-          <Search />
-          <TextField
-            placeholder="Søk her"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          ></TextField>
+        <Grid item xs={2}>
+          <Box className={classes.gridBoxCenter}>
+            <Search />
+            <TextField
+              placeholder="Søk her"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              variant="outlined"
+              margin="dense"
+              className={classes.inputSmall}
+            ></TextField>
+          </Box>
         </Grid>
-        <Grid item xs={3}>
-          <InputLabel htmlFor="fam-str" shrink>
-            Familie Størrelse
-          </InputLabel>
-          <Select
-            inputProps={{
-              name: "familie",
-              id: "fam-str",
-            }}
-            value={familySize}
-            onChange={onFamSizeChange}
-          >
-            <MenuItem value={-1}>Alle</MenuItem>
-            {FAMILY_SIZES.map((famObj, index) => {
-              return (
-                <MenuItem key={index} value={famObj.value}>
-                  {famObj.text}
-                </MenuItem>
-              );
-            })}
-          </Select>
+        <Grid item xs={4}>
+          <Box className={classes.gridBoxCenter}>
+            <PeopleOutlineIcon />
+            <Select
+              value={familySize}
+              onChange={onFamSizeChange}
+              className={classes.inputSmall}
+              variant="outlined"
+            >
+              <MenuItem value={-1}>Alle</MenuItem>
+              {FAMILY_SIZES.map((famObj, index) => {
+                return (
+                  <MenuItem key={index} value={famObj.value}>
+                    {famObj.text}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </Box>
         </Grid>
-        <Grid item xs={3}>
-          <InputLabel htmlFor="color" shrink>
-            Tilstand
-          </InputLabel>
-          <Select
-            inputProps={{
-              name: "color",
-              id: "color",
-            }}
-            value={color}
-            onChange={onColorChange}
-          >
-            <MenuItem value={"alle"}>Alle</MenuItem>
-            {CONNECTION_COLORS.map((colObj, index) => {
-              return (
-                <MenuItem key={index} value={colObj.value}>
-                  {colObj.text}
-                </MenuItem>
-              );
-            })}
-          </Select>
+        <Grid item xs={4}>
+          <Box className={classes.gridBoxCenter}>
+            {color == "alle" && (
+              <Box>
+                <CancelOutlined style={{ color: "red" }} />
+                <ErrorOutlineOutlined style={{ color: "yellow" }} />
+                <CheckCircleOutline style={{ color: "green" }} />
+              </Box>
+            )}
+            {color == "Rød" && <CancelOutlined style={{ color: "red" }} />}
+            {color == "Gul" && <ErrorOutlineOutlined style={{ color: "yellow" }} />}
+            {color == "Grønn" && <CheckCircleOutline style={{ color: "green" }} />}
+            <Select
+              value={color}
+              onChange={onColorChange}
+              variant="outlined"
+              className={classes.inputSmall}
+            >
+              <MenuItem value={"alle"}>Alle</MenuItem>
+              {CONNECTION_COLORS.map((colObj, index) => {
+                return (
+                  <MenuItem key={index} value={colObj.value}>
+                    {colObj.text}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </Box>
         </Grid>
       </Grid>
 
+      <Divider />
+
       <Virtuoso
         totalCount={recipientData.length}
-        style={{ height: 400, borderRadius: 10 }}
+        style={{ height: 500 }}
         itemContent={(index) => (
           <RecipientDataCard
             recipientData={recipientData[index]}

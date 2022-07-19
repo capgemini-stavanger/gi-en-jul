@@ -78,8 +78,9 @@ export const useStyles = makeStyles((theme) => ({
   oversiktBox: {
     width: "200px",
     height: "700px",
-    backgroundColor: "#DBEDE9",
+    backgroundColor: theme.palette.secondary.light,
     flexShrink: 0,
+    padding: "1em",
   },
   dashboardBox: {
     flexGrow: 1,
@@ -97,16 +98,14 @@ export const useStyles = makeStyles((theme) => ({
   dashboardConnectBox: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   },
   dashBoardConnection: {
     flexGrow: 1,
     height: "100px",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#E3E2E2",
+    backgroundColor: theme.palette.secondary.light,
+    padding: "1em",
   },
   giverTable: {
     flexGrow: 1,
@@ -116,9 +115,9 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#E3E2E2",
+    backgroundColor: theme.palette.secondary.light,
     borderRadius: "1em",
-    padding: "1em",
+    paddingTop: "1em",
   },
   suggestionData: {
     marginBottom: "1em",
@@ -128,15 +127,15 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   accordionNormal: {
-    backgroundColor: "#DBEDE9",
+    backgroundColor: theme.palette.secondary.light,
   },
   accordionSelected: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.secondary.dark,
   },
   tableHeadingSpace: {
     marginBottom: "1em",
   },
-  gridBox: {
+  gridBoxCenter: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -170,6 +169,20 @@ export const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.primary.main,
     },
+  },
+  gridBoxLeft: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  gridBoxRight: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  inputSmall: {
+    width: "100px",
+    height: "40px",
   },
 }));
 

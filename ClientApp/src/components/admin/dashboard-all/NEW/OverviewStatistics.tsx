@@ -1,9 +1,10 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { GiverType, RecipientType } from "components/shared/Types";
 import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "components/admin/dashboard-all/Styles";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 
 type IStatistics = {
   givers: GiverType[];
@@ -53,42 +54,49 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         <Typography variant="h5">Oversikt</Typography>
       </Grid>
       <Grid item>
-        <Typography variant="h5"> {statistics?.totalRecipints} Givere </Typography>
+        <Typography variant="h5"> {statistics?.totalGivers} Givere </Typography>
+        <Typography>
+          <PeopleOutlineIcon /> STR - ANTALL
+        </Typography>
+        <Typography>
+          <PeopleOutlineIcon /> STR - ANTALL
+        </Typography>
+        <Typography>
+          <PeopleOutlineIcon /> STR - ANTALL
+        </Typography>
         <Typography className={classes.textWarning}>
-          {statistics?.giversWithoutRecipient} uten giver
+          {statistics?.giversWithoutRecipient} uten familie
         </Typography>
       </Grid>
+      <Divider />
       <Grid item>
-        <Typography variant="h5"> {statistics?.totalRecipints} Givere </Typography>
+        <Typography variant="h5"> {statistics?.totalRecipints} Familier </Typography>
         <Typography>
-          <PeopleOutlineIcon /> SIZE - ANTALL
+          <PeopleOutlineIcon /> STR - ANTALL
         </Typography>
         <Typography>
-          <PeopleOutlineIcon /> SIZE - ANTALL
+          <PeopleOutlineIcon /> STR - ANTALL
         </Typography>
         <Typography>
-          <PeopleOutlineIcon /> SIZE - ANTALL
+          <PeopleOutlineIcon /> STR - ANTALL
         </Typography>
         <Typography className={classes.textWarning}>
-          {statistics?.recipientsWithoutGiver} uten familie
+          {statistics?.recipientsWithoutGiver} uten giver
         </Typography>
       </Grid>
+      <Divider />
       <Grid item>
         <Typography variant="h5">Koblinger</Typography>
         <Typography>
-          <FiberManualRecord fontSize="large" color="primary" />
+          <CheckCircleOutline style={{ color: "green" }} />
           {statistics?.confirmedMatch} Bekreftede
         </Typography>
         <Typography>
-          <FiberManualRecord
-            fontSize="large"
-            //not possible to use color="warning"
-            style={{ color: "#f4cf8a" }}
-          />
+          <ErrorOutlineOutlined style={{ color: "yellow" }} />
           {statistics?.suggestedMatch} Foreslåtte
         </Typography>
         <Typography>
-          <FiberManualRecord fontSize="large" color="error" /> {statistics?.noMatch} Ikke koblet
+          <CancelOutlined style={{ color: "red" }} /> {statistics?.noMatch} Ikke koblet
         </Typography>
       </Grid>
     </Grid>
