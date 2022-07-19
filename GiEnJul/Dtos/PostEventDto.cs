@@ -17,10 +17,13 @@ namespace GiEnJul.Dtos
         [Required]
         public string DeliveryAddress { get; set; }
         [Required]
-        public string DeliveryDate { get; set; }[Required]
-        public string DeliveryTime { get; set; }[Required]
-        public string ContactPerson { get; set; }[Required]
+        public string DeliveryDate { get; set; }
+        [Required]
+        public string DeliveryTime { get; set; }
+        [Required]
+        public string ContactPerson { get; set; }
         public string DeliveryGPS { get; set; }
+        [Required]
         public int GiverLimit { get; set; }
         [Required]
         public string Email { get; set; }

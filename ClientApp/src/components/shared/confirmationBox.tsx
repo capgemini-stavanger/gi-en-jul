@@ -1,5 +1,6 @@
 import { Dialog, Grid, Typography } from "@material-ui/core";
 import useStyles from "components/shared/Styles";
+import { theme } from "index";
 import React from "react";
 import { Button } from "reactstrap";
 

@@ -1,51 +1,52 @@
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Container } from "@material-ui/core";
 import ConfirmationBox from "components/shared/confirmationBox";
 import { useState } from "react";
-import EventInformation, { EventContent, EventContentInit } from "./EventInformation";
+import useStyles from "./Styles";
+import { EventContent, EventContentInit } from "./EventType";
+import EventInformation from "./EventInformation";
 
 interface Props {
   handleSaveEvent: (event: EventContent) => void;
-  eventName: string;
-  eventId: any;
+  onClose: () => void;
+  open: boolean;
 }
 
-const NewEventBox: React.FC<Props> = ({ handleSaveEvent, eventName }) => {
-  const [newEvent, setNewEvent] = useState<EventContent>(EventContentInit(eventName));
-  const [open, setOpen] = useState<boolean>(false);
+const NewEventBox: React.FC<Props> = ({ handleSaveEvent, onClose, open }) => {
+  const classes = useStyles();
+  const [newEvent, setNewEvent] = useState<EventContent>(EventContentInit());
   const [openConfirmationBox, setOpenConfirmationBox] = useState<boolean>(false);
-  const handleAddClick = () => {
-    setOpen(true);
-  };
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const handleSaveClick = () => {
     setOpenConfirmationBox(true);
   };
   const handleClose = () => {
-    setOpen(false);
+    onClose();
   };
   const handleSaveResponse = (response: boolean) => {
     if (response) {
       handleSaveEvent(newEvent); // send new element to parent
-      setOpen(false); // close container
       setOpenConfirmationBox(false); // close confirmation box
+      setNewEvent(EventContentInit()); // reset boxes
     } else {
       setOpenConfirmationBox(false);
     }
   };
   const handleEventChange = (event: EventContent) => {
+    setIsUpdated(true);
     setNewEvent(event);
   };
   return (
     <>
       {open ? (
-        <Container>
+        <Container className={classes.newBoxBackgorund}>
           <EventInformation
             event={newEvent}
             handleEventChange={handleEventChange}
-            id={0}
-            onDelete={() => {}}
+            id={""}
+            onDelete={handleClose}
           />
-          <Button onClick={handleSaveClick}>Lagre event</Button>
-          <Button onClick={handleClose}>Avbryt</Button>
+          {isUpdated ? <Button onClick={handleSaveClick}>Lagre event</Button> : ""}
+          {/* <Button onClick={handleClose}>Avbryt</Button> */}
           <ConfirmationBox
             open={openConfirmationBox}
             text={"Er du sikker på at du vil legge til et nytt event?"}
@@ -56,9 +57,7 @@ const NewEventBox: React.FC<Props> = ({ handleSaveEvent, eventName }) => {
           />
         </Container>
       ) : (
-        <Container>
-          <Button onClick={handleAddClick}>Nytt event</Button>
-        </Container>
+        ""
       )}
     </>
   );

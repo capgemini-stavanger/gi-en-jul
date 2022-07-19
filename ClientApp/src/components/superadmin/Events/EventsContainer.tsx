@@ -1,16 +1,20 @@
 import { Button, Grid, TextField } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
-import EventInformation, {
+import EventInformation from "components/superadmin/Events/EventInformation";
+import {
   EventContent,
+  EventContentDto,
   EventContentInit,
-} from "components/superadmin/Events/EventInformation";
+  EventContent2Dto,
+  Dto2EventContent,
+} from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "components/register-as-giver/Styles";
 import NewEventBox from "./NewEventBox";
-import { ContactSupportOutlined } from "@material-ui/icons";
 import InformationBox from "components/shared/InformationBox";
+import ConfirmationBox from "components/shared/confirmationBox";
 
 interface Props {
   accessToken: string;
@@ -18,19 +22,46 @@ interface Props {
 
 const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const classes = useStyles();
-  const [events, setEvents] = useState<EventContent[]>([]);
+  const [events, setEvents] = useState(new Map<string, EventContent>());
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
+  const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
   const [informationBoxInfo, setInformationBoxInfo] = useState<string>("");
   const [uniqueEventNames, setUniqueEventNames] = useState<string[]>([]);
   const [selectedEventName, setSelectedEventName] = useState<string>("");
   const [newEventName, setNewEventName] = useState<string>("");
+  const [openNewEventBox, setOpenNewEventBox] = useState<boolean>(false);
   const [validNewEventName, setValidNewEventName] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string>('Nytt eventnavn (feks "Jul22")');
   const [addState, setAddState] = useState<boolean>(false);
+  const [tempEventName, setTempEventName] = useState<string>("");
   const apiservice = new ApiService(accessToken);
   const handleDropDownChange = (value: string) => {
+    if (openNewEventBox) {
+      setOpenConfirmaitonBox(true);
+      setTempEventName(value);
+      return;
+    }
     setSelectedEventName(value);
+  };
+  const keyCombinationExists = (combination: string) => {
+    const existingCombinations: string[] = [];
+    events.forEach((event, id) => {
+      existingCombinations.push(id);
+    });
+    console.log("checking if combinattion: ");
+    console.log(combination);
+    console.log("already exists in the list:");
+    console.log(existingCombinations);
+    const exists: boolean = existingCombinations.includes(combination);
+    console.log(exists);
+    return exists;
+  };
+  const handleConfirmationResponse = (response: boolean) => {
+    if (response) {
+      setOpenNewEventBox(false);
+      setSelectedEventName(tempEventName);
+    }
   };
   const handleNewEventNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     validateNewEventName(e.target.value);
@@ -68,56 +99,106 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     setAddState(true);
   };
   const createNewEvent = (newEvent: EventContent) => {
-    postNewEvent(newEvent);
-    setEvents([...events, newEvent]);
+    if (newEvent.id == "") {
+      newEvent.id = newEvent.eventName + newEvent.municipality;
+    }
+    if (keyCombinationExists(newEvent.id)) {
+      setInformationBoxInfo(`Eventnavn - Kommune kombinasjonen finnes allerede. \n
+      Du kan ikke lage to av samme event i en kommune`);
+      setOpenInformationBox(true);
+      return;
+    }
+    // todo: check if eventname-municipality combination already exists
+    setOpenNewEventBox(false); // only close the new-box if the event has a valid id
+    const eventsCopy = new Map(events);
+    eventsCopy.set(newEvent.id, newEvent);
+    setEvents(eventsCopy);
+    postEventUpdate(newEvent);
   };
-  const handleEventChange = (updatedEvent: EventContent, id: any) => {
-    console.log("Update happened from event with index: " + id);
+  const handleEventUpdate = (updatedEvent: EventContent, id: string) => {
+    const eventsCopy = new Map(events);
+    eventsCopy.set(id, updatedEvent);
+    setEvents(eventsCopy);
+    postEventUpdate(updatedEvent); // send updated event to backend
   };
-  const handleEventDeletion = (index: number) => {
-    events.splice(index, 1);
-    setEvents(events);
-
-    buildBody();
+  const handleEventDeletion = (id: string) => {
+    const eventToBeDeleted = events.get(id); // get event from map
+    const eventsCopy = new Map(events);
+    eventsCopy.delete(id);
+    setEvents(eventsCopy);
+    postEventDeletion(eventToBeDeleted);
   };
-  const postNewEvent = (event: EventContent) => {
+  const postEventDeletion = (event: EventContent | undefined) => {
+    if (event == undefined) {
+      setInformationBoxInfo("Finner ikke eventet du prøver å slette");
+      setOpenInformationBox(true);
+      return;
+    }
     apiservice
       .post(
-        "Event/create",
+        "Event/Delete",
         JSON.stringify({
-          ...event,
+          ...EventContent2Dto(event),
         })
       )
       .then((resp) => {
         if (resp.status == 200) {
-          setInformationBoxInfo("Nytt event ble laget");
-        } else {
-          setInformationBoxInfo("Det skjedde en feil ved laging av event");
+          setInformationBoxInfo(`Eventet (${event.eventName}-${event.municipality}) ble slettet`);
         }
-        setOpenInformationBox(true);
+      })
+      .catch((errorstack) => {
+        setInformationBoxInfo("Det skjedde en feil ved sletting av event");
+        console.error(errorstack);
       });
+    setOpenInformationBox(true);
+  };
+  const postEventUpdate = (event: EventContent) => {
+    apiservice
+      .post(
+        "Event/CreateOrReplace",
+        JSON.stringify({
+          ...EventContent2Dto(event),
+        })
+      )
+      .then((resp) => {
+        if (resp.status == 200) {
+          setInformationBoxInfo("Ett event ble oppdatert");
+        }
+      })
+      .catch((errorstack) => {
+        setInformationBoxInfo("Det skjedde en feil ved laging av event");
+        console.error(errorstack);
+      });
+    setOpenInformationBox(true);
   };
   const fetchEvents = () => {
     apiservice
       .get("Event/GetAll", {})
       .then((resp) => {
-        setEvents(resp.data);
+        const fetchedEvents = new Map<string, EventContent>();
+        const eventContents = resp.data.map((event: EventContentDto) => Dto2EventContent(event));
+        eventContents.forEach((event: EventContent) => {
+          fetchedEvents.set(event.id, event);
+        });
+        setEvents(fetchedEvents);
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
   };
   const buildBody = () => {
-    const body = events
+    const eventsList: EventContent[] = [];
+    events.forEach((event, id) => eventsList.push(event));
+    const body = eventsList
       .filter((e) => e.eventName === selectedEventName)
-      .map((event, i) => {
+      .map((event) => {
         return (
           <Grid item container direction="row" key={event.eventName + event.municipality}>
             <EventInformation
               event={event}
-              handleEventChange={handleEventChange}
-              id={i}
+              handleEventChange={handleEventUpdate}
               onDelete={handleEventDeletion}
+              id={event.id}
             />
           </Grid>
         );
@@ -180,7 +261,16 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       <Grid item container direction="column">
         {eventBody}
       </Grid>
-
+      <ConfirmationBox
+        open={openConfirmationBox}
+        text={
+          "Det nye eventet du holder på å legge til vil gå tapt dersom du bytter fane. Er du sikker på at du likevel ønsker å bytte fane?"
+        }
+        handleClose={function (): void {
+          setOpenConfirmaitonBox(false);
+        }}
+        handleResponse={handleConfirmationResponse}
+      />
       <InformationBox
         open={openInformationBox}
         text={informationBoxInfo}
@@ -189,14 +279,23 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
         }}
       />
       <Grid item>
-        {selectedEventName === "" ? (
+        <NewEventBox
+          open={openNewEventBox}
+          handleSaveEvent={createNewEvent}
+          onClose={() => {
+            setOpenNewEventBox(false);
+          }}
+        />
+        {selectedEventName === "" || openNewEventBox ? (
           ""
         ) : (
-          <NewEventBox
-            handleSaveEvent={createNewEvent}
-            eventId={events.length}
-            eventName={selectedEventName}
-          />
+          <Button
+            onClick={() => {
+              setOpenNewEventBox(true);
+            }}
+          >
+            Nytt event
+          </Button>
         )}
       </Grid>
     </Grid>

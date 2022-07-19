@@ -41,7 +41,7 @@ namespace GiEnJul.Controllers
             return events;
         }
 
-        [HttpGet("contacts")]
+        [HttpGet("Contacts")]
         public async Task<List<GetContactsDto>> GetActiveContactsAsync()
         {
             var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
@@ -50,12 +50,23 @@ namespace GiEnJul.Controllers
         }
 
         //POST api/Event/createEvent 
-        [HttpPost("create")]
-        // temp comment
-//        [Authorize(Policy= Policy.SuperAdmin)]
+        [HttpPost("CreateOrReplace")]
+        [Authorize(Policy= Policy.SuperAdmin)]
         public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
         {
             var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
+            if (entity == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        [HttpPost("Delete")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<ActionResult> DeleteEvent([FromBody] PostEventDto content)
+        {
+            var entity = await _eventRepository.DeleteEntry(content.EventName, content.Municipality);
             if (entity == null)
             {
                 return BadRequest();
