@@ -46,7 +46,6 @@ const NewEventBox: React.FC<Props> = ({ handleSaveEvent, onClose, open }) => {
             onDelete={handleClose}
           />
           {isUpdated ? <Button onClick={handleSaveClick}>Lagre event</Button> : ""}
-          {/* <Button onClick={handleClose}>Avbryt</Button> */}
           <ConfirmationBox
             open={openConfirmationBox}
             text={"Er du sikker på at du vil legge til et nytt event?"}
