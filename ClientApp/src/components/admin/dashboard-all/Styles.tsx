@@ -78,7 +78,7 @@ export const useStyles = makeStyles((theme) => ({
   oversiktBox: {
     width: "200px",
     height: "700px",
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: "#f4f5f4",
     flexShrink: 0,
     padding: "1em",
   },
@@ -93,7 +93,7 @@ export const useStyles = makeStyles((theme) => ({
   tableBox: {
     display: "flex",
     flexDirection: "row",
-    height: "500px",
+    height: "600px",
   },
   dashboardConnectBox: {
     display: "flex",
@@ -104,33 +104,35 @@ export const useStyles = makeStyles((theme) => ({
     height: "100px",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: "#f4f5f4",
     padding: "1em",
   },
   giverTable: {
     flexGrow: 1,
     marginRight: "1em",
+    backgroundColor: "#f4f5f4",
+    borderRadius: "1em",
+    paddingTop: "1em",
   },
   recipientTable: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: "#f4f5f4",
     borderRadius: "1em",
     paddingTop: "1em",
   },
   suggestionData: {
-    marginBottom: "1em",
-    height: "200px",
+    flexGrow: 1,
   },
   recipientData: {
     flexGrow: 1,
   },
   accordionNormal: {
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: "#f4f5f4",
   },
   accordionSelected: {
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: theme.palette.primary.light,
   },
   tableHeadingSpace: {
     marginBottom: "1em",
