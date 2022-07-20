@@ -26,6 +26,7 @@ import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
+import { IFormWish } from "./FormWish";
 
 interface props {
   accessToken: string;
