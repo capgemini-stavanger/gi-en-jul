@@ -1,8 +1,6 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
-import family from "styling/img/familyTop.svg";
-import snowDown from "styling/img/snow_down.svg";
 import { LocationData } from "components/municipalities/Kommunes";
 import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
@@ -70,19 +68,17 @@ const Municipality = () => {
     <>
       <NavBarPublic />
       <Container className={classes.root} maxWidth={false}>
-        <Grid className={classes.headLineContainer}>
-          <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
-        </Grid>
-        <Grid item>
-          <Kommunes locations={locationData} />
-          <img className={classes.familyImage} src={family}></img>
-        </Grid>
-        <Grid item>
-          <img className={classes.snowDown} src={snowDown}></img>
+        <Grid container direction="column">
+          <Grid item style={{ marginTop: "3em" }}>
+            <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
+          </Grid>
+          <Grid item>
+            <Kommunes locations={locationData} />
+          </Grid>
         </Grid>
         <ScrollToTop maxPagePosition={300} />
-        <Footer />
       </Container>
+      <Footer />
     </>
   );
 };

@@ -1,11 +1,9 @@
 import { Button, IconButton, Tab, Box, Grid, Toolbar, AppBar } from "@material-ui/core";
 import { isMobile } from "common/functions/IsMobile";
-import logo from "styling/img/logo_green.svg";
+import logo from "styling/img/logo_white.svg";
 import useStyles from "components/shared/Styles";
-import { ArrowForwardIos } from "@material-ui/icons";
+import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import { Navbar, NavbarBrand } from "reactstrap";
-import { TabContext, TabList } from "@material-ui/lab";
 import NavBarBusiness from "./NavBarBusiness";
 import NavbarMobile from "./NavBarMobile";
 import React from "react";
@@ -35,67 +33,59 @@ const NavBarPublic = () => {
   } else {
     return (
       <>
-        <Box className={classes.navbarBackground}>
-          <Navbar className={classes.navContainer}>
-            <NavbarBrand className={classes.toolBar}>
-              <TabContext value={"1"}>
-                <TabList centered className={classes.toolBar}>
-                  <Grid container justifyContent="center" direction="row" spacing={10}>
-                    <Grid item>
-                      <IconButton
-                        onClick={() => {
-                          history.push("/");
-                        }}
-                      >
-                        <img className={classes.smallLogo} src={logo}></img>
-                      </IconButton>
-                    </Grid>
+        <Box>
+          <Grid
+            container
+            className={classes.navBarGridContainer}
+            justifyContent="space-around"
+            alignItems="center"
+            direction="row"
+          >
+            <Grid item className={classes.treeGridIcon}>
+              <IconButton
+                onClick={() => {
+                  history.push("/");
+                }}
+              >
+                <FiberManualRecord className={classes.treeCircle} />
+                <img className={classes.smallLogo} src={logo}></img>
+              </IconButton>
+            </Grid>
 
-                    <Grid item>
-                      <Tab
-                        onClick={() => {
-                          history.push("/");
-                        }}
-                        className={classes.drawerContent}
-                        label="Hjem"
-                      ></Tab>
-                    </Grid>
+            <Grid item className={classes.fontSizeNavText}>
+              <Tab
+                onClick={() => {
+                  history.push("/");
+                }}
+                className={classes.drawerContent}
+                label="Hjem"
+              ></Tab>
 
-                    <Grid item>
-                      <Tab
-                        onClick={() => {
-                          history.push("/bedrift");
-                        }}
-                        className={classes.drawerContent}
-                        label="For bedrifter"
-                      ></Tab>
-                    </Grid>
+              <Tab
+                onClick={() => {
+                  history.push("/bedrift");
+                }}
+                className={classes.drawerContent}
+                label="For bedrifter"
+              ></Tab>
 
-                    <Grid item>
-                      <Tab
-                        onClick={() => {
-                          history.push("/startJul");
-                        }}
-                        className={classes.drawerContent}
-                        label="Start Gi en jul i din kommune"
-                      ></Tab>
-                    </Grid>
-                    <Grid item>
-                      <Tab
-                        onClick={() => {
-                          history.push("kommune");
-                        }}
-                        className={classes.drawerContent}
-                        label="Kommuner"
-                      ></Tab>
-                    </Grid>
-                  </Grid>
-                </TabList>
-              </TabContext>
-            </NavbarBrand>
-          </Navbar>
-          <Grid item>
-            <Box alignItems={"right"}>
+              <Tab
+                onClick={() => {
+                  history.push("/startJul");
+                }}
+                className={classes.drawerContent}
+                label="Start Gi en jul i din kommune"
+              ></Tab>
+
+              <Tab
+                onClick={() => {
+                  history.push("kommune");
+                }}
+                className={classes.drawerContent}
+                label="Kommuner"
+              ></Tab>
+            </Grid>
+            <Grid item className={classes.giverButtonGridItem}>
               <Button
                 size="large"
                 className={classes.giverButton}
@@ -104,7 +94,7 @@ const NavBarPublic = () => {
               >
                 Bli giver
               </Button>
-            </Box>
+            </Grid>
           </Grid>
         </Box>
       </>

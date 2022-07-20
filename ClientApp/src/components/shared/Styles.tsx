@@ -22,9 +22,17 @@ export default () =>
       },
     },
     smallLogo: {
-      height: "40px",
-      width: "40px",
+      position: "absolute",
+      height: "35px",
+      width: "35px",
       margin: theme.spacing(-1.5),
+    },
+    treeGridIcon: { marginLeft: "-12%" },
+    treeCircle: {
+      position: "relative",
+      height: "65px",
+      width: "65px",
+      color: theme.palette.primary.main,
     },
     drawerMenu: {
       backgroundColor: theme.palette.secondary.light,
@@ -33,7 +41,7 @@ export default () =>
     drawerContent: {
       cursor: "pointer",
       fontSize: "75%",
-      fontWeight: 800,
+
       color: "black",
       "&:hover": {
         color: theme.palette.primary.dark,
@@ -49,6 +57,11 @@ export default () =>
       border: "none",
       boxShadow: "none",
       padding: theme.spacing(2),
+    },
+    navBarGridContainer: {
+      height: "75px",
+      backgroundColor: "white",
+      borderBottom: "1 px solid rgba(217, 217, 217, 0.01)",
     },
     toolBar: {
       justifyContent: "space-between",
@@ -66,20 +79,23 @@ export default () =>
     },
     giverButton: {
       backgroundColor: theme.palette.primary.main,
-      position: "absolute",
       color: "white",
-      top: "2%",
-      right: "5%",
-      marginRight: "5%",
+      height: "40px",
+      width: "120px",
       textTransform: "none",
       padding: theme.spacing(1.5, 2, 1.5, 2),
       "&:hover": {
         backgroundColor: theme.palette.primary.dark,
       },
     },
+    giverButtonGridItem: {
+      marginRight: "-12%",
+    },
     buttonNext: {
       position: "inherit",
       color: "white",
+      height: "40px",
+      width: "110px",
       backgroundColor: theme.palette.primary.main,
       textTransform: "none",
       padding: theme.spacing(1.5, 2, 1.5, 2),
@@ -98,6 +114,17 @@ export default () =>
       paddingLeft: "10px",
     },
     navbarBackground: {
-      color: "white",
+      backgroundColor: "white",
+    },
+
+    fontSizeNavText: {
+      fontSize: "20px",
+    },
+    navContainerMobile: {
+      backgroundColor: "rgba(0, 0, 0, 0)",
+      position: "absolute",
+      border: "none",
+      boxShadow: "none",
+      padding: theme.spacing(2),
     },
   }))();
