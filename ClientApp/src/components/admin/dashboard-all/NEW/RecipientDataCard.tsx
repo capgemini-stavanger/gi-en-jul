@@ -8,9 +8,9 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "../Styles";
-import { GiverType, RecipientType } from "../../../shared/Types";
+import { RecipientType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
@@ -58,6 +58,11 @@ const RecipientDataCard: React.FC<Props> = ({
   const [openEditFamilyDialog, setOpenEditFamilyDialog] = useState(false);
   const [openDelConnectionDialog, setOpenDelConnectionDialog] = useState(false);
   const [openDelFamilyDialog, setOpenDelFamilyDialog] = useState(false);
+  const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
+
+  useEffect(() => {
+    setComment(recipientData.comment ? recipientData.comment : "");
+  }, []);
 
   const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
@@ -91,6 +96,25 @@ const RecipientDataCard: React.FC<Props> = ({
         })
         .catch((errorStack) => {
           console.error(errorStack);
+        });
+    }
+  };
+
+  const saveComment = (response: boolean) => {
+    if (response) {
+      apiservice
+        .post("admin/recipient/addcomment", {
+          event: recipientData.event,
+          recipientId: recipientData.recipientId,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
         });
     }
   };
@@ -143,7 +167,7 @@ const RecipientDataCard: React.FC<Props> = ({
             </Grid>
             <Grid item xs={1}>
               {
-                !recipientData.comment && <ChatBubbleOutline /> // remove ! to show all comments
+                recipientData.comment && <ChatBubbleOutline /> // remove ! to show all comments
               }
             </Grid>
             <Grid item xs={1}>
@@ -248,10 +272,27 @@ const RecipientDataCard: React.FC<Props> = ({
                       multiline
                       minRows={4}
                       value={comment}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setComment(e.target.value);
+                      }}
                     />
-                    <Button variant="contained" className={classes.commentBoxButton}>
+                    <Button
+                      variant="contained"
+                      className={classes.commentBoxButton}
+                      onClick={() => {
+                        setOpenConfirmationComment(true);
+                      }}
+                    >
                       Lagre
                     </Button>
+                    <ConfirmationBox
+                      open={openConfirmationComment}
+                      text={"Ønsker du å lagre kommentaren?"}
+                      handleResponse={saveComment}
+                      handleClose={() => {
+                        setOpenConfirmationComment(false);
+                      }}
+                    />
                   </Box>
                 </Grid>
               </Grid>

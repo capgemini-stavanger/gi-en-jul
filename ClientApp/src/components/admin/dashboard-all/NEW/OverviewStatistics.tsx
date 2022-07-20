@@ -1,7 +1,6 @@
 import { Divider, Grid, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { GiverType, RecipientType } from "components/shared/Types";
-import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "components/admin/dashboard-all/Styles";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";

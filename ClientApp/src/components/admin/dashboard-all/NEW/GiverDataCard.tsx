@@ -8,7 +8,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -19,13 +19,11 @@ import {
   CheckCircleOutline,
   CancelOutlined,
   PeopleOutline,
-  Phone,
   LinkOutlined,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/confirmationBox";
 import ApiService from "common/functions/apiServiceClass";
-import DeleteTypeDialog from "../DeleteTypeDialog";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
 
@@ -58,6 +56,11 @@ const GiverDataCard: React.FC<Props> = ({
   const [confirmConnectDialogOpen, setConfirmConnectDialogOpen] = useState(false);
   const [deleteConnectDialogOpen, setDeleteConnectDialogOpen] = useState(false);
   const [deleteGiverDialogOpen, setDeleteGiverDialogOpen] = useState(false);
+  const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
+
+  useEffect(() => {
+    setComment(giverData.comment ? giverData.comment : "");
+  }, []);
 
   // REFRESH DATA ALSO?
   const confirmConnection = (giver: GiverType) => (response: boolean) => {
@@ -112,6 +115,25 @@ const GiverDataCard: React.FC<Props> = ({
     }
   };
 
+  const saveComment = (response: boolean) => {
+    if (response) {
+      apiservice
+        .post("admin/giver/addcomment", {
+          event: giverData.event,
+          giverId: giverData.giverId,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
   return (
     <>
       <Accordion
@@ -158,7 +180,7 @@ const GiverDataCard: React.FC<Props> = ({
             </Grid>
             <Grid item xs={1}>
               {
-                !giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
+                giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
               }
             </Grid>
             <Grid item xs={1}>
@@ -230,10 +252,27 @@ const GiverDataCard: React.FC<Props> = ({
                       multiline
                       minRows={4}
                       value={comment}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setComment(e.target.value);
+                      }}
                     />
-                    <Button variant="contained" className={classes.commentBoxButton}>
+                    <Button
+                      variant="contained"
+                      className={classes.commentBoxButton}
+                      onClick={() => {
+                        setOpenConfirmationComment(true);
+                      }}
+                    >
                       Lagre
                     </Button>
+                    <ConfirmationBox
+                      open={openConfirmationComment}
+                      text={"Ønsker du å lagre kommentaren?"}
+                      handleResponse={saveComment}
+                      handleClose={() => {
+                        setOpenConfirmationComment(false);
+                      }}
+                    />
                   </Box>
                 </Grid>
               </Grid>

@@ -1,17 +1,7 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-import React, { useEffect, useState, useCallback } from "react";
+import { Box, Divider, Grid, MenuItem, Select, TextField, Typography } from "@material-ui/core";
+import React, { useState } from "react";
 import useStyles from "../Styles";
-import { GiverType, RecipientType } from "../../../shared/Types";
+import { RecipientType } from "../../../shared/Types";
 import { Virtuoso } from "react-virtuoso";
 import RecipientDataCard from "./RecipientDataCard";
 import { Search } from "@material-ui/icons";

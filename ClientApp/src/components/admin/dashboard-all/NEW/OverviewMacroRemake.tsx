@@ -1,14 +1,4 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
@@ -181,7 +171,6 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               <Box>
                 <Typography variant="h4">Dashboard</Typography>
                 <Typography>Finn, søk og koble sammen familier og givere</Typography>
-                <Button onClick={() => console.log(suggestionData)}> CHECK </Button>
               </Box>
               <Box className={classes.dashboardConnectBox}>
                 <Box className={classes.dashBoardConnection}>

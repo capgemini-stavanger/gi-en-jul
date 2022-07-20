@@ -1,20 +1,9 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import { Box, Divider, Grid, MenuItem, Select, TextField, Typography } from "@material-ui/core";
+import React, { useState } from "react";
 import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
 import { Virtuoso } from "react-virtuoso";
 import GiverDataCard from "./GiverDataCard";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import { Search } from "@material-ui/icons";
 import { CONNECTION_COLORS } from "common/constants/ConnectionColors";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
