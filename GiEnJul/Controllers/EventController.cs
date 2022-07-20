@@ -35,13 +35,13 @@ namespace GiEnJul.Controllers
         // GET api/Event/GetAll
         [HttpGet("GetAll")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<List<Entities.Event>> GetAllEvents()
+        public async Task<List<Models.Event>> GetAllEvents()
         {
             var events = await _eventRepository.GetAllEventsAsync();
-            return _mapper.Map<List<Entities.Event>>(events);
+            return events;
         }
 
-        [HttpGet("contacts")]
+        [HttpGet("Contacts")]
         public async Task<List<GetContactsDto>> GetActiveContactsAsync()
         {
             var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
@@ -50,7 +50,7 @@ namespace GiEnJul.Controllers
         }
 
         //POST api/Event/createEvent 
-        [HttpPost("create")]
+        [HttpPost("CreateOrReplace")]
         [Authorize(Policy= Policy.SuperAdmin)]
         public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
         {
@@ -60,6 +60,26 @@ namespace GiEnJul.Controllers
                 return BadRequest();
             }
             return Ok();
-        } 
+        }
+
+        [HttpPost("Delete")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<ActionResult> DeleteEvent([FromBody] PostEventDto content)
+        {
+            var entity = await _eventRepository.DeleteEntry(content.EventName, content.Municipality);
+            if (entity == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+
+        // Get api/Event/DistinctEventNames
+        [HttpGet("DistinctEventNames")]
+        public async Task<string[]> GetAllEventNames()
+        {
+            var eventNames = await _eventRepository.GetAllUniqueEventNames();
+            return eventNames;
+        }
     }
 }

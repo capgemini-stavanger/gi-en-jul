@@ -1,9 +1,10 @@
 import { Box, Button } from "@material-ui/core";
-import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
+import ApiService from "common/functions/apiServiceClass";
 import parse from "html-react-parser";
-import ConfirmationBox from "components/shared/confirmationBox";
+import React from "react";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface IMunicipalityInformation {
   accessToken: string;

@@ -7,7 +7,7 @@ import AddMunicipalityForm, {
   getFormAddMunicipality,
   IMunicipalityFormData,
 } from "./AddMunicipalityForm";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 
 interface props {
