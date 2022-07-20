@@ -1,4 +1,14 @@
-import { capitalize, Grid, SvgIcon, IconButton, Button, Box, Container } from "@material-ui/core";
+import {
+  capitalize,
+  Grid,
+  SvgIcon,
+  IconButton,
+  Button,
+  Box,
+  Container,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { useState } from "react";
@@ -31,6 +41,9 @@ const FormPerson: FC<IPersonProps> = ({
   const classes = useStyles();
 
   const [showWishes, setShowWishes] = useState(true);
+  const [ageWish, setAgeWish] = useState(false);
+
+  const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 
   useEffect(() => {}, [person.wishes]);
 
@@ -67,6 +80,25 @@ const FormPerson: FC<IPersonProps> = ({
       return;
     }
     updatePerson({ months: strMonths, isValidMonths: !!strMonths });
+  };
+  const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   const newInput = e.target.checked ? ageAppropriateString : person.wishes[0].wish;
+
+    if (e.target.checked) {
+      setShowWishes(false);
+      updateWish(ageAppropriateString, 0);
+
+      for (let i = 0; i < person.wishes.length; i++) {
+        if (i == 0) {
+          updateWish(ageAppropriateString, i);
+        } else {
+          deleteWish(i);
+        }
+      }
+    }
+    setAgeWish(e.target.checked);
+
+    console.log("wishes", person.wishes);
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -147,10 +179,27 @@ const FormPerson: FC<IPersonProps> = ({
               />
             </Grid>
             <Grid item>
-              <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-                Legg til gaveønske (Maks 5)
-              </Button>
+              {!ageWish && (
+                <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+                  Legg til gaveønske (Maks 5)
+                </Button>
+              )}
             </Grid>
+            <Grid item>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={ageWish}
+                    onChange={(e) => handleAgeWishChecked(e)} //denne må tømme wishlisten og sette den lik stringen om aldersgave.
+                    name="isAgeWish"
+                    color="primary"
+                  />
+                }
+                className="my-0"
+                label="Giver kjøper alderstilpasset gave"
+              />
+            </Grid>
+
             <Grid item>
               {showWishes ? (
                 <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>

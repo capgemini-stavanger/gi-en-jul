@@ -33,7 +33,7 @@ export const getFormWish: () => IFormWish = () => ({
 
 const initState: { [data: string]: any } = {
   wishInput: "",
-  ageWish: false,
+  ageWish: false, //denne skal være i formPerson og hele formWish objektet skal ikke vises dersom den er true :P herlig
   size: "",
   location: "",
   comment: "",
@@ -114,20 +114,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
           <Typography className={classes.wishNumber}>{wishIndex + 1}</Typography>
         </Box>
       </Grid>
-      <Grid item>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.ageWish}
-              onChange={onAgeWishChange}
-              name="isAgeWish"
-              color="primary"
-            />
-          }
-          className="my-0"
-          label="Giver kjøper alderstilpasset gave"
-        />
-      </Grid>
+
       <Grid item>
         {!state.ageWish && (
           <InputValidator
