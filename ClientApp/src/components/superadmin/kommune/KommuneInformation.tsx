@@ -36,7 +36,7 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
       })
       .then((resp) => {
         // response an array-wrapped object
-        setKommuneInformation(resp.data[0].information);
+        setKommuneInformation(resp.data[0].info);
         setHtml(resp.data[0].info);
       })
       .catch((errorStack) => {
