@@ -97,8 +97,6 @@ const FormPerson: FC<IPersonProps> = ({
       }
     }
     setAgeWish(e.target.checked);
-
-    console.log("wishes", person.wishes);
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

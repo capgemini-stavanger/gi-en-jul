@@ -1,12 +1,4 @@
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  SvgIcon,
-  Typography,
-} from "@material-ui/core";
+import { Box, Grid, IconButton, SvgIcon, Typography } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
@@ -42,7 +34,7 @@ const initState: { [data: string]: any } = {
   totalWish: [],
 };
 
-const ageAppropriateString = "Giver kjøper alderstilpasset gave";
+//const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 
 const InstitutionWish: React.FC<IWishProps> = ({
   viewErrorTrigger,
@@ -78,12 +70,13 @@ const InstitutionWish: React.FC<IWishProps> = ({
     getSetter("comment")(state.totalWish[2]);
     updateWish(state.totalWish.toString());
   };
-
+  /*
   const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
     updateWish(newInput);
     getSetter("ageWish")(e.target.checked);
   };
+  */
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
