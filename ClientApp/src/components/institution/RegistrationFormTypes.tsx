@@ -22,7 +22,7 @@ export interface IFormPerson {
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
-  wishes: string[];
+  wishes: IFormWish[];
 }
 
 export interface IContactState {

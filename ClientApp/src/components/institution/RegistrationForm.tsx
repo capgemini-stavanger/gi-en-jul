@@ -26,6 +26,7 @@ import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
+import { IFormWish } from "./FormWish";
 
 interface props {
   accessToken: string;
@@ -181,9 +182,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }
 
     const personsList = Array<PersonType>();
+
     formDataState.persons.forEach((person) => {
+      const wishList: string[] = [];
+      person.wishes.forEach((element) => {
+        wishList.push(element.wish);
+      });
       const person1: PersonType = {
-        Wishes: person.wishes,
+        Wishes: wishList,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,

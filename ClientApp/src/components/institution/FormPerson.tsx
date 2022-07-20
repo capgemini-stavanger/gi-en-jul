@@ -8,7 +8,7 @@ import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import useStyles from "./Styles";
-import FormWish from "./FormWish";
+import FormWish, { getFormWish, IFormWish } from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import { IFormPerson } from "./RegistrationFormTypes";
@@ -78,7 +78,7 @@ const FormPerson: FC<IPersonProps> = ({
 
   const updateWish = (newWishData: string, index: number) => {
     const newList = [...person.wishes];
-    newList[index] = newWishData;
+    newList[index].wish = newWishData;
     updatePerson({ wishes: newList });
   };
 
@@ -94,9 +94,8 @@ const FormPerson: FC<IPersonProps> = ({
   const addWish = () => {
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
-    newList.push("");
+    newList.push(getFormWish());
     updatePerson({ wishes: newList });
-    console.log("wishes", person.wishes);
   };
 
   return (
@@ -167,10 +166,10 @@ const FormPerson: FC<IPersonProps> = ({
         </Box>
         {showWishes && (
           <Box className={classes.formBoxWishes}>
-            {person.wishes.map((wish: string, i: number) => {
+            {person.wishes.map((wish: IFormWish, i: number) => {
               return (
                 <FormWish
-                  key={i}
+                  key={wish.id}
                   viewErrorTrigger={viewErrorTrigger}
                   updateWish={(wish) => {
                     updateWish(wish, i);

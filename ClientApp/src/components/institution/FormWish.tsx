@@ -90,15 +90,20 @@ const InstitutionWish: React.FC<IWishProps> = ({
     state.totalWish[0] = newInput;
     updateWish(newInput);
     getSetter("wishInput")(newInput);
-    if (newInput == "Klær" || newInput == "Sko") {
+    handleCategoryChange(e);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value == "Klær" || e.target.value == "Sko") {
       getSetter("locationDisabled")(true);
       getSetter("sizeDisabled")(false);
-    } else if (newInput == "Gavekort") {
+    } else if (e.target.value == "Gavekort") {
       getSetter("sizeDisabled")(true);
       getSetter("locationDisabled")(false);
     } else {
       getSetter("sizeDisabled")(true);
       getSetter("locationDisabled")(true);
+      state.totalWish[1] = "";
     }
   };
 
