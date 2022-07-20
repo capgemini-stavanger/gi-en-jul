@@ -26,6 +26,8 @@ type Props = {
   selectedGiverIndex: number;
   setSelectedGiver: (giver: GiverType) => void;
   setSelectedGiverIndex: (idx: number) => void;
+  refreshData: () => void;
+  accessToken: string;
 };
 
 const GiverDataTable: React.FC<Props> = ({
@@ -33,6 +35,8 @@ const GiverDataTable: React.FC<Props> = ({
   selectedGiverIndex,
   setSelectedGiver,
   setSelectedGiverIndex,
+  refreshData,
+  accessToken,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -166,10 +170,12 @@ const GiverDataTable: React.FC<Props> = ({
             selectedGiverIndex={selectedGiverIndex}
             setSelectedGiver={() => setSelectedGiver(allFilters(giverData)[index])}
             setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
+            refreshData={refreshData}
+            accessToken={accessToken}
           />
         )}
       />
     </>
   );
 };
-export default GiverDataTable;
+export default React.memo(GiverDataTable);

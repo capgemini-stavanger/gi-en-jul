@@ -20,8 +20,14 @@ import {
   CancelOutlined,
   PeopleOutline,
   LinkOutlined,
+  Edit,
 } from "@material-ui/icons";
 import getGender from "common/functions/GetGender";
+import ConfirmationBox from "components/shared/confirmationBox";
+import SendEmailContent from "components/shared/SendEmailContent";
+import SendIcon from "@material-ui/icons/Send";
+import EditFamilyDialog from "components/shared/EditFamilyDialog";
+import ApiService from "common/functions/apiServiceClass";
 
 type Props = {
   recipientData: RecipientType;
@@ -29,6 +35,8 @@ type Props = {
   selectedRecipientIndex: number;
   setSelectedRecipient: () => void;
   setSelectedRecipientIndex: () => void;
+  refreshData: () => void;
+  accessToken: string;
 };
 
 const RecipientDataCard: React.FC<Props> = ({
@@ -37,15 +45,56 @@ const RecipientDataCard: React.FC<Props> = ({
   selectedRecipientIndex,
   setSelectedRecipient,
   setSelectedRecipientIndex,
+  refreshData,
+  accessToken,
 }) => {
   const classes = useStyles();
+  const apiservice = new ApiService(accessToken);
 
   const [personExpanded, setPersonExpanded] = useState(false);
   const [comment, setComment] = useState("");
 
-  const checkData = () => {
-    console.log(recipientData.familyMembers);
+  const [openMailDialog, setOpenMailDialog] = useState(false);
+  const [openEditFamilyDialog, setOpenEditFamilyDialog] = useState(false);
+  const [openDelConnectionDialog, setOpenDelConnectionDialog] = useState(false);
+  const [openDelFamilyDialog, setOpenDelFamilyDialog] = useState(false);
+
+  const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
+    if (response) {
+      apiservice
+        .delete("admin/Connection", {
+          event: recipient.event,
+          connectedIds: `${recipient.recipientId}_${recipient.matchedGiver?.giverId}`,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+        });
+    }
   };
+
+  const deleteGiver = (recipient: RecipientType) => (response: boolean) => {
+    if (response) {
+      apiservice
+        .delete("admin/Recipient", {
+          event: recipient.event,
+          recipientId: recipient.recipientId,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+        });
+    }
+  };
+
   return (
     <>
       <Accordion
@@ -117,8 +166,15 @@ const RecipientDataCard: React.FC<Props> = ({
                 <Typography className={classes.boldText}>Kontaktperson</Typography>
                 <Typography>{recipientData.contactPhoneNumber}</Typography>
                 <Typography>{recipientData.contactEmail}</Typography>
-                <Button style={{ padding: "0" }} className={classes.underlineText}>
-                  Sendt epost
+                <SendIcon />
+                <Button
+                  style={{ padding: "0" }}
+                  className={classes.underlineText}
+                  onClick={() => {
+                    setOpenMailDialog(true);
+                  }}
+                >
+                  Send epost
                 </Button>
               </Grid>
               <Grid item xs={8}>
@@ -152,24 +208,32 @@ const RecipientDataCard: React.FC<Props> = ({
               <Grid container direction="row" spacing={10}>
                 <Grid item xs={6}>
                   <Grid container direction="column">
+                    {!recipientData.isSuggestedMatch && (
+                      <Grid item>
+                        <Typography
+                          onClick={() => {
+                            setOpenEditFamilyDialog(true);
+                          }}
+                        >
+                          <Edit />
+                          <Button>Rediger familie</Button>
+                        </Typography>
+                      </Grid>
+                    )}
+                    {recipientData.isSuggestedMatch && (
+                      <Grid item>
+                        <Typography onClick={() => setOpenDelConnectionDialog(true)}>
+                          <LinkOutlined />
+                          <Button className={classes.underlineText}>
+                            Koble fra giver og familie
+                          </Button>
+                        </Typography>
+                      </Grid>
+                    )}
                     <Grid item>
-                      <Typography>
+                      <Typography onClick={() => setOpenDelFamilyDialog(true)}>
                         <LinkOutlined />
-                        <Button className={classes.underlineText}>Godta kobling</Button>
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>
-                          Koble fra giver og familie
-                        </Button>
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>Slett giver</Button>
+                        <Button className={classes.underlineText}>Slett familie</Button>
                       </Typography>
                     </Grid>
                   </Grid>
@@ -194,8 +258,41 @@ const RecipientDataCard: React.FC<Props> = ({
             </Grid>
           </Grid>
         </AccordionDetails>
+
+        <SendEmailContent
+          open={openMailDialog}
+          handleClose={() => {
+            setOpenMailDialog(false);
+          }}
+          email={recipientData.contactEmail}
+          fullName={recipientData.contactFullName}
+        />
+        <EditFamilyDialog
+          open={openEditFamilyDialog}
+          onClose={() => {
+            setOpenEditFamilyDialog(false);
+          }}
+          refreshRecipients={() => refreshData()}
+          recipient={recipientData}
+        />
+        <ConfirmationBox
+          open={openDelConnectionDialog}
+          handleClose={() => {
+            setOpenDelConnectionDialog(false);
+          }}
+          text={`Er du sikker på at du fjerne familie id ${recipientData.familyId} [${recipientData.contactEmail}] sin tilkobling? Giver vil også bli frakoblet`}
+          handleResponse={deleteConnection(recipientData)}
+        />
+        <ConfirmationBox
+          open={openDelFamilyDialog}
+          handleClose={() => {
+            setOpenDelFamilyDialog(false);
+          }}
+          text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
+          handleResponse={deleteGiver(recipientData)}
+        />
       </Accordion>
     </>
   );
 };
-export default RecipientDataCard;
+export default React.memo(RecipientDataCard);

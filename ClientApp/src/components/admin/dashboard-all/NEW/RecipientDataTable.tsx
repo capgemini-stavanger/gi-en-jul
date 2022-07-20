@@ -25,6 +25,8 @@ type Props = {
   selectedRecipientIndex: number;
   setSelectedRecipient: (giver: RecipientType) => void;
   setSelectedRecipientIndex: (idx: number) => void;
+  refreshData: () => void;
+  accessToken: string;
 };
 
 const RecipientDataTable: React.FC<Props> = ({
@@ -32,6 +34,8 @@ const RecipientDataTable: React.FC<Props> = ({
   selectedRecipientIndex,
   setSelectedRecipient,
   setSelectedRecipientIndex,
+  refreshData,
+  accessToken,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -172,10 +176,12 @@ const RecipientDataTable: React.FC<Props> = ({
             selectedRecipientIndex={selectedRecipientIndex}
             setSelectedRecipient={() => setSelectedRecipient(allFilters(recipientData)[index])}
             setSelectedRecipientIndex={() => setSelectedRecipientIndex(index)}
+            refreshData={refreshData}
+            accessToken={accessToken}
           />
         )}
       />
     </>
   );
 };
-export default RecipientDataTable;
+export default React.memo(RecipientDataTable);

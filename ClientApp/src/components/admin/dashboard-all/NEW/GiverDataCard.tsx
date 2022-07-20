@@ -23,6 +23,11 @@ import {
   LinkOutlined,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
+import ConfirmationBox from "components/shared/confirmationBox";
+import ApiService from "common/functions/apiServiceClass";
+import DeleteTypeDialog from "../DeleteTypeDialog";
+import SendEmailContent from "components/shared/SendEmailContent";
+import SendIcon from "@material-ui/icons/Send";
 
 type Props = {
   giverData: GiverType;
@@ -30,6 +35,8 @@ type Props = {
   selectedGiverIndex: number;
   setSelectedGiver: () => void;
   setSelectedGiverIndex: () => void;
+  refreshData: () => void;
+  accessToken: string;
 };
 
 const GiverDataCard: React.FC<Props> = ({
@@ -38,11 +45,72 @@ const GiverDataCard: React.FC<Props> = ({
   selectedGiverIndex,
   setSelectedGiver,
   setSelectedGiverIndex,
+  refreshData,
+  accessToken,
 }) => {
   const classes = useStyles();
+  const apiservice = new ApiService(accessToken);
 
   const [personExpanded, setPersonExpanded] = useState(false);
   const [comment, setComment] = useState("");
+
+  const [openMailDialog, setOpenMailDialog] = useState(false);
+  const [confirmConnectDialogOpen, setConfirmConnectDialogOpen] = useState(false);
+  const [deleteConnectDialogOpen, setDeleteConnectDialogOpen] = useState(false);
+  const [deleteGiverDialogOpen, setDeleteGiverDialogOpen] = useState(false);
+
+  // REFRESH DATA ALSO?
+  const confirmConnection = (giver: GiverType) => (response: boolean) => {
+    if (response) {
+      apiservice
+        .post("connection/confirm", {
+          giverId: giver.giverId,
+          recipientId: giver.matchedRecipient,
+          event: giver.event,
+        })
+        .then((r) => {
+          if (r.status === 200) {
+            refreshData();
+          }
+        });
+    }
+  };
+
+  const deleteConnection = (giver: GiverType) => (response: boolean) => {
+    if (response) {
+      apiservice
+        .delete("admin/Connection", {
+          event: giver.event,
+          connectedIds: `${giver.matchedRecipient}_${giver.giverId}`,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+        });
+    }
+  };
+
+  const deleteGiver = (giver: GiverType) => (response: boolean) => {
+    if (response) {
+      apiservice
+        .delete("admin/Giver", {
+          giverId: giver.giverId,
+          event: giver.event,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
+        });
+    }
+  };
 
   return (
     <>
@@ -111,30 +179,41 @@ const GiverDataCard: React.FC<Props> = ({
             <Grid item style={{ paddingTop: "0px", paddingBottom: "40px" }}>
               <Typography>{giverData.phoneNumber}</Typography>
               <Typography>{giverData.email}</Typography>
-              <Button style={{ padding: "0" }} className={classes.underlineText}>
-                Sendt epost
+              <SendIcon />
+              <Button
+                style={{ padding: "0" }}
+                className={classes.underlineText}
+                onClick={() => {
+                  setOpenMailDialog(true);
+                }}
+              >
+                Send epost
               </Button>
             </Grid>
             <Grid item style={{ paddingTop: "40px" }} className={classes.borderInCards}>
               <Grid container direction="row" spacing={10}>
                 <Grid item xs={6}>
                   <Grid container direction="column">
+                    {!giverData.hasConfirmedMatch && giverData.isSuggestedMatch && (
+                      <Grid item>
+                        <Typography onClick={() => setConfirmConnectDialogOpen(true)}>
+                          <LinkOutlined />
+                          <Button className={classes.underlineText}>Godta kobling</Button>
+                        </Typography>
+                      </Grid>
+                    )}
+                    {giverData.isSuggestedMatch && (
+                      <Grid item>
+                        <Typography onClick={() => setDeleteConnectDialogOpen(true)}>
+                          <LinkOutlined />
+                          <Button className={classes.underlineText}>
+                            Koble fra giver og familie
+                          </Button>
+                        </Typography>
+                      </Grid>
+                    )}
                     <Grid item>
-                      <Typography>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>Godta kobling</Button>
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>
-                          Koble fra giver og familie
-                        </Button>
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography>
+                      <Typography onClick={() => setDeleteGiverDialogOpen(true)}>
                         <LinkOutlined />
                         <Button className={classes.underlineText}>Slett giver</Button>
                       </Typography>
@@ -161,8 +240,41 @@ const GiverDataCard: React.FC<Props> = ({
             </Grid>
           </Grid>
         </AccordionDetails>
+
+        <SendEmailContent
+          open={openMailDialog}
+          handleClose={() => {
+            setOpenMailDialog(false);
+          }}
+          email={giverData.email}
+          fullName={giverData.fullName}
+        />
+        <ConfirmationBox
+          open={confirmConnectDialogOpen}
+          handleClose={() => {
+            setConfirmConnectDialogOpen(false);
+          }}
+          text={`Er du sikker på at du vil godta på vegne av ${giverData.fullName} [${giverData.email}]?`}
+          handleResponse={confirmConnection(giverData)}
+        />
+        <ConfirmationBox
+          open={deleteConnectDialogOpen}
+          handleClose={() => {
+            setDeleteConnectDialogOpen(false);
+          }}
+          text={`Er du sikker på at du fjerne giver ${giverData.fullName} [${giverData.email}] sin tilkobling? Familien vil også bli frakoblet`}
+          handleResponse={deleteConnection(giverData)}
+        />
+        <ConfirmationBox
+          open={deleteGiverDialogOpen}
+          handleClose={() => {
+            setDeleteGiverDialogOpen(false);
+          }}
+          text={`Er du sikker på at du ønsker å slette giver ${giverData.fullName} [${giverData.email}]?`}
+          handleResponse={deleteGiver(giverData)}
+        />
       </Accordion>
     </>
   );
 };
-export default GiverDataCard;
+export default React.memo(GiverDataCard);

@@ -1,4 +1,14 @@
-import { Box, Button, Container, TextField, Typography } from "@material-ui/core";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
@@ -77,41 +87,63 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   };
 
   const handleSelectedGiver = (giver: GiverType) => {
-    setSelectedConnection((prevState) => {
-      return {
-        ...prevState,
-        giver: giver,
-      };
-    });
-    findSuggestions();
+    if (giver.isSuggestedMatch || giver.hasConfirmedMatch) {
+      setSelectedConnection((prevState) => {
+        return {
+          ...prevState,
+          giver: undefined,
+        };
+      });
+    } else {
+      setSelectedConnection((prevState) => {
+        return {
+          ...prevState,
+          giver: giver,
+        };
+      });
+      findSuggestions();
+    }
   };
   const findSuggestions = () => {
     const suggestedFamilies: RecipientType[] = [];
 
     // Get one random of each family size
     FAMILY_SIZES.map((sizeObj) => {
-      const sizeFilteredList = recipientData.filter(
+      const connectionFilteredList = recipientData.filter(
+        (family) => !family.isSuggestedMatch && !family.hasConfirmedMatch
+      );
+      const sizeFilteredList = connectionFilteredList.filter(
         (family) => rounUpFamilyMembers(family.familyMembers.length) == sizeObj.value
       );
       const randomFamily = sizeFilteredList[Math.floor(Math.random() * sizeFilteredList.length)];
-      suggestedFamilies.push(randomFamily);
+      if (randomFamily) {
+        suggestedFamilies.push(randomFamily);
+      }
     });
 
     setSuggestionData(suggestedFamilies);
   };
   const rounUpFamilyMembers = (famSize: number) => {
     const matchFamilySize = FAMILY_SIZES.find((famObj) => famObj.value >= famSize)?.value;
-
     return matchFamilySize;
   };
 
   const handleSelectedRecipient = (recipient: RecipientType) => {
-    setSelectedConnection((prevState) => {
-      return {
-        ...prevState,
-        recipient: recipient,
-      };
-    });
+    if (recipient.isSuggestedMatch || recipient.hasConfirmedMatch) {
+      setSelectedConnection((prevState) => {
+        return {
+          ...prevState,
+          recipient: undefined,
+        };
+      });
+    } else {
+      setSelectedConnection((prevState) => {
+        return {
+          ...prevState,
+          recipient: recipient,
+        };
+      });
+    }
   };
 
   const connectGiverRecipient = async () => {
@@ -167,6 +199,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   selectedGiverIndex={selectedGiverIndex}
                   setSelectedGiver={(giver) => handleSelectedGiver(giver)}
                   setSelectedGiverIndex={(index) => setSelectedGiverIndex(index)}
+                  refreshData={() => refreshData()}
+                  accessToken={accessToken}
                 />
               </Box>
               <Box className={classes.recipientTable}>
@@ -176,23 +210,36 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     selectedRecipientIndex={selectedRecipientIndex}
                     setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
                     setSelectedRecipientIndex={(index) => handleVisualSelection(index, false)}
+                    refreshData={() => refreshData()}
+                    accessToken={accessToken}
                   />
                 </Box>
               </Box>
             </Box>
-            {suggestionData.length > 0 && (
-              <Box className={classes.suggestionData}>
-                {suggestionData.map((suggestion, index) => {
+            <Box className={classes.suggestionData}>
+              <Grid
+                container
+                direction="row"
+                alignItems="center"
+                className={classes.tableHeadingSpace}
+              >
+                <Typography variant="h5">Forslag</Typography>
+              </Grid>
+              {suggestionData.map((suggestion, index) => {
+                return (
                   <RecipientDataCard
+                    key={index}
                     recipientData={suggestion}
                     recipientIndex={index}
                     selectedRecipientIndex={selectedSuggestionIndex}
                     setSelectedRecipient={() => handleSelectedRecipient(suggestion)}
-                    setSelectedRecipientIndex={() => handleVisualSelection(index, false)}
-                  />;
-                })}
-              </Box>
-            )}
+                    setSelectedRecipientIndex={() => handleVisualSelection(index, true)}
+                    refreshData={() => refreshData()}
+                    accessToken={accessToken}
+                  />
+                );
+              })}
+            </Box>
           </Box>
         </Container>
       </Box>

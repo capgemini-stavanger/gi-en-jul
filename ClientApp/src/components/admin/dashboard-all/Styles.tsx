@@ -124,8 +124,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   suggestionData: {
     flexGrow: 1,
-    backgroundColor: "green",
-    height: "500px",
   },
   recipientData: {
     flexGrow: 1,
