@@ -3,10 +3,10 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import ScrollToTop from "components/shared/ScrollToTop";
 import CompletedMacro from "components/admin/dashboard-completed/Macro";
-import OverviewMacro from "components/admin/dashboard-all/OverviewMacro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import ManageDashboard from "components/superadmin/ManageDashboard";
+import OverviewMacroRemake from "components/admin/dashboard-all/NEW/OverviewMacroRemake";
 
 interface IAdminTab {
   accessToken: string;
@@ -32,7 +32,8 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
           <Tab label="Manage" value="4" />
         </TabList>
         <TabPanel value="1">
-          <OverviewMacro location={location} accessToken={accessToken} />
+          <OverviewMacroRemake location={location} accessToken={accessToken} />
+          {/* <OverviewMacro location={location} accessToken={accessToken} /> */}
         </TabPanel>
         <TabPanel value="2">
           <ConnectionSuggesterMacro location={location} accessToken={accessToken} />

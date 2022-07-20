@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   waitingButton: {
     color: theme.palette.primary.main,
     padding: theme.spacing(1.5),
@@ -68,6 +68,128 @@ const useStyles = makeStyles((theme) => ({
     border: "2px solid #000",
     margin: theme.spacing(5),
     padding: theme.spacing(1.5),
+  },
+
+  // New styles
+  entireDashboard: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  oversiktBox: {
+    width: "200px",
+    height: "700px",
+    backgroundColor: "#f4f5f4",
+    flexShrink: 0,
+    padding: "1em",
+  },
+  dashboardBox: {
+    flexGrow: 1,
+  },
+  infoBox: {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "2em",
+  },
+  tableBox: {
+    display: "flex",
+    flexDirection: "row",
+    height: "600px",
+  },
+  dashboardConnectBox: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  dashBoardConnection: {
+    flexGrow: 1,
+    height: "100px",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "#f4f5f4",
+    padding: "1em",
+  },
+  giverTable: {
+    flexGrow: 1,
+    marginRight: "1em",
+    backgroundColor: "#f4f5f4",
+    borderRadius: "1em",
+    paddingTop: "1em",
+  },
+  recipientTable: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#f4f5f4",
+    borderRadius: "1em",
+    paddingTop: "1em",
+  },
+  suggestionData: {
+    flexGrow: 1,
+  },
+  recipientData: {
+    flexGrow: 1,
+  },
+  accordionNormal: {
+    backgroundColor: "#f4f5f4",
+  },
+  accordionSelected: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+  tableHeadingSpace: {
+    marginBottom: "1em",
+  },
+  gridBoxCenter: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  borderInCards: {
+    borderTop: "1px solid rgba(0, 0, 0, 0.15)",
+  },
+  underlineText: {
+    textDecoration: "underline",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  commentBox: {
+    paddingTop: "1em",
+  },
+  commentField: { width: "250px" },
+  commentBoxButton: {
+    marginLeft: "0.5em",
+    borderRadius: "0.5em",
+    height: "1.6em",
+    width: "1em",
+
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
+  gridBoxLeft: {
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  gridBoxRight: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  inputSmall: {
+    width: "100px",
+    height: "40px",
+  },
+  accordionSummary: {
+    height: "73px",
+  },
+  personTable: {
+    borderBottom: "1px solid rgba(0, 0, 0, 0.15)",
+    padding: "0.5em",
   },
 }));
 
