@@ -4,7 +4,7 @@ import { SelectedConnectionType } from "components/shared/Types";
 import useStyles from "../Styles";
 import { PeopleOutline } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 
 type IStatistics = {
   connection: SelectedConnectionType;

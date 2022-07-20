@@ -23,7 +23,7 @@ import {
   Edit,
 } from "@material-ui/icons";
 import getGender from "common/functions/GetGender";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";

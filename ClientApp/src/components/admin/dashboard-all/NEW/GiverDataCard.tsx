@@ -22,7 +22,7 @@ import {
   LinkOutlined,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
