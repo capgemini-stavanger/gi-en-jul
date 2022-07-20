@@ -1,16 +1,7 @@
-import {
-  AppBar,
-  Button,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Button, Drawer, IconButton, List, ListItem, Toolbar } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { ArrowForwardIos, Close } from "@material-ui/icons";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
 import useStyles from "components/shared/Styles";
@@ -31,7 +22,7 @@ const NavbarMobile = () => {
   if (window.location.pathname == "/bedrift") {
     return (
       <>
-        <AppBar className={classes.navContainer}>
+        <AppBar className={classes.navContainerMobile}>
           <Toolbar className={classes.toolBar}>
             <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
               <MenuIcon />
@@ -41,54 +32,41 @@ const NavbarMobile = () => {
                 <IconButton onClick={handleClose} className={classes.closeButton}>
                   <Close color="primary" />
                 </IconButton>
-                <ListItem>
-                  <Link
-                    to="/"
-                    onClick={() => {
-                      history.push("/");
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Hjem</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("kommune");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  Kommune innformasjon
                 </ListItem>
-                <ListItem>
-                  <Link
-                    to="bedrift"
-                    style={{ textDecoration: "none" }}
-                    onClick={() => {
-                      history.push("/bedrift");
-                    }}
-                  >
-                    <Typography className={classes.drawerContent}>For bedrifter</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("/startJul");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  Start Gi en jul i din kommune
                 </ListItem>
-                <ListItem>
-                  <Link
-                    to="startJul"
-                    style={{ textDecoration: "none" }}
-                    onClick={() => {
-                      history.push("/startJul");
-                    }}
-                  >
-                    <Typography className={classes.drawerContent}>
-                      Hvordan starte Gi en Jul i din kommune
-                    </Typography>
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    to="kommune"
-                    onClick={() => {
-                      history.push("/kommune");
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Kommuner</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("/bedrift");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  For bedrifter
                 </ListItem>
               </List>
             </Drawer>
+            <Button
+              disabled={true}
+              size="large"
+              endIcon={<ArrowForwardIos />}
+              className={classes.buttonNext}
+              onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+            >
+              Bli giver
+            </Button>
           </Toolbar>
         </AppBar>
       </>
@@ -96,7 +74,7 @@ const NavbarMobile = () => {
   } else {
     return (
       <>
-        <AppBar className={classes.navContainer}>
+        <AppBar className={classes.navContainerMobile}>
           <Toolbar className={classes.toolBar}>
             <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
               <MenuIcon />
@@ -106,51 +84,37 @@ const NavbarMobile = () => {
                 <IconButton onClick={handleClose} className={classes.closeButton}>
                   <Close color="primary" />
                 </IconButton>
-                <ListItem>
-                  <Link
-                    to="/"
-                    onClick={() => {
-                      history.push("/");
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Hjem</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("/");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  Hjem
                 </ListItem>
-                <ListItem>
-                  <Link
-                    to="bedrift"
-                    style={{ textDecoration: "none" }}
-                    onClick={() => {
-                      history.push("/bedrift");
-                    }}
-                  >
-                    <Typography className={classes.drawerContent}>For bedrifter</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("kommune");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  Kommune innformasjon
                 </ListItem>
-                <ListItem>
-                  <Link
-                    to="startJul"
-                    style={{ textDecoration: "none" }}
-                    onClick={() => {
-                      history.push("/startJul");
-                    }}
-                  >
-                    <Typography className={classes.drawerContent}>
-                      Hvordan starte Gi en Jul i din kommune
-                    </Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("/startJul");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  Start Gi en jul i din kommune
                 </ListItem>
-                <ListItem>
-                  <Link
-                    to="kommune"
-                    onClick={() => {
-                      history.push("/kommune");
-                    }}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Typography className={classes.drawerContent}>Kommuner</Typography>
-                  </Link>
+                <ListItem
+                  onClick={() => {
+                    history.push("/bedrift");
+                  }}
+                  className={classes.drawerContent}
+                >
+                  For bedrifter
                 </ListItem>
               </List>
             </Drawer>
