@@ -3,7 +3,6 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import ScrollToTop from "components/shared/ScrollToTop";
 import CompletedMacro from "components/admin/dashboard-completed/Macro";
-import OverviewMacro from "components/admin/dashboard-all/OverviewMacro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import ManageDashboard from "components/superadmin/ManageDashboard";
