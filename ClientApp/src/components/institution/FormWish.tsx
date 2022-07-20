@@ -29,7 +29,7 @@ export const getFormWish: () => IFormWish = () => ({
 
 const initState: { [data: string]: any } = {
   wishInput: "",
-  ageWish: false,
+  ageWish: false, //denne skal være i formPerson og hele formWish objektet skal ikke vises dersom den er true :P herlig
   size: "",
   location: "",
   specification: "",
