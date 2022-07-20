@@ -151,7 +151,7 @@ namespace GiEnJul.Infrastructure
 
             //Event mapping
             CreateMap<Dtos.PostEventDto, Models.Event>()
-                .ForMember(dest => dest.Municipality, opt => opt.MapFrom(src => src.City));
+                .ForMember(dest => dest.Municipality, opt => opt.MapFrom(src => src.Municipality));
 
             CreateMap<Entities.Event, Models.Event>()
                 .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.PartitionKey))

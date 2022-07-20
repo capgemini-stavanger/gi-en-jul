@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Box, Button, Grid, TextField } from "@material-ui/core";
 import parse from "html-react-parser";
-import ConfirmationBox from "components/shared/confirmationBox";
+import ConfirmationBox from "components/shared/ConfirmationBox";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import useStyles from "components/superadmin/Styles";
 

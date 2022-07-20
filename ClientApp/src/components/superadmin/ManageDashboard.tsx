@@ -51,9 +51,12 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <Typography>Placeholder - Legg til/Slett Brukere</Typography>
         </TabPanel>
         <TabPanel value="6">
-          <Grid container direction="column">
+          <Grid container direction="column" spacing={10}>
             <Grid item>
               <MunicipalityContainer accessToken={accessToken} />
+            </Grid>
+            <Grid item>
+              <Typography>Add-Users Placeholder</Typography>
             </Grid>
             <Grid item>
               <EventsContainer accessToken={accessToken} />

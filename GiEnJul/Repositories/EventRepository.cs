@@ -20,6 +20,8 @@ namespace GiEnJul.Repositories
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
         Task<Models.Event> GetEventByUserLocationAsync(string location);
         Task<List<Models.Event>> GetAllEventsAsync();
+        Task<string[]> GetAllUniqueEventNames();
+        Task<Entities.Event> DeleteEntry(string eventName, string municipality);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -81,6 +83,15 @@ namespace GiEnJul.Repositories
             return modelEvents;
         }
 
+        public async Task<string[]> GetAllUniqueEventNames()
+        {
+            var events = await GetAllAsync();
+            // Partition key is "EventName"
+            var uniqueEventNames = events.Select(e => e.PartitionKey).Distinct().ToArray();
+
+            return uniqueEventNames;
+        }
+
         public async Task<string[]> GetLocationsWithActiveEventAsync()
         {
             var events = await GetAllByQueryAsync(HasActiveDates());
@@ -109,10 +120,22 @@ namespace GiEnJul.Repositories
         public async Task<List<Models.Event>> GetContactsWithActiveEventAsync()
         {
             var events = await GetAllByQueryAsync(HasActiveDates());
-
             var modelEvents = _mapper.Map<List<Models.Event>>(events);
 
             return modelEvents;
+        }
+
+        public async Task<Entities.Event> DeleteEntry(string eventName, string municipality)
+        {
+            try
+            {
+                var deleted = await DeleteAsync(eventName, municipality);
+                return deleted;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
