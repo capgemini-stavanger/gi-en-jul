@@ -98,8 +98,6 @@ const FormPerson: FC<IPersonProps> = ({
       }
     }
     setAgeWish(e.target.checked);
-
-    console.log("wishes", person.wishes);
   };
 
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
