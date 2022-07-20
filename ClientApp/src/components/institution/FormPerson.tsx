@@ -132,7 +132,6 @@ const FormPerson: FC<IPersonProps> = ({
     if (newList.length >= 5) return;
     newList.push(getFormWish());
     updatePerson({ wishes: newList });
-    console.log("wishes", person.wishes);
   };
 
   return (
