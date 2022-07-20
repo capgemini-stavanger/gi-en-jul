@@ -181,9 +181,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }
 
     const personsList = Array<PersonType>();
+
     formDataState.persons.forEach((person) => {
+      const wishList: string[] = [];
+      person.wishes.forEach((element) => {
+        wishList.push(element.wish);
+      });
       const person1: PersonType = {
-        Wishes: person.wishes,
+        Wishes: wishList,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,

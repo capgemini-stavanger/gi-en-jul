@@ -1,4 +1,14 @@
-import { capitalize, Grid, SvgIcon, IconButton, Button, Box, Container } from "@material-ui/core";
+import {
+  capitalize,
+  Grid,
+  SvgIcon,
+  IconButton,
+  Button,
+  Box,
+  Container,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { useState } from "react";
@@ -8,7 +18,7 @@ import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import useStyles from "./Styles";
-import FormWish from "./FormWish";
+import FormWish, { getFormWish, IFormWish } from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import { IFormPerson } from "./RegistrationFormTypes";
@@ -31,6 +41,9 @@ const FormPerson: FC<IPersonProps> = ({
   const classes = useStyles();
 
   const [showWishes, setShowWishes] = useState(true);
+  const [ageWish, setAgeWish] = useState(false);
+
+  const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 
   useEffect(() => {}, [person.wishes]);
 
@@ -68,6 +81,23 @@ const FormPerson: FC<IPersonProps> = ({
     }
     updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
+  const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //   const newInput = e.target.checked ? ageAppropriateString : person.wishes[0].wish;
+
+    if (e.target.checked) {
+      setShowWishes(false);
+      updateWish(ageAppropriateString, 0);
+
+      for (let i = 0; i < person.wishes.length; i++) {
+        if (i == 0) {
+          updateWish(ageAppropriateString, i);
+        } else {
+          deleteWish(i);
+        }
+      }
+    }
+    setAgeWish(e.target.checked);
+  };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newGender = parseInt(e.target.value);
@@ -78,7 +108,7 @@ const FormPerson: FC<IPersonProps> = ({
 
   const updateWish = (newWishData: string, index: number) => {
     const newList = [...person.wishes];
-    newList[index] = newWishData;
+    newList[index].wish = newWishData;
     updatePerson({ wishes: newList });
   };
 
@@ -94,7 +124,7 @@ const FormPerson: FC<IPersonProps> = ({
   const addWish = () => {
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
-    newList.push("");
+    newList.push(getFormWish());
     updatePerson({ wishes: newList });
   };
 
@@ -147,10 +177,27 @@ const FormPerson: FC<IPersonProps> = ({
               />
             </Grid>
             <Grid item>
-              <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-                Legg til gaveønske (Maks 5)
-              </Button>
+              {!ageWish && (
+                <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+                  Legg til gaveønske (Maks 5)
+                </Button>
+              )}
             </Grid>
+            <Grid item>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={ageWish}
+                    onChange={(e) => handleAgeWishChecked(e)} //denne må tømme wishlisten og sette den lik stringen om aldersgave.
+                    name="isAgeWish"
+                    color="primary"
+                  />
+                }
+                className="my-0"
+                label="Giver kjøper alderstilpasset gave"
+              />
+            </Grid>
+
             <Grid item>
               {showWishes ? (
                 <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
@@ -166,12 +213,11 @@ const FormPerson: FC<IPersonProps> = ({
         </Box>
         {showWishes && (
           <Box className={classes.formBoxWishes}>
-            {person.wishes.map((wish: string, i: number) => {
+            {person.wishes.map((wish: IFormWish, i: number) => {
               return (
                 <FormWish
-                  key={i}
+                  key={wish.id}
                   viewErrorTrigger={viewErrorTrigger}
-                  wish={wish}
                   updateWish={(wish) => {
                     updateWish(wish, i);
                   }}
