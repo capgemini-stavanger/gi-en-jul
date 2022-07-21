@@ -15,11 +15,11 @@ const NavBarBusiness = () => {
         <Grid
           container
           className={classes.navBarGridContainer}
-          justifyContent="space-around"
           alignItems="center"
+          justifyContent="space-around"
           direction="row"
         >
-          <Grid item className={classes.treeGridIcon}>
+          <Grid item className={classes.treeGridIconBusiness}>
             <IconButton
               onClick={() => {
                 history.push("/");
@@ -30,7 +30,7 @@ const NavBarBusiness = () => {
             </IconButton>
           </Grid>
 
-          <Grid item className={classes.fontSizeNavText}>
+          <Grid item className={classes.fontSizeNavTextBusiness}>
             <Tab
               onClick={() => {
                 history.push("/");
@@ -62,17 +62,6 @@ const NavBarBusiness = () => {
               className={classes.drawerContent}
               label="Kommuner"
             ></Tab>
-          </Grid>
-          <Grid item className={classes.giverButtonGridItem}>
-            <Button
-              disabled={true}
-              size="large"
-              className={classes.giverButton}
-              endIcon={<ArrowForwardIos />}
-              onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
-            >
-              Bli giver
-            </Button>
           </Grid>
         </Grid>
       </Box>
