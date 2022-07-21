@@ -82,12 +82,13 @@ const FormPerson: FC<IPersonProps> = ({
     }
     updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
+
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //   const newInput = e.target.checked ? ageAppropriateString : person.wishes[0].wish;
+    setAgeWish(e.target.checked);
 
     if (e.target.checked) {
+      setRemoveWishes(false);
       setShowWishes(false);
-      updateWish(ageAppropriateString, 0);
 
       for (let i = 0; i < person.wishes.length; i++) {
         if (i == 0) {
@@ -96,8 +97,11 @@ const FormPerson: FC<IPersonProps> = ({
           deleteWish(i);
         }
       }
+    } else {
+      updatePerson({ wishes: [] });
+      setShowWishes(true);
+      setRemoveWishes(true);
     }
-    setAgeWish(e.target.checked);
   };
 
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -220,13 +224,13 @@ const FormPerson: FC<IPersonProps> = ({
                 control={
                   <Checkbox
                     checked={ageWish}
-                    onChange={(e) => handleAgeWishChecked(e)} //denne må tømme wishlisten og sette den lik stringen om aldersgave.
+                    onChange={(e) => handleAgeWishChecked(e)}
                     name="isAgeWish"
                     color="primary"
                   />
                 }
                 className="my-0"
-                label="Giver kjøper alderstilpasset gave"
+                label="Alderstilpasset gave"
               />
             </Grid>
 
