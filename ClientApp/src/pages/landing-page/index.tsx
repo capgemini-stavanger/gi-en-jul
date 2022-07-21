@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Box, Container, Grid } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import How from "components/landing-page/How";
 import useStyles from "components/landing-page/Styles";
@@ -12,6 +12,8 @@ import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Questions from "components/landing-page/Questions";
+import What from "components/landing-page/What";
+import { rootCertificates } from "tls";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
@@ -24,7 +26,7 @@ const Home = () => {
   return (
     <>
       <NavBarPublic />
-      <Container id="landing" className={classes.root} maxWidth={false}>
+      <Box id="landing">
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <img className={classes.logo} src={logo}></img>
@@ -36,12 +38,21 @@ const Home = () => {
             <img className={classes.snowDown} src={snowDown}></img>
           </Grid>
         </Grid>
-        <How />
-        <Questions />
-        <Contact contacts={contacts} />
+        <Box className={classes.rootGreen}>
+          <What />
+        </Box>
+        <Box className={classes.rootWhite}>
+          <How />
+        </Box>
+        <Box className={classes.rootGreen}>
+          <Questions />
+        </Box>
+        <Box className={classes.whiteBackground}>
+          <Contact contacts={contacts} />
+        </Box>
         <ScrollToTop maxPagePosition={300} />
         <Footer />
-      </Container>
+      </Box>
     </>
   );
 };
