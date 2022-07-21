@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@material-ui/core";
+import { Box, Grid } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import How from "components/landing-page/How";
 import useStyles from "components/landing-page/Styles";
@@ -13,7 +13,6 @@ import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Questions from "components/landing-page/Questions";
 import What from "components/landing-page/What";
-import { rootCertificates } from "tls";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
