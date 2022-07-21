@@ -16,15 +16,15 @@ interface IChangeEvent {
 
 const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLocation, role }) => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedMunicipality, setSelectedMunicipality] = useState<string>("");
   const apiservice = new ApiService(accessToken);
   const fetchActiveLocations = () => {
     apiservice
-      .get("Event/ActiveLocations", {})
+      .get("municipality/active", {})
       .then((resp) => {
         if (role == "Admin") {
           setActiveLocations([assignedLocation]);
-          setSelectedLocation(assignedLocation);
+          setSelectedMunicipality(assignedLocation);
         } else {
           setActiveLocations(resp.data);
         }
@@ -36,7 +36,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
   useEffect(fetchActiveLocations, []);
 
   const handleChange = (event: ChangeEvent<IChangeEvent>) => {
-    setSelectedLocation(event.target.value as string);
+    setSelectedMunicipality(event.target.value as string);
   };
 
   const menuItems = activeLocations.map((location, index) => {
@@ -57,7 +57,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={selectedLocation}
+                value={selectedMunicipality}
                 label="Location"
                 onChange={handleChange}
                 fullWidth
@@ -72,7 +72,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
             accessToken={accessToken}
             role={role}
             assignedLocation={assignedLocation}
-            location={selectedLocation}
+            municipalityName={selectedMunicipality}
           />
         </Grid>
       </Grid>

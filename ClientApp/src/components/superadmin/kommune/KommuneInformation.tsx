@@ -7,52 +7,74 @@ import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface IKommuneInformation {
   accessToken: string;
-  location: string;
+  municipalityName: string;
   role: string;
   assignedLocation: string;
 }
 
+const IMunicipalityInit = () => {
+  return {
+    country: "",
+    name: "",
+    isActive: false,
+    information: "",
+  };
+};
+
+interface IMunicipality {
+  country: string;
+  name: string;
+  isActive: boolean;
+  information: string;
+}
+
 const KommuneInformation: React.FC<IKommuneInformation> = ({
   accessToken,
-  location,
+  municipalityName,
   role,
-  // eslint-disable-next-line
   assignedLocation,
 }) => {
   const apiservice = new ApiService(accessToken);
-  const [kommuneInformation, setKommuneInformation] = useState("");
+  const [municipality, setMunicipality] = useState<IMunicipality>(IMunicipalityInit());
+  const [municipalityInformation, setMunicipalityInformation] = useState("");
   const [html, setHtml] = useState("");
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
   const [openEditor, setOpenEditor] = useState(false);
 
   const fetchInformation = () => {
-    if (!location) {
+    if (!municipalityName) {
       // location is not set (location starts as an empty string in the parent)
       return;
     }
     apiservice
-      .get("Cms/GetSingle", {
-        params: { contentType: "Kommune", index: location },
+      .get("Municipality/GetSingle", {
+        params: { Country: "Norge", Municipality: municipalityName },
       })
       .then((resp) => {
         // response an array-wrapped object
-        setKommuneInformation(resp.data[0].info);
-        setHtml(resp.data[0].info);
+        let kommuneInformation: string | undefined = resp.data[0].information;
+        if (kommuneInformation == undefined) {
+          kommuneInformation = "";
+        }
+        setMunicipality(resp.data[0]);
+        setMunicipalityInformation(kommuneInformation);
+        setHtml(kommuneInformation);
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
   };
-  useEffect(fetchInformation, [location]);
+  useEffect(fetchInformation, [municipalityName]);
 
-  const deleteLocation = () => {
+  const deleteMunicipalityInformation = () => {
     apiservice
-      .post("Cms/deleteSingle", {
-        ContentType: "Kommune",
-        Index: location,
+      .put("Municipality/update", {
+        ...municipality,
+        information: "",
       })
       .then(() => {
-        setKommuneInformation("");
+        setMunicipalityInformation("");
+        setMunicipality(IMunicipalityInit());
         setHtml("");
       })
       .catch((errorStack) => {
@@ -64,41 +86,21 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
     setHtml(e.target.value);
   }
 
-  const saveKommuneInformation = () => {
-    if (role == "SuperAdmin") {
-      apiservice
-        .post("cms/insert", {
-          ContentType: "Kommune",
-          Index: location,
-          Info: html,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setKommuneInformation(html);
-            setOpenEditor(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-    if (role == "Admin") {
-      apiservice
-        .post(`cms/Insertforadmin/${assignedLocation}`, {
-          ContentType: "Kommune",
-          Index: location,
-          Info: html,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            setKommuneInformation(html);
-            setOpenEditor(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+  const saveMunicipalityInformation = () => {
+    apiservice
+      .put(`Municipality/Update`, {
+        ...municipality,
+        information: html,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setMunicipalityInformation(html);
+          setOpenEditor(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleSaveClick = () => {
@@ -107,13 +109,13 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
 
   const handleSaveResponse = (response: boolean) => {
     if (response) {
-      saveKommuneInformation();
+      saveMunicipalityInformation();
     }
   };
 
   return (
     <>
-      <Box>{parse(kommuneInformation)}</Box>
+      <Box>{parse(municipalityInformation)}</Box>
 
       <Button
         variant="contained"
@@ -144,7 +146,7 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
       )}
 
       <Grid item>
-        <Button hidden={role != "SuperAdmin"} onClick={deleteLocation}>
+        <Button hidden={role != "SuperAdmin"} onClick={deleteMunicipalityInformation}>
           Slett informasjon om valgt kommune
         </Button>
       </Grid>
