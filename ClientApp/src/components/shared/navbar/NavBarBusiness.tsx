@@ -1,7 +1,6 @@
-import { Box, Button, Grid, IconButton, Tab } from "@material-ui/core";
-import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
+import { Box, Grid, IconButton, Tab } from "@material-ui/core";
+import { FiberManualRecord } from "@material-ui/icons";
 import useStyles from "components/shared/Styles";
-import React from "react";
 import { useHistory } from "react-router";
 import logo from "styling/img/logo_white.svg";
 
