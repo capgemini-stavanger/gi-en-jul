@@ -9,6 +9,7 @@ import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import OverviewStatistics from "./OverviewStatistics";
 import OverviewConnection from "./OverviewConnection";
 import RecipientDataCard from "./RecipientDataCard";
+import CustomTooltip from "components/institution/CustomTooltip";
 
 interface IOverviewMacro {
   location: string;
@@ -84,6 +85,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
           giver: undefined,
         };
       });
+      setSuggestionData([]);
     } else {
       setSelectedConnection((prevState) => {
         return {
@@ -151,12 +153,20 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         if (response.status === 200) {
           fetchRecipients();
           fetchGivers();
-          setSelectedConnection(initState);
+          resetSelections();
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
+  };
+
+  const resetSelections = () => {
+    setSelectedConnection(initState);
+    setSuggestionData([]);
+    setSelectedGiverIndex(-1);
+    setSelectedRecipientIndex(-1);
+    setSelectedSuggestionIndex(-1);
   };
 
   return (
@@ -168,7 +178,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         <Container>
           <Box className={classes.dashboardBox}>
             <Box className={classes.infoBox}>
-              <Box>
+              <Box className={classes.dashInfoSpacing}>
                 <Typography variant="h4">Dashboard</Typography>
                 <Typography>Finn, søk og koble sammen familier og givere</Typography>
               </Box>
@@ -177,6 +187,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   <OverviewConnection
                     connection={selectedConnection}
                     connectGiverRecipient={connectGiverRecipient}
+                    resetSelections={resetSelections}
                   />
                 </Box>
               </Box>
@@ -190,9 +201,41 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   setSelectedGiverIndex={(index) => setSelectedGiverIndex(index)}
                   refreshData={() => refreshData()}
                   accessToken={accessToken}
+                  resetSelections={resetSelections}
                 />
               </Box>
               <Box className={classes.recipientTable}>
+                {suggestionData.length > 0 && (
+                  <Box className={classes.suggestionData}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      className={classes.tableHeadingSpaceSuggestion}
+                    >
+                      <Grid item>
+                        <Typography variant="h5">
+                          Forslag <CustomTooltip iconType={true} content={"TEXT"} />
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    {suggestionData.map((suggestion, index) => {
+                      return (
+                        <RecipientDataCard
+                          key={index}
+                          recipientData={suggestion}
+                          recipientIndex={index}
+                          selectedRecipientIndex={selectedSuggestionIndex}
+                          setSelectedRecipient={() => handleSelectedRecipient(suggestion)}
+                          setSelectedRecipientIndex={() => handleVisualSelection(index, true)}
+                          refreshData={() => refreshData()}
+                          accessToken={accessToken}
+                          resetSelections={() => resetSelections()}
+                        />
+                      );
+                    })}
+                  </Box>
+                )}
                 <Box className={classes.recipientData}>
                   <RecipientDataTable
                     recipientData={recipientData}
@@ -201,33 +244,10 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     setSelectedRecipientIndex={(index) => handleVisualSelection(index, false)}
                     refreshData={() => refreshData()}
                     accessToken={accessToken}
+                    resetSelections={resetSelections}
                   />
                 </Box>
               </Box>
-            </Box>
-            <Box className={classes.suggestionData}>
-              <Grid
-                container
-                direction="row"
-                alignItems="center"
-                className={classes.tableHeadingSpace}
-              >
-                <Typography variant="h5">Forslag</Typography>
-              </Grid>
-              {suggestionData.map((suggestion, index) => {
-                return (
-                  <RecipientDataCard
-                    key={index}
-                    recipientData={suggestion}
-                    recipientIndex={index}
-                    selectedRecipientIndex={selectedSuggestionIndex}
-                    setSelectedRecipient={() => handleSelectedRecipient(suggestion)}
-                    setSelectedRecipientIndex={() => handleVisualSelection(index, true)}
-                    refreshData={() => refreshData()}
-                    accessToken={accessToken}
-                  />
-                );
-              })}
             </Box>
           </Box>
         </Container>

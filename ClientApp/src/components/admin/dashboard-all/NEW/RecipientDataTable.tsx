@@ -17,6 +17,7 @@ type Props = {
   setSelectedRecipientIndex: (idx: number) => void;
   refreshData: () => void;
   accessToken: string;
+  resetSelections: () => void;
 };
 
 const RecipientDataTable: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const RecipientDataTable: React.FC<Props> = ({
   setSelectedRecipientIndex,
   refreshData,
   accessToken,
+  resetSelections,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -158,7 +160,6 @@ const RecipientDataTable: React.FC<Props> = ({
 
       <Virtuoso
         totalCount={allFilters(recipientData).length}
-        style={{ height: 500 }}
         itemContent={(index) => (
           <RecipientDataCard
             recipientData={allFilters(recipientData)[index]}
@@ -168,6 +169,7 @@ const RecipientDataTable: React.FC<Props> = ({
             setSelectedRecipientIndex={() => setSelectedRecipientIndex(index)}
             refreshData={refreshData}
             accessToken={accessToken}
+            resetSelections={resetSelections}
           />
         )}
       />

@@ -17,6 +17,7 @@ type Props = {
   setSelectedGiverIndex: (idx: number) => void;
   refreshData: () => void;
   accessToken: string;
+  resetSelections: () => void;
 };
 
 const GiverDataTable: React.FC<Props> = ({
@@ -26,6 +27,7 @@ const GiverDataTable: React.FC<Props> = ({
   setSelectedGiverIndex,
   refreshData,
   accessToken,
+  resetSelections,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -151,7 +153,7 @@ const GiverDataTable: React.FC<Props> = ({
 
       <Virtuoso
         totalCount={allFilters(giverData).length}
-        style={{ height: 500 }}
+        style={{ marginBottom: "2em" }}
         itemContent={(index) => (
           <GiverDataCard
             giverData={allFilters(giverData)[index]}
@@ -161,6 +163,7 @@ const GiverDataTable: React.FC<Props> = ({
             setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
             refreshData={refreshData}
             accessToken={accessToken}
+            resetSelections={resetSelections}
           />
         )}
       />

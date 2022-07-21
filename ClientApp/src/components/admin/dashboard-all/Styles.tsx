@@ -74,16 +74,28 @@ export const useStyles = makeStyles((theme) => ({
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
+    height: "80vh",
   },
   oversiktBox: {
     width: "200px",
     height: "700px",
-    backgroundColor: "#f4f5f4",
-    flexShrink: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.02)",
+    position: "absolute",
+    left: "0",
+    top: "8em",
     padding: "1em",
   },
+  oversiktBoxSpacing: {
+    marginTop: "1em",
+    marginBottom: "1em",
+  },
   dashboardBox: {
+    marginLeft: "200px",
     flexGrow: 1,
+    height: "100%",
+  },
+  dashInfoSpacing: {
+    marginBottom: "1em",
   },
   infoBox: {
     display: "flex",
@@ -93,7 +105,7 @@ export const useStyles = makeStyles((theme) => ({
   tableBox: {
     display: "flex",
     flexDirection: "row",
-    height: "600px",
+    height: "100%",
   },
   dashboardConnectBox: {
     display: "flex",
@@ -104,38 +116,42 @@ export const useStyles = makeStyles((theme) => ({
     height: "100px",
     display: "flex",
     justifyContent: "center",
-    backgroundColor: "#f4f5f4",
+    backgroundColor: "rgba(0, 0, 0, 0.02)",
     padding: "1em",
   },
   giverTable: {
     flexGrow: 1,
     marginRight: "1em",
-    backgroundColor: "#f4f5f4",
+    backgroundColor: "rgba(0, 0, 0, 0.02)",
     borderRadius: "1em",
     paddingTop: "1em",
+    paddingBottom: "5em",
   },
   recipientTable: {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "#f4f5f4",
-    borderRadius: "1em",
-    paddingTop: "1em",
   },
   suggestionData: {
-    flexGrow: 1,
+    marginBottom: "1em",
+    backgroundColor: "#feffed",
+    borderRadius: "1em",
+    paddingTop: "1em",
+    paddingBottom: "1em",
   },
   recipientData: {
     flexGrow: 1,
-  },
-  accordionNormal: {
-    backgroundColor: "#f4f5f4",
-  },
-  accordionSelected: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "rgba(0, 0, 0, 0.02)",
+    borderRadius: "1em",
+    paddingTop: "1em",
+    paddingBottom: "5em",
   },
   tableHeadingSpace: {
     marginBottom: "1em",
+  },
+  tableHeadingSpaceSuggestion: {
+    marginBottom: "1em",
+    marginLeft: "1em",
   },
   gridBoxCenter: {
     display: "flex",
@@ -185,11 +201,26 @@ export const useStyles = makeStyles((theme) => ({
     height: "40px",
   },
   accordionSummary: {
-    height: "73px",
+    padding: "0.5em",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
+  accordionDetails: {
+    padding: "1em",
+  },
+  accordionNormal: {
+    // backgroundColor: "#fafafa",
+  },
+  accordionSelected: {
+    backgroundColor: "rgba(73, 165, 145, 0.25)",
   },
   personTable: {
     borderBottom: "1px solid rgba(0, 0, 0, 0.15)",
     padding: "0.5em",
+  },
+  statsGrow: {
+    flexGrow: 1,
   },
 }));
 
