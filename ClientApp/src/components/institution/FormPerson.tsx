@@ -104,27 +104,6 @@ const FormPerson: FC<IPersonProps> = ({
     }
   };
 
-  const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAgeWish(e.target.checked);
-
-    if (e.target.checked) {
-      setRemoveWishes(false);
-      setShowWishes(false);
-
-      for (let i = 0; i < person.wishes.length; i++) {
-        if (i == 0) {
-          updateWish(ageAppropriateString, i);
-        } else {
-          deleteWish(i);
-        }
-      }
-    } else {
-      updatePerson({ wishes: [] });
-      setShowWishes(true);
-      setRemoveWishes(true);
-    }
-  };
-
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newGender = parseInt(e.target.value);
     if (newGender !== NaN && newGender !== Gender.Unspecified) {
@@ -200,21 +179,6 @@ const FormPerson: FC<IPersonProps> = ({
                   return { value: o.value, text: capitalize(o.text) };
                 })}
                 className={classes.mediumWidth}
-              />
-            </Grid>
-
-            <Grid item>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={ageWish}
-                    onChange={(e) => handleAgeWishChecked(e)}
-                    name="isAgeWish"
-                    color="primary"
-                  />
-                }
-                className="my-0"
-                label="Alderstilpasset gave"
               />
             </Grid>
 
