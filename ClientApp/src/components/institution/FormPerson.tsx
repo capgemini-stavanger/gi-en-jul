@@ -136,7 +136,6 @@ const FormPerson: FC<IPersonProps> = ({
     const newList = [...person.wishes];
     newList[index].wish = newWishData;
     updatePerson({ wishes: newList });
-    console.log("wishes", person.wishes);
   };
 
   const deleteWish = (index: number) => {
@@ -259,7 +258,6 @@ const FormPerson: FC<IPersonProps> = ({
                   }}
                   deleteWish={() => deleteWish(i)}
                   wishIndex={i}
-                  input={person.wishes[i].wish}
                 />
               );
             })}
