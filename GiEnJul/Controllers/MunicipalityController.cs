@@ -63,11 +63,11 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        public async Task<List<Entities.Municipality>> GetAll()
+        [HttpGet("all")]
+        public async Task<List<Models.Municipality>> GetAll()
         {
             var municipalities = await _municipalityRepository.GetAll();  
-            return _mapper.Map<List<Entities.Municipality>>(municipalities);
+            return _mapper.Map<List<Models.Municipality>>(municipalities);
         }
 
         [HttpGet("active")] 
