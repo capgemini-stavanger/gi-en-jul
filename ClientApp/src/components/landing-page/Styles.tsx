@@ -177,6 +177,34 @@ const useStyles = makeStyles((theme) => ({
       width: "20%",
     },
   },
+  cardContainer: {
+    width: "260px",
+    height: "310px",
+    backgroundColor: theme.palette.secondary.light,
+    borderRadius: "50px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  cardInfo: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  cardImage: {
+    width: "130px",
+    height: "130px",
+    borderRadius: "50%",
+  },
+  iconText: {
+    display: "inline",
+    color: "black",
+    textDecoration: "underline",
+    textDecorationColor: "black",
+  },
+  smallIcon: {
+    marginRight: "5px",
+  },
 }));
 
 export default useStyles;

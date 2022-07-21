@@ -1,26 +1,13 @@
 import * as React from "react";
-import {
-  Typography,
-  Container,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  IconButton,
-} from "@material-ui/core";
+import { Typography, Container, Grid, Box } from "@material-ui/core";
 import useStyles from "./Styles";
-import { Link as Scroll } from "react-scroll";
-import dummyImg from "styling/img/dummy-image.jpg";
-import Information from "./Information";
-import { Mail, Facebook, Instagram, Phone } from "@material-ui/icons";
+import img_placeholder from "styling/img/person.png";
+import { Mail, Phone } from "@material-ui/icons";
 
 export interface ContactData {
   city: string;
   contactPerson: string;
   email: string;
-  facebook: string;
-  instagram: string;
   image: string;
   phoneNumber: string;
   information: string; //denne må være her til den nye tabellen for CMS kommer
@@ -30,98 +17,51 @@ interface Props {
   contacts: ContactData[];
 }
 
-const style = {
-  greyImageFilter: {
-    filter: "grayscale(100%)",
-  },
-};
-
 const Contact: React.FC<Props> = ({ contacts }) => {
   const classes = useStyles();
 
-  const ContactCards = contacts.map((contact, index) => (
-    <div key={index}>
-      <Grid className={classes.contactItem}>
-        <Card className={classes.contactCard}>
-          <Typography className={classes.contactHeader}>{contact.city}</Typography>
-          {
-            <CardMedia
-              style={style.greyImageFilter}
-              className={classes.howImage}
-              image={contact.image || dummyImg}
-            />
-          }
-          <CardContent className={classes.contactContent}>
-            <Typography>
-              Ta kontakt med <br /> {contact.contactPerson} på
-            </Typography>
-          </CardContent>
-          <CardActions className={classes.contactContent}>
-            <IconButton>
-              <Mail color="primary" className={classes.mailIcon} />
-              <a href={"mailto:" + contact.email}>
-                <Typography color="primary">{contact.email}</Typography>
-              </a>
-            </IconButton>
-          </CardActions>
-          <CardActions className={classes.contactContent}>
-            {contact.phoneNumber && (
-              <IconButton>
-                <Phone color="primary" className={classes.mailIcon} />
-                <a href={"tel:" + contact.phoneNumber}>
-                  <Typography color="primary">{contact.phoneNumber}</Typography>
-                </a>
-              </IconButton>
-            )}
-          </CardActions>
-          <CardActions className={classes.contactContent}>
-            {contact.facebook && (
-              <IconButton
-                onClick={() => {
-                  window.open(contact.facebook, "_blank")?.focus();
-                }}
-              >
-                <Facebook color="primary" />
-              </IconButton>
-            )}
-            {contact.instagram && (
-              <IconButton
-                onClick={() => {
-                  window.open(contact.instagram, "_blank")?.focus();
-                }}
-              >
-                <Instagram color="primary" />
-              </IconButton>
-            )}
-          </CardActions>
-        </Card>
-      </Grid>
-    </div>
-  ));
-
   return (
-    <Container id="contact" className={classes.sectionContainer}>
-      <div className={classes.headLineContainer}>
-        <Typography className={classes.textHeadline}>Kontakt</Typography>
-      </div>
-      {/* Todo: Legg inn scrolle-link under */}
-      {(ContactCards.length && (
-        <Typography className={classes.contactContent}>
-          Før du tar kontakt, se om du finner svaret på det du lurer på i <br />
-          <Scroll to="questions" smooth={true}>
-            <span className={classes.textLink}>ofte stilte spørsmål.</span>
-          </Scroll>
-        </Typography>
-      )) || (
-        <Typography className={classes.contactContent}>
-          Det er dessverre ikke mulig å melde seg opp som giver enda.
-        </Typography>
-      )}
-      <Grid container justifyContent="center">
-        {ContactCards}
-        <div>
-          <Information />
-        </div>
+    <Container style={{ backgroundColor: "white" }} className={classes.sectionContainer}>
+      <Grid container direction="row" spacing={4} justifyContent="center">
+        {contacts.map((contact, index) => {
+          return (
+            <Grid item key={index}>
+              <Box className={classes.cardContainer}>
+                <Box className={classes.cardInfo}>
+                  <Typography variant="h5" color="primary">
+                    {contact.city}
+                  </Typography>
+                </Box>
+                <Box className={classes.cardInfo}>
+                  <img
+                    src={contact.image}
+                    className={classes.cardImage}
+                    alt={"Finner ikke bilde.."}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = `${img_placeholder}`;
+                    }}
+                  />
+                  <Typography> {contact.contactPerson} </Typography>
+                </Box>
+                <Box className={classes.cardInfo}>
+                  <Box>
+                    <Mail className={classes.smallIcon} color="primary" />
+                    <a href={"mailto:" + contact.email}>
+                      <Typography className={classes.iconText}>{contact.email}</Typography>
+                    </a>
+                  </Box>
+                  <Box>
+                    <Phone className={classes.smallIcon} color="primary" />
+                    <a href={"tel:" + contact.phoneNumber}>
+                      <Typography className={classes.iconText}>{contact.phoneNumber}</Typography>
+                    </a>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          );
+        })}
       </Grid>
     </Container>
   );
