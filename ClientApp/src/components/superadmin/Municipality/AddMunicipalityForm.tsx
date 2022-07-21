@@ -91,22 +91,7 @@ const MunicipalityForm: React.FC<props> = ({
               errorMessages={["Du må fylle inn navnet på kommunen"]}
             />
           </Grid>
-          <Grid item>
-            <InputValidator
-              autoFocus
-              label="Informasjon"
-              margin="normal"
-              fullWidth
-              name="information"
-              autoComplete="Information"
-              value={state.info}
-              onChange={(e) => {
-                setState((prev) => ({ ...prev, info: e.target.value }));
-              }}
-              validators={[isNotNull]}
-              errorMessages={["Du må fylle inn navnet på kommunen"]}
-            />
-          </Grid>
+
           <Grid container direction="row">
             <Grid item>
               <Button onClick={handleClose}>Avbryt</Button>
