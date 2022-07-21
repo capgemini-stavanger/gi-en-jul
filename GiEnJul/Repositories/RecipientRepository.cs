@@ -48,7 +48,7 @@ namespace GiEnJul.Repositories
 
         public async Task<bool> RecipientDoesExist(string referenceId)
         {
-            var query = $"ReferenceId eq '{referenceId}";
+            var query = $"ReferenceId eq '{referenceId}'";
             var exists = await GetAllByQueryAsync(query);
             if (_mapper.Map<List<Models.Recipient>>(exists).Count > 0)
                 return true;

@@ -102,8 +102,8 @@ namespace GiEnJul.Infrastructure
 
 
             CreateMap<Models.Giver, Entities.Giver>()
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.GiverId))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Event))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.GiverId) ? Guid.NewGuid().ToString() : src.GiverId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Event) ? $"{src.EventName}_{src.Location}" : src.Event))
                 .ForMember(dest => dest.MatchedFamilyId, opt => opt.MapFrom(src => src.MatchedFamilyId))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
