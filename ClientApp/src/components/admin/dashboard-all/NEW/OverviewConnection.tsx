@@ -2,16 +2,21 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SelectedConnectionType } from "components/shared/Types";
 import useStyles from "../Styles";
-import { PeopleOutline } from "@material-ui/icons";
+import { CancelOutlined, PeopleOutline } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 
 type IStatistics = {
   connection: SelectedConnectionType;
   connectGiverRecipient: () => void;
+  resetSelections: () => void;
 };
 
-const OverviewConnection: React.FC<IStatistics> = ({ connection, connectGiverRecipient }) => {
+const OverviewConnection: React.FC<IStatistics> = ({
+  connection,
+  connectGiverRecipient,
+  resetSelections,
+}) => {
   const classes = useStyles();
 
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
@@ -37,25 +42,46 @@ const OverviewConnection: React.FC<IStatistics> = ({ connection, connectGiverRec
             </Box>
           ) : (
             <Box>
-              <Typography variant="h5">Ingen valgt kobling</Typography>
-              <Typography variant="h5">Velg en giver</Typography>
+              <Typography variant="h5">
+                Velg en
+                <Box
+                  style={{ paddingLeft: "5px", paddingRight: "5px" }}
+                  className={classes.boldText}
+                  display="inline"
+                >
+                  <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                </Box>
+                giver
+              </Typography>
             </Box>
           )}
         </Box>
       </Grid>
       <Grid item xs={4}>
         <Box className={classes.gridBoxCenter}>
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={!connection.giver || !connection.recipient}
-            onClick={() => {
-              setOpenConfirmBox(true);
-            }}
-          >
-            <Typography>Koble sammen</Typography>
-          </Button>
+          <Typography>
+            <Button
+              className={classes.underlineText}
+              onClick={() => {
+                resetSelections();
+              }}
+            >
+              Nullstill
+            </Button>
+          </Typography>
+          <Typography>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              disabled={!connection.giver || !connection.recipient}
+              onClick={() => {
+                setOpenConfirmBox(true);
+              }}
+            >
+              Koble sammen
+            </Button>
+          </Typography>
           <ConfirmationBox
             open={openConfirmBox}
             text={"Er du sikker på at du vil koble sammen giver og familie?"}
@@ -81,10 +107,15 @@ const OverviewConnection: React.FC<IStatistics> = ({ connection, connectGiverRec
           ) : (
             <Box>
               <Typography variant="h5" align="right">
-                Ingen valgt kobling
-              </Typography>
-              <Typography variant="h5" align="right">
-                Velg en familie
+                Velg en
+                <Box
+                  style={{ paddingLeft: "5px", paddingRight: "5px" }}
+                  className={classes.boldText}
+                  display="inline"
+                >
+                  <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                </Box>
+                familie
               </Typography>
             </Box>
           )}

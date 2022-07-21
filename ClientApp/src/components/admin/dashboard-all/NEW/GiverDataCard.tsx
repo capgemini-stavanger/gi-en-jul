@@ -1,13 +1,4 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "../Styles";
 import { GiverType } from "../../../shared/Types";
@@ -35,6 +26,7 @@ type Props = {
   setSelectedGiverIndex: () => void;
   refreshData: () => void;
   accessToken: string;
+  resetSelections: () => void;
 };
 
 const GiverDataCard: React.FC<Props> = ({
@@ -45,6 +37,7 @@ const GiverDataCard: React.FC<Props> = ({
   setSelectedGiverIndex,
   refreshData,
   accessToken,
+  resetSelections,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -62,7 +55,6 @@ const GiverDataCard: React.FC<Props> = ({
     setComment(giverData.comment ? giverData.comment : "");
   }, []);
 
-  // REFRESH DATA ALSO?
   const confirmConnection = (giver: GiverType) => (response: boolean) => {
     if (response) {
       apiservice
@@ -74,6 +66,8 @@ const GiverDataCard: React.FC<Props> = ({
         .then((r) => {
           if (r.status === 200) {
             refreshData();
+            setPersonExpanded(false);
+            resetSelections();
           }
         });
     }
@@ -89,6 +83,8 @@ const GiverDataCard: React.FC<Props> = ({
         .then((response) => {
           if (response.status === 200) {
             refreshData();
+            setPersonExpanded(false);
+            resetSelections();
           }
         })
         .catch((errorStack) => {
@@ -107,6 +103,7 @@ const GiverDataCard: React.FC<Props> = ({
         .then((response) => {
           if (response.status === 200) {
             refreshData();
+            resetSelections();
           }
         })
         .catch((errorStack) => {
@@ -136,19 +133,17 @@ const GiverDataCard: React.FC<Props> = ({
 
   return (
     <>
-      <Accordion
-        expanded={personExpanded}
+      <Box
         className={
           giverIndex == selectedGiverIndex ? classes.accordionSelected : classes.accordionNormal
         }
-        onClick={(event) => {
-          event.stopPropagation();
+        onClick={() => {
           setSelectedGiver();
           setSelectedGiverIndex();
         }}
       >
-        <AccordionSummary className={classes.accordionSummary}>
-          <Grid container justifyContent="space-between">
+        <Box className={classes.accordionSummary}>
+          <Grid container direction="row" justifyContent="space-between" alignItems="center">
             <Grid item xs={2}>
               <Typography className={classes.boldText}>{giverData.fullName}</Typography>
             </Grid>
@@ -195,124 +190,131 @@ const GiverDataCard: React.FC<Props> = ({
               )}
             </Grid>
           </Grid>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container direction="column" spacing={2}>
-            <Grid item style={{ paddingTop: "0px", paddingBottom: "40px" }}>
-              <Typography>{giverData.phoneNumber}</Typography>
-              <Typography>{giverData.email}</Typography>
-              <SendIcon />
-              <Button
-                style={{ padding: "0" }}
-                className={classes.underlineText}
-                onClick={() => {
-                  setOpenMailDialog(true);
-                }}
-              >
-                Send epost
-              </Button>
-            </Grid>
-            <Grid item style={{ paddingTop: "40px" }} className={classes.borderInCards}>
-              <Grid container direction="row" spacing={10}>
-                <Grid item xs={6}>
-                  <Grid container direction="column">
-                    {!giverData.hasConfirmedMatch && giverData.isSuggestedMatch && (
+        </Box>
+        {personExpanded && (
+          <Box className={classes.accordionDetails}>
+            <Grid
+              container
+              direction="column"
+              spacing={2}
+              className={classes.borderInCards}
+              wrap="nowrap"
+            >
+              <Grid item>
+                <Typography>{giverData.phoneNumber}</Typography>
+                <Typography>{giverData.email}</Typography>
+                <SendIcon />
+                <Button
+                  style={{ padding: "0" }}
+                  className={classes.underlineText}
+                  onClick={() => {
+                    setOpenMailDialog(true);
+                  }}
+                >
+                  Send epost
+                </Button>
+                <SendEmailContent
+                  open={openMailDialog}
+                  handleClose={() => {
+                    setOpenMailDialog(false);
+                  }}
+                  email={giverData.email}
+                  fullName={giverData.fullName}
+                />
+              </Grid>
+              <Grid item className={classes.borderInCards}>
+                <Grid container direction="row">
+                  <Grid item xs={6}>
+                    <Grid container direction="column">
+                      {!giverData.hasConfirmedMatch && giverData.isSuggestedMatch && (
+                        <Grid item>
+                          <Typography onClick={() => setConfirmConnectDialogOpen(true)}>
+                            <LinkOutlined />
+                            <Button className={classes.underlineText}>Godta kobling</Button>
+                          </Typography>
+                          <ConfirmationBox
+                            open={confirmConnectDialogOpen}
+                            handleClose={() => {
+                              setConfirmConnectDialogOpen(false);
+                            }}
+                            text={`Er du sikker på at du vil godta på vegne av ${giverData.fullName} [${giverData.email}]?`}
+                            handleResponse={confirmConnection(giverData)}
+                          />
+                        </Grid>
+                      )}
+                      {giverData.isSuggestedMatch && (
+                        <Grid item>
+                          <Typography onClick={() => setDeleteConnectDialogOpen(true)}>
+                            <LinkOutlined />
+                            <Button className={classes.underlineText}>
+                              Koble fra giver og familie
+                            </Button>
+                          </Typography>
+                          <ConfirmationBox
+                            open={deleteConnectDialogOpen}
+                            handleClose={() => {
+                              setDeleteConnectDialogOpen(false);
+                            }}
+                            text={`Er du sikker på at du fjerne giver ${giverData.fullName} [${giverData.email}] sin tilkobling? Familien vil også bli frakoblet`}
+                            handleResponse={deleteConnection(giverData)}
+                          />
+                        </Grid>
+                      )}
                       <Grid item>
-                        <Typography onClick={() => setConfirmConnectDialogOpen(true)}>
+                        <Typography onClick={() => setDeleteGiverDialogOpen(true)}>
                           <LinkOutlined />
-                          <Button className={classes.underlineText}>Godta kobling</Button>
+                          <Button className={classes.underlineText}>Slett giver</Button>
                         </Typography>
+                        <ConfirmationBox
+                          open={deleteGiverDialogOpen}
+                          handleClose={() => {
+                            setDeleteGiverDialogOpen(false);
+                          }}
+                          text={`Er du sikker på at du ønsker å slette giver ${giverData.fullName} [${giverData.email}]?`}
+                          handleResponse={deleteGiver(giverData)}
+                        />
                       </Grid>
-                    )}
-                    {giverData.isSuggestedMatch && (
-                      <Grid item>
-                        <Typography onClick={() => setDeleteConnectDialogOpen(true)}>
-                          <LinkOutlined />
-                          <Button className={classes.underlineText}>
-                            Koble fra giver og familie
-                          </Button>
-                        </Typography>
-                      </Grid>
-                    )}
-                    <Grid item>
-                      <Typography onClick={() => setDeleteGiverDialogOpen(true)}>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>Slett giver</Button>
-                      </Typography>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid item xs={6}>
-                  <Box className={classes.commentBox}>
-                    <TextField
-                      className={classes.commentField}
-                      id="outlined-multiline-static"
-                      variant="outlined"
-                      label="Kommentar"
-                      multiline
-                      minRows={4}
-                      value={comment}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setComment(e.target.value);
-                      }}
-                    />
-                    <Button
-                      variant="contained"
-                      className={classes.commentBoxButton}
-                      onClick={() => {
-                        setOpenConfirmationComment(true);
-                      }}
-                    >
-                      Lagre
-                    </Button>
-                    <ConfirmationBox
-                      open={openConfirmationComment}
-                      text={"Ønsker du å lagre kommentaren?"}
-                      handleResponse={saveComment}
-                      handleClose={() => {
-                        setOpenConfirmationComment(false);
-                      }}
-                    />
-                  </Box>
+                  <Grid item xs={6}>
+                    <Box className={classes.commentBox}>
+                      <TextField
+                        className={classes.commentField}
+                        id="outlined-multiline-static"
+                        variant="outlined"
+                        label="Kommentar"
+                        multiline
+                        minRows={4}
+                        value={comment}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setComment(e.target.value);
+                        }}
+                      />
+                      <Button
+                        variant="contained"
+                        className={classes.commentBoxButton}
+                        onClick={() => {
+                          setOpenConfirmationComment(true);
+                        }}
+                      >
+                        Lagre
+                      </Button>
+                      <ConfirmationBox
+                        open={openConfirmationComment}
+                        text={"Ønsker du å lagre kommentaren?"}
+                        handleResponse={saveComment}
+                        handleClose={() => {
+                          setOpenConfirmationComment(false);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </AccordionDetails>
-
-        <SendEmailContent
-          open={openMailDialog}
-          handleClose={() => {
-            setOpenMailDialog(false);
-          }}
-          email={giverData.email}
-          fullName={giverData.fullName}
-        />
-        <ConfirmationBox
-          open={confirmConnectDialogOpen}
-          handleClose={() => {
-            setConfirmConnectDialogOpen(false);
-          }}
-          text={`Er du sikker på at du vil godta på vegne av ${giverData.fullName} [${giverData.email}]?`}
-          handleResponse={confirmConnection(giverData)}
-        />
-        <ConfirmationBox
-          open={deleteConnectDialogOpen}
-          handleClose={() => {
-            setDeleteConnectDialogOpen(false);
-          }}
-          text={`Er du sikker på at du fjerne giver ${giverData.fullName} [${giverData.email}] sin tilkobling? Familien vil også bli frakoblet`}
-          handleResponse={deleteConnection(giverData)}
-        />
-        <ConfirmationBox
-          open={deleteGiverDialogOpen}
-          handleClose={() => {
-            setDeleteGiverDialogOpen(false);
-          }}
-          text={`Er du sikker på at du ønsker å slette giver ${giverData.fullName} [${giverData.email}]?`}
-          handleResponse={deleteGiver(giverData)}
-        />
-      </Accordion>
+          </Box>
+        )}
+      </Box>
     </>
   );
 };

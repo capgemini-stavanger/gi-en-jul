@@ -1,13 +1,4 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "../Styles";
 import { RecipientType } from "../../../shared/Types";
@@ -37,6 +28,7 @@ type Props = {
   setSelectedRecipientIndex: () => void;
   refreshData: () => void;
   accessToken: string;
+  resetSelections: () => void;
 };
 
 const RecipientDataCard: React.FC<Props> = ({
@@ -47,6 +39,7 @@ const RecipientDataCard: React.FC<Props> = ({
   setSelectedRecipientIndex,
   refreshData,
   accessToken,
+  resetSelections,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -74,6 +67,8 @@ const RecipientDataCard: React.FC<Props> = ({
         .then((response) => {
           if (response.status === 200) {
             refreshData();
+            setPersonExpanded(false);
+            resetSelections();
           }
         })
         .catch((errorStack) => {
@@ -92,6 +87,7 @@ const RecipientDataCard: React.FC<Props> = ({
         .then((response) => {
           if (response.status === 200) {
             refreshData();
+            resetSelections();
           }
         })
         .catch((errorStack) => {
@@ -121,21 +117,19 @@ const RecipientDataCard: React.FC<Props> = ({
 
   return (
     <>
-      <Accordion
-        expanded={personExpanded}
+      <Box
         className={
           recipientIndex == selectedRecipientIndex
             ? classes.accordionSelected
             : classes.accordionNormal
         }
-        onClick={(event) => {
-          event.stopPropagation();
+        onClick={() => {
           setSelectedRecipient();
           setSelectedRecipientIndex();
         }}
       >
-        <AccordionSummary className={classes.accordionSummary}>
-          <Grid container justifyContent="space-between">
+        <Box className={classes.accordionSummary}>
+          <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={2}>
               <Typography className={classes.boldText}>ID: {recipientData.familyId}</Typography>
             </Grid>
@@ -182,157 +176,166 @@ const RecipientDataCard: React.FC<Props> = ({
               )}
             </Grid>
           </Grid>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid container direction="column">
-            <Grid container direction="row" justifyContent="space-between">
-              <Grid item style={{ paddingTop: "0px", paddingBottom: "40px" }}>
-                <Typography className={classes.boldText}>Kontaktperson</Typography>
-                <Typography>{recipientData.contactPhoneNumber}</Typography>
-                <Typography>{recipientData.contactEmail}</Typography>
-                <SendIcon />
-                <Button
-                  style={{ padding: "0" }}
-                  className={classes.underlineText}
-                  onClick={() => {
-                    setOpenMailDialog(true);
-                  }}
-                >
-                  Send epost
-                </Button>
-              </Grid>
-              <Grid item xs={8}>
-                {recipientData.familyMembers.map((person, index) => (
-                  <Grid
-                    key={index}
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    className={classes.personTable}
-                  >
-                    <Grid item xs={6}>
-                      <Typography>
-                        {getGender(person.gender, person.age)} {person.age} år
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography>
-                        {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
-                      </Typography>
-                      <Typography>
-                        {person.comment ? "Kommentar: " + person.comment : ""}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-
-            <Grid item style={{ paddingTop: "40px" }} className={classes.borderInCards}>
-              <Grid container direction="row" spacing={10}>
-                <Grid item xs={6}>
-                  <Grid container direction="column">
-                    {!recipientData.isSuggestedMatch && (
-                      <Grid item>
-                        <Typography
-                          onClick={() => {
-                            setOpenEditFamilyDialog(true);
-                          }}
-                        >
-                          <Edit />
-                          <Button>Rediger familie</Button>
-                        </Typography>
-                      </Grid>
-                    )}
-                    {recipientData.isSuggestedMatch && (
-                      <Grid item>
-                        <Typography onClick={() => setOpenDelConnectionDialog(true)}>
-                          <LinkOutlined />
-                          <Button className={classes.underlineText}>
-                            Koble fra giver og familie
-                          </Button>
-                        </Typography>
-                      </Grid>
-                    )}
-                    <Grid item>
-                      <Typography onClick={() => setOpenDelFamilyDialog(true)}>
-                        <LinkOutlined />
-                        <Button className={classes.underlineText}>Slett familie</Button>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={6}>
-                  <Box className={classes.commentBox}>
-                    <TextField
-                      className={classes.commentField}
-                      id="outlined-multiline-static"
-                      variant="outlined"
-                      label="Kommentar"
-                      multiline
-                      minRows={4}
-                      value={comment}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setComment(e.target.value);
-                      }}
-                    />
+        </Box>
+        {personExpanded && (
+          <Box className={classes.accordionDetails}>
+            <Grid
+              container
+              direction="column"
+              spacing={2}
+              className={classes.borderInCards}
+              wrap="nowrap"
+            >
+              <Grid item>
+                <Grid container direction="row" justifyContent="space-between">
+                  <Grid item xs={4}>
+                    <Typography className={classes.boldText}>Kontaktperson</Typography>
+                    <Typography>{recipientData.contactPhoneNumber}</Typography>
+                    <Typography>{recipientData.contactEmail}</Typography>
+                    <SendIcon />
                     <Button
-                      variant="contained"
-                      className={classes.commentBoxButton}
+                      style={{ padding: "0" }}
+                      className={classes.underlineText}
                       onClick={() => {
-                        setOpenConfirmationComment(true);
+                        setOpenMailDialog(true);
                       }}
                     >
-                      Lagre
+                      Send epost
                     </Button>
-                    <ConfirmationBox
-                      open={openConfirmationComment}
-                      text={"Ønsker du å lagre kommentaren?"}
-                      handleResponse={saveComment}
+                    <SendEmailContent
+                      open={openMailDialog}
                       handleClose={() => {
-                        setOpenConfirmationComment(false);
+                        setOpenMailDialog(false);
                       }}
+                      email={recipientData.contactEmail}
+                      fullName={recipientData.contactFullName}
                     />
-                  </Box>
+                  </Grid>
+                  <Grid item xs={8}>
+                    {recipientData.familyMembers.map((person, index) => (
+                      <Grid
+                        key={index}
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        className={classes.personTable}
+                      >
+                        <Grid item xs={6}>
+                          <Typography>
+                            {getGender(person.gender, person.age)} {person.age} år
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Typography>
+                            {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
+                          </Typography>
+                          <Typography>
+                            {person.comment ? "Kommentar: " + person.comment : ""}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item className={classes.borderInCards}>
+                <Grid container direction="row">
+                  <Grid item xs={6}>
+                    <Grid container direction="column">
+                      {!recipientData.isSuggestedMatch && (
+                        <Grid item>
+                          <Typography
+                            onClick={() => {
+                              setOpenEditFamilyDialog(true);
+                            }}
+                          >
+                            <Edit />
+                            <Button>Rediger familie</Button>
+                          </Typography>
+                          <EditFamilyDialog
+                            open={openEditFamilyDialog}
+                            onClose={() => {
+                              setOpenEditFamilyDialog(false);
+                            }}
+                            refreshRecipients={() => refreshData()}
+                            recipient={recipientData}
+                          />
+                        </Grid>
+                      )}
+                      {recipientData.isSuggestedMatch && (
+                        <Grid item>
+                          <Typography onClick={() => setOpenDelConnectionDialog(true)}>
+                            <LinkOutlined />
+                            <Button className={classes.underlineText}>
+                              Koble fra giver og familie
+                            </Button>
+                          </Typography>
+                          <ConfirmationBox
+                            open={openDelConnectionDialog}
+                            handleClose={() => {
+                              setOpenDelConnectionDialog(false);
+                            }}
+                            text={`Er du sikker på at du fjerne familie id ${recipientData.familyId} [${recipientData.contactEmail}] sin tilkobling? Giver vil også bli frakoblet`}
+                            handleResponse={deleteConnection(recipientData)}
+                          />
+                        </Grid>
+                      )}
+                      <Grid item>
+                        <Typography onClick={() => setOpenDelFamilyDialog(true)}>
+                          <LinkOutlined />
+                          <Button className={classes.underlineText}>Slett familie</Button>
+                        </Typography>
+                        <ConfirmationBox
+                          open={openDelFamilyDialog}
+                          handleClose={() => {
+                            setOpenDelFamilyDialog(false);
+                          }}
+                          text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
+                          handleResponse={deleteGiver(recipientData)}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Box className={classes.commentBox}>
+                      <TextField
+                        className={classes.commentField}
+                        id="outlined-multiline-static"
+                        variant="outlined"
+                        label="Kommentar"
+                        multiline
+                        minRows={4}
+                        value={comment}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setComment(e.target.value);
+                        }}
+                      />
+                      <Button
+                        variant="contained"
+                        className={classes.commentBoxButton}
+                        onClick={() => {
+                          setOpenConfirmationComment(true);
+                        }}
+                      >
+                        Lagre
+                      </Button>
+                      <ConfirmationBox
+                        open={openConfirmationComment}
+                        text={"Ønsker du å lagre kommentaren?"}
+                        handleResponse={saveComment}
+                        handleClose={() => {
+                          setOpenConfirmationComment(false);
+                        }}
+                      />
+                    </Box>
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </AccordionDetails>
-
-        <SendEmailContent
-          open={openMailDialog}
-          handleClose={() => {
-            setOpenMailDialog(false);
-          }}
-          email={recipientData.contactEmail}
-          fullName={recipientData.contactFullName}
-        />
-        <EditFamilyDialog
-          open={openEditFamilyDialog}
-          onClose={() => {
-            setOpenEditFamilyDialog(false);
-          }}
-          refreshRecipients={() => refreshData()}
-          recipient={recipientData}
-        />
-        <ConfirmationBox
-          open={openDelConnectionDialog}
-          handleClose={() => {
-            setOpenDelConnectionDialog(false);
-          }}
-          text={`Er du sikker på at du fjerne familie id ${recipientData.familyId} [${recipientData.contactEmail}] sin tilkobling? Giver vil også bli frakoblet`}
-          handleResponse={deleteConnection(recipientData)}
-        />
-        <ConfirmationBox
-          open={openDelFamilyDialog}
-          handleClose={() => {
-            setOpenDelFamilyDialog(false);
-          }}
-          text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
-          handleResponse={deleteGiver(recipientData)}
-        />
-      </Accordion>
+          </Box>
+        )}
+      </Box>
     </>
   );
 };
