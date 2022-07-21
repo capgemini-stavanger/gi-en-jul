@@ -76,10 +76,12 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   };
 
   const deleteMunicipality = () => {
-    apiservice.delete("municipality", { Country: Country, Name: selectedLocationAll }).then(() => {
-      fetchActiveLocations();
-      fetchAllLocations();
-    });
+    apiservice
+      .put("municipality/update", { Country: Country, Name: selectedLocationAll, IsActive: false })
+      .then(() => {
+        fetchActiveLocations();
+        fetchAllLocations();
+      });
     setOpen(false);
   };
 

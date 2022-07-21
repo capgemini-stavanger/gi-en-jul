@@ -97,9 +97,9 @@ namespace GiEnJul.Controllers
 
         [HttpPut("update")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
+        public async Task<ActionResult> UpdateMunicipalityContent([FromBody] PostMunicipalityDto content)
         {
-            var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
+            var didUpdate = await _municipalityRepository.UpdateMunicipality(_mapper.Map<Models.Municipality>(content));
             if (didUpdate)
             {
                 return Ok();
