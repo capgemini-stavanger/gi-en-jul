@@ -26,6 +26,7 @@ import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
+import InformationBox from "components/shared/InformationBox";
 
 interface props {
   accessToken: string;
@@ -37,6 +38,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
 
   const [state, setState] = useState(initState);
+  const [open, setOpen] = useState<boolean>(false);
   const [formDataState, setFormDataState] = useState(initFormDataState());
   const [validFormState, setValidFormState] = useState(initValidFormState); //denne har ... i orginal
 
@@ -263,7 +265,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setFormDataState(nextFormDataState());
   };
   const onSuccessSubmit = () => {
+    //sett confirmationbox boolean true here.
+    handleClose(true);
     resetForm();
+  };
+
+  //tullete å ha denne som en egen metode
+  const handleClose = (open: boolean) => {
+    setOpen(open);
   };
 
   return (
@@ -491,6 +500,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Button>
                 </Grid>
               </Grid>
+
+              <InformationBox
+                open={open}
+                text={"Familien har blitt meldt inn"}
+                handleClose={() => handleClose(false)}
+              />
             </Grid>
           </Grid>
         </form>

@@ -32,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
   hollowButton: {
     color: theme.palette.primary.main,
     padding: theme.spacing(1.2),
+    marginBottom: "1em",
     textTransform: "none",
     width: "150px",
     borderColor: theme.palette.primary.main,

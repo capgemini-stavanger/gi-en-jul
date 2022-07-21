@@ -5,12 +5,16 @@ import { Categories, ICategories } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
+import { useEffect } from "react";
 
 interface IWishProps {
   viewErrorTrigger: number;
   updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
+  required?: boolean;
+  setIsValid?: (isValid: boolean) => void;
+  input: string;
 }
 
 export interface IFormWish {
@@ -25,26 +29,29 @@ export const getFormWish: () => IFormWish = () => ({
 
 const initState: { [data: string]: any } = {
   wishInput: "",
-  ageWish: false, //denne skal være i formPerson og hele formWish objektet skal ikke vises dersom den er true :P herlig
+  ageWish: false,
   size: "",
   location: "",
-  comment: "",
+  specification: "",
   sizeDisabled: true,
   locationDisabled: true,
   totalWish: [],
 };
-
-//const ageAppropriateString = "Giver kjøper alderstilpasset gave";
 
 const InstitutionWish: React.FC<IWishProps> = ({
   viewErrorTrigger,
   updateWish,
   deleteWish,
   wishIndex,
+  required,
+  input,
+  setIsValid,
 }) => {
   const [state, setState] = useState({ ...initState });
-
+  const [isValidInput, setIsValidInput] = useState(false);
   const classes = useStyles();
+  const [isErr, setIsErr] = useState(false);
+  const [viewError, setViewError] = useState(false);
 
   const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
     setState((prev) => {
@@ -67,16 +74,9 @@ const InstitutionWish: React.FC<IWishProps> = ({
 
   const getOnCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     state.totalWish[2] = e.target.value;
-    getSetter("comment")(state.totalWish[2]);
+    getSetter("specification")(state.totalWish[2]);
     updateWish(state.totalWish.toString());
   };
-  /*
-  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.checked ? ageAppropriateString : state.wishInput;
-    updateWish(newInput);
-    getSetter("ageWish")(e.target.checked);
-  };
-  */
 
   const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newInput = e.target.value;
@@ -100,6 +100,16 @@ const InstitutionWish: React.FC<IWishProps> = ({
     }
   };
 
+  useEffect(() => {
+    setViewError(!!viewErrorTrigger);
+  }, [viewErrorTrigger]);
+
+  useEffect(() => {
+    const isInvalid = !isValidInput;
+    if (setIsValid) setIsValid(!isInvalid);
+    setIsErr(!!required && viewError && isInvalid);
+  }, [setIsValid, required, state.wishInput, isValidInput]);
+
   return (
     <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>
       <Grid item>
@@ -112,7 +122,11 @@ const InstitutionWish: React.FC<IWishProps> = ({
         {!state.ageWish && (
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
-            validators={[isNotNull]}
+            validators={[
+              (input) => {
+                return !required || isNotNull(input);
+              },
+            ]}
             name="wish"
             type="select"
             label="Kategori"
@@ -123,6 +137,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
             value={state.wishInput}
             onChange={(e) => onWishInputChange(e)}
             className={classes.mediumWidth}
+            setIsValids={setIsValidInput}
           ></InputValidator>
         )}
       </Grid>
@@ -137,7 +152,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
             value={state.location}
             name="clocation"
             id="lokasjon"
-            label="Lokasjon"
+            label="Lokasjon*"
             className={classes.mediumWidth}
           ></InputValidator>
         )}
@@ -153,7 +168,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
             value={state.size}
             name="csize"
             id="størrelse"
-            label="Størrelse"
+            label="Størrelse*"
             className={classes.mediumWidth}
           ></InputValidator>
         )}
@@ -164,10 +179,10 @@ const InstitutionWish: React.FC<IWishProps> = ({
           viewErrorTrigger={viewErrorTrigger}
           validators={[]}
           onChange={(e) => getOnCommentInputChange(e)}
-          value={state.comment}
-          name="ccomment"
-          id="kommentar"
-          label="Kommentar"
+          value={state.specification}
+          name="cspecification"
+          id="spesifikasjon"
+          label="Spesifikasjon"
           className={classes.mediumWidth}
         ></InputValidator>
       </Grid>
