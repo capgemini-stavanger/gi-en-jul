@@ -133,6 +133,17 @@ export const theme = createTheme({
         borderRadius: "0.5em",
       },
     },
+    MuiPaper: {
+      elevation1: {
+        boxShadow: "0",
+        "&:hover": {
+          boxShadow: "0",
+        },
+      },
+      rounded: {
+        borderRadius: "0",
+      },
+    },
   },
 });
 
