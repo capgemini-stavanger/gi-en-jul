@@ -3,9 +3,9 @@ export interface ICategories {
 }
 
 export const Categories: ICategories[] = [
+  { type: "Gavekort" },
   { type: "Klær" },
   { type: "Sko" },
-  { type: "Gavekort" },
   { type: "Leker" },
   { type: "Annet" },
 ];
