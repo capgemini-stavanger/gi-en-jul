@@ -9,7 +9,6 @@ interface IKommuneInformation {
   accessToken: string;
   municipalityName: string;
   role: string;
-  assignedLocation: string;
 }
 
 const IMunicipalityInit = () => {
@@ -32,7 +31,6 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
   accessToken,
   municipalityName,
   role,
-  assignedLocation,
 }) => {
   const apiservice = new ApiService(accessToken);
   const [municipality, setMunicipality] = useState<IMunicipality>(IMunicipalityInit());

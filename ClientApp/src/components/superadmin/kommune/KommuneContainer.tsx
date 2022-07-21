@@ -71,7 +71,6 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
           <KommuneInformation
             accessToken={accessToken}
             role={role}
-            assignedLocation={assignedLocation}
             municipalityName={selectedMunicipality}
           />
         </Grid>
