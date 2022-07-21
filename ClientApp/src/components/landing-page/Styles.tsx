@@ -6,6 +6,17 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover",
     padding: theme.spacing(4),
   },
+  rootWhite: {
+    backgroundColor: "white",
+    padding: theme.spacing(4),
+  },
+  rootGreen: {
+    backgroundColor: theme.palette.secondary.light,
+    padding: theme.spacing(4),
+  },
+  whiteBackground: {
+    backgroundColor: "white",
+  },
   logo: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(2),
