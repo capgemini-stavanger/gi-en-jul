@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Grid,
+  Divider,
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import { useEffect, useState } from "react";
@@ -46,10 +47,11 @@ const Questions = () => {
       <div className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
       </div>
-      <Grid container justifyContent="center">
+      <Grid container direction="column" alignItems="center" justifyContent="center">
         {questions ? (
           Array.from(questions).map((val, index) => (
             <Grid className={classes.questionItem} key={index}>
+              <Divider />
               <Accordion
                 expanded={expanded === index.toString()}
                 onChange={handleChange(index.toString())}
@@ -58,9 +60,9 @@ const Questions = () => {
                   className={classes.questionSummary}
                   expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
                 >
-                  <Typography>{val.question}</Typography>
+                  <Typography className={classes.questionText}>{val.question}</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails className={classes.questionDetails}>
                   <Typography>{parse(val.info)}</Typography>
                 </AccordionDetails>
               </Accordion>

@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   sectionContainer: {
     marginTop: theme.spacing(3),
     padding: 0,
-    maxWidth: "70em",
+    maxWidth: "90em",
   },
   howItem: {
     maxWidth: "100%",
@@ -76,19 +76,25 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   questionItem: {
-    width: "80%",
     margin: theme.spacing(1),
+    marginBottom: "0",
     [theme.breakpoints.up("laptop")]: {
       width: "48%",
     },
   },
+
   questionBox: {
     width: "100%",
   },
   questionSummary: {
-    backgroundColor: theme.palette.primary.light,
-    borderRadius: "2em",
-    color: "white",
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.primary.main,
+  },
+  questionText: { fontWeight: 700, fontSize: "20px" },
+  questionDetails: {
+    marginTop: "-2%",
+    backgroundColor: theme.palette.secondary.light,
+    color: "black",
   },
   imgContainer: {
     overflow: "hidden",

@@ -175,22 +175,19 @@ export const theme = createTheme({
           borderRadius: "2em",
         },
       },
-    */
-  },
-
-  /* Accordion Shadow removed
-    MuiPaper: {
+    */ MuiPaper: {
       elevation1: {
-        boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
+        boxShadow: "0",
         "&:hover": {
-          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+          boxShadow: "0",
         },
       },
       rounded: {
-        borderRadius: "2em",
+        borderRadius: "0",
       },
     },
-    */
+  },
+
   /*
     MuiAccordion: {
       root: {},
