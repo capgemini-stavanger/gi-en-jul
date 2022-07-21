@@ -69,7 +69,7 @@ const Municipality = () => {
   return (
     <>
       <NavBarPublic />
-      <Container className={classes.root} maxWidth={false}>
+      <Container className={classes.rootNavBarPages} maxWidth={false}>
         <Grid container direction="column">
           <Grid item style={{ marginTop: "3em" }}>
             <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>

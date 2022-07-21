@@ -3,8 +3,6 @@ import ScrollToTop from "components/shared/ScrollToTop";
 import How from "components/landing-page/How";
 import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
-import family from "styling/img/familyTop.svg";
-import snowDown from "styling/img/snow_down.svg";
 import Contact from "components/landing-page/Contact";
 import { ContactData } from "components/landing-page/Contact";
 import Footer from "components/shared/Footer";
@@ -13,6 +11,7 @@ import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Questions from "components/landing-page/Questions";
 import What from "components/landing-page/What";
+import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
@@ -26,15 +25,18 @@ const Home = () => {
     <>
       <NavBarPublic />
       <Box id="landing">
-        <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid
+          container
+          className={classes.rootGreen}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Grid item>
             <img className={classes.logo} src={logo}></img>
           </Grid>
           <Grid item>
-            <img className={classes.familyImage} src={family}></img>
-          </Grid>
-          <Grid item>
-            <img className={classes.snowDown} src={snowDown}></img>
+            <img className={classes.familyImage} src={bigLandingPagePicture}></img>
           </Grid>
         </Grid>
         <Box className={classes.rootGreen}>
