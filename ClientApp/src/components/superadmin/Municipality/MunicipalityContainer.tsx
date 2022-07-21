@@ -1,4 +1,4 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import CustomTooltip from "components/institution/CustomTooltip";
 import React, { useState, useEffect, ChangeEvent } from "react";
@@ -128,80 +128,7 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
 
   return (
     <>
-      <Grid container direction="row" spacing={5}>
-        <Grid item>
-          <Box width="250px">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Alle Kommuner</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedLocationAll}
-                label="Location"
-                onChange={handleChangeAll}
-                fullWidth
-              >
-                {itemsAll}
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
-
-        <Grid item>
-          <Box width="250px">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Aktive kommuner</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedLocationActive}
-                label="Location"
-                onChange={handleChangeActive}
-                fullWidth
-              >
-                {itemsActive}
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
-
-        <Grid item>
-          <Box width="250px">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Velg kommune du vil slette</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedLocationAll}
-                label="Location"
-                onChange={handleChangeAll}
-                fullWidth
-              >
-                {itemsAll}
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
-
-        <Grid item>
-          <Button
-            onClick={() => {
-              deleteMunicipality;
-              setOpenConfirm(true);
-            }}
-          >
-            Slett
-          </Button>
-        </Grid>
-        <ConfirmationBox
-          open={openConfirm}
-          text={"Er du sikker på at du vil slette denne kommunen?"}
-          handleClose={() => {
-            handleCloseConfirm(false);
-          }}
-          handleResponse={handleResponseConfirm}
-        />
-
+      <Grid container direction="column" spacing={5}>
         <Grid item>
           <Button
             onClick={() => {
@@ -232,6 +159,80 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
             content={
               "Den nye kommunen blir ikke aktiv før du legger til ett arrangement på kommunen."
             }
+          />
+        </Grid>
+        <Grid container direction="row" spacing={5}>
+          <Grid item>
+            <Typography>Alle Kommuner</Typography>
+            <Box width="250px">
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedLocationAll}
+                  label="Location"
+                  onChange={handleChangeAll}
+                  fullWidth
+                >
+                  {itemsAll}
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+
+          <Grid item>
+            <Typography>Aktive Kommuner</Typography>
+            <Box width="250px">
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedLocationActive}
+                  label="Location"
+                  onChange={handleChangeActive}
+                  fullWidth
+                >
+                  {itemsActive}
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+
+          <Grid item>
+            <Typography>Velg kommune du vil gjøre inaktiv</Typography>
+            <Box width="250px">
+              <FormControl fullWidth>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={selectedLocationAll}
+                  label="Location"
+                  onChange={handleChangeAll}
+                  fullWidth
+                >
+                  {itemsAll}
+                </Select>
+              </FormControl>
+            </Box>
+          </Grid>
+
+          <Grid item>
+            <Button
+              onClick={() => {
+                deleteMunicipality;
+                setOpenConfirm(true);
+              }}
+            >
+              Sett til inaktiv
+            </Button>
+          </Grid>
+          <ConfirmationBox
+            open={openConfirm}
+            text={"Er du sikker på at du vil slette denne kommunen?"}
+            handleClose={() => {
+              handleCloseConfirm(false);
+            }}
+            handleResponse={handleResponseConfirm}
           />
         </Grid>
       </Grid>
