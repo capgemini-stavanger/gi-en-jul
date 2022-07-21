@@ -5,16 +5,12 @@ import { Categories, ICategories } from "./mockDatabase";
 import React, { useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
-import { useEffect } from "react";
 
 interface IWishProps {
   viewErrorTrigger: number;
   updateWish: (newWishData: string) => void;
   deleteWish: () => void;
   wishIndex: number;
-  required?: boolean;
-  setIsValid?: (isValid: boolean) => void;
-  input: string;
 }
 
 export interface IFormWish {
@@ -43,15 +39,9 @@ const InstitutionWish: React.FC<IWishProps> = ({
   updateWish,
   deleteWish,
   wishIndex,
-  required,
-  input,
-  setIsValid,
 }) => {
   const [state, setState] = useState({ ...initState });
-  const [isValidInput, setIsValidInput] = useState(false);
   const classes = useStyles();
-  const [isErr, setIsErr] = useState(false);
-  const [viewError, setViewError] = useState(false);
 
   const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
     setState((prev) => {
@@ -100,16 +90,6 @@ const InstitutionWish: React.FC<IWishProps> = ({
     }
   };
 
-  useEffect(() => {
-    setViewError(!!viewErrorTrigger);
-  }, [viewErrorTrigger]);
-
-  useEffect(() => {
-    const isInvalid = !isValidInput;
-    if (setIsValid) setIsValid(!isInvalid);
-    setIsErr(!!required && viewError && isInvalid);
-  }, [setIsValid, required, state.wishInput, isValidInput]);
-
   return (
     <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>
       <Grid item>
@@ -122,11 +102,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
         {!state.ageWish && (
           <InputValidator
             viewErrorTrigger={viewErrorTrigger}
-            validators={[
-              (input) => {
-                return !required || isNotNull(input);
-              },
-            ]}
+            validators={[isNotNull]}
             name="wish"
             type="select"
             label="Kategori"
@@ -137,7 +113,6 @@ const InstitutionWish: React.FC<IWishProps> = ({
             value={state.wishInput}
             onChange={(e) => onWishInputChange(e)}
             className={classes.mediumWidth}
-            setIsValids={setIsValidInput}
           ></InputValidator>
         )}
       </Grid>
