@@ -27,7 +27,8 @@ export default () =>
       width: "35px",
       margin: theme.spacing(-1.5),
     },
-    treeGridIcon: { marginLeft: "-12%" },
+    treeGridIconBusiness: { marginLeft: "-32%" },
+    treeGridIcon: { marginLeft: "-10%" },
     treeCircle: {
       position: "relative",
       height: "65px",
@@ -89,7 +90,7 @@ export default () =>
       },
     },
     giverButtonGridItem: {
-      marginRight: "-12%",
+      marginRight: "-10%",
     },
     buttonNext: {
       position: "inherit",
@@ -119,6 +120,10 @@ export default () =>
 
     fontSizeNavText: {
       fontSize: "20px",
+    },
+    fontSizeNavTextBusiness: {
+      fontSize: "20px",
+      marginLeft: "-43%",
     },
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",

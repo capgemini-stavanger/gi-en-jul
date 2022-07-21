@@ -10,7 +10,10 @@ import getLocations from "common/constants/Locations";
 import useStyles from "components/register-as-giver/Styles";
 import LoadingPage from "pages/LoadingPage";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import bli_giver from "styling/img/bli_giver.png";
+import BliGiverStep1 from "styling/img/BliGiverStep1.png";
+import BliGiverStep2 from "styling/img/BliGiverStep2.png";
+import BliGiverStep3 from "styling/img/BliGiverStep3.png";
+import BliGiverStep4 from "styling/img/BliGiverStep4.png";
 import Steppers from "components/register-as-giver/Steppers";
 
 const initFormDataState: IFormData = {
@@ -82,53 +85,65 @@ const RegistrationMacro = () => {
     switch (state.step) {
       case 1:
         return (
-          <Location
-            nextStep={nextStep}
-            handleLocationChange={handleLocationChange}
-            values={formDataState}
-            placeHolder={"Velg et sted..."}
-            locationOptions={locationOptions ?? []}
-            step={state.step}
-          />
+          <>
+            <img src={BliGiverStep1}></img>
+            <Location
+              nextStep={nextStep}
+              handleLocationChange={handleLocationChange}
+              values={formDataState}
+              placeHolder={"Velg et sted..."}
+              locationOptions={locationOptions ?? []}
+              step={state.step}
+            />
+          </>
         );
       case 2:
         return (
-          <ContactInfo
-            nextStep={nextStep}
-            prevStep={prevStep}
-            handlefullnameChange={handlefullnameChange}
-            handleEmailChange={handleEmailChange}
-            handleTlfChange={handleTlfChange}
-            values={formDataState}
-            step={state.step}
-          />
+          <>
+            <img src={BliGiverStep2}></img>
+            <ContactInfo
+              nextStep={nextStep}
+              prevStep={prevStep}
+              handlefullnameChange={handlefullnameChange}
+              handleEmailChange={handleEmailChange}
+              handleTlfChange={handleTlfChange}
+              values={formDataState}
+              step={state.step}
+            />
+          </>
         );
       case 3:
         return (
-          <FamilySize
-            nextStep={nextStep}
-            prevStep={prevStep}
-            handleFamilyChange={handleFamilyChange}
-            values={formDataState}
-            placeHolder={"Familiestørrelse"}
-            step={state.step}
-          />
+          <>
+            <img src={BliGiverStep3}></img>
+            <FamilySize
+              nextStep={nextStep}
+              prevStep={prevStep}
+              handleFamilyChange={handleFamilyChange}
+              values={formDataState}
+              placeHolder={"Familiestørrelse"}
+              step={state.step}
+            />
+          </>
         );
       case 4:
         return (
-          <SummaryRegistration
-            nextStep={nextStep}
-            prevStep={prevStep}
-            handleLocationChange={handleLocationChange}
-            handlefullnameChange={handlefullnameChange}
-            handleEmailChange={handleEmailChange}
-            handleTlfChange={handleTlfChange}
-            handleFamilyChange={handleFamilyChange}
-            values={formDataState}
-            locationOptions={locationOptions ?? []}
-            callingback={handleConfirm}
-            step={state.step}
-          />
+          <>
+            <img src={BliGiverStep4}></img>
+            <SummaryRegistration
+              nextStep={nextStep}
+              prevStep={prevStep}
+              handleLocationChange={handleLocationChange}
+              handlefullnameChange={handlefullnameChange}
+              handleEmailChange={handleEmailChange}
+              handleTlfChange={handleTlfChange}
+              handleFamilyChange={handleFamilyChange}
+              values={formDataState}
+              locationOptions={locationOptions ?? []}
+              callingback={handleConfirm}
+              step={state.step}
+            />
+          </>
         );
       case 5:
         return (
@@ -143,9 +158,7 @@ const RegistrationMacro = () => {
       <Container className={classes.fillBackground} maxWidth={false}>
         <NavBarPublic />
         <Container className={state.step === 5 ? classes.summaryDesign : classes.giverForm}>
-          {/* STEPPER UP HERE, SINCE IT DOES NOT VARY */}
           <Steppers state={state.step} />
-          {state.step === 5 ? null : <img src={bli_giver}></img>}
           {getStepPage()}
         </Container>
       </Container>
