@@ -195,6 +195,7 @@ const useStyles = makeStyles((theme) => ({
     width: "130px",
     height: "130px",
     borderRadius: "50%",
+    objectFit: "contain",
   },
   iconText: {
     display: "inline",
@@ -204,6 +205,9 @@ const useStyles = makeStyles((theme) => ({
   },
   smallIcon: {
     marginRight: "5px",
+  },
+  contactSpacing: {
+    marginBottom: "2em",
   },
 }));
 

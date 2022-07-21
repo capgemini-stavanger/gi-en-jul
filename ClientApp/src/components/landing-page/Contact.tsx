@@ -3,6 +3,7 @@ import { Typography, Container, Grid, Box } from "@material-ui/core";
 import useStyles from "./Styles";
 import img_placeholder from "styling/img/person.png";
 import { Mail, Phone } from "@material-ui/icons";
+import { Link as Scroll } from "react-scroll";
 
 export interface ContactData {
   city: string;
@@ -21,7 +22,16 @@ const Contact: React.FC<Props> = ({ contacts }) => {
   const classes = useStyles();
 
   return (
-    <Container style={{ backgroundColor: "white" }} className={classes.sectionContainer}>
+    <Container className={classes.sectionContainer}>
+      <div className={classes.headLineContainer}>
+        <Typography className={classes.blueTextHeadline}>Kontakt</Typography>
+        <Typography className={classes.contactSpacing}>
+          Før du tar kontakt, se om du finner svaret på det du lurer på i&nbsp;
+          <Scroll to="questions" smooth={true}>
+            <span className={classes.textLink}>ofte stilte spørsmål.</span>
+          </Scroll>
+        </Typography>
+      </div>
       <Grid container direction="row" spacing={4} justifyContent="center">
         {contacts.map((contact, index) => {
           return (
