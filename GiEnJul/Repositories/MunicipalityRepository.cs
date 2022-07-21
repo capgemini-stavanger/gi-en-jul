@@ -15,8 +15,10 @@ namespace GiEnJul.Repositories
         Task<Entities.Municipality> DeleteEntry(Models.Municipality municipality);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
         Task<IEnumerable<Municipality>> GetAll();
-     //   Task<IEnumerable<Municipality>> GetAllActive();
-      
+        Task<IEnumerable<Municipality>> GetSingle(string municipality, string country="Norge");
+        //   Task<IEnumerable<Municipality>> GetAllActive();
+        Task<bool> UpdateMunicipality(Models.Municipality municipality);
+
     }
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
@@ -46,6 +48,24 @@ namespace GiEnJul.Repositories
         public async Task<IEnumerable<Municipality>> GetAll()
         {
             return await GetAllAsync();
+        }
+        public async Task<IEnumerable<Municipality>> GetSingle(string municipality, string country = "Norge")
+        {
+            var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
+            return await GetAllByQueryAsync(query);
+        }
+        public async Task<bool> UpdateMunicipality(Models.Municipality municipality)
+        {
+            var entityMunicipality = _mapper.Map<Entities.Municipality>(municipality);
+
+            var query = $"PartitionKey eq '{entityMunicipality.PartitionKey}' and RowKey eq '{entityMunicipality.RowKey}' ";
+            var matches = await GetAllByQueryAsync(query);
+            if (matches.Count() != 1)  // either no matches, or multiple matches
+            {
+                return false;
+            }
+            await InsertOrReplaceAsync(municipality);
+            return true;
         }
     }
 }

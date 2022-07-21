@@ -58,7 +58,7 @@ namespace GiEnJul.Controllers
             var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
             if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
-
+            
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
         }
@@ -86,7 +86,29 @@ namespace GiEnJul.Controllers
             var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
             var names = municipalities.Select(m => m.Name);
             return names;
-        } 
+        }
+
+        [HttpGet("getSingle")]
+        public async Task<IEnumerable<Models.Municipality>> GetSingle([FromQuery] string municipality)
+        {
+            var singleMuniList = await _municipalityRepository.GetSingle(municipality);
+            return _mapper.Map<List<Models.Municipality>>(singleMuniList);
+        }
+
+        [HttpPut("update")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
+        {
+            var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
+            if (didUpdate)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("There was a problem when updating the municipality");
+            }
+        }
     }
     
 }
