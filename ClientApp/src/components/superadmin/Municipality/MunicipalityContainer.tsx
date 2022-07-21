@@ -1,12 +1,4 @@
-import {
-  Box,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@material-ui/core";
+import { Box, FormControl, Grid, MenuItem, Select, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import CustomTooltip from "components/institution/CustomTooltip";
 import React, { useState, useEffect, ChangeEvent } from "react";
