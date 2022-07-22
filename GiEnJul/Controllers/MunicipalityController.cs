@@ -97,10 +97,11 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("contact")]
-        public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
+        public async Task<IEnumerable<Dtos.GetContactsDto>> GetSingleContact([FromQuery] string municipality)
         {
-            var contacts = await _municipalityRepository.GetSingle(municipality);
-            return _mapper.Map<Dtos.GetContactsDto>(contacts.First());
+            var contact = await _municipalityRepository.GetSingle(municipality);
+            var contactDtos = _mapper.Map<List<Dtos.GetContactsDto>>(contact);
+            return contactDtos;
         }
 
         [HttpGet("getSingle")]
