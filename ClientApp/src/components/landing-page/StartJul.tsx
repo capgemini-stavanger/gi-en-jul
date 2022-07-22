@@ -1,11 +1,10 @@
 import { Typography, Container, Grid } from "@material-ui/core";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import useStyles from "components/landing-page/Styles";
-import family from "styling/img/familyTop.svg";
-import snowDown from "styling/img/snow_down.svg";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
+import Footer from "components/shared/Footer";
 
 interface iHowtoStartInfo {
   ContentType: string;
@@ -41,7 +40,7 @@ const StartJul = () => {
   return (
     <>
       <NavBarPublic />
-      <Container id="start" className={classes.root} maxWidth={false}>
+      <Container id="start" className={classes.rootNavBarPages} maxWidth={false}>
         <div className={classes.headLineContainer}>
           <Typography className={classes.textHeadline}>
             Hvordan du starter Gi en jul i din kommune
@@ -49,16 +48,11 @@ const StartJul = () => {
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography className={classes.sectionContainer}>
-              {parse(howToStartInfo.info)}
-            </Typography>
-            <img className={classes.familyImage} src={family}></img>
-          </Grid>
-          <Grid item>
-            <img className={classes.snowDown} src={snowDown}></img>
+            <Typography>{parse(howToStartInfo.info)}</Typography>
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 };

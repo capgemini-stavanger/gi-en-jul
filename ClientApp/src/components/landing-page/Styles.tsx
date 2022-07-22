@@ -6,6 +6,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: "cover",
     padding: theme.spacing(4),
   },
+  rootNavBarPages: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    height: "100vh",
+    padding: theme.spacing(4),
+  },
   rootWhite: {
     backgroundColor: "white",
     padding: theme.spacing(4),
@@ -20,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(2),
-    maxHeight: "15em",
+    height: "10em",
     [theme.breakpoints.up("tablet")]: {
       maxHeight: "18em",
     },
@@ -206,6 +212,33 @@ const useStyles = makeStyles((theme) => ({
   smallIcon: {
     marginRight: "5px",
   },
+  giverButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
+    height: "40px",
+    width: "120px",
+    textTransform: "none",
+    padding: theme.spacing(1.5, 2, 1.5, 2),
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  infoBoxCircleText: {
+    position: "relative",
+    top: "60%",
+    left: "-13%",
+    fontSize: "2.5rem",
+    color: theme.palette.primary.main,
+    fontWeight: 500,
+  },
+
+  infoBoxCircle: {
+    position: "static",
+    height: "2.5em",
+    width: "2.5em",
+    color: theme.palette.secondary.main,
+  },
+
   contactSpacing: {
     marginBottom: "2em",
   },

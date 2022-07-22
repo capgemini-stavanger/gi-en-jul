@@ -1,12 +1,11 @@
 import { Typography, Container, Grid } from "@material-ui/core";
 import useStyles from "components/landing-page/Styles";
-import family from "styling/img/familyTop.svg";
-import snowDown from "styling/img/snow_down.svg";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Link, useHistory } from "react-router-dom";
+import Footer from "components/shared/Footer";
 
 interface businessInfo {
   question: string;
@@ -48,13 +47,13 @@ const Business = () => {
   return (
     <>
       <NavBarPublic />
-      <Container className={classes.root} maxWidth={false}>
+      <Container className={classes.rootNavBarPages} maxWidth={false}>
         <div className={classes.headLineContainer}>
           <Typography className={classes.textHeadline}>For bedrifter</Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
-            <Typography className={classes.sectionContainer}>{parse(businessInfo.info)}</Typography>
+            <Typography>{parse(businessInfo.info)}</Typography>
             <Link
               to="/bli-giver"
               onClick={() => {
@@ -62,18 +61,14 @@ const Business = () => {
               }}
               style={{ textDecoration: "none" }}
             >
-              {" "}
               <Typography>
                 Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
               </Typography>
             </Link>
-            <img className={classes.familyImage} src={family}></img>
-          </Grid>
-          <Grid item>
-            <img className={classes.snowDown} src={snowDown}></img>
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 };
