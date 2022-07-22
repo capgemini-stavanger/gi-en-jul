@@ -15,8 +15,7 @@ namespace GiEnJul.Repositories
         Task<Entities.Municipality> DeleteEntry(Models.Municipality municipality);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
         Task<IEnumerable<Municipality>> GetAll();
-        Task<IEnumerable<Municipality>> GetSingle(string municipality, string country="Norge");
-        //   Task<IEnumerable<Municipality>> GetAllActive();
+        Task<IEnumerable<Municipality>> GetSingle(string municipality, string country = "Norge");
         Task<bool> UpdateMunicipality(Models.Municipality municipality);
 
     }
@@ -30,7 +29,7 @@ namespace GiEnJul.Repositories
         {
             try
             {
-                var response= await DeleteAsync(municipality.Country, municipality.Name);
+                var response = await DeleteAsync(municipality.Country, municipality.Name);
                 return response;
             }
             catch

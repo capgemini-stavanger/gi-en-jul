@@ -186,7 +186,11 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.IsActive, opt => opt.Ignore())
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
                 .ForMember(dest => dest.Information, opt => opt.Ignore())
-                .ForMember(dest => dest.Email, opt => opt.Ignore());
+                .ForMember(dest => dest.Email, opt => opt.Ignore())
+                .ForMember(dest => dest.Instagram, opt => opt.Ignore())
+                .ForMember(dest => dest.Facebook, opt => opt.Ignore())
+                .ForMember(dest => dest.ContactPerson, opt => opt.Ignore())
+                .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore());
 
             CreateMap<Models.Municipality, Entities.Municipality>()
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))
