@@ -12,7 +12,7 @@ import {
 import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { useState } from "react";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
@@ -21,7 +21,7 @@ import useStyles from "./Styles";
 import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
+import { IFormPerson, IFormWish, getFormWish, TotalWish } from "./RegistrationFormTypes";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -43,11 +43,10 @@ const FormPerson: FC<IPersonProps> = ({
   const [showWishes, setShowWishes] = useState(true);
   const [ageWish, setAgeWish] = useState(false);
 
-  useEffect(() => {}, [person.wishes]);
-
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
     const intAge = Math.floor(parseInt(strAge));
+    let isValidAge = false;
     strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
@@ -55,13 +54,14 @@ const FormPerson: FC<IPersonProps> = ({
       } else if (intAge < 0) {
         strAge = "0";
       }
+      isValidAge = true;
     } else {
       return;
     }
     if (intAge >= 1) {
-      person.months = "0";
+      person.months = "1";
     }
-    updatePerson({ age: strAge, isValidAge: !!strAge });
+    updatePerson({ age: strAge, isValidAge: isValidAge });
   };
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,8 +71,8 @@ const FormPerson: FC<IPersonProps> = ({
     if (intMonths !== NaN) {
       if (intMonths > 11) {
         strMonths = "11";
-      } else if (intMonths < 0) {
-        strMonths = "0";
+      } else if (intMonths < 1) {
+        strMonths = "1";
       }
     } else {
       return;
@@ -92,10 +92,10 @@ const FormPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (newWishData: string, index: number) => {
+  const updateWish = (newWishData: string[], isValid: boolean, index: number) => {
     const newList = [...person.wishes];
     newList[index].wish = newWishData;
-    updatePerson({ wishes: newList, isValidWish: true });
+    updatePerson({ wishes: newList, isValidWish: isValid });
   };
 
   const deleteWish = (index: number) => {
@@ -108,7 +108,6 @@ const FormPerson: FC<IPersonProps> = ({
   };
 
   const addWish = () => {
-    console.log(person.wishes);
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
     newList.push(getFormWish());
@@ -201,11 +200,11 @@ const FormPerson: FC<IPersonProps> = ({
                 <FormWish
                   key={wish.id}
                   viewErrorTrigger={viewErrorTrigger}
-                  updateWish={(wish) => {
-                    updateWish(wish, i);
+                  updateWish={(wish, valid) => {
+                    updateWish(wish, valid, i);
                   }}
                   deleteWish={() => deleteWish(i)}
-                  wish={wish}
+                  wish={wish.wish}
                   wishIndex={i}
                 />
               );

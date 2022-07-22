@@ -1,30 +1,19 @@
-import { Box, Button, Grid, IconButton, SvgIcon, Typography } from "@material-ui/core";
+import { Box, Grid, IconButton, SvgIcon, Typography } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
 import React, { useEffect, useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
-import { IFormWish } from "./RegistrationFormTypes";
+import { TotalWish } from "./RegistrationFormTypes";
 
 interface IWishProps {
   viewErrorTrigger: number;
-  updateWish: (newWishData: string) => void;
+  updateWish: (newWishData: string[], isValid: boolean) => void;
   deleteWish: () => void;
-  wish: IFormWish;
+  wish: string[];
   wishIndex: number;
 }
-
-const initState: { [data: string]: any } = {
-  wishInput: "",
-  size: "",
-  location: "",
-  specification: "",
-  categorySelected: false,
-  sizeDisabled: true,
-  locationDisabled: true,
-  totalWish: [],
-};
 
 const InstitutionWish: React.FC<IWishProps> = ({
   viewErrorTrigger,
@@ -33,61 +22,86 @@ const InstitutionWish: React.FC<IWishProps> = ({
   wish,
   wishIndex,
 }) => {
-  const [state, setState] = useState({ ...initState });
   const classes = useStyles();
 
+  const [totalWish, setTotalWish] = useState(["", "", ""]);
+  const [categorySelected, setCategorySelected] = useState(false);
+  const [sizeDisabled, setSizeDisabled] = useState(true);
+  const [locationDisabled, setLocationDisabled] = useState(true);
+
   useEffect(() => {
-    const wishSplit = wish.wish.split(",");
-    wishSplit.map((field, index) => (state.totalWish[index] = field));
-    console.log(wishSplit);
+    setTotalWish(wish);
+    if (wish[TotalWish.Category] != "") {
+      handleCategoryChange(wish[TotalWish.Category]);
+    }
   }, []);
 
-  const getSetter = (target: keyof typeof state) => (value: typeof state[typeof target]) => {
-    setState((prev) => {
-      prev[target] = value;
-      return prev;
-    });
+  const updateTotalWish = (totalWishIndex: number, wish: string) => {
+    const newTotalWish = [...totalWish];
+    newTotalWish[totalWishIndex] = wish;
+    setTotalWish(newTotalWish);
+    return newTotalWish;
   };
 
-  const getOnSizeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    state.totalWish[1] = e.target.value;
-    getSetter("size")(state.totalWish[1]);
-    updateWish(state.totalWish.toString());
+  const onCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedValue = e.target.value;
+    const updatedWishList = updateTotalWish(TotalWish.Category, updatedValue);
+    const validWishList = validateWish(updatedWishList);
+    updateWish(updatedWishList, validWishList);
+    handleCategoryChange(updatedValue);
   };
 
-  const getOnLocationInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    state.totalWish[1] = e.target.value;
-    getSetter("location")(state.totalWish[1]);
-    updateWish(state.totalWish.toString());
+  const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedValue = e.target.value;
+    const updatedWishList = updateTotalWish(TotalWish.LocationOrSpecification, updatedValue);
+    const validWishList = validateWish(updatedWishList);
+    updateWish(updatedWishList, validWishList);
   };
 
-  const getOnCommentInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(state);
-    state.totalWish[2] = e.target.value;
-    getSetter("specification")(state.totalWish[2]);
-    updateWish(state.totalWish.toString());
+  const onSpecificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedValue = e.target.value;
+    const updatedWishList = updateTotalWish(TotalWish.LocationOrSpecification, updatedValue);
+    const validWishList = validateWish(updatedWishList);
+    updateWish(updatedWishList, validWishList);
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newInput = e.target.value;
-    state.totalWish[0] = newInput;
-    updateWish(newInput);
-    getSetter("wishInput")(newInput);
-    handleCategoryChange(e);
+  const onSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updatedValue = e.target.value;
+    const updatedWishList = updateTotalWish(TotalWish.Size, updatedValue);
+    const validWishList = validateWish(updatedWishList);
+    updateWish(updatedWishList, validWishList);
   };
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    getSetter("categorySelected")(true);
-    if (e.target.value == "Klær" || e.target.value == "Sko") {
-      getSetter("locationDisabled")(true);
-      getSetter("sizeDisabled")(false);
-    } else if (e.target.value == "Gavekort") {
-      getSetter("sizeDisabled")(true);
-      getSetter("locationDisabled")(false);
+  const handleCategoryChange = (category: string) => {
+    setCategorySelected(true);
+    if (category == "Klær" || category == "Sko") {
+      setLocationDisabled(true);
+      setSizeDisabled(false);
+    } else if (category == "Gavekort") {
+      setSizeDisabled(true);
+      setLocationDisabled(false);
     } else {
-      getSetter("sizeDisabled")(true);
-      getSetter("locationDisabled")(true);
-      state.totalWish[1] = "";
+      setSizeDisabled(true);
+      setLocationDisabled(true);
+    }
+  };
+
+  const validateWish = (wish: string[]) => {
+    const category = wish[TotalWish.Category];
+    const specification = wish[TotalWish.LocationOrSpecification];
+    const size = wish[TotalWish.Size];
+    if (category == "Gavekort" || category == "Leker" || category == "Annet") {
+      if (specification == "") {
+        return false;
+      }
+      return true;
+    } else if (category == "Sko" || category == "Klær") {
+      if (specification == "" || size == "") {
+        return false;
+      }
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -109,43 +123,41 @@ const InstitutionWish: React.FC<IWishProps> = ({
           options={Categories.map((o: ICategories) => {
             return { value: o.type, text: o.type };
           })}
-          disabled={state.ageWish}
-          value={state.wishInput}
-          onChange={(e) => onWishInputChange(e)}
+          value={totalWish[TotalWish.Category]}
+          onChange={onCategoryChange}
           fullWidth
         ></InputValidator>
       </Grid>
 
-      {state.categorySelected && (
+      {categorySelected && (
         <React.Fragment>
-          {!state.locationDisabled && (
+          {!locationDisabled && (
             <Grid item xs={7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
-                onChange={(e) => getOnLocationInputChange(e)}
-                disabled={state.locationDisabled}
-                value={state.location}
                 name="clocation"
                 id="lokasjon"
                 label="Sted *"
                 placeholder="HM eller Zara"
+                value={totalWish[TotalWish.LocationOrSpecification]}
+                onChange={onLocationChange}
                 fullWidth
               ></InputValidator>
             </Grid>
           )}
-          {!state.sizeDisabled && (
+          {!sizeDisabled && (
             <React.Fragment>
               <Grid item xs={5}>
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isNotNull]}
-                  onChange={(e) => getOnCommentInputChange(e)}
-                  value={state.specification}
                   name="cspecification"
                   id="spesifikasjon"
                   label="Spesifikasjon *"
                   placeholder="Blå genser"
+                  value={totalWish[TotalWish.LocationOrSpecification]}
+                  onChange={onSpecificationChange}
                   fullWidth
                 ></InputValidator>
               </Grid>
@@ -153,29 +165,28 @@ const InstitutionWish: React.FC<IWishProps> = ({
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isNotNull]}
-                  onChange={(e) => getOnSizeInputChange(e)}
-                  disabled={state.sizeDisabled}
-                  value={state.size}
                   name="csize"
                   id="størrelse"
                   label="Størrelse *"
                   placeholder="L / Large"
+                  value={totalWish[TotalWish.Size]}
+                  onChange={onSizeChange}
                   fullWidth
                 ></InputValidator>
               </Grid>
             </React.Fragment>
           )}
-          {state.locationDisabled && state.sizeDisabled && (
+          {locationDisabled && sizeDisabled && (
             <Grid item xs={7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
-                onChange={(e) => getOnCommentInputChange(e)}
-                value={state.specification}
                 name="cspecification"
                 id="spesifikasjon"
                 label="Spesifikasjon *"
                 placeholder="Barbie eller Lego"
+                value={totalWish[TotalWish.LocationOrSpecification]}
+                onChange={onSpecificationChange}
                 fullWidth
               ></InputValidator>
             </Grid>

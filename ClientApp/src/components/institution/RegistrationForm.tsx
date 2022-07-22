@@ -11,6 +11,7 @@ import {
   getFormPerson,
   IContactState,
   initState,
+  TotalWish,
 } from "components/institution/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
@@ -40,7 +41,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
   const [open, setOpen] = useState<boolean>(false);
   const [formDataState, setFormDataState] = useState(initFormDataState());
-  const [validFormState, setValidFormState] = useState(initValidFormState); //denne har ... i orginal
+  const [validFormState, setValidFormState] = useState(initValidFormState);
 
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
@@ -60,14 +61,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     });
   };
   const allIsValid = () => {
+    return formDataState.persons.every((p) => {
+      console.log(p);
+      return p.isValidAge && p.isValidGender && p.isValidWish;
+    });
     for (const isValid in validFormState) {
       if (!validFormState[isValid]) return false;
     }
-    return formDataState.persons.every((p) => {
-      console.log("VALIDATION:");
-      console.log(p.isValidWish);
-      return p.isValidAge && p.isValidGender && p.isValidWish;
-    });
   };
   const setAlert = (
     open?: boolean,
@@ -188,9 +188,10 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
     formDataState.persons.forEach((person) => {
       const wishList: string[] = [];
-      person.wishes.forEach((element) => {
-        wishList.push(element.wish);
-      });
+
+      // CHANGE SOMETHING
+      // Loop over each wishLIST in wishes, combine to string, add to wishList
+
       const person1: PersonType = {
         Wishes: wishList,
         Age: parseInt(person.age),

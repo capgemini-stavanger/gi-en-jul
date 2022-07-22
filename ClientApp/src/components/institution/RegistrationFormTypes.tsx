@@ -18,15 +18,21 @@ export interface IFormPerson {
   months: string;
   gender: Gender;
   comment: string;
+  wishes: IFormWish[];
   isValidAge: boolean;
   isValidGender: boolean;
   isValidWish: boolean;
-  wishes: IFormWish[];
 }
 
 export interface IFormWish {
   id: string;
-  wish: string;
+  wish: string[];
+}
+
+export enum TotalWish {
+  Category,
+  LocationOrSpecification,
+  Size,
 }
 
 export interface IContactState {
@@ -101,18 +107,18 @@ const initFoodFormData: IFoodFormData = {
 export const getFormPerson: () => IFormPerson = () => ({
   uuid: uuidv4(),
   age: "0",
-  months: "0",
+  months: "1",
   gender: Gender.Unspecified,
   comment: "",
+  wishes: [getFormWish()],
   isValidAge: false,
   isValidGender: false,
   isValidWish: false,
-  wishes: [getFormWish()],
 });
 
 export const getFormWish: () => IFormWish = () => ({
   id: Math.random().toString(),
-  wish: "",
+  wish: ["", "", ""],
 });
 
 export const initFormDataState: () => IContactState = () => ({
