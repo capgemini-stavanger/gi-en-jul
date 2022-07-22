@@ -4,7 +4,6 @@ import logo from "styling/img/logo_white.svg";
 import useStyles from "components/shared/Styles";
 import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
-import NavBarBusiness from "./NavBarBusiness";
 import NavbarMobile from "./NavBarMobile";
 import React from "react";
 
@@ -28,8 +27,6 @@ const NavBarPublic = () => {
         </AppBar>
       </>
     );
-  } else if (window.location.pathname == "/bedrift") {
-    return <NavBarBusiness />;
   } else {
     return (
       <>
@@ -86,14 +83,26 @@ const NavBarPublic = () => {
               ></Tab>
             </Grid>
             <Grid item className={classes.giverButtonGridItem}>
-              <Button
-                size="large"
-                className={classes.giverButton}
-                endIcon={<ArrowForwardIos />}
-                onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
-              >
-                Bli giver
-              </Button>
+              {window.location.pathname == "/bedrift" ? (
+                <Button
+                  size="large"
+                  className={classes.giverButton}
+                  style={{ visibility: "hidden" }}
+                  endIcon={<ArrowForwardIos />}
+                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+                >
+                  Bli giver
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  className={classes.giverButton}
+                  endIcon={<ArrowForwardIos />}
+                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+                >
+                  Bli giver
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Box>
