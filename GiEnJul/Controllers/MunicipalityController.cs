@@ -12,7 +12,7 @@ namespace GiEnJul.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MunicipalityController: ControllerBase
+    public class MunicipalityController : ControllerBase
     {
         private readonly IMunicipalityRepository _municipalityRepository;
         private readonly IMapper _mapper;
@@ -39,26 +39,26 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = Policy.SuperAdmin)]
+        // [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
-                return BadRequest("RowKey already exists, use put request to edit");            
-            
-            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));  
+                return BadRequest("RowKey already exists, use put request to edit");
+
+            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
         }
 
         [HttpPut]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
+        //  [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
             var entities = await _municipalityRepository.GetAll();
             var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
             if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
-            
+
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
         }
@@ -66,11 +66,11 @@ namespace GiEnJul.Controllers
         [HttpGet("all")]
         public async Task<List<Models.Municipality>> GetAll()
         {
-            var municipalities = await _municipalityRepository.GetAll();  
+            var municipalities = await _municipalityRepository.GetAll();
             return _mapper.Map<List<Models.Municipality>>(municipalities);
         }
 
-        [HttpGet("active")] 
+        [HttpGet("active")]
         public async Task<List<string>> getActiveNames()
         {
             var all = await _municipalityRepository.GetAll();
@@ -94,21 +94,22 @@ namespace GiEnJul.Controllers
             var singleMuniList = await _municipalityRepository.GetSingle(municipality);
             return _mapper.Map<List<Models.Municipality>>(singleMuniList);
         }
-
+        //hvorfor trenger vi denne metoden? virker som den gjør det samme som putcontent men med en annen policy, superadmin har updatemunicipality tilgang.
         [HttpPut("update")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> UpdateMunicipalityContent([FromBody] PostMunicipalityDto content)
+        public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
         {
-            var didUpdate = await _municipalityRepository.UpdateMunicipality(_mapper.Map<Models.Municipality>(content));
+            var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
             if (didUpdate)
             {
                 return Ok();
             }
             else
             {
-                return BadRequest("There was a problem when updating the municipality");
+                return BadRequest("There was a problem updating the municipality");
             }
         }
     }
-    
+
 }
+
