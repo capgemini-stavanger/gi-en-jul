@@ -211,6 +211,7 @@ const useStyles = makeStyles((theme) => ({
   },
   smallIcon: {
     marginRight: "5px",
+  },
   giverButton: {
     backgroundColor: theme.palette.primary.main,
     color: "white",
@@ -230,12 +231,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     fontWeight: 500,
   },
+
   infoBoxCircle: {
     position: "static",
     height: "2.5em",
     width: "2.5em",
     color: theme.palette.secondary.main,
   },
+
   contactSpacing: {
     marginBottom: "2em",
   },
