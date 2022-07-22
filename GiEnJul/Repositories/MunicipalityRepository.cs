@@ -38,6 +38,8 @@ namespace GiEnJul.Repositories
             }
         }
 
+   
+
         public async Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality)
         {
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Municipality>(municipality));
@@ -48,6 +50,7 @@ namespace GiEnJul.Repositories
         {
             return await GetAllAsync();
         }
+
         public async Task<IEnumerable<Municipality>> GetSingle(string municipality, string country = "Norge")
         {
             var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";

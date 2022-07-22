@@ -163,9 +163,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
                 .ForMember(dest => dest.ETag, opt => opt.Ignore());
 
-            CreateMap<Models.Event, GetContactsDto>()
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Municipality));
-
+           
+               
             //Cms mapping
             CreateMap<Dtos.PostCmsDto, Models.Cms>();
 
@@ -191,6 +190,18 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Facebook, opt => opt.Ignore())
                 .ForMember(dest => dest.ContactPerson, opt => opt.Ignore())
                 .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore());
+
+            CreateMap<GetContactsDto, Models.Municipality>()
+               .ForMember(dest => dest.Information, opt => opt.Ignore())
+               .ForMember(dest => dest.IsActive, opt => opt.Ignore());
+
+            CreateMap< Dtos.GetContactsDto, Entities.Municipality>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.Ignore())
+                .ForMember(dest => dest.RowKey, opt => opt.Ignore())
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore())
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+                .ForMember(dest => dest.Information, opt => opt.Ignore());
 
             CreateMap<Models.Municipality, Entities.Municipality>()
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))

@@ -39,7 +39,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        // [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
@@ -51,7 +51,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPut]
-        //  [Authorize(Policy = Policy.UpdateMunicipality)]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
             var entities = await _municipalityRepository.GetAll();
@@ -88,6 +88,21 @@ namespace GiEnJul.Controllers
             return names;
         }
 
+        [HttpGet("contacts")]
+        public async Task<IEnumerable<Dtos.GetContactsDto>> GetContacts()
+        {
+            var entities = await _municipalityRepository.GetAll();
+            var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(entities);
+            return contacts;
+        }
+
+        [HttpGet("contact")]
+        public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
+        {
+            var contacts = await _municipalityRepository.GetSingle(municipality);
+            return _mapper.Map<Dtos.GetContactsDto>(contacts.First());
+        }
+
         [HttpGet("getSingle")]
         public async Task<IEnumerable<Models.Municipality>> GetSingle([FromQuery] string municipality)
         {
@@ -96,7 +111,7 @@ namespace GiEnJul.Controllers
         }
         //hvorfor trenger vi denne metoden? virker som den gjør det samme som putcontent men med en annen policy, superadmin har updatemunicipality tilgang.
         [HttpPut("update")]
-        [Authorize(Policy = Policy.SuperAdmin)]
+       // [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
         {
             var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
