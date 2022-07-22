@@ -27,7 +27,6 @@ export default () =>
       width: "35px",
       margin: theme.spacing(-1.5),
     },
-    treeGridIconBusiness: { marginLeft: "-32%" },
     treeGridIcon: { marginLeft: "-10%" },
     treeCircle: {
       position: "relative",
@@ -121,10 +120,7 @@ export default () =>
     fontSizeNavText: {
       fontSize: "20px",
     },
-    fontSizeNavTextBusiness: {
-      fontSize: "20px",
-      marginLeft: "-43%",
-    },
+
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",
       position: "absolute",
