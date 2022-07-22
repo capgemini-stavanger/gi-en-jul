@@ -26,6 +26,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
   const [informationBoxInfo, setInformationBoxInfo] = useState<string>("");
   const [uniqueEventNames, setUniqueEventNames] = useState<string[]>([]);
+  const [municipalityNames, setMunicipalityNames] = useState<string[]>([]);
   const [selectedEventName, setSelectedEventName] = useState<string>("");
   const [newEventName, setNewEventName] = useState<string>("");
   const [openNewEventBox, setOpenNewEventBox] = useState<boolean>(false);
@@ -34,6 +35,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const [addState, setAddState] = useState<boolean>(false);
   const [tempEventName, setTempEventName] = useState<string>("");
   const apiservice = new ApiService(accessToken);
+
   const handleDropDownChange = (value: string) => {
     if (openNewEventBox) {
       setOpenConfirmaitonBox(true);
@@ -164,6 +166,18 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       });
     setOpenInformationBox(true);
   };
+  const fetchMunicipalityNames = () => {
+    apiservice
+      .get("Municipality/names", {})
+      .then((resp) => {
+        console.log("got the different municipality names:");
+        console.log(resp.data);
+        setMunicipalityNames(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
   const fetchEvents = () => {
     apiservice
       .get("Event/GetAll", {})
@@ -211,6 +225,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   };
 
   useEffect(fetchEvents, []);
+  useEffect(fetchMunicipalityNames, []);
   useEffect(fetchDistinctEventNames, []);
   useEffect(buildBody, [events, selectedEventName]);
 
