@@ -64,6 +64,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       if (!validFormState[isValid]) return false;
     }
     return formDataState.persons.every((p) => {
+      console.log("VALIDATION:");
+      console.log(p.isValidWish);
       return p.isValidAge && p.isValidGender && p.isValidWish;
     });
   };

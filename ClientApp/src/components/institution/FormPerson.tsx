@@ -18,10 +18,10 @@ import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import useStyles from "./Styles";
-import FormWish, { getFormWish, IFormWish } from "./FormWish";
+import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IFormPerson } from "./RegistrationFormTypes";
+import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -42,9 +42,6 @@ const FormPerson: FC<IPersonProps> = ({
 
   const [showWishes, setShowWishes] = useState(true);
   const [ageWish, setAgeWish] = useState(false);
-  const [removeWishes, setRemoveWishes] = useState(true);
-
-  const ageAppropriateString = "Alderstilpasset gave";
 
   useEffect(() => {}, [person.wishes]);
 
@@ -80,28 +77,12 @@ const FormPerson: FC<IPersonProps> = ({
     } else {
       return;
     }
-    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
+    updatePerson({ months: strMonths });
   };
 
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgeWish(e.target.checked);
-
-    if (e.target.checked) {
-      setRemoveWishes(false);
-      setShowWishes(false);
-
-      for (let i = 0; i < person.wishes.length; i++) {
-        if (i == 0) {
-          updateWish(ageAppropriateString, i);
-        } else {
-          deleteWish(i);
-        }
-      }
-    } else {
-      updatePerson({ wishes: [] });
-      setShowWishes(true);
-      setRemoveWishes(true);
-    }
+    setShowWishes(!e.target.checked);
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -114,7 +95,7 @@ const FormPerson: FC<IPersonProps> = ({
   const updateWish = (newWishData: string, index: number) => {
     const newList = [...person.wishes];
     newList[index].wish = newWishData;
-    updatePerson({ wishes: newList });
+    updatePerson({ wishes: newList, isValidWish: true });
   };
 
   const deleteWish = (index: number) => {
@@ -127,6 +108,7 @@ const FormPerson: FC<IPersonProps> = ({
   };
 
   const addWish = () => {
+    console.log(person.wishes);
     const newList = [...person.wishes];
     if (newList.length >= 5) return;
     newList.push(getFormWish());
@@ -197,20 +179,22 @@ const FormPerson: FC<IPersonProps> = ({
               />
             </Grid>
 
-            <Grid item>
-              {showWishes ? (
-                <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
-                  <ExpandLessIcon />
-                </Button>
-              ) : (
-                <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
-                  <ExpandMoreIcon />
-                </Button>
-              )}
-            </Grid>
+            {!ageWish && (
+              <Grid item>
+                {showWishes ? (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
+                    <ExpandLessIcon />
+                  </Button>
+                ) : (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
+                    <ExpandMoreIcon />
+                  </Button>
+                )}
+              </Grid>
+            )}
           </Grid>
         </Box>
-        {(showWishes || removeWishes) && (
+        {showWishes && (
           <Box className={classes.formBoxWishes}>
             {person.wishes.map((wish: IFormWish, i: number) => {
               return (
@@ -221,19 +205,16 @@ const FormPerson: FC<IPersonProps> = ({
                     updateWish(wish, i);
                   }}
                   deleteWish={() => deleteWish(i)}
+                  wish={wish}
                   wishIndex={i}
                 />
               );
             })}
-          </Box>
-        )}
-        <Grid item>
-          {!ageWish && (
             <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
               Legg til gaveønske
             </Button>
-          )}
-        </Grid>
+          </Box>
+        )}
       </Container>
       <Box className={classes.deleteBox}>
         <IconButton color="primary" onClick={deletePerson}>
