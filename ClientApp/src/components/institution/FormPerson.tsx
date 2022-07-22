@@ -42,8 +42,9 @@ const FormPerson: FC<IPersonProps> = ({
 
   const [showWishes, setShowWishes] = useState(true);
   const [ageWish, setAgeWish] = useState(false);
+  const [removeWishes, setRemoveWishes] = useState(true);
 
-  const ageAppropriateString = "Giver kjøper alderstilpasset gave";
+  const ageAppropriateString = "Alderstilpasset gave";
 
   useEffect(() => {}, [person.wishes]);
 
@@ -81,12 +82,13 @@ const FormPerson: FC<IPersonProps> = ({
     }
     updatePerson({ months: strMonths, isValidMonths: !!strMonths });
   };
+
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //   const newInput = e.target.checked ? ageAppropriateString : person.wishes[0].wish;
+    setAgeWish(e.target.checked);
 
     if (e.target.checked) {
+      setRemoveWishes(false);
       setShowWishes(false);
-      updateWish(ageAppropriateString, 0);
 
       for (let i = 0; i < person.wishes.length; i++) {
         if (i == 0) {
@@ -95,8 +97,11 @@ const FormPerson: FC<IPersonProps> = ({
           deleteWish(i);
         }
       }
+    } else {
+      updatePerson({ wishes: [] });
+      setShowWishes(true);
+      setRemoveWishes(true);
     }
-    setAgeWish(e.target.checked);
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -176,25 +181,19 @@ const FormPerson: FC<IPersonProps> = ({
                 className={classes.mediumWidth}
               />
             </Grid>
-            <Grid item>
-              {!ageWish && (
-                <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-                  Legg til gaveønske (Maks 5)
-                </Button>
-              )}
-            </Grid>
+
             <Grid item>
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={ageWish}
-                    onChange={(e) => handleAgeWishChecked(e)} //denne må tømme wishlisten og sette den lik stringen om aldersgave.
+                    onChange={(e) => handleAgeWishChecked(e)}
                     name="isAgeWish"
                     color="primary"
                   />
                 }
                 className="my-0"
-                label="Giver kjøper alderstilpasset gave"
+                label="Alderstilpasset gave"
               />
             </Grid>
 
@@ -211,7 +210,7 @@ const FormPerson: FC<IPersonProps> = ({
             </Grid>
           </Grid>
         </Box>
-        {showWishes && (
+        {(showWishes || removeWishes) && (
           <Box className={classes.formBoxWishes}>
             {person.wishes.map((wish: IFormWish, i: number) => {
               return (
@@ -228,6 +227,13 @@ const FormPerson: FC<IPersonProps> = ({
             })}
           </Box>
         )}
+        <Grid item>
+          {!ageWish && (
+            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+              Legg til gaveønske
+            </Button>
+          )}
+        </Grid>
       </Container>
       <Box className={classes.deleteBox}>
         <IconButton color="primary" onClick={deletePerson}>
