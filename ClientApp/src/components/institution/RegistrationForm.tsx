@@ -61,13 +61,30 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     });
   };
   const allIsValid = () => {
-    return formDataState.persons.every((p) => {
-      console.log(p);
-      return p.isValidAge && p.isValidGender && p.isValidWish;
-    });
+    let returnValue = true;
+
+    // Check contact person and dinner options
     for (const isValid in validFormState) {
-      if (!validFormState[isValid]) return false;
+      if (!validFormState[isValid]) {
+        returnValue = false;
+      }
     }
+
+    // Check person validation
+    formDataState.persons.every((p) => {
+      // Selected gender and age
+      if (!p.isValidAge || !p.isValidGender) {
+        returnValue = false;
+      }
+      // All wishes are valid
+      p.wishes.every((w) => {
+        if (!w.isValidWish) {
+          returnValue = false;
+        }
+      });
+    });
+
+    return returnValue;
   };
   const setAlert = (
     open?: boolean,
@@ -300,8 +317,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={3} justifyContent="space-around">
-                    <Grid item>
+                  <Grid container direction="row" spacing={3}>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isNotNull]}
@@ -314,7 +331,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         label="Navn"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isPhoneNumber, isNotNull]}
@@ -331,7 +348,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         autoComplete="tel"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isEmail, isNotNull]}
@@ -389,8 +406,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   <Typography>Vennligst fyll ut familiens matønsker</Typography>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={3} justifyContent="space-around">
-                    <Grid item>
+                  <Grid container direction="row" spacing={3}>
+                    <Grid item xs={4}>
                       <FormFood
                         viewErrorTrigger={state.viewErrorTrigger}
                         onInputChange={onDinnerInputChange}
@@ -405,7 +422,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         name="dinner"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <FormFood
                         viewErrorTrigger={state.viewErrorTrigger}
                         onInputChange={onDessertInputChange}
@@ -420,7 +437,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         name="dessert"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <TextField
                         variant="outlined"
                         value={formDataState.specialNeeds}

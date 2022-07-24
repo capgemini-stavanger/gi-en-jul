@@ -92,19 +92,21 @@ const FormPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (newWishData: string[], isValid: boolean, index: number) => {
+  const updateWish = (newWishData: IFormWish, index: number) => {
     const newList = [...person.wishes];
-    newList[index].wish = newWishData;
-    updatePerson({ wishes: newList, isValidWish: isValid });
+    newList[index] = newWishData;
+    updatePerson({ wishes: newList });
   };
 
   const deleteWish = (index: number) => {
-    const newList = [...person.wishes];
-    const head = newList.slice(0, index);
-    const tail = newList.slice(index + 1, newList.length);
-    const newWishList = head.concat(tail);
-    person.wishes = newWishList;
-    updatePerson({ wishes: newWishList });
+    if (person.wishes.length > 1) {
+      const newList = [...person.wishes];
+      const head = newList.slice(0, index);
+      const tail = newList.slice(index + 1, newList.length);
+      const newWishList = head.concat(tail);
+      person.wishes = newWishList;
+      updatePerson({ wishes: newWishList });
+    }
   };
 
   const addWish = () => {
@@ -198,13 +200,13 @@ const FormPerson: FC<IPersonProps> = ({
             {person.wishes.map((wish: IFormWish, i: number) => {
               return (
                 <FormWish
-                  key={wish.id}
+                  key={i}
                   viewErrorTrigger={viewErrorTrigger}
-                  updateWish={(wish, valid) => {
-                    updateWish(wish, valid, i);
+                  updateWish={(wishObj) => {
+                    updateWish(wishObj, i);
                   }}
                   deleteWish={() => deleteWish(i)}
-                  wish={wish.wish}
+                  wishObj={wish}
                   wishIndex={i}
                 />
               );

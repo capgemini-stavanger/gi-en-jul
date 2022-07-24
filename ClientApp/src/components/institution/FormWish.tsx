@@ -5,13 +5,14 @@ import { Categories, ICategories } from "./mockDatabase";
 import React, { useEffect, useState } from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
-import { TotalWish } from "./RegistrationFormTypes";
+import { IFormWish, TotalWish, WishCategory } from "./RegistrationFormTypes";
+import SuggestionPopover from "./SuggestionPopover";
 
 interface IWishProps {
   viewErrorTrigger: number;
-  updateWish: (newWishData: string[], isValid: boolean) => void;
+  updateWish: (newWishData: IFormWish) => void;
   deleteWish: () => void;
-  wish: string[];
+  wishObj: IFormWish;
   wishIndex: number;
 }
 
@@ -19,71 +20,48 @@ const InstitutionWish: React.FC<IWishProps> = ({
   viewErrorTrigger,
   updateWish,
   deleteWish,
-  wish,
+  wishObj,
   wishIndex,
 }) => {
   const classes = useStyles();
 
-  const [totalWish, setTotalWish] = useState(["", "", ""]);
-  const [categorySelected, setCategorySelected] = useState(false);
-  const [sizeDisabled, setSizeDisabled] = useState(true);
-  const [locationDisabled, setLocationDisabled] = useState(true);
-
-  useEffect(() => {
-    setTotalWish(wish);
-    if (wish[TotalWish.Category] != "") {
-      handleCategoryChange(wish[TotalWish.Category]);
-    }
-  }, []);
-
-  const updateTotalWish = (totalWishIndex: number, wish: string) => {
-    const newTotalWish = [...totalWish];
-    newTotalWish[totalWishIndex] = wish;
-    setTotalWish(newTotalWish);
-    return newTotalWish;
+  const updateTotalWish = (totalWishIndex: number, newWish: string) => {
+    const wishCopy = { ...wishObj };
+    wishCopy.wish[totalWishIndex] = newWish;
+    wishCopy.isValidWish = validateWish(wishCopy.wish);
+    return wishCopy;
   };
 
   const onCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.value;
     const updatedWishList = updateTotalWish(TotalWish.Category, updatedValue);
-    const validWishList = validateWish(updatedWishList);
-    updateWish(updatedWishList, validWishList);
-    handleCategoryChange(updatedValue);
+    const category = updatedWishList.wish[TotalWish.Category];
+    if (category == "Gavekort") {
+      updatedWishList.category = WishCategory.Location;
+    } else if (category == "Sko" || category == "Klær") {
+      updatedWishList.category = WishCategory.Size;
+    } else {
+      updatedWishList.category = WishCategory.Specifiction;
+    }
+    updateWish(updatedWishList);
   };
 
   const onLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.value;
     const updatedWishList = updateTotalWish(TotalWish.LocationOrSpecification, updatedValue);
-    const validWishList = validateWish(updatedWishList);
-    updateWish(updatedWishList, validWishList);
+    updateWish(updatedWishList);
   };
 
   const onSpecificationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.value;
     const updatedWishList = updateTotalWish(TotalWish.LocationOrSpecification, updatedValue);
-    const validWishList = validateWish(updatedWishList);
-    updateWish(updatedWishList, validWishList);
+    updateWish(updatedWishList);
   };
 
   const onSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const updatedValue = e.target.value;
     const updatedWishList = updateTotalWish(TotalWish.Size, updatedValue);
-    const validWishList = validateWish(updatedWishList);
-    updateWish(updatedWishList, validWishList);
-  };
-
-  const handleCategoryChange = (category: string) => {
-    setCategorySelected(true);
-    if (category == "Klær" || category == "Sko") {
-      setLocationDisabled(true);
-      setSizeDisabled(false);
-    } else if (category == "Gavekort") {
-      setSizeDisabled(true);
-      setLocationDisabled(false);
-    } else {
-      setSizeDisabled(true);
-      setLocationDisabled(true);
-    }
+    updateWish(updatedWishList);
   };
 
   const validateWish = (wish: string[]) => {
@@ -123,15 +101,15 @@ const InstitutionWish: React.FC<IWishProps> = ({
           options={Categories.map((o: ICategories) => {
             return { value: o.type, text: o.type };
           })}
-          value={totalWish[TotalWish.Category]}
+          value={wishObj.wish[TotalWish.Category]}
           onChange={onCategoryChange}
           fullWidth
         ></InputValidator>
       </Grid>
 
-      {categorySelected && (
+      {wishObj.category >= 0 ? (
         <React.Fragment>
-          {!locationDisabled && (
+          {wishObj.category == WishCategory.Location && (
             <Grid item xs={7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
@@ -140,13 +118,13 @@ const InstitutionWish: React.FC<IWishProps> = ({
                 id="lokasjon"
                 label="Sted *"
                 placeholder="HM eller Zara"
-                value={totalWish[TotalWish.LocationOrSpecification]}
+                value={wishObj.wish[TotalWish.LocationOrSpecification]}
                 onChange={onLocationChange}
                 fullWidth
               ></InputValidator>
             </Grid>
           )}
-          {!sizeDisabled && (
+          {wishObj.category == WishCategory.Size && (
             <React.Fragment>
               <Grid item xs={5}>
                 <InputValidator
@@ -156,7 +134,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
                   id="spesifikasjon"
                   label="Spesifikasjon *"
                   placeholder="Blå genser"
-                  value={totalWish[TotalWish.LocationOrSpecification]}
+                  value={wishObj.wish[TotalWish.LocationOrSpecification]}
                   onChange={onSpecificationChange}
                   fullWidth
                 ></InputValidator>
@@ -169,14 +147,14 @@ const InstitutionWish: React.FC<IWishProps> = ({
                   id="størrelse"
                   label="Størrelse *"
                   placeholder="L / Large"
-                  value={totalWish[TotalWish.Size]}
+                  value={wishObj.wish[TotalWish.Size]}
                   onChange={onSizeChange}
                   fullWidth
                 ></InputValidator>
               </Grid>
             </React.Fragment>
           )}
-          {locationDisabled && sizeDisabled && (
+          {wishObj.category == WishCategory.Specifiction && (
             <Grid item xs={7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
@@ -185,15 +163,23 @@ const InstitutionWish: React.FC<IWishProps> = ({
                 id="spesifikasjon"
                 label="Spesifikasjon *"
                 placeholder="Barbie eller Lego"
-                value={totalWish[TotalWish.LocationOrSpecification]}
+                value={wishObj.wish[TotalWish.LocationOrSpecification]}
                 onChange={onSpecificationChange}
                 fullWidth
               ></InputValidator>
             </Grid>
           )}
         </React.Fragment>
+      ) : (
+        <Grid item xs={2}>
+          <SuggestionPopover
+            wishObj={wishObj}
+            updateWish={(wishObj) => {
+              updateWish(wishObj);
+            }}
+          />
+        </Grid>
       )}
-
       <Grid item xs={1}>
         <IconButton color="primary" onClick={deleteWish}>
           <SvgIcon component={ClearIcon} />

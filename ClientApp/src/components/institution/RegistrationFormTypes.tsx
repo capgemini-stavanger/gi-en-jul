@@ -21,14 +21,19 @@ export interface IFormPerson {
   wishes: IFormWish[];
   isValidAge: boolean;
   isValidGender: boolean;
-  isValidWish: boolean;
 }
 
 export interface IFormWish {
-  id: string;
   wish: string[];
+  category: number;
+  isValidWish: boolean;
 }
 
+export enum WishCategory {
+  Location,
+  Size,
+  Specifiction,
+}
 export enum TotalWish {
   Category,
   LocationOrSpecification,
@@ -113,12 +118,12 @@ export const getFormPerson: () => IFormPerson = () => ({
   wishes: [getFormWish()],
   isValidAge: false,
   isValidGender: false,
-  isValidWish: false,
 });
 
 export const getFormWish: () => IFormWish = () => ({
-  id: Math.random().toString(),
   wish: ["", "", ""],
+  category: -1,
+  isValidWish: false,
 });
 
 export const initFormDataState: () => IContactState = () => ({
