@@ -22,8 +22,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
-  const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
-  // const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
 
   const onUsernameChange = (event: ChangeEvent<IChangeEvent>) => {
     setUsernameInput(event.target.value as string);
@@ -54,8 +52,8 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
           onChange={(e) => {
             onUsernameChange(e);
           }}
-          label={"Brukernavn*"}
-          name={"brukernavn"}
+          label={"Email*"}
+          name={"email"}
         ></InputValidator>
       </Grid>
 
@@ -114,7 +112,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
       <Grid item>
         <Button
           onClick={() => {
-            handleConfirm(confirmOpen);
+            handleConfirm(true);
           }}
         >
           <Typography>Legg til</Typography>

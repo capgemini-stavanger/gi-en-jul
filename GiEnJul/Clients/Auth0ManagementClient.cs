@@ -20,6 +20,7 @@ namespace GiEnJul.Clients
         Task<string> GetTokenAsync();
         Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
         Task<User> CreateUser(CreateUserDto userDto);
+        Task<List<User>> GetAllUsers();
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -87,6 +88,16 @@ namespace GiEnJul.Clients
             metadataDict.AddDictionary(appMetadata.ToObject<Dictionary<string, string>>(), CombineStrategy.takeFirst);
             _metadataCache.Add(userId, metadataDict, DateTime.Now.AddMinutes(10));
             return metadataDict;
+        }
+
+        public async Task<List<User>> GetAllUsers()
+        {
+            var token = await GetTokenAsync();
+            _managementApiClient.UpdateAccessToken(token);
+            var request = new GetUsersRequest();
+            var user = await _managementApiClient.Users.GetAllAsync(request);
+         
+            return (List<User>) user;
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
