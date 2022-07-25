@@ -22,7 +22,6 @@ import {
 import FormFood from "./FormFood";
 import { DINNERS } from "common/constants/Dinners";
 import { DESSERTS } from "common/constants/Desserts";
-import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
@@ -40,7 +39,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const [state, setState] = useState(initState);
   const [open, setOpen] = useState<boolean>(false);
   const [formDataState, setFormDataState] = useState(initFormDataState());
-  const [validFormState, setValidFormState] = useState(initValidFormState); //denne har ... i orginal
+  const [validFormState, setValidFormState] = useState(initValidFormState);
 
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
@@ -60,12 +59,32 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     });
   };
   const allIsValid = () => {
+    let returnValue = true;
+
+    // Check contact person and dinner options
     for (const isValid in validFormState) {
-      if (!validFormState[isValid]) return false;
+      if (!validFormState[isValid]) {
+        returnValue = false;
+      }
     }
-    return formDataState.persons.every((p) => {
-      return p.isValidAge && p.isValidGender && p.isValidWish;
+
+    // Check person validation
+    formDataState.persons.every((p) => {
+      // Selected gender and age
+      if (!p.isValidAge || !p.isValidGender) {
+        returnValue = false;
+      }
+      // All wishes are valid
+      if (!p.noWish) {
+        p.wishes.every((w) => {
+          if (!w.isValidWish) {
+            returnValue = false;
+          }
+        });
+      }
     });
+
+    return returnValue;
   };
   const setAlert = (
     open?: boolean,
@@ -186,15 +205,21 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
     formDataState.persons.forEach((person) => {
       const wishList: string[] = [];
-      person.wishes.forEach((element) => {
-        wishList.push(element.wish);
-      });
+
+      if (!person.noWish) {
+        person.wishes.forEach((wishObj) => {
+          wishList.push(wishObj.wish.filter(Boolean).join(", "));
+        });
+      } else {
+        wishList.push("Alderstilpasset gaveønske");
+      }
+
       const person1: PersonType = {
         Wishes: wishList,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
-        Comment: person.comment,
+        NoWish: person.noWish,
       };
       personsList.push(person1);
     });
@@ -297,8 +322,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={3} justifyContent="space-around">
-                    <Grid item>
+                  <Grid container direction="row" spacing={3}>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isNotNull]}
@@ -311,7 +336,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         label="Navn"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isPhoneNumber, isNotNull]}
@@ -328,7 +353,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         autoComplete="tel"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isEmail, isNotNull]}
@@ -352,7 +377,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               <Grid container direction="column" spacing={5}>
                 <Grid item>
                   <Typography variant="h5"> Family ID *</Typography>
-                  <Typography>Hvis familien har PID..</Typography>
+                  <Typography>
+                    Hvis familien har PID, vennligst fyll den inn. Om ikke, kan feltet stå blankt.
+                  </Typography>
                 </Grid>
                 <Grid item>
                   <Grid container>
@@ -368,10 +395,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         error={formDataState.pidError}
                         helperText={formDataState.pidHelperText}
                       />
-                      <CustomTooltip
-                        iconType={false}
-                        content="ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom."
-                      />
                     </Grid>
                   </Grid>
                 </Grid>
@@ -386,8 +409,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   <Typography>Vennligst fyll ut familiens matønsker</Typography>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={3} justifyContent="space-around">
-                    <Grid item>
+                  <Grid container direction="row" spacing={3}>
+                    <Grid item xs={4}>
                       <FormFood
                         viewErrorTrigger={state.viewErrorTrigger}
                         onInputChange={onDinnerInputChange}
@@ -402,7 +425,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         name="dinner"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <FormFood
                         viewErrorTrigger={state.viewErrorTrigger}
                         onInputChange={onDessertInputChange}
@@ -417,7 +440,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         name="dessert"
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={4}>
                       <TextField
                         variant="outlined"
                         value={formDataState.specialNeeds}

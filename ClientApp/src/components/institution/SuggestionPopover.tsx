@@ -4,13 +4,19 @@ import * as React from "react";
 import useStyles from "./Styles";
 import { List, ListItem } from "@material-ui/core";
 import { useState } from "react";
+import { IFormWish } from "./RegistrationFormTypes";
 
-const SuggestionPopover: React.FC = () => {
+interface props {
+  wishObj: IFormWish;
+  updateWish: (newWishData: IFormWish) => void;
+}
+
+const SuggestionPopover: React.FC<props> = ({ wishObj, updateWish }) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [chosenSuggestions, setChosenSuggestions] = useState([false, false, false]);
-  const suggestionData = ["Genser", "Bukse", "Gavekort"];
+  const [chosenSuggestions, setChosenSuggestions] = useState([false, false]);
+  const suggestionData = ["Genser", "Bukse"];
 
   const openPopover = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -24,17 +30,23 @@ const SuggestionPopover: React.FC = () => {
     setChosenSuggestions(editSuggestion);
   };
   const resetChosenSuggestions = () => {
-    setChosenSuggestions([false, false, false]);
+    setChosenSuggestions([false, false]);
   };
   const submitWishlist = () => {
     setAnchorEl(null);
     resetChosenSuggestions();
+
+    const wishCopy = { ...wishObj };
+    wishCopy.category = 1;
+    wishCopy.wish[0] = "Klær";
+    wishCopy.wish[1] = "Genser";
+    updateWish(wishCopy);
   };
 
   return (
     <>
       <Button onClick={openPopover}>
-        Suggestions
+        Forslag
         <EmojiObjectsOutlinedIcon />
       </Button>
       <Popover

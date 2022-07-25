@@ -1,7 +1,6 @@
 import {
   capitalize,
   Grid,
-  SvgIcon,
   IconButton,
   Button,
   Box,
@@ -9,19 +8,20 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { useState } from "react";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
 import useStyles from "./Styles";
-import FormWish, { getFormWish, IFormWish } from "./FormWish";
+import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IFormPerson } from "./RegistrationFormTypes";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
+import CustomTooltip from "./CustomTooltip";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -42,15 +42,11 @@ const FormPerson: FC<IPersonProps> = ({
 
   const [showWishes, setShowWishes] = useState(true);
   const [ageWish, setAgeWish] = useState(false);
-  const [removeWishes, setRemoveWishes] = useState(true);
-
-  const ageAppropriateString = "Alderstilpasset gave";
-
-  useEffect(() => {}, [person.wishes]);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
     const intAge = Math.floor(parseInt(strAge));
+    let isValidAge = false;
     strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
@@ -58,13 +54,14 @@ const FormPerson: FC<IPersonProps> = ({
       } else if (intAge < 0) {
         strAge = "0";
       }
+      isValidAge = true;
     } else {
       return;
     }
     if (intAge >= 1) {
-      person.months = "0";
+      person.months = "1";
     }
-    updatePerson({ age: strAge, isValidAge: !!strAge });
+    updatePerson({ age: strAge, isValidAge: isValidAge });
   };
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,34 +71,19 @@ const FormPerson: FC<IPersonProps> = ({
     if (intMonths !== NaN) {
       if (intMonths > 11) {
         strMonths = "11";
-      } else if (intMonths < 0) {
-        strMonths = "0";
+      } else if (intMonths < 1) {
+        strMonths = "1";
       }
     } else {
       return;
     }
-    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
+    updatePerson({ months: strMonths });
   };
 
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgeWish(e.target.checked);
-
-    if (e.target.checked) {
-      setRemoveWishes(false);
-      setShowWishes(false);
-
-      for (let i = 0; i < person.wishes.length; i++) {
-        if (i == 0) {
-          updateWish(ageAppropriateString, i);
-        } else {
-          deleteWish(i);
-        }
-      }
-    } else {
-      updatePerson({ wishes: [] });
-      setShowWishes(true);
-      setRemoveWishes(true);
-    }
+    setShowWishes(!e.target.checked);
+    updatePerson({ noWish: e.target.checked });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -111,19 +93,21 @@ const FormPerson: FC<IPersonProps> = ({
     }
   };
 
-  const updateWish = (newWishData: string, index: number) => {
+  const updateWish = (newWishData: IFormWish, index: number) => {
     const newList = [...person.wishes];
-    newList[index].wish = newWishData;
+    newList[index] = newWishData;
     updatePerson({ wishes: newList });
   };
 
   const deleteWish = (index: number) => {
-    const newList = [...person.wishes];
-    const head = newList.slice(0, index);
-    const tail = newList.slice(index + 1, newList.length);
-    const newWishList = head.concat(tail);
-    person.wishes = newWishList;
-    updatePerson({ wishes: newWishList });
+    if (person.wishes.length > 1) {
+      const newList = [...person.wishes];
+      const head = newList.slice(0, index);
+      const tail = newList.slice(index + 1, newList.length);
+      const newWishList = head.concat(tail);
+      person.wishes = newWishList;
+      updatePerson({ wishes: newWishList });
+    }
   };
 
   const addWish = () => {
@@ -139,7 +123,7 @@ const FormPerson: FC<IPersonProps> = ({
       <Container className={classes.formBox}>
         <Box className={classes.formBoxHeader}>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item>
+            <Grid item xs={2}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isInt]}
@@ -148,11 +132,11 @@ const FormPerson: FC<IPersonProps> = ({
                 label="Alder"
                 value={person.age || "0"}
                 onChange={onAgeChange}
-                className={classes.smallWidth}
+                fullWidth
               />
             </Grid>
             {parseInt(person.age) == 0 && (
-              <Grid item>
+              <Grid item xs={2}>
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isInt]}
@@ -161,14 +145,15 @@ const FormPerson: FC<IPersonProps> = ({
                   label="Måneder"
                   value={person.months || "0"}
                   onChange={onMonthsChange}
-                  className={classes.smallWidth}
+                  fullWidth
                 />
               </Grid>
             )}
-            <Grid item>
+            <Grid item xs={2}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
+                errorMessages={["Vennligst spesifiser kjønn"]}
                 name="gender"
                 type="select"
                 label="Kjønn"
@@ -178,7 +163,7 @@ const FormPerson: FC<IPersonProps> = ({
                 options={GENDERS.map((o) => {
                   return { value: o.value, text: capitalize(o.text) };
                 })}
-                className={classes.mediumWidth}
+                fullWidth
               />
             </Grid>
 
@@ -195,49 +180,52 @@ const FormPerson: FC<IPersonProps> = ({
                 className="my-0"
                 label="Alderstilpasset gave"
               />
+              <CustomTooltip
+                iconType={false}
+                content="Om alderstilpasset gave er huket av, kan giveren selv finne gave til personen."
+              />
             </Grid>
 
-            <Grid item>
-              {showWishes ? (
-                <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
-                  <ExpandLessIcon />
-                </Button>
-              ) : (
-                <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
-                  <ExpandMoreIcon />
-                </Button>
-              )}
-            </Grid>
+            {!ageWish && (
+              <Grid item>
+                {showWishes ? (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
+                    <ExpandLessIcon />
+                  </Button>
+                ) : (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
+                    <ExpandMoreIcon />
+                  </Button>
+                )}
+              </Grid>
+            )}
           </Grid>
         </Box>
-        {(showWishes || removeWishes) && (
+        {showWishes && (
           <Box className={classes.formBoxWishes}>
             {person.wishes.map((wish: IFormWish, i: number) => {
               return (
                 <FormWish
-                  key={wish.id}
+                  key={i}
                   viewErrorTrigger={viewErrorTrigger}
-                  updateWish={(wish) => {
-                    updateWish(wish, i);
+                  updateWish={(wishObj) => {
+                    updateWish(wishObj, i);
                   }}
                   deleteWish={() => deleteWish(i)}
+                  wishObj={wish}
                   wishIndex={i}
                 />
               );
             })}
-          </Box>
-        )}
-        <Grid item>
-          {!ageWish && (
             <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
               Legg til gaveønske
             </Button>
-          )}
-        </Grid>
+          </Box>
+        )}
       </Container>
       <Box className={classes.deleteBox}>
-        <IconButton color="primary" onClick={deletePerson}>
-          <SvgIcon component={ClearIcon} />
+        <IconButton onClick={deletePerson}>
+          <CancelIcon className={classes.redCross} />
         </IconButton>
       </Box>
     </Box>

@@ -28,7 +28,7 @@ namespace GiEnJul.Dtos
             public IEnumerable<string> Wishes { get; set; }
             public int Age { get; set; }
             public Gender Gender { get; set; }
-            public string Comment { get; set; }
+            public bool NoWish { get; set; }
         }
     }
 }
