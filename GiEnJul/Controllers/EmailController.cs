@@ -76,6 +76,32 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
+        [HttpPost("sendFromUser")]
+        [Authorize(Policy = Policy.PostEmail)]
+        public async Task<ActionResult> SendMailFromUser(PostEmailFromUserDto emailFromUser)
+        {
+            _log.Information("Received email post with data {@0}", emailFromUser);
+            if (string.IsNullOrWhiteSpace(emailFromUser.FromName))
+            {
+                emailFromUser.FromName = emailFromUser.FromEmail;
+            }
+            if (string.IsNullOrWhiteSpace(emailFromUser.ToName))
+            {
+                emailFromUser.ToName = emailFromUser.ToEmail;
+            }
+            try
+            {
+                var notificationTemplate = await NotificationEmailTemplateBuilder(emailFromUser.Content);
+                await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, emailFromUser.Subject, notificationTemplate.Content);
+            }
+            catch (Exception e)
+            {
+                _log.Error(e, "Could not send mail to {@0}", emailFromUser.ToEmail);
+                throw;
+            }
+            return Ok();
+        }
+
         // POST api/email/givers/location
         [HttpPost("givers/location")]
         [Authorize(Policy = Policy.PostEmail)]
