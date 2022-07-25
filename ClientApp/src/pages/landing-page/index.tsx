@@ -18,7 +18,7 @@ const Home = () => {
   const classes = useStyles();
   const apiservice = new ApiService();
   useEffect(() => {
-    apiservice.get("event/contacts").then((response) => setContacts(response.data));
+    apiservice.get("municipality/allcontacts").then((response) => setContacts(response.data));
   }, []);
 
   return (

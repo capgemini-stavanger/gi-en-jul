@@ -23,6 +23,7 @@ namespace GiEnJul.Controllers
     public class ConnectionController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IMunicipalityRepository _municipalityRepository;
         private readonly IGiverRepository _giverRepository;
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
@@ -35,6 +36,7 @@ namespace GiEnJul.Controllers
 
         public ConnectionController(
             IEventRepository eventRepository,
+            IMunicipalityRepository municipalityRepository,
             IGiverRepository giverRepository,
             IRecipientRepository recipientRepository,
             IPersonRepository personRepository,
@@ -46,6 +48,7 @@ namespace GiEnJul.Controllers
             IEmailTemplateBuilder emailTemplateBuilder)
         {
             _eventRepository= eventRepository;
+            _municipalityRepository = municipalityRepository;
             _giverRepository = giverRepository;
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
@@ -87,6 +90,7 @@ namespace GiEnJul.Controllers
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 var eventModel = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+                var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
                 var familyTable = "";
                 for (var i = 0; i < recipient.PersonCount; i++)
@@ -107,6 +111,7 @@ namespace GiEnJul.Controllers
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
