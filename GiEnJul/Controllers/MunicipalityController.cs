@@ -88,7 +88,7 @@ namespace GiEnJul.Controllers
             return names;
         }
 
-        [HttpGet("contacts")]
+        [HttpGet("allcontacts")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetContacts()
         {
@@ -98,7 +98,7 @@ namespace GiEnJul.Controllers
             return contacts;
         }
 
-        [HttpGet("contact")]
+        [HttpGet("singlecontact")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetSingleContact([FromQuery] string municipality)
         {
