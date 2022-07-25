@@ -54,7 +54,6 @@ namespace GiEnJul.Repositories
         public async Task<IEnumerable<Models.Municipality>> GetSingle(string municipality, string country = "Norge")
         {
             var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
-            //todo fix
             var entetitiesMuni  = await GetAllByQueryAsync(query);
             var modelsMuni = _mapper.Map<List<Models.Municipality>>(entetitiesMuni);
             return modelsMuni;
