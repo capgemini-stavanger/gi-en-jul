@@ -7,7 +7,7 @@ interface Props {
   information: string;
 }
 
-const KommuneInformation: React.FC<Props> = ({ location, information }) => {
+const MunicipalityInformation: React.FC<Props> = ({ location, information }) => {
   const classes = useStyles();
 
   return (
@@ -22,4 +22,4 @@ const KommuneInformation: React.FC<Props> = ({ location, information }) => {
   );
 };
 
-export default KommuneInformation;
+export default MunicipalityInformation;

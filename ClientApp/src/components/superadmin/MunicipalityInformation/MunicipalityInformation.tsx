@@ -5,7 +5,7 @@ import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 
-interface IKommuneInformation {
+interface IMunicipalityInformation {
   accessToken: string;
   municipalityName: string;
   role: string;
@@ -27,7 +27,7 @@ interface IMunicipality {
   information: string;
 }
 
-const KommuneInformation: React.FC<IKommuneInformation> = ({
+const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   accessToken,
   municipalityName,
   role,
@@ -161,4 +161,4 @@ const KommuneInformation: React.FC<IKommuneInformation> = ({
   );
 };
 
-export default KommuneInformation;
+export default MunicipalityInformation;

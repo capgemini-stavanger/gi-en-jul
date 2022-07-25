@@ -23,7 +23,7 @@ const initFormDataState: () => IMunicipalityFormData = () => ({
   ...getFormAddMunicipality(),
 });
 
-const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
+const ManageMunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [allLocations, setLocations] = useState<string[]>([]);
   const [selectedLocationActive, setSelectedLocationActive] = useState<string>("");
@@ -242,4 +242,4 @@ const MunicipalityContainer: React.FC<props> = ({ accessToken }) => {
   );
 };
 
-export default MunicipalityContainer;
+export default ManageMunicipalityContainer;
