@@ -284,6 +284,7 @@ const RecipientDataCard: React.FC<Props> = ({
                             }}
                             refreshRecipients={() => refreshData()}
                             recipient={recipientData}
+                            institution={false}
                           />
                         </Grid>
                       )}

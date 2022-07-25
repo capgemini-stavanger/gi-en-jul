@@ -17,6 +17,7 @@ namespace GiEnJul.Repositories
         Task<IEnumerable<Municipality>> GetAll();
         Task<IEnumerable<Models.Municipality>> GetSingle(string municipality, string country = "Norge");
         Task<bool> UpdateMunicipality(Models.Municipality municipality);
+        Task<Models.Municipality> GetEmailByLocation(string location);
 
     }
 
@@ -70,6 +71,14 @@ namespace GiEnJul.Repositories
             }
             await InsertOrReplaceAsync(municipality);
             return true;
+        }
+        public async Task<Models.Municipality> GetEmailByLocation(string location)
+        {
+            var query = $"RowKey eq '{location}' ";
+            var municipalities = await GetAllByQueryAsync(query);
+            var municipalityMatch = municipalities.FirstOrDefault();
+
+            return _mapper.Map<Models.Municipality>(municipalityMatch);
         }
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using GiEnJul.Helpers;
+using GiEnJul.Clients;
 
 namespace GiEnJul.Controllers
 {
@@ -16,11 +18,13 @@ namespace GiEnJul.Controllers
     {
         private readonly IMunicipalityRepository _municipalityRepository;
         private readonly IMapper _mapper;
+        private readonly IAuth0ManagementClient _managementClient;
 
-        public MunicipalityController(IMunicipalityRepository municipalityRepository, IMapper mapper)
+        public MunicipalityController(IMunicipalityRepository municipalityRepository, IMapper mapper, IAuth0ManagementClient managementClient)
         {
             _municipalityRepository = municipalityRepository;
             _mapper = mapper;
+            _managementClient = managementClient;
         }
 
         [HttpDelete]
@@ -86,6 +90,24 @@ namespace GiEnJul.Controllers
             var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
             var names = municipalities.Select(m => m.Name);
             return names;
+        }
+
+        [HttpGet("email")]
+        public async Task<ActionResult<string>> GetEmailForInstitution()
+        {
+            // Get metadata
+            var metadata = await _managementClient.GetUserMetadata(ClaimsHelper.GetUserId(User));
+            var location = metadata["location"];
+
+            // Get email
+            var municipalityByLocation = await _municipalityRepository.GetEmailByLocation(location);
+            if(municipalityByLocation == null)
+            {
+                return NotFound("Could not find municipality for location: "+location);
+            }
+
+            return Ok(municipalityByLocation.Email);
+ 
         }
 
         [HttpGet("allcontacts")]

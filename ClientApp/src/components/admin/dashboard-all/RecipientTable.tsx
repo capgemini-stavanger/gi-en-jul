@@ -280,6 +280,7 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
         }}
         refreshRecipients={() => refreshData()}
         recipient={selectedRecipient}
+        institution={false}
       />
 
       <DeleteTypeDialog

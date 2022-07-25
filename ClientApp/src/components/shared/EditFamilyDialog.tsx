@@ -26,6 +26,7 @@ interface IEditFamilyDialog {
   open: boolean;
   refreshRecipients: () => void;
   recipient: RecipientType;
+  institution: boolean;
 }
 
 const EditFamilyDialog: FC<IEditFamilyDialog> = ({
@@ -33,6 +34,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   open,
   refreshRecipients,
   recipient,
+  institution,
 }) => {
   const classes = useStyles();
 
@@ -166,12 +168,39 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       .then((response) => {
         if (response.status === 200) {
           refreshRecipients();
+          if (institution) {
+            sendEmailToMunicipality();
+          }
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
   };
+
+  async function sendEmailToMunicipality() {
+    console.log("SEND EMAIL");
+    /*
+    await apiservice
+      .post(
+        "email/send",
+        JSON.stringify({
+          EmailAddress: email,
+          Subject: subjectInput,
+          Content: html,
+          RecipientName: fullName,
+        })
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response);
+        }
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+      */
+  }
 
   const handleUpdateResponse = (response: boolean) => {
     if (response) {

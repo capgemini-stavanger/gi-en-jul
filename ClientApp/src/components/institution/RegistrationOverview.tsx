@@ -7,6 +7,7 @@ import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import EditIcon from "@material-ui/icons/Edit";
 import useStyles from "./Styles";
 import FormInformationBox from "./FormInformationBox";
+import { FiberManualRecord } from "@material-ui/icons";
 
 interface IDatagridFamily {
   id: string;
@@ -24,6 +25,7 @@ interface IRegistrationOverview {
 const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, institution }) => {
   const apiservice = new ApiService(accessToken);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
+  const [municipalityEmail, setMunicipalityEmail] = useState("");
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [editRecipient, setEditRecipient] = useState({} as RecipientType);
   const [rowData, setRowData] = useState<IDatagridFamily[] | []>([]);
@@ -65,7 +67,7 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
 
   const fetchRecipients = () => {
     apiservice
-      .get("Recipient", { params: { Institution: institution } })
+      .get("Recipient", { params: { Institution: institution } }) // Remove parameter, get from backend
       .then((resp) => {
         setRecipientData(resp.data);
       })
@@ -73,9 +75,20 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
         console.error(errorStack);
       });
   };
+  const fetchMuncipalityEmail = () => {
+    apiservice
+      .get("Municipality/email")
+      .then((resp) => {
+        setMunicipalityEmail(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack.response.data);
+      });
+  };
 
   useEffect(() => {
     fetchRecipients();
+    fetchMuncipalityEmail();
   }, []);
   useEffect(() => {
     setRowData(updateRowData(recipientData));
@@ -154,20 +167,50 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
               />
             </Grid>
             <Grid item xs={3}>
-              <FormInformationBox
-                index={3}
-                info={
-                  "Det kan gjøres endringer til familier som ikke er tilknyttet en giver. Dette er indikert ved ..."
-                }
-              />
+              <Grid container direction="column" spacing={2} alignContent="space-between">
+                <Grid item>
+                  <Grid container justifyContent="center">
+                    <Grid item>
+                      <Typography className={classes.infoBoxCircleText}>{3}</Typography>
+                      <FiberManualRecord className={classes.infoBoxCircle} fontSize="large" />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container justifyContent="center">
+                    <Grid item>
+                      <Typography className={classes.formInfoBoxText}>
+                        Det kan gjøres endringer til familier som ikke er tilknyttet en giver. Dette
+                        er indikert ved <EditIcon />
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={3}>
-              <FormInformationBox
-                index={4}
-                info={
-                  "Om det er spørsmål eller problemer relatert til oversikten, ta kontakt med ..."
-                }
-              />
+              <Grid container direction="column" spacing={2} alignContent="space-between">
+                <Grid item>
+                  <Grid container justifyContent="center">
+                    <Grid item>
+                      <Typography className={classes.infoBoxCircleText}>{4}</Typography>
+                      <FiberManualRecord className={classes.infoBoxCircle} fontSize="large" />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Grid container justifyContent="center">
+                    <Grid item>
+                      <Typography className={classes.formInfoBoxText}>
+                        Om det er spørsmål eller problemer relatert til oversikten, ta kontakt med{" "}
+                        {municipalityEmail && (
+                          <a href={"mailto:" + municipalityEmail}> {municipalityEmail} </a>
+                        )}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
@@ -191,6 +234,7 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
               }}
               refreshRecipients={() => refreshData()}
               recipient={editRecipient}
+              institution={true}
             />
           </Grid>
         </Grid>
