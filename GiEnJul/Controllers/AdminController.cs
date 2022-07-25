@@ -189,6 +189,8 @@ namespace GiEnJul.Controllers
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
             giver.MatchedRecipient = null;
+            giver.SuggestedMatchAt = null;
+            giver.RemindedAt = null;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
@@ -241,6 +243,8 @@ namespace GiEnJul.Controllers
             try
             {
                 giver.IsSuggestedMatch = true;
+                giver.SuggestedMatchAt = DateTime.UtcNow;
+                giver.RemindedAt = null;
                 giver.MatchedRecipient = connectionDto.RecipientId;
                 giver.MatchedFamilyId = recipient.FamilyId;
                 await _giverRepository.InsertOrReplaceAsync(giver);
@@ -253,39 +257,17 @@ namespace GiEnJul.Controllers
 
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-                var verifyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/verify";
-                var denyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/deny";
+                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, baseUrl);
 
-                var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
-
-                var familyTable = "";
-                for (var i = 0; i < recipient.PersonCount; i++)
-                {
-                    if (recipient.FamilyMembers != null)
-                    {
-                        var member = recipient.FamilyMembers[i];
-                        familyTable += $"<li> {member.GetGenderAge()} </li>";
-                        familyTable += " ";
-                    }
-                }
-
-                var emailTemplatename = EmailTemplateName.VerifyConnection;
-                var emailValuesDict = new Dictionary<string, string> 
-                {
-                    { "familyTable", familyTable },
-                    { "verifyLink", verifyLink },
-                    { "denyLink", denyLink },
-                };
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
-
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {
                 giver.IsSuggestedMatch = false;
+                giver.SuggestedMatchAt = null;
+                giver.RemindedAt = null;
                 giver.MatchedRecipient = "";
                 giver.MatchedFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);

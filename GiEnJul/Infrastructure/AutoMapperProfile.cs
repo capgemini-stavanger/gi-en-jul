@@ -91,6 +91,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(x => x.GiverId, opt => opt.Ignore())
                 .ForMember(x => x.EventName, opt => opt.Ignore())
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.SuggestedMatchAt, opt => opt.Ignore())
+                .ForMember(dest => dest.RemindedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.Ignore())
                 .ForMember(dest => dest.MatchedRecipient, opt => opt.Ignore())
                 .ForMember(dest => dest.MatchedFamilyId, opt => opt.Ignore())
@@ -133,7 +135,9 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
-                .ForMember(dest => dest.Comment, opt => opt.Ignore());
+                .ForMember(dest => dest.Comment, opt => opt.Ignore())
+                .ForMember(dest => dest.SuggestedMatchAt, opt => opt.Ignore())
+                .ForMember(dest => dest.RemindedAt, opt => opt.Ignore());
 
 
             CreateMap<Entities.Connection, Models.Recipient>()

@@ -37,13 +37,34 @@ namespace GiEnJul.Helpers
         /// <typeparam name="TVal">Dictionary Value</typeparam>
         /// <param name="dict">working dictionary</param>
         /// <param name="other">dictionary to add non duplicates from</param>
-        public static void AddDictionary<TKey, TVal>(this Dictionary<TKey, TVal> dict, Dictionary<TKey, TVal> other)
+        public static void AddDictionary<TKey, TVal>(this Dictionary<TKey, TVal> dict, Dictionary<TKey, TVal> other,
+            CombineStrategy combineStrategy = CombineStrategy.error)
         {
             foreach (var item in other)
             {
                 if (!dict.ContainsKey(item.Key))
                     dict.Add(item.Key, item.Value);
+                else
+                    switch (combineStrategy)
+                    {
+                        case CombineStrategy.error:
+                            throw new InvalidOperationException($"{item.Key} already exists in dictionary");
+                        case CombineStrategy.takeFirst:
+                            break;
+                        case CombineStrategy.takeLast:
+                            dict[item.Key] = item.Value;
+                            break;
+                        default:
+                            break;
+                    }
             }
         }
+    }
+
+    public enum CombineStrategy
+    {
+        error,
+        takeFirst,
+        takeLast,
     }
 }
