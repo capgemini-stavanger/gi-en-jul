@@ -206,9 +206,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     formDataState.persons.forEach((person) => {
       const wishList: string[] = [];
 
-      person.wishes.forEach((wishObj) => {
-        wishList.push(wishObj.wish.filter(Boolean).join(", "));
-      });
+      if (!person.noWish) {
+        person.wishes.forEach((wishObj) => {
+          wishList.push(wishObj.wish.filter(Boolean).join(", "));
+        });
+      } else {
+        wishList.push("Alderstilpasset gaveønske");
+      }
 
       const person1: PersonType = {
         Wishes: wishList,
