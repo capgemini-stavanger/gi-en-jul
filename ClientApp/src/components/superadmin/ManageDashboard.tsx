@@ -6,9 +6,9 @@ import { Container } from "reactstrap";
 import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
 import EventsContainer from "./Events/EventsContainer";
-import KommuneContainer from "./kommune/KommuneContainer";
+import MunicipalityInformationContainer from "./MunicipalityInformation/MunicipalityInformationContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
-import MunicipalityContainer from "./Municipality/MunicipalityContainer";
+import MunicipalityManageTable from "./Municipality/MunicipalityManageTable";
 
 interface IManageDashboard {
   role: string;
@@ -33,13 +33,17 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <Tab hidden={role != "SuperAdmin"} label="Bedrift" value="3" />
           <Tab hidden={role != "SuperAdmin"} label="Hvordan starte Gi en jul" value="4" />
           <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="5" />
-          <Tab hidden={role != "SuperAdmin"} label="Administrer Kommuner og Eventer" value="6" />
+          <Tab hidden={role != "SuperAdmin"} label="Legg til Kommuner og Eventer" value="6" />
         </TabList>
         <TabPanel value="1">
           <FaqContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <KommuneContainer accessToken={accessToken} role={role} assignedLocation={location} />
+          <MunicipalityInformationContainer
+            accessToken={accessToken}
+            role={role}
+            assignedLocation={location}
+          />
         </TabPanel>
         <TabPanel value="3">
           <BusinessInformation accessToken={accessToken} />
@@ -53,7 +57,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
         <TabPanel value="6">
           <Grid container direction="column" spacing={10}>
             <Grid item>
-              <MunicipalityContainer accessToken={accessToken} />
+              <MunicipalityManageTable accessToken={accessToken} />
             </Grid>
             <Grid item>
               <Typography>Add-Users Placeholder</Typography>

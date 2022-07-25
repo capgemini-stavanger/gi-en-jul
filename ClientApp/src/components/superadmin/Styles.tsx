@@ -66,6 +66,29 @@ const useStyles = makeStyles((theme: Theme) =>
       width: "1000px",
       margin: "auto",
     },
+    table: {
+      backgroundColor: theme.palette.primary.light,
+    },
+    tableBody: {
+      backgroundColor: theme.palette.secondary.light,
+    },
+    tableHeaderText: {
+      color: "white",
+    },
+    button: {
+      color: "white",
+      backgroundColor: theme.palette.primary.main,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.dark,
+      },
+    },
+    buttonError: {
+      color: "white",
+      backgroundColor: theme.palette.error.main,
+      "&:hover": {
+        backgroundColor: theme.palette.error.dark,
+      },
+    },
   })
 );
 

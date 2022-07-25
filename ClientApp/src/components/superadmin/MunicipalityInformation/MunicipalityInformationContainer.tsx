@@ -1,9 +1,9 @@
 import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect, ChangeEvent } from "react";
-import KommuneInformation from "./KommuneInformation";
+import MunicipalityInformation from "./MunicipalityInformation";
 
-interface IKommuneContainer {
+interface IMunicipalityInformationContainer {
   accessToken: string;
   assignedLocation: string;
   role: string;
@@ -14,7 +14,11 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLocation, role }) => {
+const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContainer> = ({
+  accessToken,
+  assignedLocation,
+  role,
+}) => {
   const [activeLocations, setActiveLocations] = useState<string[]>([]);
   const [selectedMunicipality, setSelectedMunicipality] = useState<string>("");
   const apiservice = new ApiService(accessToken);
@@ -27,6 +31,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
           setSelectedMunicipality(assignedLocation);
         } else {
           setActiveLocations(resp.data);
+          setSelectedMunicipality(assignedLocation);
         }
       })
       .catch((errorStack) => {
@@ -68,7 +73,7 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
           </Box>
         </Grid>
         <Grid item>
-          <KommuneInformation
+          <MunicipalityInformation
             accessToken={accessToken}
             role={role}
             municipalityName={selectedMunicipality}
@@ -79,4 +84,4 @@ const KommuneContainer: React.FC<IKommuneContainer> = ({ accessToken, assignedLo
   );
 };
 
-export default KommuneContainer;
+export default MunicipalityInformationContainer;

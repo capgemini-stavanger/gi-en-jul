@@ -5,7 +5,9 @@ import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
-import Kommunes, { LocationData } from "components/municipalities/Kommunes";
+import Municipalities, {
+  LocationData,
+} from "components/landing-page/Municipalities/Municipalities";
 
 interface IKommuneInfoResponse {
   country: string;
@@ -75,7 +77,7 @@ const Municipality = () => {
             <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
           </Grid>
           <Grid item>
-            <Kommunes locations={municipalityData} />
+            <Municipalities locations={municipalityData} />
           </Grid>
         </Grid>
         <ScrollToTop maxPagePosition={300} />
