@@ -40,15 +40,7 @@ namespace GiEnJul.Controllers
             var events = await _eventRepository.GetAllEventsAsync();
             return events;
         }
-
-        [HttpGet("Contacts")]
-        public async Task<List<GetContactsDto>> GetActiveContactsAsync()
-        {
-            var contacts = await _eventRepository.GetContactsWithActiveEventAsync();
-            return _mapper.Map<List<GetContactsDto>>(contacts);
-
-        }
-
+       
         //POST api/Event/createEvent 
         [HttpPost("CreateOrReplace")]
         [Authorize(Policy= Policy.SuperAdmin)]

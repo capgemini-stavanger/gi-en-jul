@@ -89,14 +89,17 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("contacts")]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetContacts()
         {
             var entities = await _municipalityRepository.GetAll();
-            var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(entities);
+            var active = entities.Where(m => m.IsActive).ToList();
+            var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(active);
             return contacts;
         }
 
         [HttpGet("contact")]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetSingleContact([FromQuery] string municipality)
         {
             var contact = await _municipalityRepository.GetSingle(municipality);
@@ -110,9 +113,9 @@ namespace GiEnJul.Controllers
             var singleMuniList = await _municipalityRepository.GetSingle(municipality);
             return _mapper.Map<List<Models.Municipality>>(singleMuniList);
         }
-        //hvorfor trenger vi denne metoden? virker som den gjør det samme som putcontent men med en annen policy, superadmin har updatemunicipality tilgang.
+       
         [HttpPut("update")]
-       // [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
         {
             var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
