@@ -14,11 +14,11 @@ namespace GiEnJul.Models
         public int Age { get; set; }
         public int Months {  get; set; }
         public Gender Gender { get; set; }
-        public string Comment { get; set; }
+        public bool NoWish { get; set; }
 
         public string ToReadableString()
         {
-            return $"<strong>{GenderToString()} {Age} år:</strong> {(!Wishes.Any() ? "  Her du kan selv finne alderstilpasset gave" : Wishes)} {(string.IsNullOrEmpty(Comment) ? " " : ", Kommentar til gave: "+Comment)}";
+            return $"<strong>{GenderToString()} {Age} år:</strong> {(NoWish ? "  Her du kan selv finne alderstilpasset gave" : Wishes)}";
         }
 
         public string GetGenderAge()

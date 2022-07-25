@@ -12,6 +12,6 @@ namespace GiEnJul.Dtos
         public int Months { get; set; }
         [Required]
         public Gender Gender { get; set; }
-        public string Comment { get; set; }
+        public bool NoWish { get; set; }
     }
 }

@@ -17,7 +17,7 @@ export interface IFormPerson {
   age: string;
   months: string;
   gender: Gender;
-  comment: string;
+  noWish: boolean;
   wishes: IFormWish[];
   isValidAge: boolean;
   isValidGender: boolean;
@@ -57,7 +57,7 @@ export type PersonType = {
   Age: number;
   Months: number;
   Gender: Gender;
-  Comment: string;
+  NoWish: boolean;
 };
 
 export type SubmitType = {
@@ -114,9 +114,9 @@ export const getFormPerson: () => IFormPerson = () => ({
   age: "0",
   months: "1",
   gender: Gender.Unspecified,
-  comment: "",
+  noWish: false,
   wishes: [getFormWish()],
-  isValidAge: false,
+  isValidAge: true,
   isValidGender: false,
 });
 

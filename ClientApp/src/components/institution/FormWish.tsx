@@ -2,7 +2,7 @@ import { Box, Grid, IconButton, SvgIcon, Typography } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { Categories, ICategories } from "./mockDatabase";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 import { IFormWish, TotalWish, WishCategory } from "./RegistrationFormTypes";
@@ -181,7 +181,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
         </Grid>
       )}
       <Grid item xs={1}>
-        <IconButton color="primary" onClick={deleteWish}>
+        <IconButton className={classes.redCross} onClick={deleteWish}>
           <SvgIcon component={ClearIcon} />
         </IconButton>
       </Grid>

@@ -1,7 +1,6 @@
 import {
   capitalize,
   Grid,
-  SvgIcon,
   IconButton,
   Button,
   Box,
@@ -9,7 +8,6 @@ import {
   FormControlLabel,
   Checkbox,
 } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
 import { useState } from "react";
 import { FC } from "react";
@@ -21,7 +19,9 @@ import useStyles from "./Styles";
 import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import { IFormPerson, IFormWish, getFormWish, TotalWish } from "./RegistrationFormTypes";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
+import CustomTooltip from "./CustomTooltip";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -83,6 +83,7 @@ const FormPerson: FC<IPersonProps> = ({
   const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAgeWish(e.target.checked);
     setShowWishes(!e.target.checked);
+    updatePerson({ noWish: e.target.checked });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -122,7 +123,7 @@ const FormPerson: FC<IPersonProps> = ({
       <Container className={classes.formBox}>
         <Box className={classes.formBoxHeader}>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item>
+            <Grid item xs={2}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isInt]}
@@ -131,11 +132,11 @@ const FormPerson: FC<IPersonProps> = ({
                 label="Alder"
                 value={person.age || "0"}
                 onChange={onAgeChange}
-                className={classes.smallWidth}
+                fullWidth
               />
             </Grid>
             {parseInt(person.age) == 0 && (
-              <Grid item>
+              <Grid item xs={2}>
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isInt]}
@@ -144,14 +145,15 @@ const FormPerson: FC<IPersonProps> = ({
                   label="Måneder"
                   value={person.months || "0"}
                   onChange={onMonthsChange}
-                  className={classes.smallWidth}
+                  fullWidth
                 />
               </Grid>
             )}
-            <Grid item>
+            <Grid item xs={2}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
+                errorMessages={["Vennligst spesifiser kjønn"]}
                 name="gender"
                 type="select"
                 label="Kjønn"
@@ -161,7 +163,7 @@ const FormPerson: FC<IPersonProps> = ({
                 options={GENDERS.map((o) => {
                   return { value: o.value, text: capitalize(o.text) };
                 })}
-                className={classes.mediumWidth}
+                fullWidth
               />
             </Grid>
 
@@ -177,6 +179,10 @@ const FormPerson: FC<IPersonProps> = ({
                 }
                 className="my-0"
                 label="Alderstilpasset gave"
+              />
+              <CustomTooltip
+                iconType={false}
+                content="Om alderstilpasset gave er huket av, kan giveren selv finne gave til personen."
               />
             </Grid>
 
@@ -218,8 +224,8 @@ const FormPerson: FC<IPersonProps> = ({
         )}
       </Container>
       <Box className={classes.deleteBox}>
-        <IconButton color="primary" onClick={deletePerson}>
-          <SvgIcon component={ClearIcon} />
+        <IconButton onClick={deletePerson}>
+          <CancelIcon className={classes.redCross} />
         </IconButton>
       </Box>
     </Box>

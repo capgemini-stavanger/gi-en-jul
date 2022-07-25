@@ -141,6 +141,10 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     fontSize: "24px",
   },
+  redCross: {
+    color: theme.palette.error.main,
+    fontSize: "1.5em",
+  },
 }));
 
 export default useStyles;

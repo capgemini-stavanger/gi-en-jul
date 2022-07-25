@@ -11,7 +11,6 @@ import {
   getFormPerson,
   IContactState,
   initState,
-  TotalWish,
 } from "components/institution/RegistrationFormTypes";
 import { useState } from "react";
 import useUser from "hooks/useUser";
@@ -23,7 +22,6 @@ import {
 import FormFood from "./FormFood";
 import { DINNERS } from "common/constants/Dinners";
 import { DESSERTS } from "common/constants/Desserts";
-import CustomTooltip from "./CustomTooltip";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
@@ -77,11 +75,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
         returnValue = false;
       }
       // All wishes are valid
-      p.wishes.every((w) => {
-        if (!w.isValidWish) {
-          returnValue = false;
-        }
-      });
+      if (!p.noWish) {
+        p.wishes.every((w) => {
+          if (!w.isValidWish) {
+            returnValue = false;
+          }
+        });
+      }
     });
 
     return returnValue;
@@ -206,15 +206,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     formDataState.persons.forEach((person) => {
       const wishList: string[] = [];
 
-      // CHANGE SOMETHING
-      // Loop over each wishLIST in wishes, combine to string, add to wishList
+      person.wishes.forEach((wishObj) => {
+        wishList.push(wishObj.wish.filter(Boolean).join(", "));
+      });
 
       const person1: PersonType = {
         Wishes: wishList,
         Age: parseInt(person.age),
         Months: parseInt(person.months),
         Gender: person.gender,
-        Comment: person.comment,
+        NoWish: person.noWish,
       };
       personsList.push(person1);
     });
@@ -372,7 +373,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               <Grid container direction="column" spacing={5}>
                 <Grid item>
                   <Typography variant="h5"> Family ID *</Typography>
-                  <Typography>Hvis familien har PID..</Typography>
+                  <Typography>
+                    Hvis familien har PID, vennligst fyll den inn. Om ikke, kan feltet stå blankt.
+                  </Typography>
                 </Grid>
                 <Grid item>
                   <Grid container>
@@ -387,10 +390,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         placeholder="PID eller annen ID"
                         error={formDataState.pidError}
                         helperText={formDataState.pidHelperText}
-                      />
-                      <CustomTooltip
-                        iconType={false}
-                        content="ID benyttes til å gjenkjenne familien du registrerer. Dersom dere ikke har en type ID kan du la denne stå tom."
                       />
                     </Grid>
                   </Grid>
