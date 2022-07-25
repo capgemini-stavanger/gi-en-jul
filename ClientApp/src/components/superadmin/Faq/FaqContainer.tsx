@@ -1,4 +1,4 @@
-import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from "@material-ui/core";
+import { FormControl, Grid, MenuItem, Select, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
 import React, { useEffect, useState, ChangeEvent } from "react";
@@ -56,12 +56,10 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
       <Typography variant="h5"> Ofte stile spørsmål</Typography>
       <Grid item>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Velg et spørsmål</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={selectedItem}
-            label="Velg et spørsmål"
             onChange={handleChanges}
             fullWidth
           >

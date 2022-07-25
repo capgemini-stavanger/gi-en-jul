@@ -120,6 +120,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
           <>
             <Grid item>
               <Button
+                className={classes.button}
                 variant="contained"
                 onClick={() => {
                   setOpenEditor(true);
@@ -128,7 +129,8 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
                 Rediger tekst
               </Button>
               <Button
-                className={classes.deleteButton}
+                style={{ marginLeft: "10px" }}
+                className={classes.buttonError}
                 variant="contained"
                 onClick={handleDeleteClick}
               >
@@ -147,6 +149,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
         )}
         <Grid item>
           <Button
+            className={classes.button}
             variant="contained"
             onClick={() => {
               setOpenAddFaqEditor(true), setHtml("");
@@ -168,14 +171,15 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
               }}
             />
             <DefaultEditor value={html} onChange={onChange} />
-            <Grid container direction="row" spacing={2}>
+            <Grid container direction="row" spacing={2} style={{ marginTop: "10px" }}>
               <Grid item>
-                <Button variant="contained" onClick={handleSaveClick}>
+                <Button className={classes.button} variant="contained" onClick={handleSaveClick}>
                   Lagre endringer
                 </Button>
               </Grid>
               <Grid item>
                 <Button
+                  className={classes.button}
                   variant="contained"
                   onClick={() => {
                     setOpenAddFaqEditor(false);

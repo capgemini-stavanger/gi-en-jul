@@ -82,6 +82,13 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.primary.dark,
       },
     },
+    buttonError: {
+      color: "white",
+      backgroundColor: theme.palette.error.main,
+      "&:hover": {
+        backgroundColor: theme.palette.error.dark,
+      },
+    },
   })
 );
 

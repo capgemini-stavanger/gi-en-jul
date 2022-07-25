@@ -1,9 +1,10 @@
-import { Box, Button, Grid } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useState, useEffect } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
+import useStyles from "../Styles";
 
 interface IMunicipalityInformation {
   accessToken: string;
@@ -38,6 +39,8 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   const [html, setHtml] = useState("");
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
   const [openEditor, setOpenEditor] = useState(false);
+  const classes = useStyles();
+  const [openDeleteConfirmBox, setOpenDeleteConfirmBox] = useState(false);
 
   const fetchInformation = () => {
     if (!municipalityName) {
@@ -111,12 +114,20 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
     }
   };
 
+  const handleDeleteResponse = (response: boolean) => {
+    if (response) {
+      deleteMunicipalityInformation();
+    }
+  };
+
   return (
     <>
       <Box>{parse(municipalityInformation)}</Box>
 
       <Button
+        style={{ marginTop: "10px", marginBottom: "10px" }}
         variant="contained"
+        className={classes.button}
         onClick={() => {
           setOpenEditor(true);
         }}
@@ -129,10 +140,17 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           <DefaultEditor value={html} onChange={onChange} />
           <br />
 
-          <Button variant="contained" onClick={handleSaveClick}>
+          <Button
+            style={{ marginRight: "10px" }}
+            className={classes.button}
+            variant="contained"
+            onClick={handleSaveClick}
+          >
             Lagre endringer
           </Button>
           <Button
+            style={{ marginRight: "10px" }}
+            className={classes.button}
             variant="contained"
             onClick={() => {
               setOpenEditor(false);
@@ -140,14 +158,18 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           >
             Avbryt
           </Button>
+          <Button
+            className={classes.buttonError}
+            variant="outlined"
+            hidden={role != "SuperAdmin"}
+            onClick={() => {
+              setOpenDeleteConfirmBox(true);
+            }}
+          >
+            Slett informasjon om valgt kommune
+          </Button>
         </>
       )}
-
-      <Grid item>
-        <Button hidden={role != "SuperAdmin"} onClick={deleteMunicipalityInformation}>
-          Slett informasjon om valgt kommune
-        </Button>
-      </Grid>
 
       <ConfirmationBox
         open={openConfirmBox}
@@ -156,6 +178,14 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           setOpenConfirmBox(false);
         }}
         handleResponse={handleSaveResponse}
+      />
+      <ConfirmationBox
+        open={openDeleteConfirmBox}
+        text={"Er du sikker på at du ønsker å slette all informasjon?"}
+        handleClose={() => {
+          setOpenDeleteConfirmBox(false);
+        }}
+        handleResponse={handleDeleteResponse}
       />
     </>
   );

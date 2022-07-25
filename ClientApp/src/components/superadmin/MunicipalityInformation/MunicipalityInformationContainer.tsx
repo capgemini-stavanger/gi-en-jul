@@ -31,6 +31,7 @@ const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContain
           setSelectedMunicipality(assignedLocation);
         } else {
           setActiveLocations(resp.data);
+          setSelectedMunicipality(assignedLocation);
         }
       })
       .catch((errorStack) => {

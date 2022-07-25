@@ -1,17 +1,6 @@
-import {
-  Box,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  TextField,
-  Typography,
-} from "@material-ui/core";
+import { Button, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
 import { useState, useEffect } from "react";
-import { DefaultEditor } from "react-simple-wysiwyg";
 import ApiService from "common/functions/apiServiceClass";
-import parse from "html-react-parser";
 import React from "react";
 import AddMunicipalityForm, {
   getFormAddMunicipality,
@@ -29,16 +18,24 @@ interface IMunicipalityManageTable {
 export interface IMunicipality {
   name: string;
   isActive: boolean;
-  info: string;
+  information: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
+  contactPerson: string;
+  image: string;
+  facebook: string;
+  instagram: string;
 }
 const initInterfaceMunicipality: IMunicipality = {
   name: "",
   isActive: false,
-  info: "",
+  information: "",
   email: "",
-  phone: "",
+  phoneNumber: "",
+  contactPerson: "",
+  image: "",
+  facebook: "",
+  instagram: "",
 };
 
 const initFormDataState: () => IMunicipalityFormData = () => ({
@@ -58,7 +55,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
   const [selectedMunicipality, setSelectedMunicipality] =
     useState<IMunicipality>(initInterfaceMunicipality);
   const [active, setActive] = useState(false);
-
   const classes = useStyles();
 
   const fetchInformation = () => {
@@ -100,12 +96,14 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
     setOpen(false);
   };
 
-  const updateMunicipalityInformation = () => {
+  const updateMunicipalityInformation = (municipality: IMunicipality) => {
     apiservice
       .put("municipality/update", {
         Country: Country,
-        Name: selectedMunicipality?.name,
-        IsActive: active,
+        Name: municipality.name,
+        Email: municipality.email,
+        PhoneNumber: municipality.phoneNumber,
+        ContactPerson: municipality.contactPerson,
       })
       .then(() => {
         fetchInformation();
@@ -139,10 +137,10 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
             <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
-            <TableCell>Aktiv</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Telefon</TableCell>
-            <TableCell>Kontaktperson</TableCell>
+            <TableCell className={classes.tableHeaderText}>Aktiv</TableCell>
+            <TableCell className={classes.tableHeaderText}>Email</TableCell>
+            <TableCell className={classes.tableHeaderText}>Telefon</TableCell>
+            <TableCell className={classes.tableHeaderText}>Kontaktperson</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
@@ -154,6 +152,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
               setSelectedMunicipality={setSelectedMunicipality}
               setActive={setActive}
               setOpenConfirm={setOpenConfirm}
+              updateMunicipalityInformation={updateMunicipalityInformation}
             />
           ))}
         </TableBody>
