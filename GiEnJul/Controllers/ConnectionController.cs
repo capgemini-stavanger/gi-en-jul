@@ -89,7 +89,8 @@ namespace GiEnJul.Controllers
                 recipient.HasConfirmedMatch = true;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
-                var eventModel = await _municipalityRepository.GetSingle(giver.Location);
+                var eventModel = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
+                var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
                 var recipientNote = string.IsNullOrWhiteSpace(recipient.Note) ? "" : $"<strong>Merk:</strong> {recipient.Note}";
                 var familyTable = "";
                 for (var i = 0; i < recipient.PersonCount; i++)
@@ -109,7 +110,8 @@ namespace GiEnJul.Controllers
                     { "recipientNote", recipientNote },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "municipalityDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);

@@ -31,7 +31,8 @@ namespace GiEnJul.Test.UtilTests
                 { "recipientNote", string.Empty }
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
-            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "municipalityDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Municipality(), "municipalityDto."));
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Recipient(), "recipient."));
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.AssignedFamily, data);
@@ -49,7 +50,8 @@ namespace GiEnJul.Test.UtilTests
                 { "familyRange", string.Empty }
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
-            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "municipalityDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Municipality(), "municipalityDto."));
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.Registered, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
@@ -66,7 +68,8 @@ namespace GiEnJul.Test.UtilTests
                 { "familyRange", string.Empty }
             };
             data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
-            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "municipalityDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Event(), "eventDto."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Municipality(), "municipalityDto."));
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.WaitingList, data);
             Assert.False(string.IsNullOrEmpty(result.Subject));
