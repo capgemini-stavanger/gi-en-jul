@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, IconButton } from "@material-ui/core";
+import { Box, Button, Container, Grid, IconButton, Typography } from "@material-ui/core";
 import { RecipientType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import EditIcon from "@material-ui/icons/Edit";
 import useStyles from "./Styles";
+import FormInformationBox from "./FormInformationBox";
 
 interface IDatagridFamily {
   id: string;
@@ -128,6 +129,50 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, in
 
   return (
     <Container className={classes.root}>
+      <Grid container direction="column" spacing={5}>
+        <Grid item>
+          <Grid container direction="column" alignItems="center">
+            <Grid item>
+              <Typography className={classes.titleText} variant="h3">
+                Oversikt over familie
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography> Her kan du se alle tidligere registrerte familier </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container direction="row" spacing={4} justifyContent="center">
+            <Grid item xs={3}>
+              <FormInformationBox index={1} info={"Tabellen kan lastes ned til excel."} />
+            </Grid>
+            <Grid item xs={3}>
+              <FormInformationBox
+                index={2}
+                info={"Tabellen kan filtreres ved å bruke øverste rad i tabellen. "}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <FormInformationBox
+                index={3}
+                info={
+                  "Det kan gjøres endringer til familier som ikke er tilknyttet en giver. Dette er indikert ved ..."
+                }
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <FormInformationBox
+                index={4}
+                info={
+                  "Om det er spørsmål eller problemer relatert til oversikten, ta kontakt med ..."
+                }
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
       <Grid container direction="row" justifyContent="center">
         <Grid container direction="column" spacing={1}>
           <Grid container direction="row">
