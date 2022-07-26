@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Helpers
+﻿using System;
+
+namespace GiEnJul.Helpers
 {
     public static class TableQueryFilterHelper
     {
@@ -36,6 +38,14 @@
 
             var filter = string.Join(" and ", PKfilter, eventNameFilter, locationFilter);
             return filter;
+        }
+
+        public static string GetStaleGiversQuery(DateTime olderThanDate)
+        {
+            var notConfirmed = $"IsSuggestedMatch eq true and HasConfirmedMatch eq false";
+            var suggested = $"SuggestedMatchAt le datetime'{olderThanDate:O}'";
+
+            return string.Join(" and ", notConfirmed, suggested);
         }
     }
 }

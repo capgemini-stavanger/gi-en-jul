@@ -84,6 +84,8 @@ namespace GiEnJul.Controllers
             try
             {
                 giver.HasConfirmedMatch = true;
+                giver.SuggestedMatchAt = null;
+                giver.RemindedAt = null;
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.HasConfirmedMatch = true;
@@ -158,6 +160,8 @@ namespace GiEnJul.Controllers
 
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
+            giver.SuggestedMatchAt = null;
+            giver.RemindedAt = null;
             giver.MatchedRecipient = null;
             giver.CancelFeedback = feedback.FeedbackGiver;
             giver.CancelDate = DateTime.UtcNow;

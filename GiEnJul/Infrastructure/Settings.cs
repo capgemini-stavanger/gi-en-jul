@@ -11,6 +11,7 @@ namespace GiEnJul.Infrastructure
         public string ReactAppUri { get; }
         public MailSettings MailSettings { get; }
         public Auth0Settings Auth0Settings { get; }
+        public CleanupJob CleanupJob { get; }
     }
 
     public class Settings : ISettings
@@ -44,6 +45,7 @@ namespace GiEnJul.Infrastructure
                 return settings;
             }
         }
+
         public Auth0Settings Auth0Settings { get
             {
                 var section = _configuration.GetSection("Auth0");
@@ -57,6 +59,18 @@ namespace GiEnJul.Infrastructure
                 };
                 return auth0;
             } 
+        }
+
+        public CleanupJob CleanupJob { get
+            {
+                var section = _configuration.GetSection("CleanupJob");
+                var cleanup = new CleanupJob
+                {
+                    EndDaySensitivity = section.GetValue<int>("EndDaySensitiviity"),
+                    NormalDaySensitivity = section.GetValue<int>("NormalDaySensitivity")
+                };
+                return cleanup;
+            }
         }
     }
 
@@ -76,5 +90,11 @@ namespace GiEnJul.Infrastructure
         public string AzureAudience { get; set; }
         public string ManagementClientId { get; set; }
         public string ManagementClientSecret { get; set; }
+    }
+
+    public class CleanupJob
+    {
+        public int NormalDaySensitivity { get; set; }
+        public int EndDaySensitivity { get; set; }
     }
 }
