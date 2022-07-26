@@ -2,17 +2,16 @@
   "Body": [
     "background-color: white;",
     "color: rgba(0, 0, 0, 0.54);",
-    "max-width: 600px;",
+    "width: 600px;",
     "margin: auto;",
     "font-family: 'ubuntu', sans-serif;",
-    "margin-left: 80px;",
-    "margin-right: 80px;",
     "text-align: start;"
+
+
   ],
   "Image": [
     "display: block;",
-    "width: 600px;",
-    "height: 100%",
+    "width: 100%;",
     "margin: 0;",
     "padding: 0;"
   ]
