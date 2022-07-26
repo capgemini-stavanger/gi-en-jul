@@ -6,7 +6,7 @@ import CompletedMacro from "components/admin/dashboard-completed/Macro";
 import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import ManageDashboard from "components/superadmin/ManageDashboard";
-import OverviewMacroRemake from "components/admin/dashboard-all/NEW/OverviewMacroRemake";
+import OverviewMacroRemake from "components/admin/dashboard-all/OverviewMacroRemake";
 
 interface IAdminTab {
   accessToken: string;

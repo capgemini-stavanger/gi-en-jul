@@ -4,15 +4,12 @@ import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import RegistrationForm from "components/institution/RegistrationForm";
 import RegistrationOverview from "components/institution/RegistrationOverview";
-import useUser from "hooks/useUser";
 
 interface IInstitutionMacro {
   accessToken: string;
 }
 const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
   const [step, setStep] = useState<string>("1");
-
-  const { location, institution, email } = useUser();
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setStep(newValue);
@@ -30,7 +27,7 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
           <RegistrationForm accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <RegistrationOverview accessToken={accessToken} userEmail={email} />
+          <RegistrationOverview accessToken={accessToken} />
         </TabPanel>
       </TabContext>
     </>

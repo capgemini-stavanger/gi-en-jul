@@ -19,10 +19,9 @@ interface IDatagridFamily {
 
 interface IRegistrationOverview {
   accessToken: string;
-  userEmail?: string;
 }
 
-const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, userEmail }) => {
+const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const [municipalityEmail, setMunicipalityEmail] = useState("");
@@ -235,7 +234,6 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken, us
               refreshRecipients={() => refreshData()}
               recipient={editRecipient}
               isInstitution={true}
-              userEmail={userEmail}
               accessToken={accessToken}
             />
           </Grid>

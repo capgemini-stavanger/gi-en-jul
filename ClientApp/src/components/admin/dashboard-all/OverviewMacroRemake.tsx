@@ -2,7 +2,7 @@ import { Box, Container } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
-import { useStyles } from "../Styles";
+import { useStyles } from "./Styles";
 import GiverDataTable from "./GiverDataTable";
 import RecipientDataTable from "./RecipientDataTable";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";

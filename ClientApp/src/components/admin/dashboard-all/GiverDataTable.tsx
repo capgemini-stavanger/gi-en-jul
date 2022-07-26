@@ -1,9 +1,9 @@
 import { Box, Divider, Grid, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "../Styles";
-import { RecipientType } from "../../../shared/Types";
+import useStyles from "./Styles";
+import { GiverType } from "../../shared/Types";
 import { Virtuoso } from "react-virtuoso";
-import RecipientDataCard from "./RecipientDataCard";
+import GiverDataCard from "./GiverDataCard";
 import { Search } from "@material-ui/icons";
 import { CONNECTION_COLORS } from "common/constants/ConnectionColors";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
@@ -11,20 +11,20 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import LinkIcon from "@material-ui/icons/Link";
 
 type Props = {
-  recipientData: RecipientType[];
-  selectedRecipientIndex: number;
-  setSelectedRecipient: (giver: RecipientType) => void;
-  setSelectedRecipientIndex: (idx: number) => void;
+  giverData: GiverType[];
+  selectedGiverIndex: number;
+  setSelectedGiver: (giver: GiverType) => void;
+  setSelectedGiverIndex: (idx: number) => void;
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
 };
 
-const RecipientDataTable: React.FC<Props> = ({
-  recipientData,
-  selectedRecipientIndex,
-  setSelectedRecipient,
-  setSelectedRecipientIndex,
+const GiverDataTable: React.FC<Props> = ({
+  giverData,
+  selectedGiverIndex,
+  setSelectedGiver,
+  setSelectedGiverIndex,
   refreshData,
   accessToken,
   resetSelections,
@@ -34,29 +34,22 @@ const RecipientDataTable: React.FC<Props> = ({
   const [familySize, setFamilySize] = useState(-1);
   const [color, setColor] = useState("alle");
 
-  const searchFilter = (input: RecipientType[]) => {
+  const searchFilter = (input: GiverType[] | []) => {
     return input.filter(
       (input) =>
-        input.contactEmail?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.contactFullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.contactPhoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.institution?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.referenceId?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-        input.familyId.toString()?.toLowerCase().indexOf(query.toLowerCase()) > -1
+        input.fullName?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.email?.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+        input.phoneNumber?.toLowerCase().indexOf(query.toLowerCase()) > -1
     );
   };
-  const rounUpFamilyMembers = (famSize: number) => {
-    const matchFamilySize = FAMILY_SIZES.find((famObj) => famObj.value >= famSize)?.value;
-    return matchFamilySize;
-  };
-  const familyFilter = (input: RecipientType[]) => {
+  const familyFilter = (input: GiverType[] | []) => {
     if (familySize == -1) {
       return input; // Unfiltered
     } else {
-      return input.filter((input) => rounUpFamilyMembers(input.familyMembers.length) == familySize);
+      return input.filter((input) => input.maxReceivers == familySize);
     }
   };
-  const colorFilter = (input: RecipientType[]) => {
+  const colorFilter = (input: GiverType[] | []) => {
     if (color == "Rød") {
       return input.filter((input) => !input.isSuggestedMatch && !input.hasConfirmedMatch);
     } else if (color == "Gul") {
@@ -68,7 +61,7 @@ const RecipientDataTable: React.FC<Props> = ({
     }
   };
 
-  const allFilters = (input: RecipientType[]) => {
+  const allFilters = (input: GiverType[] | []) => {
     let filteredInput = input;
     filteredInput = searchFilter(filteredInput);
     filteredInput = familyFilter(filteredInput);
@@ -87,9 +80,15 @@ const RecipientDataTable: React.FC<Props> = ({
   return (
     <>
       <Typography align="center" variant="h5">
-        Familier
+        Givere
       </Typography>
-      <Grid container direction="row" alignItems="center" className={classes.tableHeadingSpace}>
+      <Grid
+        container
+        direction="row"
+        alignItems="center"
+        className={classes.tableHeadingSpace}
+        spacing={1}
+      >
         <Grid item xs={4}>
           <Box className={classes.gridBoxCenter}>
             <Search />
@@ -148,14 +147,15 @@ const RecipientDataTable: React.FC<Props> = ({
       <Divider />
 
       <Virtuoso
-        totalCount={allFilters(recipientData).length}
+        totalCount={allFilters(giverData).length}
+        style={{ marginBottom: "2em" }}
         itemContent={(index) => (
-          <RecipientDataCard
-            recipientData={allFilters(recipientData)[index]}
-            recipientIndex={index}
-            selectedRecipientIndex={selectedRecipientIndex}
-            setSelectedRecipient={() => setSelectedRecipient(allFilters(recipientData)[index])}
-            setSelectedRecipientIndex={() => setSelectedRecipientIndex(index)}
+          <GiverDataCard
+            giverData={allFilters(giverData)[index]}
+            giverIndex={index}
+            selectedGiverIndex={selectedGiverIndex}
+            setSelectedGiver={() => setSelectedGiver(allFilters(giverData)[index])}
+            setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
             refreshData={refreshData}
             accessToken={accessToken}
             resetSelections={resetSelections}
@@ -165,4 +165,4 @@ const RecipientDataTable: React.FC<Props> = ({
     </>
   );
 };
-export default React.memo(RecipientDataTable);
+export default React.memo(GiverDataTable);

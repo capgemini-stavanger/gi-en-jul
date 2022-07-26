@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import useStyles from "../Styles";
-import { GiverType } from "../../../shared/Types";
+import useStyles from "./Styles";
+import { RecipientType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
@@ -11,31 +11,32 @@ import {
   CancelOutlined,
   PeopleOutline,
   LinkOutlined,
+  Edit,
 } from "@material-ui/icons";
-import formatFamily from "common/functions/GetFamilySize";
+import getGender from "common/functions/GetGender";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-import ApiService from "common/functions/apiServiceClass";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
-import CustomTooltip from "components/institution/CustomTooltip";
+import EditFamilyDialog from "components/shared/EditFamilyDialog";
+import ApiService from "common/functions/apiServiceClass";
 
 type Props = {
-  giverData: GiverType;
-  giverIndex: number;
-  selectedGiverIndex: number;
-  setSelectedGiver: () => void;
-  setSelectedGiverIndex: () => void;
+  recipientData: RecipientType;
+  recipientIndex: number;
+  selectedRecipientIndex: number;
+  setSelectedRecipient: () => void;
+  setSelectedRecipientIndex: () => void;
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
 };
 
-const GiverDataCard: React.FC<Props> = ({
-  giverData,
-  giverIndex,
-  selectedGiverIndex,
-  setSelectedGiver,
-  setSelectedGiverIndex,
+const RecipientDataCard: React.FC<Props> = ({
+  recipientData,
+  recipientIndex,
+  selectedRecipientIndex,
+  setSelectedRecipient,
+  setSelectedRecipientIndex,
   refreshData,
   accessToken,
   resetSelections,
@@ -47,45 +48,27 @@ const GiverDataCard: React.FC<Props> = ({
   const [comment, setComment] = useState("");
 
   const [openMailDialog, setOpenMailDialog] = useState(false);
-  const [confirmConnectDialogOpen, setConfirmConnectDialogOpen] = useState(false);
-  const [deleteConnectDialogOpen, setDeleteConnectDialogOpen] = useState(false);
-  const [deleteGiverDialogOpen, setDeleteGiverDialogOpen] = useState(false);
+  const [openEditFamilyDialog, setOpenEditFamilyDialog] = useState(false);
+  const [openDelConnectionDialog, setOpenDelConnectionDialog] = useState(false);
+  const [openDelFamilyDialog, setOpenDelFamilyDialog] = useState(false);
   const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
 
   useEffect(() => {
-    setComment(giverData.comment ? giverData.comment : "");
+    setComment(recipientData.comment ? recipientData.comment : "");
   }, []);
 
   useEffect(() => {
-    if (selectedGiverIndex == -1) {
+    if (selectedRecipientIndex == -1) {
       setPersonExpanded(false);
     }
-  }, [selectedGiverIndex]);
+  }, [selectedRecipientIndex]);
 
-  const confirmConnection = (giver: GiverType) => (response: boolean) => {
-    if (response) {
-      apiservice
-        .post("connection/confirm", {
-          giverId: giver.giverId,
-          recipientId: giver.matchedRecipient,
-          event: giver.event,
-        })
-        .then((r) => {
-          if (r.status === 200) {
-            refreshData();
-            setPersonExpanded(false);
-            resetSelections();
-          }
-        });
-    }
-  };
-
-  const deleteConnection = (giver: GiverType) => (response: boolean) => {
+  const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
       apiservice
         .delete("admin/Connection", {
-          event: giver.event,
-          connectedIds: `${giver.matchedRecipient}_${giver.giverId}`,
+          event: recipient.event,
+          connectedIds: `${recipient.recipientId}_${recipient.matchedGiver}`,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -100,12 +83,12 @@ const GiverDataCard: React.FC<Props> = ({
     }
   };
 
-  const deleteGiver = (giver: GiverType) => (response: boolean) => {
+  const deleteGiver = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
       apiservice
-        .delete("admin/Giver", {
-          giverId: giver.giverId,
-          event: giver.event,
+        .delete("admin/Recipient", {
+          event: recipient.event,
+          recipientId: recipient.recipientId,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -122,9 +105,9 @@ const GiverDataCard: React.FC<Props> = ({
   const saveComment = (response: boolean) => {
     if (response) {
       apiservice
-        .post("admin/giver/addcomment", {
-          event: giverData.event,
-          giverId: giverData.giverId,
+        .post("admin/recipient/addcomment", {
+          event: recipientData.event,
+          recipientId: recipientData.recipientId,
           comment: comment,
         })
         .then((resp) => {
@@ -142,27 +125,29 @@ const GiverDataCard: React.FC<Props> = ({
     <>
       <Box
         className={
-          giverIndex == selectedGiverIndex ? classes.accordionSelected : classes.accordionNormal
+          recipientIndex == selectedRecipientIndex
+            ? classes.accordionSelected
+            : classes.accordionNormal
         }
         onClick={() => {
-          setSelectedGiver();
-          setSelectedGiverIndex();
+          setSelectedRecipient();
+          setSelectedRecipientIndex();
         }}
       >
         <Box className={classes.accordionSummary}>
-          <Grid container direction="row" justifyContent="space-between" alignItems="center">
+          <Grid container justifyContent="space-between" alignItems="center">
             <Grid item xs={2}>
-              <Typography className={classes.boldText}>{giverData.fullName}</Typography>
+              <Typography className={classes.boldText}>ID: {recipientData.familyId}</Typography>
             </Grid>
             <Grid item xs={2}>
               <Typography className={classes.boldText}>
                 <PeopleOutline />
-                {formatFamily(giverData.maxReceivers)}
+                {recipientData.familyMembers.length}
               </Typography>
             </Grid>
             <Grid item xs={3}>
-              {giverData.isSuggestedMatch ? (
-                !giverData.hasConfirmedMatch ? (
+              {recipientData.isSuggestedMatch ? (
+                !recipientData.hasConfirmedMatch ? (
                   <Typography className={classes.boldText}>
                     <ErrorOutlineOutlined style={{ color: "yellow" }} />
                     Foreslått
@@ -182,7 +167,7 @@ const GiverDataCard: React.FC<Props> = ({
             </Grid>
             <Grid item xs={1}>
               {
-                giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
+                recipientData.comment && <ChatBubbleOutline /> // remove ! to show all comments
               }
             </Grid>
             <Grid item xs={1}>
@@ -213,9 +198,8 @@ const GiverDataCard: React.FC<Props> = ({
                     <Typography variant="h6" gutterBottom>
                       Kontakt
                     </Typography>
-                    <Typography>{giverData.fullName}</Typography>
-                    <Typography>{giverData.phoneNumber}</Typography>
-                    <Typography gutterBottom>{giverData.email}</Typography>
+                    <Typography>{recipientData.contactPhoneNumber}</Typography>
+                    <Typography gutterBottom>{recipientData.contactEmail}</Typography>
                     <SendIcon />
                     <Button
                       className={classes.underlineText}
@@ -230,84 +214,111 @@ const GiverDataCard: React.FC<Props> = ({
                       handleClose={() => {
                         setOpenMailDialog(false);
                       }}
-                      email={giverData.email}
-                      fullName={giverData.fullName}
+                      email={recipientData.contactEmail}
+                      fullName={recipientData.contactFullName}
                     />
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="h6" gutterBottom>
-                      Feedback <CustomTooltip iconType={false} content={"TEXT"} />
-                    </Typography>
-                    <Typography> For stor familie.. vis ikon (?)</Typography>
                   </Grid>
                 </Grid>
               </Grid>
+
               <Grid item className={classes.borderInCards}>
+                <Typography variant="h6" gutterBottom>
+                  Familie
+                </Typography>
+                <Grid container direction="row">
+                  <Grid item xs={12}>
+                    {recipientData.familyMembers.map((person, index) => (
+                      <Grid
+                        key={index}
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        className={classes.personTable}
+                      >
+                        <Grid item xs={2}>
+                          <Typography>{getGender(person.gender, person.age)}</Typography>
+                        </Grid>
+                        <Grid item xs={2}>
+                          {person.age} år
+                        </Grid>
+                        <Grid item xs={8}>
+                          {!person.noWish ? (
+                            person.wishes.map((wish, wIndex) => {
+                              return (
+                                <Typography key={wIndex}>
+                                  Ønske {wIndex + 1}: {wish}
+                                </Typography>
+                              );
+                            })
+                          ) : (
+                            <Typography>Giver kjøper alderstilpasset gave.</Typography>
+                          )}
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              <Grid item className={classes.borderInCards}>
+                <Typography variant="h6" gutterBottom>
+                  Administrer
+                </Typography>
                 <Grid container direction="row">
                   <Grid item xs={6}>
                     <Grid container direction="column">
-                      <Typography variant="h6" gutterBottom>
-                        Admininistrer
-                      </Typography>
-                      {!giverData.hasConfirmedMatch && giverData.isSuggestedMatch && (
+                      {!recipientData.isSuggestedMatch && (
                         <Grid item>
-                          <Typography>
-                            <LinkOutlined />
-                            <Button
-                              className={classes.underlineText}
-                              onClick={() => setConfirmConnectDialogOpen(true)}
-                            >
-                              Godta kobling
-                            </Button>
-                          </Typography>
-                          <ConfirmationBox
-                            open={confirmConnectDialogOpen}
-                            handleClose={() => {
-                              setConfirmConnectDialogOpen(false);
+                          <Typography
+                            onClick={() => {
+                              setOpenEditFamilyDialog(true);
                             }}
-                            text={`Er du sikker på at du vil godta på vegne av ${giverData.fullName} [${giverData.email}]?`}
-                            handleResponse={confirmConnection(giverData)}
+                          >
+                            <Edit />
+                            <Button>Rediger familie</Button>
+                          </Typography>
+                          <EditFamilyDialog
+                            open={openEditFamilyDialog}
+                            onClose={() => {
+                              setOpenEditFamilyDialog(false);
+                            }}
+                            refreshRecipients={() => refreshData()}
+                            recipient={recipientData}
+                            isInstitution={false}
+                            accessToken={accessToken}
                           />
                         </Grid>
                       )}
-                      {giverData.isSuggestedMatch && (
+                      {recipientData.isSuggestedMatch && (
                         <Grid item>
-                          <Typography>
+                          <Typography onClick={() => setOpenDelConnectionDialog(true)}>
                             <LinkOutlined />
-                            <Button
-                              className={classes.underlineText}
-                              onClick={() => setDeleteConnectDialogOpen(true)}
-                            >
+                            <Button className={classes.underlineText}>
                               Koble fra giver og familie
                             </Button>
                           </Typography>
                           <ConfirmationBox
-                            open={deleteConnectDialogOpen}
+                            open={openDelConnectionDialog}
                             handleClose={() => {
-                              setDeleteConnectDialogOpen(false);
+                              setOpenDelConnectionDialog(false);
                             }}
-                            text={`Er du sikker på at du fjerne giver ${giverData.fullName} [${giverData.email}] sin tilkobling? Familien vil også bli frakoblet`}
-                            handleResponse={deleteConnection(giverData)}
+                            text={`Er du sikker på at du fjerne familie id ${recipientData.familyId} [${recipientData.contactEmail}] sin tilkobling? Giver vil også bli frakoblet`}
+                            handleResponse={deleteConnection(recipientData)}
                           />
                         </Grid>
                       )}
                       <Grid item>
-                        <Typography>
+                        <Typography onClick={() => setOpenDelFamilyDialog(true)}>
                           <LinkOutlined />
-                          <Button
-                            className={classes.underlineText}
-                            onClick={() => setDeleteGiverDialogOpen(true)}
-                          >
-                            Slett giver
-                          </Button>
+                          <Button className={classes.underlineText}>Slett familie</Button>
                         </Typography>
                         <ConfirmationBox
-                          open={deleteGiverDialogOpen}
+                          open={openDelFamilyDialog}
                           handleClose={() => {
-                            setDeleteGiverDialogOpen(false);
+                            setOpenDelFamilyDialog(false);
                           }}
-                          text={`Er du sikker på at du ønsker å slette giver ${giverData.fullName} [${giverData.email}]?`}
-                          handleResponse={deleteGiver(giverData)}
+                          text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
+                          handleResponse={deleteGiver(recipientData)}
                         />
                       </Grid>
                     </Grid>
@@ -320,12 +331,11 @@ const GiverDataCard: React.FC<Props> = ({
                         variant="outlined"
                         label="Kommentar"
                         multiline
-                        minRows={3}
+                        minRows={4}
                         value={comment}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           setComment(e.target.value);
                         }}
-                        fullWidth
                       />
                       <Button
                         variant="contained"
@@ -355,4 +365,4 @@ const GiverDataCard: React.FC<Props> = ({
     </>
   );
 };
-export default React.memo(GiverDataCard);
+export default React.memo(RecipientDataCard);

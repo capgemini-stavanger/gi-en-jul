@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "../Styles";
-import { RecipientType } from "../../../shared/Types";
+import useStyles from "./Styles";
+import { RecipientType } from "../../shared/Types";
 import SuggestionDataCard from "./SuggestionDataCard";
 import CustomTooltip from "components/institution/CustomTooltip";
 

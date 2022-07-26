@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SelectedConnectionType } from "components/shared/Types";
-import useStyles from "../Styles";
+import useStyles from "./Styles";
 import { CancelOutlined, PeopleOutline } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
