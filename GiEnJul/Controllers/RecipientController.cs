@@ -89,10 +89,11 @@ namespace GiEnJul.Controllers
 
         [HttpGet]
         [Authorize(Policy = Policy.ReadRecipient)]
-        public async Task<List<Recipient>> GetRecipientsByInstitutionAsync([FromQuery] string institution)
+        public async Task<List<Recipient>> GetRecipientsByInstitutionAsync()
         {
             var metadata = await _managementClient.GetUserMetadata(ClaimsHelper.GetUserId(User));
             var location = metadata["location"];
+            var institution = metadata["institution"];
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
 
             var recipients = await _recipientRepository.GetRecipientsByInstitutionAndEventAsync(institution, eventName, location);
