@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useStyles from "../Styles";
 import { RecipientType } from "../../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -31,10 +31,6 @@ const SuggestionDataCard: React.FC<Props> = ({
   const classes = useStyles();
 
   const [personExpanded, setPersonExpanded] = useState(false);
-
-  useEffect(() => {
-    console.log(suggestionData);
-  }, []);
 
   return (
     <>
