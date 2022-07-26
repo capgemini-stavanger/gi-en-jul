@@ -83,11 +83,10 @@ function Row(props: RecipientRowProps) {
                       <TableCell>{getGender(familyMember.gender, familyMember.age)}</TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell>
-                        {familyMember.wish
-                          ? familyMember.wish
+                        {!familyMember.noWish
+                          ? familyMember.wishes[0]
                           : "Giver kjøper alderstilpasset gave. "}
                         <br />
-                        {familyMember.comment ? "Kommentar: " + familyMember.comment : ""}
                       </TableCell>
                     </TableRow>
                   ))}

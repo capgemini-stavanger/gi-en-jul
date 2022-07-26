@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
@@ -8,8 +8,7 @@ import RecipientDataTable from "./RecipientDataTable";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import OverviewStatistics from "./OverviewStatistics";
 import OverviewConnection from "./OverviewConnection";
-import RecipientDataCard from "./RecipientDataCard";
-import CustomTooltip from "components/institution/CustomTooltip";
+import SuggestionDataTable from "./SuggestionDataTable";
 
 interface IOverviewMacro {
   location: string;
@@ -178,10 +177,6 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         <Container>
           <Box className={classes.dashboardBox}>
             <Box className={classes.infoBox}>
-              <Box className={classes.dashInfoSpacing}>
-                <Typography variant="h4">Dashboard</Typography>
-                <Typography>Finn, søk og koble sammen familier og givere</Typography>
-              </Box>
               <Box className={classes.dashboardConnectBox}>
                 <Box className={classes.dashBoardConnection}>
                   <OverviewConnection
@@ -207,33 +202,12 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
               <Box className={classes.recipientTable}>
                 {suggestionData.length > 0 && (
                   <Box className={classes.suggestionData}>
-                    <Grid
-                      container
-                      direction="row"
-                      alignItems="center"
-                      className={classes.tableHeadingSpaceSuggestion}
-                    >
-                      <Grid item>
-                        <Typography variant="h5">
-                          Forslag <CustomTooltip iconType={true} content={"TEXT"} />
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                    {suggestionData.map((suggestion, index) => {
-                      return (
-                        <RecipientDataCard
-                          key={index}
-                          recipientData={suggestion}
-                          recipientIndex={index}
-                          selectedRecipientIndex={selectedSuggestionIndex}
-                          setSelectedRecipient={() => handleSelectedRecipient(suggestion)}
-                          setSelectedRecipientIndex={() => handleVisualSelection(index, true)}
-                          refreshData={() => refreshData()}
-                          accessToken={accessToken}
-                          resetSelections={() => resetSelections()}
-                        />
-                      );
-                    })}
+                    <SuggestionDataTable
+                      suggestionData={suggestionData}
+                      selectedSuggestionIndex={selectedSuggestionIndex}
+                      setSelectedSuggestion={(suggestion) => handleSelectedRecipient(suggestion)}
+                      setSelectedSuggestionIndex={(index) => handleVisualSelection(index, true)}
+                    />
                   </Box>
                 )}
                 <Box className={classes.recipientData}>

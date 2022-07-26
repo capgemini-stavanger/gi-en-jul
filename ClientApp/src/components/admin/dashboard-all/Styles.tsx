@@ -74,15 +74,17 @@ export const useStyles = makeStyles((theme) => ({
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
-    height: "80vh",
+    height: "90vh",
+    marginTop: "1em",
+    marginRight: "1em",
   },
   oversiktBox: {
     width: "200px",
-    height: "700px",
+    height: "650px",
     backgroundColor: "rgba(0, 0, 0, 0.02)",
-    position: "absolute",
+    position: "fixed",
     left: "0",
-    top: "8em",
+    top: "5em",
     padding: "1em",
   },
   oversiktBoxSpacing: {
@@ -124,7 +126,6 @@ export const useStyles = makeStyles((theme) => ({
     marginRight: "1em",
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     borderRadius: "1em",
-    paddingTop: "1em",
     paddingBottom: "5em",
   },
   recipientTable: {
@@ -136,18 +137,17 @@ export const useStyles = makeStyles((theme) => ({
     marginBottom: "1em",
     backgroundColor: "#feffed",
     borderRadius: "1em",
-    paddingTop: "1em",
-    paddingBottom: "1em",
+    paddingTop: "0.3em",
+    paddingBottom: "0.3em",
   },
   recipientData: {
     flexGrow: 1,
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     borderRadius: "1em",
-    paddingTop: "1em",
     paddingBottom: "5em",
   },
   tableHeadingSpace: {
-    marginBottom: "1em",
+    padding: "0.2em",
   },
   tableHeadingSpaceSuggestion: {
     marginBottom: "1em",
@@ -196,12 +196,12 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "flex-end",
     alignItems: "center",
   },
-  inputSmall: {
-    width: "100px",
+  inputHeight: {
+    width: "120px",
     height: "40px",
   },
   accordionSummary: {
-    padding: "0.5em",
+    padding: "0.2em",
     "&:hover": {
       cursor: "pointer",
     },
