@@ -4,13 +4,19 @@ Hei, {giver.FullName}
 <br /><br />
 
 Da har vi en familie til deg!
-<h3>OVERSIKT OVER FAMILIE </h3>
+<h3 style="color: rgba(50, 124, 109, 1);">OVERSIKT OVER FAMILIE </h3>
 <ul>{familyTable}</ul>
-<br /><br />
+<br />
 
-Når du har lest gjennom teksten er det viktig at du klikker på linken nedenfor for å bekrefte eller avkrefte at du gir familien en jul.
-Din familie har nummer {recipient.FamilyId}. Dette nummeret må du skrive godt synlig på esken. Ikke pakk inn eller levér noe i plastposer, men i esker som er enkle å bære.
-<br /><br />
+Når du har lest gjennom teksten er det viktig at du klikker på knappen nedenfor for å bekrefte at du blir med i Gi en jul med den tildelte familien.
+<br/>
+<br/>
+<button style="margin-left: 40%; background-color: rgba(50, 124, 109, 1);color:white;border-radius: 24px; width: 140px; height:40px; font-size: 16px; border: 0; " onclick="location.href='{verifyLink}'" type="button"> Godkjenn </button>
+<br/>
+<br/>
 
-<button onclick="location.href='{verifyLink}'" type="button"> Godkjenn </button>
-<button onclick="location.href='{denyLink}'" type="button"> Avslå </button>
+
+Ønsker du å en annen familie, eller melde deg helt av trykk på knappen under.
+<br/>
+<br/>
+<button style="margin-left: 40%; background-color: red;color:white;border-radius: 24px; width: 140px; height:40px; font-size: 16px; border: 0; " onclick="location.href='{denyLink}'" type="button"> Avslå </button>

@@ -104,6 +104,7 @@ namespace GiEnJul.Controllers
                 }
 
                 var emailTemplatename = EmailTemplateName.AssignedFamily;
+                
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "familyTable", familyTable },
@@ -111,7 +112,7 @@ namespace GiEnJul.Controllers
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel.First(), "municipalityDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);

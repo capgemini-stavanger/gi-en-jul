@@ -39,7 +39,7 @@ namespace GiEnJul.Utilities
             var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
 
             // Read Image
-            var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}familyTop.png");
+            var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}family.png");
             var imgString = Convert.ToBase64String(imgFile);
             var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
 
