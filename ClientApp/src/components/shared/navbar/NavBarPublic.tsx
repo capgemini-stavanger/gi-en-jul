@@ -1,6 +1,7 @@
 import { Button, IconButton, Tab, Box, Grid, Toolbar, AppBar } from "@material-ui/core";
 import { isMobile } from "common/functions/IsMobile";
 import logo from "styling/img/logo_white.svg";
+import logogreen from "styling/img/logo_green.svg";
 import useStyles from "components/shared/Styles";
 import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
@@ -18,9 +19,10 @@ const NavBarPublic = () => {
       <>
         <AppBar className={classes.navContainer}>
           <Toolbar className={classes.toolBar}>
-            <IconButton>
+            <IconButton className={classes.logoBliGiverContainer}>
               <Link to="/">
-                <img className={classes.smallLogo} src={logo}></img>
+                <FiberManualRecord className={classes.treeCircleBliGiver} />
+                <img className={classes.smallLogoBliGiver} src={logogreen}></img>
               </Link>
             </IconButton>
           </Toolbar>

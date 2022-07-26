@@ -89,7 +89,6 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("allcontacts")]
-        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetContacts()
         {
             var entities = await _municipalityRepository.GetAll();

@@ -52,7 +52,7 @@ const Business = () => {
           <Typography className={classes.textHeadline}>For bedrifter</Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item>
+          <Grid item xs={6}>
             <Typography>{parse(businessInfo.info)}</Typography>
             <Link
               to="/bli-giver"

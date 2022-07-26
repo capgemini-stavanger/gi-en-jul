@@ -27,6 +27,16 @@ export default () =>
       width: "35px",
       margin: theme.spacing(-1.5),
     },
+    logoBliGiverContainer: { position: "relative" },
+
+    smallLogoBliGiver: {
+      position: "relative",
+      left: "-37px",
+      height: "35px",
+      width: "35px",
+      backgroundcolor: theme.palette.primary.dark,
+      margin: theme.spacing(-1.5),
+    },
     treeGridIcon: { marginLeft: "-10%" },
     treeCircle: {
       position: "relative",
@@ -34,6 +44,12 @@ export default () =>
       width: "65px",
       color: theme.palette.primary.main,
     },
+    treeCircleBliGiver: {
+      height: "65px",
+      width: "65px",
+      color: "white",
+    },
+
     drawerMenu: {
       backgroundColor: theme.palette.secondary.light,
       color: theme.palette.primary.main,

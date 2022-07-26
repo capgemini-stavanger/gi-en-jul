@@ -1,10 +1,9 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback } from "react";
-import { Spinner } from "reactstrap";
 import IFormData from "./IFormData";
 import useStyles from "components/register-as-giver/Styles";
 import snowmanFull from "styling/img/snowmanFull.svg";
-import snowDown from "styling/img/snow_down2.svg";
+import DotLoader from "common/constants/DotLoader";
 
 type Props = {
   values: IFormData;
@@ -47,12 +46,10 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
   return (
     <>
       <Grid container direction="column" justifyContent="center" alignItems="center">
-        <Grid item>
-          <img className={classes.imageSnow} src={snowDown}></img>
-        </Grid>
+        <Grid item></Grid>
         <Grid item>
           <Container className={classes.giverForm}>
-            {confirmationOK !== undefined ? getMessage() : <Spinner />}
+            {confirmationOK !== undefined ? getMessage() : <DotLoader />}
           </Container>
         </Grid>
         <Grid item className={classes.imageContainer}>

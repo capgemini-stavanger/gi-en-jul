@@ -40,14 +40,14 @@ const StartJul = () => {
   return (
     <>
       <NavBarPublic />
-      <Container id="start" className={classes.rootNavBarPages} maxWidth={false}>
+      <Container className={classes.rootNavBarPages} maxWidth={false}>
         <div className={classes.headLineContainer}>
           <Typography className={classes.textHeadline}>
             Hvordan du starter Gi en jul i din kommune
           </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item>
+          <Grid item xs={6}>
             <Typography>{parse(howToStartInfo.info)}</Typography>
           </Grid>
         </Grid>
