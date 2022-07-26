@@ -9,9 +9,17 @@ interface Props {
   handleSaveEvent: (event: EventContent) => void;
   onClose: () => void;
   open: boolean;
+  existingEventNames: string[];
+  existingMunicipalities: string[];
 }
 
-const NewEventBox: React.FC<Props> = ({ handleSaveEvent, onClose, open }) => {
+const NewEventBox: React.FC<Props> = ({
+  handleSaveEvent,
+  onClose,
+  open,
+  existingEventNames,
+  existingMunicipalities,
+}) => {
   const classes = useStyles();
   const [newEvent, setNewEvent] = useState<EventContent>(EventContentInit());
   const [openConfirmationBox, setOpenConfirmationBox] = useState<boolean>(false);
@@ -44,6 +52,8 @@ const NewEventBox: React.FC<Props> = ({ handleSaveEvent, onClose, open }) => {
             handleEventChange={handleEventChange}
             id={""}
             onDelete={handleClose}
+            existingEventNames={existingEventNames}
+            existingMunicipalities={existingMunicipalities}
           />
           {isUpdated ? <Button onClick={handleSaveClick}>Lagre event</Button> : ""}
           <ConfirmationBox

@@ -10,11 +10,6 @@ export interface EventContent {
   deliveryTime: string;
   contactPerson: string;
   giverLimit: string;
-  email: string;
-  // facebook: string; //url
-  // instagram: string; // url
-  // image: string; // url to contact person image
-  phoneNumber: string;
 }
 export interface EventContentDto {
   eventName: string; // Jul{YY}
@@ -27,11 +22,6 @@ export interface EventContentDto {
   deliveryTime: string;
   contactPerson: string;
   giverLimit: number;
-  email: string;
-  // facebook: string; //url
-  // instagram: string; // url
-  // image: string; // url to contact person image
-  phoneNumber: string;
 }
 export const EventContentInit = (): EventContent => {
   return {
@@ -46,11 +36,6 @@ export const EventContentInit = (): EventContent => {
     deliveryTime: "",
     contactPerson: "",
     giverLimit: "",
-    email: "",
-    // facebook: "", //url
-    // instagram: "", // url
-    // image: "", // url to contact person image
-    phoneNumber: "",
   };
 };
 

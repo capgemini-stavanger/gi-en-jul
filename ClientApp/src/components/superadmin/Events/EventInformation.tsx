@@ -1,13 +1,11 @@
 import { Button, Grid } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useStyles from "components/superadmin/Events/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import { EventContent } from "./EventType";
-import ApiService from "common/functions/apiServiceClass";
-import ConnectionStyle from "components/admin/dashboard-completed/ConnectionStyles";
 
 type ValidEventEntry = {
   [valid: string]: boolean;
@@ -21,85 +19,30 @@ const initValidEventState: ValidEventEntry = {
   deliveryAddress: false,
   deliveryDate: false,
   deliveryTime: false,
-  contactPerson: false,
   giverLimit: false,
-  email: false,
-  phoneNumber: false,
-};
-
-const getValidators = (field: string) => {
-  switch (field) {
-    case "eventName":
-      return [EV.emptyString];
-    case "municipality":
-      return [EV.emptyString];
-    case "startDate":
-      return [EV.emptyString, EV.notADate];
-    case "endDate":
-      return [EV.emptyString, EV.notADate];
-    case "deliveryAddress":
-      return [EV.emptyString];
-    case "deliveryDate":
-      return [EV.emptyString];
-    case "deliveryTime":
-      return [EV.emptyString];
-    case "contactPerson":
-      return [EV.emptyString];
-    case "giverLimit":
-      return [EV.emptyString, EV.notANumber];
-    case "email":
-      return [EV.emptyString, EV.notAnEmail];
-    case "phoneNumber":
-      return [EV.emptyString, EV.notAPhoneNumber];
-  }
-  return [
-    () => {
-      return true;
-    },
-  ];
-};
-
-const getErrorMessages = (field: string) => {
-  switch (field) {
-    case "eventName":
-      return [EE.emptyString];
-    case "municipality":
-      return [EE.emptyString];
-    case "startDate":
-      return [EE.emptyString, EE.wrongDateFormat];
-    case "endDate":
-      return [EE.emptyString, EE.wrongDateFormat];
-    case "deliveryAddress":
-      return [EE.emptyString];
-    case "deliveryDate":
-      return [EE.emptyString];
-    case "deliveryTime":
-      return [EE.emptyString];
-    case "contactPerson":
-      return [EE.emptyString];
-    case "giverLimit":
-      return [EE.emptyString, EE.notANumber];
-    case "email":
-      return [EE.emptyString, EE.notAnEmail];
-    case "phoneNumber":
-      return [EE.emptyString, EE.notAPhoneNumber];
-  }
 };
 
 interface Props {
   event: EventContent;
   handleEventChange: (updatedEvent: EventContent, id: string) => void;
-  onDelete: (id: any) => void;
+  onDelete: (id: string) => void;
   id: string;
+  existingEventNames: string[];
+  existingMunicipalities: string[];
 }
 
-const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete, id }) => {
+const EventInformation: React.FC<Props> = ({
+  event,
+  handleEventChange,
+  onDelete,
+  id,
+  existingEventNames,
+  existingMunicipalities,
+}) => {
   const classes = useStyles();
-  const apiservice = new ApiService();
   const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
   const [activeEdit, setActiveEdit] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<EventContent>(event);
-  const [existingMunicipalities, setExistingMunicipalities] = useState<string[]>([]);
   const [openSaveConfirmation, setOpenSaveConfirmation] = useState<boolean>(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState<boolean>(false);
   const [informationText, setInformationText] = useState<string>("");
@@ -107,6 +50,59 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
   const [validEventState, setValidEventState] = useState({
     ...initValidEventState,
   });
+
+  const getValidators = (field: string) => {
+    switch (field) {
+      case "eventName":
+        return [EV.emptyString, eventNameDoesntExist];
+      case "municipality":
+        return [EV.emptyString, municipalityDoesntExist];
+      case "startDate":
+        return [EV.emptyString, EV.notADate];
+      case "endDate":
+        return [EV.emptyString, EV.notADate];
+      case "deliveryAddress":
+        return [EV.emptyString];
+      case "deliveryDate":
+        return [EV.emptyString];
+      case "deliveryTime":
+        return [EV.emptyString];
+      case "contactPerson":
+        return [EV.emptyString];
+      case "giverLimit":
+        return [EV.emptyString, EV.notANumber];
+    }
+    return [
+      () => {
+        return true;
+      },
+    ];
+  };
+
+  const getErrorMessages = (field: string) => {
+    switch (field) {
+      case "eventName":
+        return [EE.emptyString, "Eventnavnet er ikke lagt til enda"];
+      case "municipality":
+        return [EE.emptyString, "Kommunen er ikke lagt til enda"];
+      case "startDate":
+        return [EE.emptyString, EE.wrongDateFormat];
+      case "endDate":
+        return [EE.emptyString, EE.wrongDateFormat];
+      case "deliveryAddress":
+        return [EE.emptyString];
+      case "deliveryDate":
+        return [EE.emptyString];
+      case "deliveryTime":
+        return [EE.emptyString];
+      case "contactPerson":
+        return [EE.emptyString];
+      case "giverLimit":
+        return [EE.emptyString, EE.notANumber];
+    }
+    return [];
+  };
+
   const everythingValid = () => {
     return Object.values(validEventState).every((value) => {
       return value === true;
@@ -128,48 +124,17 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
     return allIsValid;
   };
 
-  const fetchExistingMunicipalities = async () => {
-    apiservice
-      .get("Municipality/names", {})
-      .then((resp) => {
-        setExistingMunicipalities(resp.data);
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
+  const eventNameDoesntExist = (value: string) => {
+    return existingEventNames.includes(value);
   };
 
-  const checkMunicipalityExist = async (maybeMunicipality: string): Promise<any> => {
-    console.log("staring check muni exists");
-    await fetchExistingMunicipalities();
-    console.log("checking with municipalieis: ");
-    console.log(existingMunicipalities);
-    const exists = existingMunicipalities.includes(maybeMunicipality);
-    console.log("exists: ");
-    console.log(exists);
-    return exists;
+  const municipalityDoesntExist = (value: string) => {
+    return existingMunicipalities.includes(value);
   };
 
-  const handleMunicipalityDoesntExists = () => {
-    setInformationText(
-      "Kommunen er ikke laget enda, vennligst lag denne før du laget et event koblet til den."
-    );
-    setOpenInformation(true);
-    setFormValues({
-      ...formValues,
-      municipality: event.municipality,
-    });
-  };
-
-  const handleSaveConfirmation = async (response: boolean) => {
+  const handleSaveConfirmation = (response: boolean) => {
     if (response) {
-      const muniExists = await checkMunicipalityExist(formValues.municipality);
-      if (!muniExists) {
-        handleMunicipalityDoesntExists();
-      } else {
-        // municipality exists; all good!
-        handleEventChange(formValues, id);
-      }
+      handleEventChange(formValues, id);
     }
     setOpenSaveConfirmation(false);
   };
@@ -359,25 +324,6 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
         disabled={!activeEdit}
       />
     </Grid>,
-    // contactPerson
-    <Grid className={classes.eventBox} key={6} item>
-      <InputValidator
-        viewErrorTrigger={viewErrorNumber}
-        validators={getValidators("contactPerson")}
-        setIsValids={getValiditySetter("contactPerson")}
-        errorMessages={getErrorMessages("contactPerson")}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const copy = { ...formValues };
-          copy.contactPerson = e.target.value;
-          setFormValues(copy);
-          incrementErrorNum("contactPerson", e.target.value);
-        }}
-        value={formValues.contactPerson}
-        name="contactPerson"
-        label="Kontaktperson"
-        disabled={!activeEdit}
-      />
-    </Grid>,
     //giverLimit
     <Grid className={classes.eventBox} key={7} item>
       <InputValidator
@@ -394,44 +340,6 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
         value={formValues.giverLimit}
         name="giverLimit"
         label="Maks Antall Givere"
-        disabled={!activeEdit}
-      />
-    </Grid>,
-    //email
-    <Grid className={classes.eventBox} key={8} item>
-      <InputValidator
-        viewErrorTrigger={viewErrorNumber}
-        validators={getValidators("email")}
-        setIsValids={getValiditySetter("email")}
-        errorMessages={getErrorMessages("email")}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const copy = { ...formValues };
-          copy.email = e.target.value;
-          setFormValues(copy);
-          incrementErrorNum("email", e.target.value);
-        }}
-        value={formValues.email}
-        name="email"
-        label="Kontaktemail"
-        disabled={!activeEdit}
-      />
-    </Grid>,
-    //phoneNumber
-    <Grid className={classes.eventBox} key={9} item>
-      <InputValidator
-        viewErrorTrigger={viewErrorNumber}
-        validators={getValidators("phoneNumber")}
-        setIsValids={getValiditySetter("phoneNumber")}
-        errorMessages={getErrorMessages("phoneNumber")}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const copy = { ...formValues };
-          copy.phoneNumber = e.target.value;
-          setFormValues(copy);
-          incrementErrorNum("phoneNumber", e.target.value);
-        }}
-        value={formValues.phoneNumber}
-        name="phoneNumber"
-        label="Kontakt telefon"
         disabled={!activeEdit}
       />
     </Grid>,

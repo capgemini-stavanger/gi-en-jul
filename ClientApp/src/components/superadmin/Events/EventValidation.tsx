@@ -1,10 +1,10 @@
 export const EventErrors = {
-  emptyString: "Kan ikke være en tom string",
-  keyCombinationExists: "Event / Kommune kombinasjonen finnes allerede",
+  emptyString: "Feltet kan ikke være tomt",
+  keyCombinationExists: "Event/Kommune kombinasjonen finnes allerede",
   wrongDateFormat: "Vennligst skriv inn dato på formen åååå-mm-dd",
-  notANumber: "Vennligst tast inn et tall",
-  notAnEmail: "Vennligst fyll inn en gyldig email",
-  notAPhoneNumber: "Vennligst fyll inn ett gyldig telefonnr",
+  notANumber: "Vennligst skriv inn ett gyldig tall",
+  notAnEmail: "Vennligst skriv inn en gyldig email",
+  notAPhoneNumber: "Vennligst skriv inn ett gyldig telefonnr",
 };
 
 export const EventInputValidators = {

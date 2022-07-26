@@ -1,4 +1,4 @@
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { Box, FormControl, MenuItem, Select, Typography } from "@material-ui/core";
 import { ChangeEvent } from "react";
 
 interface Props {
@@ -29,7 +29,8 @@ const EventDropdown: React.FC<Props> = ({ choices, labelNote, updateValue, selec
   return (
     <Box width="250px">
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{labelNote}</InputLabel>
+        <Typography>{labelNote}</Typography>
+        {/* <InputLabel id="demo-simple-select-label">{labelNote}</InputLabel> */}
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"

@@ -1,20 +1,42 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
+import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import EventsContainer from "../Events/EventsContainer";
-import MunicipalityContainer from "../Municipality/MunicipalityContainer";
+import { Dto2EventContent, EventContent, EventContentDto } from "../Events/EventType";
+import MunicipalityManageTable from "../Municipality/MunicipalityManageTable";
 
 interface Props {
   accessToken: string;
 }
 
 const AdminMunicipalityUserEvent: React.FC<Props> = ({ accessToken }) => {
-  const [municipalities, setMunicipalities] = useState([]);
-  const [events, setEvents] = useState([]);
+  const apiservice = new ApiService(accessToken);
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
+  const [events, setEvents] = useState(new Map<string, EventContent>());
   const fetchMunicipalities = () => {
-    // get Municipalities
+    apiservice
+      .get("Municipality/names", {})
+      .then((resp) => {
+        setMunicipalities(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
   };
   const fetchEvents = () => {
-    // get Events
+    apiservice
+      .get("Event/GetAll", {})
+      .then((resp) => {
+        const fetchedEvents = new Map<string, EventContent>();
+        const eventContents = resp.data.map((event: EventContentDto) => Dto2EventContent(event));
+        eventContents.forEach((event: EventContent) => {
+          fetchedEvents.set(event.id, event);
+        });
+        setEvents(fetchedEvents);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
   };
   const fetchData = () => {
     fetchMunicipalities();
@@ -24,13 +46,17 @@ const AdminMunicipalityUserEvent: React.FC<Props> = ({ accessToken }) => {
   return (
     <Grid container direction="column" spacing={10}>
       <Grid item>
-        <MunicipalityContainer accessToken={accessToken} />
+        <Typography>Liste over kommuner</Typography>
+        <MunicipalityManageTable accessToken={accessToken} refreshData={fetchData} />
       </Grid>
+      <Divider />
       <Grid item>
-        <Typography>Add-Users Placeholder</Typography>
-      </Grid>
-      <Grid item>
-        <EventsContainer accessToken={accessToken} />
+        <EventsContainer
+          accessToken={accessToken}
+          refreshData={fetchData}
+          existingMunicipalities={municipalities}
+          pEvents={events}
+        />
       </Grid>
     </Grid>
   );

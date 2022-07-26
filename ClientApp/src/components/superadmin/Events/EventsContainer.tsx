@@ -1,26 +1,28 @@
-import { Button, Grid, TextField } from "@material-ui/core";
+import { Button, Grid, TextField, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import EventInformation from "components/superadmin/Events/EventInformation";
-import {
-  EventContent,
-  EventContentDto,
-  EventContent2Dto,
-  Dto2EventContent,
-} from "components/superadmin/Events/EventType";
+import { EventContent, EventContent2Dto } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
-import AddIcon from "@material-ui/icons/Add";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
+import useStyles from "../Styles";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface Props {
   accessToken: string;
+  refreshData: () => void;
+  existingMunicipalities: string[];
+  pEvents: Map<string, EventContent>;
 }
 
-const EventsContainer: React.FC<Props> = ({ accessToken }) => {
-  const [events, setEvents] = useState(new Map<string, EventContent>());
+const EventsContainer: React.FC<Props> = ({
+  accessToken,
+  refreshData,
+  existingMunicipalities,
+  pEvents,
+}) => {
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
@@ -33,8 +35,9 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const [errorText, setErrorText] = useState<string>('Nytt eventnavn (feks "Jul22")');
   const [addState, setAddState] = useState<boolean>(false);
   const [tempEventName, setTempEventName] = useState<string>("");
-  const apiservice = new ApiService(accessToken);
 
+  const classes = useStyles();
+  const apiservice = new ApiService(accessToken);
   const handleDropDownChange = (value: string) => {
     if (openNewEventBox) {
       setOpenConfirmaitonBox(true);
@@ -43,13 +46,16 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     }
     setSelectedEventName(value);
   };
-  const keyCombinationExists = (combination: string) => {
+  const keyCombinationExists = (combination: string): boolean => {
     const existingCombinations: string[] = [];
-    events.forEach((event, id) => {
+    pEvents.forEach((event, id) => {
       existingCombinations.push(id);
     });
     const exists: boolean = existingCombinations.includes(combination);
     return exists;
+  };
+  const municipalityExists = (municipality: string): boolean => {
+    return existingMunicipalities.includes(municipality);
   };
   const handleConfirmationResponse = (response: boolean) => {
     if (response) {
@@ -82,6 +88,27 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       setErrorText("");
     }
   };
+  const validateNewEvent = (newEvent: EventContent, newId: string) => {
+    if (!municipalityExists(newEvent.municipality)) {
+      setInformationBoxInfo(`Kommunen tastet inn er ikke registrert som en kommune. 
+        Vennligst legg til denne før du lager et event for denne kommunen.`);
+      setOpenInformationBox(true);
+      return false;
+    }
+    if (!uniqueEventNames.includes(newEvent.eventName)) {
+      setInformationBoxInfo(`Eventnavnet du har tastet inn er ikke lagt til i listen av eventer. 
+      Vennligst legg til dette før du lager et event med dette eventnavnet.`);
+      setOpenInformationBox(true);
+      return false;
+    }
+    if (keyCombinationExists(newId)) {
+      setInformationBoxInfo(`Eventnavn - Kommune kombinasjonen finnes allerede. 
+      Du kan ikke lage to av samme event i en kommune.`);
+      setOpenInformationBox(true);
+      return false;
+    }
+    return true;
+  };
   const handleSaveNewEventName = () => {
     if (!validNewEventName) return;
     setUniqueEventNames([...uniqueEventNames, newEventName]);
@@ -93,33 +120,31 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     setAddState(true);
   };
   const createNewEvent = (newEvent: EventContent) => {
-    if (newEvent.id == "") {
-      newEvent.id = newEvent.eventName + newEvent.municipality;
+    const newId = newEvent.eventName + newEvent.municipality;
+    const validNewEvent = validateNewEvent(newEvent, newId);
+    if (validNewEvent) {
+      newEvent.id = newId;
+      setOpenNewEventBox(false);
+      postEventUpdate(newEvent);
     }
-    if (keyCombinationExists(newEvent.id)) {
-      setInformationBoxInfo(`Eventnavn - Kommune kombinasjonen finnes allerede. \n
-      Du kan ikke lage to av samme event i en kommune`);
-      setOpenInformationBox(true);
-      return;
-    }
-    // todo: check if eventname-municipality combination already exists
-    setOpenNewEventBox(false); // only close the new-box if the event has a valid id
-    const eventsCopy = new Map(events);
-    eventsCopy.set(newEvent.id, newEvent);
-    setEvents(eventsCopy);
-    postEventUpdate(newEvent);
   };
   const handleEventUpdate = (updatedEvent: EventContent, id: string) => {
-    const eventsCopy = new Map(events);
-    eventsCopy.set(id, updatedEvent);
-    setEvents(eventsCopy);
-    postEventUpdate(updatedEvent); // send updated event to backend
+    const newId = updatedEvent.eventName + updatedEvent.municipality;
+    // either municipality or eventname for the event is updated
+    if (updatedEvent.id != newId) {
+      const validUpdate = validateNewEvent(updatedEvent, newId);
+      if (validUpdate) {
+        updatedEvent.id = newId;
+        postEventUpdate(updatedEvent); // send updated event to backend
+        postEventDeletion(pEvents.get(id)); // delete old version of the event
+      }
+    } else {
+      // municipality and eventname stayed the same
+      postEventUpdate(updatedEvent);
+    }
   };
   const handleEventDeletion = (id: string) => {
-    const eventToBeDeleted = events.get(id); // get event from map
-    const eventsCopy = new Map(events);
-    eventsCopy.delete(id);
-    setEvents(eventsCopy);
+    const eventToBeDeleted = pEvents.get(id); // get event from map
     postEventDeletion(eventToBeDeleted);
   };
   const postEventDeletion = (event: EventContent | undefined) => {
@@ -138,6 +163,8 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       .then((resp) => {
         if (resp.status == 200) {
           setInformationBoxInfo(`Eventet (${event.eventName}-${event.municipality}) ble slettet`);
+          refreshData();
+          fetchDistinctEventNames();
         }
       })
       .catch((errorstack) => {
@@ -146,7 +173,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       });
     setOpenInformationBox(true);
   };
-  const postEventUpdate = (event: EventContent) => {
+  const postEventUpdate = (event: EventContent): void => {
     apiservice
       .post(
         "Event/CreateOrReplace",
@@ -157,6 +184,8 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       .then((resp) => {
         if (resp.status == 200) {
           setInformationBoxInfo("Ett event ble oppdatert");
+          refreshData();
+          fetchDistinctEventNames();
         }
       })
       .catch((errorstack) => {
@@ -165,24 +194,11 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       });
     setOpenInformationBox(true);
   };
-  const fetchEvents = () => {
-    apiservice
-      .get("Event/GetAll", {})
-      .then((resp) => {
-        const fetchedEvents = new Map<string, EventContent>();
-        const eventContents = resp.data.map((event: EventContentDto) => Dto2EventContent(event));
-        eventContents.forEach((event: EventContent) => {
-          fetchedEvents.set(event.id, event);
-        });
-        setEvents(fetchedEvents);
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  };
+
   const buildBody = () => {
     const eventsList: EventContent[] = [];
-    events.forEach((event) => eventsList.push(event));
+    // events.forEach((event) => eventsList.push(event));
+    pEvents.forEach((event) => eventsList.push(event));
     const body = eventsList
       .filter((e) => e.eventName === selectedEventName)
       .map((event) => {
@@ -193,6 +209,8 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
               handleEventChange={handleEventUpdate}
               onDelete={handleEventDeletion}
               id={event.id}
+              existingEventNames={uniqueEventNames}
+              existingMunicipalities={existingMunicipalities}
             />
           </Grid>
         );
@@ -211,9 +229,9 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
       });
   };
 
-  useEffect(fetchEvents, []);
+  // useEffect(fetchEvents, []);
   useEffect(fetchDistinctEventNames, []);
-  useEffect(buildBody, [events, selectedEventName]);
+  useEffect(buildBody, [pEvents, selectedEventName]);
 
   return (
     <Grid container direction="column" spacing={5}>
@@ -246,8 +264,8 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
               </Button>
             </>
           ) : (
-            <Button onClick={handleAddClick} variant="outlined">
-              Nytt Eventnavn
+            <Button onClick={handleAddClick} variant="contained" className={classes.button}>
+              Lag nytt event
             </Button>
           )}
         </Grid>
@@ -279,16 +297,19 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
           onClose={() => {
             setOpenNewEventBox(false);
           }}
+          existingEventNames={uniqueEventNames}
+          existingMunicipalities={existingMunicipalities}
         />
         {selectedEventName === "" || openNewEventBox ? (
           ""
         ) : (
           <Button
+            className={classes.button}
             onClick={() => {
               setOpenNewEventBox(true);
             }}
           >
-            <AddIcon />
+            <Typography>Knytt ny kommune til eventet</Typography>
           </Button>
         )}
       </Grid>

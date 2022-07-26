@@ -13,6 +13,7 @@ import MunicipalityTableElements from "./MunicipalityTableElements";
 
 interface IMunicipalityManageTable {
   accessToken: string;
+  refreshData: () => void;
 }
 
 export interface IMunicipality {
@@ -42,7 +43,10 @@ const initFormDataState: () => IMunicipalityFormData = () => ({
   ...getFormAddMunicipality(),
 });
 
-const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessToken }) => {
+const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
+  accessToken,
+  refreshData,
+}) => {
   const apiservice = new ApiService(accessToken);
   const [Municipalities, setMunicipalities] = useState<IMunicipality[]>([
     initInterfaceMunicipality,
@@ -78,6 +82,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
       .then(() => {
         fetchInformation();
         setOpenAdd(true);
+        refreshData();
       });
 
     setOpen(false);
@@ -92,6 +97,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
       })
       .then(() => {
         fetchInformation();
+        refreshData();
       });
     setOpen(false);
   };
@@ -107,6 +113,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
       })
       .then(() => {
         fetchInformation();
+        refreshData();
       });
   };
 
@@ -132,7 +139,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
   useEffect(fetchInformation, []);
   return (
     <>
-      <Typography>Liste over Kommuner</Typography>
       <Table style={{ width: "1300px" }}>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
