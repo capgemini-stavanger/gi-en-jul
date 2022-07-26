@@ -104,7 +104,6 @@ namespace GiEnJul.Controllers
                 }
 
                 var emailTemplatename = EmailTemplateName.AssignedFamily;
-                
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "familyTable", familyTable },
