@@ -4,6 +4,7 @@ using GiEnJul.Dtos;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -21,6 +22,7 @@ namespace GiEnJul.Clients
         Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
         Task<User> CreateUser(CreateUserDto userDto);
         Task<List<User>> GetAllUsers();
+        void DeleteUser(string email);
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -98,6 +100,15 @@ namespace GiEnJul.Clients
             var user = await _managementApiClient.Users.GetAllAsync(request);
          
             return (List<User>) user;
+        }
+
+        public async void DeleteUser (string email)
+        {
+            
+            var token = await GetTokenAsync();
+            _managementApiClient.UpdateAccessToken(token);
+             await _managementApiClient.Users.DeleteAsync(email);
+
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
