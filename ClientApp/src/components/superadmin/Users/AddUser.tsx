@@ -1,7 +1,15 @@
-import { Grid, Tab, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
+import {
+  Grid,
+  IconButton,
+  Tab,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "reactstrap";
+import { Button, Container, Table } from "reactstrap";
 import useStyles from "components/landing-page/Styles";
 import UserForm from "./UserForm";
 import ConfirmationBox from "components/shared/ConfirmationBox";
@@ -106,33 +114,40 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
         )}
       </Grid>
 
-      <Grid container spacing={3} direction="column" alignItems="center">
+      <Grid container spacing={3} direction="column" alignItems="center" className={classes.root}>
         <Grid item>
           <Typography className={classes.textHeadline}>Alle brukere</Typography>
         </Grid>
 
-        <Grid item>
-          <Table style={{ width: "800px" }}>
-            <TableBody>
-              <TableRow>
-                <TableCell>Navn</TableCell>
-                <TableCell>Email</TableCell>
-              </TableRow>
+        <Grid direction="row" alignItems="center">
+          <Grid item>
+            <Table style={{ width: "1200px" }}>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Navn</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Rolle</TableCell>
+                  <TableCell>Lokasjon</TableCell>
+                  <TableCell>Slett</TableCell>
+                </TableRow>
 
-              <TableRow>
-                <TableCell>
-                  {nicknames.map((nickname, index) => (
-                    <Typography key={index}>{nickname}</Typography>
-                  ))}
-                </TableCell>
-                <TableCell>
-                  {emails.map((email, index) => (
-                    <Typography key={index}>{email}</Typography>
-                  ))}
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+                <TableRow>
+                  <TableCell>
+                    {nicknames.map((nickname, index) => (
+                      <Typography key={index}>{nickname}</Typography>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {emails.map((email, index) => (
+                      <>
+                        <Typography key={index}>{email}</Typography>
+                      </>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

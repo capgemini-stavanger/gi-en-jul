@@ -1,4 +1,5 @@
 import { Grid, Typography } from "@material-ui/core";
+import ApiService from "common/functions/apiServiceClass";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import React, { ChangeEvent, useState } from "react";
@@ -17,14 +18,19 @@ interface IChangeEvent {
 }
 
 const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, confirmOpen }) => {
-  const [usernameInput, setUsernameInput] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
+  const [institutionName, setinstitutionName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
-  const onUsernameChange = (event: ChangeEvent<IChangeEvent>) => {
-    setUsernameInput(event.target.value as string);
+  const apiservice = new ApiService(accessToken);
+
+  const onEmailChange = (event: React.ChangeEvent<IChangeEvent>) => {
+    setEmail(event.target.value as string);
   };
 
   const onRoleInputChange = (event: ChangeEvent<IChangeEvent>) => {
@@ -41,16 +47,45 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
     setLocationInput(event.target.value as string);
   };
 
-  //to do: method for validating that the passwords are the same
+  const onInstitutionNameChange = (event: ChangeEvent<IChangeEvent>) => {
+    setinstitutionName(event.target.value as string);
+  };
+
+  const handleConfirmPassword = () => {
+    if (passwordInput === confirmPasswordInput) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const handleCreateUser = () => {
+    if (handleConfirmPassword()) {
+      apiservice
+        .post("user/create", {
+          Email: email,
+          Password: passwordInput,
+          Location: locationInput,
+          Role: roleInput,
+          Institution: institutionName,
+        })
+        .then(() => {
+          setOpen(true);
+        });
+      setOpen(false);
+    } else {
+      setErrorMessage("The passwords must match");
+    }
+  };
 
   return (
     <Grid container direction="column" spacing={3} alignItems="center">
       <Grid item>
         <InputValidator
           validators={[isNotNull]}
-          value={usernameInput}
+          value={email}
           onChange={(e) => {
-            onUsernameChange(e);
+            onEmailChange(e);
           }}
           label={"Email*"}
           name={"email"}
@@ -110,9 +145,24 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
       </Grid>
 
       <Grid item>
+        {institution && (
+          <InputValidator
+            validators={[isNotNull]}
+            value={institutionName}
+            onChange={(e) => {
+              onInstitutionNameChange(e);
+            }}
+            label={"Institusjon(Navn)*"}
+            name={"institusjonsnavn"}
+          ></InputValidator>
+        )}
+      </Grid>
+
+      <Grid item>
         <Button
           onClick={() => {
-            handleConfirm(true);
+            handleCreateUser();
+            //  handleConfirm(true);
           }}
         >
           <Typography>Legg til</Typography>
