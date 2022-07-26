@@ -1,4 +1,4 @@
-import { Button, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
+import { Button, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import React from "react";
