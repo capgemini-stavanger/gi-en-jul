@@ -27,11 +27,7 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
           <Tab label="Oversikt" value="2" />
         </TabList>
         <TabPanel value="1">
-          <RegistrationForm
-            accessToken={accessToken}
-            location={location}
-            institution={institution}
-          />
+          <RegistrationForm accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
           <RegistrationOverview accessToken={accessToken} />
