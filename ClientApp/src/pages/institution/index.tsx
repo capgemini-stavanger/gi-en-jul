@@ -12,7 +12,7 @@ interface IInstitutionMacro {
 const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
   const [step, setStep] = useState<string>("1");
 
-  const { location, institution } = useUser();
+  const { location, institution, email } = useUser();
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setStep(newValue);
@@ -30,7 +30,7 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
           <RegistrationForm accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <RegistrationOverview accessToken={accessToken} />
+          <RegistrationOverview accessToken={accessToken} userEmail={email} />
         </TabPanel>
       </TabContext>
     </>
