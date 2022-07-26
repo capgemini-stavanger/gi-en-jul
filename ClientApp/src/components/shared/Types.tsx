@@ -41,17 +41,17 @@ export interface RecipientType {
   hasConfirmedMatch: boolean;
   isSuggestedMatch: boolean;
   location: string;
-  matchedGiver?: GiverType;
+  matchedGiver?: string;
   comment: string;
 }
 export interface PersonType {
   recipientId: string;
   personId: string;
-  wish: string;
+  wishes: string[];
   age: number;
   months: number;
   gender: Gender;
-  comment: string;
+  noWish: boolean;
 }
 
 export interface SelectedConnectionType {

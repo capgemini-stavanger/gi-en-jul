@@ -33,7 +33,6 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
         </TabList>
         <TabPanel value="1">
           <OverviewMacroRemake location={location} accessToken={accessToken} />
-          {/* <OverviewMacro location={location} accessToken={accessToken} /> */}
         </TabPanel>
         <TabPanel value="2">
           <ConnectionSuggesterMacro location={location} accessToken={accessToken} />

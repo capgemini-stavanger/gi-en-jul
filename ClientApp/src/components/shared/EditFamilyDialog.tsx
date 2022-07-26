@@ -1,14 +1,12 @@
 import {
   Box,
   Button,
+  capitalize,
   Dialog,
   DialogActions,
   DialogTitle,
   Grid,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -16,12 +14,12 @@ import React, { FC, useEffect, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import useStyles from "components/admin/Styles";
 import { PersonType, RecipientType } from "./Types";
-import getGender from "common/functions/GetGender";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
 import { useAuth0 } from "@auth0/auth0-react";
 import ConfirmationBox from "./ConfirmationBox";
+import SelectForm from "./input-fields/SelectForm";
 
 interface IEditFamilyDialog {
   onClose: () => void;
@@ -121,39 +119,31 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       ],
     }));
   };
-  const onWishChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecipientData((prev) => ({
-      ...prev,
-      familyMembers: [
-        ...prev.familyMembers.slice(0, index),
-        {
-          ...prev.familyMembers[index],
-          wish: e.target.value,
-        },
-        ...prev.familyMembers.slice(index + 1),
-      ],
-    }));
-  };
-  const onCommentChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRecipientData((prev) => ({
-      ...prev,
-      familyMembers: [
-        ...prev.familyMembers.slice(0, index),
-        {
-          ...prev.familyMembers[index],
-          comment: e.target.value,
-        },
-        ...prev.familyMembers.slice(index + 1),
-      ],
-    }));
-  };
+  const onWishChange =
+    (fIndex: number, wIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      setRecipientData((prev) => ({
+        ...prev,
+        familyMembers: [
+          ...prev.familyMembers.slice(0, fIndex),
+          {
+            ...prev.familyMembers[fIndex],
+            wishes: [
+              ...prev.familyMembers[fIndex].wishes.slice(0, wIndex),
+              e.target.value,
+              ...prev.familyMembers[fIndex].wishes.slice(wIndex + 1),
+            ],
+          },
+          ...prev.familyMembers.slice(fIndex + 1),
+        ],
+      }));
+    };
   const newFamilyMember = () => {
     const newRecipient = {
       age: 0,
       months: 0,
       gender: 9,
       recipientId: recipientData.recipientId,
-      wish: "",
+      wishes: [""],
     } as PersonType;
 
     setRecipientData((prev) => ({
@@ -215,12 +205,15 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             <Typography variant="h4"> Familie: {recipientData.familyId} </Typography>
 
             <Grid item>
-              <Typography variant="h5">Matønsker </Typography>
+              <Typography variant="h5" gutterBottom>
+                Matønsker
+              </Typography>
               <Grid container spacing={3} direction="row" alignItems="center">
                 <Grid item>
                   <TextField
                     type="text"
                     label="Middag"
+                    variant="outlined"
                     value={recipientData.dinner}
                     onChange={onDinnerChange}
                   />
@@ -229,6 +222,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                   <TextField
                     type="text"
                     label="Dessert"
+                    variant="outlined"
                     value={recipientData.dessert}
                     onChange={onDessertChange}
                   />
@@ -237,6 +231,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                   <TextField
                     type="text"
                     label="Kommentar"
+                    variant="outlined"
                     value={recipientData.note}
                     onChange={onNoteChange}
                   />
@@ -245,72 +240,85 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             </Grid>
 
             <Grid item>
-              <Typography variant="h5"> Familiesammensetning </Typography>
-              {recipientData.familyMembers?.map((familyMember: PersonType, fIndex: number) => (
-                <Grid container spacing={5} direction="row" alignItems="center" key={fIndex}>
-                  <Grid item>
-                    <InputLabel htmlFor="kjonn-header" shrink>
-                      Kjønn
-                    </InputLabel>
-                    <Select
-                      inputProps={{
-                        name: "kjonn",
-                        id: "kjonn-header",
-                      }}
-                      style={{ height: 25 }}
-                      value={familyMember.gender}
-                      onChange={(e) => {
-                        onChangeGender(fIndex, e);
-                      }}
-                    >
-                      {GENDERS.map((gender, gIndex) => {
-                        return (
-                          <MenuItem key={gIndex} value={gender.value.toString()}>
-                            {getGender(gender.value, familyMember.age)}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
+              <Typography variant="h5" gutterBottom>
+                Familiesammensetning
+              </Typography>
+              <Grid container direction="column" spacing={3}>
+                {recipientData.familyMembers?.map((familyMember: PersonType, fIndex: number) => (
+                  <Grid item key={fIndex}>
+                    <Grid container spacing={2} direction="row" alignItems="center">
+                      <Grid item xs={2}>
+                        <SelectForm
+                          name="gender"
+                          label="kjønn"
+                          variant="outlined"
+                          value={familyMember.gender}
+                          options={GENDERS.map((o) => {
+                            return { value: o.value, text: capitalize(o.text) };
+                          })}
+                          onChange={(e) => {
+                            onChangeGender(fIndex, e);
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <TextField
+                          type="number"
+                          label="Alder"
+                          variant="outlined"
+                          value={familyMember.age}
+                          onChange={onAgeChange(fIndex)}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={2}>
+                        <TextField
+                          type="number"
+                          label="Måneder"
+                          variant="outlined"
+                          value={familyMember.months}
+                          onChange={onMonthsChange(fIndex)}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        {!familyMember.noWish ? (
+                          <React.Fragment>
+                            {familyMember.wishes.map((wish, wIndex) => {
+                              return (
+                                <TextField
+                                  key={wIndex}
+                                  type="text"
+                                  label="Ønske"
+                                  variant="outlined"
+                                  value={wish}
+                                  onChange={onWishChange(fIndex, wIndex)}
+                                  fullWidth
+                                />
+                              );
+                            })}
+                          </React.Fragment>
+                        ) : (
+                          <TextField
+                            type="text"
+                            label="Ønske"
+                            variant="outlined"
+                            value={"Alderstilpasset gaveønske"}
+                            disabled
+                            fullWidth
+                          />
+                        )}
+                      </Grid>
+                      <Grid item xs={2}>
+                        <IconButton aria-label="close" onClick={() => removeFamilyMember(fIndex)}>
+                          <CloseIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <TextField
-                      type="number"
-                      label="Alder"
-                      value={familyMember.age}
-                      onChange={onAgeChange(fIndex)}
-                      style={{ width: 50 }}
-                    />
-                    <TextField
-                      type="number"
-                      label="Måneder"
-                      value={familyMember.months}
-                      onChange={onMonthsChange(fIndex)}
-                      style={{ width: 50 }}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      type="text"
-                      label="Ønske"
-                      value={familyMember.wish ? familyMember.wish : ""}
-                      onChange={onWishChange(fIndex)}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <TextField
-                      type="text"
-                      label="Kommentar"
-                      value={familyMember.comment ? familyMember.comment : ""}
-                      onChange={onCommentChange(fIndex)}
-                    />
-                  </Grid>
-                  <Grid item>
-                    <IconButton aria-label="close" onClick={() => removeFamilyMember(fIndex)}>
-                      <CloseIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              ))}
+                ))}
+              </Grid>
             </Grid>
           </Grid>
 

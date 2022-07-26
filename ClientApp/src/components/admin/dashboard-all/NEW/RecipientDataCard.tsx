@@ -57,12 +57,18 @@ const RecipientDataCard: React.FC<Props> = ({
     setComment(recipientData.comment ? recipientData.comment : "");
   }, []);
 
+  useEffect(() => {
+    if (selectedRecipientIndex == -1) {
+      setPersonExpanded(false);
+    }
+  }, [selectedRecipientIndex]);
+
   const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
       apiservice
         .delete("admin/Connection", {
           event: recipient.event,
-          connectedIds: `${recipient.recipientId}_${recipient.matchedGiver?.giverId}`,
+          connectedIds: `${recipient.recipientId}_${recipient.matchedGiver}`,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -188,13 +194,14 @@ const RecipientDataCard: React.FC<Props> = ({
             >
               <Grid item>
                 <Grid container direction="row" justifyContent="space-between">
-                  <Grid item xs={4}>
-                    <Typography className={classes.boldText}>Kontaktperson</Typography>
+                  <Grid item xs={6}>
+                    <Typography variant="h6" gutterBottom>
+                      Kontakt
+                    </Typography>
                     <Typography>{recipientData.contactPhoneNumber}</Typography>
-                    <Typography>{recipientData.contactEmail}</Typography>
+                    <Typography gutterBottom>{recipientData.contactEmail}</Typography>
                     <SendIcon />
                     <Button
-                      style={{ padding: "0" }}
                       className={classes.underlineText}
                       onClick={() => {
                         setOpenMailDialog(true);
@@ -211,7 +218,15 @@ const RecipientDataCard: React.FC<Props> = ({
                       fullName={recipientData.contactFullName}
                     />
                   </Grid>
-                  <Grid item xs={8}>
+                </Grid>
+              </Grid>
+
+              <Grid item className={classes.borderInCards}>
+                <Typography variant="h6" gutterBottom>
+                  Familie
+                </Typography>
+                <Grid container direction="row">
+                  <Grid item xs={12}>
                     {recipientData.familyMembers.map((person, index) => (
                       <Grid
                         key={index}
@@ -220,18 +235,24 @@ const RecipientDataCard: React.FC<Props> = ({
                         justifyContent="space-between"
                         className={classes.personTable}
                       >
-                        <Grid item xs={6}>
-                          <Typography>
-                            {getGender(person.gender, person.age)} {person.age} år
-                          </Typography>
+                        <Grid item xs={2}>
+                          <Typography>{getGender(person.gender, person.age)}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                          <Typography>
-                            {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
-                          </Typography>
-                          <Typography>
-                            {person.comment ? "Kommentar: " + person.comment : ""}
-                          </Typography>
+                        <Grid item xs={2}>
+                          {person.age} år
+                        </Grid>
+                        <Grid item xs={8}>
+                          {!person.noWish ? (
+                            person.wishes.map((wish, wIndex) => {
+                              return (
+                                <Typography key={wIndex}>
+                                  Ønske {wIndex + 1}: {wish}
+                                </Typography>
+                              );
+                            })
+                          ) : (
+                            <Typography>Giver kjøper alderstilpasset gave.</Typography>
+                          )}
                         </Grid>
                       </Grid>
                     ))}
@@ -240,6 +261,9 @@ const RecipientDataCard: React.FC<Props> = ({
               </Grid>
 
               <Grid item className={classes.borderInCards}>
+                <Typography variant="h6" gutterBottom>
+                  Administrer
+                </Typography>
                 <Grid container direction="row">
                   <Grid item xs={6}>
                     <Grid container direction="column">

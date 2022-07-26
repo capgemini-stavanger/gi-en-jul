@@ -145,9 +145,8 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
                 <Typography className={classes.smallColumn}> {person.age} år </Typography>
                 <Typography className={classes.largeColumn}>
                   {" "}
-                  {person.wish ? person.wish : "Giver kjøper alderstilpasset gave. "}
+                  {person.noWish ? person.wishes : "Giver kjøper alderstilpasset gave. "}
                   <br />
-                  {person.comment ? "Kommentar: " + person.comment : ""}
                 </Typography>
               </AccordionDetails>
               <Divider />
@@ -196,8 +195,8 @@ const DatatableRecipient: React.FC<Props> = ({ data, refreshData, handleRecipien
                   setType(null);
                   handleOpenDialog({
                     event: recipient.event,
-                    connectedIds: `${recipient.recipientId}_${recipient.matchedGiver?.giverId}`,
-                    fullName: recipient.matchedGiver?.fullName,
+                    connectedIds: `${recipient.recipientId}_${recipient.matchedGiver}`,
+                    fullName: recipient.matchedGiver,
                     familyId: recipient.familyId,
                   });
                 }}
