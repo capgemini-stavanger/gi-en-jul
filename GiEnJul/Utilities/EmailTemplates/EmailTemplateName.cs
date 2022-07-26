@@ -7,6 +7,5 @@
         AssignedFamily,
         VerifyConnection,
         Notification
-        
     }
 }
