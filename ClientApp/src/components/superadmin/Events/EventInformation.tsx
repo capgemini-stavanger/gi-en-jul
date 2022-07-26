@@ -1,11 +1,13 @@
 import { Button, Grid } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useStyles from "components/superadmin/Events/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import { EventContent } from "./EventType";
+import ApiService from "common/functions/apiServiceClass";
+import ConnectionStyle from "components/admin/dashboard-completed/ConnectionStyles";
 
 type ValidEventEntry = {
   [valid: string]: boolean;
@@ -93,11 +95,14 @@ interface Props {
 
 const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete, id }) => {
   const classes = useStyles();
+  const apiservice = new ApiService();
   const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
   const [activeEdit, setActiveEdit] = useState<boolean>(false);
   const [formValues, setFormValues] = useState<EventContent>(event);
+  const [existingMunicipalities, setExistingMunicipalities] = useState<string[]>([]);
   const [openSaveConfirmation, setOpenSaveConfirmation] = useState<boolean>(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState<boolean>(false);
+  const [informationText, setInformationText] = useState<string>("");
   const [openInformation, setOpenInformation] = useState<boolean>(false);
   const [validEventState, setValidEventState] = useState({
     ...initValidEventState,
@@ -122,9 +127,49 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
     });
     return allIsValid;
   };
-  const handleSaveConfirmation = (response: boolean) => {
+
+  const fetchExistingMunicipalities = async () => {
+    apiservice
+      .get("Municipality/names", {})
+      .then((resp) => {
+        setExistingMunicipalities(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
+
+  const checkMunicipalityExist = async (maybeMunicipality: string): Promise<any> => {
+    console.log("staring check muni exists");
+    await fetchExistingMunicipalities();
+    console.log("checking with municipalieis: ");
+    console.log(existingMunicipalities);
+    const exists = existingMunicipalities.includes(maybeMunicipality);
+    console.log("exists: ");
+    console.log(exists);
+    return exists;
+  };
+
+  const handleMunicipalityDoesntExists = () => {
+    setInformationText(
+      "Kommunen er ikke laget enda, vennligst lag denne før du laget et event koblet til den."
+    );
+    setOpenInformation(true);
+    setFormValues({
+      ...formValues,
+      municipality: event.municipality,
+    });
+  };
+
+  const handleSaveConfirmation = async (response: boolean) => {
     if (response) {
-      handleEventChange(formValues, id);
+      const muniExists = await checkMunicipalityExist(formValues.municipality);
+      if (!muniExists) {
+        handleMunicipalityDoesntExists();
+      } else {
+        // municipality exists; all good!
+        handleEventChange(formValues, id);
+      }
     }
     setOpenSaveConfirmation(false);
   };
@@ -146,6 +191,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       setOpenSaveConfirmation(true);
     } else {
       //Informs user know that some fields are not filled out properly
+      setInformationText("Vennligst fyll ut gyldige verider i alle felter");
       setOpenInformation(true);
     }
   };
@@ -294,6 +340,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
         disabled={!activeEdit}
       />
     </Grid>,
+    // deliveryTime
     <Grid className={classes.eventBox} key={"deliveryTime"} item>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
@@ -396,7 +443,7 @@ const EventInformation: React.FC<Props> = ({ event, handleEventChange, onDelete,
       <Grid item>
         <InformationBox
           open={openInformation}
-          text={"Vennligst fyll ut gyldige verider i alle felter"}
+          text={informationText}
           handleClose={() => {
             setOpenInformation(false);
           }}
