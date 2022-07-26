@@ -1,13 +1,19 @@
 {
   "Body": [
-    "background-color: rgb(224, 243, 244);",
+    "background-color: white;",
     "color: rgba(0, 0, 0, 0.54);",
-    "max-width: 70em;",
-    "padding: 15px;",
+    "max-width: 600px;",
     "margin: auto;",
+    "font-family: 'ubuntu', sans-serif;",
+    "margin-left: 80px;",
+    "margin-right: 80px;",
+    "text-align: start;"
   ],
   "Image": [
     "display: block;",
-    "margin: auto;",
-  ],
+    "width: 600px;",
+    "height: 100%",
+    "margin: 0;",
+    "padding: 0;"
+  ]
 }
