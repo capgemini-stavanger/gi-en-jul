@@ -15,9 +15,6 @@ namespace GiEnJul.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-        //to do:
-        //delete user
         
         private readonly IAuth0ManagementClient _auth0ManagementClient;
         private readonly IMapper _mapper;
@@ -29,7 +26,7 @@ namespace GiEnJul.Controllers
         }
        
         [HttpGet("getallemails")]
-       // [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<List<String>> getAllEmails()
         {
             var users = await _auth0ManagementClient.GetAllUsers();
@@ -72,7 +69,7 @@ namespace GiEnJul.Controllers
 
 
         [HttpPost("create")]
-       // [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<User> CreateUser([FromBody] CreateUserDto content)
         {
             var user = await _auth0ManagementClient.CreateUser(content);
@@ -82,9 +79,16 @@ namespace GiEnJul.Controllers
             
         }
 
-        [HttpDelete]
-        //policy
-        public void DeleteUser([FromBody] string email)
+        [HttpGet("getsingle")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public async Task<User> GetSingleUser([FromQuery] string email)
+        {
+            return await _auth0ManagementClient.GetSingleUser(email);
+        }
+
+        [HttpDelete("delete")]
+        [Authorize(Policy = Policy.SuperAdmin)]
+        public void DeleteUser([FromQuery] string email)
         {
              _auth0ManagementClient.DeleteUser(email);
 

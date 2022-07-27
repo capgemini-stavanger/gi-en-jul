@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace GiEnJul.Clients
 {
@@ -23,6 +24,7 @@ namespace GiEnJul.Clients
         Task<User> CreateUser(CreateUserDto userDto);
         Task<List<User>> GetAllUsers();
         void DeleteUser(string email);
+        Task<User> GetSingleUser(string email);
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -97,18 +99,22 @@ namespace GiEnJul.Clients
             var token = await GetTokenAsync();
             _managementApiClient.UpdateAccessToken(token);
             var request = new GetUsersRequest();
-            var user = await _managementApiClient.Users.GetAllAsync(request);
+            var users = await _managementApiClient.Users.GetAllAsync(request);
          
-            return (List<User>) user;
+            return (List<User>) users;
+        }
+
+        public async Task<User> GetSingleUser(string email)
+        {
+            var users = await GetAllUsers();
+            return users.Where(u => u.Email == email).SingleOrDefault(); 
         }
 
         public async void DeleteUser (string email)
         {
+            var user = await GetSingleUser(email);
+            await _managementApiClient.Users.DeleteAsync(user.UserId);
             
-            var token = await GetTokenAsync();
-            _managementApiClient.UpdateAccessToken(token);
-             await _managementApiClient.Users.DeleteAsync(email);
-
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
