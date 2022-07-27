@@ -1,4 +1,4 @@
-import { Tab, Typography } from "@material-ui/core";
+import { Tab } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import useStyles from "components/superadmin/Styles";
 import React, { useState } from "react";
@@ -8,6 +8,7 @@ import FaqContainer from "./Faq/FaqContainer";
 import MunicipalityInformationContainer from "./MunicipalityInformation/MunicipalityInformationContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 import AdminMunicipalityUserEvent from "./MuniEventUserManaging/AdminMunicipalityUserEvent";
+import AddUser from "./Users/AddUser";
 
 interface IManageDashboard {
   role: string;
@@ -51,7 +52,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <HowToStartGiEnJul accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="5">
-          <Typography>Placeholder - Legg til/Slett Brukere</Typography>
+          <AddUser accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="6">
           <AdminMunicipalityUserEvent accessToken={accessToken} />

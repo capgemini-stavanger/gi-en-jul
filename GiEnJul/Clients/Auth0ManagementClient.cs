@@ -4,6 +4,7 @@ using GiEnJul.Dtos;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -12,6 +13,7 @@ using System.Net.Http;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace GiEnJul.Clients
 {
@@ -20,6 +22,9 @@ namespace GiEnJul.Clients
         Task<string> GetTokenAsync();
         Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
         Task<User> CreateUser(CreateUserDto userDto);
+        Task<List<User>> GetAllUsers();
+        void DeleteUser(string email);
+        Task<User> GetSingleUser(string email);
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -87,6 +92,29 @@ namespace GiEnJul.Clients
             metadataDict.AddDictionary(appMetadata.ToObject<Dictionary<string, string>>(), CombineStrategy.takeFirst);
             _metadataCache.Add(userId, metadataDict, DateTime.Now.AddMinutes(10));
             return metadataDict;
+        }
+
+        public async Task<List<User>> GetAllUsers()
+        {
+            var token = await GetTokenAsync();
+            _managementApiClient.UpdateAccessToken(token);
+            var request = new GetUsersRequest();
+            var users = await _managementApiClient.Users.GetAllAsync(request);
+         
+            return (List<User>) users;
+        }
+
+        public async Task<User> GetSingleUser(string email)
+        {
+            var users = await GetAllUsers();
+            return users.Where(u => u.Email == email).SingleOrDefault(); 
+        }
+
+        public async void DeleteUser (string email)
+        {
+            var user = await GetSingleUser(email);
+            await _managementApiClient.Users.DeleteAsync(user.UserId);
+ 
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
