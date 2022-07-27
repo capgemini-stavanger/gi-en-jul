@@ -32,17 +32,22 @@ const SuggestionDataTable: React.FC<Props> = ({
         </Grid>
         <Grid item xs={1}>
           <Box className={classes.gridBoxCenter}>
-            <CustomTooltip iconType={false} content={"TEXT"} />
+            <CustomTooltip
+              iconType={false}
+              content={
+                "Forslagene er basert på listen over familier. Blant forslagene finner man et tilfeldig forslag for hver familiestørrelse, gitt at det finnes en familie av hver størrelse"
+              }
+            />
           </Box>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={9}>
           <Box className={classes.gridBoxCenter}>
             <Button
               onClick={() => {
                 setHideSuggestions(!hideSuggestions);
               }}
             >
-              HIDE
+              {hideSuggestions ? "Vis forslag" : "Gjem forslag"}
             </Button>
           </Box>
         </Grid>

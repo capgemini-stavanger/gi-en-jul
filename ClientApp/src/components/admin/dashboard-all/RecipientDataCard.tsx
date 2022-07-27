@@ -9,7 +9,6 @@ import {
   ErrorOutlineOutlined,
   CheckCircleOutline,
   CancelOutlined,
-  PeopleOutline,
   LinkOutlined,
   Edit,
 } from "@material-ui/icons";
@@ -19,6 +18,7 @@ import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import ApiService from "common/functions/apiServiceClass";
+import PeopleIcon from "@material-ui/icons/People";
 
 type Props = {
   recipientData: RecipientType;
@@ -136,41 +136,52 @@ const RecipientDataCard: React.FC<Props> = ({
       >
         <Box className={classes.accordionSummary}>
           <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item xs={2}>
-              <Typography className={classes.boldText}>ID: {recipientData.familyId}</Typography>
+            <Grid item xs={3}>
+              <Typography
+                className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
+              >
+                ID: {recipientData.familyId}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography className={classes.boldText}>
-                <PeopleOutline />
+              <Typography
+                className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
+              >
+                <PeopleIcon />
                 {recipientData.familyMembers.length}
               </Typography>
             </Grid>
             <Grid item xs={3}>
               {recipientData.isSuggestedMatch ? (
                 !recipientData.hasConfirmedMatch ? (
-                  <Typography className={classes.boldText}>
+                  <Typography
+                    className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
+                  >
                     <ErrorOutlineOutlined style={{ color: "yellow" }} />
                     Foreslått
                   </Typography>
                 ) : (
-                  <Typography className={classes.boldText}>
+                  <Typography
+                    className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
+                  >
                     <CheckCircleOutline style={{ color: "green" }} />
                     Koblet
                   </Typography>
                 )
               ) : (
-                <Typography className={classes.boldText}>
+                <Typography
+                  className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
+                >
                   <CancelOutlined style={{ color: "red" }} />
                   Ikke koblet
                 </Typography>
               )}
             </Grid>
             <Grid item xs={1}>
-              {
-                recipientData.comment && <ChatBubbleOutline /> // remove ! to show all comments
-              }
+              {recipientData.comment && <ChatBubbleOutline />}
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={2}>
               {personExpanded ? (
                 <Button onClick={() => setPersonExpanded(false)}>
                   <ExpandLessIcon />
