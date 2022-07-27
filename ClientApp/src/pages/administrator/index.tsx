@@ -3,7 +3,6 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useState } from "react";
 import ScrollToTop from "components/shared/ScrollToTop";
 import CompletedMacro from "components/admin/dashboard-completed/Macro";
-import ConnectionSuggesterMacro from "components/admin/connection-suggester/ConnectionSuggesterMacro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import ManageDashboard from "components/superadmin/ManageDashboard";
 import OverviewMacroRemake from "components/admin/dashboard-all/OverviewMacroRemake";
@@ -27,20 +26,16 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
       <TabContext value={step}>
         <TabList onChange={handleChange} centered>
           <Tab label="Oversikt" value="1" />
-          <Tab label="Foreslåtte koblinger" value="2" />
-          <Tab label="Fullførte koblinger" value="3" />
-          <Tab label="Manage" value="4" />
+          <Tab label="Fullførte koblinger" value="2" />
+          <Tab label="Manage" value="3" />
         </TabList>
         <TabPanel value="1">
           <OverviewMacroRemake location={location} accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <ConnectionSuggesterMacro location={location} accessToken={accessToken} />
-        </TabPanel>
-        <TabPanel value="3">
           <CompletedMacro accessToken={accessToken} location={location} />
         </TabPanel>
-        <TabPanel value="4">
+        <TabPanel value="3">
           <ManageDashboard accessToken={accessToken} role={role} location={location} />
         </TabPanel>
       </TabContext>
@@ -49,3 +44,10 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
   );
 };
 export default AdminTab;
+
+/*
+<Tab label="Foreslåtte koblinger" value="2" />
+<TabPanel value="2">
+  <ConnectionSuggesterMacro location={location} accessToken={accessToken} />
+</TabPanel>
+*/

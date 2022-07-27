@@ -9,9 +9,9 @@ import {
   ErrorOutlineOutlined,
   CheckCircleOutline,
   CancelOutlined,
-  PeopleOutline,
 } from "@material-ui/icons";
 import getGender from "common/functions/GetGender";
+import PeopleIcon from "@material-ui/icons/People";
 
 type Props = {
   suggestionData: RecipientType;
@@ -47,41 +47,52 @@ const SuggestionDataCard: React.FC<Props> = ({
       >
         <Box className={classes.accordionSummary}>
           <Grid container justifyContent="space-between" alignItems="center">
-            <Grid item xs={2}>
-              <Typography className={classes.boldText}>ID: {suggestionData.familyId}</Typography>
+            <Grid item xs={3}>
+              <Typography
+                className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+              >
+                ID: {suggestionData.familyId}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography className={classes.boldText}>
-                <PeopleOutline />
+              <Typography
+                className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+              >
+                <PeopleIcon />
                 {suggestionData.familyMembers.length}
               </Typography>
             </Grid>
             <Grid item xs={3}>
               {suggestionData.isSuggestedMatch ? (
                 !suggestionData.hasConfirmedMatch ? (
-                  <Typography className={classes.boldText}>
+                  <Typography
+                    className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+                  >
                     <ErrorOutlineOutlined style={{ color: "yellow" }} />
                     Foreslått
                   </Typography>
                 ) : (
-                  <Typography className={classes.boldText}>
+                  <Typography
+                    className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+                  >
                     <CheckCircleOutline style={{ color: "green" }} />
                     Koblet
                   </Typography>
                 )
               ) : (
-                <Typography className={classes.boldText}>
+                <Typography
+                  className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+                >
                   <CancelOutlined style={{ color: "red" }} />
                   Ikke koblet
                 </Typography>
               )}
             </Grid>
             <Grid item xs={1}>
-              {
-                suggestionData.comment && <ChatBubbleOutline /> // remove ! to show all comments
-              }
+              {suggestionData.comment && <ChatBubbleOutline />}
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={2}>
               {personExpanded ? (
                 <Button onClick={() => setPersonExpanded(false)}>
                   <ExpandLessIcon />
@@ -96,6 +107,31 @@ const SuggestionDataCard: React.FC<Props> = ({
         </Box>
         {personExpanded && (
           <Box margin={1}>
+            <Grid item className={classes.borderInCards}>
+              <Typography variant="h6" gutterBottom>
+                Matønsker
+              </Typography>
+              <Grid container direction="row">
+                <Grid item xs={12}>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    className={classes.personTable}
+                  >
+                    <Grid item xs={2}>
+                      <Typography>{suggestionData.dinner}</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      {suggestionData.dessert}
+                    </Grid>
+                    <Grid item xs={8}>
+                      {suggestionData.note}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
             <Grid item className={classes.borderInCards}>
               <Typography variant="h6" gutterBottom>
                 Familie

@@ -61,23 +61,13 @@ const OverviewConnection: React.FC<IStatistics> = ({
         <Box className={classes.gridBoxCenter}>
           <Typography>
             <Button
-              className={classes.underlineText}
-              onClick={() => {
-                resetSelections();
-              }}
-            >
-              Nullstill
-            </Button>
-          </Typography>
-          <Typography>
-            <Button
-              fullWidth
               variant="contained"
               color="primary"
               disabled={!connection.giver || !connection.recipient}
               onClick={() => {
                 setOpenConfirmBox(true);
               }}
+              style={{ height: "50px", width: "200px" }}
             >
               Koble sammen
             </Button>
@@ -90,6 +80,16 @@ const OverviewConnection: React.FC<IStatistics> = ({
             }}
             handleResponse={handleConfirmation}
           />
+        </Box>
+        <Box className={classes.gridBoxCenter}>
+          <Typography
+            className={classes.nullstillButton}
+            onClick={() => {
+              resetSelections();
+            }}
+          >
+            Nullstill
+          </Typography>
         </Box>
       </Grid>
       <Grid item xs={4}>

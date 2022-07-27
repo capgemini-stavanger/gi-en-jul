@@ -74,9 +74,10 @@ export const useStyles = makeStyles((theme) => ({
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
-    height: "90vh",
+    height: "85vh",
     marginTop: "1em",
     marginRight: "1em",
+    marginBottom: "10em",
   },
   oversiktBox: {
     width: "200px",
@@ -86,6 +87,8 @@ export const useStyles = makeStyles((theme) => ({
     left: "0",
     top: "5em",
     padding: "1em",
+    borderTopRightRadius: "1em",
+    borderBottomRightRadius: "1em",
   },
   oversiktBoxSpacing: {
     marginTop: "1em",
@@ -167,6 +170,14 @@ export const useStyles = makeStyles((theme) => ({
       textDecoration: "underline",
     },
   },
+  nullstillButton: {
+    fontSize: "14px",
+    textDecoration: "underline",
+    "&:hover": {
+      textDecoration: "underline",
+      cursor: "pointer",
+    },
+  },
   boldText: {
     fontWeight: "bold",
   },
@@ -197,7 +208,7 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   inputHeight: {
-    width: "120px",
+    width: "140px",
     height: "40px",
   },
   accordionSummary: {

@@ -9,7 +9,6 @@ import {
   ErrorOutlineOutlined,
   CheckCircleOutline,
   CancelOutlined,
-  PeopleOutline,
   LinkOutlined,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
@@ -18,6 +17,8 @@ import ApiService from "common/functions/apiServiceClass";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
 import CustomTooltip from "components/institution/CustomTooltip";
+import PeopleIcon from "@material-ui/icons/People";
+import LinkOffIcon from "@material-ui/icons/LinkOff";
 
 type Props = {
   giverData: GiverType;
@@ -151,41 +152,44 @@ const GiverDataCard: React.FC<Props> = ({
       >
         <Box className={classes.accordionSummary}>
           <Grid container direction="row" justifyContent="space-between" alignItems="center">
-            <Grid item xs={2}>
-              <Typography className={classes.boldText}>{giverData.fullName}</Typography>
+            <Grid item xs={3}>
+              <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
+                {giverData.fullName}
+              </Typography>
             </Grid>
             <Grid item xs={2}>
-              <Typography className={classes.boldText}>
-                <PeopleOutline />
+              <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
+                <PeopleIcon />
                 {formatFamily(giverData.maxReceivers)}
               </Typography>
             </Grid>
             <Grid item xs={3}>
               {giverData.isSuggestedMatch ? (
                 !giverData.hasConfirmedMatch ? (
-                  <Typography className={classes.boldText}>
+                  <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
                     <ErrorOutlineOutlined style={{ color: "yellow" }} />
                     Foreslått
                   </Typography>
                 ) : (
-                  <Typography className={classes.boldText}>
+                  <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
                     <CheckCircleOutline style={{ color: "green" }} />
                     Koblet
                   </Typography>
                 )
               ) : (
-                <Typography className={classes.boldText}>
+                <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
                   <CancelOutlined style={{ color: "red" }} />
                   Ikke koblet
                 </Typography>
               )}
             </Grid>
             <Grid item xs={1}>
-              {
-                giverData.comment && <ChatBubbleOutline /> // remove ! to show all comments
-              }
+              {giverData.comment && <ChatBubbleOutline />}
             </Grid>
             <Grid item xs={1}>
+              {giverData.cancelFeedback && <LinkOffIcon />}
+            </Grid>
+            <Grid item xs={2}>
               {personExpanded ? (
                 <Button onClick={() => setPersonExpanded(false)}>
                   <ExpandLessIcon />
@@ -234,12 +238,24 @@ const GiverDataCard: React.FC<Props> = ({
                       fullName={giverData.fullName}
                     />
                   </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="h6" gutterBottom>
-                      Feedback <CustomTooltip iconType={false} content={"TEXT"} />
-                    </Typography>
-                    <Typography> For stor familie.. vis ikon (?)</Typography>
-                  </Grid>
+                  {giverData.cancelFeedback && (
+                    <Grid item xs={6}>
+                      <Typography variant="h6" gutterBottom>
+                        Avslått kobling
+                        <CustomTooltip
+                          iconType={false}
+                          content={
+                            "Ved avslått kobling kan giveren gi en tilbakemelding på hvorfor. Denne vises her, og kan tas i betraktning ved neste kobling"
+                          }
+                        />
+                      </Typography>
+                      <Typography> Familie ID: {giverData.cancelFamilyId} </Typography>
+                      <Typography>
+                        Dato: {new Date(giverData.cancelDate).toLocaleDateString()}
+                      </Typography>
+                      <Typography> Tilbakemedling: {giverData.cancelFeedback} </Typography>
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
               <Grid item className={classes.borderInCards}>
