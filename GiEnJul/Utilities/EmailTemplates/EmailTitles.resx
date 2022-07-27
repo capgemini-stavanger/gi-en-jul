@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignedFamily" xml:space="preserve">
-    <value>Gi en jul - familie - husk å bekrefte!</value>
+    <value>Gi en jul - du har fått tildelt en familie!</value>
     <comment>When admin assigns a family to user</comment>
   </data>
   <data name="Notification" xml:space="preserve">

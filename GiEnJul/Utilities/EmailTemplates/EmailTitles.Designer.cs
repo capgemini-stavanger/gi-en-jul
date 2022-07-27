@@ -61,7 +61,7 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gi en jul - familie - husk å bekrefte!.
+        ///   Looks up a localized string similar to Gi en jul - du har fått tildelt en familie!.
         /// </summary>
         public static string AssignedFamily {
             get {

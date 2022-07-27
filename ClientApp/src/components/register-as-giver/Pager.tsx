@@ -19,6 +19,7 @@ const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText, step })
         {step == undefined ? (
           <>
             <Button
+              variant="outlined"
               className={classes.buttonNext}
               endIcon={<ArrowForwardIos />}
               onClick={onContinue}
@@ -47,6 +48,7 @@ const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText, step })
             backButton={
               onBack && (
                 <Button
+                  variant="outlined"
                   className={classes.buttonBack}
                   startIcon={<ArrowBackIos />}
                   onClick={onBack}
