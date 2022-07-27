@@ -23,12 +23,15 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
           </Typography>
           <Typography className={classes.paragraph}>
             Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg som giver til årets Gi
-            en jul og har sendt en oppsummering av din registrering til
+            en jul og har sendt en oppsummering av din registrering til <b>{values.email}</b>
           </Typography>
-          <Typography className={classes.paragraphBold}>{values.email}</Typography>
           <Typography className={classes.paragraph}>
-            Når det nærmer seg jul vil du motta mer informasjon som ønskelister, sted og tidspunkt
-            for innlevering av ditt bidrag.
+            Når det nærmer seg jul vil du motta en mail med litt informasjon om tildelt familie, i
+            denne mailen er det en link du må trykke på for å <b>godkjenne sammenkoblingen</b>.
+          </Typography>
+          <Typography className={classes.paragraph}>
+            Når du har godkjent sammenkoblingen, vil du motta mer informasjon som ønskelister, sted
+            og tidspunkt for innlevering av ditt bidrag.
           </Typography>
         </>
       ) : (
