@@ -6,7 +6,6 @@ import React from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 import { IFormWish, TotalWish, WishCategory } from "./RegistrationFormTypes";
-import SuggestionPopover from "./SuggestionPopover";
 
 interface IWishProps {
   viewErrorTrigger: number;
@@ -107,7 +106,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
         ></InputValidator>
       </Grid>
 
-      {wishObj.category >= 0 ? (
+      {wishObj.category >= 0 && (
         <React.Fragment>
           {wishObj.category == WishCategory.Location && (
             <Grid item xs={7}>
@@ -170,15 +169,6 @@ const InstitutionWish: React.FC<IWishProps> = ({
             </Grid>
           )}
         </React.Fragment>
-      ) : (
-        <Grid item xs={2}>
-          <SuggestionPopover
-            wishObj={wishObj}
-            updateWish={(wishObj) => {
-              updateWish(wishObj);
-            }}
-          />
-        </Grid>
       )}
       <Grid item xs={1}>
         <IconButton className={classes.redCross} onClick={deleteWish}>

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import useStyles from "../Styles";
-import { RecipientType } from "../../../shared/Types";
+import useStyles from "./Styles";
+import { RecipientType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {

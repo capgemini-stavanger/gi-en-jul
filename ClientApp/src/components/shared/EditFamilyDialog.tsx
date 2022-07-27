@@ -17,15 +17,18 @@ import { PersonType, RecipientType } from "./Types";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import ApiService from "common/functions/apiServiceClass";
-import { useAuth0 } from "@auth0/auth0-react";
 import ConfirmationBox from "./ConfirmationBox";
 import SelectForm from "./input-fields/SelectForm";
+import useUser from "hooks/useUser";
+import InformationBox from "components/shared/InformationBox";
 
 interface IEditFamilyDialog {
   onClose: () => void;
   open: boolean;
   refreshRecipients: () => void;
   recipient: RecipientType;
+  isInstitution: boolean;
+  accessToken: string;
 }
 
 const EditFamilyDialog: FC<IEditFamilyDialog> = ({
@@ -33,30 +36,37 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   open,
   refreshRecipients,
   recipient,
+  isInstitution,
+  accessToken,
 }) => {
   const classes = useStyles();
 
-  const { getAccessTokenSilently } = useAuth0();
-  const [userAccessToken, setUserAccessToken] = useState<string>("");
-  const apiservice = new ApiService(userAccessToken);
+  const apiservice = new ApiService(accessToken);
+  const { institution, location, email } = useUser();
 
   const [recipientData, setRecipientData] = useState(recipient);
   const [openUpdateConfirmBox, setOpenUpdateConfirmBox] = useState(false);
   const [openCloseConfirmBox, setOpenCloseConfirmBox] = useState(false);
+  const [municipalityEmail, setMunicipalityEmail] = useState("");
+  const [openInformation, setOpenInformation] = useState<boolean>(false);
 
   useEffect(() => {
     if (open) {
       setRecipientData(recipient);
-      getUserAccessToken().then((resp: string) => {
-        setUserAccessToken(resp);
-      });
+      fetchMuncipalityEmail();
     }
   }, [open]);
 
-  async function getUserAccessToken(): Promise<string> {
-    const accessToken = await getAccessTokenSilently();
-    return accessToken;
-  }
+  const fetchMuncipalityEmail = () => {
+    apiservice
+      .get("Municipality/email")
+      .then((resp) => {
+        setMunicipalityEmail(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack.response.data);
+      });
+  };
 
   const onDinnerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRecipientData((prev) => ({
@@ -166,12 +176,38 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       .then((response) => {
         if (response.status === 200) {
           refreshRecipients();
+          if (isInstitution) {
+            sendEmailToMunicipality();
+          }
         }
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
   };
+
+  async function sendEmailToMunicipality() {
+    await apiservice
+      .post(
+        "email/sendFromUser",
+        JSON.stringify({
+          Subject: "Updated family",
+          Content: "We have updated this...",
+          FromEmail: email,
+          ToEmail: municipalityEmail,
+          FromName: institution,
+          ToName: location,
+        })
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setOpenInformation(true);
+        }
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  }
 
   const handleUpdateResponse = (response: boolean) => {
     if (response) {
@@ -347,6 +383,14 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
           setOpenCloseConfirmBox(false);
         }}
         handleResponse={handleCloseResponse}
+      />
+
+      <InformationBox
+        open={openInformation}
+        text={"En mail med endringer er blitt sendt til kommunen"}
+        handleClose={() => {
+          setOpenInformation(false);
+        }}
       />
     </>
   );
