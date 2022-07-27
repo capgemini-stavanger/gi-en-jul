@@ -34,6 +34,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   const [tab, setTab] = useState<string>("1");
   const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
   const [emails, setEmails] = useState<string[]>([]);
+  const [meta, setMeta] = useState<string[]>([]); //denne er en dictionairy ikke en liste, må være dobbel?
   const [selectedUser, setSelectedUser] = useState<string>("");
 
   const [nicknames, setNicknames] = useState<string[]>([]);
@@ -42,7 +43,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
 
   const fetchEmails = () => {
     apiservice
-      .get("user/getallemails")
+      .get("user/getemails")
       .then((resp) => {
         setEmails(resp.data);
       })
@@ -52,9 +53,15 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   };
   useEffect(fetchEmails, []);
 
+  const deleteUser = (email: string) => {
+    apiservice.delete(`user/delete/?email=${email}`, {}).then(() => {
+      fetchEmails();
+    });
+  };
+
   const fetchNicknames = () => {
     apiservice
-      .get("user/getallnicknames")
+      .get("user/getnicknames")
       .then((resp) => {
         setNicknames(resp.data);
       })
@@ -64,12 +71,17 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   };
   useEffect(fetchNicknames, []);
 
-  const deleteUser = (email: string) => {
-    apiservice.delete(`user/delete/?email=${email}`, {}).then(() => {
-      fetchEmails();
-      fetchNicknames();
-    });
+  const fetchMeta = () => {
+    apiservice
+      .get("user/getmeta")
+      .then((resp) => {
+        setMeta(resp.data.key);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
   };
+  useEffect(fetchMeta, []);
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);
@@ -97,10 +109,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                 institution={false}
                 handleConfirm={handleConfirmAdd}
                 confirmOpen={confirmAdd}
-                handleRefresh={() => {
-                  fetchEmails();
-                  fetchNicknames();
-                }}
+                handleRefresh={fetchEmails}
               />
             </TabPanel>
             <TabPanel value="2">
@@ -111,10 +120,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                 handleConfirm={() => {
                   handleConfirmAdd(confirmAdd);
                 }}
-                handleRefresh={() => {
-                  fetchEmails();
-                  fetchNicknames();
-                }}
+                handleRefresh={fetchEmails}
               />
             </TabPanel>
           </TabContext>
@@ -141,7 +147,6 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
             <Table style={{ width: "1200px" }}>
               <TableBody>
                 <TableRow>
-                  <TableCell>Navn</TableCell>
                   <TableCell>Email</TableCell>
                   <TableCell>Rolle</TableCell>
                   <TableCell>Lokasjon</TableCell>
@@ -149,16 +154,10 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
 
                 <TableRow>
                   <TableCell>
-                    {nicknames.map((nickname, index) => {
-                      return <Typography key={index}>{nickname}</Typography>;
-                    })}
-                  </TableCell>
-                  <TableCell>
                     {emails.map((email, index) => {
                       return (
                         <>
                           <Typography key={index}>
-                            {email}
                             <IconButton
                               onClick={() => {
                                 deleteUser(email);
@@ -166,6 +165,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                             >
                               <DeleteIcon />
                             </IconButton>
+                            {email}
                           </Typography>
                         </>
                       );

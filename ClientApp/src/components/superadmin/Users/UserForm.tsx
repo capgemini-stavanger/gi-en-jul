@@ -78,7 +78,7 @@ const UserForm: React.FC<props> = ({
         })
         .then(() => {
           setOpen(true);
-          handleRefresh;
+          handleRefresh();
         });
       setOpen(false);
     } else {

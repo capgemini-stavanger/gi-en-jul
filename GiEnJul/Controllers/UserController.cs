@@ -25,7 +25,7 @@ namespace GiEnJul.Controllers
             _mapper = mapper;
         }
        
-        [HttpGet("getallemails")]
+        [HttpGet("getemails")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<List<String>> getAllEmails()
         {
@@ -37,10 +37,24 @@ namespace GiEnJul.Controllers
                 emails.Add( u.Email);
             }
             return emails;
+        }
+        //vil ha for alle ikke kun for brukeren som er logget inn
+        [HttpGet("getmeta")]
+        //policy
+        public async Task<Dictionary<string, string>> GetMeta()
+        {
+            var users = await _auth0ManagementClient.GetAllUsers();
+            foreach(User u in users)
+            {
+                var data = await _auth0ManagementClient.GetUserMetadata(u.UserId);
+                return data;
 
+            }
+            return null;
         }
 
-        [HttpGet("getallnicknames")]
+
+        [HttpGet("getnicknames")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<List<String>> getAllNicknames()
         {
@@ -51,20 +65,6 @@ namespace GiEnJul.Controllers
                 emails.Add(u.NickName);
             }
             return emails;
-        }
-
-
-        [HttpGet("getmeta")]
-        [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<List<string>> getAllMeta()
-        {
-            var users = await _auth0ManagementClient.GetAllUsers();
-            var meta = new List<String>();
-            foreach (User u in users)
-            {
-                meta.Add(u.UserMetadata);
-            }
-            return meta;
         }
 
 

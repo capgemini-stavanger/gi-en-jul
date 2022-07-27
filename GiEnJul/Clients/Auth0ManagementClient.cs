@@ -114,7 +114,7 @@ namespace GiEnJul.Clients
         {
             var user = await GetSingleUser(email);
             await _managementApiClient.Users.DeleteAsync(user.UserId);
-            
+ 
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
