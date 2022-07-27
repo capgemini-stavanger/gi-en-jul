@@ -1,4 +1,4 @@
-import { Typography, Grid } from "@material-ui/core";
+import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
 
@@ -9,12 +9,15 @@ interface Props {
 
 const MunicipalityInformation: React.FC<Props> = ({ location, information }) => {
   const classes = useStyles();
-
+  if (information == undefined) {
+    information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
+  }
   return (
     <Grid container direction="column" id="information" className={classes.sectionContainer}>
       <Grid item>
-        <Typography>Informasjon vist om {location}:</Typography>
+        <Typography variant="h5">Informasjon om Gi en jul i {location} kommune:</Typography>
       </Grid>
+      <Divider />
       <Grid item>
         <Typography>{parse(information)}</Typography>
       </Grid>
