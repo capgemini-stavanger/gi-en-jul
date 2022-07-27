@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from "@material-ui/core";
+import { Divider, Grid } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import EventsContainer from "../Events/EventsContainer";
@@ -46,7 +46,6 @@ const AdminMunicipalityUserEvent: React.FC<Props> = ({ accessToken }) => {
   return (
     <Grid container direction="column" spacing={10}>
       <Grid item>
-        <Typography>Liste over kommuner</Typography>
         <MunicipalityManageTable accessToken={accessToken} refreshData={fetchData} />
       </Grid>
       <Divider />

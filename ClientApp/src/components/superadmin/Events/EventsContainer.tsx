@@ -1,4 +1,12 @@
-import { Button, Grid, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import EventInformation from "components/superadmin/Events/EventInformation";
@@ -234,86 +242,101 @@ const EventsContainer: React.FC<Props> = ({
   useEffect(buildBody, [pEvents, selectedEventName]);
 
   return (
-    <Grid container direction="column" spacing={5}>
-      <Grid item container direction="row">
-        <Grid item>
-          <EventDropdown
-            choices={uniqueEventNames}
-            labelNote={"Velg Eventnavn"}
-            updateValue={handleDropDownChange}
-            selectedValue={selectedEventName}
-          />
+    <>
+      <Typography>Administrer event</Typography>
+      <Typography>
+        <List>
+          <ListItem>
+            <ListItemIcon>-</ListItemIcon>Her kan du legge til eller slette eventer
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>-</ListItemIcon> Når det lages et event så må det settes en start og slutt
+            dato.
+          </ListItem>
+        </List>
+      </Typography>
+
+      <Grid container direction="column" spacing={5}>
+        <Grid item container direction="row">
+          <Grid item>
+            <EventDropdown
+              choices={uniqueEventNames}
+              labelNote={"Velg Eventnavn"}
+              updateValue={handleDropDownChange}
+              selectedValue={selectedEventName}
+            />
+          </Grid>
+          <Grid item>
+            {addState ? (
+              <>
+                <Button onClick={handleSaveNewEventName} variant="contained">
+                  Lagre
+                </Button>
+                <TextField
+                  variant="outlined"
+                  onChange={handleNewEventNameChange}
+                  value={newEventName}
+                  label="Navn på Eventet"
+                  placeholder="Eventnavn"
+                  error={!validNewEventName}
+                  helperText={errorText}
+                />
+                <Button onClick={handleCancel}>
+                  <ClearIcon></ClearIcon>
+                </Button>
+              </>
+            ) : (
+              <Button onClick={handleAddClick} variant="contained" className={classes.button}>
+                Lag nytt event
+              </Button>
+            )}
+          </Grid>
         </Grid>
+        <Grid item container direction="column">
+          {eventBody}
+        </Grid>
+        <ConfirmationBox
+          open={openConfirmationBox}
+          text={
+            "Det nye eventet du holder på å legge til vil gå tapt dersom du bytter fane. Er du sikker på at du likevel ønsker å bytte fane?"
+          }
+          handleClose={function (): void {
+            setOpenConfirmaitonBox(false);
+          }}
+          handleResponse={handleConfirmationResponse}
+        />
+        <InformationBox
+          open={openInformationBox}
+          text={informationBoxInfo}
+          handleClose={() => {
+            setOpenInformationBox(false);
+          }}
+        />
         <Grid item>
-          {addState ? (
-            <>
-              <Button onClick={handleSaveNewEventName} variant="contained">
-                Lagre
-              </Button>
-              <TextField
-                variant="outlined"
-                onChange={handleNewEventNameChange}
-                value={newEventName}
-                label="Navn på Eventet"
-                placeholder="Eventnavn"
-                error={!validNewEventName}
-                helperText={errorText}
-              />
-              <Button onClick={handleCancel}>
-                <ClearIcon></ClearIcon>
-              </Button>
-            </>
+          <NewEventBox
+            open={openNewEventBox}
+            handleSaveEvent={createNewEvent}
+            onClose={() => {
+              setOpenNewEventBox(false);
+            }}
+            existingEventNames={uniqueEventNames}
+            existingMunicipalities={existingMunicipalities}
+          />
+          {selectedEventName === "" || openNewEventBox ? (
+            ""
           ) : (
-            <Button onClick={handleAddClick} variant="contained" className={classes.button}>
-              Lag nytt event
+            <Button
+              className={classes.button}
+              onClick={() => {
+                setOpenNewEventBox(true);
+              }}
+            >
+              <Typography>Knytt ny kommune til eventet</Typography>
             </Button>
           )}
         </Grid>
       </Grid>
-      <Grid item container direction="column">
-        {eventBody}
-      </Grid>
-      <ConfirmationBox
-        open={openConfirmationBox}
-        text={
-          "Det nye eventet du holder på å legge til vil gå tapt dersom du bytter fane. Er du sikker på at du likevel ønsker å bytte fane?"
-        }
-        handleClose={function (): void {
-          setOpenConfirmaitonBox(false);
-        }}
-        handleResponse={handleConfirmationResponse}
-      />
-      <InformationBox
-        open={openInformationBox}
-        text={informationBoxInfo}
-        handleClose={() => {
-          setOpenInformationBox(false);
-        }}
-      />
-      <Grid item>
-        <NewEventBox
-          open={openNewEventBox}
-          handleSaveEvent={createNewEvent}
-          onClose={() => {
-            setOpenNewEventBox(false);
-          }}
-          existingEventNames={uniqueEventNames}
-          existingMunicipalities={existingMunicipalities}
-        />
-        {selectedEventName === "" || openNewEventBox ? (
-          ""
-        ) : (
-          <Button
-            className={classes.button}
-            onClick={() => {
-              setOpenNewEventBox(true);
-            }}
-          >
-            <Typography>Knytt ny kommune til eventet</Typography>
-          </Button>
-        )}
-      </Grid>
-    </Grid>
+    </>
   );
 };
 export default EventsContainer;

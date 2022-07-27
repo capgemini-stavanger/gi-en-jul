@@ -98,7 +98,7 @@ const MunicipalityTableElements: React.FC<props> = ({
               setOpenConfirm(true);
             }}
           >
-            {municipality.isActive ? "Sett inaktiv" : "Sett aktiv"}
+            {municipality.isActive ? "Ikke vis informasjon" : "Vis informasjon"}
           </Button>
         </TableCell>
         <TableCell>
