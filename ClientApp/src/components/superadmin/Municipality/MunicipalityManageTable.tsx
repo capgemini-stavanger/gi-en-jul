@@ -1,4 +1,14 @@
-import { Button, Table, TableBody, TableCell, TableRow } from "@material-ui/core";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+} from "@material-ui/core";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import React from "react";
@@ -139,11 +149,23 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
   useEffect(fetchInformation, []);
   return (
     <>
+      <Typography>
+        <Typography>Liste over kommuner</Typography>
+        <List>
+          <ListItem>
+            <ListItemIcon>-</ListItemIcon>Denne Tabellen viser alle kommuner
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>-</ListItemIcon> Her kan du redigere informasjon om kommunen og velge om
+            informasjonen om kommunen skal vises på hjemsiden
+          </ListItem>
+        </List>
+      </Typography>
       <Table style={{ width: "1300px" }}>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
             <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
-            <TableCell className={classes.tableHeaderText}>Aktiv</TableCell>
+            <TableCell className={classes.tableHeaderText}>Vises informasjonen</TableCell>
             <TableCell className={classes.tableHeaderText}>Email</TableCell>
             <TableCell className={classes.tableHeaderText}>Telefon</TableCell>
             <TableCell className={classes.tableHeaderText}>Kontaktperson</TableCell>
@@ -190,7 +212,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       />
       <ConfirmationBox
         open={openConfirm}
-        text={"Er du sikker på at du vil sette denne kommunen inaktiv?"}
+        text={"Ønsker du å endre visning av informasjon om kommunen?"}
         handleClose={() => {
           handleCloseConfirm(false);
         }}
