@@ -10,6 +10,7 @@ interface props {
   institution: boolean;
   confirmOpen: boolean;
   handleConfirm: (response: boolean) => void;
+  handleRefresh: () => void;
 }
 
 interface IChangeEvent {
@@ -17,7 +18,13 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, confirmOpen }) => {
+const UserForm: React.FC<props> = ({
+  accessToken,
+  institution,
+  handleConfirm,
+  confirmOpen,
+  handleRefresh,
+}) => {
   const [email, setEmail] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
@@ -71,6 +78,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleConfirm, co
         })
         .then(() => {
           setOpen(true);
+          handleRefresh;
         });
       setOpen(false);
     } else {

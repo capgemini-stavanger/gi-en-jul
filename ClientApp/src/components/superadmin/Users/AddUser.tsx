@@ -14,6 +14,7 @@ import useStyles from "components/landing-page/Styles";
 import UserForm from "./UserForm";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 interface IAddUser {
   accessToken: string;
@@ -33,6 +34,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   const [tab, setTab] = useState<string>("1");
   const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
   const [emails, setEmails] = useState<string[]>([]);
+  const [selectedUser, setSelectedUser] = useState<string>("");
 
   const [nicknames, setNicknames] = useState<string[]>([]);
 
@@ -62,6 +64,13 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   };
   useEffect(fetchNicknames, []);
 
+  const deleteUser = (email: string) => {
+    apiservice.delete(`user/delete/?email=${email}`, {}).then(() => {
+      fetchEmails();
+      fetchNicknames();
+    });
+  };
+
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);
   };
@@ -88,6 +97,10 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                 institution={false}
                 handleConfirm={handleConfirmAdd}
                 confirmOpen={confirmAdd}
+                handleRefresh={() => {
+                  fetchEmails();
+                  fetchNicknames();
+                }}
               />
             </TabPanel>
             <TabPanel value="2">
@@ -97,6 +110,10 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                 confirmOpen={confirmAdd}
                 handleConfirm={() => {
                   handleConfirmAdd(confirmAdd);
+                }}
+                handleRefresh={() => {
+                  fetchEmails();
+                  fetchNicknames();
                 }}
               />
             </TabPanel>
@@ -128,21 +145,31 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                   <TableCell>Email</TableCell>
                   <TableCell>Rolle</TableCell>
                   <TableCell>Lokasjon</TableCell>
-                  <TableCell>Slett</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>
-                    {nicknames.map((nickname, index) => (
-                      <Typography key={index}>{nickname}</Typography>
-                    ))}
+                    {nicknames.map((nickname, index) => {
+                      return <Typography key={index}>{nickname}</Typography>;
+                    })}
                   </TableCell>
                   <TableCell>
-                    {emails.map((email, index) => (
-                      <>
-                        <Typography key={index}>{email}</Typography>
-                      </>
-                    ))}
+                    {emails.map((email, index) => {
+                      return (
+                        <>
+                          <Typography key={index}>
+                            {email}
+                            <IconButton
+                              onClick={() => {
+                                deleteUser(email);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Typography>
+                        </>
+                      );
+                    })}
                   </TableCell>
                 </TableRow>
               </TableBody>
