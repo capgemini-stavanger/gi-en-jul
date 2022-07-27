@@ -15,7 +15,6 @@ namespace GiEnJul.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        
         private readonly IAuth0ManagementClient _auth0ManagementClient;
         private readonly IMapper _mapper;
 
@@ -48,7 +47,6 @@ namespace GiEnJul.Controllers
             {
                 var data = await _auth0ManagementClient.GetUserMetadata(u.UserId);
                 return data;
-
             }
             return null;
         }
@@ -76,7 +74,6 @@ namespace GiEnJul.Controllers
 
             //legg til permissions.
             return user;
-            
         }
 
         [HttpGet("getsingle")]
@@ -90,9 +87,8 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.SuperAdmin)]
         public void DeleteUser([FromQuery] string email)
         {
-             _auth0ManagementClient.DeleteUser(email);
+            _auth0ManagementClient.DeleteUser(email);
 
         }
-
     }
 }

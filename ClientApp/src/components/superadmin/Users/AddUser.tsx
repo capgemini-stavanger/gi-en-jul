@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
-import { Button, Container, Table } from "reactstrap";
+import { Container, Table } from "reactstrap";
 import useStyles from "components/landing-page/Styles";
 import UserForm from "./UserForm";
 import ConfirmationBox from "components/shared/ConfirmationBox";
@@ -24,20 +24,21 @@ export interface IUser {
   email: string;
   nickname: string;
 }
+/*
 const initInterfaceUser: IUser = {
   email: "",
   nickname: "",
 };
-
+*/
 const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   const classes = useStyles();
   const [tab, setTab] = useState<string>("1");
   const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
   const [emails, setEmails] = useState<string[]>([]);
-  const [meta, setMeta] = useState<string[]>([]); //denne er en dictionairy ikke en liste, må være dobbel?
-  const [selectedUser, setSelectedUser] = useState<string>("");
+  // const [meta, setMeta] = useState<string[]>([]); //denne er en dictionairy ikke en liste, må være dobbel?
+  // const [selectedUser, setSelectedUser] = useState<string>("");
 
-  const [nicknames, setNicknames] = useState<string[]>([]);
+  // const [nicknames, setNicknames] = useState<string[]>([]);
 
   const apiservice = new ApiService(accessToken);
 
@@ -58,24 +59,25 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
       fetchEmails();
     });
   };
-
+  /*
   const fetchNicknames = () => {
     apiservice
       .get("user/getnicknames")
       .then((resp) => {
-        setNicknames(resp.data);
+     //   setNicknames(resp.data);
       })
       .catch((errorStack) => {
         console.error(errorStack);
       });
   };
   useEffect(fetchNicknames, []);
+  */
 
   const fetchMeta = () => {
     apiservice
       .get("user/getmeta")
-      .then((resp) => {
-        setMeta(resp.data.key);
+      .then(() => {
+        // setMeta(resp.data.key);
       })
       .catch((errorStack) => {
         console.error(errorStack);

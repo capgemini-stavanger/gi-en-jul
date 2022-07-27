@@ -21,8 +21,7 @@ interface IChangeEvent {
 const UserForm: React.FC<props> = ({
   accessToken,
   institution,
-  handleConfirm,
-  confirmOpen,
+
   handleRefresh,
 }) => {
   const [email, setEmail] = useState<string>("");
@@ -31,8 +30,6 @@ const UserForm: React.FC<props> = ({
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
   const [institutionName, setinstitutionName] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
 
   const apiservice = new ApiService(accessToken);
 
@@ -77,12 +74,12 @@ const UserForm: React.FC<props> = ({
           Institution: institutionName,
         })
         .then(() => {
-          setOpen(true);
+          //setOpen(true);
           handleRefresh();
         });
-      setOpen(false);
+      // setOpen(false);
     } else {
-      setErrorMessage("The passwords must match");
+      //  setErrorMessage("The passwords must match");
     }
   };
 
