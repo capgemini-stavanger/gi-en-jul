@@ -1,19 +1,58 @@
 import { Button, Grid } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import { useState } from "react";
+import React, { useState } from "react";
 import useStyles from "components/superadmin/Events/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import { EventContent } from "./EventType";
+import SelectForm from "components/shared/input-fields/SelectForm";
+
+const getValidators = (field: string) => {
+  switch (field) {
+    case "startDate":
+      return [EV.emptyString, EV.notADate];
+    case "endDate":
+      return [EV.emptyString, EV.notADate];
+    case "deliveryAddress":
+      return [EV.emptyString];
+    case "deliveryDate":
+      return [EV.emptyString];
+    case "deliveryTime":
+      return [EV.emptyString];
+    case "contactPerson":
+      return [EV.emptyString];
+    case "giverLimit":
+      return [EV.emptyString, EV.notANumber];
+  }
+  return [() => true];
+};
+
+const getErrorMessages = (field: string) => {
+  switch (field) {
+    case "startDate":
+      return [EE.emptyString, EE.wrongDateFormat];
+    case "endDate":
+      return [EE.emptyString, EE.wrongDateFormat];
+    case "deliveryAddress":
+      return [EE.emptyString];
+    case "deliveryDate":
+      return [EE.emptyString];
+    case "deliveryTime":
+      return [EE.emptyString];
+    case "contactPerson":
+      return [EE.emptyString];
+    case "giverLimit":
+      return [EE.emptyString, EE.notANumber];
+  }
+  return [];
+};
 
 type ValidEventEntry = {
   [valid: string]: boolean;
 };
 
 const initValidEventState: ValidEventEntry = {
-  eventName: false,
-  municipality: false,
   startDate: false,
   endDate: false,
   deliveryAddress: false,
@@ -51,58 +90,6 @@ const EventInformation: React.FC<Props> = ({
     ...initValidEventState,
   });
 
-  const getValidators = (field: string) => {
-    switch (field) {
-      case "eventName":
-        return [EV.emptyString, eventNameDoesntExist];
-      case "municipality":
-        return [EV.emptyString, municipalityDoesntExist];
-      case "startDate":
-        return [EV.emptyString, EV.notADate];
-      case "endDate":
-        return [EV.emptyString, EV.notADate];
-      case "deliveryAddress":
-        return [EV.emptyString];
-      case "deliveryDate":
-        return [EV.emptyString];
-      case "deliveryTime":
-        return [EV.emptyString];
-      case "contactPerson":
-        return [EV.emptyString];
-      case "giverLimit":
-        return [EV.emptyString, EV.notANumber];
-    }
-    return [
-      () => {
-        return true;
-      },
-    ];
-  };
-
-  const getErrorMessages = (field: string) => {
-    switch (field) {
-      case "eventName":
-        return [EE.emptyString, "Eventnavnet er ikke lagt til enda"];
-      case "municipality":
-        return [EE.emptyString, "Kommunen er ikke lagt til enda"];
-      case "startDate":
-        return [EE.emptyString, EE.wrongDateFormat];
-      case "endDate":
-        return [EE.emptyString, EE.wrongDateFormat];
-      case "deliveryAddress":
-        return [EE.emptyString];
-      case "deliveryDate":
-        return [EE.emptyString];
-      case "deliveryTime":
-        return [EE.emptyString];
-      case "contactPerson":
-        return [EE.emptyString];
-      case "giverLimit":
-        return [EE.emptyString, EE.notANumber];
-    }
-    return [];
-  };
-
   const everythingValid = () => {
     return Object.values(validEventState).every((value) => {
       return value === true;
@@ -122,14 +109,6 @@ const EventInformation: React.FC<Props> = ({
       }
     });
     return allIsValid;
-  };
-
-  const eventNameDoesntExist = (value: string) => {
-    return existingEventNames.includes(value);
-  };
-
-  const municipalityDoesntExist = (value: string) => {
-    return existingMunicipalities.includes(value);
   };
 
   const handleSaveConfirmation = (response: boolean) => {
@@ -191,43 +170,59 @@ const EventInformation: React.FC<Props> = ({
     </Button>
   );
 
+  const handleEventnameDropdownChange = (
+    e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+  ) => {
+    const val = String(e.target.value);
+    const copy = {
+      ...formValues,
+      eventName: val,
+    };
+    setFormValues(copy);
+  };
+  const handleMunicipalityDropdownChange = (
+    e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+  ) => {
+    const val = String(e.target.value);
+    const copy = {
+      ...formValues,
+      municipality: val,
+    };
+    setFormValues(copy);
+  };
+
   const form: JSX.Element[] = [
     // eventName
-    <Grid className={classes.eventBox} key={0} item>
-      <InputValidator
-        viewErrorTrigger={viewErrorNumber}
-        validators={getValidators("eventName")}
-        setIsValids={getValiditySetter("eventName")}
-        errorMessages={getErrorMessages("eventName")}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const copy = { ...formValues };
-          copy.eventName = e.target.value;
-          setFormValues(copy);
-          incrementErrorNum("eventName", e.target.value);
-        }}
-        value={formValues.eventName}
-        name="eventName"
+    <Grid className={classes.eventBox} item key={0}>
+      <SelectForm
+        name="Eventnavn"
         label="Eventnavn"
+        variant="outlined"
+        errorMessage="Velg eventnavn"
+        error={formValues.eventName == ""}
+        value={formValues.eventName}
+        options={existingEventNames.map((eventName) => {
+          return { value: eventName, text: eventName };
+        })}
+        onChange={handleEventnameDropdownChange}
         disabled={!activeEdit}
+        fullWidth
       />
     </Grid>,
-    // municipality
-    <Grid className={classes.eventBox} key={1} item>
-      <InputValidator
-        viewErrorTrigger={viewErrorNumber}
-        validators={getValidators("municipality")}
-        setIsValids={getValiditySetter("municipality")}
-        errorMessages={getErrorMessages("municipality")}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          const copy = { ...formValues };
-          copy.municipality = e.target.value;
-          setFormValues(copy);
-          incrementErrorNum("municipality", e.target.value);
-        }}
-        value={formValues.municipality}
-        name="municipality"
+    <Grid className={classes.eventBox} item key={1}>
+      <SelectForm
+        name="Municipality"
         label="Kommune"
+        variant="outlined"
+        errorMessage="Velg kommune"
+        error={formValues.municipality == ""}
+        value={formValues.municipality}
+        options={existingMunicipalities.map((muni) => {
+          return { value: muni, text: muni };
+        })}
+        onChange={handleMunicipalityDropdownChange}
         disabled={!activeEdit}
+        fullWidth
       />
     </Grid>,
     // startDate
