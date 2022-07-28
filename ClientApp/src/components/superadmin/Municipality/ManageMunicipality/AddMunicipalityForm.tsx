@@ -3,53 +3,16 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { useState } from "react";
 import useStyles from "../../Styles";
-
-export interface IMunicipalityFormData {
-  country: string;
-  name: string;
-  image?: string;
-  info?: string;
-  email?: string;
-  isActive: boolean;
-}
-
-export const getFormAddMunicipality: () => IMunicipalityFormData = () => ({
-  country: "",
-  name: "",
-  image: "",
-  info: "",
-  email: "",
-  isActive: false,
-});
+import { IMunicipality, initInterfaceMunicipality } from "../ManageMunicipalityContainer";
 
 interface props {
-  values: IMunicipalityFormData;
   open: boolean;
-  openAdd: boolean;
-
-  handleClose: () => void;
-  handleAddMunicipality: (data: IMunicipalityFormData) => void;
-  handleOpenAdd: (response: boolean) => void;
+  setOpen: (open: boolean) => void;
+  handleAddMunicipality: (data: IMunicipality) => void;
 }
 
-const initState: IMunicipalityFormData = {
-  country: "Norge",
-  name: "",
-  image: undefined,
-  info: undefined,
-  email: undefined,
-  isActive: false,
-};
-
-const MunicipalityForm: React.FC<props> = ({
-  open,
-  openAdd,
-  handleOpenAdd,
-  handleClose,
-  handleAddMunicipality,
-}) => {
-  const [state, setState] = useState(initState);
-
+const MunicipalityForm: React.FC<props> = ({ open, setOpen, handleAddMunicipality }) => {
+  const [newMunicipality, setNewMunicipality] = useState<IMunicipality>(initInterfaceMunicipality);
   const classes = useStyles();
 
   return (
@@ -65,10 +28,11 @@ const MunicipalityForm: React.FC<props> = ({
               margin="normal"
               fullWidth
               name="country"
+              disabled={true}
               autoComplete="Country"
-              value={state.country}
+              value={newMunicipality.country}
               onChange={(e) => {
-                setState((prev) => ({ ...prev, country: e.target.value }));
+                setNewMunicipality((o) => ({ ...o, country: e.target.value }));
               }}
               validators={[isNotNull]}
               errorMessages={["Du må fylle inn landet kommunen ligger i"]}
@@ -83,9 +47,9 @@ const MunicipalityForm: React.FC<props> = ({
               fullWidth
               name="name"
               autoComplete="Name"
-              value={state.name}
+              value={newMunicipality.name}
               onChange={(e) => {
-                setState((prev) => ({ ...prev, name: e.target.value }));
+                setNewMunicipality((o) => ({ ...o, name: e.target.value }));
               }}
               validators={[isNotNull]}
               errorMessages={["Du må fylle inn navnet på kommunen"]}
@@ -94,16 +58,25 @@ const MunicipalityForm: React.FC<props> = ({
 
           <Grid container direction="row">
             <Grid item>
-              <Button onClick={handleClose}>Avbryt</Button>
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Avbryt
+              </Button>
             </Grid>
 
             <Grid item>
               <Button
                 onClick={() => {
                   {
-                    handleAddMunicipality(state);
-                    setState(initState);
-                    handleOpenAdd(openAdd);
+                    handleAddMunicipality({
+                      ...newMunicipality,
+                      information: "Det er ingen informasjon om kommunen enda",
+                    });
+                    setNewMunicipality(initInterfaceMunicipality);
+                    setOpen(false);
                   }
                 }}
               >

@@ -9,121 +9,50 @@ import {
   ListItem,
   ListItemIcon,
 } from "@material-ui/core";
-import { useState, useEffect } from "react";
-import ApiService from "common/functions/apiServiceClass";
+import { useState } from "react";
 import React from "react";
-import AddMunicipalityForm, {
-  getFormAddMunicipality,
-  IMunicipalityFormData,
-} from "./AddMunicipalityForm";
+import AddMunicipalityForm from "./AddMunicipalityForm";
 import InformationBox from "components/shared/InformationBox";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-
 import MunicipalityTableElements from "./MunicipalityTableElements";
 import useStyles from "components/superadmin/Styles";
+import { IMunicipality, initInterfaceMunicipality } from "../ManageMunicipalityContainer";
 
 interface IMunicipalityManageTable {
-  accessToken: string;
+  municipalities: IMunicipality[];
+  setMunicipalities: (municipalities: IMunicipality[]) => void;
+  addMunicipality: (data: IMunicipality) => void;
+  updateMunicipalityInformation: (data: IMunicipality) => void;
+  setMunicipalityInactive: (data: IMunicipality) => void;
+  openAdd: boolean;
+  setOpenAdd: (open: boolean) => void;
+  handleCloseAdd: (response: boolean) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  role: string;
 }
 
-export interface IMunicipality {
-  name: string;
-  isActive: boolean;
-  information: string;
-  email: string;
-  phoneNumber: string;
-  contactPerson: string;
-  image: string;
-  facebook: string;
-  instagram: string;
-}
-const initInterfaceMunicipality: IMunicipality = {
-  name: "",
-  isActive: false,
-  information: "",
-  email: "",
-  phoneNumber: "",
-  contactPerson: "",
-  image: "",
-  facebook: "",
-  instagram: "",
-};
-
-const initFormDataState: () => IMunicipalityFormData = () => ({
-  ...getFormAddMunicipality(),
-});
-
-const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessToken }) => {
-  const apiservice = new ApiService(accessToken);
-  const [Municipalities, setMunicipalities] = useState<IMunicipality[]>([
-    initInterfaceMunicipality,
-  ]);
-  const [open, setOpen] = useState<boolean>(false);
+const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
+  addMunicipality,
+  municipalities,
+  updateMunicipalityInformation,
+  setMunicipalityInactive,
+  openAdd,
+  handleCloseAdd,
+  open,
+  setOpen,
+  role,
+}) => {
   const [openConfirm, setOpenConfirm] = useState(false);
-  const [openAdd, setOpenAdd] = useState(false);
-  const [formDataState] = useState(initFormDataState());
-  const [Country] = useState<string>("Norge");
+
   const [selectedMunicipality, setSelectedMunicipality] =
     useState<IMunicipality>(initInterfaceMunicipality);
   const [active, setActive] = useState(false);
   const classes = useStyles();
 
-  const fetchInformation = () => {
-    apiservice
-      .get("municipality/all")
-      .then((resp) => {
-        setMunicipalities(resp.data);
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  };
-
-  const addMunicipality = (data: IMunicipalityFormData) => {
-    apiservice
-      .post("municipality", {
-        Country: data.country,
-        Name: data.name,
-        IsActive: "false",
-      })
-      .then(() => {
-        fetchInformation();
-        setOpenAdd(true);
-      });
-
-    setOpen(false);
-  };
-
-  const setMunicipalityInactive = () => {
-    apiservice
-      .put("municipality/update", {
-        Country: Country,
-        Name: selectedMunicipality?.name,
-        IsActive: active,
-      })
-      .then(() => {
-        fetchInformation();
-      });
-    setOpen(false);
-  };
-
-  const updateMunicipalityInformation = (municipality: IMunicipality) => {
-    apiservice
-      .put("municipality/update", {
-        Country: Country,
-        Name: municipality.name,
-        Email: municipality.email,
-        PhoneNumber: municipality.phoneNumber,
-        ContactPerson: municipality.contactPerson,
-      })
-      .then(() => {
-        fetchInformation();
-      });
-  };
-
   const handleResponseConfirm = (response: boolean) => {
     if (response) {
-      setMunicipalityInactive();
+      setMunicipalityInactive({ ...selectedMunicipality, isActive: active });
     }
     handleCloseConfirm(true);
   };
@@ -134,13 +63,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
     }
   };
 
-  const handleCloseAdd = (response: boolean) => {
-    if (response) {
-      setOpenAdd(false);
-    }
-  };
-
-  useEffect(fetchInformation, []);
   return (
     <>
       <Typography>
@@ -150,12 +72,12 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
             <ListItemIcon>-</ListItemIcon>Denne Tabellen viser alle kommuner
           </ListItem>
           <ListItem>
-            <ListItemIcon>-</ListItemIcon> Her kan du redigere informasjon om kommunen og velge om
-            informasjonen om kommunen skal vises på hjemsiden
+            <ListItemIcon>-</ListItemIcon> Her kan du redigere kontakt informasjon om kommunen og
+            velge om informasjonen om kommunen skal vises på hjemsiden
           </ListItem>
         </List>
       </Typography>
-      <Table style={{ width: "1300px" }}>
+      <Table style={{ width: "1800px" }}>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
             <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
@@ -163,12 +85,15 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
             <TableCell className={classes.tableHeaderText}>Email</TableCell>
             <TableCell className={classes.tableHeaderText}>Telefon</TableCell>
             <TableCell className={classes.tableHeaderText}>Kontaktperson</TableCell>
+            <TableCell className={classes.tableHeaderText}>Facebook</TableCell>
+            <TableCell className={classes.tableHeaderText}>Instagram</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
 
-          {Municipalities.map((municipality, index) => (
+          {municipalities.map((municipality, index) => (
             <MunicipalityTableElements
+              role={role}
               municipality={municipality}
               key={index}
               setSelectedMunicipality={setSelectedMunicipality}
@@ -180,6 +105,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
         </TableBody>
       </Table>
       <Button
+        hidden={role != "SuperAdmin"}
         className={classes.button}
         style={{ marginTop: "10px" }}
         variant="contained"
@@ -196,13 +122,9 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessTok
         handleClose={() => handleCloseAdd(true)}
       />
       <AddMunicipalityForm
-        key={formDataState.name}
-        values={formDataState}
         open={open}
-        handleClose={() => setOpen(false)}
-        handleAddMunicipality={(data: IMunicipalityFormData) => addMunicipality(data)}
-        openAdd={openAdd}
-        handleOpenAdd={() => setOpenAdd(openAdd)}
+        setOpen={setOpen}
+        handleAddMunicipality={(data: IMunicipality) => addMunicipality(data)}
       />
       <ConfirmationBox
         open={openConfirm}

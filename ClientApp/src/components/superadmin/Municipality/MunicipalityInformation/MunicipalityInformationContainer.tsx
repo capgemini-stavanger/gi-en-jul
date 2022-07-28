@@ -1,56 +1,25 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@material-ui/core";
-import ApiService from "common/functions/apiServiceClass";
-import { useState, useEffect, ChangeEvent } from "react";
+import { Box, FormControl, Grid } from "@material-ui/core";
+import SelectForm from "components/shared/input-fields/SelectForm";
+import { useState } from "react";
+import { IMunicipality, initInterfaceMunicipality } from "../ManageMunicipalityContainer";
 import MunicipalityInformation from "./MunicipalityInformation";
 
 interface IMunicipalityInformationContainer {
-  accessToken: string;
   assignedLocation: string;
   role: string;
-}
-
-interface IChangeEvent {
-  name?: string | undefined;
-  value: unknown;
+  municipalities: IMunicipality[];
+  updateMunicipalityInformation: (municipality: IMunicipality) => void;
+  deleteMunicipalityInformation: (municipality: IMunicipality) => void;
 }
 
 const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContainer> = ({
-  accessToken,
-  assignedLocation,
   role,
+  municipalities,
+  updateMunicipalityInformation,
+  deleteMunicipalityInformation,
 }) => {
-  const [activeLocations, setActiveLocations] = useState<string[]>([]);
-  const [selectedMunicipality, setSelectedMunicipality] = useState<string>("");
-  const apiservice = new ApiService(accessToken);
-  const fetchActiveLocations = () => {
-    apiservice
-      .get("municipality/active", {})
-      .then((resp) => {
-        if (role == "Admin") {
-          setActiveLocations([assignedLocation]);
-          setSelectedMunicipality(assignedLocation);
-        } else {
-          setActiveLocations(resp.data);
-          setSelectedMunicipality(assignedLocation);
-        }
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  };
-  useEffect(fetchActiveLocations, []);
-
-  const handleChange = (event: ChangeEvent<IChangeEvent>) => {
-    setSelectedMunicipality(event.target.value as string);
-  };
-
-  const menuItems = activeLocations.map((location, index) => {
-    return (
-      <MenuItem key={index} value={location}>
-        {location}
-      </MenuItem>
-    );
-  });
+  const [selectedMunicipality, setSelectedMunicipality] =
+    useState<IMunicipality>(initInterfaceMunicipality);
 
   return (
     <>
@@ -58,24 +27,29 @@ const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContain
         <Grid item>
           <Box width="250px">
             <FormControl fullWidth>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={selectedMunicipality}
-                label="Location"
-                onChange={handleChange}
-                fullWidth
-              >
-                {menuItems}
-              </Select>
+              <SelectForm
+                name="Kommune"
+                variant="outlined"
+                label="Velg kommune"
+                value={selectedMunicipality.name}
+                options={municipalities.map((o) => {
+                  return { value: o.name, text: o.name };
+                })}
+                onChange={(e) => {
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  setSelectedMunicipality(municipalities.find((m) => m.name === e.target.value)!);
+                }}
+              />
             </FormControl>
           </Box>
         </Grid>
         <Grid item>
           <MunicipalityInformation
-            accessToken={accessToken}
             role={role}
-            municipalityName={selectedMunicipality}
+            municipality={selectedMunicipality}
+            setSelectedMunicipality={setSelectedMunicipality}
+            updateMunicipalityInformation={updateMunicipalityInformation}
+            deleteMunicipalityInformation={deleteMunicipalityInformation}
           />
         </Grid>
       </Grid>

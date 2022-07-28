@@ -43,7 +43,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
@@ -136,7 +136,7 @@ namespace GiEnJul.Controllers
         }
        
         [HttpPut("update")]
-        [Authorize(Policy = Policy.SuperAdmin)]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
         {
             var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
