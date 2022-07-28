@@ -10,7 +10,12 @@ import {
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import EventInformation from "components/superadmin/Events/EventInformation";
-import { EventContent, EventContent2Dto } from "components/superadmin/Events/EventType";
+import {
+  Dto2EventContent,
+  EventContent,
+  EventContent2Dto,
+  EventContentDto,
+} from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import ClearIcon from "@material-ui/icons/Clear";
 import NewEventBox from "./NewEventBox";
@@ -20,17 +25,11 @@ import ConfirmationBox from "components/shared/ConfirmationBox";
 
 interface Props {
   accessToken: string;
-  refreshData: () => void;
-  existingMunicipalities: string[];
-  pEvents: Map<string, EventContent>;
 }
 
-const EventsContainer: React.FC<Props> = ({
-  accessToken,
-  refreshData,
-  existingMunicipalities,
-  pEvents,
-}) => {
+const EventsContainer: React.FC<Props> = ({ accessToken }) => {
+  const [events, setEvents] = useState(new Map<string, EventContent>());
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
@@ -56,14 +55,14 @@ const EventsContainer: React.FC<Props> = ({
   };
   const keyCombinationExists = (combination: string): boolean => {
     const existingCombinations: string[] = [];
-    pEvents.forEach((event, id) => {
+    events.forEach((event, id) => {
       existingCombinations.push(id);
     });
     const exists: boolean = existingCombinations.includes(combination);
     return exists;
   };
   const municipalityExists = (municipality: string): boolean => {
-    return existingMunicipalities.includes(municipality);
+    return municipalities.includes(municipality);
   };
   const handleConfirmationResponse = (response: boolean) => {
     if (response) {
@@ -144,7 +143,7 @@ const EventsContainer: React.FC<Props> = ({
       if (validUpdate) {
         updatedEvent.id = newId;
         postEventUpdate(updatedEvent); // send updated event to backend
-        postEventDeletion(pEvents.get(id)); // delete old version of the event
+        postEventDeletion(events.get(id)); // delete old version of the event
       }
     } else {
       // municipality and eventname stayed the same
@@ -152,7 +151,7 @@ const EventsContainer: React.FC<Props> = ({
     }
   };
   const handleEventDeletion = (id: string) => {
-    const eventToBeDeleted = pEvents.get(id); // get event from map
+    const eventToBeDeleted = events.get(id); // get event from map
     postEventDeletion(eventToBeDeleted);
   };
   const postEventDeletion = (event: EventContent | undefined) => {
@@ -206,7 +205,7 @@ const EventsContainer: React.FC<Props> = ({
   const buildBody = () => {
     const eventsList: EventContent[] = [];
     // events.forEach((event) => eventsList.push(event));
-    pEvents.forEach((event) => eventsList.push(event));
+    events.forEach((event) => eventsList.push(event));
     const body = eventsList
       .filter((e) => e.eventName === selectedEventName)
       .map((event) => {
@@ -218,7 +217,7 @@ const EventsContainer: React.FC<Props> = ({
               onDelete={handleEventDeletion}
               id={event.id}
               existingEventNames={uniqueEventNames}
-              existingMunicipalities={existingMunicipalities}
+              existingMunicipalities={municipalities}
             />
           </Grid>
         );
@@ -236,25 +235,57 @@ const EventsContainer: React.FC<Props> = ({
         console.error(errorStack);
       });
   };
+  const fetchMunicipalities = () => {
+    apiservice
+      .get("Municipality/names", {})
+      .then((resp) => {
+        setMunicipalities(resp.data);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
+  const fetchEvents = () => {
+    apiservice
+      .get("Event/GetAll", {})
+      .then((resp) => {
+        const fetchedEvents = new Map<string, EventContent>();
+        const eventContents = resp.data.map((event: EventContentDto) => Dto2EventContent(event));
+        eventContents.forEach((event: EventContent) => {
+          fetchedEvents.set(event.id, event);
+        });
+        setEvents(fetchedEvents);
+      })
+      .catch((errorStack) => {
+        console.error(errorStack);
+      });
+  };
 
-  // useEffect(fetchEvents, []);
-  useEffect(fetchDistinctEventNames, []);
-  useEffect(buildBody, [pEvents, selectedEventName, uniqueEventNames, existingMunicipalities]);
+  const refreshData = () => {
+    fetchMunicipalities();
+    fetchDistinctEventNames();
+    fetchEvents();
+  };
+
+  useEffect(refreshData, []);
+  useEffect(buildBody, [events, selectedEventName, uniqueEventNames, municipalities]);
 
   return (
     <>
-      <Typography>
-        Administrer event
-        <List>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon>Her kan du legge til eller slette eventer
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon> Når du knytter en kommune opp mot et event, må det settes
-            en start og sluttdato som bestemmer når eventet er aktivt.
-          </ListItem>
-        </List>
-      </Typography>
+      <Typography variant="h6">Administrer event</Typography>
+      <List>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>Her kan du legge til eller slette eventer</Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Når du knytter en kommune opp mot et event, må det settes en start og sluttdato som
+            bestemmer når eventet er aktivt.
+          </Typography>
+        </ListItem>
+      </List>
 
       <Grid container direction="column" spacing={5}>
         <Grid item container direction="row">
@@ -320,7 +351,7 @@ const EventsContainer: React.FC<Props> = ({
               setOpenNewEventBox(false);
             }}
             existingEventNames={uniqueEventNames}
-            existingMunicipalities={existingMunicipalities}
+            existingMunicipalities={municipalities}
           />
           {selectedEventName === "" || openNewEventBox ? (
             ""
