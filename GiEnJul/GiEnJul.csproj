@@ -49,9 +49,6 @@
     <None Update="Utilities\EmailTemplates\Files\AssignedFamily.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilities\EmailTemplates\Files\family.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Utilities\EmailTemplates\Files\familyTop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -60,6 +57,9 @@
     </None>
 	<None Update="Utilities\EmailTemplates\Files\Registered.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="Utilities\EmailTemplates\Files\family.png">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
 	<None Update="Utilities\EmailTemplates\Files\VerifyConnection.html">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
