@@ -55,45 +55,6 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
               </Grid>
             </Container>
           );
-        } else {
-          setContent(
-            <Container className={classes.summaryDesign}>
-              <Button
-                size="large"
-                endIcon={<ArrowForwardIos />}
-                className={classes.buttonMainPage}
-                onClick={() => history.push("/")}
-              >
-                Finn kontaktinformasjon
-              </Button>
-              <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item>
-                  <img className={classes.imageSnow} src={snowDown}></img>
-                </Grid>
-                <Grid item>
-                  <Container className={classes.giverForm}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen <br />
-                      du skal gjøre!
-                    </Typography>
-                    <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
-                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
-                      registrere ditt bidrag.
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
-                      gave
-                    </Typography>
-                  </Container>
-                </Grid>
-                <Grid item className={classes.imageContainer}>
-                  <img className={classes.backgroundImage} src={snowmanFull}></img>
-                </Grid>
-              </Grid>
-            </Container>
-          );
         }
       })
       .catch(() =>

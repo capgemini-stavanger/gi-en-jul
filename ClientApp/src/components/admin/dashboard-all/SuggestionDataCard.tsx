@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, capitalize, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
@@ -106,7 +106,7 @@ const SuggestionDataCard: React.FC<Props> = ({
           </Grid>
         </Box>
         {personExpanded && (
-          <Box margin={1}>
+          <Box className={classes.accordionDetails}>
             <Grid item className={classes.borderInCards}>
               <Typography variant="h6" gutterBottom>
                 Matønsker
@@ -120,13 +120,13 @@ const SuggestionDataCard: React.FC<Props> = ({
                     className={classes.personTable}
                   >
                     <Grid item xs={2}>
-                      <Typography>{suggestionData.dinner}</Typography>
+                      <Typography>{capitalize(suggestionData.dinner)}</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                      {suggestionData.dessert}
+                      <Typography>{capitalize(suggestionData.dessert)}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                      {suggestionData.note}
+                      <Typography>{capitalize(suggestionData.note)}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -144,7 +144,11 @@ const SuggestionDataCard: React.FC<Props> = ({
                       container
                       direction="row"
                       justifyContent="space-between"
-                      className={classes.personTable}
+                      className={
+                        index == suggestionData.familyMembers.length - 1
+                          ? classes.personTable
+                          : classes.personTableBorder
+                      }
                     >
                       <Grid item xs={2}>
                         <Typography>{getGender(person.gender, person.age)}</Typography>

@@ -167,5 +167,13 @@ const useStyles = makeStyles((theme) => ({
   stepperBackground: {
     backgroundColor: theme.palette.secondary.light,
   },
+  feedbackField: {
+    width: "300px",
+    marginBottom: "2em",
+    marginTop: "2em",
+  },
+  spacingBottom: {
+    marginBottom: "2em",
+  },
 }));
 export default useStyles;

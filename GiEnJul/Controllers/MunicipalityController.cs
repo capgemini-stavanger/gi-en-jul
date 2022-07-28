@@ -106,7 +106,7 @@ namespace GiEnJul.Controllers
                 return NotFound("Could not find municipality for location: "+location);
             }
 
-            return Ok(municipalityByLocation.Email);
+            return Ok(municipalityByLocation);
  
         }
 

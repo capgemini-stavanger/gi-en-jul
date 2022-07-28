@@ -6,6 +6,7 @@
         WaitingList,
         AssignedFamily,
         VerifyConnection,
-        Notification
+        Notification,
+        ConnectionDenied
     }
 }
