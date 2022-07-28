@@ -47,7 +47,7 @@ namespace GiEnJul.Controllers
             IEmailClient emailClient,
             IEmailTemplateBuilder emailTemplateBuilder)
         {
-            _eventRepository= eventRepository;
+            _eventRepository = eventRepository;
             _municipalityRepository = municipalityRepository;
             _giverRepository = giverRepository;
             _recipientRepository = recipientRepository;
@@ -62,7 +62,7 @@ namespace GiEnJul.Controllers
 
         // POST: /verify/giverGuid/recipientGuid/event_location
         [HttpPost("{giverId}/{recipientId}/{event}/verify")]
-        public async Task VerifyConnection(string giverId, string recipientId, string @event)
+        public async Task<ActionResult> VerifyConnection(string giverId, string recipientId, string @event)
         {
             //Populate recipient and giver using keys
             var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
@@ -71,12 +71,12 @@ namespace GiEnJul.Controllers
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return; 
+                return BadRequest("Connection already exists");
             }
 
             if (!ConnectionHelper.CanConnect(giver, recipient))
             {
-                throw new InvalidConnectionCreationException();
+                return BadRequest("Connection between giver and recipient cannot be made");
             }
 
             (string @event, string connectedIds) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
@@ -120,11 +120,6 @@ namespace GiEnJul.Controllers
 
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
-            catch (InvalidConnectionCreationException e)
-            {
-                _log.Error(e, "Connection between {@0} and {@1} is not possible", giver, recipient);
-                throw;
-            }
             catch (Exception e)
             {
                 //Undo all operations
@@ -135,8 +130,10 @@ namespace GiEnJul.Controllers
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 _log.Error("An exception was thrown", e);
-                throw;
+                return NotFound("Unable to update connection");
             }
+
+            return Ok();
         }
 
         [HttpPost("{giverId}/{recipientId}/{event}/deny")]
@@ -171,6 +168,7 @@ namespace GiEnJul.Controllers
             recipient.IsSuggestedMatch = false;
             recipient.MatchedGiver = null;
 
+            // Noreply email to giver
             var emailTemplatename = EmailTemplateName.Notification;
             var emailValuesDict = new Dictionary<string, string>
                 {
@@ -178,11 +176,19 @@ namespace GiEnJul.Controllers
                 };
             var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
 
+            var adminEmail = await _municipalityRepository.GetEmailByLocation(giver.Location);
+
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+
+                if (adminEmail != null)
+                {
+                    await _emailClient.SendEmailFromUserAsync(giver.Email, giver.FullName, adminEmail, giver.Location, "Avslått kobling", $"Bekreftelse på at {giver.FullName} har avslått");
+                }
+
             }
             catch (Exception e)
             {
@@ -207,5 +213,26 @@ namespace GiEnJul.Controllers
         {
             await VerifyConnection(connectionDto.GiverId, connectionDto.RecipientId, connectionDto.Event);
         }
+
+
+        [HttpGet("connectionStatus")]
+        public async Task<ActionResult> ConnectionStatus(string giverId, string recipientId, string @event)
+        {
+            var giver = await _giverRepository.GetGiverAsync(@event, giverId);
+            var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
+
+            if (_connectionRepository.ConnectionExists(giver, recipient))
+            {
+                return BadRequest("Connection already exists");
+            }
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Connection between giver and recipient cannot be made");
+            }
+
+            return Ok("Godkjent kobling");
+        }
+
     }
 }

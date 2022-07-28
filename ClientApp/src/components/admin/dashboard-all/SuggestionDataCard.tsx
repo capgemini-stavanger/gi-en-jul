@@ -106,7 +106,7 @@ const SuggestionDataCard: React.FC<Props> = ({
           </Grid>
         </Box>
         {personExpanded && (
-          <Box margin={1}>
+          <Box className={classes.accordionDetails}>
             <Grid item className={classes.borderInCards}>
               <Typography variant="h6" gutterBottom>
                 Matønsker
@@ -144,7 +144,11 @@ const SuggestionDataCard: React.FC<Props> = ({
                       container
                       direction="row"
                       justifyContent="space-between"
-                      className={classes.personTable}
+                      className={
+                        index == suggestionData.familyMembers.length - 1
+                          ? classes.personTable
+                          : classes.personTableBorder
+                      }
                     >
                       <Grid item xs={2}>
                         <Typography>{getGender(person.gender, person.age)}</Typography>

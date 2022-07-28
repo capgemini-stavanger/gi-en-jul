@@ -244,7 +244,11 @@ const RecipientDataCard: React.FC<Props> = ({
                         container
                         direction="row"
                         justifyContent="space-between"
-                        className={classes.personTable}
+                        className={
+                          index == recipientData.familyMembers.length - 1
+                            ? classes.personTable
+                            : classes.personTableBorder
+                        }
                       >
                         <Grid item xs={2}>
                           <Typography>{getGender(person.gender, person.age)}</Typography>

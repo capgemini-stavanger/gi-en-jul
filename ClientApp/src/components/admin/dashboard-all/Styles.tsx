@@ -74,7 +74,7 @@ export const useStyles = makeStyles((theme) => ({
   entireDashboard: {
     display: "flex",
     flexDirection: "row",
-    height: "85vh",
+    height: "100vh",
     marginTop: "1em",
     marginRight: "1em",
     marginBottom: "10em",
@@ -129,7 +129,7 @@ export const useStyles = makeStyles((theme) => ({
     marginRight: "1em",
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     borderRadius: "1em",
-    paddingBottom: "5em",
+    paddingBottom: "7em",
   },
   recipientTable: {
     flexGrow: 1,
@@ -147,7 +147,7 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     borderRadius: "1em",
-    paddingBottom: "5em",
+    paddingBottom: "7em",
   },
   tableHeadingSpace: {
     padding: "0.2em",
@@ -213,12 +213,13 @@ export const useStyles = makeStyles((theme) => ({
   },
   accordionSummary: {
     padding: "0.2em",
+    paddingLeft: "0.5em",
     "&:hover": {
       cursor: "pointer",
     },
   },
   accordionDetails: {
-    padding: "1em",
+    padding: "2em",
   },
   accordionNormal: {
     // backgroundColor: "#fafafa",
@@ -227,6 +228,9 @@ export const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(73, 165, 145, 0.25)",
   },
   personTable: {
+    padding: "0.5em",
+  },
+  personTableBorder: {
     borderBottom: "1px solid rgba(0, 0, 0, 0.15)",
     padding: "0.5em",
   },

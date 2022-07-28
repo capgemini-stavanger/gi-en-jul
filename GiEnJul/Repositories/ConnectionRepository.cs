@@ -57,7 +57,7 @@ namespace GiEnJul.Repositories
         }
         public bool ConnectionExists(Models.Giver giver, Models.Recipient recipient)
         {
-            return TryGet(giver.GiverId, $"{recipient.RecipientId}_{giver.EventName}", out _);
+            return TryGet(giver.Event, $"{recipient.RecipientId}_{giver.GiverId}", out _);
         }
     }
 }
