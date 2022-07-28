@@ -35,16 +35,19 @@ namespace GiEnJul.Utilities
             string jsonString = r.ReadToEnd();
             var styles = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(jsonString);
 
-            var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
+           // Unused for now var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
             var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
-
+            
             // Read Image
             var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}family.png");
             var imgString = Convert.ToBase64String(imgFile);
             var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
 
+            var center = "center";
+            var widht = "600px";
+
             // Combine
-            content = $"<!DOCTYPE html><html><div style={bodyStyle}>{img}{content}</div></html>";
+            content = $"<!DOCTYPE html><html><table align={center} width={widht}><tr><td>{img}</td></tr>{content}</table></html>";
 
             foreach (var item in data)
             {
