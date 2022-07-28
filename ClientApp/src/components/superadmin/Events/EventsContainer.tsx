@@ -272,18 +272,20 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
 
   return (
     <>
-      <Typography>
-        Administrer event
-        <List>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon>Her kan du legge til eller slette eventer
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon> Når du knytter en kommune opp mot et event, må det settes
-            en start og sluttdato som bestemmer når eventet er aktivt.
-          </ListItem>
-        </List>
-      </Typography>
+      <Typography variant="h6">Administrer event</Typography>
+      <List>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>Her kan du legge til eller slette eventer</Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Når du knytter en kommune opp mot et event, må det settes en start og sluttdato som
+            bestemmer når eventet er aktivt.
+          </Typography>
+        </ListItem>
+      </List>
 
       <Grid container direction="column" spacing={5}>
         <Grid item container direction="row">
