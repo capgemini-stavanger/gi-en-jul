@@ -7,8 +7,8 @@ import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
 import MunicipalityInformationContainer from "./MunicipalityInformation/MunicipalityInformationContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
-import AdminMunicipalityUserEvent from "./MuniEventUserManaging/AdminMunicipalityUserEvent";
 import AddUser from "./Users/AddUser";
+import EventsContainer from "./Events/EventsContainer";
 
 interface IManageDashboard {
   role: string;
@@ -33,7 +33,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <Tab hidden={role != "SuperAdmin"} label="Bedrift" value="3" />
           <Tab hidden={role != "SuperAdmin"} label="Hvordan starte Gi en jul" value="4" />
           <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="5" />
-          <Tab hidden={role != "SuperAdmin"} label="Legg til Kommuner og Eventer" value="6" />
+          <Tab hidden={role != "SuperAdmin"} label="Administrer Eventer" value="6" />
         </TabList>
         <TabPanel value="1">
           <FaqContainer accessToken={accessToken} />
@@ -55,7 +55,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <AddUser accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="6">
-          <AdminMunicipalityUserEvent accessToken={accessToken} />
+          <EventsContainer accessToken={accessToken} />
         </TabPanel>
       </TabContext>
     </Container>
