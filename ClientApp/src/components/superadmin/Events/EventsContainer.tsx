@@ -239,19 +239,19 @@ const EventsContainer: React.FC<Props> = ({
 
   // useEffect(fetchEvents, []);
   useEffect(fetchDistinctEventNames, []);
-  useEffect(buildBody, [pEvents, selectedEventName]);
+  useEffect(buildBody, [pEvents, selectedEventName, uniqueEventNames, existingMunicipalities]);
 
   return (
     <>
-      <Typography>Administrer event</Typography>
       <Typography>
+        Administrer event
         <List>
           <ListItem>
             <ListItemIcon>-</ListItemIcon>Her kan du legge til eller slette eventer
           </ListItem>
           <ListItem>
-            <ListItemIcon>-</ListItemIcon> Når det lages et event så må det settes en start og slutt
-            dato.
+            <ListItemIcon>-</ListItemIcon> Når du knytter en kommune opp mot et event, må det settes
+            en start og sluttdato som bestemmer når eventet er aktivt.
           </ListItem>
         </List>
       </Typography>
@@ -261,7 +261,7 @@ const EventsContainer: React.FC<Props> = ({
           <Grid item>
             <EventDropdown
               choices={uniqueEventNames}
-              labelNote={"Velg Eventnavn"}
+              labelNote={"Velg event"}
               updateValue={handleDropDownChange}
               selectedValue={selectedEventName}
             />
@@ -331,7 +331,7 @@ const EventsContainer: React.FC<Props> = ({
                 setOpenNewEventBox(true);
               }}
             >
-              <Typography>Knytt ny kommune til eventet</Typography>
+              <Typography>Knytt ny kommune til event</Typography>
             </Button>
           )}
         </Grid>
