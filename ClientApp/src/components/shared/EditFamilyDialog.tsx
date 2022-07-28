@@ -57,6 +57,33 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     }
   }, [open]);
 
+  // A very general STATIC check change, just to have something in the email template
+  const checkChanges = () => {
+    const changes: string[] = [];
+    if (recipient.dinner != recipientData.dinner) changes.push("Middag");
+    if (recipient.dessert != recipientData.dessert) changes.push("Dessert");
+    if (recipient.note != recipientData.note) changes.push("Kommentar");
+    if (recipient.familyMembers.length != recipientData.familyMembers.length) {
+      changes.push("Antall familie medlemmer");
+    } else {
+      for (let i = 0; i < recipient.familyMembers.length; i++) {
+        if (recipient.familyMembers[i].age != recipientData.familyMembers[i].age) {
+          if (changes?.indexOf("Alder") < 0) changes.push("Alder");
+        }
+        if (recipient.familyMembers[i].months != recipientData.familyMembers[i].months) {
+          if (changes?.indexOf("Måned") < 0) changes.push("Måned");
+        }
+        if (recipient.familyMembers[i].gender != recipientData.familyMembers[i].gender) {
+          if (changes?.indexOf("Kjønn") < 0) changes.push("Kjønn");
+        }
+        if (recipient.familyMembers[i].wishes != recipientData.familyMembers[i].wishes) {
+          if (changes?.indexOf("Ønsker") < 0) changes.push("Ønsker");
+        }
+      }
+    }
+    return changes;
+  };
+
   const fetchMuncipalityEmail = () => {
     apiservice
       .get("Municipality/email")
@@ -187,16 +214,22 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   };
 
   async function sendEmailToMunicipality() {
+    let emailContent =
+      "Dette er de nye endringene til familie: " + recipientData.familyId + " </br>";
+    const updateChanges = checkChanges();
+    updateChanges.map((change) => {
+      emailContent += change + "<br>";
+    });
     await apiservice
       .post(
         "email/sendFromUser",
         JSON.stringify({
-          Subject: "Updated family",
-          Content: "We have updated this...",
+          Subject: "Oppdatert familie",
+          Content: emailContent,
           FromEmail: email,
           ToEmail: municipalityEmail,
           FromName: institution,
-          ToName: location,
+          ToName: "Gi en jul " + location,
         })
       )
       .then((response) => {

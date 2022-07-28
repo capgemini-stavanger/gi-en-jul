@@ -225,7 +225,7 @@ const RecipientDataCard: React.FC<Props> = ({
                       handleClose={() => {
                         setOpenMailDialog(false);
                       }}
-                      email={recipientData.contactEmail}
+                      toEmail={recipientData.contactEmail}
                       fullName={recipientData.contactFullName}
                     />
                   </Grid>
