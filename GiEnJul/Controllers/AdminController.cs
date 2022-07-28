@@ -247,6 +247,9 @@ namespace GiEnJul.Controllers
                 giver.RemindedAt = null;
                 giver.MatchedRecipient = connectionDto.RecipientId;
                 giver.MatchedFamilyId = recipient.FamilyId;
+                giver.CancelFeedback = "";
+                giver.CancelDate = null;
+                giver.CancelFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);
 
                 recipient.IsSuggestedMatch = true;

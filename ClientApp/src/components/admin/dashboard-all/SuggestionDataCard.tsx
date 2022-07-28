@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, capitalize, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
@@ -120,13 +120,13 @@ const SuggestionDataCard: React.FC<Props> = ({
                     className={classes.personTable}
                   >
                     <Grid item xs={2}>
-                      <Typography>{suggestionData.dinner}</Typography>
+                      <Typography>{capitalize(suggestionData.dinner)}</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                      {suggestionData.dessert}
+                      <Typography>{capitalize(suggestionData.dessert)}</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                      {suggestionData.note}
+                      <Typography>{capitalize(suggestionData.note)}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
