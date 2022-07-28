@@ -15,15 +15,16 @@ import { useAuth0 } from "@auth0/auth0-react";
 import InformationBox from "./InformationBox";
 import { useEffect, useState } from "react";
 import SendIcon from "@material-ui/icons/Send";
+import useUser from "hooks/useUser";
 
 interface ISendSingleEmail {
   open: boolean;
   handleClose: () => void;
-  email: string;
+  toEmail: string;
   fullName: string;
 }
 
-const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email, fullName }) => {
+const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, toEmail, fullName }) => {
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
   const [html, setHtml] = React.useState("");
@@ -34,6 +35,8 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
   // States for confirmation box
   const [openConfBox, setOpenConfBox] = React.useState(false);
   const [confText, setConfText] = React.useState("");
+
+  const { location, email } = useUser();
 
   function onChange(e: { target: { value: React.SetStateAction<string> } }) {
     setHtml(e.target.value);
@@ -50,7 +53,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
     });
   });
 
-  async function sendEmailPost() {
+  async function sendEmailToUser() {
     if (subjectInput == "") {
       setError(true);
       setErrorText("Please enter a subject");
@@ -58,12 +61,14 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
     }
     await apiservice
       .post(
-        "email/send",
+        "email/sendFromUser",
         JSON.stringify({
-          EmailAddress: email,
           Subject: subjectInput,
           Content: html,
-          RecipientName: fullName,
+          FromEmail: email,
+          ToEmail: toEmail,
+          FromName: "Gi en jul " + location,
+          ToName: fullName,
         })
       )
       .then((response) => {
@@ -79,9 +84,11 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
         console.error(errorStack);
         setConfText("Problem oppsto under sending av mail!");
         setOpenConfBox(true);
+      })
+      .finally(() => {
+        setSubjectInput("");
+        setHtml("");
       });
-    setSubjectInput("");
-    setHtml("");
   }
 
   return (
@@ -120,7 +127,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, email
           </TableRow>
           <TableRow>
             <TableCell>
-              <Button variant="contained" endIcon={<SendIcon />} onClick={sendEmailPost}>
+              <Button variant="contained" endIcon={<SendIcon />} onClick={sendEmailToUser}>
                 Send Email
               </Button>
             </TableCell>

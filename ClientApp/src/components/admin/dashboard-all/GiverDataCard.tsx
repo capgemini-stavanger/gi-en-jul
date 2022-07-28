@@ -234,7 +234,7 @@ const GiverDataCard: React.FC<Props> = ({
                       handleClose={() => {
                         setOpenMailDialog(false);
                       }}
-                      email={giverData.email}
+                      toEmail={giverData.email}
                       fullName={giverData.fullName}
                     />
                   </Grid>
