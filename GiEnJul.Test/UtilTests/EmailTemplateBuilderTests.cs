@@ -111,5 +111,22 @@ namespace GiEnJul.Test.UtilTests
 
             Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
         }
+
+        [Fact]
+        public async Task ConnectionDeniedTemplate_ReplaceAllFields()
+        {
+            var data = new Dictionary<string, string>()
+            {
+                { "content", string.Empty }
+            };
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Giver(), "giver."));
+            data.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(new Municipality(), "municipalityDto."));
+
+            var result = await SUT.GetEmailTemplate(EmailTemplateName.ConnectionDenied, data);
+            Assert.False(string.IsNullOrEmpty(result.Subject));
+            Assert.False(string.IsNullOrEmpty(result.Content));
+
+            Assert.False(result.Content.Contains('{') || result.Content.Contains('}'));
+        }
     }
 }

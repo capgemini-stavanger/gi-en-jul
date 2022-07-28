@@ -169,25 +169,33 @@ namespace GiEnJul.Controllers
             recipient.MatchedGiver = null;
 
             // Noreply email to giver
-            var emailTemplatename = EmailTemplateName.Notification;
+            var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
+            var emailTemplatename = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
+
+            var emailContent = "";
+            if (feedback.DeleteGiver) {
+                emailContent = "Dette er en bekreftelse på at du har avslått den foreslåtte koblingen. " +
+                    "Vi forstår at du ønsker å trekke deg som giver. Om du skulle ombestemme deg er det alltids mulig å registrere seg på nytt!";
+            } else
+            {
+                emailContent = "Dette er en bekreftelse på at du har avslått den foreslåtte koblingen. " +
+                    "Vi setter pris på din tilbakemelding og tar den i betraktning ved neste forslag.";
+            }
+
             var emailValuesDict = new Dictionary<string, string>
                 {
-                    { "content", "Dette er en bekreftelse på at du har avslått koblingen..."},
+                    { "content", emailContent},
                 };
-            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel.First(), "municipalityDto."));
 
-            var adminEmail = await _municipalityRepository.GetEmailByLocation(giver.Location);
+            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
 
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
-
-                if (adminEmail != null)
-                {
-                    await _emailClient.SendEmailFromUserAsync(giver.Email, giver.FullName, adminEmail, giver.Location, "Avslått kobling", $"Bekreftelse på at {giver.FullName} har avslått");
-                }
 
             }
             catch (Exception e)

@@ -121,6 +121,10 @@
     <value>Gi en jul - du har fått tildelt en familie!</value>
     <comment>When admin assigns a family to user</comment>
   </data>
+  <data name="ConnectionDenied" xml:space="preserve">
+    <value>Gi en jul - avslått kobling!</value>
+    <comment>When giver denies the connection</comment>
+  </data>
   <data name="Notification" xml:space="preserve">
     <value>Gi en jul - notifikasjon!</value>
     <comment>When a notification is provided</comment>
