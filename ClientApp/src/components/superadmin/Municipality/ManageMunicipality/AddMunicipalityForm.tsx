@@ -2,7 +2,7 @@ import { Button, Dialog, Grid, Typography } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import { useState } from "react";
-import useStyles from "../Styles";
+import useStyles from "../../Styles";
 
 export interface IMunicipalityFormData {
   country: string;

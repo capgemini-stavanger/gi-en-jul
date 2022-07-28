@@ -58,7 +58,6 @@ const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContain
         <Grid item>
           <Box width="250px">
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Lokasjon</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"

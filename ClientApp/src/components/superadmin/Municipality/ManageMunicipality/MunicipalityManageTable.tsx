@@ -18,12 +18,12 @@ import AddMunicipalityForm, {
 } from "./AddMunicipalityForm";
 import InformationBox from "components/shared/InformationBox";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-import useStyles from "../Styles";
+
 import MunicipalityTableElements from "./MunicipalityTableElements";
+import useStyles from "components/superadmin/Styles";
 
 interface IMunicipalityManageTable {
   accessToken: string;
-  refreshData: () => void;
 }
 
 export interface IMunicipality {
@@ -53,10 +53,7 @@ const initFormDataState: () => IMunicipalityFormData = () => ({
   ...getFormAddMunicipality(),
 });
 
-const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
-  accessToken,
-  refreshData,
-}) => {
+const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
   const [Municipalities, setMunicipalities] = useState<IMunicipality[]>([
     initInterfaceMunicipality,
@@ -92,7 +89,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       .then(() => {
         fetchInformation();
         setOpenAdd(true);
-        refreshData();
       });
 
     setOpen(false);
@@ -107,7 +103,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       })
       .then(() => {
         fetchInformation();
-        refreshData();
       });
     setOpen(false);
   };
@@ -123,7 +118,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       })
       .then(() => {
         fetchInformation();
-        refreshData();
       });
   };
 

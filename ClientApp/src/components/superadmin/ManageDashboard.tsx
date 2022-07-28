@@ -5,10 +5,10 @@ import React, { useState } from "react";
 import { Container } from "reactstrap";
 import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
-import MunicipalityInformationContainer from "./MunicipalityInformation/MunicipalityInformationContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 import AddUser from "./Users/AddUser";
 import EventsContainer from "./Events/EventsContainer";
+import ManageMunicipalityContainer from "./Municipality/ManageMunicipalityContainer";
 
 interface IManageDashboard {
   role: string;
@@ -39,10 +39,10 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
           <FaqContainer accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <MunicipalityInformationContainer
+          <ManageMunicipalityContainer
             accessToken={accessToken}
-            role={role}
             assignedLocation={location}
+            role={role}
           />
         </TabPanel>
         <TabPanel value="3">

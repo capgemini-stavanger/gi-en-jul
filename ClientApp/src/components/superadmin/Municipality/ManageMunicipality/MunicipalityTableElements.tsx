@@ -2,7 +2,7 @@ import { Button, TableCell, TableRow, TextField } from "@material-ui/core";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import { useEffect, useState } from "react";
-import useStyles from "../Styles";
+import useStyles from "../../Styles";
 import { IMunicipality } from "./MunicipalityManageTable";
 
 interface props {

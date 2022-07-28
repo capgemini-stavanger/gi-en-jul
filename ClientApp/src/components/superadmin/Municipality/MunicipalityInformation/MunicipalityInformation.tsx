@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-import useStyles from "../Styles";
+import useStyles from "../../Styles";
 
 interface IMunicipalityInformation {
   accessToken: string;
