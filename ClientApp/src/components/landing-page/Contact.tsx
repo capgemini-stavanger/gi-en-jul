@@ -6,7 +6,7 @@ import { Mail, Phone } from "@material-ui/icons";
 import { Link as Scroll } from "react-scroll";
 
 export interface ContactData {
-  city: string;
+  name: string; // municipality name
   contactPerson: string;
   email: string;
   image: string;
@@ -39,12 +39,12 @@ const Contact: React.FC<Props> = ({ contacts }) => {
               <Box className={classes.cardContainer}>
                 <Box className={classes.cardInfo}>
                   <Typography variant="h5" color="primary">
-                    {contact.city}
+                    {contact.name}
                   </Typography>
                 </Box>
                 <Box className={classes.cardInfo}>
                   <img
-                    src={contact.image}
+                    src={"/contact_images/" + contact.contactPerson + ".jpg"}
                     className={classes.cardImage}
                     alt={"Finner ikke bilde.."}
                     onError={({ currentTarget }) => {
