@@ -102,7 +102,8 @@ namespace GiEnJul.Test.UtilTests
         {
             var data = new Dictionary<string, string>()
             {
-                { "content", string.Empty }
+                { "content", string.Empty },
+                {"fromemail", string.Empty }
             };
 
             var result = await SUT.GetEmailTemplate(EmailTemplateName.Notification, data);
