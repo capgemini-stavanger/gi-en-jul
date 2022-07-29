@@ -55,7 +55,17 @@ const NewEventBox: React.FC<Props> = ({
             existingEventNames={existingEventNames}
             existingMunicipalities={existingMunicipalities}
           />
-          {isUpdated ? <Button onClick={handleSaveClick}>Lagre event</Button> : ""}
+          {isUpdated ? (
+            <Button
+              style={{ marginLeft: "45%", marginBottom: "20px" }}
+              className={classes.button}
+              onClick={handleSaveClick}
+            >
+              Send inn eventet
+            </Button>
+          ) : (
+            ""
+          )}
           <ConfirmationBox
             open={openConfirmationBox}
             text={"Er du sikker på at du vil legge til et nytt event?"}
