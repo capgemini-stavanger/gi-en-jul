@@ -26,10 +26,10 @@ namespace GiEnJul.Controllers
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
 
         public EmailController(
-            ILogger log, 
-            IMapper mapper, 
+            ILogger log,
+            IMapper mapper,
             IEmailClient emailClient,
-            IGiverRepository giverRepository, 
+            IGiverRepository giverRepository,
             IEventRepository eventRepository,
             IEmailTemplateBuilder emailTemplateBuilder)
         {
@@ -42,12 +42,13 @@ namespace GiEnJul.Controllers
         }
 
         // The notification template is used to wrap content with styling
-        private async Task<EmailTemplate> NotificationEmailTemplateBuilder(string content)
+        private async Task<EmailTemplate> NotificationEmailTemplateBuilder(string content, string fromemail)
         {
             var emailTemplatename = EmailTemplateName.Notification;
             var emailValuesDict = new Dictionary<string, string>
                 {
                     { "content", content},
+                {"fromemail",fromemail },
                 };
             var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
             return emailTemplate;
@@ -56,21 +57,21 @@ namespace GiEnJul.Controllers
         // POST api/email/send
         [HttpPost("send")]
         [Authorize(Policy = Policy.PostEmail)]
-        public async Task<ActionResult> SendMail(PostEmailDto email)
+        public async Task<ActionResult> SendMail(PostEmailFromUserDto email)
         {
             _log.Information("Received email post with data {@0}", email);
-            if (string.IsNullOrWhiteSpace(email.RecipientName))
+            if (string.IsNullOrWhiteSpace(email.FromName))
             {
-                email.RecipientName = email.EmailAddress;
+                email.FromName = email.FromEmail;
             }
             try
             {
-                var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content);
-                await _emailClient.SendEmailAsync(email.EmailAddress, email.RecipientName, email.Subject, notificationTemplate.Content);
+                var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,email.FromEmail);
+                await _emailClient.SendEmailAsync(email.ToEmail, email.ToName, email.Subject, notificationTemplate.Content);
             }
             catch (Exception e)
             {
-                _log.Error(e, "Could not send mail to {@0}", email.EmailAddress);
+                _log.Error(e, "Could not send mail to {@0}", email.ToEmail);
                 throw;
             }
             return Ok();
@@ -91,7 +92,7 @@ namespace GiEnJul.Controllers
             }
             try
             {
-                var notificationTemplate = await NotificationEmailTemplateBuilder(emailFromUser.Content);
+                var notificationTemplate = await NotificationEmailTemplateBuilder(emailFromUser.Content,emailFromUser.FromEmail);
                 await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, emailFromUser.Subject, notificationTemplate.Content);
             }
             catch (Exception e)
@@ -125,7 +126,7 @@ namespace GiEnJul.Controllers
             {
                 try
                 {
-                    var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content);
+                    var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,"");
                     await _emailClient.SendEmailAsync(giver.Email, giver.Email, email.Subject, notificationTemplate.Content);
                 }
                 catch (Exception e)
