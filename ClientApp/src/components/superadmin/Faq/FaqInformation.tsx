@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
-import { Box, Button, Grid, TextField } from "@material-ui/core";
+import { Box, Button, Divider, Grid, TextField } from "@material-ui/core";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
@@ -9,15 +9,18 @@ import useStyles from "components/superadmin/Styles";
 interface IFaqInformation {
   accessToken: string;
   index: string;
+  getFaqInformation: () => void;
 }
 
-const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
+const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index, getFaqInformation }) => {
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
   const [faq, setFaq] = useState("");
   const [html, setHtml] = useState("");
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
+  const [openConfirmBox2, setOpenConfirmBox2] = useState(false);
+  const [openConfirmBox3, setOpenConfirmBox3] = useState(false);
   const [openEditor, setOpenEditor] = useState(false);
   const [openAddFaqEditor, setOpenAddFaqEditor] = useState(false);
   const [faqQuestion, setFaqQuestion] = useState("");
@@ -50,11 +53,9 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
   }
 
   const handleDeleteClick = () => {
-    setOpenConfirmBox(true);
+    setOpenConfirmBox3(true);
   };
-  const handleSaveClick = () => {
-    setOpenConfirmBox(true);
-  };
+
   const handleConfirmDelete = (response: boolean) => {
     if (response) {
       apiservice
@@ -65,6 +66,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
         .then(() => {
           setFaq("");
           setHtml("");
+          getFaqInformation();
         })
         .catch((errorStack) => {
           console.error(errorStack);
@@ -83,6 +85,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
         .then((response) => {
           if (response.status === 200) {
             setOpenEditor(false);
+            getFaqInformation();
           }
         })
         .catch((error) => {
@@ -102,6 +105,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
         .then((response) => {
           if (response.status === 200) {
             setOpenEditor(false);
+            getFaqInformation();
           }
         })
         .catch((error) => {
@@ -124,11 +128,14 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
                 variant="contained"
                 onClick={() => {
                   setOpenEditor(true);
+                  setOpenAddFaqEditor(false);
+                  setHtml(faq);
                 }}
               >
                 Rediger tekst
               </Button>
               <Button
+                hidden={openAddFaqEditor}
                 style={{ marginLeft: "10px" }}
                 className={classes.buttonError}
                 variant="contained"
@@ -137,27 +144,17 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
                 Slett spørsmål og svar
               </Button>
               <ConfirmationBox
-                open={openConfirmBox}
+                open={openConfirmBox3}
                 text={"Er du sikker på at du ønsker å slette dette ofte stilte spørsmålet?"}
                 handleClose={() => {
-                  setOpenConfirmBox(false);
+                  setOpenConfirmBox3(false);
                 }}
                 handleResponse={handleConfirmDelete}
               />
             </Grid>
           </>
         )}
-        <Grid item>
-          <Button
-            className={classes.button}
-            variant="contained"
-            onClick={() => {
-              setOpenAddFaqEditor(true), setHtml("");
-            }}
-          >
-            Legg til nytt spørsmål og svar
-          </Button>
-        </Grid>
+
         {openAddFaqEditor && (
           <Grid item>
             <TextField
@@ -173,13 +170,19 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
             <DefaultEditor value={html} onChange={onChange} />
             <Grid container direction="row" spacing={2} style={{ marginTop: "10px" }}>
               <Grid item>
-                <Button className={classes.button} variant="contained" onClick={handleSaveClick}>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  onClick={() => {
+                    setOpenConfirmBox(true);
+                  }}
+                >
                   Lagre endringer
                 </Button>
               </Grid>
               <Grid item>
                 <Button
-                  className={classes.button}
+                  className={classes.buttonError}
                   variant="contained"
                   onClick={() => {
                     setOpenAddFaqEditor(false);
@@ -200,20 +203,25 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
             />
           </Grid>
         )}
-
         {openEditor && (
           <Grid item>
             <DefaultEditor value={html} onChange={onChange} />
             <br />
             <Grid container direction="row" spacing={2}>
               <Grid item>
-                {" "}
-                <Button variant="contained" onClick={handleSaveClick}>
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  onClick={() => {
+                    setOpenConfirmBox2(true);
+                  }}
+                >
                   Lagre endringer
                 </Button>
               </Grid>
               <Grid item>
                 <Button
+                  className={classes.buttonError}
                   variant="contained"
                   onClick={() => {
                     setOpenEditor(false);
@@ -225,15 +233,28 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index }) => {
             </Grid>
 
             <ConfirmationBox
-              open={openConfirmBox}
+              open={openConfirmBox2}
               text={"Er du sikker på at du ønsker å oppdatere teksten?"}
               handleClose={() => {
-                setOpenConfirmBox(false), setOpenEditor(false);
+                setOpenConfirmBox2(false), setOpenEditor(false);
               }}
               handleResponse={handleSaveResponse}
             />
           </Grid>
         )}
+        <Divider />
+        <Grid item>
+          <Button
+            hidden={openAddFaqEditor}
+            className={classes.button}
+            variant="contained"
+            onClick={() => {
+              setOpenAddFaqEditor(true), setHtml(""), setOpenEditor(false);
+            }}
+          >
+            Legg til nytt spørsmål og svar
+          </Button>
+        </Grid>
       </Grid>
     </>
   );

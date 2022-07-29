@@ -22,9 +22,10 @@ const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleRes
           </Typography>
         </Grid>
         <Grid item>
-          <Grid container direction="row" justifyContent="center">
+          <Grid container style={{ marginBottom: "10px" }} direction="row" justifyContent="center">
             <Grid item>
               <Button
+                className={classes.buttonError}
                 variant="contained"
                 onClick={() => {
                   handleResponse(false);
@@ -36,6 +37,7 @@ const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleRes
             </Grid>
             <Grid item className={classes.confirmationBoxButton}>
               <Button
+                className={classes.button}
                 variant="contained"
                 onClick={() => {
                   handleResponse(true);

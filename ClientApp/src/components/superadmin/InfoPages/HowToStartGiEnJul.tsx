@@ -111,6 +111,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
             onClick={() => {
               setOpenEditor(true);
             }}
+            className={classes.button}
           >
             Rediger tekst
           </Button>
@@ -123,7 +124,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
 
           <Grid container direction="row" spacing={2}>
             <Grid item className={classes.businessButton}>
-              <Button variant="contained" onClick={handleOpen}>
+              <Button variant="contained" className={classes.button} onClick={handleOpen}>
                 Lagre endringer
               </Button>
             </Grid>
@@ -133,6 +134,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
                 onClick={() => {
                   setOpenEditor(false);
                 }}
+                className={classes.buttonError}
               >
                 Avbryt
               </Button>

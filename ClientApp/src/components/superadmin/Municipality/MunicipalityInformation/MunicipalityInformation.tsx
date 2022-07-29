@@ -50,7 +50,9 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
 
   return (
     <>
-      <Box style={{ marginTop: "15px" }}>{parse(municipality.information)}</Box>
+      <Box className={classes.tableBody} style={{ marginTop: "15px" }}>
+        {parse(municipality.information)}
+      </Box>
 
       <Button
         style={{ marginTop: "10px", marginBottom: "10px" }}
@@ -77,7 +79,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           </Button>
           <Button
             style={{ marginRight: "10px" }}
-            className={classes.button}
+            className={classes.buttonError}
             variant="contained"
             onClick={() => {
               setOpenEditor(false);

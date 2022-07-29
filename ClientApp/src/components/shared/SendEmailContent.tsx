@@ -74,7 +74,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, toEma
       .then((response) => {
         if (response.status === 200) {
           handleClose();
-          setConfText("Sendte mail til: " + fullName + " <" + email + ">");
+          setConfText("Sendte mail til: " + fullName + " <" + toEmail + ">");
           setOpenConfBox(true);
           setError(false);
           setErrorText("");
@@ -97,7 +97,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, toEma
         <TableCell rowSpan={10}>
           <TableRow>
             <TableCell>
-              <Typography variant="h6">Send email to {email} </Typography>
+              <Typography variant="h6">Sender email til {toEmail} </Typography>
               <TextField
                 fullWidth
                 placeholder="Enter subject here"
