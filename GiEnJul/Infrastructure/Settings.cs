@@ -28,6 +28,7 @@ namespace GiEnJul.Infrastructure
         public LogEventLevel LogLevel => _configuration.GetValue("LogLevel", LogEventLevel.Debug);
         public string RecaptchaSecret => _configuration.GetValue<string>("RecaptchaSecret");
         public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri");
+
         public MailSettings MailSettings
         {
             get
@@ -46,7 +47,9 @@ namespace GiEnJul.Infrastructure
             }
         }
 
-        public Auth0Settings Auth0Settings { get
+        public Auth0Settings Auth0Settings
+        {
+            get
             {
                 var section = _configuration.GetSection("Auth0");
                 var auth0 = new Auth0Settings
@@ -56,12 +59,17 @@ namespace GiEnJul.Infrastructure
                     LocalAudience = section.GetValue<string>("LocalAudience"),
                     ManagementClientId = section.GetValue<string>("ManagementClientId"),
                     ManagementClientSecret = section.GetValue<string>("ManagementClientSecret"),
+                    Admin = section.GetValue<string>("AdminRole"),
+                    Institution = section.GetValue<string>("InstitutionRole"),
+                    SuperAdmin = section.GetValue<string>("SuperAdminRole")
                 };
                 return auth0;
-            } 
+            }
         }
 
-        public CleanupJob CleanupJob { get
+        public CleanupJob CleanupJob
+        {
+            get
             {
                 var section = _configuration.GetSection("CleanupJob");
                 var cleanup = new CleanupJob
@@ -90,6 +98,9 @@ namespace GiEnJul.Infrastructure
         public string AzureAudience { get; set; }
         public string ManagementClientId { get; set; }
         public string ManagementClientSecret { get; set; }
+        public string Admin { get; set; }
+        public string Institution { get; set; }
+        public string SuperAdmin { get; set; }
     }
 
     public class CleanupJob

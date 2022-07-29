@@ -1,5 +1,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
+import ConfirmationBox from "components/shared/ConfirmationBox";
+import InformationBox from "components/shared/InformationBox";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import React, { ChangeEvent, useState } from "react";
@@ -8,8 +10,6 @@ import { Button } from "reactstrap";
 interface props {
   accessToken: string;
   institution: boolean;
-  confirmOpen: boolean;
-  handleConfirm: (response: boolean) => void;
   handleRefresh: () => void;
 }
 
@@ -18,18 +18,18 @@ interface IChangeEvent {
   value: unknown;
 }
 
-const UserForm: React.FC<props> = ({
-  accessToken,
-  institution,
-
-  handleRefresh,
-}) => {
+const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
   const [email, setEmail] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
   const [institutionName, setinstitutionName] = useState<string>("");
+
+  const [openAdd, setOpenAdd] = useState<boolean>(false);
+  const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
 
   const apiservice = new ApiService(accessToken);
 
@@ -63,6 +63,14 @@ const UserForm: React.FC<props> = ({
     }
   };
 
+  const handleSetMessage = () => {
+    if (success) {
+      setMessage("Brukeren er lagt til");
+    } else {
+      setMessage("Kunne ikke legge til brukeren");
+    }
+  };
+
   const handleCreateUser = () => {
     if (handleConfirmPassword()) {
       apiservice
@@ -70,17 +78,27 @@ const UserForm: React.FC<props> = ({
           Email: email,
           Password: passwordInput,
           Location: locationInput,
-          Role: roleInput,
+          Role: institution ? "Institution" : roleInput,
           Institution: institutionName,
         })
         .then(() => {
-          //setOpen(true);
+          setSuccess(true);
           handleRefresh();
+        })
+        .catch((errorStack) => {
+          console.error(errorStack);
         });
-      // setOpen(false);
     } else {
-      //  setErrorMessage("The passwords must match");
     }
+  };
+
+  const handleAdd = (response: boolean) => {
+    if (response) {
+      handleCreateUser();
+      setConfirmAdd(true);
+    }
+    handleSetMessage();
+    setOpenAdd(false);
   };
 
   return (
@@ -123,6 +141,20 @@ const UserForm: React.FC<props> = ({
         ></InputValidator>
       </Grid>
 
+      {institution && (
+        <Grid item>
+          <InputValidator
+            validators={[isNotNull]}
+            value={institutionName}
+            onChange={(e) => {
+              onInstitutionNameChange(e);
+            }}
+            label={"Institusjon(Navn)*"}
+            name={"institusjonsnavn"}
+          ></InputValidator>
+        </Grid>
+      )}
+
       <Grid item>
         <InputValidator
           validators={[isNotNull]}
@@ -135,8 +167,8 @@ const UserForm: React.FC<props> = ({
         ></InputValidator>
       </Grid>
 
-      <Grid item>
-        {!institution && (
+      {!institution && (
+        <Grid item>
           <InputValidator
             validators={[isNotNull]}
             value={roleInput}
@@ -146,28 +178,30 @@ const UserForm: React.FC<props> = ({
             label={"Rolle*"}
             name={"rolle"}
           ></InputValidator>
-        )}
-      </Grid>
+        </Grid>
+      )}
 
-      <Grid item>
-        {institution && (
-          <InputValidator
-            validators={[isNotNull]}
-            value={institutionName}
-            onChange={(e) => {
-              onInstitutionNameChange(e);
-            }}
-            label={"Institusjon(Navn)*"}
-            name={"institusjonsnavn"}
-          ></InputValidator>
-        )}
-      </Grid>
+      <ConfirmationBox
+        open={openAdd}
+        text={"Er du sikker på at du vil legge til brukeren?"}
+        handleClose={() => {
+          handleAdd;
+        }}
+        handleResponse={handleAdd}
+      ></ConfirmationBox>
+
+      <InformationBox
+        open={confirmAdd}
+        text={message}
+        handleClose={() => {
+          setConfirmAdd(false);
+        }}
+      ></InformationBox>
 
       <Grid item>
         <Button
           onClick={() => {
-            handleCreateUser();
-            //  handleConfirm(true);
+            setOpenAdd(true);
           }}
         >
           <Typography>Legg til</Typography>

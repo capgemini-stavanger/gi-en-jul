@@ -25,6 +25,10 @@ namespace GiEnJul.Clients
         Task<List<User>> GetAllUsers();
         void DeleteUser(string email);
         Task<User> GetSingleUser(string email);
+        Task AddUserRole(User user, string roleId);
+        Task UpdateUserRole(User user, List<string> roles);
+        Task RemoveUserRole(User user, string roleId);
+
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -66,7 +70,7 @@ namespace GiEnJul.Clients
 
             var tokenDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenResp);
 
-            if(!tokenDict.ContainsKey("access_token"))
+            if (!tokenDict.ContainsKey("access_token"))
                 throw new Exception($"Token response did not contain the access_token key");
 
             var token = tokenDict["access_token"];
@@ -100,33 +104,42 @@ namespace GiEnJul.Clients
             _managementApiClient.UpdateAccessToken(token);
             var request = new GetUsersRequest();
             var users = await _managementApiClient.Users.GetAllAsync(request);
-         
-            return (List<User>) users;
+
+            return (List<User>)users;
         }
 
         public async Task<User> GetSingleUser(string email)
         {
             var users = await GetAllUsers();
-            return users.Where(u => u.Email == email).SingleOrDefault(); 
+            return users.Where(u => u.Email == email).SingleOrDefault();
         }
 
-        public async void DeleteUser (string email)
+        public async void DeleteUser(string email)
         {
             var user = await GetSingleUser(email);
             await _managementApiClient.Users.DeleteAsync(user.UserId);
- 
+
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
         {
-            var token  = await GetTokenAsync();
-            var newUser = new UserCreateRequest { 
-                Connection = "Username-Password-Authentication", 
-                Email = userDto.Email, 
-                Password= userDto.Password, 
+            var token = await GetTokenAsync();
+            var newUser = new UserCreateRequest
+            {
+                Connection = "Username-Password-Authentication",
+                Email = userDto.Email,
+                Password = userDto.Password,
                 NickName = userDto.Email.Split('@')[0],
-                AppMetadata = GenerateMetadata(MetaDataType.app_metadata, userDto),
-                UserMetadata = GenerateMetadata(MetaDataType.user_metadata, userDto)
+                UserMetadata = new
+                {
+                    location = userDto.Location,
+
+                },
+                AppMetadata = new
+                {
+                    role = userDto.Role,
+                    institution = userDto.Institution
+                }
             };
             _managementApiClient.UpdateAccessToken(token);
             return await _managementApiClient.Users.CreateAsync(newUser);
@@ -142,6 +155,31 @@ namespace GiEnJul.Clients
             return JObject.FromObject(new Dictionary<string, string>() {
                     { "location", userDto.Location}
                 });
+        }
+
+        public async Task AddUserRole(User user, string roleId)
+        {
+            var currentRoles = await _managementApiClient.Users.GetRolesAsync(user.UserId);
+            var roles = currentRoles.Select(role => role.Id).ToList();
+            roles.Add(roleId);
+            await UpdateUserRole(user, roles);
+        }
+
+        public async Task RemoveUserRole(User user, string roleId)
+        {
+            var currentRoles = await _managementApiClient.Users.GetRolesAsync(user.UserId);
+            var roles = currentRoles.Select(role => role.Id).ToList();
+            roles.RemoveAll(role => role == roleId);
+            await UpdateUserRole(user, roles);
+        }
+
+        public async Task UpdateUserRole(User user, List<string> roles)
+        {
+            var newRoles = new AssignRolesRequest()
+            {
+                Roles = roles.Distinct().ToArray()
+            };
+            await _managementApiClient.Users.AssignRolesAsync(user.UserId, newRoles);
         }
     }
 }
