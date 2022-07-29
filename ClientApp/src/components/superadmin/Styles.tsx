@@ -89,6 +89,9 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.error.dark,
       },
     },
+    regitrationFields: {
+      l: "100px",
+    },
   })
 );
 
