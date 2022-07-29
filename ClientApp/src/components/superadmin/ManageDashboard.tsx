@@ -5,7 +5,6 @@ import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 import AddUser from "./Users/AddUser";
-import EventsContainer from "./Events/EventsContainer";
 import ManageMunicipalityContainer from "./Municipality/ManageMunicipalityContainer";
 import EventsTable from "./Events/EventsTable";
 
