@@ -1,7 +1,7 @@
-import { FormControl, Grid, MenuItem, Select, Typography } from "@material-ui/core";
+import { FormControl, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 import FaqInformation from "./FaqInformation";
 import SelectForm from "components/shared/input-fields/SelectForm";
 
@@ -15,11 +15,6 @@ interface faqInfo {
   contentType: string;
   index: string;
   timestamp: string;
-}
-
-interface IChangeEvent {
-  name?: string | undefined;
-  value: unknown;
 }
 
 const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
@@ -60,6 +55,7 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
             onChange={(e) => {
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               setSelectedItem(faq.find((m: any) => m.question === e.target.value)!.index);
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               setSelectFormValue(faq.find((m: any) => m.question === e.target.value)!.question);
             }}
           />
