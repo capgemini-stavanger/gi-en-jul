@@ -1,8 +1,9 @@
-import { FormControl, Grid, MenuItem, Select, Typography } from "@material-ui/core";
+import { FormControl, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 import FaqInformation from "./FaqInformation";
+import SelectForm from "components/shared/input-fields/SelectForm";
 
 interface IFaqInformation {
   accessToken: string;
@@ -16,15 +17,11 @@ interface faqInfo {
   timestamp: string;
 }
 
-interface IChangeEvent {
-  name?: string | undefined;
-  value: unknown;
-}
-
 const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
   const [faq, setFaq] = useState<faqInfo[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>("");
+  const [selectFormValue, setSelectFormValue] = useState<string>("");
 
   const getFaqInformation = () => {
     apiservice
@@ -39,36 +36,37 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
       });
   };
   useEffect(getFaqInformation, []);
-  const handleChanges = (event: ChangeEvent<IChangeEvent>) => {
-    setSelectedItem(event.target.value as string);
-  };
-
-  const menuItems = faq.map((item, index) => {
-    return (
-      <MenuItem key={index} value={item.index}>
-        {item.question}
-      </MenuItem>
-    );
-  });
 
   return (
     <Grid container direction="column">
-      <Typography variant="h5"> Ofte stile spørsmål</Typography>
+      <Typography style={{ marginBottom: "20px" }} variant="h5">
+        Ofte stile spørsmål
+      </Typography>
       <Grid item>
         <FormControl fullWidth>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedItem}
-            onChange={handleChanges}
-            fullWidth
-          >
-            {menuItems}
-          </Select>
+          <SelectForm
+            name="Faq"
+            variant="outlined"
+            label="Velg faq"
+            value={selectFormValue}
+            options={faq.map((o) => {
+              return { value: o.question, text: o.question };
+            })}
+            onChange={(e) => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              setSelectedItem(faq.find((m: any) => m.question === e.target.value)!.index);
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              setSelectFormValue(faq.find((m: any) => m.question === e.target.value)!.question);
+            }}
+          />
         </FormControl>
       </Grid>
       <Grid item>
-        <FaqInformation accessToken={accessToken} index={selectedItem} />
+        <FaqInformation
+          getFaqInformation={getFaqInformation}
+          accessToken={accessToken}
+          index={selectedItem}
+        />
       </Grid>
       <Grid item>
         <Questions />

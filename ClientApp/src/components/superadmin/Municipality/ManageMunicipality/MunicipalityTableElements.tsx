@@ -129,7 +129,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           ) : (
             <>
               <Button
-                className={classes.button}
+                className={classes.buttonError}
                 variant="contained"
                 onClick={() => {
                   setOpenEditForm(true);

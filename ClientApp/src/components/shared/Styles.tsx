@@ -21,6 +21,7 @@ export default () =>
         color: theme.palette.primary.dark,
       },
     },
+
     smallLogo: {
       position: "absolute",
       height: "35px",
@@ -135,6 +136,20 @@ export default () =>
 
     fontSizeNavText: {
       fontSize: "20px",
+    },
+    button: {
+      color: "white",
+      backgroundColor: theme.palette.primary.main,
+      "&:hover": {
+        backgroundColor: theme.palette.primary.dark,
+      },
+    },
+    buttonError: {
+      color: "white",
+      backgroundColor: theme.palette.error.main,
+      "&:hover": {
+        backgroundColor: theme.palette.error.dark,
+      },
     },
 
     navContainerMobile: {

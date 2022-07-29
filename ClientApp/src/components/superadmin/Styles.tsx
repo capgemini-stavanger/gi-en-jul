@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: "10px",
     },
     dialogBox: {
-      width: "1000px",
+      width: "500px",
       margin: "auto",
     },
     table: {

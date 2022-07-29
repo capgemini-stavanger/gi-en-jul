@@ -18,9 +18,19 @@ const MunicipalityForm: React.FC<props> = ({ open, setOpen, handleAddMunicipalit
   return (
     <>
       <Dialog open={open} className={classes.dialogBox} fullWidth>
-        <Typography>Legg til ny kommune</Typography>
+        <Typography
+          style={{ marginLeft: "20px", marginTop: "10px", marginBottom: "10px", fontWeight: "600" }}
+        >
+          Legg til ny kommune
+        </Typography>
 
-        <Grid container direction="column" justifyContent="space-evenly" alignItems="stretch">
+        <Grid
+          style={{ marginLeft: "40px", width: "350px" }}
+          container
+          direction="column"
+          justifyContent="space-evenly"
+          alignItems="stretch"
+        >
           <Grid item>
             <InputValidator
               autoFocus
@@ -42,7 +52,7 @@ const MunicipalityForm: React.FC<props> = ({ open, setOpen, handleAddMunicipalit
           <Grid item>
             <InputValidator
               autoFocus
-              label="Navn*"
+              label="Kommune navn*"
               margin="normal"
               fullWidth
               name="name"
@@ -56,9 +66,11 @@ const MunicipalityForm: React.FC<props> = ({ open, setOpen, handleAddMunicipalit
             />
           </Grid>
 
-          <Grid container direction="row">
+          <Grid style={{ marginBottom: "10px" }} container direction="row">
             <Grid item>
               <Button
+                className={classes.buttonError}
+                style={{ marginRight: "10px" }}
                 onClick={() => {
                   setOpen(false);
                 }}
@@ -69,6 +81,7 @@ const MunicipalityForm: React.FC<props> = ({ open, setOpen, handleAddMunicipalit
 
             <Grid item>
               <Button
+                className={classes.button}
                 onClick={() => {
                   {
                     handleAddMunicipality({

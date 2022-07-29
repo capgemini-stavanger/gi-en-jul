@@ -112,6 +112,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
             onClick={() => {
               setOpenEditor(true);
             }}
+            className={classes.button}
           >
             Rediger tekst
           </Button>
@@ -124,12 +125,13 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
 
           <Grid container direction="row" spacing={2}>
             <Grid item className={classes.businessButton}>
-              <Button variant="contained" onClick={handleOpen}>
+              <Button variant="contained" className={classes.button} onClick={handleOpen}>
                 Lagre endringer
               </Button>
             </Grid>
             <Grid item className={classes.businessButton}>
               <Button
+                className={classes.buttonError}
                 variant="contained"
                 onClick={() => {
                   setOpenEditor(false);
