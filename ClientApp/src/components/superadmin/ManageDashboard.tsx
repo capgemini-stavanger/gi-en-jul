@@ -5,8 +5,8 @@ import BusinessInformation from "./Business/BusinessInformation";
 import FaqContainer from "./Faq/FaqContainer";
 import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 import AddUser from "./Users/AddUser";
-import EventsContainer from "./Events/EventsContainer";
 import ManageMunicipalityContainer from "./Municipality/ManageMunicipalityContainer";
+import EventsTable from "./Events/EventsTable";
 
 interface IManageDashboard {
   role: string;
@@ -52,7 +52,7 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
         <AddUser accessToken={accessToken} />
       </TabPanel>
       <TabPanel value="6">
-        <EventsContainer accessToken={accessToken} />
+        <EventsTable accessToken={accessToken} />
       </TabPanel>
     </TabContext>
   );

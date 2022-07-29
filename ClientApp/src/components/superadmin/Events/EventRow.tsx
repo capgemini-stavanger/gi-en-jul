@@ -1,7 +1,7 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, TableCell, TableRow } from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import React, { useState } from "react";
-import useStyles from "components/superadmin/Events/Styles";
+import useStyles from "components/superadmin/Styles";
 import { EventErrors as EE, EventInputValidators as EV } from "./EventValidation";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
@@ -70,7 +70,7 @@ interface Props {
   existingMunicipalities: string[];
 }
 
-const EventInformation: React.FC<Props> = ({
+const EventRow: React.FC<Props> = ({
   event,
   handleEventChange,
   onDelete,
@@ -191,12 +191,12 @@ const EventInformation: React.FC<Props> = ({
     setFormValues(copy);
   };
 
-  const form: JSX.Element[] = [
+  const tableCells: JSX.Element[] = [
     // eventName
-    <Grid className={classes.eventBox} item key={0}>
+    <TableCell key={0}>
       <SelectForm
         name="Eventnavn"
-        label="Eventnavn"
+        // label="Eventnavn"
         variant="outlined"
         errorMessage="Velg eventnavn"
         error={formValues.eventName == ""}
@@ -208,11 +208,11 @@ const EventInformation: React.FC<Props> = ({
         disabled={!activeEdit}
         fullWidth
       />
-    </Grid>,
-    <Grid className={classes.eventBox} item key={1}>
+    </TableCell>,
+    <TableCell key={1}>
       <SelectForm
         name="Municipality"
-        label="Kommune"
+        // label="Kommune"
         variant="outlined"
         errorMessage="Velg kommune"
         error={formValues.municipality == ""}
@@ -224,9 +224,9 @@ const EventInformation: React.FC<Props> = ({
         disabled={!activeEdit}
         fullWidth
       />
-    </Grid>,
+    </TableCell>,
     // startDate
-    <Grid className={classes.eventBox} key={2} item>
+    <TableCell key={2} width="140px">
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("startDate")}
@@ -240,12 +240,13 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.startDate}
         name="startDate"
-        label="Start-dato (åååå-mm-dd)"
+        // label="Start-dato (åååå-mm-dd)"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
     // endDate
-    <Grid className={classes.eventBox} key={3} item>
+    <TableCell key={3} width="140px">
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("endDate")}
@@ -259,12 +260,13 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.endDate}
         name="endDate"
-        label="Slutt-dato  (åååå-mm-dd)"
+        // label="Slutt-dato (åååå-mm-dd)"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
     // deliveryAddress
-    <Grid className={classes.eventBox} key={4} item>
+    <TableCell key={4}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryAddress")}
@@ -277,12 +279,13 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.deliveryAddress}
         name="deliveryAddress"
-        label="Leverings Adresse"
+        // label="Leverings Adresse"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
     // deliveryDate
-    <Grid className={classes.eventBox} key={5} item>
+    <TableCell key={5} width="140px">
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryDate")}
@@ -296,12 +299,13 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.deliveryDate}
         name="deliveryDate"
-        label="Leverings-dato"
+        // label="Leverings-dato"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
     // deliveryTime
-    <Grid className={classes.eventBox} key={"deliveryTime"} item>
+    <TableCell key={"deliveryTime"}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryTime")}
@@ -315,12 +319,13 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.deliveryTime}
         name="deliveryTime"
-        label="Leverings-Klokkeslett"
+        // label="Leverings-Klokkeslett"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
     //giverLimit
-    <Grid className={classes.eventBox} key={7} item>
+    <TableCell key={7} width="100px">
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("giverLimit")}
@@ -334,16 +339,17 @@ const EventInformation: React.FC<Props> = ({
         }}
         value={formValues.giverLimit}
         name="giverLimit"
-        label="Maks Antall Givere"
+        // label="Maks Antall Givere"
+        label=""
         disabled={!activeEdit}
       />
-    </Grid>,
+    </TableCell>,
   ];
 
   return (
-    <Grid container direction="row" className={classes.eventContainers}>
-      {form}
-      <Grid item>
+    <TableRow className={classes.tableBody}>
+      {tableCells}
+      <TableCell>
         <InformationBox
           open={openInformation}
           text={informationText}
@@ -367,17 +373,19 @@ const EventInformation: React.FC<Props> = ({
           }}
           handleResponse={handleDeleteConfirmation}
         />
-        {activeEdit ? (
-          <>
-            {cancelButton} {saveButton}
-          </>
-        ) : (
-          <>
-            {editButton} {deleteButton}
-          </>
-        )}
-      </Grid>
-    </Grid>
+        <Grid container direction="row">
+          {activeEdit ? (
+            <>
+              {cancelButton} {saveButton}
+            </>
+          ) : (
+            <>
+              {editButton} {deleteButton}
+            </>
+          )}
+        </Grid>
+      </TableCell>
+    </TableRow>
   );
 };
-export default EventInformation;
+export default EventRow;
