@@ -208,7 +208,7 @@ namespace GiEnJul.Infrastructure
             CreateMap<Models.Municipality, Dtos.GetContactsDto>();
                
             CreateMap<Entities.Municipality, Dtos.GetContactsDto>()
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.PartitionKey));
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.RowKey));
 
         }
     }
