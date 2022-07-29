@@ -11,5 +11,19 @@ const useStyles = makeStyles((theme) => ({
   eventBox: {
     margin: "1%",
   },
+  button: {
+    color: "white",
+    backgroundColor: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  buttonError: {
+    color: "white",
+    backgroundColor: theme.palette.error.main,
+    "&:hover": {
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
 }));
 export default useStyles;

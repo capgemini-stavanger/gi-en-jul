@@ -4,13 +4,15 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  Table,
   TableBody,
+  TableCell,
+  TableRow,
   TextField,
   Typography,
 } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
-import EventInformation from "components/superadmin/Events/EventInformation";
 import {
   Dto2EventContent,
   EventContent,
@@ -23,15 +25,15 @@ import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
 import useStyles from "../Styles";
 import ConfirmationBox from "components/shared/ConfirmationBox";
+import EventRow from "./EventRow";
 
 interface Props {
   accessToken: string;
 }
 
-const EventsContainer: React.FC<Props> = ({ accessToken }) => {
+const EventsTable: React.FC<Props> = ({ accessToken }) => {
   const [events, setEvents] = useState(new Map<string, EventContent>());
   const [municipalities, setMunicipalities] = useState<string[]>([]);
-  const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
   const [eventTable, setEventTable] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
@@ -204,27 +206,26 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     setOpenInformationBox(true);
   };
 
-  const buildBody = () => {
+  const buildTable = () => {
     const eventsList: EventContent[] = [];
     // events.forEach((event) => eventsList.push(event));
     events.forEach((event) => eventsList.push(event));
-    const body = eventsList
+    const table = eventsList
       .filter((e) => e.eventName === selectedEventName)
       .map((event) => {
         return (
-          <Grid item container direction="row" key={event.eventName + event.municipality}>
-            <EventInformation
-              event={event}
-              handleEventChange={handleEventUpdate}
-              onDelete={handleEventDeletion}
-              id={event.id}
-              existingEventNames={uniqueEventNames}
-              existingMunicipalities={municipalities}
-            />
-          </Grid>
+          <EventRow
+            key={event.eventName + event.municipality}
+            event={event}
+            handleEventChange={handleEventUpdate}
+            onDelete={handleEventDeletion}
+            id={event.id}
+            existingEventNames={uniqueEventNames}
+            existingMunicipalities={municipalities}
+          />
         );
       });
-    setEventBody(body);
+    setEventTable(table);
   };
 
   const fetchDistinctEventNames = () => {
@@ -270,7 +271,7 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   };
 
   useEffect(refreshData, []);
-  useEffect(buildBody, [events, selectedEventName, uniqueEventNames, municipalities]);
+  useEffect(buildTable, [events, selectedEventName, uniqueEventNames, municipalities]);
 
   return (
     <>
@@ -325,12 +326,23 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
             )}
           </Grid>
         </Grid>
-        <Grid item container direction="column">
-          {eventBody}
-        </Grid>
-
-        <TableBody className={classes.tableBody}>{eventTable}</TableBody>
-
+        <Table>
+          <TableBody className={classes.table}>
+            <TableRow>
+              <TableCell className={classes.tableHeaderText}>Eventnavn</TableCell>
+              <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
+              <TableCell className={classes.tableHeaderText}>Start-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>Slutt-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>Leverings-adresse</TableCell>
+              <TableCell className={classes.tableHeaderText}>Leverings-dato</TableCell>
+              <TableCell className={classes.tableHeaderText}>Leverings-klokkeslett</TableCell>
+              <TableCell className={classes.tableHeaderText}>Maks antall givere</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableBody>
+          <TableBody className={classes.tableBody}>{eventTable}</TableBody>
+        </Table>
         <ConfirmationBox
           open={openConfirmationBox}
           text={
@@ -375,4 +387,4 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
     </>
   );
 };
-export default EventsContainer;
+export default EventsTable;
