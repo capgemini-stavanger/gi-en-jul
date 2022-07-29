@@ -4,8 +4,10 @@ import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "reactstrap";
+import useStyles from "../Styles";
+import { ROLES } from "common/constants/Roles";
 
 interface props {
   accessToken: string;
@@ -25,6 +27,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
   const [institutionName, setinstitutionName] = useState<string>("");
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
 
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
@@ -32,6 +35,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const [success, setSuccess] = useState<boolean>(false);
 
   const apiservice = new ApiService(accessToken);
+  const classes = useStyles();
 
   const onEmailChange = (event: React.ChangeEvent<IChangeEvent>) => {
     setEmail(event.target.value as string);
@@ -91,6 +95,13 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     } else {
     }
   };
+
+  const getMunicipalities = () => {
+    apiservice.get("municipality/active").then((respone) => {
+      setMunicipalities(respone.data);
+    });
+  };
+  useEffect(getMunicipalities, []);
 
   const handleAdd = (response: boolean) => {
     if (response) {
@@ -157,8 +168,13 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
 
       <Grid item>
         <InputValidator
+          size={"medium"}
           validators={[isNotNull]}
           value={locationInput}
+          type="select"
+          options={municipalities.map((m) => {
+            return { value: m, text: m };
+          })}
           onChange={(e) => {
             onLocationChange(e);
           }}
@@ -170,8 +186,13 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       {!institution && (
         <Grid item>
           <InputValidator
+            size={"medium"}
             validators={[isNotNull]}
             value={roleInput}
+            type="select"
+            options={ROLES.map((r) => {
+              return { value: r, text: r };
+            })}
             onChange={(e) => {
               onRoleInputChange(e);
             }}
