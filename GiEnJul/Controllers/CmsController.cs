@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +35,17 @@ namespace GiEnJul.Controllers
             {
                 return content;
             }
-            return null;
+            else
+            {
+                var newContent = await _cmsRepository.InsertOrReplaceAsync(new Models.Cms
+                {
+                    Index = Guid.NewGuid().ToString(),
+                    ContentType = contentType,
+                    Info = String.Empty,
+                    Question = null
+                });
+                return new List<Models.Cms> { newContent };
+            }
         }
 
         [HttpGet("GetSingle")]
