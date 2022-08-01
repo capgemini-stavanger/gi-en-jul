@@ -29,6 +29,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
+  connectionAwaitState: number;
+  setConnectionAwaitState: (state: number) => void;
 };
 
 const GiverDataCard: React.FC<Props> = ({
@@ -40,6 +42,8 @@ const GiverDataCard: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
+  connectionAwaitState,
+  setConnectionAwaitState,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -65,77 +69,95 @@ const GiverDataCard: React.FC<Props> = ({
 
   const confirmConnection = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      apiservice
-        .post("connection/confirm", {
-          giverId: giver.giverId,
-          recipientId: giver.matchedRecipient,
-          event: giver.event,
-        })
-        .then((r) => {
-          if (r.status === 200) {
-            refreshData();
-            setPersonExpanded(false);
-            resetSelections();
-          }
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .post("connection/confirm", {
+            giverId: giver.giverId,
+            recipientId: giver.matchedRecipient,
+            event: giver.event,
+          })
+          .then((r) => {
+            if (r.status === 200) {
+              setConnectionAwaitState(2);
+              refreshData();
+              setPersonExpanded(false);
+              resetSelections();
+            }
+          })
+          .catch((errorStack) => {
+            setConnectionAwaitState(3);
+            console.error(errorStack);
+          });
+      }
     }
   };
 
   const deleteConnection = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      apiservice
-        .delete("admin/Connection", {
-          event: giver.event,
-          connectedIds: `${giver.matchedRecipient}_${giver.giverId}`,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            refreshData();
-            setPersonExpanded(false);
-            resetSelections();
-          }
-        })
-        .catch((errorStack) => {
-          console.error(errorStack);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .delete("admin/connection", {
+            event: giver.event,
+            giverId: giver.giverId,
+            recipientId: giver.matchedRecipient,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              refreshData();
+              setPersonExpanded(false);
+              resetSelections();
+            }
+          })
+          .catch((errorStack) => {
+            console.error(errorStack);
+          });
+      }
     }
   };
 
   const deleteGiver = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      apiservice
-        .delete("admin/Giver", {
-          giverId: giver.giverId,
-          event: giver.event,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            refreshData();
-            resetSelections();
-          }
-        })
-        .catch((errorStack) => {
-          console.error(errorStack);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .delete("admin/Giver", {
+            giverId: giver.giverId,
+            event: giver.event,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              refreshData();
+              resetSelections();
+            }
+          })
+          .catch((errorStack) => {
+            console.error(errorStack);
+          });
+      }
     }
   };
 
   const saveComment = (response: boolean) => {
     if (response) {
-      apiservice
-        .post("admin/giver/addcomment", {
-          event: giverData.event,
-          giverId: giverData.giverId,
-          comment: comment,
-        })
-        .then((resp) => {
-          if (resp.status === 200) {
-            refreshData();
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .post("admin/giver/addcomment", {
+            event: giverData.event,
+            giverId: giverData.giverId,
+            comment: comment,
+          })
+          .then((resp) => {
+            if (resp.status === 200) {
+              refreshData();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
   };
 
@@ -217,7 +239,6 @@ const GiverDataCard: React.FC<Props> = ({
                     <Typography variant="h6" gutterBottom>
                       Kontakt
                     </Typography>
-                    <Typography>{giverData.fullName}</Typography>
                     <Typography>{giverData.phoneNumber}</Typography>
                     <Typography gutterBottom>{giverData.email}</Typography>
                     <SendIcon />

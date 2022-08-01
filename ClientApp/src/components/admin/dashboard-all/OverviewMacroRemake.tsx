@@ -33,6 +33,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
 
   const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
 
+  const [connectionAwaitState, setConnectionAwaitState] = useState(0); // 0 = init, 1 = waiting, 2 = ok, 3 = error
+
   async function fetchGivers() {
     await apiservice
       .get("admin/Overview/Givers", { params: { location: location } })
@@ -55,14 +57,14 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   }
 
   useEffect(() => {
-    fetchRecipients();
-    fetchGivers();
+    refreshData();
   }, []);
 
   const refreshData = () => {
     fetchGivers();
     fetchRecipients();
     setSelectedConnection(initState);
+    setConnectionAwaitState(0);
   };
 
   const handleVisualSelection = (index: number, suggestionTable: boolean) => {
@@ -138,26 +140,29 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   };
 
   const connectGiverRecipient = async () => {
-    await apiservice
-      .post(
-        "admin/",
-        JSON.stringify({
-          GiverId: selectedConnection.giver?.giverId,
-          Event: selectedConnection.giver?.event,
-          RecipientId: selectedConnection.recipient?.recipientId,
+    if (connectionAwaitState != 1) {
+      setConnectionAwaitState(1);
+      await apiservice
+        .post(
+          "admin/connection",
+          JSON.stringify({
+            GiverId: selectedConnection.giver?.giverId,
+            Event: selectedConnection.giver?.event,
+            RecipientId: selectedConnection.recipient?.recipientId,
+          })
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            setConnectionAwaitState(2);
+            refreshData();
+            resetSelections();
+          }
         })
-      )
-      .then((response) => {
-        //use this for sending a response to the user
-        if (response.status === 200) {
-          fetchRecipients();
-          fetchGivers();
-          resetSelections();
-        }
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
+        .catch((errorStack) => {
+          setConnectionAwaitState(3);
+          console.error(errorStack);
+        });
+    }
   };
 
   const resetSelections = () => {
@@ -183,6 +188,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     connection={selectedConnection}
                     connectGiverRecipient={connectGiverRecipient}
                     resetSelections={resetSelections}
+                    connectionAwaitState={connectionAwaitState}
                   />
                 </Box>
               </Box>
@@ -197,6 +203,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   refreshData={() => refreshData()}
                   accessToken={accessToken}
                   resetSelections={resetSelections}
+                  connectionAwaitState={connectionAwaitState}
+                  setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
                 />
               </Box>
               <Box className={classes.recipientTable}>
@@ -219,6 +227,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     refreshData={() => refreshData()}
                     accessToken={accessToken}
                     resetSelections={resetSelections}
+                    connectionAwaitState={connectionAwaitState}
+                    setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
                   />
                 </Box>
               </Box>

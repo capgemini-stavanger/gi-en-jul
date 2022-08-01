@@ -153,34 +153,25 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpDelete("Connection")]
+        [HttpDelete("connection")]
         [Authorize(Policy = Policy.DeleteConnection)]
         public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
-            var giverId = connectionDto.ConnectedIds.Substring(connectionDto.ConnectedIds.IndexOf('_') + 1);
-            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, giverId);
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
 
-            var recipientId = connectionDto.ConnectedIds.Substring(0, connectionDto.ConnectedIds.IndexOf('_'));
-            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, recipientId);
-
-            if (giver is null && recipient is null)
-            {
-                return NotFound();
-            }
-
-            if (giver?.MatchedRecipient != null && recipient is null)
-            {
-                recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, giver.MatchedRecipient);
-            }
-
-            if (recipient?.MatchedGiver != null && giver is null)
-            {
-                giver = await _giverRepository.GetGiverAsync(connectionDto.Event, recipient.MatchedGiver);
-            }
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
 
             if (recipient is null || giver is null)
             {
-                return NotFound();
+                return NotFound("Could not find giver or recipient");
+            }
+            if (ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Giver and recipients are already disconnected");
+            }
+            if (!ConnectionHelper.MatchingIds(giver, recipient, connectionDto.GiverId, connectionDto.RecipientId))
+            {
+                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
             }
 
             var originalGiver = giver.ShallowCopy();
@@ -188,33 +179,22 @@ namespace GiEnJul.Controllers
 
             giver.HasConfirmedMatch = false;
             giver.IsSuggestedMatch = false;
-            giver.MatchedRecipient = null;
+            giver.MatchedRecipient = String.Empty;
+            giver.MatchedFamilyId = String.Empty;
             giver.SuggestedMatchAt = null;
             giver.RemindedAt = null;
 
             recipient.HasConfirmedMatch = false;
             recipient.IsSuggestedMatch = false;
-            recipient.MatchedGiver = null;
+            recipient.MatchedGiver = String.Empty;
 
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
-            }
-            catch (Exception e)
-            {
-                await _giverRepository.InsertOrReplaceAsync(originalGiver);
-                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
-
-                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
-                return NotFound();
-            }
-
-            if (!originalGiver.HasConfirmedMatch) return Ok();
-            
-            try
-            {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
+                if (originalGiver.HasConfirmedMatch) {
+                    await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
+                }
             }
             catch (Exception e)
             {
@@ -226,58 +206,56 @@ namespace GiEnJul.Controllers
             }
 
             return Ok();
+
         }
 
-        [HttpPost]
+        [HttpPost("connection")]
         [Authorize(Policy = Policy.AddConnection)]
         public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
 
-            if (!ConnectionHelper.CanSuggestConnection(giver, recipient))
+            if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                throw new InvalidConnectionCreationException();
+                return BadRequest("Connection already exists");
             }
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Connection between giver and recipient cannot be made");
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.IsSuggestedMatch = true;
+            giver.SuggestedMatchAt = DateTime.UtcNow;
+            giver.RemindedAt = null;
+            giver.MatchedRecipient = connectionDto.RecipientId;
+            giver.MatchedFamilyId = recipient.FamilyId;
+            giver.CancelFeedback = String.Empty;
+            giver.CancelDate = null;
+            giver.CancelFamilyId = String.Empty;
+
+            recipient.IsSuggestedMatch = true;
+            recipient.MatchedGiver = connectionDto.GiverId;
 
             try
             {
-                giver.IsSuggestedMatch = true;
-                giver.SuggestedMatchAt = DateTime.UtcNow;
-                giver.RemindedAt = null;
-                giver.MatchedRecipient = connectionDto.RecipientId;
-                giver.MatchedFamilyId = recipient.FamilyId;
-                giver.CancelFeedback = "";
-                giver.CancelDate = null;
-                giver.CancelFamilyId = "";
                 await _giverRepository.InsertOrReplaceAsync(giver);
-
-                recipient.IsSuggestedMatch = true;
-                recipient.MatchedGiver = connectionDto.GiverId;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
-
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
-
                 var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, baseUrl);
-
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
-
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }
             catch (Exception e)
             {
-                giver.IsSuggestedMatch = false;
-                giver.SuggestedMatchAt = null;
-                giver.RemindedAt = null;
-                giver.MatchedRecipient = "";
-                giver.MatchedFamilyId = "";
-                await _giverRepository.InsertOrReplaceAsync(giver);
-
-                recipient.IsSuggestedMatch = false;
-                recipient.MatchedGiver = "";
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
                 _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
 
                 throw;
@@ -293,7 +271,7 @@ namespace GiEnJul.Controllers
 
             if (recipientToDelete.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(recipientDto.Event, recipientDto.RecipientId));
+                await DeleteConnectionAsync(new DeleteConnectionDto(recipientToDelete.Event, recipientToDelete.MatchedGiver, recipientToDelete.RecipientId));
             }
 
             var personsToDelete = await _personRepository.GetAllByRecipientId(recipientDto.RecipientId);
@@ -377,7 +355,7 @@ namespace GiEnJul.Controllers
 
             if (giver.IsSuggestedMatch)
             {
-                await DeleteConnectionAsync(new DeleteConnectionDto(giverDto.Event, giverDto.GiverId));
+                await DeleteConnectionAsync(new DeleteConnectionDto(giver.Event, giver.GiverId, giver.MatchedRecipient));
             }
 
             var giverToDelete = await _giverRepository.GetGiverAsync(giverDto.Event, giverDto.GiverId);

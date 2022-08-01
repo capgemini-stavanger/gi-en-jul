@@ -8,12 +8,25 @@ namespace GiEnJul.Helpers
 
         public static bool CanConnect(Giver giver, Recipient recipient)
         {
-            return
-                recipient.IsSuggestedMatch &&
-                giver.IsSuggestedMatch &&
-                giver.MatchedRecipient == recipient.RecipientId &&
-                recipient.MatchedGiver == giver.GiverId &&
-                CanSuggestConnection(giver, recipient);
+            if (giver.IsSuggestedMatch || giver.HasConfirmedMatch ||
+                recipient.IsSuggestedMatch || recipient.HasConfirmedMatch)
+            {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        public static bool MatchingIds(Giver giver, Recipient recipient, string giverIdDto, string recipientIdDto)
+        {
+            if ((recipient.MatchedGiver != giverIdDto) || (giver.MatchedRecipient != recipientIdDto))
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
         }
 
         public static bool CanSuggestConnection(Giver giver, Recipient recipient)
