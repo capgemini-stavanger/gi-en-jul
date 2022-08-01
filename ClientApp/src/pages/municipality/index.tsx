@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
 import Footer from "components/shared/Footer";
