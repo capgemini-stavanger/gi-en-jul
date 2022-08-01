@@ -38,8 +38,6 @@ const getErrorMessages = (field: string) => {
       return [EE.emptyString];
     case "deliveryTime":
       return [EE.emptyString];
-    // case "contactPerson":
-    //   return [EE.emptyString];
     case "giverLimit":
       return [EE.emptyString, EE.notANumber];
   }
