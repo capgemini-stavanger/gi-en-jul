@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
 import Footer from "components/shared/Footer";
@@ -74,10 +74,14 @@ const Municipality = () => {
       <Container className={classes.rootNavBarPages} maxWidth={false}>
         <Grid container direction="column">
           <Grid item style={{ marginTop: "3em" }}>
-            <Typography className={classes.textHeadline}>Kommune Informasjon</Typography>
+            <Typography className={classes.textHeadline}>Kommuneinformasjon</Typography>
           </Grid>
           <Grid item>
-            <Municipalities locations={municipalityData} />
+            {activeMunicipalities.length > 0 ? (
+              <Municipalities locations={municipalityData} />
+            ) : (
+              <Typography>Det er ikke lagt til noe informasjon om kommunene enda</Typography>
+            )}
           </Grid>
         </Grid>
         <ScrollToTop maxPagePosition={300} />
