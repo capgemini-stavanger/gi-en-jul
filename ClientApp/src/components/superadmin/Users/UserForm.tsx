@@ -21,11 +21,6 @@ interface FormState {
   location: string;
   role: string;
   institutionName: string;
-  //openAdd: boolean;
-  // confirmAdd: boolean;
-  // message: string;
-  // success: boolean;
-  //  municipalities: string[];
 }
 
 export const initFormDataState: () => FormState = () => ({
@@ -35,11 +30,6 @@ export const initFormDataState: () => FormState = () => ({
   location: "",
   role: "",
   institutionName: "",
-  // openAdd: false,
-  //confirmAdd: false,
-  //  message: "",
-  //  success: false,
-  // municipalities: [],
 });
 
 const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
@@ -47,19 +37,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
   const [municipalities, setMunicipalities] = useState<string[]>([]);
-  /*
-  const [email, setEmail] = useState<string>("");
-  const [passwordInput, setPasswordInput] = useState<string>("");
-  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
-  const [locationInput, setLocationInput] = useState<string>("");
-  const [roleInput, setRoleInput] = useState<string>("");
-  const [institutionName, setinstitutionName] = useState<string>("");
-  
-
-  
-*/
   const apiservice = new ApiService(accessToken);
 
   const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,7 +100,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           Institution: state.institutionName,
         })
         .then(() => {
-          setSuccess(true); //trenger ikke denne
           setMessage("Brukeren er lagt til");
           handleRefresh();
           refreshForm();
