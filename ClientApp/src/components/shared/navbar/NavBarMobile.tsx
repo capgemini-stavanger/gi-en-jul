@@ -19,118 +19,76 @@ const NavbarMobile = () => {
     setAnchorEl(() => null);
   };
 
-  if (window.location.pathname == "/bedrift") {
-    return (
-      <>
-        <AppBar className={classes.navContainerMobile}>
-          <Toolbar className={classes.toolBar}>
-            <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
-              <List className={classes.drawerMenu}>
-                <IconButton onClick={handleClose} className={classes.closeButton}>
-                  <Close color="primary" />
-                </IconButton>
-                <ListItem
-                  onClick={() => {
-                    history.push("kommune");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  Kommune innformasjon
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    history.push("/startJul");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  Start Gi en jul i din kommune
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    history.push("/bedrift");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  For bedrifter
-                </ListItem>
-              </List>
-            </Drawer>
+  return (
+    <>
+      <AppBar className={classes.navContainerMobile}>
+        <Toolbar className={classes.toolBar}>
+          <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
+            <MenuIcon />
+          </IconButton>
+          <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
+            <List className={classes.drawerMenu}>
+              <IconButton onClick={handleClose} className={classes.closeButton}>
+                <Close color="primary" />
+              </IconButton>
+              <ListItem
+                onClick={() => {
+                  history.push("/");
+                }}
+                className={classes.drawerContent}
+              >
+                Hjem
+              </ListItem>
+              <ListItem
+                onClick={() => {
+                  history.push("kommune");
+                }}
+                className={classes.drawerContent}
+              >
+                Kommune innformasjon
+              </ListItem>
+              <ListItem
+                onClick={() => {
+                  history.push("/startJul");
+                }}
+                className={classes.drawerContent}
+              >
+                Start Gi en jul i din kommune
+              </ListItem>
+              <ListItem
+                onClick={() => {
+                  history.push("/bedrift");
+                }}
+                className={classes.drawerContent}
+              >
+                For bedrifter
+              </ListItem>
+            </List>
+          </Drawer>
+          {window.location.pathname == "/bedrift" ? (
             <Button
-              disabled={true}
               size="large"
+              className={classes.giverButton}
+              style={{ visibility: "hidden" }}
               endIcon={<ArrowForwardIos />}
-              className={classes.buttonNext}
               onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
             >
               Bli giver
             </Button>
-          </Toolbar>
-        </AppBar>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <AppBar className={classes.navContainerMobile}>
-          <Toolbar className={classes.toolBar}>
-            <IconButton className={classes.navIcon} edge="start" onClick={handleEvent}>
-              <MenuIcon />
-            </IconButton>
-            <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
-              <List className={classes.drawerMenu}>
-                <IconButton onClick={handleClose} className={classes.closeButton}>
-                  <Close color="primary" />
-                </IconButton>
-                <ListItem
-                  onClick={() => {
-                    history.push("/");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  Hjem
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    history.push("kommune");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  Kommune innformasjon
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    history.push("/startJul");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  Start Gi en jul i din kommune
-                </ListItem>
-                <ListItem
-                  onClick={() => {
-                    history.push("/bedrift");
-                  }}
-                  className={classes.drawerContent}
-                >
-                  For bedrifter
-                </ListItem>
-              </List>
-            </Drawer>
+          ) : (
             <Button
               size="large"
+              className={classes.giverButton}
               endIcon={<ArrowForwardIos />}
-              className={classes.buttonNext}
               onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
             >
               Bli giver
             </Button>
-          </Toolbar>
-        </AppBar>
-      </>
-    );
-  }
+          )}
+        </Toolbar>
+      </AppBar>
+    </>
+  );
 };
 
 export default NavbarMobile;
