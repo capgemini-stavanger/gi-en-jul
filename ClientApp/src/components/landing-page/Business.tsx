@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Link, useHistory } from "react-router-dom";
 import Footer from "components/shared/Footer";
+import { isMobile } from "common/functions/IsMobile";
 
 interface businessInfo {
   question: string;
@@ -49,23 +50,42 @@ const Business = () => {
       <NavBarPublic />
       <Container className={classes.rootNavBarPages} maxWidth={false}>
         <div className={classes.headLineContainer}>
-          <Typography className={classes.textHeadline}>For bedrifter</Typography>
+          <Typography style={{ marginTop: "3em" }} className={classes.textHeadline}>
+            For bedrifter
+          </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item xs={6}>
-            <Typography>{parse(businessInfo.info)}</Typography>
-            <Link
-              to="/bli-giver"
-              onClick={() => {
-                history.push("/");
-              }}
-              style={{ textDecoration: "none" }}
-            >
-              <Typography>
-                Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
-              </Typography>
-            </Link>
-          </Grid>
+          {isMobile() ? (
+            <Grid item xs={12}>
+              <Typography>{parse(businessInfo.info)}</Typography>
+              <Link
+                to="/bli-giver"
+                onClick={() => {
+                  history.push("/");
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <Typography>
+                  Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
+                </Typography>
+              </Link>
+            </Grid>
+          ) : (
+            <Grid item xs={6}>
+              <Typography>{parse(businessInfo.info)}</Typography>
+              <Link
+                to="/bli-giver"
+                onClick={() => {
+                  history.push("/");
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <Typography>
+                  Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
+                </Typography>
+              </Link>
+            </Grid>
+          )}
         </Grid>
       </Container>
       <Footer />
