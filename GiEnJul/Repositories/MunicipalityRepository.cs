@@ -15,7 +15,7 @@ namespace GiEnJul.Repositories
         Task<Entities.Municipality> DeleteEntry(Models.Municipality municipality);
         Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality);
         Task<IEnumerable<Municipality>> GetAll();
-        Task<IEnumerable<Models.Municipality>> GetSingle(string municipality, string country = "Norge");
+        Task<Models.Municipality> GetSingle(string municipality, string country = "Norge");
         Task<bool> UpdateMunicipality(Models.Municipality municipality);
         Task<string> GetEmailByLocation(string location);
 
@@ -52,12 +52,14 @@ namespace GiEnJul.Repositories
             return await GetAllAsync();
         }
 
-        public async Task<IEnumerable<Models.Municipality>> GetSingle(string municipality, string country = "Norge")
+        public async Task<Models.Municipality> GetSingle(string municipality, string country = "Norge")
         {
             var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
-            var entetitiesMuni  = await GetAllByQueryAsync(query);
+            var singleMunicipality = await GetAsync(country, municipality);
+            return _mapper.Map<Models.Municipality>(singleMunicipality);
+           /* var entetitiesMuni  = await GetAllByQueryAsync(query);
             var modelsMuni = _mapper.Map<List<Models.Municipality>>(entetitiesMuni);
-            return modelsMuni;
+            return modelsMuni;*/
         }
         public async Task<bool> UpdateMunicipality(Models.Municipality municipality)
         {

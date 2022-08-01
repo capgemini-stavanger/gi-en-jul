@@ -121,18 +121,18 @@ namespace GiEnJul.Controllers
 
         [HttpGet("singlecontact")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<IEnumerable<Dtos.GetContactsDto>> GetSingleContact([FromQuery] string municipality)
+        public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
         {
             var contact = await _municipalityRepository.GetSingle(municipality);
-            var contactDtos = _mapper.Map<List<Dtos.GetContactsDto>>(contact);
-            return contactDtos;
+            return _mapper.Map<Dtos.GetContactsDto>(contact);
+            
         }
 
         [HttpGet("getSingle")]
-        public async Task<IEnumerable<Models.Municipality>> GetSingle([FromQuery] string municipality)
+        public async Task<Models.Municipality> GetSingle([FromQuery] string municipality)
         {
-            var singleMuniList = await _municipalityRepository.GetSingle(municipality);
-            return _mapper.Map<List<Models.Municipality>>(singleMuniList);
+            var singelMunicipality = await _municipalityRepository.GetSingle(municipality);
+            return _mapper.Map<Models.Municipality>(singelMunicipality);
         }
        
         [HttpPut("update")]
