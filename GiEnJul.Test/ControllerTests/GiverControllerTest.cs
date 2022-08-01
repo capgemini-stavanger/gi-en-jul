@@ -119,10 +119,10 @@ namespace GiEnJul.Test.ControllerTests
             //Arrange
             var fakeEvent = new Models.Event { Municipality = "Stavanger", EventName = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
             mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent);
-
-          /*  FIX TEST 
-           *  var fakeMunicipality = new Models.Municipality { Country = "Norway", Name = "Stavanger", ContactPerson = "Navn test", Email="Email", PhoneNumber="1231232131" };
-            mockMunicipalityRepo.Setup(x => x.InsertOrReplaceAsync(fakeMunicipality));
+            
+            
+            var fakeMunicipality = new Models.Municipality { Country = "Norway", Name = "Stavanger", ContactPerson = "Navn test", Email="Email", PhoneNumber="1231232131" };
+            mockMunicipalityRepo.Setup(x => x.GetSingle(It.IsAny<string>(), "Norge")).ReturnsAsync(fakeMunicipality);
 
             var fakeModel = new Models.Giver { EventName = Guid.NewGuid().ToString(), GiverId = $"{fakeEvent.Municipality}_{fakeEvent.EventName}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
@@ -143,7 +143,8 @@ namespace GiEnJul.Test.ControllerTests
             mockGiverRepo.Verify(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
             mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
-            mockEmailTemplateBuilder.Verify(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>())); */
+            mockEmailTemplateBuilder.Verify(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>()));
+            mockMunicipalityRepo.Verify(x => x.GetSingle(It.IsAny<string>(),"Norge"), Times.Once());
         }
 
         [Fact]

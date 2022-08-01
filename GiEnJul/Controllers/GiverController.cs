@@ -82,7 +82,7 @@ namespace GiEnJul.Controllers
 
             var emailValuesDict = new Dictionary<string, string> { { "familyRange", familyRange } };
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel.First(), "municipalityDto."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
 
             var templateId = waiting_list ? EmailTemplateName.WaitingList : EmailTemplateName.Registered;
