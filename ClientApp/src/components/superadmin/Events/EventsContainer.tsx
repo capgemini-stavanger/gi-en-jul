@@ -4,7 +4,6 @@ import {
   List,
   ListItem,
   ListItemIcon,
-  TableBody,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -32,7 +31,6 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
   const [events, setEvents] = useState(new Map<string, EventContent>());
   const [municipalities, setMunicipalities] = useState<string[]>([]);
   const [eventBody, setEventBody] = useState<JSX.Element[]>([]);
-  const [eventTable, setEventTable] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
   const [informationBoxInfo, setInformationBoxInfo] = useState<string>("");
@@ -220,6 +218,9 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
               id={event.id}
               existingEventNames={uniqueEventNames}
               existingMunicipalities={municipalities}
+              initEditable={false}
+              handleChangeButtonClick={() => {}}
+              handleValidEventCancel={() => {}}
             />
           </Grid>
         );
@@ -328,8 +329,6 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
         <Grid item container direction="column">
           {eventBody}
         </Grid>
-
-        <TableBody className={classes.tableBody}>{eventTable}</TableBody>
 
         <ConfirmationBox
           open={openConfirmationBox}

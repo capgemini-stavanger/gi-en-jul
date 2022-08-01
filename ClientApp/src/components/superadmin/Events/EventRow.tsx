@@ -20,8 +20,6 @@ const getValidators = (field: string) => {
       return [EV.emptyString];
     case "deliveryTime":
       return [EV.emptyString];
-    case "contactPerson":
-      return [EV.emptyString];
     case "giverLimit":
       return [EV.emptyString, EV.notANumber];
   }
@@ -39,8 +37,6 @@ const getErrorMessages = (field: string) => {
     case "deliveryDate":
       return [EE.emptyString];
     case "deliveryTime":
-      return [EE.emptyString];
-    case "contactPerson":
       return [EE.emptyString];
     case "giverLimit":
       return [EE.emptyString, EE.notANumber];
@@ -196,7 +192,6 @@ const EventRow: React.FC<Props> = ({
     <TableCell key={0}>
       <SelectForm
         name="Eventnavn"
-        // label="Eventnavn"
         variant="outlined"
         errorMessage="Velg eventnavn"
         error={formValues.eventName == ""}
@@ -212,7 +207,6 @@ const EventRow: React.FC<Props> = ({
     <TableCell key={1}>
       <SelectForm
         name="Municipality"
-        // label="Kommune"
         variant="outlined"
         errorMessage="Velg kommune"
         error={formValues.municipality == ""}
@@ -260,7 +254,6 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.endDate}
         name="endDate"
-        // label="Slutt-dato (åååå-mm-dd)"
         label=""
         disabled={!activeEdit}
       />
@@ -279,7 +272,6 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.deliveryAddress}
         name="deliveryAddress"
-        // label="Leverings Adresse"
         label=""
         disabled={!activeEdit}
       />
@@ -299,7 +291,6 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.deliveryDate}
         name="deliveryDate"
-        // label="Leverings-dato"
         label=""
         disabled={!activeEdit}
       />
@@ -339,7 +330,6 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.giverLimit}
         name="giverLimit"
-        // label="Maks Antall Givere"
         label=""
         disabled={!activeEdit}
       />

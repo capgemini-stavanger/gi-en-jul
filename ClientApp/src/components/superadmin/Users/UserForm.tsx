@@ -7,6 +7,7 @@ import { isNotNull, isEmail } from "components/shared/input-fields/validators/Va
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import { ROLES } from "common/constants/Roles";
+import useStyles from "../Styles";
 
 interface props {
   accessToken: string;
@@ -49,10 +50,11 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
+  const [viewErrorNumber, setViewErrorNumber] = useState<number>(0);
   const [validFormValues, setValidFormValues] = useState({
     ...initValidFields,
   });
+  const classes = useStyles();
 
   const [municipalities, setMunicipalities] = useState<string[]>([]);
   const apiservice = new ApiService(accessToken);
@@ -105,29 +107,11 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     return Object.values(objectToValidate).every((value) => value === true);
   };
 
-  const fieldIsValid = (field: string, fieldValue: string) => {
-    let allIsValid = true;
-    const validators = getValidators(field);
-    validators.forEach((validator) => {
-      if (!validator(fieldValue)) {
-        allIsValid = false;
-      }
-    });
-    return allIsValid;
-  };
-
-  const incrementErrorNum = (field: string, fieldValue: string) => {
-    if (!fieldIsValid(field, fieldValue)) {
-      setViewErrorNumber(viewErrorNumber + 1);
-    }
-  };
-
   const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState((prev) => ({
       ...prev,
       email: event.target.value as string,
     }));
-    incrementErrorNum("email", event.target.value as string);
   };
 
   const onRoleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -142,7 +126,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       ...prev,
       password: event.target.value as string,
     }));
-    incrementErrorNum("password", event.target.value as string);
   };
 
   const onConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -150,8 +133,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       ...prev,
       confirmPassword: event.target.value as string,
     }));
-
-    incrementErrorNum("confirmPassword", event.target.value as string);
   };
 
   const onLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -159,7 +140,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       ...prev,
       location: event.target.value as string,
     }));
-    incrementErrorNum("municipality", event.target.value as string);
   };
 
   const onInstitutionNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -167,7 +147,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       ...prev,
       institutionName: event.target.value as string,
     }));
-    incrementErrorNum("insitution", event.target.value as string);
   };
 
   const handleConfirmPassword = () => {
@@ -232,7 +211,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           <ListItemIcon>-</ListItemIcon>Inneholde store og små bokstaver
         </ListItem>
         <ListItem>
-          <ListItemIcon>-</ListItemIcon>Inneholde minimum ett av tegna !@#$%^&*
+          <ListItemIcon>-</ListItemIcon>Inneholde minimum ett av tegnene: !@#$%^&*
         </ListItem>
       </List>
       <Grid item>
@@ -297,12 +276,11 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       )}
       <Grid item>
         <InputValidator
+          className={classes.dropdown}
           viewErrorTrigger={viewErrorNumber}
-          // validators={getValidators("municipality")}
+          validators={getValidators("municipality")}
           errorMessages={["Vennligst velg en kommune"]}
           setIsValids={getValiditySetter("municipality")}
-          size={"medium"}
-          validators={[isNotNull]}
           value={state.location}
           type="select"
           options={municipalities.map((m) => {
@@ -311,18 +289,18 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           onChange={(e) => {
             onLocationChange(e);
           }}
-          label={"Lokasjon*"}
-          name={"lokasjon"}
+          label={"Kommune*"}
+          name={"Kommune"}
         ></InputValidator>
       </Grid>
       {!institution && (
         <Grid item>
           <InputValidator
+            className={classes.dropdown}
             viewErrorTrigger={viewErrorNumber}
             validators={getValidators("role")}
             errorMessages={["Vennligst velg en rolle"]}
             setIsValids={getValiditySetter("role")}
-            size={"medium"}
             value={state.role}
             type="select"
             options={ROLES.map((r) => {
@@ -357,6 +335,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
             if (allFieldsAreValid()) {
               setOpenAdd(true);
             } else {
+              setViewErrorNumber(viewErrorNumber + 1);
               setMessage("Vennligst fyll ut alle feltene");
               setOpenInformationBox(true);
             }

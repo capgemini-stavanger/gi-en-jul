@@ -8,7 +8,6 @@ export interface EventContent {
   deliveryDate: string;
   // deliveryGPS: string;
   deliveryTime: string;
-  contactPerson: string;
   giverLimit: string;
 }
 export interface EventContentDto {
@@ -20,7 +19,6 @@ export interface EventContentDto {
   deliveryDate: string;
   // deliveryGPS: string;
   deliveryTime: string;
-  contactPerson: string;
   giverLimit: number;
 }
 export const EventContentInit = (): EventContent => {
@@ -34,7 +32,6 @@ export const EventContentInit = (): EventContent => {
     deliveryDate: "",
     // deliveryGPS: "",
     deliveryTime: "",
-    contactPerson: "",
     giverLimit: "",
   };
 };
