@@ -5,6 +5,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: "100%",
     },
+    dropdown: {
+      width: "200px",
+    },
     heading: {
       fontSize: theme.typography.pxToRem(15),
       flexBasis: "33.33%",
