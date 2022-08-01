@@ -2,11 +2,13 @@
 using GiEnJul.Auth;
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
+using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -16,14 +18,16 @@ namespace GiEnJul.Controllers
     public class CmsController : ControllerBase
     {
         private readonly ICmsRepository _cmsRepository;
+        private readonly IAuthorization _authorization;
         private readonly IMapper _mapper;
-
+       
         public CmsController(
             ICmsRepository cmsRepository,
-            IMapper mapper)
+            IMapper mapper, IAuthorization authorization)
         {
             _cmsRepository = cmsRepository;
             _mapper = mapper;
+            _authorization = authorization;
         }
 
         [HttpGet("GetAll")]
@@ -61,13 +65,9 @@ namespace GiEnJul.Controllers
 
         [HttpPost("Insertforadmin/{location}")]
         [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> UpdateMunicipality([FromBody] PostCmsDto content , string location )
+        public async Task<ActionResult> UpdateMunicipality([FromBody] PostCmsDto content)
         {
-            if (content.Index != location)
-            {
-                return BadRequest("Wrong municipality");
-            }
-
+            await _authorization.ThrowIfNotAccessToMunicipality(content.Index, User); 
             await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
             return Ok();
         }

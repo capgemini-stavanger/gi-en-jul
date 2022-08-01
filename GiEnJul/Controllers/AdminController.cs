@@ -66,7 +66,8 @@ namespace GiEnJul.Controllers
         [HttpGet("Overview/Givers")]
         [Authorize(Policy = Policy.ReadGiver)]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
-        {            
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
 
@@ -89,6 +90,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
 
@@ -110,6 +112,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DownloadDeliveryExcel)]
         public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User); 
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
             using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
@@ -120,6 +123,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadConnection)]
         public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
             var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
@@ -130,6 +134,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.AddEvent)]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(eventDto.Municipality, User);
             if (eventDto.StartDate <= DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
@@ -426,6 +431,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.GetUnsuggestedGivers)]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -446,6 +452,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.GetUnsuggestedRecipients)]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
