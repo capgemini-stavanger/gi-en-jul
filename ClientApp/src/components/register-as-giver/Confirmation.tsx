@@ -2,7 +2,6 @@ import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback } from "react";
 import IFormData from "./IFormData";
 import useStyles from "components/register-as-giver/Styles";
-import snowmanFull from "styling/img/snowmanFull.svg";
 import DotLoader from "common/constants/DotLoader";
 
 type Props = {
@@ -54,9 +53,6 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
           <Container className={classes.giverForm}>
             {confirmationOK !== undefined ? getMessage() : <DotLoader />}
           </Container>
-        </Grid>
-        <Grid item className={classes.imageContainer}>
-          <img className={classes.backgroundImage} src={snowmanFull}></img>
         </Grid>
       </Grid>
     </>

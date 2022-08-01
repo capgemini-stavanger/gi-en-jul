@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
-    maxWidth: "none",
+    maxWidth: "500px",
     minHeight: "100vh",
   },
   heading: {
