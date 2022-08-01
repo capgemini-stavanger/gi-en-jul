@@ -39,6 +39,12 @@ const NewEventBox: React.FC<Props> = ({
       setOpenConfirmationBox(false);
     }
   };
+  const handleChangeButtonClick = () => {
+    setIsUpdated(false);
+  };
+  const handleValidEventCancel = () => {
+    setIsUpdated(true);
+  };
   const handleEventChange = (event: EventContent) => {
     setIsUpdated(true);
     setNewEvent(event);
@@ -50,10 +56,13 @@ const NewEventBox: React.FC<Props> = ({
           <EventInformation
             event={newEvent}
             handleEventChange={handleEventChange}
+            handleChangeButtonClick={handleChangeButtonClick}
+            handleValidEventCancel={handleValidEventCancel}
             id={""}
             onDelete={handleClose}
             existingEventNames={existingEventNames}
             existingMunicipalities={existingMunicipalities}
+            initEditable={true}
           />
           {isUpdated ? (
             <Button

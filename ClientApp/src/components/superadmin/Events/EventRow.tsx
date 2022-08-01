@@ -20,8 +20,8 @@ const getValidators = (field: string) => {
       return [EV.emptyString];
     case "deliveryTime":
       return [EV.emptyString];
-    case "contactPerson":
-      return [EV.emptyString];
+    // case "contactPerson":
+    //   return [EV.emptyString];
     case "giverLimit":
       return [EV.emptyString, EV.notANumber];
   }
@@ -40,8 +40,8 @@ const getErrorMessages = (field: string) => {
       return [EE.emptyString];
     case "deliveryTime":
       return [EE.emptyString];
-    case "contactPerson":
-      return [EE.emptyString];
+    // case "contactPerson":
+    //   return [EE.emptyString];
     case "giverLimit":
       return [EE.emptyString, EE.notANumber];
   }

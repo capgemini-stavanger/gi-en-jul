@@ -20,8 +20,8 @@ const getValidators = (field: string) => {
       return [EV.emptyString];
     case "deliveryTime":
       return [EV.emptyString];
-    case "contactPerson":
-      return [EV.emptyString];
+    // case "contactPerson":
+    //   return [EV.emptyString];
     case "giverLimit":
       return [EV.emptyString, EV.notANumber];
   }
@@ -40,8 +40,8 @@ const getErrorMessages = (field: string) => {
       return [EE.emptyString];
     case "deliveryTime":
       return [EE.emptyString];
-    case "contactPerson":
-      return [EE.emptyString];
+    // case "contactPerson":
+    //   return [EE.emptyString];
     case "giverLimit":
       return [EE.emptyString, EE.notANumber];
   }
@@ -68,6 +68,9 @@ interface Props {
   id: string;
   existingEventNames: string[];
   existingMunicipalities: string[];
+  initEditable: boolean;
+  handleChangeButtonClick: () => void;
+  handleValidEventCancel: () => void; // informs parent that the event is still valid
 }
 
 const EventInformation: React.FC<Props> = ({
@@ -77,10 +80,13 @@ const EventInformation: React.FC<Props> = ({
   id,
   existingEventNames,
   existingMunicipalities,
+  initEditable,
+  handleChangeButtonClick,
+  handleValidEventCancel,
 }) => {
   const classes = useStyles();
-  const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
-  const [activeEdit, setActiveEdit] = useState<boolean>(false);
+  const [viewErrorNumber, setViewErrorNumber] = useState<number>(0);
+  const [activeEdit, setActiveEdit] = useState<boolean>(initEditable);
   const [formValues, setFormValues] = useState<EventContent>(event);
   const [openSaveConfirmation, setOpenSaveConfirmation] = useState<boolean>(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState<boolean>(false);
@@ -90,16 +96,13 @@ const EventInformation: React.FC<Props> = ({
     ...initValidEventState,
   });
 
-  const everythingValid = () => {
-    return Object.values(validEventState).every((value) => {
-      return value === true;
-    });
+  const validEvent = (event: EventContent): boolean => {
+    // checks if all fields in the event passes its validator-tests
+    return Object.entries(event).every(([fieldName, fieldValue]) =>
+      fieldIsValid(fieldName, fieldValue)
+    );
   };
-  const incrementErrorNum = (field: string, fieldValue: string) => {
-    if (!fieldIsValid(field, fieldValue)) {
-      setViewErrorNumber(viewErrorNumber + 1);
-    }
-  };
+
   const fieldIsValid = (field: string, fieldValue: string) => {
     let allIsValid = true;
     const validators = getValidators(field);
@@ -109,6 +112,12 @@ const EventInformation: React.FC<Props> = ({
       }
     });
     return allIsValid;
+  };
+
+  const everythingValid = () => {
+    return Object.values(validEventState).every((value) => {
+      return value === true;
+    });
   };
 
   const handleSaveConfirmation = (response: boolean) => {
@@ -134,7 +143,7 @@ const EventInformation: React.FC<Props> = ({
       setActiveEdit(false);
       setOpenSaveConfirmation(true);
     } else {
-      //Informs user know that some fields are not filled out properly
+      setViewErrorNumber(viewErrorNumber + 1);
       setInformationText("Vennligst fyll ut gyldige verider i alle felter");
       setOpenInformation(true);
     }
@@ -147,6 +156,10 @@ const EventInformation: React.FC<Props> = ({
   const handleCancelClick = () => {
     setFormValues(event); // reset values
     setActiveEdit(false);
+    // checks if previous state is valid
+    if (validEvent(event)) {
+      handleValidEventCancel();
+    }
   };
   const cancelButton = (
     <Button variant="contained" onClick={handleCancelClick}>
@@ -154,6 +167,7 @@ const EventInformation: React.FC<Props> = ({
     </Button>
   );
   const handleEditClick = () => {
+    handleChangeButtonClick(); // informs parent that the event is being edited
     setActiveEdit(true);
   };
   const editButton = (
@@ -236,7 +250,6 @@ const EventInformation: React.FC<Props> = ({
           const copy = { ...formValues };
           copy.startDate = e.target.value;
           setFormValues(copy);
-          incrementErrorNum("startDate", e.target.value);
         }}
         value={formValues.startDate}
         name="startDate"
@@ -255,7 +268,6 @@ const EventInformation: React.FC<Props> = ({
           const copy = { ...formValues };
           copy.endDate = e.target.value;
           setFormValues(copy);
-          incrementErrorNum("endDate", e.target.value);
         }}
         value={formValues.endDate}
         name="endDate"
@@ -292,7 +304,6 @@ const EventInformation: React.FC<Props> = ({
           const copy = { ...formValues };
           copy.deliveryDate = e.target.value;
           setFormValues(copy);
-          incrementErrorNum("deliveryDate", e.target.value);
         }}
         value={formValues.deliveryDate}
         name="deliveryDate"
@@ -311,7 +322,6 @@ const EventInformation: React.FC<Props> = ({
           const copy = { ...formValues };
           copy.deliveryTime = e.target.value;
           setFormValues(copy);
-          incrementErrorNum("deliveryTime", e.target.value);
         }}
         value={formValues.deliveryTime}
         name="deliveryTime"
@@ -330,7 +340,6 @@ const EventInformation: React.FC<Props> = ({
           const copy = { ...formValues };
           copy.giverLimit = e.target.value;
           setFormValues(copy);
-          incrementErrorNum("giverLimit", e.target.value);
         }}
         value={formValues.giverLimit}
         name="giverLimit"
