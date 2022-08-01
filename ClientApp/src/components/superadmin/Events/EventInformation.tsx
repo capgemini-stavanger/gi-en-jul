@@ -20,8 +20,6 @@ const getValidators = (field: string) => {
       return [EV.emptyString];
     case "deliveryTime":
       return [EV.emptyString];
-    // case "contactPerson":
-    //   return [EV.emptyString];
     case "giverLimit":
       return [EV.emptyString, EV.notANumber];
   }
