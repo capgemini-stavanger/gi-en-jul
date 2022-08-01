@@ -146,15 +146,17 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
                                 <Typography>{user.location}</Typography>
                               </TableCell>
                               <TableCell>
-                                <IconButton
-                                  key={index}
-                                  onClick={() => {
-                                    setSelectedEmail(user.email);
-                                    setOpenDelete(true);
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
+                                {!(user.role == "SuperAdmin") && (
+                                  <IconButton
+                                    key={index}
+                                    onClick={() => {
+                                      setSelectedEmail(user.email);
+                                      setOpenDelete(true);
+                                    }}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                )}
                               </TableCell>
                             </TableRow>
                           </>
