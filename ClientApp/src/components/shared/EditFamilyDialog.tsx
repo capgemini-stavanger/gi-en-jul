@@ -131,26 +131,55 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     }));
   };
   const onAgeChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strAge = e.target.value;
+    let intMonths = 0;
+    const intAge = Math.floor(parseInt(strAge));
+    strAge = intAge.toString();
+    if (intAge !== NaN) {
+      if (intAge > 130) {
+        strAge = "130";
+      } else if (intAge < 0) {
+        strAge = "0";
+      }
+    } else if (intAge != 0) {
+      intMonths = 0;
+    } else {
+      return;
+    }
     setRecipientData((prev) => ({
       ...prev,
       familyMembers: [
         ...prev.familyMembers.slice(0, index),
         {
           ...prev.familyMembers[index],
-          age: parseInt(e.target.value),
+          age: parseInt(strAge),
+          months: intMonths,
         },
         ...prev.familyMembers.slice(index + 1),
       ],
     }));
   };
+
   const onMonthsChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strMonths = e.target.value;
+    const intMonths = Math.floor(parseInt(strMonths));
+    strMonths = intMonths.toString();
+    if (intMonths !== NaN) {
+      if (intMonths > 130) {
+        strMonths = "130";
+      } else if (intMonths < 0) {
+        strMonths = "0";
+      }
+    } else {
+      return;
+    }
     setRecipientData((prev) => ({
       ...prev,
       familyMembers: [
         ...prev.familyMembers.slice(0, index),
         {
           ...prev.familyMembers[index],
-          months: parseInt(e.target.value),
+          months: parseInt(strMonths),
         },
         ...prev.familyMembers.slice(index + 1),
       ],
@@ -341,16 +370,18 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                           fullWidth
                         />
                       </Grid>
-                      <Grid item xs={2}>
-                        <TextField
-                          type="number"
-                          label="Måneder"
-                          variant="outlined"
-                          value={familyMember.months}
-                          onChange={onMonthsChange(fIndex)}
-                          fullWidth
-                        />
-                      </Grid>
+                      {familyMember.age == 0 && (
+                        <Grid item xs={2}>
+                          <TextField
+                            type="number"
+                            label="Måneder"
+                            variant="outlined"
+                            value={familyMember.months || "0"}
+                            onChange={onMonthsChange(fIndex)}
+                            fullWidth
+                          />
+                        </Grid>
+                      )}
                       <Grid item xs={4}>
                         {!familyMember.noWish ? (
                           <React.Fragment>
