@@ -67,7 +67,7 @@ namespace GiEnJul.Repositories
 
             if (activeEvent == null || !activeEvent.Any())
             {
-                throw new KeyNotFoundException();
+                return null;
             }
             _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
