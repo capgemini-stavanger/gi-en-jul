@@ -35,3 +35,4 @@ namespace GiEnJul.Controllers
         }
     }
 }
+//tror denne blir erstattet med UserController?

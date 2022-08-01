@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using GiEnJul.Helpers;
 using GiEnJul.Clients;
+using GiEnJul.Utilities;
 
 namespace GiEnJul.Controllers
 {
@@ -19,12 +20,14 @@ namespace GiEnJul.Controllers
         private readonly IMunicipalityRepository _municipalityRepository;
         private readonly IMapper _mapper;
         private readonly IAuth0ManagementClient _managementClient;
+        private readonly IAuthorization _authorization;
 
-        public MunicipalityController(IMunicipalityRepository municipalityRepository, IMapper mapper, IAuth0ManagementClient managementClient)
+        public MunicipalityController(IMunicipalityRepository municipalityRepository, IMapper mapper, IAuth0ManagementClient managementClient, IAuthorization authorization)
         {
             _municipalityRepository = municipalityRepository;
             _mapper = mapper;
             _managementClient = managementClient;
+            _authorization = authorization;
         }
 
         [HttpDelete]
@@ -46,6 +49,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User); //ødlegger denne for superadmin? 
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.Name == content.Name).Any())
                 return BadRequest("RowKey already exists, use put request to edit");
@@ -58,7 +62,9 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
-            var exsistingMunicipalities = await _municipalityRepository.GetAll();
+            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User);
+            var entities = await _municipalityRepository.GetAll();
+            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
             if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
 
@@ -102,7 +108,6 @@ namespace GiEnJul.Controllers
             {
                 return NotFound("Could not find municipality for location: "+location);
             }
-
             return Ok(municipalityByLocation);
  
         }
