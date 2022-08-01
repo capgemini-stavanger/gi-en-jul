@@ -41,7 +41,6 @@ namespace GiEnJul.Controllers
                 this.email = email;
                 this.institution = institution;
             }
-
         }
 
         [HttpGet("users")]
@@ -75,8 +74,6 @@ namespace GiEnJul.Controllers
         {
             try
             {
-
-
                 var user = await _auth0ManagementClient.CreateUser(content);
 
                 if (content.Role == "Admin")
@@ -111,7 +108,6 @@ namespace GiEnJul.Controllers
         public void DeleteUser([FromQuery] string email)
         {
             _auth0ManagementClient.DeleteUser(email);
-
         }
     }
 }
