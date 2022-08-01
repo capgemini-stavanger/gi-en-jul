@@ -3,11 +3,14 @@ namespace GiEnJul.Dtos
     public class DeleteConnectionDto
     {
         public string Event { get; set; }
-        public string ConnectedIds { get; set; } //recId_givId
-        public DeleteConnectionDto(string @event, string connctedIds)
+        public string GiverId { get; set; }
+        public string RecipientId { get; set; }
+
+        public DeleteConnectionDto(string @event, string giverId, string recipientId)
         {
             Event = @event;
-            ConnectedIds = connctedIds;
+            GiverId = giverId;
+            RecipientId = recipientId;
         }
     }
 }

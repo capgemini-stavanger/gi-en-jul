@@ -18,6 +18,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
+  connectionAwaitState: number;
+  setConnectionAwaitState: (state: number) => void;
 };
 
 const RecipientDataTable: React.FC<Props> = ({
@@ -28,6 +30,8 @@ const RecipientDataTable: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
+  connectionAwaitState,
+  setConnectionAwaitState,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -159,6 +163,8 @@ const RecipientDataTable: React.FC<Props> = ({
             refreshData={refreshData}
             accessToken={accessToken}
             resetSelections={resetSelections}
+            connectionAwaitState={connectionAwaitState}
+            setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
           />
         )}
       />

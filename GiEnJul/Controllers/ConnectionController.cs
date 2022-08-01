@@ -73,22 +73,28 @@ namespace GiEnJul.Controllers
             {
                 return BadRequest("Connection already exists");
             }
-
-            if (!ConnectionHelper.CanConnect(giver, recipient))
+            if(ConnectionHelper.CanConnect(giver, recipient))
             {
-                return BadRequest("Connection between giver and recipient cannot be made");
+                return BadRequest("Giver and Recipient are disconnected");
+            }
+            if (!ConnectionHelper.MatchingIds(giver, recipient, giverId, recipientId))
+            {
+                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
             }
 
-            (string @event, string connectedIds) connection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            (string @event, string connectedIds) originalConnection = await _connectionRepository.InsertOrReplaceAsync(giver, recipient);
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.HasConfirmedMatch = true;
+            giver.SuggestedMatchAt = null;
+            giver.RemindedAt = null;
+
+            recipient.HasConfirmedMatch = true;
 
             try
             {
-                giver.HasConfirmedMatch = true;
-                giver.SuggestedMatchAt = null;
-                giver.RemindedAt = null;
                 await _giverRepository.InsertOrReplaceAsync(giver);
-
-                recipient.HasConfirmedMatch = true;
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
 
                 var eventModel = await _eventRepository.GetEventByUserLocationAsync(giver.Location);
@@ -104,7 +110,6 @@ namespace GiEnJul.Controllers
                         familyTable += " ";
                     }
                 }
-
                 var emailTemplatename = EmailTemplateName.AssignedFamily;
                 var emailValuesDict = new Dictionary<string, string>
                 {
@@ -123,11 +128,9 @@ namespace GiEnJul.Controllers
             catch (Exception e)
             {
                 //Undo all operations
-                await _connectionRepository.DeleteConnectionAsync(connection.@event, connection.connectedIds);
-                giver.HasConfirmedMatch = false;
-                await _giverRepository.InsertOrReplaceAsync(giver);
-                recipient.HasConfirmedMatch = false;
-                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                await _connectionRepository.DeleteConnectionAsync(originalConnection.@event, originalConnection.connectedIds);
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
 
                 _log.Error("An exception was thrown", e);
                 return NotFound("Unable to update connection");
@@ -146,10 +149,13 @@ namespace GiEnJul.Controllers
             {
                 return BadRequest("Connection already exists");
             }
-
-            if (!ConnectionHelper.CanConnect(giver, recipient))
+            if (ConnectionHelper.CanConnect(giver, recipient))
             {
-                return BadRequest("Connection between giver and recipient cannot be made");
+                return BadRequest("Giver and Recipient are disconnected");
+            }
+            if (!ConnectionHelper.MatchingIds(giver, recipient, giverId, recipientId))
+            {
+                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
             }
 
             var originalGiver = giver.ShallowCopy();
@@ -168,10 +174,6 @@ namespace GiEnJul.Controllers
             recipient.IsSuggestedMatch = false;
             recipient.MatchedGiver = null;
 
-            // Noreply email to giver
-            var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
-            var emailTemplatename = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
-
             var emailContent = "";
             if (feedback.DeleteGiver) {
                 emailContent = "Dette er en bekreftelse på at du har avslått den foreslåtte koblingen. " +
@@ -182,19 +184,21 @@ namespace GiEnJul.Controllers
                     "Vi setter pris på din tilbakemelding og tar den i betraktning ved neste forslag.";
             }
 
-            var emailValuesDict = new Dictionary<string, string>
-                {
-                    { "content", emailContent},
-                };
-            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
-
-            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
-
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+
+                // Noreply email to giver
+                var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
+                var emailTemplatename = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
+                var emailValuesDict = new Dictionary<string, string>
+                {
+                    { "content", emailContent},
+                };
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
 
             }
@@ -210,13 +214,15 @@ namespace GiEnJul.Controllers
             if (feedback.DeleteGiver) // Delete giver
             {
                 await _giverRepository.DeleteAsync(giver);
+
+                // Send email to ADMIN with deleted giver (?)
             }
 
             return Ok();
         }
 
         [HttpPost("confirm")]
-        //[Authorize(Policy = Policy.AddConnection)]
+        //[Authorize(Policy = Policy.AddConnection)] POLICY SHOULD BE ADMIN 
         public async Task ConfirmConnection(ConfirmConnectionDto connectionDto)
         {
             await VerifyConnection(connectionDto.GiverId, connectionDto.RecipientId, connectionDto.Event);
@@ -229,14 +235,18 @@ namespace GiEnJul.Controllers
             var giver = await _giverRepository.GetGiverAsync(@event, giverId);
             var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
 
+            // Check connection
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
                 return BadRequest("Connection already exists");
             }
-
-            if (!ConnectionHelper.CanConnect(giver, recipient))
+            if (ConnectionHelper.CanConnect(giver, recipient))
             {
-                return BadRequest("Connection between giver and recipient cannot be made");
+                return BadRequest("Giver and Recipient are disconnected");
+            }
+            if (!ConnectionHelper.MatchingIds(giver, recipient, giverId, recipientId))
+            {
+                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
             }
 
             return Ok("Godkjent kobling");

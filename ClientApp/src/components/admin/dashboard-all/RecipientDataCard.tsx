@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Button, capitalize, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
@@ -29,6 +29,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
+  connectionAwaitState: number;
+  setConnectionAwaitState: (state: number) => void;
 };
 
 const RecipientDataCard: React.FC<Props> = ({
@@ -40,6 +42,8 @@ const RecipientDataCard: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
+  connectionAwaitState,
+  setConnectionAwaitState,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -65,59 +69,69 @@ const RecipientDataCard: React.FC<Props> = ({
 
   const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
-      apiservice
-        .delete("admin/Connection", {
-          event: recipient.event,
-          connectedIds: `${recipient.recipientId}_${recipient.matchedGiver}`,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            refreshData();
-            setPersonExpanded(false);
-            resetSelections();
-          }
-        })
-        .catch((errorStack) => {
-          console.error(errorStack);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .delete("admin/connection", {
+            event: recipient.event,
+            giverId: recipient.matchedGiver,
+            recipientId: recipient.recipientId,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              refreshData();
+              setPersonExpanded(false);
+              resetSelections();
+            }
+          })
+          .catch((errorStack) => {
+            console.error(errorStack);
+          });
+      }
     }
   };
 
   const deleteGiver = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
-      apiservice
-        .delete("admin/Recipient", {
-          event: recipient.event,
-          recipientId: recipient.recipientId,
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            refreshData();
-            resetSelections();
-          }
-        })
-        .catch((errorStack) => {
-          console.error(errorStack);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .delete("admin/Recipient", {
+            event: recipient.event,
+            recipientId: recipient.recipientId,
+          })
+          .then((response) => {
+            if (response.status === 200) {
+              refreshData();
+              resetSelections();
+            }
+          })
+          .catch((errorStack) => {
+            console.error(errorStack);
+          });
+      }
     }
   };
 
   const saveComment = (response: boolean) => {
     if (response) {
-      apiservice
-        .post("admin/recipient/addcomment", {
-          event: recipientData.event,
-          recipientId: recipientData.recipientId,
-          comment: comment,
-        })
-        .then((resp) => {
-          if (resp.status === 200) {
-            refreshData();
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+      if (connectionAwaitState != 1) {
+        setConnectionAwaitState(1);
+        apiservice
+          .post("admin/recipient/addcomment", {
+            event: recipientData.event,
+            recipientId: recipientData.recipientId,
+            comment: comment,
+          })
+          .then((resp) => {
+            if (resp.status === 200) {
+              refreshData();
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
   };
 
@@ -228,6 +242,31 @@ const RecipientDataCard: React.FC<Props> = ({
                       toEmail={recipientData.contactEmail}
                       fullName={recipientData.contactFullName}
                     />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="h6" gutterBottom>
+                      Matønsker
+                    </Typography>
+                    <Grid container direction="row">
+                      <Grid item xs={12}>
+                        <Grid
+                          container
+                          direction="row"
+                          justifyContent="space-between"
+                          className={classes.personTable}
+                        >
+                          <Grid item xs={2}>
+                            <Typography>{capitalize(recipientData.dinner)}</Typography>
+                          </Grid>
+                          <Grid item xs={2}>
+                            <Typography>{capitalize(recipientData.dessert)}</Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography>{capitalize(recipientData.note)}</Typography>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
