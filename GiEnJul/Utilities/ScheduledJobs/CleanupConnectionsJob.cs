@@ -21,6 +21,7 @@ namespace GiEnJul.Utilities.ScheduledJobs
         private readonly IGiverRepository _giverRepository;
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
+        private readonly IMunicipalityRepository _municipalityRepository;
 
         public CleanupConnectionsJob(ILogger log,
                                      ISettings settings,
@@ -28,7 +29,8 @@ namespace GiEnJul.Utilities.ScheduledJobs
                                      IEmailTemplateBuilder templateBuilder,
                                      IGiverRepository giverRepository,
                                      IRecipientRepository recipientRepository,
-                                     IPersonRepository personRepository)
+                                     IPersonRepository personRepository,
+                                     IMunicipalityRepository municipalityRepository)
         {
             _log = log;
             _settings = settings;
@@ -37,11 +39,13 @@ namespace GiEnJul.Utilities.ScheduledJobs
             _giverRepository = giverRepository;
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
+            _municipalityRepository = municipalityRepository;
         }
         
         public async Task Execute(IJobExecutionContext context)
         {
             _log.Information("[Cleanup Job] Starting Cleanup Connections job");
+            var municipalities = await _municipalityRepository.GetAll();
 
             // TODO: Rewrite this job to work per event and use proximity to enddate of the event to calculate sensitivity
             var daySensitivity = DateTime.Now.Month < 11 || (DateTime.Now.Month == 11 && DateTime.Now.Day < 15) ? 
@@ -60,15 +64,15 @@ namespace GiEnJul.Utilities.ScheduledJobs
             var recipientIds = staleGivers.Select(g => g.MatchedRecipient);
             var connectedRecipients = await _recipientRepository.GetRecipientsByIdsAsync(recipientIds);
 
-            var giversToNotify = staleGivers.Where(g => g.RemindedAt == null || g.RemindedAt == DateTime.MinValue).ToList();
+            var giversToRemind = staleGivers.Where(g => g.RemindedAt == null || g.RemindedAt == DateTime.MinValue).ToList();
             var giversToRemove = staleGivers.Where(g => g.SuggestedMatchAt <= removeConnectionDate && g.RemindedAt < notificationDate).ToList();
-            var giversToSkip = staleGivers.Except(giversToNotify).Except(giversToRemove).ToList();
+            var giversToSkip = staleGivers.Except(giversToRemind).Except(giversToRemove).ToList();
 
             _log.Information("[Cleanup Job] Job tasks: Notify {0}, Removing {1}, " +
                 "Skipping {2} givers that have been recently reminded",
-                giversToNotify.Count, giversToRemove.Count, giversToSkip.Count);
+                giversToRemind.Count, giversToRemove.Count, giversToSkip.Count);
 
-            await NotifyGivers(connectedRecipients, giversToNotify);
+            await RemindGiver(connectedRecipients, giversToRemind, municipalities);
             await RemoveConnection(connectedRecipients, giversToRemove);
 
             _log.Information("[Cleanup Job] Cleanup Connections job done!");
@@ -84,6 +88,7 @@ namespace GiEnJul.Utilities.ScheduledJobs
                 {
                     var recipient = connectedRecipients.FirstOrDefault(r => r.RecipientId == giver.MatchedRecipient);
                     UnMatchGiver(giver);
+                    giver.CancelFeedback = $"Automatisk frakobling {DateTime.Now:d} da giveren ikke bekreftet etter påminnelse {giver.RemindedAt:d}";
                     await _giverRepository.InsertOrReplaceAsync(giver);
                     if (recipient != null)
                     {
@@ -104,18 +109,18 @@ namespace GiEnJul.Utilities.ScheduledJobs
             _log.Information("[Cleanup Job] removed {0} connections", removedCount);
         }
 
-        private async Task NotifyGivers(IEnumerable<Recipient> connectedRecipients, IEnumerable<Giver> giversToNotify)
+        private async Task RemindGiver(IEnumerable<Recipient> connectedRecipients, IEnumerable<Giver> giversToNotify, IEnumerable<Municipality> municipalities)
         {
             var connectedRecipientIds = giversToNotify.Select(g => g.MatchedRecipient);
             var connectedRecipientPersons = await _personRepository.GetAllByRecipientIds(connectedRecipientIds);
-            var recipientsForGiversToNotify = connectedRecipients.Where(r => connectedRecipientIds.Contains(r.RecipientId)).ToList();
+            var recipientsForGiversToRemind = connectedRecipients.Where(r => connectedRecipientIds.Contains(r.RecipientId)).ToList();
 
-            recipientsForGiversToNotify.ForEach(r => r.FamilyMembers = connectedRecipientPersons.Where(p => p.RecipientId == r.RecipientId).ToList());
+            recipientsForGiversToRemind.ForEach(r => r.FamilyMembers = connectedRecipientPersons.Where(p => p.RecipientId == r.RecipientId).ToList());
 
             var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
             _log.Information("[Cleanup Job] Trying to remind {0} givers", giversToNotify.Count());
-            var notifiedCount = 0;
+            var remindedCount = 0;
             foreach (var giver in giversToNotify)
             {
                 try
@@ -125,11 +130,14 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     {
                         _log.Warning("[Cleanup Job] Giver {@0} had no matched recipient. unmatching...", giver);
                         UnMatchGiver(giver);
+                        giver.CancelFeedback = $"Automatisk frakobling {DateTime.Now:d} på grunn av en datafeil: fant ikke tilkoblet familie ref:{giver.MatchedRecipient}, fam id: {giver.MatchedFamilyId}";
+                        Log.Warning(giver.CancelFeedback);
                         await _giverRepository.InsertOrReplaceAsync(giver);
                         continue;
                     }
-                    var emailValuesDictionary = EmailDictionaryHelper.MakeVerifyEmailContent(giver, matchedRecipient, baseUrl);
-                    var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.AssignedFamily);
+                    var municipality = municipalities.First(m => m.Name == giver.Location);
+                    var emailValuesDictionary = EmailDictionaryHelper.MakeVerifyEmailContent(giver, matchedRecipient, municipality, baseUrl);
+                    var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.ConnectionReminder, emailValuesDictionary);
                     //TODO different Email template?
 
                     await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent.Subject, emailContent.Content);
@@ -137,7 +145,7 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     giver.RemindedAt = DateTime.UtcNow;
                     await _giverRepository.InsertOrReplaceAsync(giver);
 
-                    notifiedCount++;
+                    remindedCount++;
                 }
                 catch (Exception ex)
                 {
@@ -145,7 +153,7 @@ namespace GiEnJul.Utilities.ScheduledJobs
                 }
             }
 
-            _log.Information("[Cleanup Job] Sent reminder to {0}", notifiedCount);
+            _log.Information("[Cleanup Job] Sent reminder to {0}", remindedCount);
         }
 
         private static void UnMatchRecipient(Recipient recipient)

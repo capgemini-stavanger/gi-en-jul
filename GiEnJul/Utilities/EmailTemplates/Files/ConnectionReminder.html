@@ -1,0 +1,61 @@
+﻿<tr>
+    <td valign="center">
+
+        <br />
+        Hei, {giver.FullName}
+        <br />
+        <br />
+
+        Vi har sendt deg forslag til familie du kan gi en jul til. Det er viktig at du går inn og bekrefter at du gir en jul til denne familien slik at vi er sikker på at denne familien får en jul. NB! Det er kort frist for tilbakemelding!
+
+        <br />
+        <br />
+        Når du har bekreftet så sender vi deg informasjon om familiens ønsker.
+
+        <br />
+        <br />
+        Dersom du ikke lengre ønsker å være giver, eller ikke kan gi en jul til denne familien er det også viktig at du registrerer dette slik at vi kan finne en ny giver til familien.
+
+        <br />
+        <br />
+        Vær oppmerksom på at dersom du ikke bekrefter din familie innen fristen så vil finne en annen giver denne familien.
+
+        <br />
+        <br />
+        <br />
+        Her er familien som er tildelt til deg!
+        <h3 style="color: #327C6D">OVERSIKT OVER FAMILIE </h3>
+        <ul>{familyTable}</ul>
+        <br />
+
+        Når du har lest gjennom teksten er det viktig at du klikker på knappen nedenfor for å  <br />
+        bekrefte at du blir med i Gi en jul med den tildelte familien.
+        <br />
+        <br />
+        <table align="center">
+            <tr>
+                <td><a href="{verifyLink}"> <p style="color:white;background-color:green; "> &nbsp;Godkjenn&nbsp; </p></a></td>
+            </tr>
+        </table>
+
+        <br />
+        <br />
+
+        Ønsker du å en annen familie, eller melde deg helt av trykk på knappen under.
+        <br />
+        <br />
+        <table align="center">
+            <tr>
+                <td><a href="{denyLink}"> <p style="background-color: red;color:white; "> &nbsp;Avslå&nbsp; </p></a></td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        PS: Denne mailen kan ikke besvares. Ved spørsmål angående registreringen eller lignende,<br />
+        ta kontakt med {municipalityDto.ContactPerson} på <a href=\"mailto:{municipalityDto.Email}\">{municipalityDto.Email}</a>
+
+        <br />
+        <br />
+
+    </td>
+</tr>

@@ -47,7 +47,7 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
             var names = await _municipalityRepository.GetAll();
-            if (names.Where(x => x.RowKey == content.Name).Any())
+            if (names.Where(x => x.Name == content.Name).Any())
                 return BadRequest("RowKey already exists, use put request to edit");
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
@@ -58,8 +58,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
         {
-            var entities = await _municipalityRepository.GetAll();
-            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            var exsistingMunicipalities = await _municipalityRepository.GetAll();
             if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
                 return BadRequest("RowKey does not exists");
 
@@ -77,8 +76,7 @@ namespace GiEnJul.Controllers
         [HttpGet("active")]
         public async Task<List<string>> getActiveNames()
         {
-            var all = await _municipalityRepository.GetAll();
-            var municipalities = _mapper.Map<List<Models.Municipality>>(all);
+            var municipalities = await _municipalityRepository.GetAll();
             var active = municipalities.Where(m => m.IsActive).Select(m => m.Name).ToList();
             return active;
         }
@@ -86,8 +84,7 @@ namespace GiEnJul.Controllers
         [HttpGet("names")]
         public async Task<IEnumerable<string>> GetAllNames()
         {
-            var entities = await _municipalityRepository.GetAll();
-            var municipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            var municipalities = await _municipalityRepository.GetAll();
             var names = municipalities.Select(m => m.Name);
             return names;
         }
@@ -113,8 +110,8 @@ namespace GiEnJul.Controllers
         [HttpGet("allcontacts")]
         public async Task<IEnumerable<Dtos.GetContactsDto>> GetContacts()
         {
-            var entities = await _municipalityRepository.GetAll();
-            var active = entities.Where(m => m.IsActive).ToList();
+            var municipalities = await _municipalityRepository.GetAll();
+            var active = municipalities.Where(m => m.IsActive).ToList();
             var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(active);
             return contacts;
         }

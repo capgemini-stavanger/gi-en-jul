@@ -215,6 +215,7 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
+            var municipality = new Municipality();
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
@@ -248,7 +249,9 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
-                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, baseUrl);
+
+                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
+
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }

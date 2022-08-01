@@ -79,6 +79,15 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - påminnelse! Husk å bekrefte!.
+        /// </summary>
+        public static string ConnectionReminder {
+            get {
+                return ResourceManager.GetString("ConnectionReminder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gi en jul - notifikasjon!.
         /// </summary>
         public static string Notification {
