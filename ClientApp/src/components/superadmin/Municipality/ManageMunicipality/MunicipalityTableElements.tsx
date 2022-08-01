@@ -101,6 +101,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <Button
             className={classes.button}
             variant="contained"
+            disabled={!openEditForm}
             onClick={() => {
               setSelectedMunicipality(municipality);
               if (municipality.isActive) {
