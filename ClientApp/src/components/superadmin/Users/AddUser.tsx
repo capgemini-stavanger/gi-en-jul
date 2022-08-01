@@ -38,9 +38,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   const [tab, setTab] = useState<string>("1");
   const [institutions, setInstitutions] = useState<User[]>([]);
   const [admins, setAdmins] = useState<User[]>([]);
-
   const apiservice = new ApiService(accessToken);
-
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [selectedEmail, setSelectedEmail] = useState<string>("");
   const [confirmDelete, setConfirmDelete] = useState<boolean>(false);
@@ -104,12 +102,10 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
           </TabContext>
         </Container>
       </Grid>
-
       <Grid container spacing={3} direction="column" alignItems="center">
         <Grid item>
           <Typography className={classes.textHeadline}>Alle brukere</Typography>
         </Grid>
-
         <Grid item>
           <Container>
             <TabContext value={tab}>

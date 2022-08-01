@@ -28,7 +28,6 @@ namespace GiEnJul.Clients
         Task AddUserRole(User user, string roleId);
         Task UpdateUserRole(User user, List<string> roles);
         Task RemoveUserRole(User user, string roleId);
-
     }
 
     public class Auth0ManagementClient : IAuth0ManagementClient
@@ -118,7 +117,6 @@ namespace GiEnJul.Clients
         {
             var user = await GetSingleUser(email);
             await _managementApiClient.Users.DeleteAsync(user.UserId);
-
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
