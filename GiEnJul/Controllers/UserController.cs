@@ -71,23 +71,32 @@ namespace GiEnJul.Controllers
 
         [HttpPost("create")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<User> CreateUser([FromBody] CreateUserDto content)
+        public async Task<ActionResult> CreateUser([FromBody] CreateUserDto content)
         {
-            var user = await _auth0ManagementClient.CreateUser(content);
+            try
+            {
 
-            if (content.Role == "Admin")
-            {
-                await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.Admin);
+
+                var user = await _auth0ManagementClient.CreateUser(content);
+
+                if (content.Role == "Admin")
+                {
+                    await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.Admin);
+                }
+                else if (content.Role == "Institution")
+                {
+                    await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.Institution);
+                }
+                else if (content.Role == "SuperAdmin")
+                {
+                    await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.SuperAdmin);
+                }
+                return Ok();
             }
-            else if (content.Role == "Institution")
+            catch
             {
-                await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.Institution);
+                return BadRequest("could not create user");
             }
-            else if (content.Role == "SuperAdmin")
-            {
-                await _auth0ManagementClient.AddUserRole(user, _settings.Auth0Settings.SuperAdmin);
-            }
-            return user;
         }
 
         [HttpGet("getsingle")]

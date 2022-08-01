@@ -6,7 +6,6 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull } from "components/shared/input-fields/validators/Validators";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import useStyles from "../Styles";
 import { ROLES } from "common/constants/Roles";
 
 interface props {
@@ -15,63 +14,100 @@ interface props {
   handleRefresh: () => void;
 }
 
-interface IChangeEvent {
-  name?: string | undefined;
-  value: unknown;
+interface FormState {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  location: string;
+  role: string;
+  institutionName: string;
+  //openAdd: boolean;
+  // confirmAdd: boolean;
+  // message: string;
+  // success: boolean;
+  //  municipalities: string[];
 }
 
+export const initFormDataState: () => FormState = () => ({
+  email: "",
+  password: "",
+  confirmPassword: "",
+  location: "",
+  role: "",
+  institutionName: "",
+  // openAdd: false,
+  //confirmAdd: false,
+  //  message: "",
+  //  success: false,
+  // municipalities: [],
+});
+
 const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
+  const [state, setState] = useState(initFormDataState());
+  const [openAdd, setOpenAdd] = useState<boolean>(false);
+  const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
+  /*
   const [email, setEmail] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
   const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
   const [locationInput, setLocationInput] = useState<string>("");
   const [roleInput, setRoleInput] = useState<string>("");
   const [institutionName, setinstitutionName] = useState<string>("");
-  const [municipalities, setMunicipalities] = useState<string[]>([]);
+  
 
-  const [openAdd, setOpenAdd] = useState<boolean>(false);
-  const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
-
+  
+*/
   const apiservice = new ApiService(accessToken);
-  const classes = useStyles();
 
-  const onEmailChange = (event: React.ChangeEvent<IChangeEvent>) => {
-    setEmail(event.target.value as string);
-  };
-
-  const onRoleInputChange = (event: ChangeEvent<IChangeEvent>) => {
-    setRoleInput(event.target.value as string);
+  const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      email: event.target.value as string,
+    }));
   };
 
-  const onPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
-    setPasswordInput(event.target.value as string);
+  const onRoleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      role: event.target.value as string,
+    }));
   };
-  const onConfirmPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
-    setConfirmPasswordInput(event.target.value as string);
-  };
-  const onLocationChange = (event: ChangeEvent<IChangeEvent>) => {
-    setLocationInput(event.target.value as string);
+  const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      password: event.target.value as string,
+    }));
   };
 
-  const onInstitutionNameChange = (event: ChangeEvent<IChangeEvent>) => {
-    setinstitutionName(event.target.value as string);
+  const onConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      confirmPassword: event.target.value as string,
+    }));
+  };
+
+  const onLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      location: event.target.value as string,
+    }));
+  };
+
+  const onInstitutionNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      institutionName: event.target.value as string,
+    }));
   };
 
   const handleConfirmPassword = () => {
-    if (passwordInput === confirmPasswordInput) {
+    if (state.password === state.confirmPassword) {
       return true;
     } else {
       return false;
-    }
-  };
-
-  const handleSetMessage = () => {
-    if (success) {
-      setMessage("Brukeren er lagt til");
-    } else {
-      setMessage("Kunne ikke legge til brukeren");
     }
   };
 
@@ -79,26 +115,29 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     if (handleConfirmPassword()) {
       apiservice
         .post("user/create", {
-          Email: email,
-          Password: passwordInput,
-          Location: locationInput,
-          Role: institution ? "Institution" : roleInput,
-          Institution: institutionName,
+          Email: state.email,
+          Password: state.password,
+          Location: state.location,
+          Role: institution ? "Institution" : state.role,
+          Institution: state.institutionName,
         })
         .then(() => {
-          setSuccess(true);
+          setSuccess(true); //trenger ikke denne
+          setMessage("Brukeren er lagt til");
           handleRefresh();
+          refreshForm();
         })
         .catch((errorStack) => {
           console.error(errorStack);
+          setMessage("Kunne ikke legge til brukeren");
         });
     } else {
     }
   };
 
   const getMunicipalities = () => {
-    apiservice.get("municipality/active").then((respone) => {
-      setMunicipalities(respone.data);
+    apiservice.get("municipality/active").then((response) => {
+      setMunicipalities(response.data);
     });
   };
   useEffect(getMunicipalities, []);
@@ -108,8 +147,12 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       handleCreateUser();
       setConfirmAdd(true);
     }
-    handleSetMessage();
+
     setOpenAdd(false);
+  };
+
+  const refreshForm = () => {
+    setState(initFormDataState());
   };
 
   return (
@@ -117,7 +160,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       <Grid item>
         <InputValidator
           validators={[isNotNull]}
-          value={email}
+          value={state.email}
           onChange={(e) => {
             onEmailChange(e);
           }}
@@ -129,7 +172,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       <Grid item>
         <InputValidator
           validators={[isNotNull]}
-          value={passwordInput}
+          value={state.password}
           onChange={(e) => {
             onPasswordChange(e);
           }}
@@ -142,7 +185,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       <Grid item>
         <InputValidator
           validators={[isNotNull]}
-          value={confirmPasswordInput}
+          value={state.confirmPassword}
           onChange={(e) => {
             onConfirmPasswordChange(e);
           }}
@@ -156,7 +199,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
         <Grid item>
           <InputValidator
             validators={[isNotNull]}
-            value={institutionName}
+            value={state.institutionName}
             onChange={(e) => {
               onInstitutionNameChange(e);
             }}
@@ -170,7 +213,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
         <InputValidator
           size={"medium"}
           validators={[isNotNull]}
-          value={locationInput}
+          value={state.location}
           type="select"
           options={municipalities.map((m) => {
             return { value: m, text: m };
@@ -188,7 +231,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           <InputValidator
             size={"medium"}
             validators={[isNotNull]}
-            value={roleInput}
+            value={state.role}
             type="select"
             options={ROLES.map((r) => {
               return { value: r, text: r };
