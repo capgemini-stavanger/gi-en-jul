@@ -6,7 +6,6 @@ import InputValidator from "components/shared/input-fields/validators/InputValid
 import { isNotNull, isEmail } from "components/shared/input-fields/validators/Validators";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "reactstrap";
-import useStyles from "../Styles";
 import { ROLES } from "common/constants/Roles";
 
 interface props {
@@ -15,9 +14,13 @@ interface props {
   handleRefresh: () => void;
 }
 
-interface IChangeEvent {
-  name?: string | undefined;
-  value: unknown;
+interface FormState {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  location: string;
+  role: string;
+  institutionName: string;
 }
 
 type ValidFields = {
@@ -32,30 +35,30 @@ const initValidFields: ValidFields = {
   role: false,
 };
 
-const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
-  const [email, setEmail] = useState<string>("");
-  const [passwordInput, setPasswordInput] = useState<string>("");
-  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>("");
-  const [locationInput, setLocationInput] = useState<string>("");
-  const [roleInput, setRoleInput] = useState<string>("");
-  const [institutionName, setinstitutionName] = useState<string>("");
-  const [municipalities, setMunicipalities] = useState<string[]>([]);
+export const initFormDataState: () => FormState = () => ({
+  email: "",
+  password: "",
+  confirmPassword: "",
+  location: "",
+  role: "",
+  institutionName: "",
+});
 
+const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
+  const [state, setState] = useState(initFormDataState());
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
-
   const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
   const [validFormValues, setValidFormValues] = useState({
     ...initValidFields,
   });
 
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
   const apiservice = new ApiService(accessToken);
-  const classes = useStyles();
 
   const checkEqualPassword = (confirmPassword: string) => {
-    return confirmPassword === passwordInput;
+    return confirmPassword === state.password;
   };
 
   // checks if papssword is between 12-32 length,
@@ -119,44 +122,59 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     }
   };
 
-  const onEmailChange = (event: React.ChangeEvent<IChangeEvent>) => {
-    setEmail(event.target.value as string);
+  const onEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      email: event.target.value as string,
+    }));
     incrementErrorNum("email", event.target.value as string);
   };
 
-  const onRoleInputChange = (event: ChangeEvent<IChangeEvent>) => {
-    setRoleInput(event.target.value as string);
+  const onRoleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      role: event.target.value as string,
+    }));
   };
 
-  const onPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
-    setPasswordInput(event.target.value as string);
+  const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      password: event.target.value as string,
+    }));
     incrementErrorNum("password", event.target.value as string);
   };
-  const onConfirmPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
-    setConfirmPasswordInput(event.target.value as string);
+
+  const onConfirmPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      confirmPassword: event.target.value as string,
+    }));
+
     incrementErrorNum("confirmPassword", event.target.value as string);
   };
-  const onLocationChange = (event: ChangeEvent<IChangeEvent>) => {
-    setLocationInput(event.target.value as string);
+
+  const onLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      location: event.target.value as string,
+    }));
+    incrementErrorNum("municipality", event.target.value as string);
   };
 
-  const onInstitutionNameChange = (event: ChangeEvent<IChangeEvent>) => {
-    setinstitutionName(event.target.value as string);
+  const onInstitutionNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setState((prev) => ({
+      ...prev,
+      institutionName: event.target.value as string,
+    }));
+    incrementErrorNum("insitution", event.target.value as string);
   };
 
   const handleConfirmPassword = () => {
-    if (passwordInput === confirmPasswordInput) {
+    if (state.password === state.confirmPassword) {
       return true;
     } else {
       return false;
-    }
-  };
-
-  const handleSetMessage = () => {
-    if (success) {
-      setMessage("Brukeren er lagt til");
-    } else {
-      setMessage("Kunne ikke legge til brukeren");
     }
   };
 
@@ -164,26 +182,28 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     if (handleConfirmPassword()) {
       apiservice
         .post("user/create", {
-          Email: email,
-          Password: passwordInput,
-          Location: locationInput,
-          Role: institution ? "Institution" : roleInput,
-          Institution: institutionName,
+          Email: state.email,
+          Password: state.password,
+          Location: state.location,
+          Role: institution ? "Institution" : state.role,
+          Institution: state.institutionName,
         })
         .then(() => {
-          setSuccess(true);
+          setMessage("Brukeren er lagt til");
           handleRefresh();
+          refreshForm();
         })
         .catch((errorStack) => {
           console.error(errorStack);
+          setMessage("Kunne ikke legge til brukeren");
         });
     } else {
     }
   };
 
   const getMunicipalities = () => {
-    apiservice.get("municipality/active").then((respone) => {
-      setMunicipalities(respone.data);
+    apiservice.get("municipality/active").then((response) => {
+      setMunicipalities(response.data);
     });
   };
   useEffect(getMunicipalities, []);
@@ -193,8 +213,12 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
       handleCreateUser();
       setOpenInformationBox(true);
     }
-    handleSetMessage();
+
     setOpenAdd(false);
+  };
+
+  const refreshForm = () => {
+    setState(initFormDataState());
   };
 
   return (
@@ -217,7 +241,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           validators={getValidators("email")}
           errorMessages={["Emailen kan ikke være tom", "Vennligst fyll ut en gyldig email"]}
           setIsValids={getValiditySetter("email")}
-          value={email}
+          value={state.email}
           onChange={(e) => {
             onEmailChange(e);
           }}
@@ -231,7 +255,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           validators={getValidators("password")}
           errorMessages={["Passordet kan ikke være tomt", "Passordet er ikke sterkt nok"]}
           setIsValids={getValiditySetter("password")}
-          value={passwordInput}
+          value={state.password}
           onChange={(e) => {
             onPasswordChange(e);
           }}
@@ -246,7 +270,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           validators={getValidators("confirmPassword")}
           errorMessages={["Passordet kan ikke være tomt", "Passordene er ikke like"]}
           setIsValids={getValiditySetter("confirmPassword")}
-          value={confirmPasswordInput}
+          value={state.confirmPassword}
           onChange={(e) => {
             onConfirmPasswordChange(e);
           }}
@@ -262,7 +286,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
             validators={getValidators("institution")}
             errorMessages={["Fyll ut navn på institusjon"]}
             setIsValids={getValiditySetter("institution")}
-            value={institutionName}
+            value={state.institutionName}
             onChange={(e) => {
               onInstitutionNameChange(e);
             }}
@@ -279,7 +303,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           setIsValids={getValiditySetter("municipality")}
           size={"medium"}
           validators={[isNotNull]}
-          value={locationInput}
+          value={state.location}
           type="select"
           options={municipalities.map((m) => {
             return { value: m, text: m };
@@ -299,7 +323,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
             errorMessages={["Vennligst velg en rolle"]}
             setIsValids={getValiditySetter("role")}
             size={"medium"}
-            value={roleInput}
+            value={state.role}
             type="select"
             options={ROLES.map((r) => {
               return { value: r, text: r };

@@ -12,7 +12,7 @@ TIME_TIMESTAMP = datetime.datetime.utcfromtimestamp(
 
 TABLE_HEADER_PERSON = ["Age", "Gender", "Wish"]
 TABLE_HEADER_GIVER = ["Email", "EventName", "FullName", "HasConfirmedMatch",
-                      "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber"]
+                      "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber", "RegistrationDate"]
 TABLE_HEADER_RECIPIENT = ["ContactEmail", "ContactFullName", "ContactPhoneNumber", "Dessert", "Dinner", "EventName",
                           "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount",
                           "ReferenceId", "FamilyId", "MatchedGiver"]
@@ -301,8 +301,9 @@ def add_table_entry_giver(location: str, event_name: str):
     email = get_email(full_name)
     is_suggested_match = False
     has_confirmed_match = False
+    registation_date = TIME_TIMESTAMP
     add_table_row(FILE_PATH_GIVER, partition_key, row_key,
-                  [email, event_name, full_name, has_confirmed_match, is_suggested_match, location, max_reciviers, phone_number])
+                  [email, event_name, full_name, has_confirmed_match, is_suggested_match, location, max_reciviers, phone_number, registation_date])
 
 
 # ----- PROJECT STRUCTURE ----- #
