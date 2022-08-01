@@ -1,9 +1,9 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, List, ListItem, ListItemIcon, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
-import { isNotNull } from "components/shared/input-fields/validators/Validators";
+import { isNotNull, isEmail } from "components/shared/input-fields/validators/Validators";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import useStyles from "../Styles";
@@ -20,6 +20,18 @@ interface IChangeEvent {
   value: unknown;
 }
 
+type ValidFields = {
+  [valid: string]: boolean;
+};
+
+const initValidFields: ValidFields = {
+  email: false,
+  password: false,
+  confirmPassword: false,
+  institution: false,
+  role: false,
+};
+
 const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
   const [email, setEmail] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
@@ -30,15 +42,86 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const [municipalities, setMunicipalities] = useState<string[]>([]);
 
   const [openAdd, setOpenAdd] = useState<boolean>(false);
-  const [confirmAdd, setConfirmAdd] = useState<boolean>(false);
+  const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
+
+  const [viewErrorNumber, setViewErrorNumber] = useState<number>(1);
+  const [validFormValues, setValidFormValues] = useState({
+    ...initValidFields,
+  });
 
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
+  const checkEqualPassword = (confirmPassword: string) => {
+    return confirmPassword === passwordInput;
+  };
+
+  // checks if papssword is between 12-32 length,
+  // uses Uppercase and lowercase letters AND includes a number
+  const checkValidPassword = (password: string) => {
+    return !!String(password).match(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{12,}/
+    );
+  };
+
+  const getValidators = (field: string) => {
+    switch (field) {
+      case "password":
+        return [isNotNull, checkValidPassword];
+      case "confirmPassword":
+        return [isNotNull, checkEqualPassword];
+      case "email":
+        return [isNotNull, isEmail];
+      case "institution":
+        return [isNotNull];
+      case "municipality":
+        return [isNotNull];
+      case "role":
+        return [isNotNull];
+    }
+    return [() => true];
+  };
+
+  const getValiditySetter = (field: string) => (isValid: boolean) => {
+    setValidFormValues((prev) => {
+      prev[field] = isValid;
+      return prev;
+    });
+  };
+
+  const allFieldsAreValid = () => {
+    const objectToValidate = { ...validFormValues };
+    // set unrelated fields to true
+    if (institution) {
+      objectToValidate["role"] = true;
+    } else {
+      objectToValidate["institution"] = true;
+    }
+    return Object.values(objectToValidate).every((value) => value === true);
+  };
+
+  const fieldIsValid = (field: string, fieldValue: string) => {
+    let allIsValid = true;
+    const validators = getValidators(field);
+    validators.forEach((validator) => {
+      if (!validator(fieldValue)) {
+        allIsValid = false;
+      }
+    });
+    return allIsValid;
+  };
+
+  const incrementErrorNum = (field: string, fieldValue: string) => {
+    if (!fieldIsValid(field, fieldValue)) {
+      setViewErrorNumber(viewErrorNumber + 1);
+    }
+  };
+
   const onEmailChange = (event: React.ChangeEvent<IChangeEvent>) => {
     setEmail(event.target.value as string);
+    incrementErrorNum("email", event.target.value as string);
   };
 
   const onRoleInputChange = (event: ChangeEvent<IChangeEvent>) => {
@@ -47,9 +130,11 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
 
   const onPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
     setPasswordInput(event.target.value as string);
+    incrementErrorNum("password", event.target.value as string);
   };
   const onConfirmPasswordChange = (event: ChangeEvent<IChangeEvent>) => {
     setConfirmPasswordInput(event.target.value as string);
+    incrementErrorNum("confirmPassword", event.target.value as string);
   };
   const onLocationChange = (event: ChangeEvent<IChangeEvent>) => {
     setLocationInput(event.target.value as string);
@@ -106,7 +191,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const handleAdd = (response: boolean) => {
     if (response) {
       handleCreateUser();
-      setConfirmAdd(true);
+      setOpenInformationBox(true);
     }
     handleSetMessage();
     setOpenAdd(false);
@@ -114,9 +199,24 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
 
   return (
     <Grid container direction="column" spacing={3} alignItems="center">
+      <Typography>Passord</Typography>
+      <List>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>Minimum 12 siffer langt
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>Inneholde store og små bokstaver
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>Inneholde minimum ett av tegna !@#$%^&*
+        </ListItem>
+      </List>
       <Grid item>
         <InputValidator
-          validators={[isNotNull]}
+          viewErrorTrigger={viewErrorNumber}
+          validators={getValidators("email")}
+          errorMessages={["Emailen kan ikke være tom", "Vennligst fyll ut en gyldig email"]}
+          setIsValids={getValiditySetter("email")}
           value={email}
           onChange={(e) => {
             onEmailChange(e);
@@ -125,10 +225,12 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           name={"email"}
         ></InputValidator>
       </Grid>
-
       <Grid item>
         <InputValidator
-          validators={[isNotNull]}
+          viewErrorTrigger={viewErrorNumber}
+          validators={getValidators("password")}
+          errorMessages={["Passordet kan ikke være tomt", "Passordet er ikke sterkt nok"]}
+          setIsValids={getValiditySetter("password")}
           value={passwordInput}
           onChange={(e) => {
             onPasswordChange(e);
@@ -138,10 +240,12 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           name={"passord"}
         ></InputValidator>
       </Grid>
-
       <Grid item>
         <InputValidator
-          validators={[isNotNull]}
+          viewErrorTrigger={viewErrorNumber}
+          validators={getValidators("confirmPassword")}
+          errorMessages={["Passordet kan ikke være tomt", "Passordene er ikke like"]}
+          setIsValids={getValiditySetter("confirmPassword")}
           value={confirmPasswordInput}
           onChange={(e) => {
             onConfirmPasswordChange(e);
@@ -151,11 +255,13 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           name={"bekreftPassord"}
         ></InputValidator>
       </Grid>
-
       {institution && (
         <Grid item>
           <InputValidator
-            validators={[isNotNull]}
+            viewErrorTrigger={viewErrorNumber}
+            validators={getValidators("institution")}
+            errorMessages={["Fyll ut navn på institusjon"]}
+            setIsValids={getValiditySetter("institution")}
             value={institutionName}
             onChange={(e) => {
               onInstitutionNameChange(e);
@@ -165,9 +271,12 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           ></InputValidator>
         </Grid>
       )}
-
       <Grid item>
         <InputValidator
+          viewErrorTrigger={viewErrorNumber}
+          // validators={getValidators("municipality")}
+          errorMessages={["Vennligst velg en kommune"]}
+          setIsValids={getValiditySetter("municipality")}
           size={"medium"}
           validators={[isNotNull]}
           value={locationInput}
@@ -182,12 +291,14 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           name={"lokasjon"}
         ></InputValidator>
       </Grid>
-
       {!institution && (
         <Grid item>
           <InputValidator
+            viewErrorTrigger={viewErrorNumber}
+            validators={getValidators("role")}
+            errorMessages={["Vennligst velg en rolle"]}
+            setIsValids={getValiditySetter("role")}
             size={"medium"}
-            validators={[isNotNull]}
             value={roleInput}
             type="select"
             options={ROLES.map((r) => {
@@ -201,7 +312,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           ></InputValidator>
         </Grid>
       )}
-
       <ConfirmationBox
         open={openAdd}
         text={"Er du sikker på at du vil legge til brukeren?"}
@@ -210,19 +320,22 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
         }}
         handleResponse={handleAdd}
       ></ConfirmationBox>
-
       <InformationBox
-        open={confirmAdd}
+        open={openInformationBox}
         text={message}
         handleClose={() => {
-          setConfirmAdd(false);
+          setOpenInformationBox(false);
         }}
       ></InformationBox>
-
       <Grid item>
         <Button
           onClick={() => {
-            setOpenAdd(true);
+            if (allFieldsAreValid()) {
+              setOpenAdd(true);
+            } else {
+              setMessage("Vennligst fyll ut alle feltene");
+              setOpenInformationBox(true);
+            }
           }}
         >
           <Typography>Legg til</Typography>
