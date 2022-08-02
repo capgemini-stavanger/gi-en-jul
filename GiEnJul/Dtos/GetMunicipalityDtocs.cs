@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Dtos
+﻿using System.Collections.Generic;
+
+namespace GiEnJul.Dtos
 {
     public class GetMunicipalityDtocs
     {
@@ -8,5 +10,6 @@
         public string Image { get; set; }
         public bool IsActive { get; set; }
         public string Email { get; set; }
+        public List<string> Images { get; set; }
     }
 }
