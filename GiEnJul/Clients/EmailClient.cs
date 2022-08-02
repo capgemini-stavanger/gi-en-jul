@@ -69,7 +69,7 @@ namespace GiEnJul.Clients
 
             using (var client = new SmtpClient())
             {
-                if (!_env.IsDevelopment())
+                if (_env.IsDevelopment())
                 {
                     await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
                 }
