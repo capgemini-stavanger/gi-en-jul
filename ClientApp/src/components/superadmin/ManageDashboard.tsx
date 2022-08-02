@@ -15,7 +15,7 @@ interface IManageDashboard {
 }
 
 const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, role }) => {
-  const [tab, setTab] = useState<string>("1");
+  const [tab, setTab] = useState<string>("4");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);

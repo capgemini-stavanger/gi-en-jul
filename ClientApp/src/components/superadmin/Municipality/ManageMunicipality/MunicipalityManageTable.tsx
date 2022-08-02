@@ -65,18 +65,21 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
 
   return (
     <>
-      <Typography>
-        <Typography>Liste over kommuner</Typography>
-        <List>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon>Denne Tabellen viser alle kommuner
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>-</ListItemIcon> Her kan du redigere kontakt informasjon om kommunen og
-            velge om informasjonen om kommunen skal vises på hjemsiden
-          </ListItem>
-        </List>
-      </Typography>
+      <Typography>Liste over kommuner</Typography>
+      <List>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>Denne Tabellen viser alle kommuner</Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Her kan du redigere kontakt informasjon om kommunen og velge om informasjonen om
+            kommunen skal vises på hjemsiden
+          </Typography>
+        </ListItem>
+      </List>
+
       <Table style={{ width: "1800px" }}>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
