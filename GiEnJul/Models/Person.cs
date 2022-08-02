@@ -19,12 +19,17 @@ namespace GiEnJul.Models
 
         public string ToReadableString()
         {
-            return $"<strong>{GenderToString()} {Age} år:</strong> {(NoWish ? "  Her du kan selv finne alderstilpasset gave" : String.Join(", ", Wishes))}";
+            return $"{GetGenderAge()}: {(NoWish ? "  Her du kan selv finne alderstilpasset gave" : String.Join(", ", Wishes))}";
         }
 
         public string GetGenderAge()
         {
-            return $"<strong>{GenderToString()} {Age} år</strong>";
+            if (Age > 0) {
+                return $"<strong>{GenderToString()} {Age} år</strong>";
+            } else
+            {
+                return $"<strong>{GenderToString()} 0 år og {Months} måneder</strong>";
+            }
         }
 
         private string GenderToString()
