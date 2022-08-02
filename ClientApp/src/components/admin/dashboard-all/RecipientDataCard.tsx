@@ -19,6 +19,11 @@ import SendIcon from "@material-ui/icons/Send";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import ApiService from "common/functions/apiServiceClass";
 import PeopleIcon from "@material-ui/icons/People";
+import { RequestState } from "./OverviewMacroRemake";
+
+// New
+import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
+import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 type Props = {
   recipientData: RecipientType;
@@ -29,8 +34,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
-  connectionAwaitState: number;
-  setConnectionAwaitState: (state: number) => void;
+  requestState: number;
+  setRequestState: (state: number) => void;
 };
 
 const RecipientDataCard: React.FC<Props> = ({
@@ -42,8 +47,8 @@ const RecipientDataCard: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
-  connectionAwaitState,
-  setConnectionAwaitState,
+  requestState,
+  setRequestState,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -69,8 +74,8 @@ const RecipientDataCard: React.FC<Props> = ({
 
   const deleteConnection = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .delete("admin/connection", {
             event: recipient.event,
@@ -79,22 +84,24 @@ const RecipientDataCard: React.FC<Props> = ({
           })
           .then((response) => {
             if (response.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
               setPersonExpanded(false);
               resetSelections();
             }
           })
           .catch((errorStack) => {
+            setRequestState(RequestState.Error);
             console.error(errorStack);
           });
       }
     }
   };
 
-  const deleteGiver = (recipient: RecipientType) => (response: boolean) => {
+  const deleteRecipient = (recipient: RecipientType) => (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .delete("admin/Recipient", {
             event: recipient.event,
@@ -102,11 +109,13 @@ const RecipientDataCard: React.FC<Props> = ({
           })
           .then((response) => {
             if (response.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
               resetSelections();
             }
           })
           .catch((errorStack) => {
+            setRequestState(RequestState.Error);
             console.error(errorStack);
           });
       }
@@ -115,8 +124,8 @@ const RecipientDataCard: React.FC<Props> = ({
 
   const saveComment = (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .post("admin/recipient/addcomment", {
             event: recipientData.event,
@@ -125,10 +134,13 @@ const RecipientDataCard: React.FC<Props> = ({
           })
           .then((resp) => {
             if (resp.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
+              resetSelections();
             }
           })
           .catch((err) => {
+            setRequestState(RequestState.Error);
             console.error(err);
           });
       }
@@ -171,8 +183,8 @@ const RecipientDataCard: React.FC<Props> = ({
                   <Typography
                     className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                   >
-                    <ErrorOutlineOutlined style={{ color: "yellow" }} />
-                    Foreslått
+                    <QueryBuilderOutlinedIcon style={{ color: "#ffc505" }} />
+                    Venter svar
                   </Typography>
                 ) : (
                   <Typography
@@ -186,7 +198,7 @@ const RecipientDataCard: React.FC<Props> = ({
                 <Typography
                   className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                 >
-                  <CancelOutlined style={{ color: "red" }} />
+                  <BlockOutlinedIcon style={{ color: "red" }} />
                   Ikke koblet
                 </Typography>
               )}
@@ -247,26 +259,9 @@ const RecipientDataCard: React.FC<Props> = ({
                     <Typography variant="h6" gutterBottom>
                       Matønsker
                     </Typography>
-                    <Grid container direction="row">
-                      <Grid item xs={12}>
-                        <Grid
-                          container
-                          direction="row"
-                          justifyContent="space-between"
-                          className={classes.personTable}
-                        >
-                          <Grid item xs={2}>
-                            <Typography>{capitalize(recipientData.dinner)}</Typography>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <Typography>{capitalize(recipientData.dessert)}</Typography>
-                          </Grid>
-                          <Grid item xs={8}>
-                            <Typography>{capitalize(recipientData.note)}</Typography>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
+                    <Typography>{capitalize(recipientData.dinner)}</Typography>
+                    <Typography>{capitalize(recipientData.dessert)}</Typography>
+                    <Typography>{capitalize(recipientData.note)}</Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -372,7 +367,7 @@ const RecipientDataCard: React.FC<Props> = ({
                             setOpenDelFamilyDialog(false);
                           }}
                           text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
-                          handleResponse={deleteGiver(recipientData)}
+                          handleResponse={deleteRecipient(recipientData)}
                         />
                       </Grid>
                     </Grid>

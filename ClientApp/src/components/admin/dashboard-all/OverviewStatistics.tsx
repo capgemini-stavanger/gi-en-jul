@@ -1,11 +1,12 @@
-import { Box, Divider, Grid, Typography } from "@material-ui/core";
+import { Box, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { GiverType, RecipientType } from "components/shared/Types";
 import useStyles from "components/admin/dashboard-all/Styles";
-import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
 import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import PeopleIcon from "@material-ui/icons/People";
 
 type IStatistics = {
   givers: GiverType[];
@@ -96,34 +97,38 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
   };
 
   return (
-    <Box>
-      <Box className={classes.oversiktBoxSpacing}>
-        <Typography variant="h5">Oversikt</Typography>
+    <Box className={classes.oversiktBoxContent}>
+      <Box>
+        <Typography variant="h5" className={classes.semiBoldText}>
+          Oversikt
+        </Typography>
       </Box>
       <Divider />
       <Box className={classes.oversiktBoxSpacing}>
-        <Typography variant="h5"> Givere: {statistics?.totalGivers} </Typography>
+        <Typography variant="h5" className={classes.semiBoldText} gutterBottom>
+          Givere: {statistics?.totalGivers}
+        </Typography>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>Størrelse</Grid>
           <Grid item>Antall</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(1)}
           </Grid>
           <Grid item>{statistics?.giverSmallFam}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(4)}
           </Grid>
           <Grid item>{statistics?.giverMedFam}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(10)}
           </Grid>
           <Grid item>{statistics?.giverLargeFam}</Grid>
@@ -134,28 +139,30 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
       </Box>
       <Divider />
       <Box className={classes.oversiktBoxSpacing}>
-        <Typography variant="h5"> Familier: {statistics?.totalRecipints} </Typography>
+        <Typography variant="h5" className={classes.semiBoldText} gutterBottom>
+          Familier: {statistics?.totalRecipints}
+        </Typography>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>Størrelse</Grid>
           <Grid item>Antall</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(1)}
           </Grid>
           <Grid item>{statistics?.recipientSmallFam}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(4)}
           </Grid>
           <Grid item>{statistics?.recipientMedFam}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <PeopleOutlineIcon />
+            <PeopleIcon />
             {formatFamily(10)}
           </Grid>
           <Grid item>{statistics?.recipientLargeFam}</Grid>
@@ -166,19 +173,33 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
       </Box>
       <Divider />
       <Box className={classes.oversiktBoxSpacing}>
-        <Grid item>
-          <Typography variant="h5">Koblinger</Typography>
-          <Typography>
-            <CheckCircleOutline style={{ color: "green" }} />
-            {statistics?.confirmedMatch} Bekreftede
-          </Typography>
-          <Typography>
-            <ErrorOutlineOutlined style={{ color: "yellow" }} />
-            {statistics?.suggestedMatch} Foreslåtte
-          </Typography>
-          <Typography>
-            <CancelOutlined style={{ color: "red" }} /> {statistics?.noMatch} Ikke koblet
-          </Typography>
+        <Typography variant="h5" className={classes.semiBoldText} gutterBottom>
+          Koblinger{"  "}
+          <Tooltip placement="top" title="Koblingene som er vist under er basert på giverne">
+            <InfoOutlinedIcon />
+          </Tooltip>
+        </Typography>
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item>Koblinger</Grid>
+          <Grid item>Antall</Grid>
+        </Grid>
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item>
+            <CancelOutlined style={{ color: "red" }} /> Ikke koblet
+          </Grid>
+          <Grid item>{statistics?.noMatch}</Grid>
+        </Grid>
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item>
+            <ErrorOutlineOutlined style={{ color: "yellow" }} /> Foreslått
+          </Grid>
+          <Grid item>{statistics?.noMatch}</Grid>
+        </Grid>
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item>
+            <CheckCircleOutline style={{ color: "green" }} /> Bekreftet
+          </Grid>
+          <Grid item>{statistics?.noMatch}</Grid>
         </Grid>
       </Box>
     </Box>
@@ -186,61 +207,3 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
 };
 
 export default OverviewStatistics;
-
-/*
-Grid container direction="column" alignItems="flex-start" spacing={4}>
-      <Grid item>
-        <Typography variant="h5">Oversikt</Typography>
-      </Grid>
-      <Grid item>
-        <Typography variant="h5"> {statistics?.totalGivers} Givere </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(1)} - {statistics?.giverSmallFam}
-        </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(4)} - {statistics?.giverMedFam}
-        </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(10)} - {statistics?.giverLargeFam}
-        </Typography>
-        <Typography className={classes.textWarning}>
-          {statistics?.giversWithoutRecipient} uten familie
-        </Typography>
-      </Grid>
-      <Divider />
-      <Grid item className={classes.statsGrow}>
-        <Grid container direction="row" justifyContent="space-between">
-          <Grid item>STR</Grid>
-          <Grid item>ANTALL</Grid>
-        </Grid>
-        <Typography variant="h5"> {statistics?.totalRecipints} Familier </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(1)} - {statistics?.recipientSmallFam}
-        </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(4)} - {statistics?.recipientMedFam}
-        </Typography>
-        <Typography>
-          <PeopleOutlineIcon /> {formatFamily(10)} - {statistics?.recipientLargeFam}
-        </Typography>
-        <Typography className={classes.textWarning}>
-          {statistics?.recipientsWithoutGiver} uten giver
-        </Typography>
-      </Grid>
-      <Divider />
-      <Grid item>
-        <Typography variant="h5">Koblinger</Typography>
-        <Typography>
-          <CheckCircleOutline style={{ color: "green" }} />
-          {statistics?.confirmedMatch} Bekreftede
-        </Typography>
-        <Typography>
-          <ErrorOutlineOutlined style={{ color: "yellow" }} />
-          {statistics?.suggestedMatch} Foreslåtte
-        </Typography>
-        <Typography>
-          <CancelOutlined style={{ color: "red" }} /> {statistics?.noMatch} Ikke koblet
-        </Typography>
-      </Grid>
-    </Grid>
-*/
