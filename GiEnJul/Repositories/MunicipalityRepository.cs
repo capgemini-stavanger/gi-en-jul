@@ -79,5 +79,29 @@ namespace GiEnJul.Repositories
             }
             return municipalityMatch.Email;
         }
+
+       public async Task<List<string>> GetInfoImages(string location)
+        {
+            var query = $"RowKey eq '{location}' ";
+            var municipalities = await GetAllByQueryAsync(query);
+            var municipalityMatch = municipalities.FirstOrDefault(); _mapper.Map<Models.Municipality>(municipalities.FirstOrDefault());
+            if (municipalityMatch == null)
+            {
+                return null;
+            }
+
+            var images = new List<string>();
+            try
+            {
+                images.Add(municipalityMatch.InfoImage1);
+                images.Add(municipalityMatch.InfoImage2);
+                images.Add(municipalityMatch.InfoImage3);
+            }
+            catch
+            {
+                return null; //feil fordi den returnerer null hvis det ikke er 3 bilder
+            }
+            return images;
+        }
     }
 }

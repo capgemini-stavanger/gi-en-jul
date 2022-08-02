@@ -152,5 +152,12 @@ namespace GiEnJul.Controllers
         }
     }
 
+        [HttpGet("images")]
+        //policy
+        public async Task<List<string>> GetInformationImages([FromQuery] string location)
+        {
+            return await _municipalityRepository.GetInfoImages(location);
+        }
+    }
 }
 
