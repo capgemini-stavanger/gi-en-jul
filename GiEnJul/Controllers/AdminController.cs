@@ -256,7 +256,8 @@ namespace GiEnJul.Controllers
                 var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
             }
             catch (Exception e)
             {

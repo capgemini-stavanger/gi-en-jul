@@ -1,4 +1,6 @@
 ﻿using GiEnJul.Utilities.EmailTemplates;
+using MimeKit;
+using MimeKit.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -37,27 +39,33 @@ namespace GiEnJul.Utilities
 
             // Unused for now var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
             var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
-            
-            // Read Image
-            var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}family2.png");
-            var imgString = Convert.ToBase64String(imgFile);
-            var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
 
-            var center = "center";
-            var widht = "600px";
+
+            // Read Image
+            var imagePath = $"{AppContext.BaseDirectory}{templatePath}family.png";
+            var imageContentId = MimeUtils.GenerateMessageId();
+            var imgTag = $"<img src=\"cid:{imageContentId}\" style={imageStyle}/>";
+
+
+            var builder = new BodyBuilder();
+            var image = builder.LinkedResources.Add(imagePath);
+            image.ContentId = imageContentId;
+
 
             // Combine
-            content = $"<!DOCTYPE html><html><table align={center} width={widht}>{content}</table></html>";
+            content = $"<!DOCTYPE html><html><table align=center width=600px><tr><td>{imgTag}</td></tr>{content}</table></html>";
 
             foreach (var item in data)
             {
                 content = content.Replace($"{{{item.Key}}}", item.Value);
             }
+            builder.HtmlBody = content;
 
             return new EmailTemplate
             {
                 Content = content,
-                Subject = resourceManager.GetString(name.ToString())
+                Subject = resourceManager.GetString(name.ToString()),
+                Body = builder.ToMessageBody()
             };
         }
     }

@@ -140,7 +140,7 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.ConnectionReminder, emailValuesDictionary);
                     //TODO different Email template?
 
-                    await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent.Subject, emailContent.Content);
+                    await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
                     
                     giver.RemindedAt = DateTime.UtcNow;
                     await _giverRepository.InsertOrReplaceAsync(giver);

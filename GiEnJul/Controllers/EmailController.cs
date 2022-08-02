@@ -67,7 +67,7 @@ namespace GiEnJul.Controllers
             try
             {
                 var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,email.FromEmail);
-                await _emailClient.SendEmailAsync(email.ToEmail, email.ToName, email.Subject, notificationTemplate.Content);
+                await _emailClient.SendEmailAsync(email.ToEmail, email.ToName, notificationTemplate);
             }
             catch (Exception e)
             {
@@ -93,7 +93,7 @@ namespace GiEnJul.Controllers
             try
             {
                 var notificationTemplate = await NotificationEmailTemplateBuilder(emailFromUser.Content,emailFromUser.FromEmail);
-                await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, emailFromUser.Subject, notificationTemplate.Content);
+                await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, notificationTemplate);
             }
             catch (Exception e)
             {
@@ -127,7 +127,7 @@ namespace GiEnJul.Controllers
                 try
                 {
                     var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,"");
-                    await _emailClient.SendEmailAsync(giver.Email, giver.Email, email.Subject, notificationTemplate.Content);
+                    await _emailClient.SendEmailAsync(giver.Email, giver.Email, notificationTemplate);
                 }
                 catch (Exception e)
                 {
