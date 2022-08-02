@@ -53,9 +53,6 @@ namespace GiEnJul.Repositories
             var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
             var singleMunicipality = await GetAsync(country, municipality);
             return _mapper.Map<Models.Municipality>(singleMunicipality);
-           /* var entetitiesMuni  = await GetAllByQueryAsync(query);
-            var modelsMuni = _mapper.Map<List<Models.Municipality>>(entetitiesMuni);
-            return modelsMuni;*/
         }
         public async Task<bool> UpdateMunicipality(Models.Municipality municipality)
         {
