@@ -1,4 +1,4 @@
-import { Box, Button, Grid, MobileStepper } from "@material-ui/core";
+import { Box, Button, Grid } from "@material-ui/core";
 import React, { FC } from "react";
 import useStyles from "./Styles";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
