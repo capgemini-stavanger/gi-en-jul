@@ -143,6 +143,10 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
                     
                     giver.RemindedAt = DateTime.UtcNow;
+                    var reminderComment = $"Påminnelse autmatisk sent {DateTime.Now}";
+                    giver.Comment = string.IsNullOrWhiteSpace(giver.Comment) ? 
+                        reminderComment : 
+                        string.Format("{0}{1}{2}", giver.Comment, Environment.NewLine, reminderComment);
                     await _giverRepository.InsertOrReplaceAsync(giver);
 
                     remindedCount++;

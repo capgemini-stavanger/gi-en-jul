@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Quartz;
 using Serilog;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace GiEnJul
@@ -70,6 +71,7 @@ namespace GiEnJul
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            SetCulture();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -115,6 +117,13 @@ namespace GiEnJul
         {
             var allowedOrigins = settings.ReactAppUri.Split(';');
             return allowedOrigins.Contains(x);
+        }
+
+        private static void SetCulture()
+        {
+            var culture = new CultureInfo("no-NB");
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
         }
     }
 }

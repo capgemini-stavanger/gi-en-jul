@@ -9,6 +9,6 @@
         Notification,
         ConnectionDenied,
         ConnectionReminder,
-        AutomaticDisconnection
+        AutomaticDisconnect
     }
 }
