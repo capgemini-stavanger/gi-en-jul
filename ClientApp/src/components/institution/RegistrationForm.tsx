@@ -78,25 +78,6 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
         returnValue = false;
       }
     });
-    // Check person validation
-    /*
-    formDataState.persons.every((p) => {
-      // Selected gender and age
-      if (!p.isValidAge || !p.isValidGender) {
-        returnValue = false;
-      }
-      // All wishes are valid
-      if (!p.noWish) {
-        console.log(p.wishes);
-        p.wishes.every((w) => {
-          console.log(w.isValidWish);
-          if (!w.isValidWish) {
-            returnValue = false;
-          }
-        });
-      }
-    });
-    */
 
     return returnValue;
   };
