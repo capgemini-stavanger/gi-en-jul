@@ -15,10 +15,10 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 interface IDatagridFamily {
   id: string;
   refId: string;
-  Navn: string;
-  Email: string;
-  Telefon: string;
-  Status: string;
+  navn: string;
+  email: string;
+  telefon: string;
+  status: string;
 }
 
 interface IRegistrationOverview {
@@ -43,11 +43,11 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       width: 150,
     },
     {
-      field: "Navn",
+      field: "navn",
       width: 200,
     },
     {
-      field: "Email",
+      field: "email",
       width: 200,
       renderCell: (params) => {
         const overflow = getTextWidth(params.row.Email) >= 195;
@@ -65,11 +65,11 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       },
     },
     {
-      field: "Telefon",
+      field: "telefon",
       width: 200,
     },
     {
-      field: "Status",
+      field: "status",
       headerName: "Status",
       width: 200,
       renderCell: (params) => {
@@ -101,7 +101,7 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       },
     },
     {
-      field: "Button",
+      field: "button",
       headerName: "Endre",
       width: 100,
       sortable: false,
@@ -204,10 +204,10 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       rows[i] = {
         id: data[i].familyId,
         refId: data[i].referenceId,
-        Navn: data[i].contactFullName,
-        Email: data[i].contactEmail,
-        Telefon: data[i].contactPhoneNumber,
-        Status: recipientStatus(data[i]),
+        navn: data[i].contactFullName,
+        email: data[i].contactEmail,
+        telefon: data[i].contactPhoneNumber,
+        status: recipientStatus(data[i]),
       };
     }
     return rows;
