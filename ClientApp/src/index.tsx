@@ -144,6 +144,14 @@ export const theme = createTheme({
         borderRadius: "0",
       },
     },
+    MuiTooltip: {
+      tooltipPlacementTop: {
+        margin: "0px",
+        backgroundColor: "rgba(0, 0, 0, 0.02)",
+        color: "black",
+        fontSize: "12px",
+      },
+    },
   },
 });
 
