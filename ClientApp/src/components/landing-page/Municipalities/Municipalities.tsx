@@ -7,9 +7,7 @@ import MunicipalityInformation from "./MunicipalityInformation";
 export interface LocationData {
   location: string;
   information: string;
-  image1: string;
-  image2: string;
-  image3: string;
+  images: string[];
 }
 
 interface Props {
@@ -32,9 +30,7 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
       <MunicipalityInformation
         location={val.location}
         information={val.information}
-        image1={val.image1}
-        image2={val.image2}
-        image3={val.image3}
+        images={val.images}
       />
     </TabPanel>
   ));

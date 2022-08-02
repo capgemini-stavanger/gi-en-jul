@@ -1,28 +1,23 @@
 import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
+import { useState } from "react";
 
 interface Props {
   location: string;
   information: string;
-  image1: string;
-  image2: string;
-  image3: string;
+  images: string[];
 }
 
-const MunicipalityInformation: React.FC<Props> = ({
-  location,
-  information,
-  image1,
-  image2,
-  image3,
-}) => {
+const MunicipalityInformation: React.FC<Props> = ({ location, information, images }) => {
   const classes = useStyles();
+  const [showImages, setShowImages] = useState<boolean>(true);
+
   if (information == undefined) {
     information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
   }
-  if (image1 == null) {
-    image1 = "Det er ikke lagt til noe bilde enda";
+  if (images.length == 0) {
+    setShowImages(false);
   }
   return (
     <Grid container direction="column" id="information" className={classes.sectionContainer}>
@@ -30,7 +25,15 @@ const MunicipalityInformation: React.FC<Props> = ({
         <Typography variant="h5">Informasjon om Gi en jul i {location} kommune:</Typography>
       </Grid>
       <Divider />
-      <Grid item>{parse(information)}</Grid>
+      <Grid item>
+        <Typography>{parse(information)}</Typography>
+      </Grid>
+      <Grid item>
+        {showImages &&
+          images.map((img, index) => {
+            return <img key={index} src={img} className={classes.infoImage} />;
+          })}
+      </Grid>
     </Grid>
   );
 };

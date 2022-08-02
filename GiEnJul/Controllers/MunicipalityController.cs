@@ -59,10 +59,10 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<List<Models.Municipality>> GetAll()
+        public async Task<List<Dtos.GetMunicipalityDtocs>> GetAll()
         {
             var municipalities = await _municipalityRepository.GetAll();
-            return _mapper.Map<List<Models.Municipality>>(municipalities);
+            return _mapper.Map<List<Dtos.GetMunicipalityDtocs>>(municipalities);
         }
 
         [HttpGet("active")]
