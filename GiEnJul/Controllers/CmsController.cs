@@ -17,7 +17,6 @@ namespace GiEnJul.Controllers
     public class CmsController : ControllerBase
     {
         private readonly ICmsRepository _cmsRepository;
-       
         private readonly IMapper _mapper;
        
         public CmsController(
