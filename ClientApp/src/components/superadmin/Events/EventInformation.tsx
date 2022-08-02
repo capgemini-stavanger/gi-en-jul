@@ -65,8 +65,6 @@ interface Props {
   existingEventNames: string[];
   existingMunicipalities: string[];
   initEditable: boolean;
-  handleChangeButtonClick: () => void;
-  handleValidEventCancel: () => void; // informs parent that the event is still valid
 }
 
 const EventInformation: React.FC<Props> = ({
@@ -76,15 +74,10 @@ const EventInformation: React.FC<Props> = ({
   id,
   existingEventNames,
   existingMunicipalities,
-  initEditable,
-  handleChangeButtonClick,
-  handleValidEventCancel,
 }) => {
   const classes = useStyles();
   const [viewErrorNumber, setViewErrorNumber] = useState<number>(0);
-  const [activeEdit, setActiveEdit] = useState<boolean>(initEditable);
   const [formValues, setFormValues] = useState<EventContent>(event);
-  const [openSaveConfirmation, setOpenSaveConfirmation] = useState<boolean>(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState<boolean>(false);
   const [informationText, setInformationText] = useState<string>("");
   const [openInformation, setOpenInformation] = useState<boolean>(false);
@@ -92,91 +85,49 @@ const EventInformation: React.FC<Props> = ({
     ...initValidEventState,
   });
 
-  const validEvent = (event: EventContent): boolean => {
-    // checks if all fields in the event passes its validator-tests
-    return Object.entries(event).every(([fieldName, fieldValue]) =>
-      fieldIsValid(fieldName, fieldValue)
-    );
-  };
-
-  const fieldIsValid = (field: string, fieldValue: string) => {
-    let allIsValid = true;
-    const validators = getValidators(field);
-    validators.forEach((validator) => {
-      if (!validator(fieldValue)) {
-        allIsValid = false;
-      }
-    });
-    return allIsValid;
-  };
-
   const everythingValid = () => {
     return Object.values(validEventState).every((value) => {
       return value === true;
     });
   };
 
-  const handleSaveConfirmation = (response: boolean) => {
-    if (response) {
-      handleEventChange(formValues, id);
-    }
-    setOpenSaveConfirmation(false);
-  };
   const handleDeleteConfirmation = (response: boolean) => {
     if (response) {
       onDelete(id);
     }
     setOpenDeleteConfirmation(false);
   };
+
   const getValiditySetter = (target: string) => (isValid: boolean) => {
     setValidEventState((prev) => {
       prev[target] = isValid;
       return prev;
     });
   };
+
   const handleSaveClick = () => {
     if (everythingValid()) {
-      setActiveEdit(false);
-      setOpenSaveConfirmation(true);
+      handleEventChange(formValues, id);
     } else {
       setViewErrorNumber(viewErrorNumber + 1);
       setInformationText("Vennligst fyll ut gyldige verider i alle felter");
       setOpenInformation(true);
     }
   };
+
   const saveButton = (
     <Button variant="contained" className={classes.button} onClick={handleSaveClick}>
-      Lagre
+      Send inn
     </Button>
   );
-  const handleCancelClick = () => {
-    setFormValues(event); // reset values
-    setActiveEdit(false);
-    // checks if previous state is valid
-    if (validEvent(event)) {
-      handleValidEventCancel();
-    }
-  };
-  const cancelButton = (
-    <Button variant="contained" onClick={handleCancelClick}>
-      Avbryt
-    </Button>
-  );
-  const handleEditClick = () => {
-    handleChangeButtonClick(); // informs parent that the event is being edited
-    setActiveEdit(true);
-  };
-  const editButton = (
-    <Button variant="contained" onClick={handleEditClick}>
-      Rediger
-    </Button>
-  );
+
   const handleDeleteClick = () => {
     setOpenDeleteConfirmation(true);
   };
+
   const deleteButton = (
     <Button variant="contained" className={classes.buttonError} onClick={handleDeleteClick}>
-      Slett
+      Avbryt
     </Button>
   );
 
@@ -190,6 +141,7 @@ const EventInformation: React.FC<Props> = ({
     };
     setFormValues(copy);
   };
+
   const handleMunicipalityDropdownChange = (
     e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
   ) => {
@@ -215,7 +167,6 @@ const EventInformation: React.FC<Props> = ({
           return { value: eventName, text: eventName };
         })}
         onChange={handleEventnameDropdownChange}
-        disabled={!activeEdit}
         fullWidth
       />
     </Grid>,
@@ -231,7 +182,6 @@ const EventInformation: React.FC<Props> = ({
           return { value: muni, text: muni };
         })}
         onChange={handleMunicipalityDropdownChange}
-        disabled={!activeEdit}
         fullWidth
       />
     </Grid>,
@@ -250,7 +200,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.startDate}
         name="startDate"
         label="Start-dato (åååå-mm-dd)"
-        disabled={!activeEdit}
       />
     </Grid>,
     // endDate
@@ -268,7 +217,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.endDate}
         name="endDate"
         label="Slutt-dato  (åååå-mm-dd)"
-        disabled={!activeEdit}
       />
     </Grid>,
     // deliveryAddress
@@ -286,7 +234,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.deliveryAddress}
         name="deliveryAddress"
         label="Leverings Adresse"
-        disabled={!activeEdit}
       />
     </Grid>,
     // deliveryDate
@@ -304,7 +251,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.deliveryDate}
         name="deliveryDate"
         label="Leverings-dato"
-        disabled={!activeEdit}
       />
     </Grid>,
     // deliveryTime
@@ -322,7 +268,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.deliveryTime}
         name="deliveryTime"
         label="Leverings-Klokkeslett"
-        disabled={!activeEdit}
       />
     </Grid>,
     //giverLimit
@@ -340,7 +285,6 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.giverLimit}
         name="giverLimit"
         label="Maks Antall Givere"
-        disabled={!activeEdit}
       />
     </Grid>,
   ];
@@ -348,7 +292,7 @@ const EventInformation: React.FC<Props> = ({
   return (
     <Grid container direction="row" className={classes.eventContainers}>
       {form}
-      <Grid item>
+      <Grid item style={{ marginTop: "1.4em" }}>
         <InformationBox
           open={openInformation}
           text={informationText}
@@ -357,30 +301,18 @@ const EventInformation: React.FC<Props> = ({
           }}
         />
         <ConfirmationBox
-          open={openSaveConfirmation}
-          text={"Er du sikker på at du vil lagre endringene?"}
-          handleClose={() => {
-            setOpenSaveConfirmation(false);
-          }}
-          handleResponse={handleSaveConfirmation}
-        />
-        <ConfirmationBox
           open={openDeleteConfirmation}
-          text={`Er du sikker på at du ønsker å slette event (${formValues.eventName}-${formValues.municipality}) ?`}
+          text={"Er du sikker på at du ønsker å avbryte ?"}
           handleClose={() => {
             setOpenDeleteConfirmation(false);
           }}
           handleResponse={handleDeleteConfirmation}
         />
-        {activeEdit ? (
+        {
           <>
-            {cancelButton} {saveButton}
+            {saveButton} {deleteButton}
           </>
-        ) : (
-          <>
-            {editButton} {deleteButton}
-          </>
-        )}
+        }
       </Grid>
     </Grid>
   );
