@@ -76,8 +76,6 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "15px",
     marginLeft: "20px",
   },
-
-  // New Attempt
   personBox: {
     display: "flex",
     flexDirection: "row",
@@ -92,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.dark,
     color: "white",
     borderRadius: "2px",
+    fontSize: "30px",
   },
   formBox: {
     flexGrow: 1,
@@ -145,10 +144,13 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     fontSize: "1.5em",
   },
-
   boxOverflow: {
     overflow: "hidden",
     textOverflow: "ellipsis",
+  },
+  smallRedCross: {
+    color: theme.palette.error.main,
+    fontSize: "1.6em",
   },
 }));
 

@@ -153,10 +153,9 @@ const FormPerson: FC<IPersonProps> = ({
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
-                errorMessages={["Vennligst spesifiser kjønn"]}
                 name="gender"
                 type="select"
-                label="Kjønn"
+                label="Kjønn *"
                 variant={"outlined"}
                 value={person.gender ? person.gender : ""}
                 onChange={onGenderChange}
