@@ -68,19 +68,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       }
     }
 
-    // Check person validation
-    formDataState.persons.every((p) => {
-      // Selected gender and age
-      if (!p.isValidAge || !p.isValidGender) {
+    formDataState.persons.forEach((person) => {
+      if (!person.isValidAge || !person.isValidGender) {
         returnValue = false;
       }
-      // All wishes are valid
-      if (!p.noWish) {
-        p.wishes.every((w) => {
-          if (!w.isValidWish) {
-            returnValue = false;
-          }
-        });
+
+      const validWishes = person.wishes.every((wish) => wish.isValidWish);
+      if (!validWishes) {
+        returnValue = false;
       }
     });
 
@@ -322,8 +317,8 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={3}>
-                    <Grid item xs={4}>
+                  <Grid container direction="row" spacing={1}>
+                    <Grid item xs={3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isNotNull]}
@@ -336,7 +331,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         label="Navn"
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isPhoneNumber, isNotNull]}
@@ -353,7 +348,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         autoComplete="tel"
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isEmail, isNotNull]}
@@ -507,7 +502,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         variant="outlined"
                         onClick={addPerson}
                       >
-                        Legg til flere
+                        Legg til familiemedlem
                       </Button>
                     </Grid>
                   </Grid>

@@ -70,6 +70,15 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - automatisk frakobling.
+        /// </summary>
+        public static string AutomaticDisconnect {
+            get {
+                return ResourceManager.GetString("AutomaticDisconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gi en jul - avslått kobling!.
         /// </summary>
         public static string ConnectionDenied {

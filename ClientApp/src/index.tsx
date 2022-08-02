@@ -111,7 +111,7 @@ export const theme = createTheme({
     },
     MuiOutlinedInput: {
       root: {
-        borderRadius: "1em",
+        borderRadius: "10px",
         "& $notchedOutline": {
           top: "0px",
         },
@@ -142,6 +142,14 @@ export const theme = createTheme({
       },
       rounded: {
         borderRadius: "0",
+      },
+    },
+    MuiTooltip: {
+      tooltipPlacementTop: {
+        margin: "0px",
+        backgroundColor: "rgba(0, 0, 0, 0.02)",
+        color: "black",
+        fontSize: "12px",
       },
     },
   },

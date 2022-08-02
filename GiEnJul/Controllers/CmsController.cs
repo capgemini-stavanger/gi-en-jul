@@ -18,7 +18,7 @@ namespace GiEnJul.Controllers
     {
         private readonly ICmsRepository _cmsRepository;
         private readonly IMapper _mapper;
-
+       
         public CmsController(
             ICmsRepository cmsRepository,
             IMapper mapper)
@@ -64,19 +64,6 @@ namespace GiEnJul.Controllers
                 || content.ContentType == "HowToStart"))
             {
                 content.Index = Guid.NewGuid().ToString();
-            }
-
-            await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
-            return Ok();
-        }
-
-        [HttpPost("Insertforadmin/{location}")]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> UpdateMunicipality([FromBody] PostCmsDto content , string location )
-        {
-            if (content.Index != location)
-            {
-                return BadRequest("Wrong municipality");
             }
 
             await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));

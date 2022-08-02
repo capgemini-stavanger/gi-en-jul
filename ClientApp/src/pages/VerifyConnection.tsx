@@ -32,7 +32,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
       .then((response) => {
         if (response.status == 200) {
           setContent(
-            <Container className={classes.summaryDesign}>
+            <Container className={classes.fillBackground}>
               <Grid container direction="column" justifyContent="center" alignItems="center">
                 <Grid item>
                   <img className={classes.imageSnow} src={snowDown}></img>
@@ -59,15 +59,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
       })
       .catch(() =>
         setContent(
-          <Container className={classes.summaryDesign}>
-            <Button
-              size="large"
-              endIcon={<ArrowForwardIos />}
-              className={classes.buttonMainPage}
-              onClick={() => history.push("/")}
-            >
-              Finn kontaktinformasjon
-            </Button>
+          <Container className={classes.fillBackground}>
             <Grid container direction="column" justifyContent="center" alignItems="center">
               <Grid item>
                 <img className={classes.imageSnow} src={snowDown}></img>
@@ -87,6 +79,18 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                     Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
                     øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin gave
                   </Typography>
+                  <Typography className={classes.paragraph}>
+                    Du finner kontaktinformasjon for din kommune nederst på hjemsiden
+                  </Typography>
+                  <Button
+                    size="large"
+                    endIcon={<ArrowForwardIos />}
+                    style={{ marginTop: "1rem" }}
+                    className={classes.buttonNext}
+                    onClick={() => history.push("/")}
+                  >
+                    Til hjemsiden
+                  </Button>
                 </Container>
               </Grid>
               <Grid item className={classes.imageContainer}>

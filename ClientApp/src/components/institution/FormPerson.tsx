@@ -1,5 +1,4 @@
 import {
-  capitalize,
   Grid,
   IconButton,
   Button,
@@ -22,6 +21,7 @@ import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
 import CustomTooltip from "./CustomTooltip";
+import getGender from "common/functions/GetGender";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -153,15 +153,14 @@ const FormPerson: FC<IPersonProps> = ({
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
-                errorMessages={["Vennligst spesifiser kjønn"]}
                 name="gender"
                 type="select"
-                label="Kjønn"
+                label="Kjønn *"
                 variant={"outlined"}
                 value={person.gender ? person.gender : ""}
                 onChange={onGenderChange}
                 options={GENDERS.map((o) => {
-                  return { value: o.value, text: capitalize(o.text) };
+                  return { value: o.value, text: getGender(o.value, parseInt(person.age)) };
                 })}
                 fullWidth
               />

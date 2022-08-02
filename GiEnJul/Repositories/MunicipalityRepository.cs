@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,7 +17,6 @@ namespace GiEnJul.Repositories
         Task<Models.Municipality> GetSingle(string municipality, string country = "Norge");
         Task<bool> UpdateMunicipality(Models.Municipality municipality);
         Task<string> GetEmailByLocation(string location);
-
     }
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
@@ -39,8 +37,6 @@ namespace GiEnJul.Repositories
             }
         }
 
-   
-
         public async Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality)
         {
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Municipality>(municipality));
@@ -58,9 +54,6 @@ namespace GiEnJul.Repositories
             var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
             var singleMunicipality = await GetAsync(country, municipality);
             return _mapper.Map<Models.Municipality>(singleMunicipality);
-           /* var entetitiesMuni  = await GetAllByQueryAsync(query);
-            var modelsMuni = _mapper.Map<List<Models.Municipality>>(entetitiesMuni);
-            return modelsMuni;*/
         }
         public async Task<bool> UpdateMunicipality(Models.Municipality municipality)
         {
@@ -84,7 +77,6 @@ namespace GiEnJul.Repositories
             {
                 return null;
             }
-
             return municipalityMatch.Email;
         }
     }

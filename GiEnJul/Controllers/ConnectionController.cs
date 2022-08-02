@@ -123,7 +123,7 @@ namespace GiEnJul.Controllers
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
             }
             catch (Exception e)
             {
@@ -199,7 +199,7 @@ namespace GiEnJul.Controllers
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
 
             }
             catch (Exception e)

@@ -116,7 +116,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
                 name="clocation"
                 id="lokasjon"
                 label="Sted *"
-                placeholder="HM eller Zara"
+                placeholder="F.eks: et kjøpesenter eller en butikk"
                 value={wishObj.wish[TotalWish.LocationOrSpecification]}
                 onChange={onLocationChange}
                 fullWidth
@@ -132,7 +132,11 @@ const InstitutionWish: React.FC<IWishProps> = ({
                   name="cspecification"
                   id="spesifikasjon"
                   label="Spesifikasjon *"
-                  placeholder="Blå genser"
+                  placeholder={
+                    wishObj.wish[TotalWish.Category] == "Sko"
+                      ? "F.eks: vintersko eller fotballsko"
+                      : "F.eks: blå genser eller vinterjakke"
+                  }
                   value={wishObj.wish[TotalWish.LocationOrSpecification]}
                   onChange={onSpecificationChange}
                   fullWidth
@@ -145,7 +149,9 @@ const InstitutionWish: React.FC<IWishProps> = ({
                   name="csize"
                   id="størrelse"
                   label="Størrelse *"
-                  placeholder="L / Large"
+                  placeholder={
+                    wishObj.wish[TotalWish.Category] == "Sko" ? "F.eks: 42" : "F.eks: large"
+                  }
                   value={wishObj.wish[TotalWish.Size]}
                   onChange={onSizeChange}
                   fullWidth
@@ -161,7 +167,11 @@ const InstitutionWish: React.FC<IWishProps> = ({
                 name="cspecification"
                 id="spesifikasjon"
                 label="Spesifikasjon *"
-                placeholder="Barbie eller Lego"
+                placeholder={
+                  wishObj.wish[TotalWish.Category] == "Annet"
+                    ? "F.eks: en feiekost"
+                    : "F.eks: barbie eller lego"
+                }
                 value={wishObj.wish[TotalWish.LocationOrSpecification]}
                 onChange={onSpecificationChange}
                 fullWidth
@@ -171,8 +181,8 @@ const InstitutionWish: React.FC<IWishProps> = ({
         </React.Fragment>
       )}
       <Grid item xs={1}>
-        <IconButton className={classes.redCross} onClick={deleteWish}>
-          <SvgIcon component={ClearIcon} />
+        <IconButton size="small" onClick={deleteWish}>
+          <SvgIcon className={classes.smallRedCross} component={ClearIcon} />
         </IconButton>
       </Grid>
     </Grid>

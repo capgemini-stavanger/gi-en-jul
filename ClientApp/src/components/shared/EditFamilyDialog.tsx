@@ -251,7 +251,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     });
     await apiservice
       .post(
-        "email/send",
+        "email/sendFromUser",
         JSON.stringify({
           Subject: "Oppdatert familie",
           Content: emailContent,

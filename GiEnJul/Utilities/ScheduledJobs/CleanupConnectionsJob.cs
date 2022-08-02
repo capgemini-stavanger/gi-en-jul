@@ -73,22 +73,25 @@ namespace GiEnJul.Utilities.ScheduledJobs
                 giversToRemind.Count, giversToRemove.Count, giversToSkip.Count);
 
             await RemindGiver(connectedRecipients, giversToRemind, municipalities);
-            await RemoveConnection(connectedRecipients, giversToRemove);
+            await RemoveConnection(connectedRecipients, giversToRemove, municipalities);
 
             _log.Information("[Cleanup Job] Cleanup Connections job done!");
         }
 
-        private async Task RemoveConnection(IEnumerable<Recipient> connectedRecipients, IEnumerable<Giver> giversToRemove)
+        private async Task RemoveConnection(IEnumerable<Recipient> connectedRecipients, IEnumerable<Giver> giversToRemove, IEnumerable<Municipality> municipalities)
         {
             _log.Information("[Cleanup Job] Removing {0} stale connections", giversToRemove.Count());
+
             var removedCount = 0;
             foreach (var giver in giversToRemove)
             {
                 try
                 {
                     var recipient = connectedRecipients.FirstOrDefault(r => r.RecipientId == giver.MatchedRecipient);
-                    UnMatchGiver(giver);
                     giver.CancelFeedback = $"Automatisk frakobling {DateTime.Now:d} da giveren ikke bekreftet etter påminnelse {giver.RemindedAt:d}";
+                    giver.CancelDate = DateTime.UtcNow;
+                    giver.CancelFamilyId = giver.MatchedFamilyId;
+                    UnMatchGiver(giver);
                     await _giverRepository.InsertOrReplaceAsync(giver);
                     if (recipient != null)
                     {
@@ -97,6 +100,12 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     }
                     else
                         _log.Warning("[Cleanup Job] Giver {@0} had no matched recipient, only removing giver");
+
+                    var municipality = municipalities.First(m => m.Name == giver.Location);
+                    var emailValuesDictionary = EmailDictionaryHelper.MakeDisconnectEmailContent(giver, recipient, municipality);
+                    var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.AutomaticDisconnect, emailValuesDictionary);
+
+                    await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
 
                     removedCount++;
                 }
@@ -138,11 +147,14 @@ namespace GiEnJul.Utilities.ScheduledJobs
                     var municipality = municipalities.First(m => m.Name == giver.Location);
                     var emailValuesDictionary = EmailDictionaryHelper.MakeVerifyEmailContent(giver, matchedRecipient, municipality, baseUrl);
                     var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.ConnectionReminder, emailValuesDictionary);
-                    //TODO different Email template?
 
-                    await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent.Subject, emailContent.Content);
+                    await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
                     
                     giver.RemindedAt = DateTime.UtcNow;
+                    var reminderComment = $"Påminnelse autmatisk sent {DateTime.Now}";
+                    giver.Comment = string.IsNullOrWhiteSpace(giver.Comment) ? 
+                        reminderComment : 
+                        string.Format("{0}{1}{2}", giver.Comment, Environment.NewLine, reminderComment);
                     await _giverRepository.InsertOrReplaceAsync(giver);
 
                     remindedCount++;

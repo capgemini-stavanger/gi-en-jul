@@ -8,6 +8,7 @@ import snowDown from "styling/img/snow_down2.svg";
 import DotLoader from "common/constants/DotLoader";
 import React from "react";
 import { ArrowForwardIos } from "@material-ui/icons";
+import { isMobile } from "common/functions/IsMobile";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -92,27 +93,7 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
 
   return (
     <>
-      <Container className={classes.summaryDesign}>
-        {!pageLoadedResult && (
-          <Button
-            size="large"
-            endIcon={<ArrowForwardIos />}
-            className={classes.buttonMainPage}
-            onClick={() => history.push("/")}
-          >
-            Finn kontaktinformasjon
-          </Button>
-        )}
-        {pageLoadedResult && feedbackSubmitted && (
-          <Button
-            size="large"
-            endIcon={<ArrowForwardIos />}
-            className={classes.buttonMainPage}
-            onClick={() => history.push("/")}
-          >
-            Finn kontaktinformasjon
-          </Button>
-        )}
+      <Container className={classes.fillBackground}>
         <Grid container direction="column" justifyContent="center" alignItems="center">
           <Grid item>
             <img className={classes.imageSnow} src={snowDown}></img>
@@ -126,18 +107,22 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                       <Typography className={classes.headingBold}>
                         Du har valgt å avslå forbindelsen! <br />
                       </Typography>
+
                       <Typography className={classes.paragraph}>
-                        Vennligst gi en kort tilbakemelding på hvorfor du ønsket å avslå
-                        forbindelsen
+                        Hvis du ønsker å forbli giver, men få tildelet en annen familie, <br />
+                        vennligst gi en kort tilbakemelding i tekstboksen på hvorfor du ønsket å
+                        avslå forbindelsen. <br />
+                        Så vil vi tildele en ny familie til deg med tilbakemeldingen i betrakning.
                       </Typography>
                       <Typography className={classes.paragraph}>
-                        Om du ønsker å trekke deg som giver, så kan du krysse av nedenfor. Du vil da
-                        bli fjernet som giver fra våre systemer.
+                        Ønsker du å trekke deg som giver, kan du krysse av boksen under. <br />
+                        Du vil da bli fjernet helt fra våre systemer.
+                        <br /> Vi vil da ikke trenge din tilbakemelding.
                       </Typography>
                       {!finishedCheck && (
                         <TextField
                           type="text"
-                          label="Feedback"
+                          label="Tilbakemelding"
                           variant="outlined"
                           placeholder="Familien var større enn ønsket.."
                           minRows={3}
@@ -151,9 +136,12 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                         ></TextField>
                       )}
                       <Checkbox checked={finishedCheck} onChange={onCheckChange} color="primary" />
-                      <Typography className={classes.spacingBottom}> Jeg trekker meg </Typography>
+                      <Typography className={classes.spacingBottom}>
+                        {" "}
+                        Jeg trekker meg som giver{" "}
+                      </Typography>
                       <Button variant="contained" type="submit" color="primary" onClick={onSubmit}>
-                        Send Feedback
+                        Send Tilbakemelding
                       </Button>
                     </React.Fragment>
                   ) : (
@@ -164,6 +152,15 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                       <Typography className={classes.paragraph}>
                         Om det er noe mer du lurer på, vennligst ta kontakt
                       </Typography>
+                      <Button
+                        size="large"
+                        style={{ marginTop: "1rem" }}
+                        endIcon={<ArrowForwardIos />}
+                        className={classes.buttonNext}
+                        onClick={() => history.push("/")}
+                      >
+                        Til hjemsiden
+                      </Button>
                     </React.Fragment>
                   )}
                 </Container>
@@ -190,9 +187,11 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
               <DotLoader />
             </Grid>
           )}
-          <Grid item className={classes.imageContainer}>
-            <img className={classes.backgroundImage} src={snowmanFull}></img>
-          </Grid>
+          {!isMobile() && (
+            <Grid item>
+              <img src={snowmanFull}></img>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </>

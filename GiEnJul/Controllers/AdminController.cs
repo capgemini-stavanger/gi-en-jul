@@ -69,7 +69,8 @@ namespace GiEnJul.Controllers
         [HttpGet("Overview/Givers")]
         [Authorize(Policy = Policy.ReadGiver)]
         public async Task<IEnumerable<Giver>> GetGiversByLocationAsync([FromQuery] string location)
-        {            
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var givers = await _giverRepository.GetGiversByLocationAsync(activeEvent, location);
 
@@ -92,6 +93,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadRecipient)]
         public async Task<List<Recipient>> GetRecipientsByLocationAsync([FromQuery] string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
             var recipients = await _recipientRepository.GetRecipientsByLocationAsync(activeEvent, location);
 
@@ -113,6 +115,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.DownloadDeliveryExcel)]
         public async Task<FileStreamResult> DownloadExcelDeliveryLocationAsync(string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User); 
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
             using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
@@ -123,10 +126,11 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.ReadConnection)]
         public async Task<IList<GetConnectionDto>> GetConnectionsByLocationAsync(string location)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
-            var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
-            return connecitonDtos;
+            var connectionDtos = _mapper.Map<List<GetConnectionDto>>(completed);
+            return connectionDtos;
         }
 
         [HttpPost("event")]
@@ -207,9 +211,7 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
-
             return Ok();
-
         }
 
         [HttpPost("connection")]
@@ -256,7 +258,8 @@ namespace GiEnJul.Controllers
                 var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
 
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
             }
             catch (Exception e)
             {
@@ -268,6 +271,7 @@ namespace GiEnJul.Controllers
             }
             return Ok();
         }
+
 
         [HttpDelete("Recipient")]
         [Authorize(Policy = Policy.DeleteRecipient)]
@@ -349,7 +353,6 @@ namespace GiEnJul.Controllers
                 _log.Error(ex, "unable to update entity {@0}", recipientDto);
                 throw;
             }
-
             return Ok();
         }
 

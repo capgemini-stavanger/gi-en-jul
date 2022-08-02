@@ -23,6 +23,15 @@ namespace GiEnJul.Helpers
 
             return emailValuesDict;
         }
+        public static Dictionary<string, string> MakeDisconnectEmailContent(Models.Giver giver, Models.Recipient recipient, Models.Municipality municipality)
+        {
+            var emailValuesDict = new Dictionary<string, string>();
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipality, "municipality."));
+
+            return emailValuesDict;
+        }
 
         private static string MakeFamilyTable(Recipient recipient)
         {
