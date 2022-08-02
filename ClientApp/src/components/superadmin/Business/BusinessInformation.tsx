@@ -103,7 +103,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
             Forhåndsvisning av bedriftinformasjon
           </Typography>
           <Typography variant="h5" className={classes.heading}>
-            <Typography>{parse(businessInfo.info)}</Typography>
+            {parse(businessInfo.info)}
           </Typography>
         </Grid>
         <Grid item className={classes.businessButton}>
@@ -120,7 +120,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
       </Grid>
 
       {openEditor && (
-        <Typography>
+        <>
           <DefaultEditor value={html} onChange={onChange} />
 
           <Grid container direction="row" spacing={2}>
@@ -148,7 +148,7 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
             handleClose={handleClose}
             handleResponse={handleResponse}
           />
-        </Typography>
+        </>
       )}
     </Container>
   );

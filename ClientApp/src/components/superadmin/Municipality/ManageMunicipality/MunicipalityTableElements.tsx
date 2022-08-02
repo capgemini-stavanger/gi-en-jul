@@ -35,8 +35,9 @@ const MunicipalityTableElements: React.FC<props> = ({
     }
   };
 
-  const [updatedMunicipality, setUpdatedMunicipality] =
-    useState<IMunicipality>(initInterfaceMunicipality);
+  const [updatedMunicipality, setUpdatedMunicipality] = useState<IMunicipality>({
+    ...initInterfaceMunicipality,
+  });
 
   useEffect(() => {
     setUpdatedMunicipality(municipality);
@@ -51,7 +52,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <TextField
             disabled={openEditForm || role != "SuperAdmin"}
             placeholder={updatedMunicipality.email == "" ? "Fyll inn epost" : ""}
-            value={updatedMunicipality.email}
+            value={!!updatedMunicipality.email ? updatedMunicipality.email : ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, email: e.target.value });
             }}
@@ -61,7 +62,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <TextField
             disabled={openEditForm}
             placeholder={updatedMunicipality.phoneNumber == "" ? "Fyll inn telefonnummer" : ""}
-            value={updatedMunicipality.phoneNumber}
+            value={!!updatedMunicipality.phoneNumber ? updatedMunicipality.phoneNumber : ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, phoneNumber: e.target.value });
             }}
@@ -71,7 +72,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <TextField
             disabled={openEditForm}
             placeholder={updatedMunicipality.contactPerson == "" ? "Fyll inn kontaktperson" : ""}
-            value={updatedMunicipality.contactPerson}
+            value={!!updatedMunicipality.contactPerson ? updatedMunicipality.contactPerson : ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, contactPerson: e.target.value });
             }}
@@ -81,7 +82,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <TextField
             disabled={openEditForm}
             placeholder={updatedMunicipality.facebook == "" ? "Fyll inn Facebook" : ""}
-            value={updatedMunicipality.facebook}
+            value={!!updatedMunicipality.facebook ? updatedMunicipality.facebook : ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, facebook: e.target.value });
             }}
@@ -91,7 +92,7 @@ const MunicipalityTableElements: React.FC<props> = ({
           <TextField
             disabled={openEditForm}
             placeholder={updatedMunicipality.instagram == "" ? "Fyll inn Instagram" : ""}
-            value={updatedMunicipality.instagram}
+            value={!!updatedMunicipality.instagram ? updatedMunicipality.instagram : ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, instagram: e.target.value });
             }}
