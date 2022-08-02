@@ -90,7 +90,7 @@ namespace GiEnJul.Controllers
 
             try
             {
-                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email.Subject, email.Content);
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email);
             }
             catch (Exception e)
             {

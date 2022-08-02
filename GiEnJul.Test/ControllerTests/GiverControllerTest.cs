@@ -141,7 +141,7 @@ namespace GiEnJul.Test.ControllerTests
 
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
             mockGiverRepo.Verify(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
-            mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<EmailTemplate>()), Times.Once());
             mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
             mockEmailTemplateBuilder.Verify(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>()));
             mockMunicipalityRepo.Verify(x => x.GetSingle(It.IsAny<string>(),"Norge"), Times.Once());

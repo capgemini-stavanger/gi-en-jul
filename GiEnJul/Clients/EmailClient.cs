@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GiEnJul.Infrastructure;
+using GiEnJul.Utilities.EmailTemplates;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
@@ -10,8 +11,8 @@ namespace GiEnJul.Clients
 {
     public interface IEmailClient
     {
-        Task SendEmailAsync(string toMail, string toName, string subject, string html);
-        Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, string subject, string body);
+        Task SendEmailAsync(string toMail, string toName, EmailTemplate email);
+        Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email);
     }
 
     public class EmailClient : IEmailClient
@@ -27,18 +28,15 @@ namespace GiEnJul.Clients
             _log = log;
         }
 
-        public async Task SendEmailAsync(string toMail, string toName, string subject, string body)
+        public async Task SendEmailAsync(string toMail, string toName, EmailTemplate email)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             message.To.Add(new MailboxAddress(toName, toMail));
 
-            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + subject : subject;
+            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
 
-            message.Body = new TextPart("html")
-            {
-                Text = body
-            };
+            message.Body = email.Body;
 
             using (var client = new SmtpClient())
             {
@@ -53,23 +51,21 @@ namespace GiEnJul.Clients
                 }
 
                 await client.SendAsync(message);
-                _log.Debug($"Sent mail to {toMail} with subject {subject}");
+                _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
                 await client.DisconnectAsync(true);
             }
         }
 
-        public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, string subject, string body)
+        public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, fromMail));
+            message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             message.To.Add(new MailboxAddress(toName, toMail));
+            message.ReplyTo.Add(new MailboxAddress(fromName, fromMail));
 
-            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + subject : subject;
+            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
 
-            message.Body = new TextPart("html")
-            {
-                Text = body
-            };
+            message.Body = email.Body;
 
             using (var client = new SmtpClient())
             {
@@ -84,9 +80,10 @@ namespace GiEnJul.Clients
                 }
 
                 await client.SendAsync(message);
-                _log.Debug($"Sent mail to {toMail} with subject {subject}");
+                _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
                 await client.DisconnectAsync(true);
             }
+
         }
     }
 }
