@@ -6,7 +6,6 @@ import IFormData from "./IFormData";
 import Pager from "./Pager";
 import useStyles from "./Styles";
 import { Link, useHistory } from "react-router-dom";
-import { isMobile } from "common/functions/IsMobile";
 
 interface Props {
   nextStep: (event: React.FormEvent) => void;
