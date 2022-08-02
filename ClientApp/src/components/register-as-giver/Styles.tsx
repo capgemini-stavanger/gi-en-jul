@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     maxWidth: "500px",
+    height: "100vh",
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
