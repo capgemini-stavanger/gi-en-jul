@@ -211,7 +211,6 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
-
             return Ok();
 
         }
