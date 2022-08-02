@@ -111,7 +111,7 @@ export const theme = createTheme({
     },
     MuiOutlinedInput: {
       root: {
-        borderRadius: "1em",
+        borderRadius: "10px",
         "& $notchedOutline": {
           top: "0px",
         },
