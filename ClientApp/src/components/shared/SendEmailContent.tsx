@@ -61,7 +61,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, toEma
     }
     await apiservice
       .post(
-        "email/send",
+        "email/sendFromUser",
         JSON.stringify({
           Subject: subjectInput,
           Content: html,
