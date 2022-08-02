@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { TheatersOutlined } from "@material-ui/icons";
 
 export const useStyles = makeStyles((theme) => ({
   waitingButton: {
@@ -251,6 +252,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   statsGrow: {
     flexGrow: 1,
+  },
+
+  confirmIcon: {
+    color: theme.palette.primary.main,
+  },
+  waitingIcon: {
+    color: "#ffc505",
+  },
+  noneIcon: {
+    color: theme.palette.error.main,
   },
 }));
 

@@ -183,14 +183,14 @@ const RecipientDataCard: React.FC<Props> = ({
                   <Typography
                     className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                   >
-                    <QueryBuilderOutlinedIcon style={{ color: "#ffc505" }} />
+                    <QueryBuilderOutlinedIcon className={classes.waitingIcon} />
                     Venter svar
                   </Typography>
                 ) : (
                   <Typography
                     className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                   >
-                    <CheckCircleOutline style={{ color: "green" }} />
+                    <CheckCircleOutline className={classes.confirmIcon} />
                     Koblet
                   </Typography>
                 )
@@ -198,7 +198,7 @@ const RecipientDataCard: React.FC<Props> = ({
                 <Typography
                   className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                 >
-                  <BlockOutlinedIcon style={{ color: "red" }} />
+                  <BlockOutlinedIcon className={classes.noneIcon} />
                   Ikke koblet
                 </Typography>
               )}
