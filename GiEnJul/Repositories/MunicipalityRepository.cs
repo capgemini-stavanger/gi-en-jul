@@ -81,3 +81,5 @@ namespace GiEnJul.Repositories
         }
     }
 }
+
+//TO DO: method get image urls from table, handle case no pictures.
