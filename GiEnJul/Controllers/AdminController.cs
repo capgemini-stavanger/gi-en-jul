@@ -129,8 +129,8 @@ namespace GiEnJul.Controllers
             await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             var eventName = await _eventRepository.GetActiveEventForLocationAsync(location);
             var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
-            var connecitonDtos = _mapper.Map<List<GetConnectionDto>>(completed);
-            return connecitonDtos;
+            var connectionDtos = _mapper.Map<List<GetConnectionDto>>(completed);
+            return connectionDtos;
         }
 
         [HttpPost("event")]
@@ -160,7 +160,7 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpDelete("connection")]
+       [HttpDelete("connection")]
         [Authorize(Policy = Policy.DeleteConnection)]
         public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
         {
@@ -199,6 +199,9 @@ namespace GiEnJul.Controllers
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
                 await _recipientRepository.InsertOrReplaceAsync(recipient);
+                if (originalGiver.HasConfirmedMatch) {
+                    await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
+                }
             }
             catch (Exception e)
             {
@@ -209,20 +212,6 @@ namespace GiEnJul.Controllers
                 return NotFound();
             }
 
-            if (!originalGiver.HasConfirmedMatch) return Ok();
- 
-            try
-            {
-                await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
-            }
-            catch (Exception e)
-            {
-                await _giverRepository.InsertOrReplaceAsync(originalGiver);
-                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
-
-                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
-                return NotFound();
-            }
             return Ok();
 
         }
@@ -239,6 +228,27 @@ namespace GiEnJul.Controllers
             {
                 return BadRequest("Connection already exists");
             }
+
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Connection between giver and recipient cannot be made");
+            }
+
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
+
+            giver.IsSuggestedMatch = true;
+            giver.SuggestedMatchAt = DateTime.UtcNow;
+            giver.RemindedAt = null;
+            giver.MatchedRecipient = connectionDto.RecipientId;
+            giver.MatchedFamilyId = recipient.FamilyId;
+            giver.CancelFeedback = string.Empty;
+            giver.CancelDate = null;
+            giver.CancelFamilyId = string.Empty;
+
+            recipient.IsSuggestedMatch = true;
+            recipient.MatchedGiver = connectionDto.GiverId;
+
             try
             {
                 await _giverRepository.InsertOrReplaceAsync(giver);
@@ -262,6 +272,7 @@ namespace GiEnJul.Controllers
             }
             return Ok();
         }
+
 
         [HttpDelete("Recipient")]
         [Authorize(Policy = Policy.DeleteRecipient)]
