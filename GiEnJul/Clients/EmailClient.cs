@@ -61,8 +61,9 @@ namespace GiEnJul.Clients
         public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, string subject, string body)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(fromName, fromMail));
+            message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             message.To.Add(new MailboxAddress(toName, toMail));
+            message.ReplyTo.Add(new MailboxAddress(fromName, fromMail));
 
             message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + subject : subject;
 
@@ -73,7 +74,7 @@ namespace GiEnJul.Clients
 
             using (var client = new SmtpClient())
             {
-                if (_env.IsDevelopment())
+                if (!_env.IsDevelopment())
                 {
                     await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
                 }

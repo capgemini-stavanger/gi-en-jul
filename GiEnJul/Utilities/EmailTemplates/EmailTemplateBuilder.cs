@@ -35,13 +35,13 @@ namespace GiEnJul.Utilities
             string jsonString = r.ReadToEnd();
             var styles = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(jsonString);
 
-           // Unused for now var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
-           // var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
+            // Unused for now var bodyStyle = $"\"{string.Join("", styles["Body"])}\"";
+            var imageStyle = $"\"{string.Join("", styles["Image"])}\"";
             
             // Read Image
-           // var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}family.png");
-           // var imgString = Convert.ToBase64String(imgFile);
-            //var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
+            var imgFile = await File.ReadAllBytesAsync($"{AppContext.BaseDirectory}{templatePath}family2.png");
+            var imgString = Convert.ToBase64String(imgFile);
+            var img = $"<img src=\"data:image/png;base64,{imgString}\" style={imageStyle}/>";
 
             var center = "center";
             var widht = "600px";
