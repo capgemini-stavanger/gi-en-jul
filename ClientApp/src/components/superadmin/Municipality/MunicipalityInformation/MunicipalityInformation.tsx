@@ -79,7 +79,6 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           </Button>
           <Button
             style={{ marginRight: "10px" }}
-            className={classes.buttonError}
             variant="contained"
             onClick={() => {
               setOpenEditor(false);
