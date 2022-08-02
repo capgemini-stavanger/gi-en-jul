@@ -145,6 +145,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     fontSize: "1.5em",
   },
+
+  boxOverflow: {
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+  },
 }));
 
 export default useStyles;

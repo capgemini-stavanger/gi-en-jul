@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, IconButton, Typography } from "@material-ui/core";
+import { Box, Button, Container, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { RecipientType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
@@ -8,13 +8,17 @@ import EditIcon from "@material-ui/icons/Edit";
 import useStyles from "./Styles";
 import FormInformationBox from "./FormInformationBox";
 import { FiberManualRecord } from "@material-ui/icons";
+import { getTextWidth } from "get-text-width";
+import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 interface IDatagridFamily {
   id: string;
   refId: string;
-  contactName: string;
-  contactMail: string;
-  contactPhone: string;
+  navn: string;
+  email: string;
+  telefon: string;
+  status: string;
 }
 
 interface IRegistrationOverview {
@@ -23,6 +27,8 @@ interface IRegistrationOverview {
 
 const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) => {
   const apiservice = new ApiService(accessToken);
+  const classes = useStyles();
+
   const [recipientData, setRecipientData] = useState<RecipientType[] | []>([]);
   const [municipalityEmail, setMunicipalityEmail] = useState("");
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -30,16 +36,77 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
   const [rowData, setRowData] = useState<IDatagridFamily[] | []>([]);
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "Familie ID", width: 200 },
-    { field: "refId", headerName: "Referanse ID", width: 200 },
-    { field: "contactName", headerName: "Kontaktperson navn", width: 200 },
-    { field: "contactMail", headerName: "Kontaktperson mail", width: 200 },
-    { field: "contactPhone", headerName: "Kontaktperson nummer", width: 200 },
+    { field: "id", headerName: "Familie ID", width: 150 },
     {
-      field: "",
-      headerName: "Endringer",
+      field: "refId",
+      headerName: "Referanse ID",
+      width: 150,
+    },
+    {
+      field: "navn",
       width: 200,
+    },
+    {
+      field: "email",
+      width: 200,
+      renderCell: (params) => {
+        const overflow = getTextWidth(params.row.Email) >= 195;
+        let renderText;
+        if (overflow) {
+          renderText = (
+            <Tooltip title={params.row.Email} placement="top">
+              <Box className={classes.boxOverflow}>{params.row.Email}</Box>
+            </Tooltip>
+          );
+        } else {
+          renderText = <Box className={classes.boxOverflow}>{params.row.Email}</Box>;
+        }
+        return renderText;
+      },
+    },
+    {
+      field: "telefon",
+      width: 200,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      renderCell: (params) => {
+        const recipientToEdit = findEditRecipient(params.row.id);
+
+        const status = recipientStatus(recipientToEdit);
+        let textRender;
+        if (recipientToEdit.hasConfirmedMatch) {
+          textRender = (
+            <Box>
+              <CheckCircleOutline style={{ color: "green" }} /> {status}
+            </Box>
+          );
+        } else if (recipientToEdit.isSuggestedMatch) {
+          textRender = (
+            <Box>
+              <ErrorOutlineOutlined style={{ color: "yellow" }} /> {status}
+            </Box>
+          );
+        } else {
+          textRender = (
+            <Box>
+              <CancelOutlined style={{ color: "red" }} /> {status}
+            </Box>
+          );
+        }
+
+        return textRender;
+      },
+    },
+    {
+      field: "button",
+      headerName: "Endre",
+      width: 100,
       sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
       renderCell: (params) => {
         const recipientToEdit = findEditRecipient(params.row.id);
 
@@ -61,8 +128,6 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       },
     },
   ];
-
-  const classes = useStyles();
 
   const fetchRecipients = () => {
     apiservice
@@ -98,6 +163,20 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
     return matchingRecipient ? matchingRecipient : ({} as RecipientType);
   };
 
+  const recipientStatus = (recipient: RecipientType) => {
+    if (recipient) {
+      if (recipient.hasConfirmedMatch) {
+        return "Koblet";
+      }
+      if (recipient.isSuggestedMatch) {
+        return "Foreslått";
+      }
+      return "Ikke koblet";
+    } else {
+      return "Ikke koblet";
+    }
+  };
+
   const validRecipient = (recipient: RecipientType) => {
     if (recipient) {
       if (!recipient.isSuggestedMatch && !recipient.hasConfirmedMatch) {
@@ -125,9 +204,10 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       rows[i] = {
         id: data[i].familyId,
         refId: data[i].referenceId,
-        contactName: data[i].contactFullName,
-        contactMail: data[i].contactEmail,
-        contactPhone: data[i].contactPhoneNumber,
+        navn: data[i].contactFullName,
+        email: data[i].contactEmail,
+        telefon: data[i].contactPhoneNumber,
+        status: recipientStatus(data[i]),
       };
     }
     return rows;
@@ -218,7 +298,12 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
       <Grid container direction="row" justifyContent="center">
         <Grid container direction="column" spacing={1}>
           <Grid container direction="row">
-            <Button color="primary" onClick={downloadExcel}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<GetAppIcon />}
+              onClick={downloadExcel}
+            >
               Last ned Excel
             </Button>
           </Grid>
