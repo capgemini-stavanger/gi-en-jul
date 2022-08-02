@@ -79,7 +79,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("sendFromUser")]
-        //[Authorize(Policy = Policy.PostEmail)]
+        [Authorize(Policy = Policy.PostEmail)]
         public async Task<ActionResult> SendMailFromUser(PostEmailFromUserDto emailFromUser)
         {
             _log.Information("Received email post with data {@0}", emailFromUser);
