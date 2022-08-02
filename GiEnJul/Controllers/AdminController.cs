@@ -160,117 +160,116 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-       [HttpDelete("connection")]
-       [Authorize(Policy = Policy.DeleteConnection)]
-       public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
-       {
-           var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
+        [HttpDelete("connection")]
+        [Authorize(Policy = Policy.DeleteConnection)]
+        public async Task<ActionResult> DeleteConnectionAsync([FromBody] DeleteConnectionDto connectionDto)
+        {
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
 
-           var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
 
-           if (recipient is null || giver is null)
-           {
-               return NotFound("Could not find giver or recipient");
-           }
-           if (ConnectionHelper.CanConnect(giver, recipient))
-           {
-               return BadRequest("Giver and recipients are already disconnected");
-           }
-           if (!ConnectionHelper.MatchingIds(giver, recipient, connectionDto.GiverId, connectionDto.RecipientId))
-           {
-               return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
-           }
+            if (recipient is null || giver is null)
+            {
+                return NotFound("Could not find giver or recipient");
+            }
+            if (ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Giver and recipients are already disconnected");
+            }
+            if (!ConnectionHelper.MatchingIds(giver, recipient, connectionDto.GiverId, connectionDto.RecipientId))
+            {
+                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
+            }
 
-           var originalGiver = giver.ShallowCopy();
-           var originalRecipient = recipient.ShallowCopy();
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
 
-           giver.HasConfirmedMatch = false;
-           giver.IsSuggestedMatch = false;
-           giver.MatchedRecipient = String.Empty;
-           giver.MatchedFamilyId = String.Empty;
-           giver.SuggestedMatchAt = null;
-           giver.RemindedAt = null;
+            giver.HasConfirmedMatch = false;
+            giver.IsSuggestedMatch = false;
+            giver.MatchedRecipient = String.Empty;
+            giver.MatchedFamilyId = String.Empty;
+            giver.SuggestedMatchAt = null;
+            giver.RemindedAt = null;
 
-           recipient.HasConfirmedMatch = false;
-           recipient.IsSuggestedMatch = false;
-           recipient.MatchedGiver = String.Empty;
+            recipient.HasConfirmedMatch = false;
+            recipient.IsSuggestedMatch = false;
+            recipient.MatchedGiver = String.Empty;
 
-           try
-           {
-               await _giverRepository.InsertOrReplaceAsync(giver);
-               await _recipientRepository.InsertOrReplaceAsync(recipient);
-               if (originalGiver.HasConfirmedMatch) {
-                   await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
-               }
-           }
-           catch (Exception e)
-           {
-               await _giverRepository.InsertOrReplaceAsync(originalGiver);
-               await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
+                if (originalGiver.HasConfirmedMatch) {
+                    await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
+                }
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
 
-               _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
-               return NotFound();
-           }
-           return Ok();
+                _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
+                return NotFound();
+            }
+            return Ok();
+        }
 
-       }
+        [HttpPost("connection")]
+        [Authorize(Policy = Policy.AddConnection)]
+        public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
+        {
+            var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
+            var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
+            var municipality = await _municipalityRepository.GetSingle(giver.Location);
 
-       [HttpPost("connection")]
-       [Authorize(Policy = Policy.AddConnection)]
-       public async Task<ActionResult> SuggestConnectionAsync([FromBody] PostConnectionDto connectionDto)
-       {
-           var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
-           var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
-           var municipality = await _municipalityRepository.GetSingle(giver.Location);
+            if (_connectionRepository.ConnectionExists(giver, recipient))
+            {
+                return BadRequest("Connection already exists");
+            }
 
-           if (_connectionRepository.ConnectionExists(giver, recipient))
-           {
-               return BadRequest("Connection already exists");
-           }
+            if (!ConnectionHelper.CanConnect(giver, recipient))
+            {
+                return BadRequest("Connection between giver and recipient cannot be made");
+            }
 
-           if (!ConnectionHelper.CanConnect(giver, recipient))
-           {
-               return BadRequest("Connection between giver and recipient cannot be made");
-           }
+            var originalGiver = giver.ShallowCopy();
+            var originalRecipient = recipient.ShallowCopy();
 
-           var originalGiver = giver.ShallowCopy();
-           var originalRecipient = recipient.ShallowCopy();
+            giver.IsSuggestedMatch = true;
+            giver.SuggestedMatchAt = DateTime.UtcNow;
+            giver.RemindedAt = null;
+            giver.MatchedRecipient = connectionDto.RecipientId;
+            giver.MatchedFamilyId = recipient.FamilyId;
+            giver.CancelFeedback = string.Empty;
+            giver.CancelDate = null;
+            giver.CancelFamilyId = string.Empty;
 
-           giver.IsSuggestedMatch = true;
-           giver.SuggestedMatchAt = DateTime.UtcNow;
-           giver.RemindedAt = null;
-           giver.MatchedRecipient = connectionDto.RecipientId;
-           giver.MatchedFamilyId = recipient.FamilyId;
-           giver.CancelFeedback = string.Empty;
-           giver.CancelDate = null;
-           giver.CancelFamilyId = string.Empty;
+            recipient.IsSuggestedMatch = true;
+            recipient.MatchedGiver = connectionDto.GiverId;
 
-           recipient.IsSuggestedMatch = true;
-           recipient.MatchedGiver = connectionDto.GiverId;
+            try
+            {
+                await _giverRepository.InsertOrReplaceAsync(giver);
+                await _recipientRepository.InsertOrReplaceAsync(recipient);
 
-           try
-           {
-               await _giverRepository.InsertOrReplaceAsync(giver);
-               await _recipientRepository.InsertOrReplaceAsync(recipient);
+                recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
+                var baseUrl = _settings.ReactAppUri.Split(';').Last();
 
-               recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
-               var baseUrl = _settings.ReactAppUri.Split(';').Last();
+                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
 
-               var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
+                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
+            }
+            catch (Exception e)
+            {
+                await _giverRepository.InsertOrReplaceAsync(originalGiver);
+                await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
+                _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
 
-               var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
-               await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
-           }
-           catch (Exception e)
-           {
-               await _giverRepository.InsertOrReplaceAsync(originalGiver);
-               await _recipientRepository.InsertOrReplaceAsync(originalRecipient);
-               _log.Error(e, "Could not suggest connection between {@0} and {@1}", giver, recipient);
-
-               throw;
-           }
-           return Ok();
-       }
+                throw;
+            }
+            return Ok();
+        }
 
 
         [HttpDelete("Recipient")]
