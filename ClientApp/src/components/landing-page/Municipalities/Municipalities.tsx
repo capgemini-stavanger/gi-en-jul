@@ -7,6 +7,9 @@ import MunicipalityInformation from "./MunicipalityInformation";
 export interface LocationData {
   location: string;
   information: string;
+  image1: string;
+  image2: string;
+  image3: string;
 }
 
 interface Props {
@@ -26,7 +29,13 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
 
   const kommuneTabPanels = locations.map((val, index) => (
     <TabPanel key={index + 1} value={String(index + 1)}>
-      <MunicipalityInformation location={val.location} information={val.information} />
+      <MunicipalityInformation
+        location={val.location}
+        information={val.information}
+        image1={val.image1}
+        image2={val.image2}
+        image3={val.image3}
+      />
     </TabPanel>
   ));
 

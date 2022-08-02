@@ -146,13 +146,6 @@ namespace GiEnJul.Controllers
                 return BadRequest("There was a problem updating the municipality");
             }
         }
-
-        [HttpGet("images")]
-        //policy
-        public async Task<List<string>> GetInformationImages([FromQuery] string location)
-        {
-            return await _municipalityRepository.GetInfoImages(location);
-        }
     }
 }
 

@@ -16,12 +16,16 @@ interface IKommuneInfoResponse {
   image: string;
   isActive: boolean;
   email: string;
+  infoImage1: string;
+  infoImage2: string;
+  infoImage3: string;
 }
 
 const Municipality = () => {
   const [activeMunicipalities, setActiveMunicipalities] = useState<string[]>([]);
   const [municipalityMap, setMunicipalityMap] = useState(new Map<string, IKommuneInfoResponse>());
   const [municipalityData, setMunicipalityData] = useState<LocationData[]>([]);
+
   const classes = useStyles();
   const apiservice = new ApiService();
 
@@ -59,7 +63,25 @@ const Municipality = () => {
       if (info === undefined) {
         info = "Ingen informasjon om denne kommunen enda";
       }
-      tempLocationData.push({ location: location, information: info });
+      let image1 = municipalityMap.get(location)?.infoImage1;
+      let image2 = municipalityMap.get(location)?.infoImage2;
+      let image3 = municipalityMap.get(location)?.infoImage3;
+      if (image1 === undefined) {
+        image1 = "No image uploaded";
+      }
+      if (image2 === undefined) {
+        image2 = "No image uploaded";
+      }
+      if (image3 === undefined) {
+        image3 = "No image uploaded";
+      }
+      tempLocationData.push({
+        location: location,
+        information: info,
+        image1: image1,
+        image2: image2,
+        image3: image3,
+      });
       setMunicipalityData(tempLocationData);
     });
   };
