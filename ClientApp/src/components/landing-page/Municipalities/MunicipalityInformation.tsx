@@ -5,12 +5,24 @@ import parse from "html-react-parser";
 interface Props {
   location: string;
   information: string;
+  image1: string;
+  image2: string;
+  image3: string;
 }
 
-const MunicipalityInformation: React.FC<Props> = ({ location, information }) => {
+const MunicipalityInformation: React.FC<Props> = ({
+  location,
+  information,
+  image1,
+  image2,
+  image3,
+}) => {
   const classes = useStyles();
   if (information == undefined) {
     information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
+  }
+  if (image1 == null) {
+    image1 = "Det er ikke lagt til noe bilde enda";
   }
   return (
     <Grid container direction="column" id="information" className={classes.sectionContainer}>

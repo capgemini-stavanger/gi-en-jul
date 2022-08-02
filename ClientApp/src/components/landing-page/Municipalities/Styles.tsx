@@ -58,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     color: "white",
   },
+  infoImage: {
+    width: "250px",
+    height: "300px",
+    marginLeft: theme.spacing(6),
+    marginRight: theme.spacing(6),
+  },
 }));
 
 export default useStyles;

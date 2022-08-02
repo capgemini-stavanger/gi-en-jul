@@ -1,4 +1,6 @@
-﻿namespace GiEnJul.Models
+﻿using System.Collections.Generic;
+
+namespace GiEnJul.Models
 {
     public class Municipality
     {
@@ -14,9 +16,7 @@
         public string Facebook { get; set; }
         public string Instagram { get; set; }
         public string PhoneNumber { get; set; }
-        public string InfoImage1 { get; set; }
-        public string InfoImage2 { get; set; }
-        public string InfoImage3 { get; set; }
+        public List<string> InfoImages { get; set; }
     }
 }
 
