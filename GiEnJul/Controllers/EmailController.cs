@@ -129,6 +129,7 @@ namespace GiEnJul.Controllers
                 try
                 {
                     var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,"");
+                    notificationTemplate.Subject = email.Subject;
                     await _emailClient.SendEmailAsync(giver.Email, giver.Email, notificationTemplate);
                 }
                 catch (Exception e)
