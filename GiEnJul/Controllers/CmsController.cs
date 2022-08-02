@@ -74,15 +74,6 @@ namespace GiEnJul.Controllers
             return Ok();
         }
 
-        [HttpPost("Insertforadmin/{location}")]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> UpdateMunicipality([FromBody] PostCmsDto content)
-        {
-            await _authorization.ThrowIfNotAccessToMunicipality(content.Index, User); 
-            await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
-            return Ok();
-        }
-
         [HttpPost("deleteSingle")]
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)
