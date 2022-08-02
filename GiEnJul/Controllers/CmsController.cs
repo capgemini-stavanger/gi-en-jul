@@ -2,14 +2,12 @@
 using GiEnJul.Auth;
 using GiEnJul.Dtos;
 using GiEnJul.Repositories;
-using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -19,16 +17,15 @@ namespace GiEnJul.Controllers
     public class CmsController : ControllerBase
     {
         private readonly ICmsRepository _cmsRepository;
-        private readonly IAuthorization _authorization;
+       
         private readonly IMapper _mapper;
        
         public CmsController(
             ICmsRepository cmsRepository,
-            IMapper mapper, IAuthorization authorization)
+            IMapper mapper)
         {
             _cmsRepository = cmsRepository;
             _mapper = mapper;
-            _authorization = authorization;
         }
 
         [HttpGet("GetAll")]
