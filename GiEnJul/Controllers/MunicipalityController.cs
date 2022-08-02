@@ -49,24 +49,10 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> PostContent([FromBody] PostMunicipalityDto content)
         {
-            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User); //ødlegger denne for superadmin? 
+            
             var names = await _municipalityRepository.GetAll();
             if (names.Where(x => x.RowKey == content.Name).Any())
                 return BadRequest("RowKey already exists, use put request to edit");
-
-            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
-            return Ok();
-        }
-
-        [HttpPut]
-        [Authorize(Policy = Policy.UpdateMunicipality)]
-        public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
-        {
-            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User);
-            var entities = await _municipalityRepository.GetAll();
-            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
-            if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
-                return BadRequest("RowKey does not exists");
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
@@ -100,7 +86,6 @@ namespace GiEnJul.Controllers
         [HttpGet("email")]
         public async Task<ActionResult<string>> GetEmailForInstitution()
         {
-            //kan denne heller bruke lokasjonen med metadata : await _authorization.ThrowIfNotAccessToMunicipality(location, User); ?
             // Get metadata
             var metadata = await _managementClient.GetUserMetadata(ClaimsHelper.GetUserId(User));
             var location = metadata["location"];
@@ -112,7 +97,6 @@ namespace GiEnJul.Controllers
                 return NotFound("Could not find municipality for location: "+location);
             }
             return Ok(municipalityByLocation);
- 
         }
 
         [HttpGet("allcontacts")]
@@ -130,7 +114,6 @@ namespace GiEnJul.Controllers
         {
             var contact = await _municipalityRepository.GetSingle(municipality);
             return _mapper.Map<Dtos.GetContactsDto>(contact);
-            
         }
 
         [HttpGet("getSingle")]
@@ -144,6 +127,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.UpdateMunicipality)]
         public async Task<ActionResult> UpdateMunicipalityContent([FromBody] Models.Municipality content)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User);
             var didUpdate = await _municipalityRepository.UpdateMunicipality(content);
             if (didUpdate)
             {
@@ -153,6 +137,20 @@ namespace GiEnJul.Controllers
             {
                 return BadRequest("There was a problem updating the municipality");
             }
+        }
+        
+        [HttpPut]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> PutContentInfo([FromBody] PostMunicipalityDto content)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User);
+            var entities = await _municipalityRepository.GetAll();
+            var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
+            if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
+                return BadRequest("RowKey does not exists");
+
+            await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+            return Ok();
         }
     }
 

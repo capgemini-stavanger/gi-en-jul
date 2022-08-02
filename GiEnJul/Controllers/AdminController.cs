@@ -134,7 +134,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.AddEvent)]
         public async Task<ActionResult> PostEventAsync([FromBody] PostEventDto eventDto)
         {
-            await _authorization.ThrowIfNotAccessToMunicipality(eventDto.Municipality, User);
             if (eventDto.StartDate <= DateTime.Today || eventDto.StartDate >= eventDto.EndDate)
             {
                 throw new ArgumentException();
@@ -216,7 +215,7 @@ namespace GiEnJul.Controllers
             }
 
             if (!originalGiver.HasConfirmedMatch) return Ok();
-            
+ 
             try
             {
                 await _connectionRepository.DeleteConnectionAsync(connectionDto.Event, recipient.RecipientId + "_" + giver.GiverId);
@@ -229,7 +228,6 @@ namespace GiEnJul.Controllers
                 _log.Error(e, "Could not delete connection between {@0} and {@1}", giver, recipient);
                 return NotFound();
             }
-
             return Ok();
         }
 
@@ -244,7 +242,6 @@ namespace GiEnJul.Controllers
             {
                 throw new InvalidConnectionCreationException();
             }
-
             try
             {
                 giver.IsSuggestedMatch = true;
@@ -370,7 +367,6 @@ namespace GiEnJul.Controllers
                 _log.Error(ex, "unable to update entity {@0}", recipientDto);
                 throw;
             }
-
             return Ok();
         }
 
@@ -431,7 +427,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.GetUnsuggestedGivers)]
         public async Task<IList<GiverDataTableDto>> GetUnsuggestedGiversAsync([FromQuery] string location, int quantity = 1)
         {
-            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);
@@ -452,7 +447,6 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.GetUnsuggestedRecipients)]
         public async Task<IList<RecipientDataTableDto>> GetUnsuggestedRecipientsAsync([FromQuery] string location, int quantity = 1)
         {
-            await _authorization.ThrowIfNotAccessToMunicipality(location, User);
             if (quantity < 1) throw new ArgumentOutOfRangeException();
 
             var activeEvent = await _eventRepository.GetActiveEventForLocationAsync(location);

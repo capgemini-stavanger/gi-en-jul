@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,7 +17,6 @@ namespace GiEnJul.Repositories
         Task<Models.Municipality> GetSingle(string municipality, string country = "Norge");
         Task<bool> UpdateMunicipality(Models.Municipality municipality);
         Task<string> GetEmailByLocation(string location);
-
     }
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
@@ -38,8 +36,6 @@ namespace GiEnJul.Repositories
                 return null;
             }
         }
-
-   
 
         public async Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality)
         {
@@ -83,7 +79,6 @@ namespace GiEnJul.Repositories
             {
                 return null;
             }
-
             return municipalityMatch.Email;
         }
     }
