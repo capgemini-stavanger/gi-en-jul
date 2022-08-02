@@ -20,6 +20,7 @@ namespace GiEnJul.Test.ControllerTests
         public Mock<IRecipientRepository> MockRecipientRepo { get; private set; }
         public Mock<IPersonRepository> MockPersonRepo { get; private set; }
         public Mock<IConnectionRepository> MockConnectionRepo { get; private set; }
+        public Mock<IMunicipalityRepository> MockMunicipalityRepo { get; private set; }
 
         private readonly Mock<IEmailClient> emailClientMock;
 
@@ -38,6 +39,7 @@ namespace GiEnJul.Test.ControllerTests
             MockRecipientRepo = new Mock<IRecipientRepository>();
             MockPersonRepo = new Mock<IPersonRepository>();
             MockConnectionRepo = new Mock<IConnectionRepository>();
+            MockMunicipalityRepo = new Mock<IMunicipalityRepository>();
             emailClientMock = new Mock<IEmailClient>();
             ConfigMock = new Mock<IConfiguration>();
             mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
@@ -48,6 +50,7 @@ namespace GiEnJul.Test.ControllerTests
                                               MockRecipientRepo.Object,
                                               MockPersonRepo.Object,
                                               MockConnectionRepo.Object,
+                                              MockMunicipalityRepo.Object,
                                               _log,
                                               _mapper,
                                               emailClientMock.Object,

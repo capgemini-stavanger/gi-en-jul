@@ -30,6 +30,7 @@ namespace GiEnJul.Controllers
         private readonly IRecipientRepository _recipientRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IConnectionRepository _connectionRepository;
+        private readonly IMunicipalityRepository _municipalityRepository;
         private readonly ILogger _log;
         private readonly IMapper _mapper;
         private readonly IEmailClient _emailClient;
@@ -43,6 +44,7 @@ namespace GiEnJul.Controllers
             IRecipientRepository recipientRepository,
             IPersonRepository personRepository,
             IConnectionRepository connectionRepository,
+            IMunicipalityRepository municipalityRepository,
             ILogger log,
             IMapper mapper,
             IEmailClient emailClient,
@@ -55,6 +57,7 @@ namespace GiEnJul.Controllers
             _recipientRepository = recipientRepository;
             _personRepository = personRepository;
             _connectionRepository = connectionRepository;
+            _municipalityRepository = municipalityRepository;
             _log = log;
             _mapper = mapper;
             _emailClient = emailClient;
@@ -215,6 +218,7 @@ namespace GiEnJul.Controllers
         {
             var giver = await _giverRepository.GetGiverAsync(connectionDto.Event, connectionDto.GiverId);
             var recipient = await _recipientRepository.GetRecipientAsync(connectionDto.Event, connectionDto.RecipientId);
+            var municipality = await _municipalityRepository.GetSingle(giver.Location);
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
@@ -234,9 +238,9 @@ namespace GiEnJul.Controllers
             giver.RemindedAt = null;
             giver.MatchedRecipient = connectionDto.RecipientId;
             giver.MatchedFamilyId = recipient.FamilyId;
-            giver.CancelFeedback = String.Empty;
+            giver.CancelFeedback = string.Empty;
             giver.CancelDate = null;
-            giver.CancelFamilyId = String.Empty;
+            giver.CancelFamilyId = string.Empty;
 
             recipient.IsSuggestedMatch = true;
             recipient.MatchedGiver = connectionDto.GiverId;
@@ -248,7 +252,9 @@ namespace GiEnJul.Controllers
 
                 recipient.FamilyMembers = await _personRepository.GetAllByRecipientId(recipient.RecipientId);
                 var baseUrl = _settings.ReactAppUri.Split(';').Last();
-                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, baseUrl);
+
+                var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
+
                 var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
                 await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate.Subject, emailTemplate.Content);
             }

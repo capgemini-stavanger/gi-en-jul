@@ -125,6 +125,10 @@
     <value>Gi en jul - avslått kobling!</value>
     <comment>When giver denies the connection</comment>
   </data>
+  <data name="ConnectionReminder" xml:space="preserve">
+    <value>Gi en jul - påminnelse! Husk å bekrefte!</value>
+    <comment>When reminder is sent to a giver</comment>
+  </data>
   <data name="Notification" xml:space="preserve">
     <value>Gi en jul - notifikasjon!</value>
     <comment>When a notification is provided</comment>

@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
-using GiEnJul.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace GiEnJul.Test.ModelTests
@@ -34,7 +29,7 @@ namespace GiEnJul.Test.ModelTests
                 }
             };
             var entityPerson = _mapper.Map<Entities.Person>(modelPerson);
-            modelPerson.Wishes.ToList().ForEach(wish => Assert.True(entityPerson.Wishes.Contains(wish)));
+            modelPerson.Wishes.ToList().ForEach(wish => Assert.Contains(wish, entityPerson.Wishes));
         }
 
         [Fact]
@@ -47,7 +42,7 @@ namespace GiEnJul.Test.ModelTests
                 Wishes = "[\"Test\", \"Setning\"]"
             };
             var modelPerson = _mapper.Map<Models.Person>(entityPerson);
-            modelPerson.Wishes.ToList().ForEach(wish => Assert.True(entityPerson.Wishes.Contains(wish)));
+            modelPerson.Wishes.ToList().ForEach(wish => Assert.Contains(wish, entityPerson.Wishes));
         }
     }
 }

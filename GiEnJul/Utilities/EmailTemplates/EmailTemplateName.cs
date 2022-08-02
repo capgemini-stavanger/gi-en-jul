@@ -7,6 +7,8 @@
         AssignedFamily,
         VerifyConnection,
         Notification,
-        ConnectionDenied
+        ConnectionDenied,
+        ConnectionReminder,
+        AutomaticDisconnection
     }
 }
