@@ -124,7 +124,7 @@ namespace GiEnJul.Repositories
             try
             {
                 _log.Verbose("Trying to add Entity:{@entity}, into table:{@tablename}", entity, _client.Name);
-                var result = await _client.UpsertEntityAsync(entity);
+                var result = await _client.UpsertEntityAsync(entity, TableUpdateMode.Replace);
                 _log.Debug("Added Entity:{@entity}, into table:{@tablename}", entity, _client.Name);
 
                 if (!result.IsError)

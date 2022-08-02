@@ -52,6 +52,9 @@
     <None Update="Utilities\EmailTemplates\Files\ConnectionDenied.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Utilities\EmailTemplates\Files\AutomaticDisconnect.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Utilities\EmailTemplates\Files\ConnectionReminder.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
