@@ -16,50 +16,24 @@ const Pager: FC<IPager> = ({ onBack, onContinue, backText, continueText, step })
   const classes = useStyles();
   if (isMobile()) {
     return (
-      <>
-        {step == 4 ? (
-          <>
-            <Box className={classes.buttonBoxGiverFormMobileSummary}>
-              <Button
-                style={{ marginTop: "20px" }}
-                variant="outlined"
-                className={classes.buttonBack}
-                startIcon={<ArrowBackIos />}
-                onClick={onBack}
-              >
-                {backText}
-              </Button>
-              <Button
-                style={{ marginLeft: "20px", marginTop: "20px" }}
-                className={classes.buttonNext}
-                endIcon={<ArrowForwardIos />}
-                onClick={onContinue}
-              >
-                {continueText}
-              </Button>
-            </Box>
-          </>
-        ) : (
-          <Box className={classes.buttonBoxGiverFormMobile}>
-            <Button
-              variant="outlined"
-              className={classes.buttonBack}
-              startIcon={<ArrowBackIos />}
-              onClick={onBack}
-            >
-              {backText}
-            </Button>
-            <Button
-              style={{ marginLeft: "20px" }}
-              className={classes.buttonNext}
-              endIcon={<ArrowForwardIos />}
-              onClick={onContinue}
-            >
-              {continueText}
-            </Button>
-          </Box>
-        )}
-      </>
+      <Box className={classes.buttonBoxGiverFormMobile}>
+        <Button
+          variant="outlined"
+          className={classes.buttonBack}
+          startIcon={<ArrowBackIos />}
+          onClick={onBack}
+        >
+          {backText}
+        </Button>
+        <Button
+          style={{ marginLeft: "20px" }}
+          className={classes.buttonNext}
+          endIcon={<ArrowForwardIos />}
+          onClick={onContinue}
+        >
+          {continueText}
+        </Button>
+      </Box>
     );
   } else {
     return (

@@ -84,17 +84,11 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
-  buttonBoxGiverFormMobileSummary: {
-    position: "sticky",
-    bottom: "0",
-  },
+
   buttonBoxGiverFormMobile: {
-    position: "absolute",
-    width: "auto",
-    display: "flex",
-    marginLeft: "15%",
-    justifyContent: "space-between",
-    bottom: "10px",
+    position: "relative",
+    marginLeft: "3em",
+    marginTop: "1em",
   },
 
   buttonMainPage: {
