@@ -1,9 +1,11 @@
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogTitle,
+  FormControlLabel,
   Grid,
   IconButton,
   TextField,
@@ -54,15 +56,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     if (open) {
       setRecipientData(recipient);
     }
-    return () => {
-      // Prevent memory leak by resetting values that MAY be part of async functions (?)
-      setRecipientData(recipient);
-      setOpenUpdateConfirmBox(false);
-      setOpenCloseConfirmBox(false);
-      setMunicipalityEmail("");
-      setOpenInformation(false);
-    };
-  }, []);
+  }, [open]);
 
   // A very general STATIC check change, just to have something in the email template
   const checkChanges = () => {
@@ -192,6 +186,54 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       ],
     }));
   };
+
+  const onAgeWishChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRecipientData((prev) => ({
+      ...prev,
+      familyMembers: [
+        ...prev.familyMembers.slice(0, index),
+        {
+          ...prev.familyMembers[index],
+          noWish: e.target.checked,
+        },
+        ...prev.familyMembers.slice(index + 1),
+      ],
+    }));
+  };
+
+  const addWish = (index: number) => {
+    const newWish = "";
+
+    setRecipientData((prev) => ({
+      ...prev,
+      familyMembers: [
+        ...prev.familyMembers.slice(0, index),
+        {
+          ...prev.familyMembers[index],
+          wishes: [...prev.familyMembers[index].wishes, newWish],
+        },
+        ...prev.familyMembers.slice(index + 1),
+      ],
+    }));
+  };
+
+  const removeWish = (fIndex: number, wIndex: number) => {
+    setRecipientData((prev) => ({
+      ...prev,
+      familyMembers: [
+        ...prev.familyMembers.slice(0, fIndex),
+        {
+          ...prev.familyMembers[fIndex],
+          wishes: [
+            ...prev.familyMembers[fIndex].wishes.slice(0, wIndex),
+            ...prev.familyMembers[fIndex].wishes.slice(wIndex + 1),
+          ],
+        },
+        ...prev.familyMembers.slice(fIndex + 1),
+      ],
+    }));
+  };
+
   const onWishChange =
     (fIndex: number, wIndex: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setRecipientData((prev) => ({
@@ -210,6 +252,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
         ],
       }));
     };
+
   const newFamilyMember = () => {
     const newRecipient = {
       age: 0,
@@ -224,6 +267,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       familyMembers: [...prev.familyMembers, newRecipient],
     }));
   };
+
   const removeFamilyMember = (index: number) => {
     setRecipientData((prev) => ({
       ...prev,
@@ -233,6 +277,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
       ],
     }));
   };
+
   const updateRecipient = async () => {
     fetchMuncipalityEmail();
     await apiservice
@@ -306,10 +351,11 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
           <CloseIcon />
         </IconButton>
 
-        <Box sx={{ m: 5 }}>
-          <Grid container spacing={2} direction="column">
-            <Typography variant="h4"> Familie: {recipientData.familyId} </Typography>
-
+        <Box sx={{ m: 5, width: "1100px" }}>
+          <Grid container spacing={3} direction="column">
+            <Grid item>
+              <Typography variant="h4"> Familie: {recipientData.familyId} </Typography>
+            </Grid>
             <Grid item>
               <Typography variant="h5">Matønsker</Typography>
               <Grid
@@ -319,30 +365,30 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                 alignItems="center"
                 className={classes.headerSpacing}
               >
-                <Grid item>
+                <Grid item xs={3}>
                   <TextField
                     type="text"
                     label="Middag"
                     variant="outlined"
-                    value={recipientData.dinner}
+                    value={recipientData.dinner ? recipientData.dinner : ""}
                     onChange={onDinnerChange}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item xs={3}>
                   <TextField
                     type="text"
                     label="Dessert"
                     variant="outlined"
-                    value={recipientData.dessert}
+                    value={recipientData.dessert ? recipientData.dessert : ""}
                     onChange={onDessertChange}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item xs={3}>
                   <TextField
                     type="text"
                     label="Kommentar"
                     variant="outlined"
-                    value={recipientData.note}
+                    value={recipientData.note ? recipientData.note : ""}
                     onChange={onNoteChange}
                   />
                 </Grid>
@@ -350,8 +396,8 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             </Grid>
 
             <Grid item>
-              <Typography variant="h5">Familiesammensetning</Typography>
-              <Grid container direction="column" spacing={3} className={classes.headerSpacing}>
+              <Typography variant="h5">Familie</Typography>
+              <Grid container direction="column" spacing={5} className={classes.headerSpacing}>
                 {recipientData.familyMembers?.map((familyMember: PersonType, fIndex: number) => (
                   <Grid item key={fIndex}>
                     <Grid container spacing={2} direction="row" alignItems="center">
@@ -373,7 +419,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                           fullWidth
                         />
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={1}>
                         <TextField
                           type="number"
                           label="Alder"
@@ -383,32 +429,39 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                           fullWidth
                         />
                       </Grid>
-                      {familyMember.age == 0 && (
-                        <Grid item xs={2}>
-                          <TextField
-                            type="number"
-                            label="Måneder"
-                            variant="outlined"
-                            value={familyMember.months || "1"}
-                            onChange={onMonthsChange(fIndex)}
-                            fullWidth
-                          />
-                        </Grid>
-                      )}
+                      <Grid item xs={1}>
+                        <TextField
+                          type="number"
+                          label="Måneder"
+                          variant="outlined"
+                          value={familyMember.months || "1"}
+                          onChange={onMonthsChange(fIndex)}
+                          fullWidth
+                        />
+                      </Grid>
                       <Grid item xs={4}>
                         {!familyMember.noWish ? (
                           <React.Fragment>
                             {familyMember.wishes.map((wish, wIndex) => {
                               return (
-                                <TextField
+                                <Box
                                   key={wIndex}
-                                  type="text"
-                                  label="Ønske"
-                                  variant="outlined"
-                                  value={wish ? wish : ""}
-                                  onChange={onWishChange(fIndex, wIndex)}
-                                  fullWidth
-                                />
+                                  className={wIndex != 0 ? classes.wishSpacing : ""}
+                                >
+                                  <TextField
+                                    type="text"
+                                    label={"Ønske " + (wIndex + 1)}
+                                    variant="outlined"
+                                    value={wish ? wish : ""}
+                                    onChange={onWishChange(fIndex, wIndex)}
+                                  />
+                                  <IconButton
+                                    aria-label="close"
+                                    onClick={() => removeWish(fIndex, wIndex)}
+                                  >
+                                    <CloseIcon />
+                                  </IconButton>
+                                </Box>
                               );
                             })}
                           </React.Fragment>
@@ -423,10 +476,38 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                           />
                         )}
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={3}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={familyMember.noWish}
+                              onChange={onAgeWishChange(fIndex)}
+                              name="isAgeWish"
+                              color="primary"
+                            />
+                          }
+                          className="my-0"
+                          label="Alderstilpasset gave"
+                        />
+                      </Grid>
+                      <Grid item xs={1}>
                         <IconButton aria-label="close" onClick={() => removeFamilyMember(fIndex)}>
                           <CloseIcon />
                         </IconButton>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row">
+                      <Grid item xs={5}></Grid>
+                      <Grid item xs={7}>
+                        {!familyMember.noWish && (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => addWish(fIndex)}
+                          >
+                            Nytt Ønske
+                          </Button>
+                        )}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -435,13 +516,17 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             </Grid>
           </Grid>
 
-          <DialogActions>
-            <Button onClick={newFamilyMember}>Nytt familiemedlem</Button>
+          <DialogActions className={classes.headerSpacing}>
+            <Button variant="contained" color="primary" onClick={newFamilyMember}>
+              Nytt familiemedlem
+            </Button>
           </DialogActions>
         </Box>
 
         <DialogActions>
-          <Button onClick={() => setOpenUpdateConfirmBox(true)}>Oppdater Familie</Button>
+          <Button variant="contained" color="primary" onClick={() => setOpenUpdateConfirmBox(true)}>
+            Oppdater Familie
+          </Button>
         </DialogActions>
       </Dialog>
 
