@@ -15,6 +15,13 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
 
+  verifyDenyConnectionContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   giverForm: {
     padding: theme.spacing(3),
     display: "flex",
@@ -142,10 +149,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   backgroundImage: {
-    objectFit: "none",
+    objectFit: "cover",
     width: "100%",
     height: "100%",
-    marginTop: -theme.spacing(4),
   },
   imageContainer: {
     height: "100vh",
