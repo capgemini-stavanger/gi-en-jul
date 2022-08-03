@@ -12,14 +12,11 @@ interface Props {
 
 const MunicipalityInformation: React.FC<Props> = ({ location, information, images }) => {
   const classes = useStyles();
-  const [showImages, setShowImages] = useState<boolean>(true);
 
   if (information == undefined) {
     information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
   }
-  if (images.length == 0) {
-    setShowImages(false);
-  }
+
   return (
     <Grid container direction="column" id="information" className={classes.sectionContainer}>
       <Grid item>
@@ -30,21 +27,23 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
         <Typography>{parse(information)}</Typography>
       </Grid>
       <Grid item>
-        {showImages &&
-          images.map((img, index) => {
-            return (
-              <img
-                key={index.toString() + img}
-                src={img}
-                className={classes.infoImage}
-                alt={"Finner ikke bildet"}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null;
-                  currentTarget.src = `${img_placeholder}`;
-                }}
-              />
-            );
-          })}
+        {images.map((img, index) => {
+          if (!img) {
+            return <></>;
+          }
+          return (
+            <img
+              key={index.toString() + img}
+              src={img}
+              className={classes.infoImage}
+              alt={"Finner ikke bildet"}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = `${img_placeholder}`;
+              }}
+            />
+          );
+        })}
       </Grid>
     </Grid>
   );
