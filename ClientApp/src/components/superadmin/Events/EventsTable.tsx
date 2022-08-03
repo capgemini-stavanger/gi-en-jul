@@ -17,6 +17,7 @@ import {
   Dto2EventContent,
   EventContent,
   EventContent2Dto,
+  EventContentInit,
   EventContentDto,
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
@@ -36,7 +37,8 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
   const [municipalities, setMunicipalities] = useState<string[]>([]);
   const [eventTable, setEventTable] = useState<JSX.Element[]>([]);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
-  const [openConfirmationBox, setOpenConfirmaitonBox] = useState<boolean>(false);
+  const [openConfirmationBox, setOpenConfirmatitonBox] = useState<boolean>(false);
+  const [openSaveConfirmationBox, setOpenSaveConfirmatitonBox] = useState<boolean>(false);
   const [informationBoxInfo, setInformationBoxInfo] = useState<string>("");
   const [uniqueEventNames, setUniqueEventNames] = useState<string[]>([]);
   const [selectedEventName, setSelectedEventName] = useState<string>("");
@@ -46,17 +48,19 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
   const [errorText, setErrorText] = useState<string>('Nytt eventnavn (feks "Jul22")');
   const [addState, setAddState] = useState<boolean>(false);
   const [tempEventName, setTempEventName] = useState<string>("");
-
+  const [tempNewEvent, setTempNewEvent] = useState<EventContent>(EventContentInit());
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
+
   const handleDropDownChange = (value: string) => {
     if (openNewEventBox) {
-      setOpenConfirmaitonBox(true);
+      setOpenConfirmatitonBox(true);
       setTempEventName(value);
       return;
     }
     setSelectedEventName(value);
   };
+
   const keyCombinationExists = (combination: string): boolean => {
     const existingCombinations: string[] = [];
     events.forEach((event, id) => {
@@ -65,28 +69,34 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
     const exists: boolean = existingCombinations.includes(combination);
     return exists;
   };
+
   const municipalityExists = (municipality: string): boolean => {
     return municipalities.includes(municipality);
   };
+
   const handleConfirmationResponse = (response: boolean) => {
     if (response) {
       setOpenNewEventBox(false);
       setSelectedEventName(tempEventName);
     }
   };
+
   const handleNewEventNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     validateNewEventName(e.target.value);
     setNewEventName(e.target.value);
   };
+
   const resetNewEventNameBox = () => {
     setErrorText("Nytt eventnavn (feks 'Jul22')");
     setNewEventName("");
     setValidNewEventName(false);
   };
+
   const handleCancel = () => {
     resetNewEventNameBox();
     setAddState(false);
   };
+
   const validateNewEventName = (newName: string) => {
     if (newName == "") {
       setValidNewEventName(false);
@@ -99,6 +109,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
       setErrorText("");
     }
   };
+
   const validateNewEvent = (newEvent: EventContent, newId: string) => {
     if (!municipalityExists(newEvent.municipality)) {
       setInformationBoxInfo(`Kommunen tastet inn er ikke registrert som en kommune. 
@@ -120,6 +131,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
     }
     return true;
   };
+
   const handleSaveNewEventName = () => {
     if (!validNewEventName) return;
     setUniqueEventNames([...uniqueEventNames, newEventName]);
@@ -127,18 +139,27 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
     setSelectedEventName(newEventName);
     resetNewEventNameBox();
   };
+
   const handleAddClick = () => {
     setAddState(true);
   };
-  const createNewEvent = (newEvent: EventContent) => {
+
+  const handleSaveResponse = (response: boolean) => {
+    if (response) {
+      postEventUpdate(tempNewEvent);
+      setOpenNewEventBox(false);
+    }
+  };
+
+  const handleNewEvent = (newEvent: EventContent) => {
     const newId = newEvent.eventName + newEvent.municipality;
     const validNewEvent = validateNewEvent(newEvent, newId);
     if (validNewEvent) {
-      newEvent.id = newId;
-      setOpenNewEventBox(false);
-      postEventUpdate(newEvent);
+      setTempNewEvent(newEvent);
+      setOpenSaveConfirmatitonBox(true);
     }
   };
+
   const handleEventUpdate = (updatedEvent: EventContent, id: string) => {
     const newId = updatedEvent.eventName + updatedEvent.municipality;
     // either municipality or eventname for the event is updated
@@ -154,10 +175,12 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
       postEventUpdate(updatedEvent);
     }
   };
+
   const handleEventDeletion = (id: string) => {
     const eventToBeDeleted = events.get(id); // get event from map
     postEventDeletion(eventToBeDeleted);
   };
+
   const postEventDeletion = (event: EventContent | undefined) => {
     if (event == undefined) {
       setInformationBoxInfo("Finner ikke eventet du prøver å slette");
@@ -184,6 +207,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
       });
     setOpenInformationBox(true);
   };
+
   const postEventUpdate = (event: EventContent): void => {
     apiservice
       .post(
@@ -238,6 +262,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
         console.error(errorStack);
       });
   };
+
   const fetchMunicipalities = () => {
     apiservice
       .get("Municipality/names", {})
@@ -248,6 +273,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
         console.error(errorStack);
       });
   };
+
   const fetchEvents = () => {
     apiservice
       .get("Event/GetAll", {})
@@ -285,7 +311,8 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
           <ListItemIcon>-</ListItemIcon>
           <Typography>
             Når du knytter en kommune opp mot et event, må det settes en start og sluttdato som
-            bestemmer når eventet er aktivt.
+            bestemmer når eventet er aktivt, og i hvilken periode det går ann å melde seg opp som
+            giver.
           </Typography>
         </ListItem>
       </List>
@@ -349,9 +376,17 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
             "Det nye eventet du holder på å legge til vil gå tapt dersom du bytter fane. Er du sikker på at du likevel ønsker å bytte fane?"
           }
           handleClose={function (): void {
-            setOpenConfirmaitonBox(false);
+            setOpenConfirmatitonBox(false);
           }}
           handleResponse={handleConfirmationResponse}
+        />
+        <ConfirmationBox
+          open={openSaveConfirmationBox}
+          text={"Er du sikker på at du ønsker å starte dette eventet?"}
+          handleClose={function (): void {
+            setOpenSaveConfirmatitonBox(false);
+          }}
+          handleResponse={handleSaveResponse}
         />
         <InformationBox
           open={openInformationBox}
@@ -363,7 +398,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
         <Grid item>
           <NewEventBox
             open={openNewEventBox}
-            handleSaveEvent={createNewEvent}
+            handleSaveEvent={handleNewEvent}
             onClose={() => {
               setOpenNewEventBox(false);
             }}

@@ -219,8 +219,6 @@ const EventsContainer: React.FC<Props> = ({ accessToken }) => {
               existingEventNames={uniqueEventNames}
               existingMunicipalities={municipalities}
               initEditable={false}
-              handleChangeButtonClick={() => {}}
-              handleValidEventCancel={() => {}}
             />
           </Grid>
         );
