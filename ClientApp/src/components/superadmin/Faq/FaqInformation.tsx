@@ -159,7 +159,7 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index, getFaqI
           <Grid item>
             <TextField
               fullWidth
-              placeholder="Enter question here"
+              placeholder="Skriv spørsmål her"
               type="text"
               variant="outlined"
               value={faqQuestion}

@@ -124,7 +124,8 @@ const ContactInfo: React.FC<Props> = ({
             setIsValids={getValiditySetter("isValidEmail")}
             label="Bekreft epost*"
             onChange={handleConfirmEmailChange}
-            name="email"
+            name="emailConfirm"
+            type="email"
             value={confimationEmail ? confimationEmail : ""}
             validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
             errorMessages={[
