@@ -24,6 +24,10 @@ namespace GiEnJul.Utilities
         {
             var userId = ClaimsHelper.GetUserId(user);
             var metadata = await _managementClient.GetUserMetadata(userId);
+            if (metadata["role"] == "SuperAdmin")
+            {
+                return true;
+            }
             return metadata["location"] == municipality;
         }
 

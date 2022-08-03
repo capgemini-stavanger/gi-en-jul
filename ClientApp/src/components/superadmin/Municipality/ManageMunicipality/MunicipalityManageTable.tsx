@@ -78,7 +78,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
           </Typography>
         </ListItem>
       </List>
-      <Table style={{ width: "1800px" }}>
+      <Table>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
             <TableCell className={classes.tableHeaderText}>Kommune</TableCell>

@@ -1,18 +1,19 @@
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
   Typography,
-  Container,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Grid,
   Divider,
+  Box,
 } from "@material-ui/core";
 import useStyles from "./Styles";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import DotLoader from "common/constants/DotLoader";
 import parse from "html-react-parser";
+import { isMobile } from "common/functions/IsMobile";
 
 interface Question {
   question: string; // question
@@ -43,36 +44,64 @@ const Questions = () => {
   useEffect(fetchQuestions, []);
 
   return (
-    <Container id="questions" className={classes.sectionContainer}>
-      <div className={classes.headLineContainer}>
+    <Grid container direction="column" alignItems="center" justifyContent="center">
+      <Grid item className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
-      </div>
-      <Grid container direction="column" alignItems="center" justifyContent="center">
-        {questions ? (
-          Array.from(questions).map((val, index) => (
-            <Grid className={classes.questionItem} key={index}>
-              <Divider />
-              <Accordion
-                expanded={expanded === index.toString()}
-                onChange={handleChange(index.toString())}
-              >
-                <AccordionSummary
-                  className={classes.questionSummary}
-                  expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
-                >
-                  <Typography className={classes.questionText}>{val.question}</Typography>
-                </AccordionSummary>
-                <AccordionDetails className={classes.questionDetails}>
-                  <Typography>{parse(val.info)}</Typography>
-                </AccordionDetails>
-              </Accordion>
-            </Grid>
-          ))
-        ) : (
-          <DotLoader />
-        )}
       </Grid>
-    </Container>
+      {isMobile() ? (
+        <Grid item xs={12}>
+          {questions ? (
+            Array.from(questions).map((val, index) => (
+              <Box className={classes.questionItem} key={index}>
+                <Divider />
+                <Accordion
+                  expanded={expanded === index.toString()}
+                  onChange={handleChange(index.toString())}
+                >
+                  <AccordionSummary
+                    className={classes.questionSummary}
+                    expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+                  >
+                    <Typography className={classes.questionText}>{val.question}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className={classes.questionDetails}>
+                    <Typography>{parse(val.info)}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            ))
+          ) : (
+            <DotLoader />
+          )}
+        </Grid>
+      ) : (
+        <Grid item xs={6}>
+          {questions ? (
+            Array.from(questions).map((val, index) => (
+              <Box className={classes.questionItem} key={index}>
+                <Divider />
+                <Accordion
+                  expanded={expanded === index.toString()}
+                  onChange={handleChange(index.toString())}
+                >
+                  <AccordionSummary
+                    className={classes.questionSummary}
+                    expandIcon={<ExpandMoreIcon className={classes.questionSummary} />}
+                  >
+                    <Typography className={classes.questionText}>{val.question}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className={classes.questionDetails}>
+                    <Typography>{parse(val.info)}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+            ))
+          ) : (
+            <DotLoader />
+          )}
+        </Grid>
+      )}
+    </Grid>
   );
 };
 export default Questions;

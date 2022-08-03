@@ -32,13 +32,22 @@ const Contact: React.FC<Props> = ({ contacts }) => {
           </Scroll>
         </Typography>
       </div>
-      <Grid container direction="row" spacing={4} justifyContent="center">
+      <Grid
+        container
+        direction="row"
+        justifyContent="center"
+        style={{ maxWidth: "1000px", marginLeft: "auto", marginRight: "auto" }}
+      >
         {contacts.map((contact, index) => {
           return (
-            <Grid item key={index}>
+            <Grid item style={{ padding: "2em" }} key={index}>
               <Box className={classes.cardContainer}>
                 <Box className={classes.cardInfo}>
-                  <Typography variant="h5" color="primary">
+                  <Typography
+                    variant="h5"
+                    style={{ fontWeight: "500", marginTop: "0.5em" }}
+                    color="primary"
+                  >
                     {contact.name}
                   </Typography>
                 </Box>

@@ -96,12 +96,12 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
 
   return (
     <Container>
-      <Grid container direction="column" spacing={1}>
-        <Grid item>
+      <Grid container direction="column" alignItems="center" spacing={1}>
+        <Grid item xs={10}>
           <Typography className={classes.heading} align="center" variant="h3">
             Forhåndsvisning av hvordan starte Gi en jul i din kommune
           </Typography>
-          <Typography variant="h5" className={classes.heading}>
+          <Typography className={classes.tableBody} style={{ marginTop: "15px" }}>
             {parse(howToStartInfo.info)}
           </Typography>
         </Grid>
