@@ -2,23 +2,25 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SelectedConnectionType } from "components/shared/Types";
 import useStyles from "./Styles";
-import { CancelOutlined, PeopleOutline } from "@material-ui/icons";
+import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import DotLoader from "common/constants/DotLoader";
+import PeopleIcon from "@material-ui/icons/People";
+import { RequestState } from "./OverviewMacroRemake";
 
 type IStatistics = {
   connection: SelectedConnectionType;
   connectGiverRecipient: () => void;
   resetSelections: () => void;
-  connectionAwaitState: number;
+  requestState: number;
 };
 
 const OverviewConnection: React.FC<IStatistics> = ({
   connection,
   connectGiverRecipient,
   resetSelections,
-  connectionAwaitState,
+  requestState,
 }) => {
   const classes = useStyles();
 
@@ -33,7 +35,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
 
   return (
     <React.Fragment>
-      {connectionAwaitState == 0 && (
+      {requestState == RequestState.Init && (
         <Grid container direction="row" alignItems="center">
           <Grid item xs={4}>
             <Box className={classes.gridBoxLeft}>
@@ -41,7 +43,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                 <Box>
                   <Typography variant="h5">{connection.giver.fullName}</Typography>
                   <Typography variant="h5">
-                    <PeopleOutline />
+                    <PeopleIcon />
                     {formatFamily(connection.giver.maxReceivers)}
                   </Typography>
                 </Box>
@@ -54,7 +56,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                       className={classes.boldText}
                       display="inline"
                     >
-                      <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                      <BlockOutlinedIcon className={classes.noneIcon} /> ikke koblet
                     </Box>
                     giver
                   </Typography>
@@ -105,7 +107,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                     Familie ID: {connection.recipient?.familyId}
                   </Typography>
                   <Typography variant="h5" align="right">
-                    <PeopleOutline />
+                    <PeopleIcon />
                     {connection.recipient.familyMembers.length}
                   </Typography>
                 </Box>
@@ -118,7 +120,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                       className={classes.boldText}
                       display="inline"
                     >
-                      <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                      <BlockOutlinedIcon className={classes.noneIcon} /> ikke koblet
                     </Box>
                     familie
                   </Typography>
@@ -129,7 +131,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
         </Grid>
       )}
 
-      {connectionAwaitState == 1 && (
+      {requestState == RequestState.Waiting && (
         <Grid container direction="row" alignItems="center">
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>
@@ -141,7 +143,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
         </Grid>
       )}
 
-      {connectionAwaitState == 2 && (
+      {requestState == RequestState.Ok && (
         <Grid container direction="row" alignItems="center">
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>
@@ -153,7 +155,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
         </Grid>
       )}
 
-      {connectionAwaitState == 3 && (
+      {requestState == RequestState.Error && (
         <Grid container direction="row" alignItems="center">
           <Grid item xs={4}></Grid>
           <Grid item xs={4}>

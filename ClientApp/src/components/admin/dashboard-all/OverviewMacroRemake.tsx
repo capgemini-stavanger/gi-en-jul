@@ -19,6 +19,13 @@ const initState: SelectedConnectionType = {
   recipient: undefined,
 };
 
+export enum RequestState {
+  Init,
+  Waiting,
+  Ok,
+  Error,
+}
+
 const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
@@ -33,7 +40,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
 
   const [selectedConnection, setSelectedConnection] = useState<SelectedConnectionType>(initState);
 
-  const [connectionAwaitState, setConnectionAwaitState] = useState(0); // 0 = init, 1 = waiting, 2 = ok, 3 = error
+  const [requestState, setRequestState] = useState(RequestState.Init);
 
   async function fetchGivers() {
     await apiservice
@@ -64,7 +71,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
     fetchGivers();
     fetchRecipients();
     setSelectedConnection(initState);
-    setConnectionAwaitState(0);
+    setRequestState(RequestState.Init);
   };
 
   const handleVisualSelection = (index: number, suggestionTable: boolean) => {
@@ -87,6 +94,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         };
       });
       setSuggestionData([]);
+      setSelectedSuggestionIndex(-1);
     } else {
       setSelectedConnection((prevState) => {
         return {
@@ -94,7 +102,10 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
           giver: giver,
         };
       });
-      findSuggestions();
+      if (selectedConnection.giver?.giverId != giver.giverId) {
+        findSuggestions();
+        setSelectedSuggestionIndex(-1);
+      }
     }
   };
   const findSuggestions = () => {
@@ -140,8 +151,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   };
 
   const connectGiverRecipient = async () => {
-    if (connectionAwaitState != 1) {
-      setConnectionAwaitState(1);
+    if (requestState != 1) {
+      setRequestState(RequestState.Waiting);
       await apiservice
         .post(
           "admin/connection",
@@ -153,13 +164,13 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
         )
         .then((response) => {
           if (response.status === 200) {
-            setConnectionAwaitState(2);
+            setRequestState(RequestState.Ok);
             refreshData();
             resetSelections();
           }
         })
         .catch((errorStack) => {
-          setConnectionAwaitState(3);
+          setRequestState(RequestState.Error);
           console.error(errorStack);
         });
     }
@@ -188,7 +199,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     connection={selectedConnection}
                     connectGiverRecipient={connectGiverRecipient}
                     resetSelections={resetSelections}
-                    connectionAwaitState={connectionAwaitState}
+                    requestState={requestState}
                   />
                 </Box>
               </Box>
@@ -203,8 +214,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   refreshData={() => refreshData()}
                   accessToken={accessToken}
                   resetSelections={resetSelections}
-                  connectionAwaitState={connectionAwaitState}
-                  setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
+                  requestState={requestState}
+                  setRequestState={(state) => setRequestState(state)}
                 />
               </Box>
               <Box className={classes.recipientTable}>
@@ -227,8 +238,8 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     refreshData={() => refreshData()}
                     accessToken={accessToken}
                     resetSelections={resetSelections}
-                    connectionAwaitState={connectionAwaitState}
-                    setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
+                    requestState={requestState}
+                    setRequestState={(state) => setRequestState(state)}
                   />
                 </Box>
               </Box>

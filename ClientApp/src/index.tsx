@@ -146,10 +146,9 @@ export const theme = createTheme({
     },
     MuiTooltip: {
       tooltipPlacementTop: {
-        margin: "0px",
-        backgroundColor: "rgba(0, 0, 0, 0.02)",
-        color: "black",
-        fontSize: "12px",
+        margin: "10px",
+        padding: "5px",
+        fontSize: "16px",
       },
     },
   },

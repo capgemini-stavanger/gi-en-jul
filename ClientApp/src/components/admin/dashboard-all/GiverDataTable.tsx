@@ -18,8 +18,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
-  connectionAwaitState: number;
-  setConnectionAwaitState: (state: number) => void;
+  requestState: number;
+  setRequestState: (state: number) => void;
 };
 
 const GiverDataTable: React.FC<Props> = ({
@@ -30,8 +30,8 @@ const GiverDataTable: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
-  connectionAwaitState,
-  setConnectionAwaitState,
+  requestState,
+  setRequestState,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -163,8 +163,8 @@ const GiverDataTable: React.FC<Props> = ({
             refreshData={refreshData}
             accessToken={accessToken}
             resetSelections={resetSelections}
-            connectionAwaitState={connectionAwaitState}
-            setConnectionAwaitState={(state) => setConnectionAwaitState(state)}
+            requestState={requestState}
+            setRequestState={(state) => setRequestState(state)}
           />
         )}
       />

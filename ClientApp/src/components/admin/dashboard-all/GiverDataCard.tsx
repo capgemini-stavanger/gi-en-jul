@@ -1,24 +1,21 @@
-import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Grid, TextField, Tooltip, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { GiverType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {
-  ChatBubbleOutline,
-  ErrorOutlineOutlined,
-  CheckCircleOutline,
-  CancelOutlined,
-  LinkOutlined,
-} from "@material-ui/icons";
+import { ChatBubbleOutline, CheckCircleOutline, LinkOutlined } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
 import SendEmailContent from "components/shared/SendEmailContent";
 import SendIcon from "@material-ui/icons/Send";
-import CustomTooltip from "components/institution/CustomTooltip";
 import PeopleIcon from "@material-ui/icons/People";
 import LinkOffIcon from "@material-ui/icons/LinkOff";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import { RequestState } from "./OverviewMacroRemake";
+import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
+import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 type Props = {
   giverData: GiverType;
@@ -29,8 +26,8 @@ type Props = {
   refreshData: () => void;
   accessToken: string;
   resetSelections: () => void;
-  connectionAwaitState: number;
-  setConnectionAwaitState: (state: number) => void;
+  requestState: number;
+  setRequestState: (state: number) => void;
 };
 
 const GiverDataCard: React.FC<Props> = ({
@@ -42,8 +39,8 @@ const GiverDataCard: React.FC<Props> = ({
   refreshData,
   accessToken,
   resetSelections,
-  connectionAwaitState,
-  setConnectionAwaitState,
+  requestState,
+  setRequestState,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -69,8 +66,8 @@ const GiverDataCard: React.FC<Props> = ({
 
   const confirmConnection = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .post("connection/confirm", {
             giverId: giver.giverId,
@@ -79,14 +76,14 @@ const GiverDataCard: React.FC<Props> = ({
           })
           .then((r) => {
             if (r.status === 200) {
-              setConnectionAwaitState(2);
+              setRequestState(RequestState.Ok);
               refreshData();
               setPersonExpanded(false);
               resetSelections();
             }
           })
           .catch((errorStack) => {
-            setConnectionAwaitState(3);
+            setRequestState(RequestState.Error);
             console.error(errorStack);
           });
       }
@@ -95,8 +92,8 @@ const GiverDataCard: React.FC<Props> = ({
 
   const deleteConnection = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .delete("admin/connection", {
             event: giver.event,
@@ -105,12 +102,14 @@ const GiverDataCard: React.FC<Props> = ({
           })
           .then((response) => {
             if (response.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
               setPersonExpanded(false);
               resetSelections();
             }
           })
           .catch((errorStack) => {
+            setRequestState(RequestState.Error);
             console.error(errorStack);
           });
       }
@@ -119,8 +118,8 @@ const GiverDataCard: React.FC<Props> = ({
 
   const deleteGiver = (giver: GiverType) => (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .delete("admin/Giver", {
             giverId: giver.giverId,
@@ -128,11 +127,13 @@ const GiverDataCard: React.FC<Props> = ({
           })
           .then((response) => {
             if (response.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
               resetSelections();
             }
           })
           .catch((errorStack) => {
+            setRequestState(RequestState.Error);
             console.error(errorStack);
           });
       }
@@ -141,8 +142,8 @@ const GiverDataCard: React.FC<Props> = ({
 
   const saveComment = (response: boolean) => {
     if (response) {
-      if (connectionAwaitState != 1) {
-        setConnectionAwaitState(1);
+      if (requestState != RequestState.Waiting) {
+        setRequestState(RequestState.Waiting);
         apiservice
           .post("admin/giver/addcomment", {
             event: giverData.event,
@@ -151,10 +152,13 @@ const GiverDataCard: React.FC<Props> = ({
           })
           .then((resp) => {
             if (resp.status === 200) {
+              setRequestState(RequestState.Ok);
               refreshData();
+              resetSelections();
             }
           })
           .catch((err) => {
+            setRequestState(RequestState.Error);
             console.error(err);
           });
       }
@@ -189,18 +193,18 @@ const GiverDataCard: React.FC<Props> = ({
               {giverData.isSuggestedMatch ? (
                 !giverData.hasConfirmedMatch ? (
                   <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                    <ErrorOutlineOutlined style={{ color: "yellow" }} />
+                    <QueryBuilderOutlinedIcon className={classes.waitingIcon} />
                     Foreslått
                   </Typography>
                 ) : (
                   <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                    <CheckCircleOutline style={{ color: "green" }} />
+                    <CheckCircleOutline className={classes.confirmIcon} />
                     Koblet
                   </Typography>
                 )
               ) : (
                 <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                  <CancelOutlined style={{ color: "red" }} />
+                  <BlockOutlinedIcon className={classes.noneIcon} />
                   Ikke koblet
                 </Typography>
               )}
@@ -262,17 +266,17 @@ const GiverDataCard: React.FC<Props> = ({
                   {giverData.cancelFeedback && (
                     <Grid item xs={6}>
                       <Typography variant="h6" gutterBottom>
-                        Avslått kobling
-                        <CustomTooltip
-                          iconType={false}
-                          content={
-                            "Ved avslått kobling kan giveren gi en tilbakemelding på hvorfor. Denne vises her, og kan tas i betraktning ved neste kobling"
-                          }
-                        />
+                        Avslått kobling {"  "}
+                        <Tooltip
+                          placement="top"
+                          title="Ved avslått kobling kan giveren gi en tilbakemelding på hvorfor. Denne vises her, og kan tas i betraktning ved neste kobling. Om en kobling brytes ved at giver ikke responderer, vil også dette vises her."
+                        >
+                          <InfoOutlinedIcon />
+                        </Tooltip>
                       </Typography>
                       <Typography> Familie ID: {giverData.cancelFamilyId} </Typography>
                       <Typography>
-                        Dato: {new Date(giverData.cancelDate).toLocaleDateString()}
+                        Dato: {new Date(giverData.cancelDate).toLocaleDateString("no-NO")}
                       </Typography>
                       <Typography> Tilbakemedling: {giverData.cancelFeedback} </Typography>
                     </Grid>
