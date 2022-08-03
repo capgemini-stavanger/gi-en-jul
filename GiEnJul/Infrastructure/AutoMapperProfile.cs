@@ -184,7 +184,11 @@ namespace GiEnJul.Infrastructure
 
 
             //Municipality mapping 
-            CreateMap<Dtos.PostMunicipalityDto, Models.Municipality>();
+            CreateMap<Dtos.PostMunicipalityDto, Models.Municipality>()
+                .ForMember(dest => dest.InfoImage1, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage2, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage3, opt => opt.Ignore());
+
             CreateMap<Dtos.DeleteMunicipalityDto, Models.Municipality>()
                 .ForMember(dest => dest.IsActive, opt => opt.Ignore())
                 .ForMember(dest => dest.Image, opt => opt.Ignore())
@@ -193,7 +197,10 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.Instagram, opt => opt.Ignore())
                 .ForMember(dest => dest.Facebook, opt => opt.Ignore())
                 .ForMember(dest => dest.ContactPerson, opt => opt.Ignore())
-                .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore());
+                .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage1, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage2, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage3, opt => opt.Ignore());
 
             CreateMap<Models.Municipality, Entities.Municipality>()
                 .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))
