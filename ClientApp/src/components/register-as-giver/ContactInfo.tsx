@@ -153,8 +153,6 @@ const ContactInfo: React.FC<Props> = ({
             margin="normal"
             fullWidth
           />
-        </Grid>
-        <Grid item>
           <Pager
             onBack={prevStep}
             onContinue={extendedNextStep}

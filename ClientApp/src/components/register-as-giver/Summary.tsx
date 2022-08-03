@@ -354,7 +354,7 @@ const SummaryRegistration: React.FC<Props> = ({
               <Pager
                 onContinue={extendedNextStep}
                 onBack={prevStep}
-                continueText="Fullfør registreringen"
+                continueText="Fullfør"
                 step={step}
               />
             </Box>
