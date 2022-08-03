@@ -73,9 +73,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
         returnValue = false;
       }
 
-      const validWishes = person.wishes.every((wish) => wish.isValidWish);
-      if (!validWishes) {
-        returnValue = false;
+      if (!person.noWish) {
+        const validWishes = person.wishes.every((wish) => wish.isValidWish);
+        if (!validWishes) {
+          returnValue = false;
+        }
       }
     });
 
