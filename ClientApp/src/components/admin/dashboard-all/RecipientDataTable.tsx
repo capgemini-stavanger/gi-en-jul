@@ -1,7 +1,7 @@
 import { Box, Divider, Grid, MenuItem, Select, TextField, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import useStyles from "./Styles";
-import { RecipientType } from "../../shared/Types";
+import { RecipientType, User } from "../../shared/Types";
 import { Virtuoso } from "react-virtuoso";
 import RecipientDataCard from "./RecipientDataCard";
 import { Search } from "@material-ui/icons";
@@ -20,6 +20,7 @@ type Props = {
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
+  user: User;
 };
 
 const RecipientDataTable: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const RecipientDataTable: React.FC<Props> = ({
   resetSelections,
   requestState,
   setRequestState,
+  user,
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState("");
@@ -165,6 +167,7 @@ const RecipientDataTable: React.FC<Props> = ({
             resetSelections={resetSelections}
             requestState={requestState}
             setRequestState={(state) => setRequestState(state)}
+            user={user}
           />
         )}
       />

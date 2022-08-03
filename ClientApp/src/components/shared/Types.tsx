@@ -58,3 +58,10 @@ export interface SelectedConnectionType {
   giver?: GiverType;
   recipient?: RecipientType;
 }
+
+export interface User {
+  location?: string;
+  role?: string;
+  institution?: string;
+  email?: string;
+}

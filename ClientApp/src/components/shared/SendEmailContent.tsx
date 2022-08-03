@@ -13,7 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import ApiService from "common/functions/apiServiceClass";
 import InformationBox from "./InformationBox";
 import SendIcon from "@material-ui/icons/Send";
-import useUser from "hooks/useUser";
+import { User } from "./Types";
 
 interface ISendSingleEmail {
   open: boolean;
@@ -21,6 +21,7 @@ interface ISendSingleEmail {
   toEmail: string;
   fullName: string;
   accessToken: string;
+  user: User;
 }
 
 const SendEmailContent: React.FC<ISendSingleEmail> = ({
@@ -29,6 +30,7 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
   toEmail,
   fullName,
   accessToken,
+  user,
 }) => {
   const apiservice = new ApiService(accessToken);
   const [error, setError] = React.useState(false);
@@ -37,8 +39,6 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
   const [subjectInput, setSubjectInput] = React.useState("");
   const [openConfBox, setOpenConfBox] = React.useState(false);
   const [confText, setConfText] = React.useState("");
-
-  const { location, email } = useUser();
 
   useEffect(() => {
     return () => {
@@ -68,9 +68,9 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
         JSON.stringify({
           Subject: subjectInput,
           Content: html,
-          FromEmail: email,
+          FromEmail: user.email,
           ToEmail: toEmail,
-          FromName: "Gi en jul " + location,
+          FromName: "Gi en jul " + user.location,
           ToName: fullName,
         })
       )

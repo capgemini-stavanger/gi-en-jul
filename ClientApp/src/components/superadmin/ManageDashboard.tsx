@@ -7,14 +7,14 @@ import HowToStartGiEnJul from "./InfoPages/HowToStartGiEnJul";
 import AddUser from "./Users/AddUser";
 import ManageMunicipalityContainer from "./Municipality/ManageMunicipalityContainer";
 import EventsTable from "./Events/EventsTable";
+import { User } from "components/shared/Types";
 
 interface IManageDashboard {
-  role: string;
-  location: string;
+  user: User;
   accessToken: string;
 }
 
-const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, role }) => {
+const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, user }) => {
   const [tab, setTab] = useState<string>("4");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
@@ -24,12 +24,12 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
   return (
     <TabContext value={tab}>
       <TabList onChange={handleChange} centered>
-        <Tab hidden={role != "SuperAdmin"} label="FAQ" value="1" />
-        <Tab hidden={role != "SuperAdmin"} label="Bedrift" value="2" />
-        <Tab hidden={role != "SuperAdmin"} label="Hvordan starte Gi en jul" value="3" />
+        <Tab hidden={user.role != "SuperAdmin"} label="FAQ" value="1" />
+        <Tab hidden={user.role != "SuperAdmin"} label="Bedrift" value="2" />
+        <Tab hidden={user.role != "SuperAdmin"} label="Hvordan starte Gi en jul" value="3" />
         <Tab label="Kommune" value="4" />
-        <Tab hidden={role != "SuperAdmin"} label="Legg til/Slett Brukere" value="5" />
-        <Tab hidden={role != "SuperAdmin"} label="Administrer eventer" value="6" />
+        <Tab hidden={user.role != "SuperAdmin"} label="Legg til/Slett Brukere" value="5" />
+        <Tab hidden={user.role != "SuperAdmin"} label="Administrer eventer" value="6" />
       </TabList>
       <TabPanel value="1">
         <FaqContainer accessToken={accessToken} />
@@ -44,8 +44,8 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, location, ro
       <TabPanel value="4">
         <ManageMunicipalityContainer
           accessToken={accessToken}
-          assignedLocation={location}
-          role={role}
+          assignedLocation={user.location ?? ""}
+          role={user.role ?? ""}
         />
       </TabPanel>
       <TabPanel value="5">
