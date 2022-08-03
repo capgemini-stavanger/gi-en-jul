@@ -12,6 +12,7 @@ import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Questions from "components/landing-page/Questions";
 import What from "components/landing-page/What";
 import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
+import WavedSeperator from "components/shared/WavedSeparator";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
@@ -42,9 +43,11 @@ const Home = () => {
         <Box className={classes.rootGreen}>
           <What />
         </Box>
+        <WavedSeperator isGreen />
         <Box className={classes.rootWhite}>
           <How />
         </Box>
+        <WavedSeperator />
         <Box className={classes.rootGreen}>
           <Questions />
         </Box>

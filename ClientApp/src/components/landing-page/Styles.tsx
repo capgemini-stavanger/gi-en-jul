@@ -242,6 +242,13 @@ const useStyles = makeStyles((theme) => ({
   contactSpacing: {
     marginBottom: "2em",
   },
+  wavedBoxGreen: {
+    marginTop: "-1px",
+  },
+  wavedBoxWhite: {
+    backgroundColor: theme.palette.secondary.light,
+    marginBottom: "-1px",
+  },
 }));
 
 export default useStyles;
