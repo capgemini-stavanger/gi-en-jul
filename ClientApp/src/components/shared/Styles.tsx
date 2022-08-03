@@ -151,7 +151,20 @@ export default () =>
         backgroundColor: theme.palette.error.dark,
       },
     },
-
+    popupContainer: {
+      width: "400px",
+      minHeight: "150px",
+      justifyContent: "space-between",
+      // border: "2px solid black",
+      // borderRadius: "40px",
+    },
+    popupText: {
+      padding: "20px",
+      // color: "black",
+      color: theme.palette.primary.main,
+      fontSize: "20px",
+      fontWeight: 800,
+    },
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",
       position: "absolute",
