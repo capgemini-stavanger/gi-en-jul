@@ -18,9 +18,7 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information }) => 
         <Typography variant="h5">Informasjon om Gi en jul i {location} kommune:</Typography>
       </Grid>
       <Divider />
-      <Grid item>
-        <Typography>{parse(information)}</Typography>
-      </Grid>
+      <Grid item>{parse(information)}</Grid>
     </Grid>
   );
 };

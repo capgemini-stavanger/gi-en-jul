@@ -57,7 +57,7 @@ const Business = () => {
         <Grid container direction="column" justifyContent="center" alignItems="center">
           {isMobile() ? (
             <Grid item xs={12}>
-              <Typography>{parse(businessInfo.info)}</Typography>
+              {parse(businessInfo.info)}
               <Link
                 to="/bli-giver"
                 onClick={() => {
@@ -72,7 +72,7 @@ const Business = () => {
             </Grid>
           ) : (
             <Grid item xs={6}>
-              <Typography>{parse(businessInfo.info)}</Typography>
+              {parse(businessInfo.info)}
               <Link
                 to="/bli-giver"
                 onClick={() => {
