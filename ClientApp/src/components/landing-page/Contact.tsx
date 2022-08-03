@@ -44,7 +44,7 @@ const Contact: React.FC<Props> = ({ contacts }) => {
                 </Box>
                 <Box className={classes.cardInfo}>
                   <img
-                    src={"/contact_images/" + contact.contactPerson + ".jpg"}
+                    src={contact.image}
                     className={classes.cardImage}
                     alt={"Finner ikke bilde.."}
                     onError={({ currentTarget }) => {
