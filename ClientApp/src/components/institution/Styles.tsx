@@ -152,6 +152,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     fontSize: "1.6em",
   },
+  confirmIcon: {
+    color: "green",
+  },
+  waitingIcon: {
+    color: "#ffaf03",
+  },
+  noneIcon: {
+    color: "red",
+  },
 }));
 
 export default useStyles;

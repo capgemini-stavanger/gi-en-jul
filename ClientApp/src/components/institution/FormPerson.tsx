@@ -6,6 +6,7 @@ import {
   Container,
   FormControlLabel,
   Checkbox,
+  Tooltip,
 } from "@material-ui/core";
 import * as React from "react";
 import { useState } from "react";
@@ -20,8 +21,8 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
-import CustomTooltip from "./CustomTooltip";
 import getGender from "common/functions/GetGender";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -179,10 +180,12 @@ const FormPerson: FC<IPersonProps> = ({
                 className="my-0"
                 label="Alderstilpasset gave"
               />
-              <CustomTooltip
-                iconType={false}
-                content="Om alderstilpasset gave er huket av, kan giveren selv finne gave til personen."
-              />
+              <Tooltip
+                placement="top"
+                title="Om alderstilpasset gave er huket av, kan giveren selv finne gave til personen."
+              >
+                <HelpOutlineIcon />
+              </Tooltip>
             </Grid>
 
             {!ageWish && (
