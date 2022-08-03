@@ -50,11 +50,11 @@ const StartJul = () => {
         <Grid container direction="column" justifyContent="center" alignItems="center">
           {isMobile() ? (
             <Grid item xs={12}>
-              <Typography>{parse(howToStartInfo.info)}</Typography>
+              {parse(howToStartInfo.info)}
             </Grid>
           ) : (
             <Grid item xs={6}>
-              <Typography>{parse(howToStartInfo.info)}</Typography>
+              {parse(howToStartInfo.info)}
             </Grid>
           )}
         </Grid>
