@@ -42,6 +42,25 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
           );
         })}
       </Grid>
+      <Grid item>
+        {images.map((img, index) => {
+          if (!img) {
+            return <></>;
+          }
+          return (
+            <img
+              key={index.toString() + img}
+              src={img}
+              className={classes.infoImage}
+              alt={"Finner ikke bildet"}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = `${img_placeholder}`;
+              }}
+            />
+          );
+        })}
+      </Grid>
     </Grid>
   );
 };
