@@ -9,8 +9,9 @@ import useStyles from "./Styles";
 import FormInformationBox from "./FormInformationBox";
 import { FiberManualRecord } from "@material-ui/icons";
 import { getTextWidth } from "get-text-width";
-import { ErrorOutlineOutlined, CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
+import { CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 interface IDatagridFamily {
   id: string;
@@ -80,19 +81,19 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
         if (recipientToEdit.hasConfirmedMatch) {
           textRender = (
             <Box>
-              <CheckCircleOutline style={{ color: "green" }} /> {status}
+              <CheckCircleOutline className={classes.confirmIcon} /> {status}
             </Box>
           );
         } else if (recipientToEdit.isSuggestedMatch) {
           textRender = (
             <Box>
-              <ErrorOutlineOutlined style={{ color: "yellow" }} /> {status}
+              <QueryBuilderOutlinedIcon className={classes.waitingIcon} /> {status}
             </Box>
           );
         } else {
           textRender = (
             <Box>
-              <CancelOutlined style={{ color: "red" }} /> {status}
+              <CancelOutlined className={classes.noneIcon} /> {status}
             </Box>
           );
         }

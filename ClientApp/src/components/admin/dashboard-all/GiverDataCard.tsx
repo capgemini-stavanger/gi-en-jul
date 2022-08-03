@@ -4,7 +4,12 @@ import useStyles from "./Styles";
 import { GiverType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { ChatBubbleOutline, CheckCircleOutline, LinkOutlined } from "@material-ui/icons";
+import {
+  ChatBubbleOutline,
+  CancelOutlined,
+  CheckCircleOutline,
+  LinkOutlined,
+} from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
@@ -14,7 +19,6 @@ import PeopleIcon from "@material-ui/icons/People";
 import LinkOffIcon from "@material-ui/icons/LinkOff";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RequestState } from "./OverviewMacroRemake";
-import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 type Props = {
@@ -204,7 +208,7 @@ const GiverDataCard: React.FC<Props> = ({
                 )
               ) : (
                 <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                  <BlockOutlinedIcon className={classes.noneIcon} />
+                  <CancelOutlined className={classes.noneIcon} />
                   Ikke koblet
                 </Typography>
               )}

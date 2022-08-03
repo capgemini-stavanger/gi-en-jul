@@ -4,12 +4,7 @@ import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {
-  ChatBubbleOutline,
-  ErrorOutlineOutlined,
-  CheckCircleOutline,
-  CancelOutlined,
-} from "@material-ui/icons";
+import { ChatBubbleOutline, CancelOutlined } from "@material-ui/icons";
 import getGender from "common/functions/GetGender";
 import PeopleIcon from "@material-ui/icons/People";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
@@ -64,30 +59,12 @@ const SuggestionDataCard: React.FC<Props> = ({
               </Typography>
             </Grid>
             <Grid item xs={3}>
-              {suggestionData.isSuggestedMatch ? (
-                !suggestionData.hasConfirmedMatch ? (
-                  <Typography
-                    className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
-                  >
-                    <ErrorOutlineOutlined style={{ color: "yellow" }} />
-                    Foreslått
-                  </Typography>
-                ) : (
-                  <Typography
-                    className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
-                  >
-                    <CheckCircleOutline style={{ color: "green" }} />
-                    Koblet
-                  </Typography>
-                )
-              ) : (
-                <Typography
-                  className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
-                >
-                  <CancelOutlined style={{ color: "red" }} />
-                  Ikke koblet
-                </Typography>
-              )}
+              <Typography
+                className={suggestionIndex == selectedSuggestionIndex ? classes.boldText : ""}
+              >
+                <CancelOutlined className={classes.noneIcon} />
+                Ikke koblet
+              </Typography>
             </Grid>
             <Grid item xs={1}>
               {suggestionData.comment && <ChatBubbleOutline />}

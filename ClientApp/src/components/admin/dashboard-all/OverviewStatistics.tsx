@@ -2,12 +2,11 @@ import { Box, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { GiverType, RecipientType } from "components/shared/Types";
 import useStyles from "components/admin/dashboard-all/Styles";
-import { CheckCircleOutline } from "@material-ui/icons";
+import { CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PeopleIcon from "@material-ui/icons/People";
-import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 type IStatistics = {
@@ -187,7 +186,7 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <BlockOutlinedIcon className={classes.noneIcon} /> Ikke koblet
+            <CancelOutlined className={classes.noneIcon} /> Ikke koblet
           </Grid>
           <Grid item>{statistics?.noMatch}</Grid>
         </Grid>
@@ -195,13 +194,13 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
           <Grid item>
             <QueryBuilderOutlinedIcon className={classes.waitingIcon} /> Foreslått
           </Grid>
-          <Grid item>{statistics?.noMatch}</Grid>
+          <Grid item>{statistics?.suggestedMatch}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
-            <CheckCircleOutline style={{ color: "green" }} /> Bekreftet
+            <CheckCircleOutline className={classes.confirmIcon} /> Bekreftet
           </Grid>
-          <Grid item>{statistics?.noMatch}</Grid>
+          <Grid item>{statistics?.confirmedMatch}</Grid>
         </Grid>
       </Box>
     </Box>
