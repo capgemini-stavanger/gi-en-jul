@@ -2,6 +2,7 @@ import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
 import { useState } from "react";
+import img_placeholder from "styling/img/person.png";
 
 interface Props {
   location: string;
@@ -31,7 +32,18 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
       <Grid item>
         {showImages &&
           images.map((img, index) => {
-            return <img key={index} src={img} className={classes.infoImage} />;
+            return (
+              <img
+                key={index.toString() + img}
+                src={img}
+                className={classes.infoImage}
+                alt={"Finner ikke bildet"}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null;
+                  currentTarget.src = `${img_placeholder}`;
+                }}
+              />
+            );
           })}
       </Grid>
     </Grid>
