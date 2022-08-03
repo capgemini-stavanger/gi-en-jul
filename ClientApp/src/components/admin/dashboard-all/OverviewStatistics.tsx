@@ -195,13 +195,13 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
           <Grid item>
             <QueryBuilderOutlinedIcon className={classes.waitingIcon} /> Foreslått
           </Grid>
-          <Grid item>{statistics?.noMatch}</Grid>
+          <Grid item>{statistics?.suggestedMatch}</Grid>
         </Grid>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
             <CheckCircleOutline style={{ color: "green" }} /> Bekreftet
           </Grid>
-          <Grid item>{statistics?.noMatch}</Grid>
+          <Grid item>{statistics?.confirmedMatch}</Grid>
         </Grid>
       </Box>
     </Box>
