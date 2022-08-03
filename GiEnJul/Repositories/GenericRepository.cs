@@ -88,7 +88,7 @@ namespace GiEnJul.Repositories
             }
         }
 
-        protected async Task<T> GetAsync(string partitionKey, string rowKey)
+        protected async Task<T> GetAsync(string partitionKey, string rowKey, bool logError = true)
         {
             try
             {
@@ -100,7 +100,8 @@ namespace GiEnJul.Repositories
             }
             catch (Exception e)
             {
-                _log.Error(e,  "Exception while trying to fetch row with RowKey:{@rowKey}, and PartitionKey:{@partitionKey}, in table:{@tablename}", rowKey, partitionKey, _client.Name);
+                if (logError)
+                    _log.Error(e,  "Exception while trying to fetch row with RowKey:{@rowKey}, and PartitionKey:{@partitionKey}, in table:{@tablename}", rowKey, partitionKey, _client.Name);
                 throw;
             }
         }
@@ -110,7 +111,7 @@ namespace GiEnJul.Repositories
             result = null;
             try
             {
-                result = GetAsync(partitionKey, rowKey).Result;
+                result = GetAsync(partitionKey, rowKey, false).Result;
                 return true;
             }
             catch (Exception)
