@@ -1,5 +1,5 @@
 import { DefaultEditor } from "react-simple-wysiwyg";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -11,9 +11,7 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import ApiService from "common/functions/apiServiceClass";
-import { useAuth0 } from "@auth0/auth0-react";
 import InformationBox from "./InformationBox";
-import { useEffect, useState } from "react";
 import SendIcon from "@material-ui/icons/Send";
 import useUser from "hooks/useUser";
 
@@ -22,36 +20,41 @@ interface ISendSingleEmail {
   handleClose: () => void;
   toEmail: string;
   fullName: string;
+  accessToken: string;
 }
 
-const SendEmailContent: React.FC<ISendSingleEmail> = ({ open, handleClose, toEmail, fullName }) => {
+const SendEmailContent: React.FC<ISendSingleEmail> = ({
+  open,
+  handleClose,
+  toEmail,
+  fullName,
+  accessToken,
+}) => {
+  const apiservice = new ApiService(accessToken);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
   const [html, setHtml] = React.useState("");
   const [subjectInput, setSubjectInput] = React.useState("");
-  const { getAccessTokenSilently } = useAuth0();
-  const [userAccessToken, setUserAccessToken] = useState<string>("");
-  const apiservice = new ApiService(userAccessToken);
-  // States for confirmation box
   const [openConfBox, setOpenConfBox] = React.useState(false);
   const [confText, setConfText] = React.useState("");
 
   const { location, email } = useUser();
 
+  useEffect(() => {
+    return () => {
+      // Prevent memory leak by resetting values that MAY be part of async functions (?)
+      setError(false);
+      setErrorText("");
+      setHtml("");
+      setSubjectInput("");
+      setOpenConfBox(false);
+      setConfText("");
+    };
+  }, []);
+
   function onChange(e: { target: { value: React.SetStateAction<string> } }) {
     setHtml(e.target.value);
   }
-
-  async function getUserAccessToken(): Promise<string> {
-    const accessToken = await getAccessTokenSilently();
-    return accessToken;
-  }
-
-  useEffect(() => {
-    getUserAccessToken().then((resp: string) => {
-      setUserAccessToken(resp);
-    });
-  });
 
   async function sendEmailToUser() {
     if (subjectInput == "") {

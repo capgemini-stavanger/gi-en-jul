@@ -1,4 +1,4 @@
-import { Box, Button, capitalize, Grid, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
@@ -244,15 +244,16 @@ const RecipientDataCard: React.FC<Props> = ({
                       }}
                       toEmail={recipientData.contactEmail}
                       fullName={recipientData.contactFullName}
+                      accessToken={accessToken}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <Typography variant="h6" gutterBottom>
                       Matønsker
                     </Typography>
-                    <Typography>{capitalize(recipientData.dinner)}</Typography>
-                    <Typography>{capitalize(recipientData.dessert)}</Typography>
-                    <Typography>{capitalize(recipientData.note)}</Typography>
+                    <Typography>{recipientData.dinner}</Typography>
+                    <Typography>{recipientData.dessert}</Typography>
+                    <Typography>{recipientData.note}</Typography>
                   </Grid>
                 </Grid>
               </Grid>
