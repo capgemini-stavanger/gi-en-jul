@@ -4,14 +4,7 @@ import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {
-  ChatBubbleOutline,
-  ErrorOutlineOutlined,
-  CheckCircleOutline,
-  CancelOutlined,
-  LinkOutlined,
-  Edit,
-} from "@material-ui/icons";
+import { ChatBubbleOutline, CheckCircleOutline, LinkOutlined, Edit } from "@material-ui/icons";
 import getGender from "common/functions/GetGender";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import SendEmailContent from "components/shared/SendEmailContent";
@@ -20,8 +13,6 @@ import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import ApiService from "common/functions/apiServiceClass";
 import PeopleIcon from "@material-ui/icons/People";
 import { RequestState } from "./OverviewMacroRemake";
-
-// New
 import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
@@ -184,7 +175,7 @@ const RecipientDataCard: React.FC<Props> = ({
                     className={recipientIndex == selectedRecipientIndex ? classes.boldText : ""}
                   >
                     <QueryBuilderOutlinedIcon className={classes.waitingIcon} />
-                    Venter svar
+                    Foreslått
                   </Typography>
                 ) : (
                   <Typography

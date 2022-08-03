@@ -2,7 +2,7 @@ import { Box, Button, Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { SelectedConnectionType } from "components/shared/Types";
 import useStyles from "./Styles";
-import { CancelOutlined } from "@material-ui/icons";
+import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import DotLoader from "common/constants/DotLoader";
@@ -56,7 +56,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                       className={classes.boldText}
                       display="inline"
                     >
-                      <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                      <BlockOutlinedIcon className={classes.noneIcon} /> ikke koblet
                     </Box>
                     giver
                   </Typography>
@@ -120,7 +120,7 @@ const OverviewConnection: React.FC<IStatistics> = ({
                       className={classes.boldText}
                       display="inline"
                     >
-                      <CancelOutlined style={{ color: "red" }} /> ikke koblet
+                      <BlockOutlinedIcon className={classes.noneIcon} /> ikke koblet
                     </Box>
                     familie
                   </Typography>

@@ -151,7 +151,6 @@ export default () =>
         backgroundColor: theme.palette.error.dark,
       },
     },
-
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",
       position: "absolute",

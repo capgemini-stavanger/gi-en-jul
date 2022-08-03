@@ -4,13 +4,7 @@ import useStyles from "./Styles";
 import { GiverType } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import {
-  ChatBubbleOutline,
-  ErrorOutlineOutlined,
-  CheckCircleOutline,
-  CancelOutlined,
-  LinkOutlined,
-} from "@material-ui/icons";
+import { ChatBubbleOutline, CheckCircleOutline, LinkOutlined } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
@@ -20,6 +14,8 @@ import PeopleIcon from "@material-ui/icons/People";
 import LinkOffIcon from "@material-ui/icons/LinkOff";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RequestState } from "./OverviewMacroRemake";
+import BlockOutlinedIcon from "@material-ui/icons/BlockOutlined";
+import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 
 type Props = {
   giverData: GiverType;
@@ -197,18 +193,18 @@ const GiverDataCard: React.FC<Props> = ({
               {giverData.isSuggestedMatch ? (
                 !giverData.hasConfirmedMatch ? (
                   <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                    <ErrorOutlineOutlined style={{ color: "yellow" }} />
+                    <QueryBuilderOutlinedIcon className={classes.waitingIcon} />
                     Foreslått
                   </Typography>
                 ) : (
                   <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                    <CheckCircleOutline style={{ color: "green" }} />
+                    <CheckCircleOutline className={classes.confirmIcon} />
                     Koblet
                   </Typography>
                 )
               ) : (
                 <Typography className={giverIndex == selectedGiverIndex ? classes.boldText : ""}>
-                  <CancelOutlined style={{ color: "red" }} />
+                  <BlockOutlinedIcon className={classes.noneIcon} />
                   Ikke koblet
                 </Typography>
               )}

@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  capitalize,
   Dialog,
   DialogActions,
   DialogTitle,
@@ -21,6 +20,7 @@ import ConfirmationBox from "./ConfirmationBox";
 import SelectForm from "./input-fields/SelectForm";
 import useUser from "hooks/useUser";
 import InformationBox from "components/shared/InformationBox";
+import getGender from "common/functions/GetGender";
 
 interface IEditFamilyDialog {
   onClose: () => void;
@@ -303,10 +303,14 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             <Typography variant="h4"> Familie: {recipientData.familyId} </Typography>
 
             <Grid item>
-              <Typography variant="h5" gutterBottom>
-                Matønsker
-              </Typography>
-              <Grid container spacing={3} direction="row" alignItems="center">
+              <Typography variant="h5">Matønsker</Typography>
+              <Grid
+                container
+                spacing={3}
+                direction="row"
+                alignItems="center"
+                className={classes.headerSpacing}
+              >
                 <Grid item>
                   <TextField
                     type="text"
@@ -338,21 +342,22 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
             </Grid>
 
             <Grid item>
-              <Typography variant="h5" gutterBottom>
-                Familiesammensetning
-              </Typography>
-              <Grid container direction="column" spacing={3}>
+              <Typography variant="h5">Familiesammensetning</Typography>
+              <Grid container direction="column" spacing={3} className={classes.headerSpacing}>
                 {recipientData.familyMembers?.map((familyMember: PersonType, fIndex: number) => (
                   <Grid item key={fIndex}>
                     <Grid container spacing={2} direction="row" alignItems="center">
                       <Grid item xs={2}>
                         <SelectForm
                           name="gender"
-                          label="kjønn"
+                          label="Kjønn"
                           variant="outlined"
                           value={familyMember.gender}
                           options={GENDERS.map((o) => {
-                            return { value: o.value, text: capitalize(o.text) };
+                            return {
+                              value: o.value,
+                              text: getGender(o.value, familyMember.age),
+                            };
                           })}
                           onChange={(e) => {
                             onChangeGender(fIndex, e);

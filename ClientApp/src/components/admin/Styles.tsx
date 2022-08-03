@@ -55,6 +55,9 @@ const useStyles = makeStyles((theme: Theme) =>
       top: "0",
       margin: "0.3em",
     },
+    headerSpacing: {
+      marginTop: "1em",
+    },
   })
 );
 
