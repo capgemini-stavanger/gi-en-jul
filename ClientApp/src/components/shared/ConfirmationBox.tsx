@@ -15,11 +15,9 @@ const ConfirmationBox: React.FC<IConfirmation> = ({ open, handleClose, handleRes
 
   return (
     <Dialog open={open}>
-      <Grid container direction="column">
+      <Grid className={classes.popupContainer} container direction="column">
         <Grid item>
-          <Typography className={classes.footerText} variant="h6">
-            {text}
-          </Typography>
+          <Typography className={classes.popupText}>{text}</Typography>
         </Grid>
         <Grid item>
           <Grid container style={{ marginBottom: "10px" }} direction="row" justifyContent="center">

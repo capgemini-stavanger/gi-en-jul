@@ -14,17 +14,17 @@ const InformationBox: React.FC<IInforrmation> = ({ open, handleClose, text }) =>
 
   return (
     <Dialog open={open}>
-      <Grid container direction="column">
+      <Grid container className={classes.popupContainer} direction="column">
         <Grid item>
-          <Typography className={classes.footerText} variant="h6">
+          <Typography className={classes.popupText} variant="h6">
             {text}
           </Typography>
         </Grid>
         <Grid item>
           <Grid container direction="row" justifyContent="center">
             <Grid item style={{ marginBottom: "10px" }}>
-              <Button className={classes.button} variant="contained" onClick={handleClose}>
-                Close
+              <Button variant="contained" onClick={handleClose}>
+                Lukk
               </Button>
             </Grid>
           </Grid>
