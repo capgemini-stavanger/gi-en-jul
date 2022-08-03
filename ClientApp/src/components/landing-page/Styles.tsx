@@ -80,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   sectionContainer: {
+    width: "auto",
     marginTop: theme.spacing(3),
     padding: 0,
-    maxWidth: "90em",
   },
   howItem: {
     maxWidth: "100%",
@@ -95,9 +95,7 @@ const useStyles = makeStyles((theme) => ({
   questionItem: {
     margin: theme.spacing(1),
     marginBottom: "0",
-    [theme.breakpoints.up("laptop")]: {
-      width: "48%",
-    },
+    width: "100%",
   },
 
   questionBox: {
@@ -109,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
   questionText: { fontWeight: 700, fontSize: "20px" },
   questionDetails: {
-    marginTop: "-2%",
+    paddingTop: "1em",
     backgroundColor: theme.palette.secondary.light,
     color: "black",
   },
@@ -201,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
     width: "130px",
     height: "130px",
     borderRadius: "50%",
-    objectFit: "contain",
+    objectFit: "cover",
   },
   iconText: {
     display: "inline",
