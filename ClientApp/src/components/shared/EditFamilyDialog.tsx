@@ -53,9 +53,16 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   useEffect(() => {
     if (open) {
       setRecipientData(recipient);
-      fetchMuncipalityEmail();
     }
-  }, [open]);
+    return () => {
+      // Prevent memory leak by resetting values that MAY be part of async functions (?)
+      setRecipientData(recipient);
+      setOpenUpdateConfirmBox(false);
+      setOpenCloseConfirmBox(false);
+      setMunicipalityEmail("");
+      setOpenInformation(false);
+    };
+  }, []);
 
   // A very general STATIC check change, just to have something in the email template
   const checkChanges = () => {
@@ -227,6 +234,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
     }));
   };
   const updateRecipient = async () => {
+    fetchMuncipalityEmail();
     await apiservice
       .put("admin/recipient", JSON.stringify(recipientData))
       .then((response) => {
@@ -381,7 +389,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                             type="number"
                             label="Måneder"
                             variant="outlined"
-                            value={familyMember.months || "0"}
+                            value={familyMember.months || "1"}
                             onChange={onMonthsChange(fIndex)}
                             fullWidth
                           />
@@ -397,7 +405,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                                   type="text"
                                   label="Ønske"
                                   variant="outlined"
-                                  value={wish}
+                                  value={wish ? wish : ""}
                                   onChange={onWishChange(fIndex, wIndex)}
                                   fullWidth
                                 />

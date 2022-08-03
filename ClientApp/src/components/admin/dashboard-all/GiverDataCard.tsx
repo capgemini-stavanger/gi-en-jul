@@ -261,6 +261,7 @@ const GiverDataCard: React.FC<Props> = ({
                       }}
                       toEmail={giverData.email}
                       fullName={giverData.fullName}
+                      accessToken={accessToken}
                     />
                   </Grid>
                   {giverData.cancelFeedback && (
