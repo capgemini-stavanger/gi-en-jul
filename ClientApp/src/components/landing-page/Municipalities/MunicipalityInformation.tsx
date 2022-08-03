@@ -1,17 +1,21 @@
 import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
+import img_placeholder from "styling/img/person.png";
 
 interface Props {
   location: string;
   information: string;
+  images: string[];
 }
 
-const MunicipalityInformation: React.FC<Props> = ({ location, information }) => {
+const MunicipalityInformation: React.FC<Props> = ({ location, information, images }) => {
   const classes = useStyles();
+
   if (information == undefined) {
     information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
   }
+
   return (
     <Grid container direction="column" id="information" className={classes.sectionContainer}>
       <Grid item>
@@ -19,6 +23,25 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information }) => 
       </Grid>
       <Divider />
       <Grid item>{parse(information)}</Grid>
+      <Grid item>
+        {images.map((img, index) => {
+          if (!img) {
+            return <></>;
+          }
+          return (
+            <img
+              key={index}
+              src={img}
+              className={classes.infoImage}
+              alt={"Finner ikke bildet"}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null;
+                currentTarget.src = `${img_placeholder}`;
+              }}
+            />
+          );
+        })}
+      </Grid>
     </Grid>
   );
 };
