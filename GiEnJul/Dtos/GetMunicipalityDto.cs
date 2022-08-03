@@ -2,7 +2,7 @@
 
 namespace GiEnJul.Dtos
 {
-    public class GetMunicipalityDtocs
+    public class GetMunicipalityDto
     {
         public string Country { get; set; }
         public string Name { get; set; }
