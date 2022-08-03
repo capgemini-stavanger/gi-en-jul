@@ -1,7 +1,6 @@
 import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
-import { useState } from "react";
 import img_placeholder from "styling/img/person.png";
 
 interface Props {
@@ -23,9 +22,7 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
         <Typography variant="h5">Informasjon om Gi en jul i {location} kommune:</Typography>
       </Grid>
       <Divider />
-      <Grid item>
-        <Typography>{parse(information)}</Typography>
-      </Grid>
+      <Grid item>{parse(information)}</Grid>
       <Grid item>
         {images.map((img, index) => {
           if (!img) {
@@ -33,7 +30,7 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
           }
           return (
             <img
-              key={index.toString() + img}
+              key={index}
               src={img}
               className={classes.infoImage}
               alt={"Finner ikke bildet"}
