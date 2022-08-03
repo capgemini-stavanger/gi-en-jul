@@ -155,12 +155,10 @@ const RegistrationMacro = () => {
   };
   return (
     <>
-      <Container className={classes.fillBackground} maxWidth={false}>
+      <Container className={classes.giverFormBackground} maxWidth={false}>
         <NavBarPublic />
-        <Container className={classes.giverForm}>
-          <Steppers state={state.step} />
-          {getStepPage()}
-        </Container>
+        <Steppers state={state.step} />
+        <Container className={classes.giverForm}>{getStepPage()}</Container>
       </Container>
     </>
   );

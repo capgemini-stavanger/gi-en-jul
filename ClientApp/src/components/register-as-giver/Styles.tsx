@@ -7,13 +7,27 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     height: "100vh",
   },
-  giverForm: {
-    paddingTop: theme.spacing(10),
-    padding: theme.spacing(3),
+
+  giverFormBackground: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    minHeight: "100vh",
+    height: "100%",
+  },
+
+  verifyDenyConnectionContainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  giverForm: {
+    padding: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "top",
     maxWidth: "500px",
     height: "100vh",
   },
@@ -77,6 +91,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
+
+  buttonBoxGiverFormMobile: {
+    position: "relative",
+    marginLeft: "3em",
+    marginTop: "1em",
+  },
+
   buttonMainPage: {
     color: "white",
     backgroundColor: theme.palette.primary.main,
@@ -122,10 +143,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   backgroundImage: {
-    objectFit: "none",
+    objectFit: "cover",
     width: "100%",
     height: "100%",
-    marginTop: -theme.spacing(4),
   },
   imageContainer: {
     height: "100vh",
@@ -163,8 +183,18 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "1.2em",
   },
   stepperBox: {
-    width: "100%",
+    width: "500px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingBottom: "2em",
   },
+  stepperBoxMobile: {
+    width: "100%",
+    paddingTop: "6em",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+
   stepperBackground: {
     backgroundColor: theme.palette.secondary.light,
   },

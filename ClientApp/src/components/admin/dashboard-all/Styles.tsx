@@ -35,7 +35,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   textWarning: {
     fontWeight: 400,
-    color: theme.palette.error.main,
+    color: "red",
     fontSize: "130%",
   },
   statisticsContainer: {
@@ -89,8 +89,15 @@ export const useStyles = makeStyles((theme) => ({
     padding: "1em",
     borderTopRightRadius: "1em",
     borderBottomRightRadius: "1em",
+    display: "flex",
+  },
+  oversiktBoxContent: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
   },
   oversiktBoxSpacing: {
+    flexGrow: 1,
     marginTop: "1em",
     marginBottom: "1em",
   },
@@ -138,7 +145,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   suggestionData: {
     marginBottom: "1em",
-    backgroundColor: "#feffed",
+    //backgroundColor: "#feffed",
+    backgroundColor: "rgba(73, 165, 145, 0.10)",
     borderRadius: "1em",
     paddingTop: "0.3em",
     paddingBottom: "0.3em",
@@ -180,6 +188,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   boldText: {
     fontWeight: "bold",
+  },
+  semiBoldText: {
+    fontWeight: 550,
   },
   commentBox: {
     paddingTop: "1em",
@@ -227,6 +238,10 @@ export const useStyles = makeStyles((theme) => ({
   accordionSelected: {
     backgroundColor: "rgba(73, 165, 145, 0.25)",
   },
+  suggestionSelected: {
+    // backgroundColor: "#dae693",
+    backgroundColor: "#e7eba4",
+  },
   personTable: {
     padding: "0.5em",
   },
@@ -236,6 +251,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   statsGrow: {
     flexGrow: 1,
+  },
+
+  confirmIcon: {
+    color: "green",
+  },
+  waitingIcon: {
+    color: "#ffaf03",
+  },
+  noneIcon: {
+    color: "red",
   },
 }));
 

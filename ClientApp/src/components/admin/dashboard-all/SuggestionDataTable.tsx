@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType } from "../../shared/Types";
 import SuggestionDataCard from "./SuggestionDataCard";
-import CustomTooltip from "components/institution/CustomTooltip";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
 type Props = {
   suggestionData: RecipientType[];
@@ -32,12 +32,12 @@ const SuggestionDataTable: React.FC<Props> = ({
         </Grid>
         <Grid item xs={1}>
           <Box className={classes.gridBoxCenter}>
-            <CustomTooltip
-              iconType={false}
-              content={
-                "Forslagene er basert på listen over familier. Blant forslagene finner man et tilfeldig forslag for hver familiestørrelse, gitt at det finnes en familie av hver størrelse"
-              }
-            />
+            <Tooltip
+              placement="top"
+              title="Forslagene er basert på listen over familier. Blant forslagene finner man et tilfeldig forslag for hver familiestørrelse, gitt at det finnes en familie av hver størrelse"
+            >
+              <HelpOutlineIcon />
+            </Tooltip>
           </Box>
         </Grid>
         <Grid item xs={9}>

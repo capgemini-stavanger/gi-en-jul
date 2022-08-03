@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   FormControl,
@@ -307,53 +308,60 @@ const SummaryRegistration: React.FC<Props> = ({
             </Button>
           </Grid>
         </Grid>
-        <FormControl required error>
-          <FormControlLabel
-            control={
-              <Checkbox
-                color="primary"
-                onChange={(e) => setIsValidPrivacyState(e.target.checked)}
-                checked={getPrivacyState()}
-              />
-            }
-            label={
-              <Typography variant="subtitle2" color={state.viewPrivacyError ? "error" : undefined}>
-                Jeg godtar Gi en juls{" "}
-                <Link
-                  color={state.viewPrivacyError ? "error" : "textSecondary"}
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setShowPrivacyDialog(true);
-                  }}
+        <Grid item xs={12}>
+          <FormControl required error>
+            {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
+            <Typography variant="caption" gutterBottom>
+              Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
+              <Link color="textSecondary" href="https://policies.google.com/privacy">
+                personvernerklæring
+              </Link>{" "}
+              og{" "}
+              <Link color="textSecondary" href="https://policies.google.com/terms">
+                vilkår for bruk
+              </Link>{" "}
+              gjelder.
+            </Typography>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  color="primary"
+                  onChange={(e) => setIsValidPrivacyState(e.target.checked)}
+                  checked={getPrivacyState()}
+                />
+              }
+              label={
+                <Typography
+                  variant="subtitle2"
+                  color={state.viewPrivacyError ? "error" : undefined}
                 >
-                  personvernerklæring
-                </Link>
-              </Typography>
-            }
-          />
-        </FormControl>
-        {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
-        <div className={classes.captchaContainer}>
-          <Typography variant="caption" gutterBottom>
-            Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
-            <Link color="textSecondary" href="https://policies.google.com/privacy">
-              personvernerklæring
-            </Link>{" "}
-            og{" "}
-            <Link color="textSecondary" href="https://policies.google.com/terms">
-              vilkår for bruk
-            </Link>{" "}
-            gjelder.
-          </Typography>
-        </div>
+                  Jeg godtar Gi en juls{" "}
+                  <Link
+                    color={state.viewPrivacyError ? "error" : "textSecondary"}
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setShowPrivacyDialog(true);
+                    }}
+                  >
+                    personvernerklæring
+                  </Link>
+                </Typography>
+              }
+            />
+            <Box className={classes.captchaContainer}>
+              <Pager
+                onContinue={extendedNextStep}
+                onBack={prevStep}
+                continueText="Fullfør"
+                step={step}
+              />
+            </Box>
+          </FormControl>
+        </Grid>
       </Grid>
-      <Pager
-        onContinue={extendedNextStep}
-        onBack={prevStep}
-        continueText="Fullfør registreringen"
-        step={step}
-      />
+
       <PrivacyDialog
         open={state.dialogOpen}
         onClose={() => setShowPrivacyDialog(false)}

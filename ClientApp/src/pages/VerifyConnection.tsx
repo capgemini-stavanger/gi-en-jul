@@ -8,6 +8,7 @@ import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/register-as-giver/Styles";
 import snowmanFull from "styling/img/snowmanFull.svg";
 import snowDown from "styling/img/snow_down2.svg";
+import { isMobile } from "common/functions/IsMobile";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -37,19 +38,35 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                 <Grid item>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
+                {isMobile() ? (
+                  <Grid item xs={12}>
+                    <Container className={classes.verifyDenyConnectionContainer}>
+                      <Typography className={classes.headingBold}>
+                        Tusen takk for at du skal Gi en jul! <br />
+                      </Typography>
+                      <Typography className={classes.paragraph}>
+                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
+                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
+                        Hilsen oss i Gi en jul.
+                      </Typography>
+                    </Container>
+                  </Grid>
+                ) : (
+                  <Grid item xs={4}>
+                    <Container className={classes.verifyDenyConnectionContainer}>
+                      <Typography className={classes.headingBold}>
+                        Tusen takk for at du skal Gi en jul! <br />
+                      </Typography>
+                      <Typography className={classes.paragraph}>
+                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
+                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
+                        Hilsen oss i Gi en jul.
+                      </Typography>
+                    </Container>
+                  </Grid>
+                )}
+
                 <Grid item>
-                  <Container className={classes.giverForm}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for at du skal Gi en jul! <br />
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Familiene setter utrolig stor pris på det, og det blir mange tårevåte øyeblikk
-                      når de får eskene sine. Håper at du koser deg med handlingen! Hilsen oss i Gi
-                      en jul.
-                    </Typography>
-                  </Container>
-                </Grid>
-                <Grid item className={classes.imageContainer}>
                   <img className={classes.backgroundImage} src={snowmanFull}></img>
                 </Grid>
               </Grid>
@@ -64,36 +81,69 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
               <Grid item>
                 <img className={classes.imageSnow} src={snowDown}></img>
               </Grid>
+              {isMobile() ? (
+                <Grid item xs={12}>
+                  <Container className={classes.verifyDenyConnectionContainer}>
+                    <Typography className={classes.headingBold}>
+                      Tusen takk for innsatsen du skal gjøre!
+                    </Typography>
+                    <Typography className={classes.paragraphBold}>
+                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
+                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
+                      registrere ditt bidrag.
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
+                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
+                      gave
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
+                    </Typography>
+                    <Button
+                      size="large"
+                      endIcon={<ArrowForwardIos />}
+                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                      className={classes.buttonNext}
+                      onClick={() => history.push("/")}
+                    >
+                      Til hjemsiden
+                    </Button>
+                  </Container>
+                </Grid>
+              ) : (
+                <Grid item xs={4}>
+                  <Container className={classes.verifyDenyConnectionContainer}>
+                    <Typography className={classes.headingBold}>
+                      Tusen takk for innsatsen du skal gjøre!
+                    </Typography>
+                    <Typography className={classes.paragraphBold}>
+                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
+                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
+                      registrere ditt bidrag.
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
+                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
+                      gave
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
+                    </Typography>
+                    <Button
+                      size="large"
+                      endIcon={<ArrowForwardIos />}
+                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                      className={classes.buttonNext}
+                      onClick={() => history.push("/")}
+                    >
+                      Til hjemsiden
+                    </Button>
+                  </Container>
+                </Grid>
+              )}
+
               <Grid item>
-                <Container className={classes.giverForm}>
-                  <Typography className={classes.headingBold}>
-                    Tusen takk for innsatsen <br />
-                    du skal gjøre!
-                  </Typography>
-                  <Typography className={classes.paragraphBold}>
-                    Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
-                    bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi registrere
-                    ditt bidrag.
-                  </Typography>
-                  <Typography className={classes.paragraph}>
-                    Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                    øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin gave
-                  </Typography>
-                  <Typography className={classes.paragraph}>
-                    Du finner kontaktinformasjon for din kommune nederst på hjemsiden
-                  </Typography>
-                  <Button
-                    size="large"
-                    endIcon={<ArrowForwardIos />}
-                    style={{ marginTop: "1rem" }}
-                    className={classes.buttonNext}
-                    onClick={() => history.push("/")}
-                  >
-                    Til hjemsiden
-                  </Button>
-                </Container>
-              </Grid>
-              <Grid item className={classes.imageContainer}>
                 <img className={classes.backgroundImage} src={snowmanFull}></img>
               </Grid>
             </Grid>
