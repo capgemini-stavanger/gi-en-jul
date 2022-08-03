@@ -22,11 +22,11 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
   const classes = useStyles();
 
   const kommuneTabs = locations.map((val, index) => (
-    <Tab key={index} value={String(index + 1)} label={val.location} />
+    <Tab key={`kommuneTabKey${val.location}`} value={String(index + 1)} label={val.location} />
   ));
 
   const kommuneTabPanels = locations.map((val, index) => (
-    <TabPanel key={index + 1} value={String(index + 1)}>
+    <TabPanel key={`kommunetablpanelKey${val.location}`} value={String(index + 1)}>
       <MunicipalityInformation
         location={val.location}
         information={val.information}
@@ -36,7 +36,7 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
   ));
 
   return (
-    <Container id="municipality" className={classes.sectionContainer}>
+    <Container className={classes.sectionContainer}>
       <TabContext value={tab}>
         <TabList onChange={handleChange} centered>
           {kommuneTabs}
