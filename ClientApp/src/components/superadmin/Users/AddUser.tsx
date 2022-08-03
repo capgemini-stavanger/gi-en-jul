@@ -134,32 +134,30 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
 
                       {admins.map((user, index) => {
                         return (
-                          <>
-                            <TableRow key={index}>
-                              <TableCell>
-                                <Typography>{user.email}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography>{user.role}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography>{user.location}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                {!(user.role == "SuperAdmin") && (
-                                  <IconButton
-                                    key={index}
-                                    onClick={() => {
-                                      setSelectedEmail(user.email);
-                                      setOpenDelete(true);
-                                    }}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          </>
+                          <TableRow key={index}>
+                            <TableCell>
+                              <Typography>{user.email}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography>{user.role}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography>{user.location}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              {!(user.role == "SuperAdmin") && (
+                                <IconButton
+                                  // key={index}
+                                  onClick={() => {
+                                    setSelectedEmail(user.email);
+                                    setOpenDelete(true);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              )}
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
                     </TableBody>
@@ -187,30 +185,28 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
 
                       {institutions.map((user, index) => {
                         return (
-                          <>
-                            <TableRow key={index}>
-                              <TableCell>
-                                <Typography>{user.email}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography>{user.institution}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography>{user.location}</Typography>
-                              </TableCell>
-                              <TableCell>
-                                <IconButton
-                                  key={index}
-                                  onClick={() => {
-                                    setSelectedEmail(user.email);
-                                    setOpenDelete(true);
-                                  }}
-                                >
-                                  <DeleteIcon />
-                                </IconButton>
-                              </TableCell>
-                            </TableRow>
-                          </>
+                          <TableRow key={index}>
+                            <TableCell>
+                              <Typography>{user.email}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography>{user.institution}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography>{user.location}</Typography>
+                            </TableCell>
+                            <TableCell>
+                              <IconButton
+                                key={index}
+                                onClick={() => {
+                                  setSelectedEmail(user.email);
+                                  setOpenDelete(true);
+                                }}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
                         );
                       })}
                     </TableBody>

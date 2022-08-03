@@ -102,7 +102,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
             Forhåndsvisning av hvordan starte Gi en jul i din kommune
           </Typography>
           <Typography variant="h5" className={classes.heading}>
-            <Typography>{parse(howToStartInfo.info)}</Typography>
+            {parse(howToStartInfo.info)}
           </Typography>
         </Grid>
         <Grid item className={classes.businessButton}>
@@ -119,7 +119,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
       </Grid>
 
       {openEditor && (
-        <Typography>
+        <>
           <DefaultEditor value={html} onChange={onChange} />
 
           <Grid container direction="row" spacing={2}>
@@ -147,7 +147,7 @@ const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
             handleClose={handleClose}
             handleResponse={handleResponse}
           />
-        </Typography>
+        </>
       )}
     </Container>
   );

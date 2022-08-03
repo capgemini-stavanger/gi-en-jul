@@ -68,8 +68,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       <Typography>Liste over kommuner</Typography>
       <List>
         <ListItem>
-          <ListItemIcon>-</ListItemIcon>
-          <Typography>Denne Tabellen viser alle kommuner</Typography>
+          <ListItemIcon>-</ListItemIcon> <Typography>Denne Tabellen viser alle kommuner</Typography>
         </ListItem>
         <ListItem>
           <ListItemIcon>-</ListItemIcon>
@@ -79,7 +78,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
           </Typography>
         </ListItem>
       </List>
-
       <Table style={{ width: "1800px" }}>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
