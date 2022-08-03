@@ -7,13 +7,20 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     height: "100vh",
   },
+
+  giverFormBackground: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    minHeight: "100vh",
+    height: "100%",
+  },
+
   giverForm: {
-    paddingTop: theme.spacing(10),
     padding: theme.spacing(3),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "top",
     maxWidth: "500px",
     height: "100vh",
   },
@@ -77,6 +84,19 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
+  buttonBoxGiverFormMobileSummary: {
+    position: "sticky",
+    bottom: "0",
+  },
+  buttonBoxGiverFormMobile: {
+    position: "absolute",
+    width: "auto",
+    display: "flex",
+    marginLeft: "15%",
+    justifyContent: "space-between",
+    bottom: "10px",
+  },
+
   buttonMainPage: {
     color: "white",
     backgroundColor: theme.palette.primary.main,
@@ -163,8 +183,18 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "1.2em",
   },
   stepperBox: {
-    width: "100%",
+    width: "500px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingBottom: "2em",
   },
+  stepperBoxMobile: {
+    width: "100%",
+    paddingTop: "6em",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+
   stepperBackground: {
     backgroundColor: theme.palette.secondary.light,
   },
