@@ -17,7 +17,7 @@ export interface IMunicipality {
   email: string;
   phoneNumber: string;
   contactPerson: string;
-  image: string;
+  images: string[];
   facebook: string;
   instagram: string;
 }
@@ -30,7 +30,7 @@ export const initInterfaceMunicipality: IMunicipality = {
   email: "",
   phoneNumber: "",
   contactPerson: "",
-  image: "",
+  images: [],
   facebook: "",
   instagram: "",
 };
@@ -47,6 +47,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
     apiservice
       .get("municipality/all")
       .then((resp) => {
+        console.log(resp.data);
         if (role == "SuperAdmin") {
           setMunicipalities(resp.data);
         }
@@ -93,10 +94,12 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
         Name: object.name,
         IsActive: object.isActive,
         Information: object.information,
+        InfoImage1: object.images[0],
+        InfoImage2: object.images[1],
+        InfoImage3: object.images[2],
         Email: object.email,
         PhoneNumber: object.phoneNumber,
         ContactPerson: object.contactPerson,
-        Image: object.image,
         Facebook: object.facebook,
         Instagram: object.instagram,
       })

@@ -1,4 +1,4 @@
-import { Box, Button } from "@material-ui/core";
+import { Box, Button, ListItem, ListItemIcon, List, Grid } from "@material-ui/core";
 import { useState } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
@@ -67,6 +67,27 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
 
       {openEditor && (
         <>
+          <Grid container direction="column">
+            Hvis du skal legge inn en link. ( dette for å forhindre at url lenken blir for lang.)
+            <List>
+              <ListItem>
+                <ListItemIcon>1</ListItemIcon>
+                Lag tekst som brukeren kan trykke på ( f.eks: Klikk her for å lese mer om kommunen)
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>2</ListItemIcon>
+                Marker den nye teksten.
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>3</ListItemIcon>
+                Trykk på Link knappen i verktøylinjen.
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>4</ListItemIcon>
+                Skriv inn den nye url lenken.
+              </ListItem>
+            </List>
+          </Grid>
           <DefaultEditor value={municipality.information} onChange={onChange} />
           <br />
           <Button

@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   sectionContainer: {
     marginTop: theme.spacing(3),
     padding: 0,
-    maxWidth: "70em",
   },
   municipalityItem: {
     maxWidth: "100%",
@@ -58,9 +57,18 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     color: "white",
   },
+  infoImageMobile: {
+    objectFit: "cover",
+    width: "200px",
+    height: "200px",
+    marginTop: "2em",
+    marginLeft: theme.spacing(6),
+    marginRight: theme.spacing(6),
+  },
   infoImage: {
     width: "250px",
     height: "300px",
+    marginTop: "4em",
     marginLeft: theme.spacing(6),
     marginRight: theme.spacing(6),
   },
