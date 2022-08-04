@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) =>
     headerSpacing: {
       marginTop: "1em",
     },
+    wishSpacing: {
+      marginTop: "1.2em",
+    },
   })
 );
 
