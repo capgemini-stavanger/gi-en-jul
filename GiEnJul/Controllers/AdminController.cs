@@ -86,6 +86,7 @@ namespace GiEnJul.Controllers
                 .OrderBy(x => x.HasConfirmedMatch)
                 .ThenBy(x => x.IsSuggestedMatch)
                 .ThenBy(x => x.RegistrationDate)
+                .ThenBy(x => x.CancelDate)
                 .ToList();
         }
 
