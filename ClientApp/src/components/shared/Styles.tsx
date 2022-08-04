@@ -38,7 +38,7 @@ export default () =>
       backgroundcolor: theme.palette.primary.dark,
       margin: theme.spacing(-1.5),
     },
-    treeGridIcon: { marginLeft: "-10%" },
+    treeGridIcon: { marginLeft: "5px" },
     treeCircle: {
       position: "relative",
       height: "65px",
@@ -106,7 +106,7 @@ export default () =>
       },
     },
     giverButtonGridItem: {
-      marginRight: "-10%",
+      marginRight: "14px",
     },
     buttonNext: {
       position: "inherit",

@@ -38,6 +38,8 @@ const useStyles = makeStyles((theme) => ({
   sectionContainer: {
     marginTop: theme.spacing(3),
     padding: 0,
+    maxWidth: "80vw",
+    wordWrap: "break-word",
   },
   municipalityItem: {
     maxWidth: "100%",

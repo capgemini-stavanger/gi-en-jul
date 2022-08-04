@@ -36,7 +36,7 @@ const NavBarPublic = () => {
           <Grid
             container
             className={classes.navBarGridContainer}
-            justifyContent="space-around"
+            justifyContent="space-between"
             alignItems="center"
             direction="row"
           >
