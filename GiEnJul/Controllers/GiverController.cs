@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
@@ -26,9 +27,11 @@ namespace GiEnJul.Controllers
         private readonly IMapper _mapper;
         private readonly IRecaptchaVerifier _recaptchaVerifier;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
+        private readonly IMunicipalityRepository _municipalityRepository;
 
         public GiverController(IGiverRepository giverRepository,
                                IEventRepository eventRepository,
+                               IMunicipalityRepository municipalityRepository,
                                IEmailClient emailClient,
                                ILogger log,
                                IMapper mapper,
@@ -36,6 +39,7 @@ namespace GiEnJul.Controllers
                                IEmailTemplateBuilder emailTemplateBuilder)
         {
             _giverRepository = giverRepository;
+            _municipalityRepository = municipalityRepository;
             _eventRepository = eventRepository;
             _emailClient = emailClient;
             _log = log;
@@ -58,10 +62,12 @@ namespace GiEnJul.Controllers
             var eventModel = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
             var giver = _mapper.Map<Giver>(giverDto);
-            giver.EventName = eventModel.PartitionKey;
+            giver.EventName = eventModel.EventName;
             giver.Email = giver.Email.Trim();
+            giver.RegistrationDate = DateTime.UtcNow;
 
             var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
+            var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
             var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
 
             var familyRange = "6+";
@@ -71,11 +77,12 @@ namespace GiEnJul.Controllers
                 familyRange = $"{minReceivers}-{giver.MaxReceivers}";
             }
 
-            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.PartitionKey, giverDto.Location);
+            var num_givers = await _giverRepository.GetGiversCountByLocationAsync(eventModel.EventName, giverDto.Location);
             bool waiting_list = num_givers > eventModel.GiverLimit;
 
             var emailValuesDict = new Dictionary<string, string> { { "familyRange", familyRange } };
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
+            emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
 
             var templateId = waiting_list ? EmailTemplateName.WaitingList : EmailTemplateName.Registered;
@@ -83,7 +90,7 @@ namespace GiEnJul.Controllers
 
             try
             {
-                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email.Subject, email.Content);
+                await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email);
             }
             catch (Exception e)
             {

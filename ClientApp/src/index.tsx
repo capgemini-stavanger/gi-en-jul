@@ -4,16 +4,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./App";
-import registerServiceWorker from "./registerServiceWorker";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import { BreakpointOverrides } from "@material-ui/core/styles/createBreakpoints";
 
 // Get the application-wide store instance, prepopulating with state from the server where available.
-const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0!;
-const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0!;
-const apiurl: string = process.env.REACT_APP_API_URL!;
-const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY!;
+const domainEnv: string = process.env.REACT_APP_DEV_TENANT_AUTH0 ?? "";
+const clientidEnv: string = process.env.REACT_APP_DEV_CLIENTID_AUTH0 ?? "";
+const apiurl: string = process.env.REACT_APP_API_URL ?? "";
+const recaptchaSiteKey: string = process.env.REACT_APP_RECAPTCHA_SITE_KEY ?? "";
 
 declare module "@material-ui/core/styles/createBreakpoints" {
   interface BreakpointOverrides {
@@ -52,13 +51,13 @@ export const theme = createTheme({
   },
   palette: {
     primary: {
-      main: "#49a591", // Dark green
+      main: "#327C6D", // Dark green
     },
     secondary: {
-      main: "#d9f0f2", // Light blue
+      main: "#D9F0F2", // Light green
     },
     error: {
-      main: "#ed8175", // Light red
+      main: "#E36152", // Light red
     },
     warning: {
       main: "#f4cf8a", //Yellow
@@ -73,68 +72,83 @@ export const theme = createTheme({
   typography: {
     fontFamily: "Quicksand",
   },
+
   overrides: {
-    MuiButton: {
+    MuiStepConnector: {
+      line: { borderColor: "#49a591" },
+    },
+    MuiStepIcon: {
       root: {
-        borderRadius: "2em",
-        textTransform: "none",
+        width: "1.5em",
+        height: "1.5em",
+        color: "transparent",
+        border: "2px solid #49a591",
+        borderRadius: "50%",
+        "&$active": {
+          color: "#49a591",
+          border: "none",
+        },
+      },
+      text: {
+        fill: "black",
+      },
+    },
+
+    MuiInputBase: {
+      root: {
+        backgroundColor: "white",
+      },
+    },
+
+    MuiInputLabel: {
+      root: {
+        marginBottom: "-5px",
+        transform: "none",
+      },
+      shrink: {
+        transform: "translate(14px, -18px) scale(1) !important",
+      },
+    },
+    MuiOutlinedInput: {
+      root: {
+        borderRadius: "10px",
+        "& $notchedOutline": {
+          top: "0px",
+        },
       },
     },
     MuiSelect: {
       select: {
         "&:focus": {
-          borderRadius: "2em",
+          borderRadius: "1em",
         },
       },
     },
-    MuiOutlinedInput: {
+    MuiButton: {
       root: {
         borderRadius: "2em",
-        "&:focus": {
-          borderRadius: "2em",
-        },
+        textTransform: "none",
+      },
+      outlined: {
+        borderRadius: "0.5em",
       },
     },
     MuiPaper: {
       elevation1: {
-        boxShadow: "0 8px 20px -12px rgba(0,0,0,0.3)",
+        boxShadow: "0",
         "&:hover": {
-          boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)",
+          boxShadow: "0",
         },
       },
       rounded: {
-        borderRadius: "2em",
+        borderRadius: "0",
       },
     },
-    MuiListItem: {
-      root: {
-        justifyContent: "center",
-      },
-    },
-    MuiAccordion: {
-      root: {
-        overflow: "hidden",
-      },
-      rounded: {
-        borderBottomLeftRadius: "2em",
-        borderBottomRightRadius: "2em",
-        borderTopLeftRadius: "2em",
-        borderTopRightRadius: "2em",
-        borderRadius: "2em",
-        "&:last-child": {
-          borderBottomLeftRadius: "2em",
-          borderBottomRightRadius: "2em",
-          borderTopLeftRadius: "2em",
-          borderTopRightRadius: "2em",
-          borderRadius: "2em",
-        },
-        "&:first-child": {
-          borderBottomLeftRadius: "2em",
-          borderBottomRightRadius: "2em",
-          borderTopLeftRadius: "2em",
-          borderTopRightRadius: "2em",
-          borderRadius: "2em",
-        },
+    MuiTooltip: {
+      tooltipPlacementTop: {
+        margin: "10px",
+        padding: "5px",
+        fontSize: "16px",
       },
     },
   },
@@ -157,5 +171,3 @@ ReactDOM.render(
   </ThemeProvider>,
   document.getElementById("root")
 );
-
-registerServiceWorker();

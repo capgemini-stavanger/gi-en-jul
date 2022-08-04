@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import {
@@ -48,7 +48,7 @@ const ContactInfo: React.FC<Props> = ({
   const [validFormState, setValidFormState] = useState(initValidFormState);
 
   const extendedNextStep = (e: React.FormEvent) => {
-    for (let isValid in validFormState) {
+    for (const isValid in validFormState) {
       if (validFormState[isValid]) continue;
       return setState((prev) => {
         return { ...prev, viewErrorTrigger: prev.viewErrorTrigger + 1 };
@@ -57,10 +57,10 @@ const ContactInfo: React.FC<Props> = ({
     nextStep(e);
   };
 
-  const [confimationEmail, setConfirmationEmail] = useState('');
+  const [confimationEmail, setConfirmationEmail] = useState("");
 
   const handleConfirmEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmationEmail(() => event.target.value)
+    setConfirmationEmail(() => event.target.value);
   };
 
   const getValiditySetter = (target: string) => {
@@ -76,13 +76,16 @@ const ContactInfo: React.FC<Props> = ({
   return (
     <>
       <Typography className={classes.subHeading}>Registrering</Typography>
-      <Typography className={classes.infoText}>Vi trenger din kontaktinformasjon for å kunne gi deg en familie</Typography>
-      <Container>
-        <Grid container
+      <Typography className={classes.infoText}>
+        Vi trenger din kontaktinformasjon for å kunne gi deg en familie
+      </Typography>
+      <Grid
+        container
         direction="column"
-        justifyContent="space-between"
+        justifyContent="space-evenly"
         alignItems="stretch"
-        className={classes.form} >
+        className={classes.form}
+      >
         <Grid item>
           <InputValidator
             autoFocus
@@ -121,7 +124,8 @@ const ContactInfo: React.FC<Props> = ({
             setIsValids={getValiditySetter("isValidEmail")}
             label="Bekreft epost*"
             onChange={handleConfirmEmailChange}
-            name="email"
+            name="emailConfirm"
+            type="email"
             value={confimationEmail ? confimationEmail : ""}
             validators={[() => isEqual(values.email, confimationEmail), isEmail, isNotNull]}
             errorMessages={[
@@ -150,12 +154,14 @@ const ContactInfo: React.FC<Props> = ({
             margin="normal"
             fullWidth
           />
-          </Grid>
-          <Grid item>
-          <Pager onBack={prevStep} onContinue={extendedNextStep} continueText={"Hvem vil du gi til?"} step={step}/>
-          </Grid>
-          </Grid>
-      </Container>
+          <Pager
+            onBack={prevStep}
+            onContinue={extendedNextStep}
+            continueText={"Neste Steg"}
+            step={step}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

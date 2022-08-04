@@ -6,23 +6,45 @@ import uuid
 import string
 import datetime
 
+from numpy import full
+
 TIME_UNIX = int(time.time())
 TIME_TIMESTAMP = datetime.datetime.utcfromtimestamp(
     TIME_UNIX).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
-TABLE_HEADER_PERSON = ["Age", "Gender", "Wish"]
-TABLE_HEADER_GIVER = ["Email", "EventName", "FullName", "HasConfirmedMatch",
-                      "IsSuggestedMatch", "Location", "MaxReceivers", "PhoneNumber"]
-TABLE_HEADER_RECIPIENT = ["ContactEmail", "ContactFullName", "ContactPhoneNumber", "Dessert", "Dinner", "EventName",
-                          "HasConfirmedMatch", "Institution", "IsSuggestedMatch", "Location", "Note", "PersonCount",
-                          "ReferenceId", "FamilyId", "MatchedGiver"]
+TABLE_HEADER_PERSON = ["Age", "Months", "Gender", "Wishes", "NoWish"]
+TABLE_HEADER_GIVER = [
+    "MaxReceivers", "Location", "EventName", "FullName", "Email", "PhoneNumber", "RegistrationDate",
+    "IsSuggestedMatch", "HasConfirmedMatch"]
+
+# UNUSED TABLE HEADERS, CREATED UPON INSERTION
+'''
+"MatchedRecipient", "MatchedFamilyId",
+"IsSuggestedMatch", "HasConfirmedMatch", "SuggestedMatchAt", "RemindedAt",
+"CancelFeedback", "CancelDate", "CancelFamilyId",
+"Comment"
+'''
+
+TABLE_HEADER_RECIPIENT = [
+    "Dessert", "Dinner", "Note", "EventName", "Location", "PersonCount", "FamilyId",
+    "ContactFullName", "ContactEmail", "ContactPhoneNumber",
+    "Institution", "ReferenceId",
+    "IsSuggestedMatch","HasConfirmedMatch",]
+
+# UNUSED TABLE HEADERS, CREATED UPON INSERTION
+'''
+"Institution", "ReferenceId",
+"MatchedGiver", 
+"IsSuggestedMatch","HasConfirmedMatch",
+"Comment"
+'''
 
 PHONE_NUMBER_RANGES = ((40_00_00_00, 49_99_99_99), (90_00_00_00, 99_99_99_99))
 EMAIL_DOMAIN = ("gmail", "outlook", "live", "lyse", "hotmail")
 EMAIL_ENDING = ("com", "no")
 
-DINNERS = ("pinnekjøtt", "ribbe")
-DESSERTS = ("riskrem", "sjokoladepudding")
+DINNERS = ("Pinnekjott", "Ribbe")
+DESSERTS = ("Riskrem", "Sjokoladepudding")
 
 FAMILY_SIZE_GIVER_OPTIONS = (2, 5, 100)
 
@@ -196,7 +218,7 @@ def get_refid():
 
 
 def get_note():
-    return get_sentence(30) if random.random() < CHANCE_NOTE else ""
+    return "Halal" if random.random() < CHANCE_NOTE else ""
 
 
 def get_wish():
@@ -251,10 +273,12 @@ def add_table_entry_person(recipient_id: str):
     partition_key = recipient_id
     row_key = get_uuid()
     age = get_age()
+    months = 1
     gender = get_gender()
-    wish = get_wish()
+    wishes = "['Alderstilpasset gaveonske']"
+    noWish = True
     add_table_row(FILE_PATH_PERSON, partition_key, row_key,
-                  [age, gender, wish])
+                  [age, months, gender, wishes, noWish])
 
 
 family_id_int = 0
@@ -280,11 +304,9 @@ def add_table_entry_recipient_and_persons(location: str, event_name: str):
     reference_id = get_refid()
     has_confirmed_match = False
     is_suggested_match = False
-    matched_giver = None
     add_table_row(FILE_PATH_RECIPIENT, partition_key, row_key,
-                  (contact_email, contact_full_name, contact_phone_number, dessert, dinner,
-                   event_name, has_confirmed_match, institution, is_suggested_match, location,
-                   note, personCount, reference_id, family_id, matched_giver))
+        [dessert, dinner, note, event_name, location, personCount, family_id,
+        contact_full_name, contact_email, contact_phone_number, institution, reference_id, is_suggested_match, has_confirmed_match])
 
     for p in range(personCount):
         add_table_entry_person(row_key)
@@ -301,9 +323,9 @@ def add_table_entry_giver(location: str, event_name: str):
     email = get_email(full_name)
     is_suggested_match = False
     has_confirmed_match = False
+    registation_date = TIME_TIMESTAMP
     add_table_row(FILE_PATH_GIVER, partition_key, row_key,
-                  [email, event_name, full_name, has_confirmed_match, is_suggested_match, location, max_reciviers, phone_number])
-
+        [max_reciviers, location, event_name, full_name, email, phone_number, registation_date, is_suggested_match, has_confirmed_match])
 
 # ----- PROJECT STRUCTURE ----- #
 

@@ -1,16 +1,39 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-  giverForm: {
-    paddingTop: theme.spacing(10),
-    padding: theme.spacing(3),
+  fillBackground: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    padding: theme.spacing(2),
+    height: "100vh",
+  },
+
+  giverFormBackground: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    minHeight: "100vh",
+    height: "100%",
+  },
+
+  verifyDenyConnectionContainer: {
+    display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
+  },
+
+  giverForm: {
+    padding: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "top",
     maxWidth: "500px",
+    height: "100vh",
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
-    maxWidth: "none",
+    maxWidth: "500px",
     minHeight: "100vh",
   },
   heading: {
@@ -27,12 +50,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
   },
   subHeading: {
-    fontSize: "170%",
+    fontSize: "130%",
     fontWeight: 500,
     margin: theme.spacing(1),
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.primary,
     [theme.breakpoints.up("tablet")]: {
-      fontSize: "200%",
+      fontSize: "160%",
     },
   },
   form: {
@@ -49,9 +72,15 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "transparent",
   },
   buttonBack: {
+    color: theme.palette.error.main,
+    padding: theme.spacing(1.2),
+    textTransform: "none",
+  },
+  buttonStep: {
     color: theme.palette.primary.main,
     padding: theme.spacing(1.2),
     textTransform: "none",
+    borderColor: theme.palette.primary.main,
   },
   buttonNext: {
     color: "white",
@@ -62,6 +91,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.dark,
     },
   },
+
+  buttonBoxGiverFormMobile: {
+    position: "relative",
+    marginLeft: "3em",
+    marginTop: "1em",
+  },
+
   buttonMainPage: {
     color: "white",
     backgroundColor: theme.palette.primary.main,
@@ -90,11 +126,12 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "110%",
     },
   },
-  infoText:{
+  infoText: {
     fontSize: "85%",
     fontWeight: 400,
     margin: theme.spacing(1),
     paddingBottom: theme.spacing(1),
+    color: theme.palette.text.secondary,
   },
   icon: {
     alignItems: "center",
@@ -106,10 +143,9 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   backgroundImage: {
-    objectFit: "none",
+    objectFit: "cover",
     width: "100%",
     height: "100%",
-    marginTop: -theme.spacing(4),
   },
   imageContainer: {
     height: "100vh",
@@ -140,11 +176,35 @@ const useStyles = makeStyles((theme) => ({
     overflowWrap: "break-word",
     marginRight: "1.6em",
   },
-  captchaContainer:{
-    paddingBottom:theme.spacing(8),
+  captchaContainer: {
+    paddingBottom: theme.spacing(8),
   },
-  summaryInput:{
+  summaryInput: {
     marginBottom: "1.2em",
-  }
+  },
+  stepperBox: {
+    width: "500px",
+    marginLeft: "auto",
+    marginRight: "auto",
+    paddingBottom: "2em",
+  },
+  stepperBoxMobile: {
+    width: "100%",
+    paddingTop: "6em",
+    marginLeft: "auto",
+    marginRight: "auto",
+  },
+
+  stepperBackground: {
+    backgroundColor: theme.palette.secondary.light,
+  },
+  feedbackField: {
+    width: "300px",
+    marginBottom: "2em",
+    marginTop: "2em",
+  },
+  spacingBottom: {
+    marginBottom: "2em",
+  },
 }));
 export default useStyles;

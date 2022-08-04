@@ -32,7 +32,7 @@ function Row(props: GiverRowProps) {
     <>
       <TableRow
         onClick={() => {
-          props.onClick(giver.rowKey, giver.partitionKey);
+          props.onClick(giver.giverId, giver.event);
         }}
         style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}
       >
@@ -66,11 +66,11 @@ export default function GiverSuggestions(props: TableProps) {
       <TableBody className={classes.clickableTableBody}>
         {props.givers.map((giver) => (
           <Row
-            key={giver.rowKey}
+            key={giver.giverId}
             giver={giver}
-            selected={selected === giver.rowKey}
+            selected={selected === giver.giverId}
             onClick={() => {
-              setSelected(giver.rowKey);
+              setSelected(giver.giverId);
               props.selectGiver(giver);
             }}
           />

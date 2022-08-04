@@ -4,6 +4,11 @@
     {
         Registered,
         WaitingList,
-        AssignedFamily
+        AssignedFamily,
+        VerifyConnection,
+        Notification,
+        ConnectionDenied,
+        ConnectionReminder,
+        AutomaticDisconnect
     }
 }

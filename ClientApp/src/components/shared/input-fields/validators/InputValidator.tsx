@@ -79,8 +79,8 @@ const InputValidator: FC<InputValidatorProps> = ({
   const [errorState, setErrorState] = useState(initErrorState);
 
   const checkArgs = () => {
-    let validatorCount = validators.length;
-    function isInvalidOptionalArg(arg?: Array<any> | Function) {
+    const validatorCount = validators.length;
+    function isInvalidOptionalArg(arg?: any[] | ((isValid: boolean) => void)) {
       return typeof arg === "object" && arg.length !== validatorCount;
     }
     if (
@@ -97,7 +97,7 @@ const InputValidator: FC<InputValidatorProps> = ({
     let isAnyInvalid = false;
 
     validators.forEach((item, i) => {
-      let isValid = item(value);
+      const isValid = item(value);
       if (typeof setIsValids === "object") {
         setIsValids[i](isValid);
       }
@@ -144,11 +144,7 @@ const InputValidator: FC<InputValidatorProps> = ({
       return (
         <SelectForm
           name={name}
-          options={
-            options
-              ? options
-              : [{ value: "", text: "Ingen alternativer tilgjengelige" }]
-          }
+          options={options ? options : [{ value: "", text: "Ingen alternativer tilgjengelige" }]}
           value={value}
           onChange={onChange}
           variant={variant}
@@ -183,9 +179,9 @@ const InputValidator: FC<InputValidatorProps> = ({
           autoComplete={autoComplete}
           fullWidth={fullWidth}
           autoFocus={autoFocus}
-          size={size}
           multiline={multiline}
           maxRows={maxRows}
+          size={size}
           placeholder={placeholder}
         />
       );

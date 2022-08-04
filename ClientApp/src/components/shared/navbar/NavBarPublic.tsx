@@ -1,41 +1,28 @@
-import {
-  AppBar,
-  Button,
-  IconButton,
-  Toolbar,
-  Drawer,
-  List,
-  ListItem,
-  Typography,
-} from "@material-ui/core";
-import React, { FC, useState } from "react";
-import { Link } from "react-router-dom";
-import { Link as Scroll } from "react-scroll";
-import logo from "styling/img/logo_green.svg";
+import { Button, IconButton, Tab, Box, Grid, Toolbar, AppBar } from "@material-ui/core";
+import { isMobile } from "common/functions/IsMobile";
+import logo from "styling/img/logo_white.svg";
+import logogreen from "styling/img/logo_green.svg";
 import useStyles from "components/shared/Styles";
-import MenuIcon from "@material-ui/icons/Menu";
-import { ArrowForwardIos, Close } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
+import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
+import { Link, useHistory } from "react-router-dom";
+import NavbarMobile from "./NavBarMobile";
+import React from "react";
 
 const NavBarPublic = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   const history = useHistory();
-  const handleEvent = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(() => event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(() => null);
-  };
 
-  if (window.location.pathname === "/bli-giver") {
+  if (isMobile()) {
+    return <NavbarMobile />;
+  } else if (window.location.pathname === "/bli-giver") {
     return (
       <>
         <AppBar className={classes.navContainer}>
           <Toolbar className={classes.toolBar}>
-            <IconButton>
+            <IconButton className={classes.logoBliGiverContainer}>
               <Link to="/">
-                <img className={classes.smallLogo} src={logo}></img>
+                <FiberManualRecord className={classes.treeCircleBliGiver} />
+                <img className={classes.smallLogoBliGiver} src={logogreen}></img>
               </Link>
             </IconButton>
           </Toolbar>
@@ -45,66 +32,82 @@ const NavBarPublic = () => {
   } else {
     return (
       <>
-        <AppBar className={classes.navContainer}>
-          <Toolbar className={classes.toolBar}>
-            <IconButton
-              className={classes.navIcon}
-              edge="start"
-              onClick={handleEvent}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Drawer open={!!anchorEl} anchor="top" onClose={handleClose}>
-              <List className={classes.drawerMenu}>
-                <IconButton
-                  onClick={handleClose}
-                  className={classes.closeButton}
+        <Box>
+          <Grid
+            container
+            className={classes.navBarGridContainer}
+            justifyContent="space-between"
+            alignItems="center"
+            direction="row"
+          >
+            <Grid item className={classes.treeGridIcon}>
+              <IconButton
+                onClick={() => {
+                  history.push("/");
+                }}
+              >
+                <FiberManualRecord className={classes.treeCircle} />
+                <img className={classes.smallLogo} src={logo}></img>
+              </IconButton>
+            </Grid>
+
+            <Grid item className={classes.fontSizeNavText}>
+              <Tab
+                onClick={() => {
+                  history.push("/");
+                }}
+                className={classes.drawerContent}
+                label="Hjem"
+              ></Tab>
+
+              <Tab
+                onClick={() => {
+                  history.push("/bedrift");
+                }}
+                className={classes.drawerContent}
+                label="For bedrifter"
+              ></Tab>
+
+              <Tab
+                onClick={() => {
+                  history.push("/startJul");
+                }}
+                className={classes.drawerContent}
+                label="Start Gi en jul i din kommune"
+              ></Tab>
+
+              <Tab
+                onClick={() => {
+                  history.push("kommune");
+                }}
+                className={classes.drawerContent}
+                label="Kommuner"
+              ></Tab>
+            </Grid>
+            <Grid item className={classes.giverButtonGridItem}>
+              {window.location.pathname == "/bedrift" ? (
+                <Button
+                  size="large"
+                  className={classes.giverButton}
+                  style={{ visibility: "hidden" }}
+                  endIcon={<ArrowForwardIos />}
+                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
                 >
-                  <Close color="primary" />
-                </IconButton>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="how" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Hvordan fungerer gi en jul?
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="questions" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Ofte stilte spørsmål
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="companies" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      For bedrifter
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-                <ListItem>
-                  <Scroll onClick={handleClose} to="contact" smooth={true}>
-                    <Typography className={classes.drawerContent}>
-                      Kontakt
-                    </Typography>
-                  </Scroll>
-                </ListItem>
-              </List>
-            </Drawer>
-            <Button
-              size="large"
-              endIcon={<ArrowForwardIos />}
-              className={classes.buttonNext}
-              onClick={React.useCallback(
-                () => history.push("/bli-giver"),
-                [history]
+                  Bli giver
+                </Button>
+              ) : (
+                <Button
+                  size="large"
+                  className={classes.giverButton}
+                  endIcon={<ArrowForwardIos />}
+                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+                >
+                  Bli giver
+                </Button>
               )}
-            >
-              Bli giver
-            </Button>
-          </Toolbar>
-        </AppBar>
+            </Grid>
+          </Grid>
+        </Box>
       </>
     );
   }

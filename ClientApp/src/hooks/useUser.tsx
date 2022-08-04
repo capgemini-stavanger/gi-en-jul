@@ -2,14 +2,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import { useEffect, useReducer } from "react";
 
-const domainEnvUrl: string = `https://${process.env
-  .REACT_APP_DEV_TENANT_AUTH0!}/api/v2/`;
+const domainEnvUrl = `https://${process.env.REACT_APP_DEV_TENANT_AUTH0 ?? ""}/api/v2/`;
 
 interface IState {
   managementAccessToken: string;
   location?: string;
   role?: string;
-  institution?: string
+  institution?: string;
+  email?: string;
   //Event
 }
 
@@ -18,6 +18,7 @@ const initState: () => IState = () => ({
   location: undefined,
   role: undefined,
   institution: undefined,
+  email: undefined,
 });
 
 enum ReducerActionType {
@@ -25,6 +26,7 @@ enum ReducerActionType {
   setLocation,
   setRole,
   setInstitution,
+  setEmail,
 }
 
 interface IReducerAction {
@@ -42,6 +44,8 @@ const reducer = (state: IState, action: IReducerAction) => {
       return { ...state, role: action.data ?? null };
     case ReducerActionType.setInstitution:
       return { ...state, institution: action.data ?? null };
+    case ReducerActionType.setEmail:
+      return { ...state, email: action.data ?? null };
     default:
       throw new Error(`Invalid action type: ${action.type}`);
   }
@@ -84,6 +88,10 @@ const useUser = () => {
             type: ReducerActionType.setInstitution,
             data: response.data.app_metadata?.institution,
           });
+          dispatch({
+            type: ReducerActionType.setEmail,
+            data: response.data.email,
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -95,6 +103,7 @@ const useUser = () => {
     location: state.location,
     role: state.role,
     institution: state.institution,
+    email: state.email,
   };
 };
 

@@ -9,7 +9,7 @@ namespace GiEnJul.Dtos
         [Required]
         public string EventName { get; set; }
         [Required]
-        public string City { get; set; }
+        public string Municipality { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
         [Required]
@@ -17,16 +17,12 @@ namespace GiEnJul.Dtos
         [Required]
         public string DeliveryAddress { get; set; }
         [Required]
-        public string DeliveryDate { get; set; }[Required]
-        public string DeliveryTime { get; set; }[Required]
-        public string ContactPerson { get; set; }[Required]
-        public string DeliveryGPS { get; set; }
-        public int GiverLimit { get; set; }
+        public string DeliveryDate { get; set; }
         [Required]
-        public string Email { get; set; }
-        public string Facebook { get; set; }
-        public string Instagram { get; set; }
-        public string Image {  get; set; }
-        public string PhoneNumber { get; set; }
+        public string DeliveryTime { get; set; }
+        public string DeliveryGPS { get; set; }
+        [Required]
+        public int GiverLimit { get; set; }
+        
     }
 }

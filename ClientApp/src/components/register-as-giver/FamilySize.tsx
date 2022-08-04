@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
@@ -36,49 +36,44 @@ const FamilySize: React.FC<Props> = ({
   const classes = useStyles();
   return (
     <>
-      <Typography className={classes.subHeading}>
-        Familiesammensetning
-      </Typography>
+      <Typography className={classes.subHeading}>Familiesammensetning</Typography>
       <Typography className={classes.infoText}>
-        En familie kan bestå av en ungdom opp til 23 år som er alene, en
-        aleneforelder med fem barn og alt mellom og over. Vi kan ikke garantere at du
-        får familiestørrelsen du ønsker, og dersom det er «samme for deg/dere»
-        er det fint om du klikker på alternativet 6+.{" "}
+        En familie kan bestå av en ungdom opp til 23 år som er alene, en aleneforelder med fem barn
+        og alt mellom og over. Vi kan ikke garantere at du får familiestørrelsen du ønsker, og
+        dersom det er «samme for deg/dere» er det fint om du klikker på alternativet 6+.{" "}
       </Typography>
-      <Container className={classes.form}>
-        <Grid
-          container
-          direction="column"
-          justifyContent="space-between"
-          alignItems="stretch"
-          className={classes.form}
-        >
-          <Grid item>
-            <InputValidator
-              viewErrorTrigger={viewErrorTrigger}
-              setIsValids={setIsValid}
-              type="select"
-              fullWidth
-              placeholder={placeHolder}
-              validators={[isNotNull]}
-              name="familyType-input"
-              value={values.maxReceivers ? values.maxReceivers : ""}
-              onChange={handleFamilyChange}
-              label="Familiesammensetning*"
-              errorMessages={["Hvilken familie venter på din gave?"]}
-              options={FAMILY_SIZES}
-            />
-          </Grid>
-          <Grid item>
-            <Pager
-              onContinue={extendedNextStep}
-              onBack={prevStep}
-              continueText={"Oppsummering"}
-              step={step}
-            />
-          </Grid>
+      <Grid
+        container
+        direction="column"
+        justifyContent="space-evenly"
+        alignItems="stretch"
+        className={classes.form}
+      >
+        <Grid item>
+          <InputValidator
+            viewErrorTrigger={viewErrorTrigger}
+            setIsValids={setIsValid}
+            type="select"
+            fullWidth
+            placeholder={placeHolder}
+            validators={[isNotNull]}
+            name="familyType-input"
+            value={values.maxReceivers ? values.maxReceivers : ""}
+            onChange={handleFamilyChange}
+            label="Familiesammensetning*"
+            errorMessages={["Hvilken familie venter på din gave?"]}
+            options={FAMILY_SIZES}
+          />
         </Grid>
-      </Container>
+        <Grid item>
+          <Pager
+            onContinue={extendedNextStep}
+            onBack={prevStep}
+            continueText={"Oppsummering"}
+            step={step}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

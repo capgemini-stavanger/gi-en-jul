@@ -1,82 +1,53 @@
 import {
-  capitalize,
-  Checkbox,
-  Link,
-  FormControlLabel,
   Grid,
-  SvgIcon,
   IconButton,
-  Typography,
+  Button,
+  Box,
+  Container,
+  FormControlLabel,
+  Checkbox,
+  Tooltip,
 } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
 import * as React from "react";
-import { FC, useEffect, useState } from "react";
+import { useState } from "react";
+import { FC } from "react";
 import { GENDERS } from "common/constants/Genders";
 import Gender from "common/enums/Gender";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isInt } from "components/shared/input-fields/validators/Validators";
-import IFormPerson from "components/institution/IFormPerson";
-import MessageDialog from "components/institution/MessageDialog";
+import useStyles from "./Styles";
+import FormWish from "./FormWish";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
+import getGender from "common/functions/GetGender";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
   deletePerson: () => void;
-  setAlert: (open?: boolean, message?:string, severity?:"error" | "info" | "success" | "warning") => void;
   viewErrorTrigger: number;
   person: IFormPerson;
+  personIndex: number;
 }
 
-const initState: { [data: string]: any } = {
-  ageWish: false,
-  commentSelect: false,
-  wishInput: "",
-  validWishInput: false,
-  dialogOpen: false,
-  comment: "",
-};
-
-const InstitutionPerson: FC<IPersonProps> = ({
+const FormPerson: FC<IPersonProps> = ({
   updatePerson,
   deletePerson,
-  setAlert,
   viewErrorTrigger,
   person,
+  personIndex,
 }) => {
-  const [state, setState] = useState({ ...initState });
+  const classes = useStyles();
 
-  const setShowMessageDialog = (show: boolean) => {
-    setState((prev) => ({
-      ...prev,
-      dialogOpen: show,
-    }));
-  };
-
-  const setValidMessage = (message: string) => {
-    setState((prev) => ({
-      ...prev,
-      comment: message,
-    }));
-    getSetter("comment")(message);
-    updatePerson({ comment: message });
-  };
-
-  const getSetter =
-    (target: keyof typeof state) => (value: typeof state[typeof target]) => {
-      setState((prev) => {
-        prev[target] = value;
-        return prev;
-      });
-    };
-
-  useEffect(() => {
-    updatePerson({
-      isValidWish: state.validWishInput || person.wish === undefined,
-    });
-  }, [state.validWishInput, person.wish]);
-
+  const [showWishes, setShowWishes] = useState(true);
+  const [ageWish, setAgeWish] = useState(false);
 
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
-    let intAge = Math.floor(parseInt(strAge));
+    const intAge = Math.floor(parseInt(strAge));
+    let isValidAge = false;
     strAge = intAge.toString();
     if (intAge !== NaN) {
       if (intAge > 130) {
@@ -84,156 +55,183 @@ const InstitutionPerson: FC<IPersonProps> = ({
       } else if (intAge < 0) {
         strAge = "0";
       }
+      isValidAge = true;
     } else {
       return;
     }
     if (intAge >= 1) {
-      person.months = "0";
+      person.months = "1";
     }
-    updatePerson({ age: strAge, isValidAge: !!strAge });
+    updatePerson({ age: strAge, isValidAge: isValidAge });
   };
 
   const onMonthsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strMonths = e.target.value;
-    let intMonths = Math.floor(parseInt(strMonths));
+    const intMonths = Math.floor(parseInt(strMonths));
     strMonths = intMonths.toString();
     if (intMonths !== NaN) {
       if (intMonths > 11) {
         strMonths = "11";
-      } else if (intMonths < 0) {
-        strMonths = "0";
+      } else if (intMonths < 1) {
+        strMonths = "1";
       }
     } else {
       return;
     }
-    updatePerson({ months: strMonths, isValidMonths: !!strMonths });
+    updatePerson({ months: strMonths });
+  };
+
+  const handleAgeWishChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAgeWish(e.target.checked);
+    setShowWishes(!e.target.checked);
+    updatePerson({ noWish: e.target.checked });
   };
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    let newGender = parseInt(e.target.value);
+    const newGender = parseInt(e.target.value);
     if (newGender !== NaN && newGender !== Gender.Unspecified) {
       updatePerson({ gender: newGender, isValidGender: true });
     }
   };
 
-  const onWishInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.value;
-    getSetter("wishInput")(newInput);
-    updatePerson({ wish: newInput });
+  const updateWish = (newWishData: IFormWish, index: number) => {
+    const newList = [...person.wishes];
+    newList[index] = newWishData;
+    updatePerson({ wishes: newList });
   };
 
-  const onAgeWishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newInput = e.target.checked;
-    getSetter("ageWish")(newInput);
-    updatePerson({ wish: undefined });
+  const deleteWish = (index: number) => {
+    if (person.wishes.length > 1) {
+      const newList = [...person.wishes];
+      const head = newList.slice(0, index);
+      const tail = newList.slice(index + 1, newList.length);
+      const newWishList = head.concat(tail);
+      person.wishes = newWishList;
+      updatePerson({ wishes: newWishList });
+    }
+  };
+
+  const addWish = () => {
+    const newList = [...person.wishes];
+    if (newList.length >= 5) return;
+    newList.push(getFormWish());
+    updatePerson({ wishes: newList });
   };
 
   return (
-    <Grid container spacing={5} alignItems="center">
-      <Grid item>
-        <IconButton color="secondary" onClick={deletePerson}>
-          <SvgIcon component={ClearIcon} />
+    <Box className={classes.personBox}>
+      <Box className={classes.numberBox}>{personIndex + 1}</Box>
+      <Container className={classes.formBox}>
+        <Box className={classes.formBoxHeader}>
+          <Grid container direction="row" spacing={2} alignItems="center">
+            <Grid item xs={2}>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isInt]}
+                name="age"
+                type="number"
+                label="Alder"
+                value={person.age || "0"}
+                onChange={onAgeChange}
+                fullWidth
+              />
+            </Grid>
+            {parseInt(person.age) == 0 && (
+              <Grid item xs={2}>
+                <InputValidator
+                  viewErrorTrigger={viewErrorTrigger}
+                  validators={[isInt]}
+                  name="months"
+                  type="number"
+                  label="Måneder"
+                  value={person.months || "0"}
+                  onChange={onMonthsChange}
+                  fullWidth
+                />
+              </Grid>
+            )}
+            <Grid item xs={2}>
+              <InputValidator
+                viewErrorTrigger={viewErrorTrigger}
+                validators={[isNotNull]}
+                name="gender"
+                type="select"
+                label="Kjønn *"
+                variant={"outlined"}
+                value={person.gender ? person.gender : ""}
+                onChange={onGenderChange}
+                options={GENDERS.map((o) => {
+                  return { value: o.value, text: getGender(o.value, parseInt(person.age)) };
+                })}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={ageWish}
+                    onChange={(e) => handleAgeWishChecked(e)}
+                    name="isAgeWish"
+                    color="primary"
+                  />
+                }
+                className="my-0"
+                label="Alderstilpasset gave"
+              />
+              <Tooltip
+                placement="top"
+                title="Om alderstilpasset gave er huket av, kan giveren selv finne gave til personen."
+              >
+                <HelpOutlineIcon />
+              </Tooltip>
+            </Grid>
+
+            {!ageWish && (
+              <Grid item>
+                {showWishes ? (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
+                    <ExpandLessIcon />
+                  </Button>
+                ) : (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
+                    <ExpandMoreIcon />
+                  </Button>
+                )}
+              </Grid>
+            )}
+          </Grid>
+        </Box>
+        {showWishes && (
+          <Box className={classes.formBoxWishes}>
+            {person.wishes.map((wish: IFormWish, i: number) => {
+              return (
+                <FormWish
+                  key={i}
+                  viewErrorTrigger={viewErrorTrigger}
+                  updateWish={(wishObj) => {
+                    updateWish(wishObj, i);
+                  }}
+                  deleteWish={() => deleteWish(i)}
+                  wishObj={wish}
+                  wishIndex={i}
+                />
+              );
+            })}
+            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+              Legg til gaveønske
+            </Button>
+          </Box>
+        )}
+      </Container>
+      <Box className={classes.deleteBox}>
+        <IconButton onClick={deletePerson}>
+          <CancelIcon className={classes.redCross} />
         </IconButton>
-      </Grid>
-      <Grid item xs={1}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isInt]}
-          name="age"
-          type="number"
-          label="Alder"
-          value={person.age || "0"}
-          onChange={onAgeChange}
-        />
-      </Grid>
-      {(parseInt(person.age) < 1 || !person.age) &&
-      <Grid item xs={1}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isInt]}
-          name="months"
-          type="number"
-          label="Måneder"
-          value={person.months || "0"}
-          onChange={onMonthsChange}
-        />
-      </Grid>
-}
-      <Grid item xs={2}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[isNotNull]}
-          name="gender"
-          type="select"
-          label="Kjønn"
-          variant={"outlined"}
-          value={person.gender ? person.gender : ""}
-          onChange={onGenderChange}
-          options={GENDERS.map((o) => {
-            return { value: o.value, text: capitalize(o.text) };
-          })}
-          fullWidth
-        />
-      </Grid>
-      { !state.ageWish &&
-      <Grid item xs={2}>
-        <InputValidator
-          viewErrorTrigger={viewErrorTrigger}
-          validators={[(isValid) => state.ageWish || isNotNull(isValid)]}
-          setIsValids={getSetter("validWishInput")}
-          name="wish"
-          label="Gaveønske (husk størrelse)"
-          disabled={state.ageWish}
-          value={state.wishInput}
-          onChange={onWishInputChange}
-          fullWidth
-        />
-      </Grid>
-}
-      <Grid item xs={2}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={state.ageWish}
-              onChange={onAgeWishChange}
-              name="isAgeWish"
-              color="primary"
-            />
-          }
-          className="my-0"
-          label="Giver kjøper alderstilpasset gave"
-        />
-      </Grid>
-      <Grid item xs={2}>
-      <Link
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          setShowMessageDialog(true);
-        }}
-      >
-        { person.comment.length == 0 &&
-        <Typography>
-          Legg til en kommentar for denne personen
-        </Typography> ||
-        <Typography>
-          Se/endre kommentaren for denne personen
-        </Typography>
-        }
-      </Link>
-      </Grid>
-      <Grid>
-      <MessageDialog
-        open={state.dialogOpen}
-        onClose={() => setShowMessageDialog(false)}
-        setMessage={setValidMessage}
-        message={person.comment}
-        setAlert={setAlert}
-      />
-      </Grid>
-    </Grid>
-    
+      </Box>
+    </Box>
   );
 };
 
-export default InstitutionPerson;
+export default FormPerson;

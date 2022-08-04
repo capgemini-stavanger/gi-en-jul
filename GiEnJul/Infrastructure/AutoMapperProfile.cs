@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using GiEnJul.Dtos;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace GiEnJul.Infrastructure
 {
@@ -10,20 +12,24 @@ namespace GiEnJul.Infrastructure
         {
             //Person mapping
             CreateMap<Dtos.PostPersonDto, Models.Person>()
-                .ForMember(dest => dest.RowKey, act => act.Ignore())
-                .ForMember(dest => dest.PartitionKey, act => act.Ignore());
+                .ForMember(dest => dest.PersonId, opt => opt.Ignore())
+                .ForMember(dest => dest.RecipientId, opt => opt.Ignore());
 
             CreateMap<Dtos.PutPersonDto, Models.Person>();
 
             CreateMap<Models.Person, Dtos.RecipientDataTableDto.PersonDataTableDto>();
 
-            CreateMap<Entities.Person, Models.Person>();
+            CreateMap<Entities.Person, Models.Person>()
+                .ForMember(dest => dest.PersonId, opt => opt.MapFrom(src => src.RowKey))
+                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Wishes, opt => opt.MapFrom(src => JsonConvert.DeserializeObject<IEnumerable<string>>(src.Wishes)));
 
             CreateMap<Models.Person, Entities.Person>()
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RowKey) ? Guid.NewGuid().ToString() : src.RowKey))
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.PersonId) ? Guid.NewGuid().ToString() : src.PersonId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.RecipientId))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
-                .ForMember(x => x.ETag, opt => opt.Ignore());
+                .ForMember(x => x.ETag, opt => opt.Ignore())
+                .ForMember(dest => dest.Wishes, opt => opt.MapFrom(src => JsonConvert.SerializeObject(src.Wishes)));
 
             CreateMap<(Models.Giver, Models.Recipient), GetConnectionDto>()
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Item1.HasConfirmedMatch))
@@ -36,105 +42,183 @@ namespace GiEnJul.Infrastructure
 
             //Recipient mapping
             CreateMap<Dtos.PostRecipientDto, Models.Recipient>()
-                .ForMember(dest => dest.RowKey, act => act.Ignore())
-                .ForMember(dest => dest.PartitionKey, act => act.Ignore())
-                .ForMember(dest => dest.EventName, act => act.Ignore())
+                .ForMember(dest => dest.RecipientId, opt => opt.Ignore())
+                .ForMember(dest => dest.Event, opt => opt.Ignore())
+                .ForMember(dest => dest.EventName, opt => opt.Ignore())
                 .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
-                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
-                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
-                .ForMember(dest => dest.MatchedGiver, act => act.Ignore())
-                .ForMember(dest => dest.FamilyId, act => act.Ignore())
-                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count));
+                .ForMember(dest => dest.HasConfirmedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.MatchedGiver, opt => opt.Ignore())
+                .ForMember(dest => dest.FamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count))
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             CreateMap<Dtos.PutRecipientDto, Models.Recipient>()
-                .ForMember(dest => dest.EventName, act => act.Ignore())
+                .ForMember(dest => dest.Event, opt => opt.Ignore())
+                .ForMember(dest => dest.RecipientId, opt => opt.Ignore())
+                .ForMember(dest => dest.EventName, opt => opt.Ignore())
                 .ForMember(dest => dest.FamilyMembers, opt => opt.MapFrom(src => src.FamilyMembers))
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count))
-                .ForMember(dest => dest.FamilyId, act => act.Ignore())
-                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
-                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
-                .ForMember(dest => dest.MatchedGiver, act => act.Ignore())
-                .ForMember(dest => dest.Location, act => act.Ignore())
-                .ForMember(dest => dest.ContactFullName, act => act.Ignore())
-                .ForMember(dest => dest.ContactEmail, act => act.Ignore())
-                .ForMember(dest => dest.ContactPhoneNumber, act => act.Ignore())
-                .ForMember(dest => dest.Institution, act => act.Ignore());
+                .ForMember(dest => dest.FamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.HasConfirmedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.MatchedGiver, opt => opt.Ignore())
+                .ForMember(dest => dest.Location, opt => opt.Ignore())
+                .ForMember(dest => dest.ContactFullName, opt => opt.Ignore())
+                .ForMember(dest => dest.ContactEmail, opt => opt.Ignore())
+                .ForMember(dest => dest.ContactPhoneNumber, opt => opt.Ignore())
+                .ForMember(dest => dest.Institution, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
-                .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
-                .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.RecipientId) ? Guid.NewGuid().ToString() : src.RecipientId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Event) ? $"{src.EventName}_{src.Location}" : src.Event))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.PersonCount));
 
-            CreateMap<Entities.Recipient, Models.Recipient>().ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
+            CreateMap<Entities.Recipient, Models.Recipient>()
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.RowKey))
+                .ForMember(dest => dest.FamilyMembers, opt => opt.Ignore());
 
             CreateMap<Models.Recipient, Dtos.RecipientDataTableDto>();
 
 
             //Giver mapping
             CreateMap<Dtos.PostGiverDto, Models.Giver>()
-                .ForMember(x => x.PartitionKey, opt => opt.Ignore())
-                .ForMember(x => x.RowKey, opt => opt.Ignore())
+                .ForMember(x => x.Event, opt => opt.Ignore())
+                .ForMember(x => x.GiverId, opt => opt.Ignore())
                 .ForMember(x => x.EventName, opt => opt.Ignore())
-                .ForMember(dest => dest.HasConfirmedMatch, act => act.Ignore())
-                .ForMember(dest => dest.IsSuggestedMatch, act => act.Ignore())
-                .ForMember(dest => dest.MatchedRecipient, act => act.Ignore())
-                .ForMember(dest => dest.MatchedFamilyId, act => act.Ignore())
-                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
-            
+                .ForMember(dest => dest.HasConfirmedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.SuggestedMatchAt, opt => opt.Ignore())
+                .ForMember(dest => dest.RemindedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.IsSuggestedMatch, opt => opt.Ignore())
+                .ForMember(dest => dest.MatchedRecipient, opt => opt.Ignore())
+                .ForMember(dest => dest.MatchedFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
+
 
             CreateMap<Models.Giver, Entities.Giver>()
-                .ForMember(dest => dest.RowKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.RowKey))))
-                .ForMember(dest => dest.PartitionKey, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.PartitionKey))))
-                .ForMember(dest => dest.MatchedFamilyId, opt => opt.Condition(src => (!string.IsNullOrEmpty(src.MatchedFamilyId))))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.GiverId) ? Guid.NewGuid().ToString() : src.GiverId))
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Event) ? $"{src.EventName}_{src.Location}" : src.Event))
+                .ForMember(dest => dest.MatchedFamilyId, opt => opt.MapFrom(src => src.MatchedFamilyId))
                 .ForMember(x => x.Timestamp, opt => opt.Ignore())
                 .ForMember(x => x.ETag, opt => opt.Ignore());
 
-            CreateMap<Entities.Giver, Models.Giver>();
+            CreateMap<Entities.Giver, Models.Giver>()
+                .ForMember(dest => dest.GiverId, opt => opt.MapFrom(src => src.RowKey))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.PartitionKey));
 
             CreateMap<Models.Giver, Dtos.PostGiverResultDto>();
-            CreateMap<Models.Giver, Dtos.GiverDataTableDto>();
+            CreateMap<Models.Giver, Dtos.GiverDataTableDto>()
+                .ForMember(dest => dest.GiverId, opt => opt.MapFrom(src => src.GiverId))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.Event));
 
             //Connection mapping
-            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
-                .ForMember(dest => dest.Check, opt => opt.Ignore());
-
             CreateMap<Entities.Connection, Models.Giver>()
+                .ForMember(dest => dest.GiverId, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1)))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.GiverFullName))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.GiverEmail))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.GiverPhoneNumber))
-                .ForMember(dest => dest.MatchedRecipient, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1))) //Rowkey is "rid_gid"
+                .ForMember(dest => dest.MatchedRecipient, opt => opt.MapFrom(src => src.RowKey.Substring(0, src.RowKey.IndexOf('_') - 1))) //Rowkey is "rid_gid"
                 .ForMember(dest => dest.MatchedFamilyId, opt => opt.MapFrom(src => src.FamilyId))
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.GiverLocation))
-                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore());
+                .ForMember(dest => dest.RegistrationDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
+                .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore())
+                .ForMember(dest => dest.SuggestedMatchAt, opt => opt.Ignore())
+                .ForMember(dest => dest.RemindedAt, opt => opt.Ignore());
 
 
             CreateMap<Entities.Connection, Models.Recipient>()
+                .ForMember(dest => dest.RecipientId, opt => opt.MapFrom(src => src.RowKey.Substring(0, src.RowKey.IndexOf('_') - 1)))
+                .ForMember(dest => dest.Event, opt => opt.MapFrom(src => src.PartitionKey))
                 .ForMember(dest => dest.ContactFullName, opt => opt.MapFrom(src => src.SubmitterFullName))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.SubmitterEmail))
                 .ForMember(dest => dest.ContactPhoneNumber, opt => opt.MapFrom(src => src.SubmitterPhoneNumber))
-                .ForMember(dest => dest.MatchedGiver, opt => opt.MapFrom(src => src.RowKey.Substring(0, src.RowKey.IndexOf('_') - 1))) //same as above
+                .ForMember(dest => dest.MatchedGiver, opt => opt.MapFrom(src => src.RowKey.Substring(src.RowKey.IndexOf('_') + 1))) //same as above
                 .ForMember(dest => dest.IsSuggestedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ReceiverLocation))
-                .ForMember(dest => dest.FamilyMembers, act => act.Ignore());
+                .ForMember(dest => dest.FamilyMembers, opt => opt.Ignore())
+                .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             //Event mapping
             CreateMap<Dtos.PostEventDto, Models.Event>()
-                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.EventName))
-                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.City));
+                .ForMember(dest => dest.Municipality, opt => opt.MapFrom(src => src.Municipality));
+
+            CreateMap<Entities.Event, Models.Event>()
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Municipality, opt => opt.MapFrom(src => src.RowKey));
 
             CreateMap<Models.Event, Entities.Event>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.EventName))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.Municipality))
                 .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
                 .ForMember(dest => dest.ETag, opt => opt.Ignore());
 
-            CreateMap<Entities.Event, Models.Event>();
+           
+               
+            //Cms mapping
+            CreateMap<Dtos.PostCmsDto, Models.Cms>();
 
-            CreateMap<Models.Event, GetContactsDto>()
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.RowKey));
+            CreateMap<Models.Cms, Entities.Cms>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.ContentType))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.Index))
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Cms, Models.Cms>()
+                .ForMember(dest => dest.ContentType, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Index, opt => opt.MapFrom(src => src.RowKey));
+
+
+            //Municipality mapping 
+            CreateMap<Dtos.PostMunicipalityDto, Models.Municipality>()
+                .ForMember(dest => dest.InfoImage1, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage2, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage3, opt => opt.Ignore());
+
+            CreateMap<Dtos.DeleteMunicipalityDto, Models.Municipality>()
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore())
+                .ForMember(dest => dest.Image, opt => opt.Ignore())
+                .ForMember(dest => dest.Information, opt => opt.Ignore())
+                .ForMember(dest => dest.Email, opt => opt.Ignore())
+                .ForMember(dest => dest.Instagram, opt => opt.Ignore())
+                .ForMember(dest => dest.Facebook, opt => opt.Ignore())
+                .ForMember(dest => dest.ContactPerson, opt => opt.Ignore())
+                .ForMember(dest => dest.PhoneNumber, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage1, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage2, opt => opt.Ignore())
+                .ForMember(dest => dest.InfoImage3, opt => opt.Ignore());
+
+            CreateMap<Models.Municipality, Entities.Municipality>()
+                .ForMember(dest => dest.PartitionKey, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.RowKey, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Timestamp, opt => opt.Ignore())
+                .ForMember(dest => dest.ETag, opt => opt.Ignore());
+
+            CreateMap<Entities.Municipality, Models.Municipality>()
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.PartitionKey))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.RowKey));
+
+            CreateMap<Models.Municipality, Dtos.GetContactsDto>();
+               
+            CreateMap<Entities.Municipality, Dtos.GetContactsDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.RowKey));
+
+            CreateMap<Models.Municipality, Dtos.GetMunicipalityDto>()
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => new List<string>() { src.InfoImage1, src.InfoImage2, src.InfoImage3 }));
         }
     }
 }

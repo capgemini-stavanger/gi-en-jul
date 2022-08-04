@@ -4,20 +4,24 @@ export interface GiverType {
   email: string;
   eventName: string;
   fullName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
+  hasConfirmedMatch: boolean;
+  isSuggestedMatch: boolean;
   location: string;
   matchedRecipient?: string;
   matchedFamilyId?: string;
   maxReceivers: number;
-  partitionKey: string;
-  rowKey: string;
+  event: string;
+  giverId: string;
   phoneNumber: string;
+  cancelFeedback: string;
+  cancelDate: Date;
+  cancelFamilyId: string;
+  comment: string;
 }
 
 export interface RecipientType {
-  rowKey: string;
-  partitionKey: string;
+  recipientId: string;
+  event: string;
   familyId: string;
 
   dinner: string;
@@ -34,21 +38,30 @@ export interface RecipientType {
   familyMembers: PersonType[];
 
   eventName: string;
-  hasConfirmedMatch: Boolean;
-  isSuggestedMatch: Boolean;
+  hasConfirmedMatch: boolean;
+  isSuggestedMatch: boolean;
   location: string;
-  matchedGiver?: GiverType;
+  matchedGiver?: string;
+  comment: string;
 }
 export interface PersonType {
-  partitionKey: string;
-  rowKey: string;
-  wish: string;
+  recipientId: string;
+  personId: string;
+  wishes: string[];
   age: number;
+  months: number;
   gender: Gender;
-  comment: string;
+  noWish: boolean;
 }
 
 export interface SelectedConnectionType {
   giver?: GiverType;
   recipient?: RecipientType;
+}
+
+export interface User {
+  location?: string;
+  role?: string;
+  institution?: string;
+  email?: string;
 }

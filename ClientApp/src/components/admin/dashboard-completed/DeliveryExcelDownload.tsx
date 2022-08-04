@@ -2,7 +2,6 @@ import { Button, Snackbar } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { Alert } from "@material-ui/lab";
 import React, { useState } from "react";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import ApiService from "common/functions/apiServiceClass";
 
 interface IDeliveryExcelDownload {
@@ -22,13 +21,9 @@ const initAlertState: () => IAlertState = () => ({
   open: false,
 });
 
-const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({
-  accessToken,
-  location,
-}) => {
+const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({ accessToken, location }) => {
   const apiservice = new ApiService(accessToken);
   const [alertState, setAlertState] = useState(initAlertState());
-  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const setAlert = (
     open?: boolean,
@@ -43,24 +38,16 @@ const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({
     }));
   };
 
-  const handleAlertClose = (
-      ) => {
+  const handleAlertClose = () => {
     setAlert(false);
   };
 
   const download = () => {
     apiservice
-      .downloadFile(
-        `admin/excel/delivery/${location}`,
-        `Leveranseliste_${location}.xlsx`
-      )
+      .downloadFile(`admin/excel/delivery/${location}`, `Leveranseliste_${location}.xlsx`)
       .catch((e) => {
         console.error("Error while trying to download delivery excel", e);
-        setAlert(
-          true,
-          "Kunne ikke laste ned dokument. Vennligst prøv på nytt.",
-          "error"
-        );
+        setAlert(true, "Kunne ikke laste ned dokument. Vennligst prøv på nytt.", "error");
       });
   };
 
@@ -83,7 +70,7 @@ const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({
         onClick={download}
         disabled={!location}
       >
-        Download
+        Last ned Excel
       </Button>
     </>
   );

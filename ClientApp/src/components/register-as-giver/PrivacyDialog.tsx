@@ -43,12 +43,7 @@ const PrivacyTexts = {
   ],
 };
 
-const PrivacyDialog: FC<IPrivacyDialog> = ({
-  privacyState,
-  setPrivacyState,
-  onClose,
-  open,
-}) => {
+const PrivacyDialog: FC<IPrivacyDialog> = ({ privacyState, setPrivacyState, onClose, open }) => {
   const classes = useStyles();
 
   const handleAgree = () => {
@@ -63,11 +58,7 @@ const PrivacyDialog: FC<IPrivacyDialog> = ({
           Personvernerklæring for Gi en jul
         </Typography>
         {onClose ? (
-          <IconButton
-            className={classes.rightMiddleAlign}
-            aria-label="close"
-            onClick={onClose}
-          >
+          <IconButton className={classes.rightMiddleAlign} aria-label="close" onClick={onClose}>
             <CloseIcon />
           </IconButton>
         ) : null}
@@ -85,8 +76,8 @@ const PrivacyDialog: FC<IPrivacyDialog> = ({
         ))}
         <Typography variant="subtitle2">Kontaktinformasjon</Typography>
         <Typography variant="caption">
-          Henvendelser om hvilke opplysninger som er registrert, retting og
-          sletting kan sende skriftlig til følgende adresser:
+          Henvendelser om hvilke opplysninger som er registrert, retting og sletting kan sende
+          skriftlig til følgende adresser:
           <a href={"mailto:stavanger@gienjul.no"}> stavanger@gienjul.no</a>
         </Typography>
       </DialogContent>

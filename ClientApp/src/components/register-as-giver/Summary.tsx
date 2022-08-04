@@ -1,7 +1,7 @@
 import {
+  Box,
   Button,
   Checkbox,
-  Container,
   FormControl,
   FormControlLabel,
   Grid,
@@ -91,7 +91,7 @@ const SummaryRegistration: React.FC<Props> = ({
   const [isValidsState, setIsValidsState] = useState({ ...initIsValidsState });
 
   const allIsValid = () => {
-    for (let isValid in isValidsState) {
+    for (const isValid in isValidsState) {
       if (!isValidsState[isValid]) return false;
     }
     return true;
@@ -109,7 +109,7 @@ const SummaryRegistration: React.FC<Props> = ({
 
   const submit = async () => {
     if (!executeRecaptcha) return;
-    let recaptchaToken = await executeRecaptcha("register_giver");
+    const recaptchaToken = await executeRecaptcha("register_giver");
     await apiservice
       .post(
         "giver",
@@ -127,9 +127,8 @@ const SummaryRegistration: React.FC<Props> = ({
           callingback(true);
         }
       })
-      .catch((errorStack) => {
+      .catch(() => {
         callingback(false);
-        console.log(errorStack);
       });
   };
 
@@ -164,10 +163,7 @@ const SummaryRegistration: React.FC<Props> = ({
     }));
   };
 
-  const getPrivacyState = useCallback(
-    () => isValidsState.isValidPrivacy,
-    [isValidsState]
-  );
+  const getPrivacyState = useCallback(() => isValidsState.isValidPrivacy, [isValidsState]);
 
   useEffect(() => {
     if (!state.viewErrorTrigger) return;
@@ -181,146 +177,152 @@ const SummaryRegistration: React.FC<Props> = ({
     <>
       <Typography className={classes.subHeading}>Oppsummering</Typography>
       <Typography className={classes.infoText}>
-        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før
-        du sender inn. Sjekk gjerne at telefonnummer og epostadresse er riktig
-        skrevet.{" "}
+        Se gjennom informasjonen, les og godkjenn personvernerklæringen vår før du sender inn. Sjekk
+        gjerne at telefonnummer og epostadresse er riktig skrevet.{" "}
       </Typography>
-      <Container>
-        <Grid container className={classes.form}>
-          <Grid container className={classes.summaryInput}>
-            <Grid item xs={9}>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                type="select"
-                disabled={changesState.location}
-                variant="outlined"
-                fullWidth
-                label="Lokasjon*"
-                name="location-input"
-                value={values.location}
-                id="location-input"
-                onChange={handleLocationChange}
-                errorMessages={["Vennligst velg lokasjon"]}
-                validators={[isNotNull]}
-                setIsValids={getValiditySetter("isValidLocation")}
-                options={locationOptions.map((loc) => {
-                  return { value: loc, text: loc };
-                })}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button onClick={handleChange("location")}>
-                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
-              </Button>
-            </Grid>
+      <Grid container className={classes.form}>
+        <Grid container className={classes.summaryInput}>
+          <Grid item xs={10}>
+            <InputValidator
+              viewErrorTrigger={state.viewErrorTrigger}
+              type="select"
+              disabled={changesState.location}
+              variant="outlined"
+              fullWidth
+              label="Lokasjon*"
+              name="location-input"
+              value={values.location}
+              id="location-input"
+              onChange={handleLocationChange}
+              errorMessages={["Vennligst velg lokasjon"]}
+              validators={[isNotNull]}
+              setIsValids={getValiditySetter("isValidLocation")}
+              options={locationOptions.map((loc) => {
+                return { value: loc, text: loc };
+              })}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button onClick={handleChange("location")}>
+              <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+            </Button>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={10} className={classes.summaryInput}>
+            <InputValidator
+              viewErrorTrigger={state.viewErrorTrigger}
+              disabled={changesState.fullName}
+              label="Fullt navn*"
+              variant="outlined"
+              fullWidth
+              name="fullname"
+              autoComplete="name"
+              value={values.fullname}
+              onChange={handlefullnameChange}
+              validators={[isNotNull]}
+              errorMessages={["Vennligst skriv inn ditt navn"]}
+              setIsValids={getValiditySetter("isValidFullName")}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button onClick={handleChange("fullName")}>
+              <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={10} className={classes.summaryInput}>
+            <InputValidator
+              viewErrorTrigger={state.viewErrorTrigger}
+              disabled={changesState.email}
+              label="Epost"
+              onChange={handleEmailChange}
+              name="email"
+              value={values.email}
+              validators={[isEmail, isNotNull]}
+              errorMessages={[
+                "Eposten din ser litt rar ut, er den skrevet riktig?",
+                "Vennligst skriv inn din epost",
+              ]}
+              setIsValids={[getValiditySetter("isValidEmail"), getValiditySetter("isNotNullEmail")]}
+              autoComplete="email"
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button onClick={handleChange("email")}>
+              <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={10} className={classes.summaryInput}>
+            <InputValidator
+              viewErrorTrigger={state.viewErrorTrigger}
+              disabled={changesState.phone}
+              label="Telefonnummer"
+              onChange={handleTlfChange}
+              name="phoneNumber"
+              value={values.phoneNumber}
+              validators={[isPhoneNumber, isNotNull]}
+              errorMessages={[
+                "Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?",
+                "Vennligst skriv inn ditt telefonnummer",
+              ]}
+              setIsValids={[getValiditySetter("isValidPhone"), getValiditySetter("isNotNullPhone")]}
+              autoComplete="tel"
+              variant="outlined"
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button onClick={handleChange("phone")}>
+              <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+            </Button>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={10} className={classes.summaryInput}>
+            <InputValidator
+              viewErrorTrigger={state.viewErrorTrigger}
+              type="select"
+              disabled={changesState.family}
+              variant="outlined"
+              fullWidth
+              name="familyType-input"
+              value={values.maxReceivers}
+              onChange={handleFamilyChange}
+              label="Familiesammensetning*"
+              validators={[isNotNull]}
+              setIsValids={getValiditySetter("isValidFamily")}
+              options={FAMILY_SIZES}
+            />
           </Grid>
 
-          <Grid container>
-            <Grid item xs={9} className={classes.summaryInput}>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                disabled={changesState.fullName}
-                label="Fullt navn*"
-                variant="outlined"
-                fullWidth
-                name="fullname"
-                autoComplete="name"
-                value={values.fullname}
-                onChange={handlefullnameChange}
-                validators={[isNotNull]}
-                errorMessages={["Vennligst skriv inn ditt navn"]}
-                setIsValids={getValiditySetter("isValidFullName")}
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button onClick={handleChange("fullName")}>
-                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
-              </Button>
-            </Grid>
+          <Grid item xs={2}>
+            <Button onClick={handleChange("family")}>
+              <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
+            </Button>
           </Grid>
-          <Grid container>
-            <Grid item xs={9} className={classes.summaryInput}>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                disabled={changesState.email}
-                label="Epost"
-                onChange={handleEmailChange}
-                name="email"
-                value={values.email}
-                validators={[isEmail, isNotNull]}
-                errorMessages={[
-                  "Eposten din ser litt rar ut, er den skrevet riktig?",
-                  "Vennligst skriv inn din epost",
-                ]}
-                setIsValids={[
-                  getValiditySetter("isValidEmail"),
-                  getValiditySetter("isNotNullEmail"),
-                ]}
-                autoComplete="email"
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button onClick={handleChange("email")}>
-                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={9} className={classes.summaryInput}>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                disabled={changesState.phone}
-                label="Telefonnummer"
-                onChange={handleTlfChange}
-                name="phoneNumber"
-                value={values.phoneNumber}
-                validators={[isPhoneNumber, isNotNull]}
-                errorMessages={[
-                  "Telefonnummeret ditt ser litt rart ut, er det skrevet riktig?",
-                  "Vennligst skriv inn ditt telefonnummer",
-                ]}
-                setIsValids={[
-                  getValiditySetter("isValidPhone"),
-                  getValiditySetter("isNotNullPhone"),
-                ]}
-                autoComplete="tel"
-                variant="outlined"
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={3}>
-              <Button onClick={handleChange("phone")}>
-                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={9} className={classes.summaryInput}>
-              <InputValidator
-                viewErrorTrigger={state.viewErrorTrigger}
-                type="select"
-                disabled={changesState.family}
-                variant="outlined"
-                fullWidth
-                name="familyType-input"
-                value={values.maxReceivers}
-                onChange={handleFamilyChange}
-                label="Familiesammensetning*"
-                validators={[isNotNull]}
-                setIsValids={getValiditySetter("isValidFamily")}
-                options={FAMILY_SIZES}
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <Button onClick={handleChange("family")}>
-                <EditOutlinedIcon className={classes.icon}></EditOutlinedIcon>
-              </Button>
-            </Grid>
-          </Grid>
+        </Grid>
+        <Grid item xs={12}>
           <FormControl required error>
+            {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
+            <Typography variant="caption" gutterBottom>
+              Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
+              <Link color="textSecondary" href="https://policies.google.com/privacy">
+                personvernerklæring
+              </Link>{" "}
+              og{" "}
+              <Link color="textSecondary" href="https://policies.google.com/terms">
+                vilkår for bruk
+              </Link>{" "}
+              gjelder.
+            </Typography>
+
             <FormControlLabel
               control={
                 <Checkbox
@@ -348,35 +350,18 @@ const SummaryRegistration: React.FC<Props> = ({
                 </Typography>
               }
             />
+            <Box className={classes.captchaContainer}>
+              <Pager
+                onContinue={extendedNextStep}
+                onBack={prevStep}
+                continueText="Fullfør"
+                step={step}
+              />
+            </Box>
           </FormControl>
-          {/* A comment about recaptcha is needed in the summary. See https://developers.google.com/recaptcha/docs/faq#id-like-to-hide-the-recaptcha-badge.-what-is-allowed*/}
-          <div className={classes.captchaContainer}>
-            <Typography variant="caption" gutterBottom>
-              Dette nettstedet er beskyttet av reCAPTCHA og Googles{" "}
-              <Link
-                color="textSecondary"
-                href="https://policies.google.com/privacy"
-              >
-                personvernerklæring
-              </Link>{" "}
-              og{" "}
-              <Link
-                color="textSecondary"
-                href="https://policies.google.com/terms"
-              >
-                vilkår for bruk
-              </Link>{" "}
-              gjelder.
-            </Typography>
-          </div>
         </Grid>
-        <Pager
-          onContinue={extendedNextStep}
-          onBack={prevStep}
-          continueText="Fullfør registreringen"
-          step={step}
-        />
-      </Container>
+      </Grid>
+
       <PrivacyDialog
         open={state.dialogOpen}
         onClose={() => setShowPrivacyDialog(false)}

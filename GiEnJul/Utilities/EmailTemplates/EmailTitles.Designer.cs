@@ -61,11 +61,47 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gi en jul - familie - husk å bekrefte!.
+        ///   Looks up a localized string similar to Gi en jul - du har fått tildelt en familie!.
         /// </summary>
         public static string AssignedFamily {
             get {
                 return ResourceManager.GetString("AssignedFamily", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - automatisk frakobling.
+        /// </summary>
+        public static string AutomaticDisconnect {
+            get {
+                return ResourceManager.GetString("AutomaticDisconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - avslått kobling!.
+        /// </summary>
+        public static string ConnectionDenied {
+            get {
+                return ResourceManager.GetString("ConnectionDenied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - påminnelse! Husk å bekrefte!.
+        /// </summary>
+        public static string ConnectionReminder {
+            get {
+                return ResourceManager.GetString("ConnectionReminder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - notifikasjon!.
+        /// </summary>
+        public static string Notification {
+            get {
+                return ResourceManager.GetString("Notification", resourceCulture);
             }
         }
         
@@ -79,7 +115,16 @@ namespace GiEnJul.Utilities.EmailTemplates {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gi en jul - registrering og informasjon!.
+        ///   Looks up a localized string similar to Gi en jul - godkjenn forespørsel!.
+        /// </summary>
+        public static string VerifyConnection {
+            get {
+                return ResourceManager.GetString("VerifyConnection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gi en jul - venteliste!.
         /// </summary>
         public static string WaitingList {
             get {

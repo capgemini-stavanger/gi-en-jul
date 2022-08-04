@@ -53,7 +53,7 @@ const FormDinner: FC<IFormDinner> = ({
   }, [viewErrorTrigger]);
 
   useEffect(() => {
-    let isInvalid = !radio || (radio === "annet" && !isValidInput);
+    const isInvalid = !radio || (radio === "annet" && !isValidInput);
     if (setIsValid) setIsValid(!isInvalid);
     setIsErr(!!required && viewError && isInvalid);
   }, [setIsValid, required, viewError, radio, isValidInput]);
@@ -68,12 +68,7 @@ const FormDinner: FC<IFormDinner> = ({
       <RadioGroup name={name} value={radio} onChange={extendedOnRadioChange}>
         {foods.map((f) => {
           return (
-            <FormControlLabel
-              key={`fd_${f}`}
-              value={f}
-              control={<Radio />}
-              label={capitalize(f)}
-            />
+            <FormControlLabel key={`fd_${f}`} value={f} control={<Radio />} label={capitalize(f)} />
           );
         })}
         <FormControlLabel

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
+using Azure;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Serilog;
-using Azure.Data.Tables;
-using Azure;
-using Azure.Core;
+using System;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
 {
@@ -36,7 +33,16 @@ namespace GiEnJul.Repositories
 
             var attempts = 1;
             while (true) {
-                var result = await GetAsync(name, tableName);
+                AutoIncrement result = default;
+                try
+                {
+                    result = await GetAsync(name, tableName);
+                }
+                catch (Exception e)
+                {
+                    if (!(e is RequestFailedException rfe && rfe.ErrorCode == "ResourceNotFound"))
+                        throw;
+                }
 
                 if (result == null && attempts == 1)
                 {
@@ -47,42 +53,13 @@ namespace GiEnJul.Repositories
                     result.Value += 1;
                 }
 
-                _httpClient.DefaultRequestHeaders.Add("If-Match", result.ETag.ToString());
-
-                try
-                {
-                    await InsertOrReplaceAsync(result);
+                if (await UpdateIfMatch(result)) 
                     return result.Value.ToString();
-                }
-                catch (RequestFailedException e)
+                else
                 {
                     attempts += 1;
-                    if (e.Status != 412 || attempts > 3)
-                    {
-                        throw e;
-                    }
                     await Task.Delay(50);
                 }
-                finally
-                {
-                    _httpClient.DefaultRequestHeaders.Remove("If-Match");
-                }
-            }
-        }
-
-        public class IfMatchPolicy : Azure.Core.Pipeline.HttpPipelineSynchronousPolicy
-        {
-            public IfMatchPolicy(ETag etag)
-            {
-                Etag = etag;
-            }
-
-            public ETag Etag { get; }
-
-            public override void OnSendingRequest(HttpMessage message)
-            {
-                message.Request.Headers.Add("If-Match", Etag.ToString());
-                base.OnSendingRequest(message);
             }
         }
     }

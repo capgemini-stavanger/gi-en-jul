@@ -14,11 +14,13 @@ namespace GiEnJul.Repositories
     {
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();
-        Task<List<Models.Event>> GetContactsWithActiveEventAsync();
         Task<string> GetDeliveryAddressForLocationAsync(string location);
         Task<(int, string)> GetGiverLimitAndEventNameForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
         Task<Models.Event> GetEventByUserLocationAsync(string location);
+        Task<List<Models.Event>> GetAllEventsAsync();
+        Task<string[]> GetAllUniqueEventNames();
+        Task<Entities.Event> DeleteEntry(string eventName, string municipality);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -65,11 +67,28 @@ namespace GiEnJul.Repositories
 
             if (activeEvent == null || !activeEvent.Any())
             {
-                throw new KeyNotFoundException();
+                return null;
             }
             _log.Debug("Found active event: {@0} for location: {1}", activeEvent.First().PartitionKey, location);
 
-            return activeEvent.First();
+            return activeEvent.First(x => x.StartDate < DateTime.Now && x.EndDate > DateTime.Now);
+        }
+
+        public async Task<List<Models.Event>> GetAllEventsAsync()
+        {
+            var events = await GetAllAsync();
+            var modelEvents = _mapper.Map<List<Models.Event>>(events);
+
+            return modelEvents;
+        }
+
+        public async Task<string[]> GetAllUniqueEventNames()
+        {
+            var events = await GetAllAsync();
+            // Partition key is "EventName"
+            var uniqueEventNames = events.Select(e => e.PartitionKey).Distinct().ToArray();
+
+            return uniqueEventNames;
         }
 
         public async Task<string[]> GetLocationsWithActiveEventAsync()
@@ -97,13 +116,17 @@ namespace GiEnJul.Repositories
             return _mapper.Map<Models.Event>(inserted);
         }
 
-        public async Task<List<Models.Event>> GetContactsWithActiveEventAsync()
+        public async Task<Entities.Event> DeleteEntry(string eventName, string municipality)
         {
-            var events = await GetAllByQueryAsync(HasActiveDates());
-
-            var modelEvents = _mapper.Map<List<Models.Event>>(events);
-
-            return modelEvents;
+            try
+            {
+                var deleted = await DeleteAsync(eventName, municipality);
+                return deleted;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

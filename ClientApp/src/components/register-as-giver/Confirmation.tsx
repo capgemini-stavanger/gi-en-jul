@@ -1,13 +1,8 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import { Spinner } from "reactstrap";
 import IFormData from "./IFormData";
 import useStyles from "components/register-as-giver/Styles";
-import snowmanFull from "styling/img/snowmanFull.svg";
-import snowDown from "styling/img/snow_down2.svg";
-import logo from "styling/img/logo_green.svg";
-import { ArrowForwardIos } from "@material-ui/icons";
+import DotLoader from "common/constants/DotLoader";
 
 type Props = {
   values: IFormData;
@@ -15,7 +10,6 @@ type Props = {
 };
 
 const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
-  const history = useHistory();
   const classes = useStyles();
 
   const getMessage = useCallback(
@@ -27,27 +21,24 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
             Hjertelig takk {values.fullname}!
           </Typography>
           <Typography className={classes.paragraph}>
-            Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg
-            som giver til årets Gi en jul og har sendt en oppsummering av din
-            registrering til
-          </Typography>
-          <Typography className={classes.paragraphBold}>
-            {values.email}
+            Tusen takk for innsatsen du skal gjøre! Vi har nå registrert deg som giver til årets Gi
+            en jul og har sendt en oppsummering av din registrering til <b>{values.email}</b>
           </Typography>
           <Typography className={classes.paragraph}>
-            Når det nærmer seg jul vil du motta mer informasjon som ønskelister,
-            sted og tidspunkt for innlevering av ditt bidrag.
+            Når det nærmer seg jul vil du motta en mail med litt informasjon om tildelt familie, i
+            denne mailen er det en link du må trykke på for å <b>godkjenne sammenkoblingen</b>.
+          </Typography>
+          <Typography className={classes.paragraph}>
+            Når du har godkjent sammenkoblingen, vil du motta mer informasjon som ønskelister, sted
+            og tidspunkt for innlevering av ditt bidrag.
           </Typography>
         </>
       ) : (
         <>
-          <Typography className={classes.headingBold}>
-            {" "}
-            Ånei! {values.fullname}!
-          </Typography>
+          <Typography className={classes.headingBold}> Ånei! {values.fullname}!</Typography>
           <Typography className={classes.paragraph}>
-            Desverre har det skjedd en feil og vi har ikke fått registrert
-            deg. Gjerne prøv igjen senere og ta kontakt på epost dersom feilen vedvarer.
+            Desverre har det skjedd en feil og vi har ikke fått registrert deg. Gjerne prøv igjen
+            senere og ta kontakt på epost dersom feilen vedvarer.
           </Typography>
         </>
       ),
@@ -56,31 +47,12 @@ const Confirmation: React.FC<Props> = ({ values, confirmationOK }) => {
 
   return (
     <>
-      <Button
-        size="large"
-        endIcon={<ArrowForwardIos />}
-        className={classes.buttonMainPage}
-        onClick={React.useCallback(() => history.push("/"), [history])}
-      >
-        Hovedsiden
-      </Button>
-      <img className={classes.smallLogo} src={logo}></img>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Grid item>
-          <img className={classes.imageSnow} src={snowDown}></img>
-        </Grid>
+      <Grid container direction="column" justifyContent="center" alignItems="center">
+        <Grid item></Grid>
         <Grid item>
           <Container className={classes.giverForm}>
-            {confirmationOK !== undefined ? getMessage() : <Spinner />}
+            {confirmationOK !== undefined ? getMessage() : <DotLoader />}
           </Container>
-        </Grid>
-        <Grid item className={classes.imageContainer}>
-          <img className={classes.backgroundImage} src={snowmanFull}></img>
         </Grid>
       </Grid>
     </>

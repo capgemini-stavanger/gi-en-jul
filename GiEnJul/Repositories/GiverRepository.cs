@@ -2,7 +2,6 @@ using AutoMapper;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace GiEnJul.Repositories
         Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location);
         Task<int> GetGiversCountByLocationAsync(string eventName, string location);
         Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
-
+        Task<IEnumerable<Models.Giver>> GetGiversByQueryAsync(string query);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -36,7 +35,6 @@ namespace GiEnJul.Repositories
 
         public async Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model)
         {
-            model.RegistrationDate = DateTime.UtcNow;
             var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Giver>(model));
             return _mapper.Map<Models.Giver>(inserted);
         }
@@ -81,6 +79,12 @@ namespace GiEnJul.Repositories
         {
             var givers = await GetGiversByLocationAsync(eventName, location);
             return givers.Count();
+        }
+
+        public async Task<IEnumerable<Models.Giver>> GetGiversByQueryAsync(string query)
+        {
+            var givers = await GetAllByQueryAsync(query);
+            return _mapper.Map<IEnumerable<Models.Giver>>(givers);
         }
     }
 }

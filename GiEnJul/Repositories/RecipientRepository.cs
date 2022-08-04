@@ -18,6 +18,9 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location);
         Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution);
+        Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location);
+        Task<IEnumerable<Models.Recipient>> GetRecipientsByIdsAsync(IEnumerable<string> ids);
+        Task<bool> RecipientDoesExist(string referenceId);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -42,6 +45,18 @@ namespace GiEnJul.Repositories
 
             var recipients = await GetAllByQueryAsync(query);
             return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<bool> RecipientDoesExist(string referenceId)
+        {
+            var query = $"ReferenceId eq '{referenceId}'";
+            var exists = await GetAllByQueryAsync(query);
+            if (_mapper.Map<List<Models.Recipient>>(exists).Count > 0)
+                return true;
+           
+            else
+                return false;
+            
         }
 
         public async Task<List<Models.Recipient>> GetAllAsModelAsync()
@@ -87,6 +102,21 @@ namespace GiEnJul.Repositories
             var recipients = await GetAllByQueryAsync(filter);
 
             return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location)
+        {
+            var query = $"Institution eq '{institution}' and PartitionKey eq '{eventName}_{location}'";
+            var recipients = await GetAllByQueryAsync(query);
+
+            return _mapper.Map<List<Models.Recipient>>(recipients);
+        }
+
+        public async Task<IEnumerable<Models.Recipient>> GetRecipientsByIdsAsync(IEnumerable<string> ids)
+        {
+            var recipients = await GetAllByRowKey(ids);
+
+            return _mapper.Map<IEnumerable<Models.Recipient>>(recipients);
         }
     }
 }

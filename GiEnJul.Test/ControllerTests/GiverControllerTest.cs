@@ -18,6 +18,7 @@ namespace GiEnJul.Test.ControllerTests
     {
         private Mock<IGiverRepository> mockGiverRepo { get; set; }
         private Mock<IEventRepository> mockEventRepo { get; set; }
+        private Mock<IMunicipalityRepository> mockMunicipalityRepo { get; set; }
         private Mock<IEmailClient> mockEmailClient { get; set; }
         private Mock<ISettings> mockSettings { get; set; }
         private Mock<IRecaptchaVerifier> mockRecaptchaVerifier { get; set; }
@@ -31,13 +32,15 @@ namespace GiEnJul.Test.ControllerTests
         {
             mockGiverRepo = new Mock<IGiverRepository>();
             mockEventRepo = new Mock<IEventRepository>();
+            mockMunicipalityRepo = new Mock<IMunicipalityRepository>();
             mockEmailClient = new Mock<IEmailClient>();
             mockSettings = new Mock<ISettings>();
             mockRecaptchaVerifier = new Mock<IRecaptchaVerifier>();
             mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
             _controller = new GiverController(
                 mockGiverRepo.Object, 
-                mockEventRepo.Object, 
+                mockEventRepo.Object,
+                mockMunicipalityRepo.Object,
                 mockEmailClient.Object, 
                 _log, 
                 _mapper, 
@@ -52,6 +55,7 @@ namespace GiEnJul.Test.ControllerTests
         {
             mockEventRepo.VerifyNoOtherCalls();
             mockGiverRepo.VerifyNoOtherCalls();
+            mockMunicipalityRepo.VerifyNoOtherCalls();
             mockEmailClient.VerifyNoOtherCalls();
             mockEmailTemplateBuilder.VerifyNoOtherCalls();
         }
@@ -97,7 +101,7 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositoryThrowsException_ControllerReturnsBadRequest()
         {
             //Arrange
-            var fakeEvent = new Models.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit=40 };
+            var fakeEvent = new Models.Event { Municipality = "Stavanger", EventName = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit=40 };
             mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent);
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).Throws(new Exception());
 
@@ -113,17 +117,21 @@ namespace GiEnJul.Test.ControllerTests
         public async Task PostAsync_GiverRepositorySuccessfullyAddsEntity_ControllerReturnsEntityAsync()
         {
             //Arrange
-            var fakeEvent = new Models.Event { RowKey = "Stavanger", PartitionKey = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
+            var fakeEvent = new Models.Event { Municipality = "Stavanger", EventName = "Jul21", DeliveryAddress = "Somewhere", EndDate = DateTime.UtcNow, StartDate = DateTime.UtcNow, GiverLimit = 40 };
             mockEventRepo.Setup(x => x.GetEventByUserLocationAsync(It.IsAny<string>())).ReturnsAsync(fakeEvent);
+            
+            
+            var fakeMunicipality = new Models.Municipality { Country = "Norway", Name = "Stavanger", ContactPerson = "Navn test", Email="Email", PhoneNumber="1231232131" };
+            mockMunicipalityRepo.Setup(x => x.GetSingle(It.IsAny<string>(), "Norge")).ReturnsAsync(fakeMunicipality);
 
-            var fakeModel = new Models.Giver { RowKey = Guid.NewGuid().ToString(), PartitionKey = $"{fakeEvent.RowKey}_{fakeEvent.PartitionKey}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
+            var fakeModel = new Models.Giver { EventName = Guid.NewGuid().ToString(), GiverId = $"{fakeEvent.Municipality}_{fakeEvent.EventName}", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" };
             mockGiverRepo.Setup(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>())).ReturnsAsync(fakeModel);
             mockGiverRepo.Setup(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(It.IsAny<int>());
 
             mockEmailTemplateBuilder.Setup(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>())).ReturnsAsync(new EmailTemplate());
 
             //Act
-            var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Not Empty", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
+            var result = await _controller.PostAsync(new PostGiverDto() { RecaptchaToken = "abcdefg123456", Location = "Stavanger", MaxReceivers = 5, PhoneNumber = "12312312", FullName = "FullName", Email = "Email" });
 
             //Assert
             var actionResult = Assert.IsType<ActionResult<PostGiverResultDto>>(result);
@@ -133,9 +141,10 @@ namespace GiEnJul.Test.ControllerTests
 
             mockGiverRepo.Verify(x => x.InsertOrReplaceAsync(It.IsAny<Models.Giver>()), Times.Once());
             mockGiverRepo.Verify(x => x.GetGiversCountByLocationAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once());
-            mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            mockEmailClient.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<EmailTemplate>()), Times.Once());
             mockEventRepo.Verify(x => x.GetEventByUserLocationAsync(It.IsAny<string>()), Times.Once());
             mockEmailTemplateBuilder.Verify(x => x.GetEmailTemplate(It.IsAny<EmailTemplateName>(), It.IsAny<Dictionary<string, string>>()));
+            mockMunicipalityRepo.Verify(x => x.GetSingle(It.IsAny<string>(),"Norge"), Times.Once());
         }
 
         [Fact]

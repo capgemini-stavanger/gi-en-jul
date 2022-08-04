@@ -57,7 +57,7 @@ namespace GiEnJul.Repositories
         }
         public bool ConnectionExists(Models.Giver giver, Models.Recipient recipient)
         {
-            return TryGet(giver.PartitionKey, $"{recipient.RowKey}_{giver.RowKey}", out _);
+            return TryGet(giver.Event, $"{recipient.RecipientId}_{giver.GiverId}", out _);
         }
     }
 }

@@ -20,11 +20,13 @@ namespace GiEnJul.Test.ControllerTests
         public Mock<IRecipientRepository> MockRecipientRepo { get; private set; }
         public Mock<IPersonRepository> MockPersonRepo { get; private set; }
         public Mock<IConnectionRepository> MockConnectionRepo { get; private set; }
+        public Mock<IMunicipalityRepository> MockMunicipalityRepo { get; private set; }
 
         private readonly Mock<IEmailClient> emailClientMock;
 
         public Mock<IConfiguration> ConfigMock { get; private set; }
         public Mock<IEmailTemplateBuilder> mockEmailTemplateBuilder { get; set; }
+        public Mock<IAuthorization> AuthMock { get; private set; }
 
         public readonly Settings settings;
 
@@ -37,20 +39,24 @@ namespace GiEnJul.Test.ControllerTests
             MockRecipientRepo = new Mock<IRecipientRepository>();
             MockPersonRepo = new Mock<IPersonRepository>();
             MockConnectionRepo = new Mock<IConnectionRepository>();
+            MockMunicipalityRepo = new Mock<IMunicipalityRepository>();
             emailClientMock = new Mock<IEmailClient>();
             ConfigMock = new Mock<IConfiguration>();
             mockEmailTemplateBuilder = new Mock<IEmailTemplateBuilder>();
             settings = new Settings(ConfigMock.Object);
+            AuthMock = new Mock<IAuthorization>();
             _controller = new AdminController(MockEventRepo.Object,
                                               MockGiverRepo.Object,
                                               MockRecipientRepo.Object,
                                               MockPersonRepo.Object,
                                               MockConnectionRepo.Object,
+                                              MockMunicipalityRepo.Object,
                                               _log,
                                               _mapper,
                                               emailClientMock.Object,
                                               settings,
-                                              mockEmailTemplateBuilder.Object);
+                                              mockEmailTemplateBuilder.Object,
+                                              AuthMock.Object);
         }
 
         [Fact]

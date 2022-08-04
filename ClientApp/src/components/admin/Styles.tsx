@@ -16,6 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexBasis: "33.33%",
       flexShrink: 0,
     },
+    emailButton: {
+      paddingLeft: "10px",
+    },
+    emailText: {
+      paddingTop: "6px",
+    },
     mediumColumn: {
       flexBasis: "30%",
     },
@@ -48,6 +54,12 @@ const useStyles = makeStyles((theme: Theme) =>
       right: "0",
       top: "0",
       margin: "0.3em",
+    },
+    headerSpacing: {
+      marginTop: "1em",
+    },
+    wishSpacing: {
+      marginTop: "1.2em",
     },
   })
 );

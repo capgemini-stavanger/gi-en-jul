@@ -4,9 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>GiEnJul</RootNamespace>
+    <UserSecretsId>b744da0b-6d55-49e8-ab44-778cf5b19a00</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Auth0.ManagementApi" Version="7.16.0" />
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="AutoMapper" Version="11.0.1" />
@@ -17,12 +19,15 @@
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Quartz" Version="3.4.0" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog" Version="2.11.0" />
     <PackageReference Include="Serilog.Sinks.AzureTableStorage" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
 	<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
+	<PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,17 +46,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Utilities\EmailTemplates\Files\AssignedFamily - styled.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Utilities\EmailTemplates\Files\AssignedFamily.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilities\EmailTemplates\Files\familyTop.0ff49710.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="Utilities\EmailTemplates\Files\ConnectionDenied.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilities\EmailTemplates\Files\AutomaticDisconnect.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilities\EmailTemplates\Files\ConnectionReminder.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilities\EmailTemplates\Files\familyTop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilities\EmailTemplates\Files\Notification.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 	<None Update="Utilities\EmailTemplates\Files\Registered.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="Utilities\EmailTemplates\Files\family.png">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+	<None Update="Utilities\EmailTemplates\Files\VerifyConnection.html">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</None>
 	<None Update="Utilities\EmailTemplates\Files\WaitingList.html">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>

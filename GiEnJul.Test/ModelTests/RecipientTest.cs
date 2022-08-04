@@ -28,9 +28,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; //Missing location
             yield return new object[] { new PostRecipientDto() {
@@ -43,9 +43,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing dinner
             yield return new object[] { new PostRecipientDto() {
@@ -58,9 +58,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing dessert
             yield return new object[] { new PostRecipientDto() {
@@ -73,9 +73,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing contact full name
             yield return new object[] { new PostRecipientDto() {
@@ -89,9 +89,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Invalid contact email
             yield return new object[] { new PostRecipientDto() {
@@ -105,9 +105,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Invalid contact phone number
             yield return new object[] { new PostRecipientDto() {
@@ -120,9 +120,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}; // Missing institution
             yield return new object[] { new PostRecipientDto() {
@@ -172,9 +172,9 @@ namespace GiEnJul.Test.ModelTests
                 Note = "",
                 FamilyMembers =
                 {
-                    new PostPersonDto() { Wish = "leke", Age = 4, Gender = Models.Gender.Female },
+                    new PostPersonDto() { Wishes = new[]{"leke"}, Age = 4, Gender = Models.Gender.Female },
                     new PostPersonDto() { Age = 47, Gender = Models.Gender.Male },
-                    new PostPersonDto() { Wish = "sko", Age = 6, Gender = Models.Gender.Female }
+                    new PostPersonDto() { Wishes = new[]{"sko"}, Age = 6, Gender = Models.Gender.Female }
                 }
             }}));
         }

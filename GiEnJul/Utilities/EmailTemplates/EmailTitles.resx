@@ -118,15 +118,35 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignedFamily" xml:space="preserve">
-    <value>Gi en jul - familie - husk å bekrefte!</value>
+    <value>Gi en jul - du har fått tildelt en familie!</value>
     <comment>When admin assigns a family to user</comment>
+  </data>
+  <data name="AutomaticDisconnect" xml:space="preserve">
+    <value>Gi en jul - automatisk frakobling</value>
+    <comment>When giver has not confirmed for while</comment>
+  </data>
+  <data name="ConnectionDenied" xml:space="preserve">
+    <value>Gi en jul - avslått kobling!</value>
+    <comment>When giver denies the connection</comment>
+  </data>
+  <data name="ConnectionReminder" xml:space="preserve">
+    <value>Gi en jul - påminnelse! Husk å bekrefte!</value>
+    <comment>When reminder is sent to a giver</comment>
+  </data>
+  <data name="Notification" xml:space="preserve">
+    <value>Gi en jul - notifikasjon!</value>
+    <comment>When a notification is provided</comment>
   </data>
   <data name="Registered" xml:space="preserve">
     <value>Gi en jul - registrering og informasjon!</value>
     <comment>When giver is registered</comment>
   </data>
+  <data name="VerifyConnection" xml:space="preserve">
+    <value>Gi en jul - godkjenn forespørsel!</value>
+    <comment>When giver connects with family</comment>
+  </data>
   <data name="WaitingList" xml:space="preserve">
-    <value>Gi en jul - registrering og informasjon!</value>
+    <value>Gi en jul - venteliste!</value>
     <comment>When giver is registered and on waiting list</comment>
   </data>
 </root>

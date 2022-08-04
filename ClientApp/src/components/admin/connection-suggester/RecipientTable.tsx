@@ -31,7 +31,7 @@ function Row(props: RecipientRowProps) {
     <>
       <TableRow
         onClick={() => {
-          props.onClick(recipient.rowKey, recipient.partitionKey);
+          props.onClick(recipient.recipientId, recipient.event);
           setOpen(!open);
         }}
         style={{ backgroundColor: props.selected ? "#EEE" : "#FFF" }}
@@ -62,7 +62,7 @@ function Row(props: RecipientRowProps) {
                   <TableRow>
                     <TableCell>Middag: {capitalize(recipient.dinner)}</TableCell>
                     <TableCell>Dessert: {capitalize(recipient.dessert)}</TableCell>
-                    <TableCell>{recipient.note ? "Kommentar: "+recipient.note : ""}</TableCell>
+                    <TableCell>{recipient.note ? "Kommentar: " + recipient.note : ""}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -75,19 +75,18 @@ function Row(props: RecipientRowProps) {
                     <TableCell>Kjønn</TableCell>
                     <TableCell>Alder</TableCell>
                     <TableCell>Ønske</TableCell>
-                    </TableRow>
+                  </TableRow>
                 </TableHead>
                 <TableBody>
                   {recipient.familyMembers.map((familyMember) => (
-                    <TableRow key={familyMember.rowKey}>
-                      <TableCell>
-                        {getGender(familyMember.gender, familyMember.age)}
-                      </TableCell>
+                    <TableRow key={familyMember.personId}>
+                      <TableCell>{getGender(familyMember.gender, familyMember.age)}</TableCell>
                       <TableCell>{familyMember.age}</TableCell>
                       <TableCell>
-                        {familyMember.wish ? familyMember.wish : "Giver kjøper alderstilpasset gave. "}
-                        <br/>
-                        {familyMember.comment ? "Kommentar: "+familyMember.comment : ""}
+                        {!familyMember.noWish
+                          ? familyMember.wishes[0]
+                          : "Giver kjøper alderstilpasset gave. "}
+                        <br />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -138,11 +137,11 @@ export default function RecipientSuggestions(props: TableProps) {
       <TableBody className={classes.clickableTableBody}>
         {props.recipients.map((recipient) => (
           <Row
-            key={recipient.rowKey}
+            key={recipient.recipientId}
             recipient={recipient}
-            selected={selectedRow === recipient.rowKey}
+            selected={selectedRow === recipient.recipientId}
             onClick={() => {
-              setSelectedRow(recipient.rowKey);
+              setSelectedRow(recipient.recipientId);
               props.selectRecipient(recipient);
             }}
           />

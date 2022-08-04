@@ -5,11 +5,12 @@ import useUser from "hooks/useUser";
 import ErrorPage from "pages/ErrorPage";
 import InstitutionMacro from "pages/institution";
 import AdminTab from "pages/administrator";
+import { User } from "components/shared/Types";
 
 function LoginRedirector() {
   const { getAccessTokenSilently } = useAuth0();
   const [userAccessToken, setUserAccessToken] = useState<string>("");
-  const { location, role } = useUser();
+  const user: User = useUser();
 
   async function getUserAccessToken(): Promise<string> {
     const accessToken = await getAccessTokenSilently();
@@ -24,10 +25,11 @@ function LoginRedirector() {
 
   function getPage() {
     if (location === null) return "NoLocation";
-    else if (role === undefined || location === undefined) return "Loading";
-    else if (role === "Unspecified") return "Unspecified";
-    else if (role === "Admin") return "Admin";
-    else if (role === "Institution") return "Institution";
+    else if (user.role === undefined || location === undefined) return "Loading";
+    else if (user.role === "Unspecified") return "Unspecified";
+    else if (user.role === "Admin") return "Admin";
+    else if (user.role === "Institution") return "Institution";
+    else if (user.role === "SuperAdmin") return "SuperAdmin";
     else return "Error";
   }
 
@@ -35,9 +37,7 @@ function LoginRedirector() {
     case "NoLocation":
       return (
         <ErrorPage
-          ErrorText={
-            "Du har ikke blitt tildelt en lokasjon enda, tilkall din GiEnJul admin"
-          }
+          ErrorText={"Du har ikke blitt tildelt en lokasjon enda, tilkall din GiEnJul admin"}
         />
       );
     case "Loading":
@@ -45,15 +45,19 @@ function LoginRedirector() {
     case "Unspecified":
       return (
         <ErrorPage
-          ErrorText={
-            "Du har ikke blitt tildelt en rolle enda, tilkall din GiEnJul admin"
-          }
+          ErrorText={"Du har ikke blitt tildelt en rolle enda, tilkall din GiEnJul admin"}
         />
+      );
+    case "SuperAdmin":
+      return (
+        <>
+          <AdminTab accessToken={userAccessToken} user={user} />
+        </>
       );
     case "Admin":
       return (
         <>
-          <AdminTab accessToken={userAccessToken} location={location ?? ""} />
+          <AdminTab accessToken={userAccessToken} user={user} />
         </>
       );
     case "Institution":

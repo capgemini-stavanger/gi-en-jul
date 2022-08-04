@@ -4,30 +4,46 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.secondary.light,
     backgroundSize: "cover",
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
+  },
+  rootNavBarPages: {
+    backgroundColor: theme.palette.secondary.light,
+    backgroundSize: "cover",
+    height: "100%",
+    padding: theme.spacing(4),
+  },
+  rootWhite: {
+    backgroundColor: "white",
+    padding: theme.spacing(4),
+  },
+  rootGreen: {
+    backgroundColor: theme.palette.secondary.light,
+    padding: theme.spacing(4),
+  },
+  whiteBackground: {
+    backgroundColor: "white",
   },
   logo: {
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(2),
-    maxHeight: "15em",
+    height: "10em",
     [theme.breakpoints.up("tablet")]: {
       maxHeight: "18em",
     },
   },
-  textLink:{
-    textDecorationLine: 'underline',
-    cursor: 'pointer'
+  textLink: {
+    textDecorationLine: "underline",
+    cursor: "pointer",
   },
-  familyImage:{
+  familyImage: {
     justifySelf: "center",
     zIndex: 2,
     width: "100%",
     height: "100%",
     position: "relative",
     objectFit: "cover",
-
   },
-  snowDown:{
+  snowDown: {
     marginTop: -theme.spacing(8),
     marginBottom: -theme.spacing(15),
     objectFit: "cover",
@@ -64,9 +80,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   sectionContainer: {
+    width: "auto",
     marginTop: theme.spacing(3),
     padding: 0,
-    maxWidth: "70em",
   },
   howItem: {
     maxWidth: "100%",
@@ -77,25 +93,29 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   questionItem: {
-    width: "80%",
     margin: theme.spacing(1),
-    [theme.breakpoints.up("laptop")]: {
-      width: "48%",
-    },
+    marginBottom: "0",
+    width: "100%",
   },
+
   questionBox: {
     width: "100%",
   },
   questionSummary: {
-    backgroundColor: theme.palette.primary.light,
-    borderRadius: "2em",
-    color: "white",
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.primary.main,
   },
-  imgContainer:{
+  questionText: { fontWeight: 700, fontSize: "20px" },
+  questionDetails: {
+    paddingTop: "1em",
+    backgroundColor: theme.palette.secondary.light,
+    color: "black",
+  },
+  imgContainer: {
     overflow: "hidden",
     height: "100%",
   },
-  stepsImage:{
+  stepsImage: {
     objectFit: "none",
     width: "346px",
     height: "278px",
@@ -112,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: "120%",
     },
   },
-  textContainer:{
+  textContainer: {
     maxWidth: "30em",
     textAlign: "center",
     margin: theme.spacing(1),
@@ -160,6 +180,72 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("laptop")]: {
       width: "20%",
     },
+  },
+  cardContainer: {
+    width: "260px",
+    height: "310px",
+    backgroundColor: theme.palette.secondary.light,
+    borderRadius: "50px",
+    display: "flex",
+    flexDirection: "column",
+  },
+  cardInfo: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  cardImage: {
+    width: "130px",
+    height: "130px",
+    borderRadius: "50%",
+    objectFit: "cover",
+  },
+  iconText: {
+    display: "inline",
+    color: "black",
+    textDecoration: "underline",
+    textDecorationColor: "black",
+  },
+  smallIcon: {
+    marginRight: "5px",
+  },
+  giverButton: {
+    backgroundColor: theme.palette.primary.main,
+    color: "white",
+    height: "40px",
+    width: "120px",
+    textTransform: "none",
+    padding: theme.spacing(1.5, 2, 1.5, 2),
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  infoBoxCircleText: {
+    position: "relative",
+    top: "60%",
+    left: "-13%",
+    fontSize: "2.5rem",
+    color: theme.palette.primary.main,
+    fontWeight: 500,
+  },
+
+  infoBoxCircle: {
+    position: "static",
+    height: "2.5em",
+    width: "2.5em",
+    color: theme.palette.secondary.main,
+  },
+
+  contactSpacing: {
+    marginBottom: "2em",
+  },
+  wavedBoxGreen: {
+    marginTop: "-1px",
+  },
+  wavedBoxWhite: {
+    backgroundColor: theme.palette.secondary.light,
+    marginBottom: "-1px",
   },
 }));
 

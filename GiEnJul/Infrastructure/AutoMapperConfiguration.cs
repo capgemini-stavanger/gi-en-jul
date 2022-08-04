@@ -9,7 +9,9 @@ namespace GiEnJul.Infrastructure
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapperProfile());
+                mc.AddProfile(new ExcelProfile());
             });
+
             return mapperConfig.CreateMapper();
         }
     }

@@ -5,8 +5,8 @@ namespace GiEnJul.Dtos
 {
     public class RecipientDataTableDto
     {
-        public string RowKey { get; set; }
-        public string PartitionKey { get; set; }
+        public string RecipientId { get; set; }
+        public string Event { get; set; }
 
         public string Dinner { get; set; }
         public string Dessert { get; set; }
@@ -24,11 +24,11 @@ namespace GiEnJul.Dtos
 
         public class PersonDataTableDto
         {
-            public string RowKey { get; set; }
-            public string Wish { get; set; }
+            public string PersonId { get; set; }
+            public IEnumerable<string> Wishes { get; set; }
             public int Age { get; set; }
             public Gender Gender { get; set; }
-            public string Comment { get; set; }
+            public bool NoWish { get; set; }
         }
     }
 }
