@@ -1,4 +1,4 @@
-import { Typography, Grid, Divider } from "@material-ui/core";
+import { Typography, Grid, Divider, Box } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
 import img_placeholder from "styling/img/person.png";
@@ -17,7 +17,7 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
   }
 
   return (
-    <Grid container direction="column" id="information" className={classes.sectionContainer}>
+    <Grid container direction="column" className={classes.sectionContainer}>
       <Grid item>
         <Typography variant="h5">Informasjon om Gi en jul i {location} kommune:</Typography>
       </Grid>
@@ -26,11 +26,11 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
       <Grid item>
         {images.map((img, index) => {
           if (!img) {
-            return <></>;
+            return <Box key={`Municipality${location}NOImage${index}`}> </Box>;
           }
           return (
             <img
-              key={index}
+              key={`Municipality${location}Image${index}`}
               src={img}
               className={classes.infoImage}
               alt={"Finner ikke bildet"}

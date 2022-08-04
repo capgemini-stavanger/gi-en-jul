@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
 import React from "react";
@@ -102,9 +102,9 @@ const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) =>
           <Typography className={classes.heading} align="center" variant="h3">
             Forhåndsvisning av bedriftinformasjon
           </Typography>
-          <Typography className={classes.tableBody} style={{ marginTop: "15px" }}>
+          <Box className={classes.tableBody} style={{ marginTop: "15px" }}>
             {parse(businessInfo.info)}
-          </Typography>
+          </Box>
         </Grid>
         <Grid item className={classes.businessButton}>
           <Button
