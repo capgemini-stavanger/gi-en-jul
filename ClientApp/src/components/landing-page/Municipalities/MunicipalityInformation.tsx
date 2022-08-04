@@ -1,4 +1,4 @@
-import { Typography, Grid, Divider, Box } from "@material-ui/core";
+import { Typography, Grid, Divider } from "@material-ui/core";
 import useStyles from "./Styles";
 import parse from "html-react-parser";
 import img_placeholder from "styling/img/person.png";

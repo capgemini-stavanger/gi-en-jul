@@ -47,7 +47,6 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
     apiservice
       .get("municipality/all")
       .then((resp) => {
-        console.log(resp.data);
         if (role == "SuperAdmin") {
           setMunicipalities(resp.data);
         }
