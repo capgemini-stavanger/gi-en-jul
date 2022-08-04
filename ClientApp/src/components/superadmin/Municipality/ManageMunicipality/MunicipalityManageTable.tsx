@@ -36,7 +36,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
   addMunicipality,
   municipalities,
   updateMunicipalityInformation,
-  setMunicipalityInactive,
   openAdd,
   handleCloseAdd,
   open,
@@ -47,12 +46,11 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
 
   const [selectedMunicipality, setSelectedMunicipality] =
     useState<IMunicipality>(initInterfaceMunicipality);
-  const [active, setActive] = useState(false);
   const classes = useStyles();
 
   const handleResponseConfirm = (response: boolean) => {
     if (response) {
-      setMunicipalityInactive({ ...selectedMunicipality, isActive: active });
+      updateMunicipalityInformation(selectedMunicipality);
     }
     handleCloseConfirm(true);
   };
@@ -98,7 +96,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
               municipality={municipality}
               key={index}
               setSelectedMunicipality={setSelectedMunicipality}
-              setActive={setActive}
               setOpenConfirm={setOpenConfirm}
               updateMunicipalityInformation={updateMunicipalityInformation}
             />

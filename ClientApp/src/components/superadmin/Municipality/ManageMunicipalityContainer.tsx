@@ -70,7 +70,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
         Facebook: "",
         Instagram: "",
         IsActive: false,
-        Information: data.information,
+        Information: "Det finnes ingen informasjon om denne kommunen",
       })
       .then((response) => {
         fetchInformation();

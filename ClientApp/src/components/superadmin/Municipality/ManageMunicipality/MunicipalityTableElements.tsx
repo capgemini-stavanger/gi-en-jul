@@ -10,7 +10,6 @@ interface props {
   key: number;
   role: string;
   setSelectedMunicipality: (municipality: IMunicipality) => void;
-  setActive: (active: boolean) => void;
   setOpenConfirm: (open: boolean) => void;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
 }
@@ -19,7 +18,6 @@ const MunicipalityTableElements: React.FC<props> = ({
   municipality,
   setSelectedMunicipality,
   updateMunicipalityInformation,
-  setActive,
   setOpenConfirm,
   role,
 }) => {
@@ -104,11 +102,10 @@ const MunicipalityTableElements: React.FC<props> = ({
             variant="contained"
             disabled={!openEditForm}
             onClick={() => {
-              setSelectedMunicipality(municipality);
               if (municipality.isActive) {
-                setActive(false);
+                setSelectedMunicipality({ ...municipality, isActive: false });
               } else {
-                setActive(true);
+                setSelectedMunicipality({ ...municipality, isActive: true });
               }
               setOpenConfirm(true);
             }}

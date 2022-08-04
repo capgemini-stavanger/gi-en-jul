@@ -51,7 +51,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   return (
     <>
       <Box className={classes.tableBody} style={{ marginTop: "15px" }}>
-        {parse(municipality.information)}
+        {parse(municipality.information) ?? "Ingen informasjon"}
       </Box>
 
       <Button
