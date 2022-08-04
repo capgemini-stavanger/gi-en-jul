@@ -62,7 +62,7 @@ const NavbarMobile = () => {
                   }}
                   className={classes.drawerContent}
                 >
-                  Kommune innformasjon
+                  Kommuneinformasjon
                 </ListItem>
                 <ListItem
                   onClick={() => {

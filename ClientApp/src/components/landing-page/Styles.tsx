@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   rootNavBarPages: {
     backgroundColor: theme.palette.secondary.light,
     backgroundSize: "cover",
-    height: "100vh",
+    height: "100%",
     padding: theme.spacing(4),
   },
   rootWhite: {
