@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField, Tooltip, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "./Styles";
-import { GiverType } from "../../shared/Types";
+import { GiverType, User } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
@@ -32,6 +32,7 @@ type Props = {
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
+  user: User;
 };
 
 const GiverDataCard: React.FC<Props> = ({
@@ -45,6 +46,7 @@ const GiverDataCard: React.FC<Props> = ({
   resetSelections,
   requestState,
   setRequestState,
+  user,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -260,6 +262,7 @@ const GiverDataCard: React.FC<Props> = ({
                       toEmail={giverData.email}
                       fullName={giverData.fullName}
                       accessToken={accessToken}
+                      user={user}
                     />
                   </Grid>
                   {giverData.cancelFeedback && (

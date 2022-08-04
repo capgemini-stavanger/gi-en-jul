@@ -6,14 +6,14 @@ import CompletedMacro from "components/admin/dashboard-completed/Macro";
 import NavBarLoggedIn from "components/shared/navbar/NavBarLoggedIn";
 import ManageDashboard from "components/superadmin/ManageDashboard";
 import OverviewMacroRemake from "components/admin/dashboard-all/OverviewMacroRemake";
+import { User } from "components/shared/Types";
 
 interface IAdminTab {
   accessToken: string;
-  location: string;
-  role: string;
+  user: User;
 }
 
-const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
+const AdminTab: React.FC<IAdminTab> = ({ accessToken, user }) => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
@@ -30,13 +30,13 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, location, role }) => {
           <Tab label="Manage" value="3" />
         </TabList>
         <TabPanel value="1">
-          <OverviewMacroRemake location={location} accessToken={accessToken} />
+          <OverviewMacroRemake user={user} accessToken={accessToken} />
         </TabPanel>
         <TabPanel value="2">
-          <CompletedMacro accessToken={accessToken} location={location} />
+          <CompletedMacro accessToken={accessToken} location={user.location ?? ""} />
         </TabPanel>
         <TabPanel value="3">
-          <ManageDashboard accessToken={accessToken} role={role} location={location} />
+          <ManageDashboard accessToken={accessToken} user={user} />
         </TabPanel>
       </TabContext>
       <ScrollToTop maxPagePosition={300} />

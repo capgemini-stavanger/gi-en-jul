@@ -1,7 +1,7 @@
 import { Box, Container } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
-import { GiverType, RecipientType, SelectedConnectionType } from "components/shared/Types";
+import { GiverType, RecipientType, SelectedConnectionType, User } from "components/shared/Types";
 import { useStyles } from "./Styles";
 import GiverDataTable from "./GiverDataTable";
 import RecipientDataTable from "./RecipientDataTable";
@@ -11,7 +11,7 @@ import OverviewConnection from "./OverviewConnection";
 import SuggestionDataTable from "./SuggestionDataTable";
 
 interface IOverviewMacro {
-  location: string;
+  user: User;
   accessToken: string;
 }
 const initState: SelectedConnectionType = {
@@ -26,7 +26,7 @@ export enum RequestState {
   Error,
 }
 
-const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }) => {
+const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) => {
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
@@ -44,7 +44,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
 
   async function fetchGivers() {
     await apiservice
-      .get("admin/Overview/Givers", { params: { location: location } })
+      .get("admin/Overview/Givers", { params: { location: user.location } })
       .then((resp) => {
         setGiverData(resp.data);
       })
@@ -54,7 +54,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
   }
   async function fetchRecipients() {
     await apiservice
-      .get("admin/Overview/Recipients", { params: { location: location } })
+      .get("admin/Overview/Recipients", { params: { location: user.location } })
       .then((resp) => {
         setRecipientData(resp.data);
       })
@@ -216,6 +216,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                   resetSelections={resetSelections}
                   requestState={requestState}
                   setRequestState={(state) => setRequestState(state)}
+                  user={user}
                 />
               </Box>
               <Box className={classes.recipientTable}>
@@ -240,6 +241,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, location }
                     resetSelections={resetSelections}
                     requestState={requestState}
                     setRequestState={(state) => setRequestState(state)}
+                    user={user}
                   />
                 </Box>
               </Box>

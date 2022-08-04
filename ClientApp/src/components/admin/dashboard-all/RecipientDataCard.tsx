@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import useStyles from "./Styles";
-import { RecipientType } from "../../shared/Types";
+import { RecipientType, User } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import {
@@ -32,6 +32,7 @@ type Props = {
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
+  user: User;
 };
 
 const RecipientDataCard: React.FC<Props> = ({
@@ -45,6 +46,7 @@ const RecipientDataCard: React.FC<Props> = ({
   resetSelections,
   requestState,
   setRequestState,
+  user,
 }) => {
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
@@ -244,6 +246,7 @@ const RecipientDataCard: React.FC<Props> = ({
                       toEmail={recipientData.contactEmail}
                       fullName={recipientData.contactFullName}
                       accessToken={accessToken}
+                      user={user}
                     />
                   </Grid>
                   <Grid item xs={6}>
