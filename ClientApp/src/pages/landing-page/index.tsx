@@ -13,6 +13,8 @@ import Questions from "components/landing-page/Questions";
 import What from "components/landing-page/What";
 import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
 import WavedSeperator from "components/shared/WavedSeparator";
+import Snowfall from "react-snowfall";
+import { isMobile } from "common/functions/IsMobile";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
@@ -26,6 +28,13 @@ const Home = () => {
     <>
       <NavBarPublic />
       <Box id="landing">
+        <Snowfall
+          color="white" // Snowflake color
+          snowflakeCount={isMobile() ? 40 : 150} // Amount of snowflakes -> Default
+          style={{
+            zIndex: "100", // On top of everything
+          }}
+        />
         <Grid
           container
           className={classes.rootGreen}
