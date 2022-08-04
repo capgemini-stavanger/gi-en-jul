@@ -120,26 +120,20 @@ const RecipientDataCard: React.FC<Props> = ({
 
   const saveComment = (response: boolean) => {
     if (response) {
-      if (requestState != RequestState.Waiting) {
-        setRequestState(RequestState.Waiting);
-        apiservice
-          .post("admin/recipient/addcomment", {
-            event: recipientData.event,
-            recipientId: recipientData.recipientId,
-            comment: comment,
-          })
-          .then((resp) => {
-            if (resp.status === 200) {
-              setRequestState(RequestState.Ok);
-              refreshData();
-              resetSelections();
-            }
-          })
-          .catch((err) => {
-            setRequestState(RequestState.Error);
-            console.error(err);
-          });
-      }
+      apiservice
+        .post("admin/recipient/addcomment", {
+          event: recipientData.event,
+          recipientId: recipientData.recipientId,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
@@ -315,13 +309,16 @@ const RecipientDataCard: React.FC<Props> = ({
                     <Grid container direction="column">
                       {!recipientData.isSuggestedMatch && (
                         <Grid item>
-                          <Typography
-                            onClick={() => {
-                              setOpenEditFamilyDialog(true);
-                            }}
-                          >
+                          <Typography>
                             <Edit />
-                            <Button>Rediger familie</Button>
+                            <Button
+                              className={classes.underlineText}
+                              onClick={() => {
+                                setOpenEditFamilyDialog(true);
+                              }}
+                            >
+                              Rediger familie
+                            </Button>
                           </Typography>
                           <EditFamilyDialog
                             open={openEditFamilyDialog}
@@ -337,9 +334,12 @@ const RecipientDataCard: React.FC<Props> = ({
                       )}
                       {recipientData.isSuggestedMatch && (
                         <Grid item>
-                          <Typography onClick={() => setOpenDelConnectionDialog(true)}>
+                          <Typography>
                             <LinkOutlined />
-                            <Button className={classes.underlineText}>
+                            <Button
+                              className={classes.underlineText}
+                              onClick={() => setOpenDelConnectionDialog(true)}
+                            >
                               Koble fra giver og familie
                             </Button>
                           </Typography>
@@ -354,9 +354,14 @@ const RecipientDataCard: React.FC<Props> = ({
                         </Grid>
                       )}
                       <Grid item>
-                        <Typography onClick={() => setOpenDelFamilyDialog(true)}>
+                        <Typography>
                           <LinkOutlined />
-                          <Button className={classes.underlineText}>Slett familie</Button>
+                          <Button
+                            className={classes.underlineText}
+                            onClick={() => setOpenDelFamilyDialog(true)}
+                          >
+                            Slett familie
+                          </Button>
                         </Typography>
                         <ConfirmationBox
                           open={openDelFamilyDialog}

@@ -55,6 +55,7 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   useEffect(() => {
     if (open) {
       setRecipientData(recipient);
+      fetchMuncipalityEmail();
     }
   }, [open]);
 
@@ -279,9 +280,15 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   };
 
   const updateRecipient = async () => {
-    fetchMuncipalityEmail();
+    const submitData = { ...recipientData };
+    submitData.familyMembers.forEach((person) => {
+      if (person.noWish) {
+        person.wishes = ["Alderstilpasset gaveønske"];
+      }
+    });
+
     await apiservice
-      .put("admin/recipient", JSON.stringify(recipientData))
+      .put("admin/recipient", JSON.stringify(submitData))
       .then((response) => {
         if (response.status === 200) {
           refreshRecipients();
@@ -455,12 +462,14 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                                     value={wish ? wish : ""}
                                     onChange={onWishChange(fIndex, wIndex)}
                                   />
-                                  <IconButton
-                                    aria-label="close"
-                                    onClick={() => removeWish(fIndex, wIndex)}
-                                  >
-                                    <CloseIcon />
-                                  </IconButton>
+                                  {recipientData.familyMembers[fIndex].wishes.length > 1 && (
+                                    <IconButton
+                                      aria-label="close"
+                                      onClick={() => removeWish(fIndex, wIndex)}
+                                    >
+                                      <CloseIcon />
+                                    </IconButton>
+                                  )}
                                 </Box>
                               );
                             })}
@@ -504,6 +513,9 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
                             variant="contained"
                             color="primary"
                             onClick={() => addWish(fIndex)}
+                            disabled={
+                              recipientData.familyMembers[fIndex].wishes.length < 5 ? false : true
+                            }
                           >
                             Nytt Ønske
                           </Button>

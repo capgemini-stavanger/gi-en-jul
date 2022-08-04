@@ -146,26 +146,20 @@ const GiverDataCard: React.FC<Props> = ({
 
   const saveComment = (response: boolean) => {
     if (response) {
-      if (requestState != RequestState.Waiting) {
-        setRequestState(RequestState.Waiting);
-        apiservice
-          .post("admin/giver/addcomment", {
-            event: giverData.event,
-            giverId: giverData.giverId,
-            comment: comment,
-          })
-          .then((resp) => {
-            if (resp.status === 200) {
-              setRequestState(RequestState.Ok);
-              refreshData();
-              resetSelections();
-            }
-          })
-          .catch((err) => {
-            setRequestState(RequestState.Error);
-            console.error(err);
-          });
-      }
+      apiservice
+        .post("admin/giver/addcomment", {
+          event: giverData.event,
+          giverId: giverData.giverId,
+          comment: comment,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
