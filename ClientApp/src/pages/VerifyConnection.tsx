@@ -88,9 +88,9 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       Tusen takk for innsatsen du skal gjøre!
                     </Typography>
                     <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
-                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
-                      registrere ditt bidrag.
+                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
+                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
+                      du tar kontakt med oss.
                     </Typography>
                     <Typography className={classes.paragraph}>
                       Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
@@ -118,9 +118,9 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                       Tusen takk for innsatsen du skal gjøre!
                     </Typography>
                     <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer så vi fikk ikke registrert din
-                      bekreftelse som giver. Ta kontakt med Gi en jul der du bor så skal vi
-                      registrere ditt bidrag.
+                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
+                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
+                      du tar kontakt med oss.
                     </Typography>
                     <Typography className={classes.paragraph}>
                       Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
