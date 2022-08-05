@@ -3,7 +3,6 @@ import { Typography, Container, Grid, Box } from "@material-ui/core";
 import useStyles from "./Styles";
 import img_placeholder from "styling/img/person.png";
 import { Mail, Phone } from "@material-ui/icons";
-import { Link as Scroll } from "react-scroll";
 
 export interface ContactData {
   name: string; // municipality name
@@ -26,10 +25,7 @@ const Contact: React.FC<Props> = ({ contacts }) => {
       <div className={classes.headLineContainer}>
         <Typography className={classes.blueTextHeadline}>Kontakt</Typography>
         <Typography className={classes.contactSpacing}>
-          Før du tar kontakt, se om du finner svaret på det du lurer på i&nbsp;
-          <Scroll to="questions" smooth={true}>
-            <span className={classes.textLink}>ofte stilte spørsmål.</span>
-          </Scroll>
+          Før du tar kontakt, se om du finner svaret på det du lurer på i ofte stilte spørsmål.
         </Typography>
       </div>
       <Grid

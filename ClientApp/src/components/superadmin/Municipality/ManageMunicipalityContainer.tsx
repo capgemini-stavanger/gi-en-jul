@@ -129,21 +129,13 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
       });
   };
 
-  const setMunicipalityInactive = (object: IMunicipality) => {
-    apiservice
-      .put("municipality/update", {
-        Country: "Norge",
-        Name: object?.name,
-        IsActive: object.isActive,
-      })
-      .then(() => {
-        fetchInformation();
-      });
-  };
-
   useEffect(() => {
     fetchInformation();
   }, []);
+
+  useEffect(() => {
+    municipalities;
+  }, [municipalities]);
 
   return (
     <>
@@ -154,7 +146,6 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             setMunicipalities={setMunicipalities}
             addMunicipality={addMunicipality}
             updateMunicipalityInformation={updateMunicipalityInformation}
-            setMunicipalityInactive={setMunicipalityInactive}
             openAdd={openAdd}
             setOpenAdd={setOpenAdd}
             handleCloseAdd={handleCloseAdd}

@@ -145,7 +145,12 @@ const EventRow: React.FC<Props> = ({
     setActiveEdit(false);
   };
   const cancelButton = (
-    <Button variant="contained" onClick={handleCancelClick}>
+    <Button
+      variant="contained"
+      className={classes.buttonError}
+      style={{ marginLeft: "10px" }}
+      onClick={handleCancelClick}
+    >
       Avbryt
     </Button>
   );
@@ -153,7 +158,12 @@ const EventRow: React.FC<Props> = ({
     setActiveEdit(true);
   };
   const editButton = (
-    <Button variant="contained" onClick={handleEditClick}>
+    <Button
+      variant="contained"
+      className={classes.button}
+      style={{ marginRight: "10px" }}
+      onClick={handleEditClick}
+    >
       Rediger
     </Button>
   );
@@ -366,7 +376,7 @@ const EventRow: React.FC<Props> = ({
         <Grid container direction="row">
           {activeEdit ? (
             <>
-              {cancelButton} {saveButton}
+              {saveButton} {cancelButton}
             </>
           ) : (
             <>

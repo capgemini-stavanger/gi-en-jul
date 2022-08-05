@@ -23,7 +23,6 @@ interface IMunicipalityManageTable {
   setMunicipalities: (municipalities: IMunicipality[]) => void;
   addMunicipality: (data: IMunicipality) => void;
   updateMunicipalityInformation: (data: IMunicipality) => void;
-  setMunicipalityInactive: (data: IMunicipality) => void;
   openAdd: boolean;
   setOpenAdd: (open: boolean) => void;
   handleCloseAdd: (response: boolean) => void;
