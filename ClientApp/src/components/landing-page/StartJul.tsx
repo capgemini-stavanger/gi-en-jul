@@ -4,7 +4,6 @@ import useStyles from "components/landing-page/Styles";
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
-import Footer from "components/shared/Footer";
 import useIsMobile from "hooks/useIsMobile";
 
 interface iHowtoStartInfo {

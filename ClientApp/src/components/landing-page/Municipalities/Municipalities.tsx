@@ -3,7 +3,7 @@ import useStyles from "./Styles";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import { useEffect, useState } from "react";
 import MunicipalityInformation from "./MunicipalityInformation";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import React from "react";
 
 export interface LocationData {
@@ -49,7 +49,7 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
     if (location) setTab(location);
   }, [location, locations]);
 
-  const kommuneTabPanels = locations.map((val, index) => (
+  const kommuneTabPanels = locations.map((val) => (
     <TabPanel
       key={`kommunetablpanelKey${val.location.toLowerCase()}`}
       value={val.location.toLowerCase()}

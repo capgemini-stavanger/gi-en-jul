@@ -62,12 +62,12 @@ const Footer: React.FC = () => {
 
             <Grid item>
               <Scroll className={classes.footerHeadline} to="questions">
-                <b>FAQs</b>
+                FAQs
               </Scroll>
             </Grid>
             <Grid item>
               <Scroll className={classes.footerHeadline} to="contacts">
-                <b>Kontakt</b>
+                Kontakt
               </Scroll>
             </Grid>
           </Grid>
