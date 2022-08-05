@@ -18,7 +18,7 @@ const How = () => {
       step2,
     ],
     [
-      "På innsamlingsdagen leverer du esken et angitt sted, og barnevernet og andre kjørereskene ut til familiene.",
+      "På innsamlingsdagen leverer du esken på angitt sted. Barnevernet og andre kjører så eskene ut til familiene.",
       step3,
     ],
   ];
