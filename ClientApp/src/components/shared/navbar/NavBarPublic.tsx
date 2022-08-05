@@ -13,7 +13,7 @@ const NavBarPublic = () => {
   const history = useHistory();
   const isMobile = useIsMobile();
 
-  const compAction = useCallback(() => history.push("/bli-giver"), [history]);
+  const companyAction = useCallback(() => history.push("/bli-giver"), [history]);
 
   if (isMobile) {
     return <NavbarMobile />;
@@ -94,7 +94,7 @@ const NavBarPublic = () => {
                   className={classes.giverButton}
                   style={{ visibility: "hidden" }}
                   endIcon={<ArrowForwardIos />}
-                  onClick={compAction}
+                  onClick={companyAction}
                 >
                   Bli giver
                 </Button>
@@ -103,7 +103,7 @@ const NavBarPublic = () => {
                   size="large"
                   className={classes.giverButton}
                   endIcon={<ArrowForwardIos />}
-                  onClick={compAction}
+                  onClick={companyAction}
                 >
                   Bli giver
                 </Button>
