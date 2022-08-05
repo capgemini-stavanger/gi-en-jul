@@ -5,7 +5,7 @@ import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Footer from "components/shared/Footer";
-import { isMobile } from "common/functions/IsMobile";
+import useIsMobile from "hooks/useIsMobile";
 
 interface iHowtoStartInfo {
   ContentType: string;
@@ -22,6 +22,7 @@ const StartJul = () => {
   const classes = useStyles();
   const [howToStartInfo, setHowToStartInfo] = useState<iHowtoStartInfo>(initHowtoStartInfo);
   const apiservice = new ApiService();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     getHowToStartInfo();
@@ -48,15 +49,9 @@ const StartJul = () => {
           </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          {isMobile() ? (
-            <Grid item xs={12}>
-              {parse(howToStartInfo.info)}
-            </Grid>
-          ) : (
-            <Grid item xs={6}>
-              {parse(howToStartInfo.info)}
-            </Grid>
-          )}
+          <Grid item xs={isMobile ? 6 : 12}>
+            {parse(howToStartInfo.info)}
+          </Grid>
         </Grid>
       </Container>
       <Footer />

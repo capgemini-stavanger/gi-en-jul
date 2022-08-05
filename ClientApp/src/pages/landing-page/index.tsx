@@ -14,12 +14,13 @@ import What from "components/landing-page/What";
 import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
 import WavedSeperator from "components/shared/WavedSeparator";
 import Snowfall from "react-snowfall";
-import { isMobile } from "common/functions/IsMobile";
+import useIsMobile from "hooks/useIsMobile";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
   const classes = useStyles();
   const apiservice = new ApiService();
+  const isMobile = useIsMobile();
   useEffect(() => {
     apiservice.get("municipality/allcontacts").then((response) => setContacts(response.data));
   }, []);
@@ -30,7 +31,7 @@ const Home = () => {
       <Box id="landing">
         <Snowfall
           color="white" // Snowflake color
-          snowflakeCount={isMobile() ? 40 : 150} // Amount of snowflakes -> Default
+          snowflakeCount={isMobile ? 40 : 150} // Amount of snowflakes -> Default
           style={{
             zIndex: "100", // On top of everything
           }}

@@ -94,7 +94,7 @@ namespace GiEnJul.Repositories
             {
                 _log.Verbose("Trying to find row with RowKey:{@rowKey}, and PartitionKey:{@partitionKey}, in table:{@tablename}.", rowKey, partitionKey, _client.Name);
                 var result = await _client.GetEntityAsync<T>(partitionKey, rowKey);
-                _log.Debug("Found entity {@entity}, in table:{@tablename}.", result.Value, _client.Name);
+                _log.Verbose("Found entity {@entity}, in table:{@tablename}.", result.Value, _client.Name);
 
                 return result.Value;
             }
@@ -126,7 +126,7 @@ namespace GiEnJul.Repositories
             {
                 _log.Verbose("Trying to add Entity:{@entity}, into table:{@tablename}", entity, _client.Name);
                 var result = await _client.UpsertEntityAsync(entity, TableUpdateMode.Replace);
-                _log.Debug("Added Entity:{@entity}, into table:{@tablename}", entity, _client.Name);
+                _log.Verbose("Added Entity:{@entity}, into table:{@tablename}", entity, _client.Name);
 
                 if (!result.IsError)
                     return entity;
@@ -169,7 +169,7 @@ namespace GiEnJul.Repositories
                     batchOperation.Add(new TableTransactionAction(TableTransactionActionType.UpsertReplace, entity));
                 }
                 var result = await _client.SubmitTransactionAsync(batchOperation);
-                _log.Debug("Added multiple entities, into table:{@tablename}", _client.Name);
+                _log.Verbose("Added multiple entities, into table:{@tablename}", _client.Name);
                 return result.Value.Count(r => !r.IsError);
             }
             catch (Exception e)
@@ -190,7 +190,7 @@ namespace GiEnJul.Repositories
                     entities.Add(item);
                 }
 
-                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _client.Name);
+                _log.Verbose("Fetched {0} entities in table:{1}", entities.Count, _client.Name);
                 return entities;
             }
             catch (Exception e)
@@ -214,7 +214,7 @@ namespace GiEnJul.Repositories
                     entities.Add(item);
                 }
 
-                _log.Debug("Fetched {0} entities in table:{1}", entities.Count, _client.Name);
+                _log.Verbose("Fetched {0} entities in table:{1}", entities.Count, _client.Name);
                 return entities;
             }
             catch (Exception e)
