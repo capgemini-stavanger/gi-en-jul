@@ -63,11 +63,11 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
     return confirmPassword === state.password;
   };
 
-  // checks if papssword is between 12-32 length,
-  // uses Uppercase and lowercase letters AND includes a number
+  // checks if password length is longer than  12 length,
+  // uses UPPERCASE, lowercase, number AND a special character
   const checkValidPassword = (password: string) => {
     return !!String(password).match(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d@$!%*?&]{12,}/
+      /^(?=.*[a-zæøå])(?=.*[A-ZÆØÅ])(?=.*\d)(?=.*[^a-zA-ZæøåÆØÅ0-9])[a-zA-ZæøåÆØÅ\d\w\W]{12,100}/
     );
   };
 
@@ -169,14 +169,17 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
         })
         .then(() => {
           setMessage("Brukeren er lagt til");
+          setOpenInformationBox(true);
           handleRefresh();
           refreshForm();
         })
         .catch((errorStack) => {
           console.error(errorStack);
-          setMessage("Kunne ikke legge til brukeren");
+          setMessage(
+            "Det oppsto en feil under laging av bruker, vannligst sjekk at brukernavnet ikke allerede er i bruk"
+          );
+          setOpenInformationBox(true);
         });
-    } else {
     }
   };
 
@@ -190,7 +193,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   const handleAdd = (response: boolean) => {
     if (response) {
       handleCreateUser();
-      setOpenInformationBox(true);
     }
 
     setOpenAdd(false);
@@ -211,7 +213,7 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
           <ListItemIcon>-</ListItemIcon>Inneholde store og små bokstaver
         </ListItem>
         <ListItem>
-          <ListItemIcon>-</ListItemIcon>Inneholde minimum ett av tegnene: !@#$%^&*
+          <ListItemIcon>-</ListItemIcon>Inneholde minimum ett tegn (feks: !@#$%^&*)
         </ListItem>
       </List>
       <Grid item>
