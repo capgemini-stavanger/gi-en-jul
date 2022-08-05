@@ -21,7 +21,6 @@ import {
   EventContentDto,
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
-import ClearIcon from "@material-ui/icons/Clear";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
 import useStyles from "../Styles";
