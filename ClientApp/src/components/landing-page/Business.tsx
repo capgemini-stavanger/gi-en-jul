@@ -5,8 +5,8 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Link, useHistory } from "react-router-dom";
-import Footer from "components/shared/Footer";
 import { isMobile } from "common/functions/IsMobile";
+import Footer from "components/shared/Footer";
 
 interface businessInfo {
   question: string;

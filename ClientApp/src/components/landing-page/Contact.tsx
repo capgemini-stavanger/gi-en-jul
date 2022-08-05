@@ -21,7 +21,7 @@ const Contact: React.FC<Props> = ({ contacts }) => {
   const classes = useStyles();
 
   return (
-    <Container className={classes.sectionContainer}>
+    <Container id="contacts" className={classes.sectionContainer} style={{ marginBottom: "5%" }}>
       <div className={classes.headLineContainer}>
         <Typography className={classes.blueTextHeadline}>Kontakt</Typography>
         <Typography className={classes.contactSpacing}>
