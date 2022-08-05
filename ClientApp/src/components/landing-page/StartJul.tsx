@@ -54,7 +54,6 @@ const StartJul = () => {
           </Grid>
         </Grid>
       </Container>
-      <Footer />
     </>
   );
 };

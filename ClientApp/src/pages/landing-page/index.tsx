@@ -5,7 +5,6 @@ import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
 import Contact from "components/landing-page/Contact";
 import { ContactData } from "components/landing-page/Contact";
-import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
@@ -65,7 +64,6 @@ const Home = () => {
           <Contact contacts={contacts} />
         </Box>
         <ScrollToTop maxPagePosition={300} />
-        <Footer />
       </Box>
     </>
   );

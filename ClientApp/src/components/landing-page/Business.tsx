@@ -88,7 +88,6 @@ const Business = () => {
           )}
         </Grid>
       </Container>
-      <Footer />
     </>
   );
 };
