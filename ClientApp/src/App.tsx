@@ -9,7 +9,6 @@ import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
 import Municipality from "pages/municipality";
 import DenyConnection from "pages/DenyConnection";
-import Footer from "components/shared/Footer";
 
 const App = () => {
   return (
@@ -26,7 +25,6 @@ const App = () => {
         component={VerifyConnection}
       />
       <Route path="/:giverRowKey/:recipientRowKey/:partitionKey/deny" component={DenyConnection} />
-      <Footer />
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Link, useHistory } from "react-router-dom";
 import { isMobile } from "common/functions/IsMobile";
+import Footer from "components/shared/Footer";
 
 interface businessInfo {
   question: string;
@@ -87,6 +88,7 @@ const Business = () => {
           )}
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 };

@@ -7,6 +7,7 @@ import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Municipalities, {
   LocationData,
 } from "components/landing-page/Municipalities/Municipalities";
+import Footer from "components/shared/Footer";
 
 interface IKommuneInfoResponse {
   country: string;
@@ -96,6 +97,7 @@ const Municipality = () => {
         </Grid>
         <ScrollToTop maxPagePosition={300} />
       </Container>
+      <Footer />
     </>
   );
 };

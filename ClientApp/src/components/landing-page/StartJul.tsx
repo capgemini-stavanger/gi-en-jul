@@ -5,6 +5,7 @@ import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import parse from "html-react-parser";
 import useIsMobile from "hooks/useIsMobile";
+import Footer from "components/shared/Footer";
 
 interface iHowtoStartInfo {
   ContentType: string;
@@ -48,11 +49,12 @@ const StartJul = () => {
           </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item xs={isMobile ? 6 : 12}>
+          <Grid item xs={isMobile ? 12 : 6}>
             {parse(howToStartInfo.info)}
           </Grid>
         </Grid>
       </Container>
+      <Footer />
     </>
   );
 };

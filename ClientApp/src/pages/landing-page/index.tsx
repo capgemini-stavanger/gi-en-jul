@@ -14,6 +14,7 @@ import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
 import WavedSeperator from "components/shared/WavedSeparator";
 import Snowfall from "react-snowfall";
 import useIsMobile from "hooks/useIsMobile";
+import Footer from "components/shared/Footer";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
@@ -65,6 +66,7 @@ const Home = () => {
         </Box>
         <ScrollToTop maxPagePosition={300} />
       </Box>
+      <Footer />
     </>
   );
 };
