@@ -1,8 +1,10 @@
 import { Container, Grid, Tab } from "@material-ui/core";
 import useStyles from "./Styles";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MunicipalityInformation from "./MunicipalityInformation";
+import { useLocation } from "react-router-dom";
+import React from "react";
 
 export interface LocationData {
   location: string;
@@ -15,18 +17,43 @@ interface Props {
 }
 
 const Municipalities: React.FC<Props> = ({ locations }) => {
-  const [tab, setTab] = useState<string>("1");
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
     setTab(newValue);
   };
   const classes = useStyles();
 
-  const kommuneTabs = locations.map((val, index) => (
-    <Tab key={`kommuneTabKey${val.location}`} value={String(index + 1)} label={val.location} />
+  function useQuery() {
+    const { search } = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
+  const query = useQuery();
+
+  const [tab, setTab] = useState<string>("");
+
+  const kommuneTabs = locations.map((val) => (
+    <Tab
+      key={`kommuneTabKey${val.location}`}
+      value={val.location.toLowerCase()}
+      label={val.location}
+    />
   ));
 
-  const kommuneTabPanels = locations.map((val, index) => (
-    <TabPanel key={`kommunetablpanelKey${val.location}`} value={String(index + 1)}>
+  useEffect(() => {
+    const location = query.get("location");
+    if (!location && locations.length) {
+      setTab(locations[0].location.toLowerCase());
+      return;
+    }
+    if (location) setTab(location);
+  }, [location, locations]);
+
+  const kommuneTabPanels = locations.map((val) => (
+    <TabPanel
+      key={`kommunetablpanelKey${val.location.toLowerCase()}`}
+      value={val.location.toLowerCase()}
+    >
       <MunicipalityInformation
         location={val.location}
         information={val.information}

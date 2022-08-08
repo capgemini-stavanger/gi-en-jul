@@ -44,7 +44,7 @@ const Questions = () => {
   useEffect(fetchQuestions, []);
 
   return (
-    <Grid container direction="column" alignItems="center" justifyContent="center">
+    <Grid id="questions" container direction="column" alignItems="center" justifyContent="center">
       <Grid item className={classes.headLineContainer}>
         <Typography className={classes.textHeadline}>Ofte stilte spørsmål</Typography>
       </Grid>

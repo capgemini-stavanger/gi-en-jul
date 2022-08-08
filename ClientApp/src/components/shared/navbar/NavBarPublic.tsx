@@ -1,18 +1,21 @@
 import { Button, IconButton, Tab, Box, Grid, Toolbar, AppBar } from "@material-ui/core";
-import { isMobile } from "common/functions/IsMobile";
 import logo from "styling/img/logo_white.svg";
 import logogreen from "styling/img/logo_green.svg";
 import useStyles from "components/shared/Styles";
 import { ArrowForwardIos, FiberManualRecord } from "@material-ui/icons";
 import { Link, useHistory } from "react-router-dom";
 import NavbarMobile from "./NavBarMobile";
-import React from "react";
+import { useCallback } from "react";
+import useIsMobile from "hooks/useIsMobile";
 
 const NavBarPublic = () => {
   const classes = useStyles();
   const history = useHistory();
+  const isMobile = useIsMobile();
 
-  if (isMobile()) {
+  const companyAction = useCallback(() => history.push("/bli-giver"), [history]);
+
+  if (isMobile) {
     return <NavbarMobile />;
   } else if (window.location.pathname === "/bli-giver") {
     return (
@@ -91,7 +94,7 @@ const NavBarPublic = () => {
                   className={classes.giverButton}
                   style={{ visibility: "hidden" }}
                   endIcon={<ArrowForwardIos />}
-                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+                  onClick={companyAction}
                 >
                   Bli giver
                 </Button>
@@ -100,7 +103,7 @@ const NavBarPublic = () => {
                   size="large"
                   className={classes.giverButton}
                   endIcon={<ArrowForwardIos />}
-                  onClick={React.useCallback(() => history.push("/bli-giver"), [history])}
+                  onClick={companyAction}
                 >
                   Bli giver
                 </Button>

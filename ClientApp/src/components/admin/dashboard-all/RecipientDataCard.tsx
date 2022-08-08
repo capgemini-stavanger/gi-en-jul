@@ -282,7 +282,7 @@ const RecipientDataCard: React.FC<Props> = ({
                           <Typography>{getGender(person.gender, person.age)}</Typography>
                         </Grid>
                         <Grid item xs={2}>
-                          {person.age} år
+                          {person.age == 0 ? `${person.months} måneder` : `${person.age} år`}
                         </Grid>
                         <Grid item xs={8}>
                           {!person.noWish ? (

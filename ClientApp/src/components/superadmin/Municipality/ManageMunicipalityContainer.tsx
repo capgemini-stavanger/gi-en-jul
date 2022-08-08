@@ -18,6 +18,7 @@ export interface IMunicipality {
   phoneNumber: string;
   contactPerson: string;
   images: string[];
+  image: string;
   facebook: string;
   instagram: string;
 }
@@ -31,6 +32,7 @@ export const initInterfaceMunicipality: IMunicipality = {
   phoneNumber: "",
   contactPerson: "",
   images: [],
+  image: "",
   facebook: "",
   instagram: "",
 };
@@ -96,6 +98,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
         InfoImage1: object.images[0],
         InfoImage2: object.images[1],
         InfoImage3: object.images[2],
+        Image: object.image,
         Email: object.email,
         PhoneNumber: object.phoneNumber,
         ContactPerson: object.contactPerson,
@@ -129,21 +132,13 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
       });
   };
 
-  const setMunicipalityInactive = (object: IMunicipality) => {
-    apiservice
-      .put("municipality/update", {
-        Country: "Norge",
-        Name: object?.name,
-        IsActive: object.isActive,
-      })
-      .then(() => {
-        fetchInformation();
-      });
-  };
-
   useEffect(() => {
     fetchInformation();
   }, []);
+
+  useEffect(() => {
+    municipalities;
+  }, [municipalities]);
 
   return (
     <>
@@ -154,7 +149,6 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             setMunicipalities={setMunicipalities}
             addMunicipality={addMunicipality}
             updateMunicipalityInformation={updateMunicipalityInformation}
-            setMunicipalityInactive={setMunicipalityInactive}
             openAdd={openAdd}
             setOpenAdd={setOpenAdd}
             handleCloseAdd={handleCloseAdd}

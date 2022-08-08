@@ -21,7 +21,6 @@ import {
   EventContentDto,
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
-import ClearIcon from "@material-ui/icons/Clear";
 import NewEventBox from "./NewEventBox";
 import InformationBox from "components/shared/InformationBox";
 import useStyles from "../Styles";
@@ -330,10 +329,8 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
           <Grid item>
             {addState ? (
               <>
-                <Button onClick={handleSaveNewEventName} variant="contained">
-                  Lagre
-                </Button>
                 <TextField
+                  style={{ marginLeft: "1em" }}
                   variant="outlined"
                   onChange={handleNewEventNameChange}
                   value={newEventName}
@@ -342,12 +339,29 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
                   error={!validNewEventName}
                   helperText={errorText}
                 />
-                <Button onClick={handleCancel}>
-                  <ClearIcon></ClearIcon>
+                <Button
+                  onClick={handleSaveNewEventName}
+                  variant="contained"
+                  style={{ marginTop: "1em", marginLeft: "1em", marginRight: "1em" }}
+                  className={classes.button}
+                >
+                  Lagre
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  style={{ marginTop: "1em" }}
+                  className={classes.buttonError}
+                >
+                  Avbryt
                 </Button>
               </>
             ) : (
-              <Button onClick={handleAddClick} variant="contained" className={classes.button}>
+              <Button
+                onClick={handleAddClick}
+                variant="contained"
+                style={{ marginTop: "1em", marginLeft: "1em" }}
+                className={classes.button}
+              >
                 Lag nytt event
               </Button>
             )}

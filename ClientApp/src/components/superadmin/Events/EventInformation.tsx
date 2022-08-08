@@ -126,7 +126,7 @@ const EventInformation: React.FC<Props> = ({
   };
 
   const deleteButton = (
-    <Button variant="contained" onClick={handleDeleteClick}>
+    <Button variant="contained" className={classes.buttonError} onClick={handleDeleteClick}>
       Avbryt
     </Button>
   );

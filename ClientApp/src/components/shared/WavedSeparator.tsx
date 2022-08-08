@@ -1,6 +1,6 @@
 import { Box, useTheme } from "@material-ui/core";
-import { isMobile } from "common/functions/IsMobile";
 import useStyles from "components/landing-page/Styles";
+import useIsMobile from "hooks/useIsMobile";
 import * as React from "react";
 
 interface WaveProps {
@@ -10,14 +10,14 @@ interface WaveProps {
 const WavedSeperator: React.FC<WaveProps> = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const mobile = isMobile();
+  const isMobile = useIsMobile();
   return (
     <>
       <Box className={props.isGreen ? classes.wavedBoxGreen : classes.wavedBoxWhite}>
         <svg
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
-          height={mobile ? "2em" : "4em"}
+          height={isMobile ? "2em" : "4em"}
           width="100%"
         >
           <path

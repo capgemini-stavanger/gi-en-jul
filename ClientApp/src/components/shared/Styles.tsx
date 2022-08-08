@@ -165,6 +165,18 @@ export default () =>
       fontSize: "20px",
       fontWeight: 800,
     },
+    footer: {
+      backgroundColor: theme.palette.secondary.light,
+      paddingTop: "5%",
+    },
+    footerHeadline: {
+      color: theme.palette.primary.dark,
+      cursor: "pointer",
+      "&:hover": {
+        color: theme.palette.primary.dark,
+      },
+      textDecoration: "none",
+    },
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",
       position: "absolute",

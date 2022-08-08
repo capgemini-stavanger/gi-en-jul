@@ -5,7 +5,6 @@ import useStyles from "components/landing-page/Styles";
 import logo from "styling/img/logo_background.svg";
 import Contact from "components/landing-page/Contact";
 import { ContactData } from "components/landing-page/Contact";
-import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
@@ -14,12 +13,14 @@ import What from "components/landing-page/What";
 import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
 import WavedSeperator from "components/shared/WavedSeparator";
 import Snowfall from "react-snowfall";
-import { isMobile } from "common/functions/IsMobile";
+import useIsMobile from "hooks/useIsMobile";
+import Footer from "components/shared/Footer";
 
 const Home = () => {
   const [contacts, setContacts] = useState<ContactData[]>([]);
   const classes = useStyles();
   const apiservice = new ApiService();
+  const isMobile = useIsMobile();
   useEffect(() => {
     apiservice.get("municipality/allcontacts").then((response) => setContacts(response.data));
   }, []);
@@ -30,7 +31,7 @@ const Home = () => {
       <Box id="landing">
         <Snowfall
           color="white" // Snowflake color
-          snowflakeCount={isMobile() ? 40 : 150} // Amount of snowflakes -> Default
+          snowflakeCount={isMobile ? 40 : 150} // Amount of snowflakes -> Default
           style={{
             zIndex: "100", // On top of everything
           }}
@@ -64,8 +65,8 @@ const Home = () => {
           <Contact contacts={contacts} />
         </Box>
         <ScrollToTop maxPagePosition={300} />
-        <Footer />
       </Box>
+      <Footer />
     </>
   );
 };

@@ -1,13 +1,13 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
-import Footer from "components/shared/Footer";
 import { useState, useEffect } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Municipalities, {
   LocationData,
 } from "components/landing-page/Municipalities/Municipalities";
+import Footer from "components/shared/Footer";
 
 interface IKommuneInfoResponse {
   country: string;

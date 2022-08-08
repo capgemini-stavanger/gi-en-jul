@@ -47,7 +47,7 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
           <SelectForm
             name="Faq"
             variant="outlined"
-            label="Velg faq"
+            label="Velg et spørsmål"
             value={selectFormValue}
             options={faq.map((o) => {
               return { value: o.question, text: o.question };
