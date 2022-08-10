@@ -167,6 +167,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             role={role}
             assignedLocation={assignedLocation}
             municipalities={municipalities}
+            accessToken={accessToken}
             updateMunicipalityInformation={updateMunicipalityInformation}
             deleteMunicipalityInformation={deleteMunicipalityInformation}
           />

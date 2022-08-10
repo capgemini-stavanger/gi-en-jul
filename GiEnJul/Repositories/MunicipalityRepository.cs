@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using GiEnJul.Clients;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Serilog;
@@ -21,8 +22,10 @@ namespace GiEnJul.Repositories
 
     public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
     {
+
         public MunicipalityRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Municipality") : base(settings, tableName, mapper, log)
-        { }
+        {
+        }
 
         public async Task<Municipality> DeleteEntry(Models.Municipality municipality)
         {

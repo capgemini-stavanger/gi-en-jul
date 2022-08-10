@@ -1,14 +1,18 @@
 import { Box, Button, ListItem, ListItemIcon, List, Grid } from "@material-ui/core";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import useStyles from "../../Styles";
 import { IMunicipality } from "../ManageMunicipalityContainer";
+import img_placeholder from "styling/img/person.png";
+import { Delete } from "@material-ui/icons";
+import ApiService from "common/functions/apiServiceClass";
 
 interface IMunicipalityInformation {
   municipality: IMunicipality;
   role: string;
+  accessToken: string;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
   setSelectedMunicipality: (municipality: IMunicipality) => void;
   deleteMunicipalityInformation: (municipality: IMunicipality) => void;
@@ -17,14 +21,21 @@ interface IMunicipalityInformation {
 const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   municipality,
   role,
+  accessToken,
   updateMunicipalityInformation,
   deleteMunicipalityInformation,
   setSelectedMunicipality,
 }) => {
   const [openConfirmBox, setOpenConfirmBox] = useState(false);
   const [openEditor, setOpenEditor] = useState(false);
+  const [openImages, setOpenImages] = useState(false);
   const classes = useStyles();
   const [openDeleteConfirmBox, setOpenDeleteConfirmBox] = useState(false);
+  const [openDeleteImageConfirmBox, setOpenDeleteImageConfirmBox] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState("");
+  const [images, setImages] = useState(municipality.images);
+
+  const apiService = new ApiService(accessToken);
 
   function onChange(e: ContentEditableEvent) {
     setSelectedMunicipality({ ...municipality, information: e.target.value });
@@ -48,6 +59,55 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
     }
   };
 
+  const handleOpenEditor = () => {
+    if (openEditor) {
+      setOpenEditor(false);
+      return;
+    }
+    setOpenEditor(true);
+    setOpenImages(false);
+  };
+
+  const handleOpenImages = () => {
+    if (openImages) {
+      setOpenImages(false);
+      return;
+    }
+    setOpenEditor(false);
+    setOpenImages(true);
+  };
+
+  const handleDeleteImage = (response: boolean) => {
+    if (!response) return;
+
+    apiService.delete("municipality/image", imageToDelete).then((resp) => {
+      if (resp.status < 400) {
+        removeImageFromView(imageToDelete);
+      }
+    });
+  };
+
+  useEffect(() => {
+    setImages(municipality.images);
+    console.log("cc");
+  }, [municipality]);
+
+  const removeImageFromView = useCallback(
+    (img: string) => {
+      const imgs = images;
+      const i = imgs.indexOf(img);
+      imgs.splice(i, 1);
+      setImages([...imgs]);
+      setImageToDelete("");
+    },
+    [images]
+  );
+
+  const openDelteImageDialog = (img: string) => {
+    setImageToDelete(img);
+    setOpenDeleteImageConfirmBox(true);
+  };
+
   return (
     <>
       <Box className={classes.tableBody} style={{ marginTop: "15px" }}>
@@ -58,11 +118,18 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
         style={{ marginTop: "10px", marginBottom: "10px" }}
         variant="contained"
         className={classes.button}
-        onClick={() => {
-          setOpenEditor(true);
-        }}
+        onClick={handleOpenEditor}
       >
         Rediger tekst
+      </Button>
+
+      <Button
+        style={{ marginTop: "10px", marginBottom: "10px" }}
+        variant="contained"
+        className={classes.button}
+        onClick={handleOpenImages}
+      >
+        Rediger bilder
       </Button>
 
       {openEditor && (
@@ -120,6 +187,49 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
         </>
       )}
 
+      {openImages && (
+        <>
+          <Grid container justifyContent="space-evenly">
+            {images.map((img, index) => {
+              if (!img) {
+                return <></>;
+              }
+              return (
+                <Grid item key={`img${index}`}>
+                  <Grid container direction={"column"}>
+                    <Grid item>
+                      <img
+                        key={index}
+                        src={img}
+                        className={classes.infoImage}
+                        alt={"Finner ikke bildet"}
+                        onError={({ currentTarget }) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = `${img_placeholder}`;
+                        }}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <Grid container justifyContent="space-evenly" style={{ marginTop: "5px" }}>
+                        <Grid item>
+                          <Button
+                            className={classes.buttonError}
+                            onClick={() => openDelteImageDialog(img)}
+                          >
+                            Slett
+                            <Delete />
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </>
+      )}
+
       <ConfirmationBox
         open={openConfirmBox}
         text={"Er du sikker på at du ønsker å oppdatere teksten?"}
@@ -135,6 +245,15 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
           setOpenDeleteConfirmBox(false);
         }}
         handleResponse={handleDeleteResponse}
+      />
+      <ConfirmationBox
+        open={openDeleteImageConfirmBox}
+        text={"Er du sikker på at du ønsker å slette bildet?"}
+        handleClose={() => {
+          setImageToDelete("");
+          setOpenDeleteImageConfirmBox(false);
+        }}
+        handleResponse={handleDeleteImage}
       />
     </>
   );
