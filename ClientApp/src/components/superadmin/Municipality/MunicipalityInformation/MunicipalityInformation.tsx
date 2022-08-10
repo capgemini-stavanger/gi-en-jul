@@ -89,7 +89,6 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
 
   useEffect(() => {
     setImages(municipality.images);
-    console.log("cc");
   }, [municipality]);
 
   const removeImageFromView = useCallback(
@@ -99,6 +98,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
       imgs.splice(i, 1);
       setImages([...imgs]);
       setImageToDelete("");
+      municipality.images = [...imgs];
     },
     [images]
   );
@@ -106,6 +106,22 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   const openDelteImageDialog = (img: string) => {
     setImageToDelete(img);
     setOpenDeleteImageConfirmBox(true);
+  };
+
+  const handleFileChange = (event: any) => {
+    const files = Array.from<File>(event.target.files);
+    if (files.length) {
+      files.forEach((file: File) => {
+        const formData = new FormData();
+        formData.append("file", file, file.name);
+        apiService.post(`municipality/image/${municipality.name}`, formData).then((response) => {
+          if (response.data) {
+            setImages([...images, response.data]);
+            municipality.images = [...municipality.images, response.data];
+          }
+        });
+      });
+    }
   };
 
   return (
@@ -124,12 +140,12 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
       </Button>
 
       <Button
-        style={{ marginTop: "10px", marginBottom: "10px" }}
+        style={{ margin: "10px" }}
         variant="contained"
-        className={classes.button}
+        className={openImages ? classes.buttonError : classes.button}
         onClick={handleOpenImages}
       >
-        Rediger bilder
+        {openImages ? "Skjul bilder" : "Vis bilder"}
       </Button>
 
       {openEditor && (
@@ -227,6 +243,10 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
               );
             })}
           </Grid>
+          <Button variant={"contained"} component={"label"} className={classes.button}>
+            Last opp nytt bilde
+            <input type={"file"} accept={"image/*"} onChange={handleFileChange} hidden />
+          </Button>
         </>
       )}
 

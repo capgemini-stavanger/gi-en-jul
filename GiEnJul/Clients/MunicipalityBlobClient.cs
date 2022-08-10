@@ -15,7 +15,7 @@ namespace GiEnJul.Clients
 
         Task<List<string>> GetImageUrlsForMunicipality(string municipality);
         Task<Dictionary<string, List<string>>> GetAllImages();
-        Task UploadImageForMunicipality(string municipality, Stream stream, string fileExt = "");
+        Task<string> UploadImageForMunicipality(string municipality, Stream stream, string fileExt = "");
         Task DeleteImageForMunicipality(string imageName);
     }
 
@@ -68,10 +68,15 @@ namespace GiEnJul.Clients
             return result;
         }
 
-        public async Task UploadImageForMunicipality(string municipality, Stream stream, string fileExt = "")
+        public async Task<string> UploadImageForMunicipality(string municipality, Stream stream, string fileExt = "")
         {
-            var blobName = $"{municipality}/{Guid.NewGuid()}{(string.IsNullOrWhiteSpace(fileExt) ? "" : $".{fileExt}")}";
+            if (_client.GetBlobs(prefix: municipality).Count() >= 10)
+                throw new Exception($"Too many images for {municipality}");
+
+            var blobName = $"{municipality}/{Guid.NewGuid()}{(string.IsNullOrWhiteSpace(fileExt) ? "" : $"{fileExt}")}";
             await _client.UploadBlobAsync(blobName, stream);
+
+            return $"{_client.Uri.AbsoluteUri}/{blobName}";
         }
     }
 }

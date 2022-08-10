@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using GiEnJul.Helpers;
 using GiEnJul.Clients;
 using GiEnJul.Utilities;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace GiEnJul.Controllers
 {
@@ -74,7 +76,9 @@ namespace GiEnJul.Controllers
             foreach (var dto in dtos)
             {
                 if (images.TryGetValue(dto.Name, out var imgs))
-                    dto.Images = imgs;
+                    dto.Images = imgs ?? new List<string>();
+                else
+                    dto.Images = new List<string>();
             }
 
             return dtos;
@@ -177,6 +181,16 @@ namespace GiEnJul.Controllers
             await _municipalityBlobClient.DeleteImageForMunicipality(imageName);
 
             return Ok();
+        }
+
+        [HttpPost("image/{municipalityName}")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<string> UploadImage([FromForm] IFormFile file, string municipalityName)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
+            var fileExt = Path.GetExtension(file.FileName);
+            var result = await _municipalityBlobClient.UploadImageForMunicipality(municipalityName, file.OpenReadStream(), fileExt);
+            return result;
         }
     }
 }
