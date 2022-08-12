@@ -23,6 +23,7 @@ const Municipality = () => {
   const [activeMunicipalities, setActiveMunicipalities] = useState<string[]>([]);
   const [municipalityMap, setMunicipalityMap] = useState(new Map<string, IKommuneInfoResponse>());
   const [municipalityData, setMunicipalityData] = useState<LocationData[]>([]);
+  const [fallbackText, setFallbackText] = useState("Henter informasjon...");
 
   const classes = useStyles();
   const apiservice = new ApiService();
@@ -50,6 +51,9 @@ const Municipality = () => {
       })
       .catch((errorStack) => {
         console.error(errorStack);
+      })
+      .finally(() => {
+        setFallbackText("Det er ikke lagt til noe informasjon om kommunene enda");
       });
   };
 
@@ -91,7 +95,7 @@ const Municipality = () => {
             {activeMunicipalities.length > 0 ? (
               <Municipalities locations={municipalityData} />
             ) : (
-              <Typography>Det er ikke lagt til noe informasjon om kommunene enda</Typography>
+              <Typography>{fallbackText}</Typography>
             )}
           </Grid>
         </Grid>
