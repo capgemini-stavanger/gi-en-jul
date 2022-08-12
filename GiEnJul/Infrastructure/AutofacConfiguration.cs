@@ -34,7 +34,9 @@ namespace GiEnJul.Infrastructure
             builder.RegisterType<EmailTemplateBuilder>().As<IEmailTemplateBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<Auth0ManagementClient>().As<IAuth0ManagementClient>().SingleInstance();
             builder.RegisterType<Authorization>().As<IAuthorization>().InstancePerLifetimeScope();
+
             builder.RegisterType<MunicipalityBlobClient>().As<IMunicipalityBlobClient>().SingleInstance();
+            builder.RegisterType<ContactImagesBlobClient>().As<IContactImagesBlobClient>().SingleInstance();
 
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)

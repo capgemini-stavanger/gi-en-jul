@@ -25,8 +25,18 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
   const isMobile = useIsMobile();
   const getSearchParam = useGetSearchParams();
 
-  const [tab, setTab] = useState<string>(getSearchParam("location") ?? "");
+  const [tab, setTab] = useState<string>(
+    getSearchParam("location") ?? locations.length ? locations[0].location.toLocaleLowerCase() : ""
+  );
 
+  useEffect(() => {
+    if (tab === "")
+      setTab(
+        getSearchParam("location") ?? locations.length
+          ? locations[0].location.toLocaleLowerCase()
+          : ""
+      );
+  }, [locations]);
   useEffect(() => {
     const loc = getSearchParam("location");
     if (loc && locations.map((l) => l.location.toLowerCase()).includes(loc)) {

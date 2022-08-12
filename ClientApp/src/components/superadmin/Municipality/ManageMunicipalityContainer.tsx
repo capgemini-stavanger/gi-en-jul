@@ -155,6 +155,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             open={open}
             setOpen={setOpen}
             role={role}
+            accessToken={accessToken}
           />
         </Grid>
         <Divider />

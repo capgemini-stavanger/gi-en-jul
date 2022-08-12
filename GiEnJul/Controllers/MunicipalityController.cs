@@ -24,18 +24,21 @@ namespace GiEnJul.Controllers
         private readonly IAuth0ManagementClient _managementClient;
         private readonly IAuthorization _authorization;
         private readonly IMunicipalityBlobClient _municipalityBlobClient;
+        private readonly IContactImagesBlobClient _contactImagesBlobClient;
 
         public MunicipalityController(IMunicipalityRepository municipalityRepository,
                                       IMapper mapper,
                                       IAuth0ManagementClient managementClient,
                                       IAuthorization authorization,
-                                      IMunicipalityBlobClient municipalityBlobClient)
+                                      IMunicipalityBlobClient municipalityBlobClient,
+                                      IContactImagesBlobClient contactImagesBlobClient)
         {
             _municipalityRepository = municipalityRepository;
             _mapper = mapper;
             _managementClient = managementClient;
             _authorization = authorization;
             _municipalityBlobClient = municipalityBlobClient;
+            _contactImagesBlobClient = contactImagesBlobClient;
         }
 
         [HttpDelete]
@@ -75,6 +78,7 @@ namespace GiEnJul.Controllers
 
             foreach (var dto in dtos)
             {
+                dto.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{dto.Name}";
                 if (images.TryGetValue(dto.Name, out var imgs))
                     dto.Images = imgs ?? new List<string>();
                 else
@@ -122,6 +126,7 @@ namespace GiEnJul.Controllers
             var municipalities = await _municipalityRepository.GetAll();
             var active = municipalities.Where(m => m.IsActive).ToList();
             var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(active);
+            contacts.ForEach(c => c.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{c.Name}");
             return contacts;
         }
 
@@ -130,7 +135,9 @@ namespace GiEnJul.Controllers
         public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
         {
             var contact = await _municipalityRepository.GetSingle(municipality);
-            return _mapper.Map<Dtos.GetContactsDto>(contact);
+            var dto = _mapper.Map<Dtos.GetContactsDto>(contact);
+            dto.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{dto.Name}";
+            return dto;
         }
 
         [HttpGet("getSingle")]
@@ -190,6 +197,15 @@ namespace GiEnJul.Controllers
             await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
             var fileExt = Path.GetExtension(file.FileName);
             var result = await _municipalityBlobClient.UploadImageForMunicipality(municipalityName, file.OpenReadStream(), fileExt);
+            return result;
+        }
+
+        [HttpPost("contactImage/{municipalityName}")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<string> UploadContactImage([FromForm] IFormFile file, string municipalityName)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
+            var result = await _contactImagesBlobClient.UpdateProfileImage(municipalityName, file.OpenReadStream());
             return result;
         }
     }

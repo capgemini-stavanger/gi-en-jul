@@ -100,6 +100,13 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(6),
       objectFit: "cover",
     },
+    smallImage: {
+      width: "65px",
+      height: "65px",
+      objectFit: "cover",
+      borderRadius: "50%",
+      margin: "auto auto auto 5px",
+    },
   })
 );
 
