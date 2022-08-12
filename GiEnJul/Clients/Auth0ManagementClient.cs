@@ -104,7 +104,14 @@ namespace GiEnJul.Clients
             var request = new GetUsersRequest();
             var users = await _managementApiClient.Users.GetAllAsync(request);
 
-            return (List<User>)users;
+            var adminUsers = await _managementApiClient.Roles.GetUsersAsync(_settings.Auth0Settings.Admin);
+            var superAdminUsers = await _managementApiClient.Roles.GetUsersAsync(_settings.Auth0Settings.SuperAdmin);
+            var institutionUsers = await _managementApiClient.Roles.GetUsersAsync(_settings.Auth0Settings.Institution);
+
+            return users.Where(u => adminUsers.Any(a => a.UserId == u.UserId)
+                            || superAdminUsers.Any(a => a.UserId == u.UserId)
+                            || institutionUsers.Any(a => a.UserId == u.UserId))
+                .ToList();
         }
 
         public async Task<User> GetSingleUser(string email)
