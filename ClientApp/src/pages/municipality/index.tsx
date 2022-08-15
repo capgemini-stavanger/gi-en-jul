@@ -1,7 +1,7 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Municipalities, {
@@ -28,7 +28,7 @@ const Municipality = () => {
   const classes = useStyles();
   const apiservice = new ApiService();
 
-  const fetchActiveLocations = () => {
+  const fetchActiveLocations = useCallback(() => {
     apiservice
       .get("Municipality/Active", {})
       .then((resp) => {
@@ -37,9 +37,9 @@ const Municipality = () => {
       .catch((errorStack) => {
         console.error(errorStack);
       });
-  };
+  }, [setActiveMunicipalities]);
 
-  const fetchKommuneInformation = () => {
+  const fetchKommuneInformation = useCallback(() => {
     apiservice
       .get("Municipality/All", {})
       .then((resp) => {
@@ -55,7 +55,7 @@ const Municipality = () => {
       .finally(() => {
         setFallbackText("Det er ikke lagt til noe informasjon om kommunene enda");
       });
-  };
+  }, [setMunicipalityMap]);
 
   const buildLocationData = () => {
     const tempLocationData: LocationData[] = [];
