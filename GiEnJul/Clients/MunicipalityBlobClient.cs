@@ -27,7 +27,9 @@ namespace GiEnJul.Clients
         public MunicipalityBlobClient(ISettings settings)
         {
             var containerClient = new BlobContainerClient(settings.TableConnectionString, "municipalities");
-            containerClient.CreateIfNotExists();
+            var created = containerClient.CreateIfNotExists();
+
+            containerClient.SetAccessPolicy(PublicAccessType.BlobContainer);
             _client = containerClient;
 
             BlobContainerUrl = _client.Uri.AbsoluteUri;

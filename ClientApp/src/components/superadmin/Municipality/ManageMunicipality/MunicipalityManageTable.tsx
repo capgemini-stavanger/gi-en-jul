@@ -29,6 +29,7 @@ interface IMunicipalityManageTable {
   open: boolean;
   setOpen: (open: boolean) => void;
   role: string;
+  accessToken: string;
 }
 
 const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
@@ -40,6 +41,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
   open,
   setOpen,
   role,
+  accessToken,
 }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -74,17 +76,25 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
             kommunen skal vises på hjemsiden
           </Typography>
         </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Opplasting av bilder skjer umiddelbart og kan ikke angres. Informasjonsbilder kan
+            slettes og kontakt person bilder overskrives
+          </Typography>
+        </ListItem>
       </List>
       <Table>
         <TableBody className={classes.tableBody}>
           <TableRow className={classes.table}>
             <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
-            <TableCell className={classes.tableHeaderText}>Vises informasjonen</TableCell>
+            <TableCell className={classes.tableHeaderText}>Vises info</TableCell>
             <TableCell className={classes.tableHeaderText}>Email</TableCell>
             <TableCell className={classes.tableHeaderText}>Telefon</TableCell>
             <TableCell className={classes.tableHeaderText}>Kontaktperson</TableCell>
             <TableCell className={classes.tableHeaderText}>Facebook</TableCell>
             <TableCell className={classes.tableHeaderText}>Instagram</TableCell>
+            <TableCell className={classes.tableHeaderText}>Kontakt bilde</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
@@ -94,6 +104,7 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
               role={role}
               municipality={municipality}
               key={index}
+              accessToken={accessToken}
               setSelectedMunicipality={setSelectedMunicipality}
               setOpenConfirm={setOpenConfirm}
               updateMunicipalityInformation={updateMunicipalityInformation}
