@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Dto2EventContent,
   EventContent,
@@ -26,12 +26,9 @@ import InformationBox from "components/shared/InformationBox";
 import useStyles from "../Styles";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import EventRow from "./EventRow";
+import accessTokenContext from "contexts/accessTokenContext";
 
-interface Props {
-  accessToken: string;
-}
-
-const EventsTable: React.FC<Props> = ({ accessToken }) => {
+const EventsTable = () => {
   const [events, setEvents] = useState(new Map<string, EventContent>());
   const [municipalities, setMunicipalities] = useState<string[]>([]);
   const [eventTable, setEventTable] = useState<JSX.Element[]>([]);
@@ -49,6 +46,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
   const [tempEventName, setTempEventName] = useState<string>("");
   const [tempNewEvent, setTempNewEvent] = useState<EventContent>(EventContentInit());
   const classes = useStyles();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
 
   const handleDropDownChange = (value: string) => {

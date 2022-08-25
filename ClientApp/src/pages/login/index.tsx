@@ -6,6 +6,7 @@ import ErrorPage from "pages/ErrorPage";
 import InstitutionMacro from "pages/institution";
 import AdminTab from "pages/administrator";
 import { User } from "components/shared/Types";
+import accessTokenContext from "contexts/accessTokenContext";
 
 function LoginRedirector() {
   const { getAccessTokenSilently } = useAuth0();
@@ -49,22 +50,17 @@ function LoginRedirector() {
         />
       );
     case "SuperAdmin":
-      return (
-        <>
-          <AdminTab accessToken={userAccessToken} user={user} />
-        </>
-      );
     case "Admin":
       return (
-        <>
-          <AdminTab accessToken={userAccessToken} user={user} />
-        </>
+        <accessTokenContext.Provider value={userAccessToken}>
+          <AdminTab user={user} />
+        </accessTokenContext.Provider>
       );
     case "Institution":
       return (
-        <>
-          <InstitutionMacro accessToken={userAccessToken} />
-        </>
+        <accessTokenContext.Provider value={userAccessToken}>
+          <InstitutionMacro />
+        </accessTokenContext.Provider>
       );
     default:
       return <ErrorPage ErrorText={"En Feil har skjedd"} ErrorCode={500} />;

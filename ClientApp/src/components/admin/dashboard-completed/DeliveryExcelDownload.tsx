@@ -1,11 +1,11 @@
 import { Button, Snackbar } from "@material-ui/core";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import { Alert } from "@material-ui/lab";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IDeliveryExcelDownload {
-  accessToken: string;
   location: string;
 }
 
@@ -21,7 +21,8 @@ const initAlertState: () => IAlertState = () => ({
   open: false,
 });
 
-const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({ accessToken, location }) => {
+const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({ location }) => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const [alertState, setAlertState] = useState(initAlertState());
 

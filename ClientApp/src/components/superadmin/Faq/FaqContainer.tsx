@@ -1,13 +1,10 @@
 import { FormControl, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import Questions from "components/landing-page/Questions";
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FaqInformation from "./FaqInformation";
 import SelectForm from "components/shared/input-fields/SelectForm";
-
-interface IFaqInformation {
-  accessToken: string;
-}
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface faqInfo {
   question: string;
@@ -17,7 +14,8 @@ interface faqInfo {
   timestamp: string;
 }
 
-const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
+const FaqContainer = () => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const [faq, setFaq] = useState<faqInfo[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>("");
@@ -62,11 +60,7 @@ const FaqContainer: React.FC<IFaqInformation> = ({ accessToken }) => {
         </FormControl>
       </Grid>
       <Grid item>
-        <FaqInformation
-          getFaqInformation={getFaqInformation}
-          accessToken={accessToken}
-          index={selectedItem}
-        />
+        <FaqInformation getFaqInformation={getFaqInformation} index={selectedItem} />
       </Grid>
       <Grid item>
         <Questions />

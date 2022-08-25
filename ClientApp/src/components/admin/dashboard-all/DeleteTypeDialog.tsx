@@ -1,4 +1,3 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   Button,
   Dialog,
@@ -8,9 +7,10 @@ import {
   DialogTitle,
   Input,
 } from "@material-ui/core";
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { isEqual } from "components/shared/input-fields/validators/Validators";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IConfirmationDialog {
   open: boolean;
@@ -27,8 +27,7 @@ const DeleteTypeDialog: FC<IConfirmationDialog> = ({
   refreshData,
   type,
 }) => {
-  const { getAccessTokenSilently } = useAuth0();
-  const [userAccessToken, setUserAccessToken] = useState<string>("");
+  const userAccessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(userAccessToken);
   const [validationInput, setGiverNameInput] = useState("");
 
@@ -44,17 +43,6 @@ const DeleteTypeDialog: FC<IConfirmationDialog> = ({
         console.error(errorStack);
       });
   };
-
-  async function getUserAccessToken(): Promise<string> {
-    const accessToken = await getAccessTokenSilently();
-    return accessToken;
-  }
-
-  useEffect(() => {
-    getUserAccessToken().then((resp: string) => {
-      setUserAccessToken(resp);
-    });
-  });
 
   return (
     <>

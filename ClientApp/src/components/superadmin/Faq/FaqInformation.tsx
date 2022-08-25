@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Box, Button, Divider, Grid, TextField } from "@material-ui/core";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import useStyles from "components/superadmin/Styles";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IFaqInformation {
-  accessToken: string;
   index: string;
   getFaqInformation: () => void;
 }
 
-const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index, getFaqInformation }) => {
+const FaqInformation: React.FC<IFaqInformation> = ({ index, getFaqInformation }) => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 

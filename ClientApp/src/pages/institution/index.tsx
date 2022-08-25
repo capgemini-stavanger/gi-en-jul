@@ -5,10 +5,7 @@ import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import RegistrationForm from "components/institution/RegistrationForm";
 import RegistrationOverview from "components/institution/RegistrationOverview";
 
-interface IInstitutionMacro {
-  accessToken: string;
-}
-const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
+const InstitutionMacro = () => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
@@ -24,10 +21,10 @@ const InstitutionMacro: React.FC<IInstitutionMacro> = ({ accessToken }) => {
           <Tab label="Oversikt" value="2" />
         </TabList>
         <TabPanel value="1">
-          <RegistrationForm accessToken={accessToken} />
+          <RegistrationForm />
         </TabPanel>
         <TabPanel value="2">
-          <RegistrationOverview accessToken={accessToken} />
+          <RegistrationOverview />
         </TabPanel>
       </TabContext>
     </>

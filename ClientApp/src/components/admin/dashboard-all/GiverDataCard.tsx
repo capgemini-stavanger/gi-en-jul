@@ -1,5 +1,5 @@
 import { Box, Button, Grid, TextField, Tooltip, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { GiverType, User } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -20,6 +20,7 @@ import LinkOffIcon from "@material-ui/icons/LinkOff";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RequestState } from "./OverviewMacroRemake";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import accessTokenContext from "contexts/accessTokenContext";
 
 type Props = {
   giverData: GiverType;
@@ -28,7 +29,6 @@ type Props = {
   setSelectedGiver: () => void;
   setSelectedGiverIndex: () => void;
   refreshData: () => void;
-  accessToken: string;
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
@@ -42,13 +42,13 @@ const GiverDataCard: React.FC<Props> = ({
   setSelectedGiver,
   setSelectedGiverIndex,
   refreshData,
-  accessToken,
   resetSelections,
   requestState,
   setRequestState,
   user,
 }) => {
   const classes = useStyles();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
 
   const [personExpanded, setPersonExpanded] = useState(false);
@@ -261,7 +261,6 @@ const GiverDataCard: React.FC<Props> = ({
                       }}
                       toEmail={giverData.email}
                       fullName={giverData.fullName}
-                      accessToken={accessToken}
                       user={user}
                     />
                   </Grid>

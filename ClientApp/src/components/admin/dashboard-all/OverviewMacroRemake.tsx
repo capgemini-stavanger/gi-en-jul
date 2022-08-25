@@ -1,5 +1,5 @@
 import { Box, Container } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { GiverType, RecipientType, SelectedConnectionType, User } from "components/shared/Types";
 import { useStyles } from "./Styles";
@@ -9,10 +9,10 @@ import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import OverviewStatistics from "./OverviewStatistics";
 import OverviewConnection from "./OverviewConnection";
 import SuggestionDataTable from "./SuggestionDataTable";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IOverviewMacro {
   user: User;
-  accessToken: string;
 }
 const initState: SelectedConnectionType = {
   giver: undefined,
@@ -26,7 +26,8 @@ export enum RequestState {
   Error,
 }
 
-const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) => {
+const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ user }) => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
@@ -212,7 +213,6 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) =>
                   setSelectedGiver={(giver) => handleSelectedGiver(giver)}
                   setSelectedGiverIndex={(index) => setSelectedGiverIndex(index)}
                   refreshData={() => refreshData()}
-                  accessToken={accessToken}
                   resetSelections={resetSelections}
                   requestState={requestState}
                   setRequestState={(state) => setRequestState(state)}
@@ -237,7 +237,6 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) =>
                     setSelectedRecipient={(recipient) => handleSelectedRecipient(recipient)}
                     setSelectedRecipientIndex={(index) => handleVisualSelection(index, false)}
                     refreshData={() => refreshData()}
-                    accessToken={accessToken}
                     resetSelections={resetSelections}
                     requestState={requestState}
                     setRequestState={(state) => setRequestState(state)}

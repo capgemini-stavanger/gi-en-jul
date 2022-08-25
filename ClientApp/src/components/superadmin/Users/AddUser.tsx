@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Container, Table } from "reactstrap";
 import useStyles from "components/landing-page/Styles";
 import UserForm from "./UserForm";
@@ -16,10 +16,7 @@ import ConfirmationBox from "components/shared/ConfirmationBox";
 import ApiService from "common/functions/apiServiceClass";
 import DeleteIcon from "@material-ui/icons/Delete";
 import InformationBox from "components/shared/InformationBox";
-
-interface IAddUser {
-  accessToken: string;
-}
+import accessTokenContext from "contexts/accessTokenContext";
 
 export interface IUser {
   email: string;
@@ -33,7 +30,8 @@ interface User {
   institution: string;
 }
 
-const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
+const AddUser = () => {
+  const accessToken = useContext(accessTokenContext);
   const classes = useStyles();
   const [tab, setTab] = useState<string>("1");
   const [institutions, setInstitutions] = useState<User[]>([]);
@@ -94,10 +92,10 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
               <Tab label={<strong>Institusjon</strong>} value="2" />
             </TabList>
             <TabPanel value="1" className={classes.root}>
-              <UserForm accessToken={accessToken} institution={false} handleRefresh={fetchUsers} />
+              <UserForm institution={false} handleRefresh={fetchUsers} />
             </TabPanel>
             <TabPanel value="2">
-              <UserForm accessToken={accessToken} institution={true} handleRefresh={fetchUsers} />
+              <UserForm institution={true} handleRefresh={fetchUsers} />
             </TabPanel>
           </TabContext>
         </Container>

@@ -1,7 +1,7 @@
 import { Box, Button, Container, Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { RecipientType } from "components/shared/Types";
 import ApiService from "common/functions/apiServiceClass";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataGrid, GridColDef } from "@material-ui/data-grid";
 import EditFamilyDialog from "components/shared/EditFamilyDialog";
 import EditIcon from "@material-ui/icons/Edit";
@@ -12,6 +12,7 @@ import { getTextWidth } from "get-text-width";
 import { CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IDatagridFamily {
   id: string;
@@ -22,11 +23,8 @@ interface IDatagridFamily {
   status: string;
 }
 
-interface IRegistrationOverview {
-  accessToken: string;
-}
-
-const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) => {
+const RegistrationOverview = () => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
@@ -320,7 +318,6 @@ const RegistrationOverview: React.FC<IRegistrationOverview> = ({ accessToken }) 
               refreshRecipients={() => refreshData()}
               recipient={editRecipient}
               isInstitution={true}
-              accessToken={accessToken}
             />
           </Grid>
         </Grid>

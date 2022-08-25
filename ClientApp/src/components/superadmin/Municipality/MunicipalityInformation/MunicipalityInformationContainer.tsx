@@ -8,7 +8,6 @@ interface IMunicipalityInformationContainer {
   assignedLocation: string;
   role: string;
   municipalities: IMunicipality[];
-  accessToken: string;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
   deleteMunicipalityInformation: (municipality: IMunicipality) => void;
 }
@@ -16,7 +15,6 @@ interface IMunicipalityInformationContainer {
 const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContainer> = ({
   role,
   municipalities,
-  accessToken,
   updateMunicipalityInformation,
   deleteMunicipalityInformation,
 }) => {
@@ -49,7 +47,6 @@ const MunicipalityInformationContainer: React.FC<IMunicipalityInformationContain
           <MunicipalityInformation
             role={role}
             municipality={selectedMunicipality}
-            accessToken={accessToken}
             setSelectedMunicipality={setSelectedMunicipality}
             updateMunicipalityInformation={updateMunicipalityInformation}
             deleteMunicipalityInformation={deleteMunicipalityInformation}

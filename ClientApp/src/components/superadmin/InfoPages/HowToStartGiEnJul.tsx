@@ -1,15 +1,12 @@
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-
-interface iHowtoStartGiEnJul {
-  accessToken: string;
-}
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface iHowtoStartInfo {
   ContentType: string;
@@ -23,8 +20,9 @@ const initHowtoStartInfo: iHowtoStartInfo = {
   index: "",
 };
 
-const HowToStartGiEnJul: React.FC<iHowtoStartGiEnJul> = ({ accessToken }) => {
+const HowToStartGiEnJul = () => {
   const classes = useStyles();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const [html, setHtml] = React.useState("");
   const [openEditor, setOpenEditor] = useState(false);

@@ -9,10 +9,23 @@ import VerifyConnection from "pages/VerifyConnection";
 import "custom.css";
 import Municipality from "pages/municipality";
 import DenyConnection from "pages/DenyConnection";
+import ApiService from "common/functions/apiServiceClass";
+import municipalitiesContext from "contexts/municipalitiesContext";
+import { useEffect, useState } from "react";
 
 const App = () => {
+  const [municipalities, setMunicipalities] = useState<string[]>([]);
+  const apiservice = new ApiService();
+
+  const fetchActive = () => {
+    apiservice.get("municipality/active").then((response) => {
+      setMunicipalities(response.data);
+    });
+  };
+  useEffect(() => fetchActive(), []);
+
   return (
-    <>
+    <municipalitiesContext.Provider value={municipalities}>
       <Route path="/admin" component={AdminPage} />
       <Route exact path="/" component={Home} />
       <Route path="/bedrift" component={Business} />
@@ -25,7 +38,7 @@ const App = () => {
         component={VerifyConnection}
       />
       <Route path="/:giverRowKey/:recipientRowKey/:partitionKey/deny" component={DenyConnection} />
-    </>
+    </municipalitiesContext.Provider>
   );
 };
 export default App;

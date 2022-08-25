@@ -1,11 +1,12 @@
 import { Divider, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
-import { useEffect, useState } from "react";
+import accessTokenContext from "contexts/accessTokenContext";
+import municipalitiesContext from "contexts/municipalitiesContext";
+import { useContext, useEffect, useState } from "react";
 import MunicipalityManageTable from "./ManageMunicipality/MunicipalityManageTable";
 import MunicipalityInformationContainer from "./MunicipalityInformation/MunicipalityInformationContainer";
 
 interface props {
-  accessToken: string;
   assignedLocation: string;
   role: string;
 }
@@ -37,7 +38,9 @@ export const initInterfaceMunicipality: IMunicipality = {
   instagram: "",
 };
 
-const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assignedLocation }) => {
+const ManageMunicipalityContainer: React.FC<props> = ({ role, assignedLocation }) => {
+  const accessToken = useContext(accessTokenContext);
+  const municipalitiesCtx = useContext(municipalitiesContext);
   const apiservice = new ApiService(accessToken);
   const [municipalities, setMunicipalities] = useState<IMunicipality[]>([
     initInterfaceMunicipality,
@@ -55,6 +58,12 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
         if (role == "Admin") {
           setMunicipalities(resp.data.filter((data: any) => data.name === assignedLocation));
         }
+        const municipalityArray = resp.data as any[];
+        const municipalityNames = municipalityArray
+          .filter((o: any) => o.isActive)
+          .map((o: any) => o.name) as string[];
+        municipalitiesCtx.splice(0, municipalitiesCtx.length);
+        municipalitiesCtx.push(...municipalityNames);
       })
       .catch((errorStack) => {
         console.error(errorStack);
@@ -155,7 +164,6 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             open={open}
             setOpen={setOpen}
             role={role}
-            accessToken={accessToken}
           />
         </Grid>
         <Divider />
@@ -168,7 +176,6 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             role={role}
             assignedLocation={assignedLocation}
             municipalities={municipalities}
-            accessToken={accessToken}
             updateMunicipalityInformation={updateMunicipalityInformation}
             deleteMunicipalityInformation={deleteMunicipalityInformation}
           />

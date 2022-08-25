@@ -1,13 +1,10 @@
 import { DataGrid, GridCellParams, GridColumns, GridRowData } from "@material-ui/data-grid";
-import { FC, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import useUser from "hooks/useUser";
 import clsx from "clsx";
 import useStyles from "components/admin/dashboard-completed/Styles";
-
-interface ITable {
-  accessToken: string;
-}
+import accessTokenContext from "contexts/accessTokenContext";
 
 type ConnectionDto = {
   familyId: string;
@@ -94,7 +91,8 @@ const columns: GridColumns = [
   },
 ];
 
-const Table: FC<ITable> = ({ accessToken }) => {
+const Table = () => {
+  const accessToken = useContext(accessTokenContext);
   const classes = useStyles();
   const apiservice = new ApiService(accessToken);
   const { location } = useUser();

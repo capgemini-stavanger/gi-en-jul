@@ -1,15 +1,12 @@
 import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/superadmin/Styles";
-import React from "react";
+import React, { useContext } from "react";
 import { useEffect, useState } from "react";
 import { DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
-
-interface IBusinessInformation {
-  accessToken: string;
-}
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface businessInfo {
   question: string;
@@ -27,8 +24,9 @@ const initBusinessInfo: businessInfo = {
   timestamp: "",
 };
 
-const BusinessInformation: React.FC<IBusinessInformation> = ({ accessToken }) => {
+const BusinessInformation = () => {
   const classes = useStyles();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const [businessInfo, setBusinessInfo] = useState<businessInfo>(initBusinessInfo);
   const [html, setHtml] = React.useState("");

@@ -5,8 +5,9 @@ import parse from "html-react-parser";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import { Link, useHistory } from "react-router-dom";
-import { isMobile } from "common/functions/IsMobile";
 import Footer from "components/shared/Footer";
+import useIsMobile from "hooks/useIsMobile";
+import DotLoader from "common/constants/DotLoader";
 
 interface businessInfo {
   question: string;
@@ -28,20 +29,29 @@ const Business = () => {
   const classes = useStyles();
   const apiservice = new ApiService();
   const [businessInfo, setBedriftInfo] = useState<businessInfo>(initBusinessInfo);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fallbackText, setFallbackText] = useState("");
   const history = useHistory();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     getBedriftInformation();
   }, []);
 
   const getBedriftInformation = () => {
+    setIsLoading(true);
+    setFallbackText("Henter info...");
     apiservice
       .get("cms/getall", { params: { contentType: "Bedrift" } })
       .then((response) => {
         setBedriftInfo(response.data[0]);
+        setIsLoading(false);
+        setFallbackText("");
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
+        setFallbackText("Kunne ikke hente info, vennligst prøv igjen senere");
       });
   };
 
@@ -55,37 +65,28 @@ const Business = () => {
           </Typography>
         </div>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          {isMobile() ? (
-            <Grid item xs={12}>
-              {parse(businessInfo.info)}
-              <Link
-                to="/bli-giver"
-                onClick={() => {
-                  history.push("/");
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <Typography>
-                  Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
-                </Typography>
-              </Link>
-            </Grid>
-          ) : (
-            <Grid item xs={6}>
-              {parse(businessInfo.info)}
-              <Link
-                to="/bli-giver"
-                onClick={() => {
-                  history.push("/");
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <Typography>
-                  Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
-                </Typography>
-              </Link>
-            </Grid>
-          )}
+          <Grid item xs={isMobile ? 12 : 8}>
+            {fallbackText && (
+              <Typography>
+                {fallbackText}
+                <br />
+              </Typography>
+            )}
+            {isLoading ? <DotLoader /> : <>{parse(businessInfo.info)}</>}
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 8}>
+            <Link
+              to="/bli-giver"
+              onClick={() => {
+                history.push("/");
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <Typography>
+                Ønsker du å Gi en jul som privatperson? Klikk her for registrering.
+              </Typography>
+            </Link>
+          </Grid>
         </Grid>
       </Container>
       <Footer />

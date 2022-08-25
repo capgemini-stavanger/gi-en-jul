@@ -4,13 +4,14 @@ import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import { isNotNull, isEmail } from "components/shared/input-fields/validators/Validators";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useState } from "react";
 import { Button } from "reactstrap";
 import { ROLES } from "common/constants/Roles";
 import useStyles from "../Styles";
+import accessTokenContext from "contexts/accessTokenContext";
+import municipalitiesContext from "contexts/municipalitiesContext";
 
 interface props {
-  accessToken: string;
   institution: boolean;
   handleRefresh: () => void;
 }
@@ -45,7 +46,7 @@ export const initFormDataState: () => FormState = () => ({
   institutionName: "",
 });
 
-const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) => {
+const UserForm: React.FC<props> = ({ institution, handleRefresh }) => {
   const [state, setState] = useState(initFormDataState());
   const [openAdd, setOpenAdd] = useState<boolean>(false);
   const [openInformationBox, setOpenInformationBox] = useState<boolean>(false);
@@ -56,7 +57,8 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
   });
   const classes = useStyles();
 
-  const [municipalities, setMunicipalities] = useState<string[]>([]);
+  const municipalities = useContext(municipalitiesContext);
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
 
   const checkEqualPassword = (confirmPassword: string) => {
@@ -182,13 +184,6 @@ const UserForm: React.FC<props> = ({ accessToken, institution, handleRefresh }) 
         });
     }
   };
-
-  const getMunicipalities = () => {
-    apiservice.get("municipality/active").then((response) => {
-      setMunicipalities(response.data);
-    });
-  };
-  useEffect(getMunicipalities, []);
 
   const handleAdd = (response: boolean) => {
     if (response) {

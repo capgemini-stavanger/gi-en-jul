@@ -29,7 +29,6 @@ interface IMunicipalityManageTable {
   open: boolean;
   setOpen: (open: boolean) => void;
   role: string;
-  accessToken: string;
 }
 
 const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
@@ -41,7 +40,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
   open,
   setOpen,
   role,
-  accessToken,
 }) => {
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -104,7 +102,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
               role={role}
               municipality={municipality}
               key={index}
-              accessToken={accessToken}
               setSelectedMunicipality={setSelectedMunicipality}
               setOpenConfirm={setOpenConfirm}
               updateMunicipalityInformation={updateMunicipalityInformation}

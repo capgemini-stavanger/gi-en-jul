@@ -2,16 +2,16 @@ import { Button, Grid, TableCell, TableRow, TextField } from "@material-ui/core"
 import ApiService from "common/functions/apiServiceClass";
 import ConfirmationBox from "components/shared/ConfirmationBox";
 import InformationBox from "components/shared/InformationBox";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useStyles from "../../Styles";
 import { IMunicipality, initInterfaceMunicipality } from "../ManageMunicipalityContainer";
 import img_placeholder from "styling/img/person.png";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface props {
   municipality: IMunicipality;
   key: number;
   role: string;
-  accessToken: string;
   setSelectedMunicipality: (municipality: IMunicipality) => void;
   setOpenConfirm: (open: boolean) => void;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
@@ -23,14 +23,13 @@ const MunicipalityTableElements: React.FC<props> = ({
   updateMunicipalityInformation,
   setOpenConfirm,
   role,
-  accessToken,
 }) => {
   const classes = useStyles();
   const [openEditForm, setOpenEditForm] = useState(true);
   const [open, setOpen] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
   const [time, setTime] = useState(Date.now().toString());
-
+  const accessToken = useContext(accessTokenContext);
   const apiService = new ApiService(accessToken);
 
   const handleSaveInformation = (response: boolean) => {

@@ -11,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import useStyles from "components/admin/Styles";
 import { PersonType, RecipientType } from "./Types";
@@ -23,6 +23,7 @@ import SelectForm from "./input-fields/SelectForm";
 import useUser from "hooks/useUser";
 import InformationBox from "components/shared/InformationBox";
 import getGender from "common/functions/GetGender";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IEditFamilyDialog {
   onClose: () => void;
@@ -30,7 +31,6 @@ interface IEditFamilyDialog {
   refreshRecipients: () => void;
   recipient: RecipientType;
   isInstitution: boolean;
-  accessToken: string;
 }
 
 const EditFamilyDialog: FC<IEditFamilyDialog> = ({
@@ -39,10 +39,9 @@ const EditFamilyDialog: FC<IEditFamilyDialog> = ({
   refreshRecipients,
   recipient,
   isInstitution,
-  accessToken,
 }) => {
   const classes = useStyles();
-
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const { institution, location, email } = useUser();
 

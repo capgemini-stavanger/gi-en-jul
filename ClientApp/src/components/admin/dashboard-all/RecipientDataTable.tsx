@@ -16,7 +16,6 @@ type Props = {
   setSelectedRecipient: (giver: RecipientType) => void;
   setSelectedRecipientIndex: (idx: number) => void;
   refreshData: () => void;
-  accessToken: string;
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
@@ -29,7 +28,6 @@ const RecipientDataTable: React.FC<Props> = ({
   setSelectedRecipient,
   setSelectedRecipientIndex,
   refreshData,
-  accessToken,
   resetSelections,
   requestState,
   setRequestState,
@@ -163,7 +161,6 @@ const RecipientDataTable: React.FC<Props> = ({
             setSelectedRecipient={() => setSelectedRecipient(allFilters(recipientData)[index])}
             setSelectedRecipientIndex={() => setSelectedRecipientIndex(index)}
             refreshData={refreshData}
-            accessToken={accessToken}
             resetSelections={resetSelections}
             requestState={requestState}
             setRequestState={(state) => setRequestState(state)}

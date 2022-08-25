@@ -12,7 +12,7 @@ import {
   IContactState,
   initState,
 } from "components/institution/RegistrationFormTypes";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useUser from "hooks/useUser";
 import {
   isNotNull,
@@ -26,14 +26,12 @@ import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
 import InformationBox from "components/shared/InformationBox";
+import accessTokenContext from "contexts/accessTokenContext";
 
-interface props {
-  accessToken: string;
-}
-
-const RegistrationForm: React.FC<props> = ({ accessToken }) => {
+const RegistrationForm = () => {
   const classes = useStyles();
   const { location, institution } = useUser();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
 
   const [state, setState] = useState(initState);

@@ -11,10 +11,9 @@ import { User } from "components/shared/Types";
 
 interface IManageDashboard {
   user: User;
-  accessToken: string;
 }
 
-const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, user }) => {
+const ManageDashboard: React.FC<IManageDashboard> = ({ user }) => {
   const [tab, setTab] = useState<string>("4");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
@@ -32,27 +31,26 @@ const ManageDashboard: React.FC<IManageDashboard> = ({ accessToken, user }) => {
         <Tab hidden={user.role != "SuperAdmin"} label="Administrer eventer" value="6" />
       </TabList>
       <TabPanel value="1">
-        <FaqContainer accessToken={accessToken} />
+        <FaqContainer />
       </TabPanel>
 
       <TabPanel value="2">
-        <BusinessInformation accessToken={accessToken} />
+        <BusinessInformation />
       </TabPanel>
       <TabPanel value="3">
-        <HowToStartGiEnJul accessToken={accessToken} />
+        <HowToStartGiEnJul />
       </TabPanel>
       <TabPanel value="4">
         <ManageMunicipalityContainer
-          accessToken={accessToken}
           assignedLocation={user.location ?? ""}
           role={user.role ?? ""}
         />
       </TabPanel>
       <TabPanel value="5">
-        <AddUser accessToken={accessToken} />
+        <AddUser />
       </TabPanel>
       <TabPanel value="6">
-        <EventsTable accessToken={accessToken} />
+        <EventsTable />
       </TabPanel>
     </TabContext>
   );

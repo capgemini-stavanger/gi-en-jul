@@ -16,7 +16,6 @@ type Props = {
   setSelectedGiver: (giver: GiverType) => void;
   setSelectedGiverIndex: (idx: number) => void;
   refreshData: () => void;
-  accessToken: string;
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
@@ -29,7 +28,6 @@ const GiverDataTable: React.FC<Props> = ({
   setSelectedGiver,
   setSelectedGiverIndex,
   refreshData,
-  accessToken,
   resetSelections,
   requestState,
   setRequestState,
@@ -163,7 +161,6 @@ const GiverDataTable: React.FC<Props> = ({
             setSelectedGiver={() => setSelectedGiver(allFilters(giverData)[index])}
             setSelectedGiverIndex={() => setSelectedGiverIndex(index)}
             refreshData={refreshData}
-            accessToken={accessToken}
             resetSelections={resetSelections}
             requestState={requestState}
             setRequestState={(state) => setRequestState(state)}

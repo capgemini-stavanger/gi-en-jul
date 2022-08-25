@@ -1,13 +1,14 @@
 import { Container, Grid, Typography } from "@material-ui/core";
 import ScrollToTop from "components/shared/ScrollToTop";
 import useStyles from "components/landing-page/Styles";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useContext } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Municipalities, {
   LocationData,
 } from "components/landing-page/Municipalities/Municipalities";
 import Footer from "components/shared/Footer";
+import municipalitiesContext from "contexts/municipalitiesContext";
 
 interface IKommuneInfoResponse {
   country: string;
@@ -20,24 +21,13 @@ interface IKommuneInfoResponse {
 }
 
 const Municipality = () => {
-  const [activeMunicipalities, setActiveMunicipalities] = useState<string[]>([]);
+  const activeMunicipalities = useContext(municipalitiesContext);
   const [municipalityMap, setMunicipalityMap] = useState(new Map<string, IKommuneInfoResponse>());
   const [municipalityData, setMunicipalityData] = useState<LocationData[]>([]);
   const [fallbackText, setFallbackText] = useState("Henter informasjon...");
 
   const classes = useStyles();
   const apiservice = new ApiService();
-
-  const fetchActiveLocations = useCallback(() => {
-    apiservice
-      .get("Municipality/Active", {})
-      .then((resp) => {
-        setActiveMunicipalities(resp.data);
-      })
-      .catch((errorStack) => {
-        console.error(errorStack);
-      });
-  }, [setActiveMunicipalities]);
 
   const fetchKommuneInformation = useCallback(() => {
     apiservice
@@ -79,7 +69,6 @@ const Municipality = () => {
     });
   };
 
-  useEffect(fetchActiveLocations, []);
   useEffect(fetchKommuneInformation, []);
   useEffect(buildLocationData, [activeMunicipalities, municipalityMap]);
 

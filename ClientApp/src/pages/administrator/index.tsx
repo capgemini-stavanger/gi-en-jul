@@ -9,11 +9,10 @@ import OverviewMacroRemake from "components/admin/dashboard-all/OverviewMacroRem
 import { User } from "components/shared/Types";
 
 interface IAdminTab {
-  accessToken: string;
   user: User;
 }
 
-const AdminTab: React.FC<IAdminTab> = ({ accessToken, user }) => {
+const AdminTab: React.FC<IAdminTab> = ({ user }) => {
   const [step, setStep] = useState<string>("1");
 
   const handleChange = (event: React.ChangeEvent<any>, newValue: string) => {
@@ -30,13 +29,13 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, user }) => {
           <Tab label="Manage" value="3" />
         </TabList>
         <TabPanel value="1">
-          <OverviewMacroRemake user={user} accessToken={accessToken} />
+          <OverviewMacroRemake user={user} />
         </TabPanel>
         <TabPanel value="2">
-          <CompletedMacro accessToken={accessToken} location={user.location ?? ""} />
+          <CompletedMacro location={user.location ?? ""} />
         </TabPanel>
         <TabPanel value="3">
-          <ManageDashboard accessToken={accessToken} user={user} />
+          <ManageDashboard user={user} />
         </TabPanel>
       </TabContext>
       <ScrollToTop maxPagePosition={300} />

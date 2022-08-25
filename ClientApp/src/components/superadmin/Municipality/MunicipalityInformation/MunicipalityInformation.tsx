@@ -1,5 +1,5 @@
 import { Box, Button, ListItem, ListItemIcon, List, Grid } from "@material-ui/core";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ContentEditableEvent, DefaultEditor } from "react-simple-wysiwyg";
 import parse from "html-react-parser";
 import ConfirmationBox from "components/shared/ConfirmationBox";
@@ -8,11 +8,11 @@ import { IMunicipality } from "../ManageMunicipalityContainer";
 import img_placeholder from "styling/img/person.png";
 import { Delete } from "@material-ui/icons";
 import ApiService from "common/functions/apiServiceClass";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface IMunicipalityInformation {
   municipality: IMunicipality;
   role: string;
-  accessToken: string;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
   setSelectedMunicipality: (municipality: IMunicipality) => void;
   deleteMunicipalityInformation: (municipality: IMunicipality) => void;
@@ -21,7 +21,6 @@ interface IMunicipalityInformation {
 const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   municipality,
   role,
-  accessToken,
   updateMunicipalityInformation,
   deleteMunicipalityInformation,
   setSelectedMunicipality,
@@ -34,7 +33,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
   const [openDeleteImageConfirmBox, setOpenDeleteImageConfirmBox] = useState(false);
   const [imageToDelete, setImageToDelete] = useState("");
   const [images, setImages] = useState(municipality.images);
-
+  const accessToken = useContext(accessTokenContext);
   const apiService = new ApiService(accessToken);
 
   function onChange(e: ContentEditableEvent) {

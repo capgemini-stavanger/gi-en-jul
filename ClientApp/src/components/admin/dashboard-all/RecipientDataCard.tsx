@@ -1,5 +1,5 @@
 import { Box, Button, Grid, TextField, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { RecipientType, User } from "../../shared/Types";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -20,6 +20,7 @@ import ApiService from "common/functions/apiServiceClass";
 import PeopleIcon from "@material-ui/icons/People";
 import { RequestState } from "./OverviewMacroRemake";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import accessTokenContext from "contexts/accessTokenContext";
 
 type Props = {
   recipientData: RecipientType;
@@ -28,7 +29,6 @@ type Props = {
   setSelectedRecipient: () => void;
   setSelectedRecipientIndex: () => void;
   refreshData: () => void;
-  accessToken: string;
   resetSelections: () => void;
   requestState: number;
   setRequestState: (state: number) => void;
@@ -42,13 +42,13 @@ const RecipientDataCard: React.FC<Props> = ({
   setSelectedRecipient,
   setSelectedRecipientIndex,
   refreshData,
-  accessToken,
   resetSelections,
   requestState,
   setRequestState,
   user,
 }) => {
   const classes = useStyles();
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
 
   const [personExpanded, setPersonExpanded] = useState(false);
@@ -245,7 +245,6 @@ const RecipientDataCard: React.FC<Props> = ({
                       }}
                       toEmail={recipientData.contactEmail}
                       fullName={recipientData.contactFullName}
-                      accessToken={accessToken}
                       user={user}
                     />
                   </Grid>
@@ -331,7 +330,6 @@ const RecipientDataCard: React.FC<Props> = ({
                             refreshRecipients={() => refreshData()}
                             recipient={recipientData}
                             isInstitution={false}
-                            accessToken={accessToken}
                           />
                         </Grid>
                       )}

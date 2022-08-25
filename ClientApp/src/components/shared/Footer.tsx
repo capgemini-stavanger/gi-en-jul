@@ -1,21 +1,12 @@
 import { Grid, Typography } from "@material-ui/core";
-import ApiService from "common/functions/apiServiceClass";
 import * as React from "react";
-import { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { Link } from "react-router-dom";
+import municipalitiesContext from "contexts/municipalitiesContext";
 
 const Footer: React.FC = () => {
   const classes = useStyles();
-  const [municipalities, setMunicipalities] = useState<string[]>([]);
-  const apiservice = new ApiService();
-
-  const fetchActive = () => {
-    apiservice.get("municipality/active").then((response) => {
-      setMunicipalities(response.data);
-    });
-  };
-  useEffect(() => fetchActive(), []);
+  const municipalities = React.useContext(municipalitiesContext);
 
   return (
     <Grid container direction="column" className={classes.footer}>

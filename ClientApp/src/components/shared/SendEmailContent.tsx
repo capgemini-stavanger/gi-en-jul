@@ -1,5 +1,5 @@
 import { DefaultEditor } from "react-simple-wysiwyg";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Button,
   Dialog,
@@ -14,13 +14,13 @@ import ApiService from "common/functions/apiServiceClass";
 import InformationBox from "./InformationBox";
 import SendIcon from "@material-ui/icons/Send";
 import { User } from "./Types";
+import accessTokenContext from "contexts/accessTokenContext";
 
 interface ISendSingleEmail {
   open: boolean;
   handleClose: () => void;
   toEmail: string;
   fullName: string;
-  accessToken: string;
   user: User;
 }
 
@@ -29,9 +29,9 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
   handleClose,
   toEmail,
   fullName,
-  accessToken,
   user,
 }) => {
+  const accessToken = useContext(accessTokenContext);
   const apiservice = new ApiService(accessToken);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
