@@ -58,11 +58,11 @@ const Footer: React.FC = () => {
                   <b>Hjelp</b>
                 </Typography>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Link className={classes.footerHeadline} to="startjul">
                   Hvordan starte Gi en jul i din kommune
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
                 <a className={classes.footerHeadline} href="/#questions">
                   FAQs

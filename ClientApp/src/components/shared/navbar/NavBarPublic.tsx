@@ -63,21 +63,21 @@ const NavBarPublic = () => {
                 label="Hjem"
               ></Tab>
 
-              <Tab
+              {/* <Tab
                 onClick={() => {
                   history.push("/bedrift");
                 }}
                 className={classes.drawerContent}
                 label="For bedrifter"
-              ></Tab>
+              ></Tab> */}
 
-              <Tab
+              {/* <Tab
                 onClick={() => {
                   history.push("/startJul");
                 }}
                 className={classes.drawerContent}
                 label="Start Gi en jul i din kommune"
-              ></Tab>
+              ></Tab> */}
 
               <Tab
                 onClick={() => {
