@@ -4,7 +4,6 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { Link } from "react-router-dom";
-import { Link as Scroll } from "react-scroll";
 
 const Footer: React.FC = () => {
   const classes = useStyles();
@@ -19,66 +18,71 @@ const Footer: React.FC = () => {
   useEffect(() => fetchActive(), []);
 
   return (
-    <>
-      <Grid className={classes.footer}>
+    <Grid container direction="column" className={classes.footer}>
+      <Grid item>
         <Grid container direction="row" justifyContent="space-evenly">
-          <Grid item>
-            <Typography variant="h6" className={classes.footerHeadline}>
-              <b>Sider</b>
-            </Typography>
-
-            <Grid item direction="column">
-              <Link className={classes.footerHeadline} to="/kommune">
-                <b>Kommuneinformasjon</b>
-              </Link>
-              {municipalities.map((municipality, index) => {
-                return (
-                  <Grid item key={index}>
-                    <Link
-                      className={classes.footerHeadline}
-                      to={`kommune?location=${municipality.toLowerCase()}`}
-                    >
-                      {municipality}
+          <Grid item xs={4}>
+            <Grid container direction="column">
+              <Grid item>
+                <Typography variant="h6" className={classes.footerHeadline}>
+                  <b>Sider</b>
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Grid container direction="column">
+                  <Grid item>
+                    <Link className={classes.footerHeadline} to="/kommune">
+                      <b>Kommuneinformasjon</b>
                     </Link>
                   </Grid>
-                );
-              })}
+                  {municipalities.map((municipality, index) => {
+                    return (
+                      <Grid item key={index}>
+                        <Link
+                          className={classes.footerHeadline}
+                          to={`kommune?location=${municipality.toLowerCase()}`}
+                        >
+                          {municipality}
+                        </Link>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container direction="column">
               <Grid item>
+                <Typography variant="h6" className={classes.footerHeadline}>
+                  <b>Hjelp</b>
+                </Typography>
+              </Grid>
+              {/* <Grid item>
                 <Link className={classes.footerHeadline} to="startjul">
                   Hvordan starte Gi en jul i din kommune
                 </Link>
+              </Grid> */}
+              <Grid item>
+                <a className={classes.footerHeadline} href="/#questions">
+                  FAQs
+                </a>
               </Grid>
               <Grid item>
-                <Link className={classes.footerHeadline} to="/bli-giver">
-                  Bli giver
-                </Link>
+                <a className={classes.footerHeadline} href="/#contacts">
+                  Kontakt
+                </a>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item direction="column">
-            <Typography variant="h6" className={classes.footerHeadline}>
-              <b>Hjelp</b>
-            </Typography>
-
-            <Grid item>
-              <Scroll className={classes.footerHeadline} to="questions">
-                FAQs
-              </Scroll>
-            </Grid>
-            <Grid item>
-              <Scroll className={classes.footerHeadline} to="contacts">
-                Kontakt
-              </Scroll>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Typography className={classes.footerText}>
-            Gi en jul &copy; {new Date().getFullYear()}
-          </Typography>
         </Grid>
       </Grid>
-    </>
+      <Grid item>
+        <Typography className={classes.footerText}>
+          Gi en jul &copy; {new Date().getFullYear()}
+        </Typography>
+      </Grid>
+    </Grid>
   );
 };
 export default Footer;

@@ -92,6 +92,21 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.error.dark,
       },
     },
+    infoImage: {
+      width: "250px",
+      height: "300px",
+      marginTop: "4em",
+      marginLeft: theme.spacing(6),
+      marginRight: theme.spacing(6),
+      objectFit: "cover",
+    },
+    smallImage: {
+      width: "65px",
+      height: "65px",
+      objectFit: "cover",
+      borderRadius: "50%",
+      margin: "auto auto auto 5px",
+    },
   })
 );
 

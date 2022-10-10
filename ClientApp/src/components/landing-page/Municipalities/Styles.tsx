@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "4em",
     marginLeft: theme.spacing(6),
     marginRight: theme.spacing(6),
+    objectFit: "cover",
   },
 }));
 

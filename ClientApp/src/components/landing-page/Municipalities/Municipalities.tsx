@@ -3,8 +3,9 @@ import useStyles from "./Styles";
 import { TabContext, TabList, TabPanel } from "@material-ui/lab";
 import { useEffect, useState } from "react";
 import MunicipalityInformation from "./MunicipalityInformation";
-import { useLocation } from "react-router-dom";
 import React from "react";
+import useIsMobile from "hooks/useIsMobile";
+import useGetSearchParams from "hooks/useGetSearchParam";
 
 export interface LocationData {
   location: string;
@@ -21,16 +22,34 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
     setTab(newValue);
   };
   const classes = useStyles();
+  const isMobile = useIsMobile();
+  const getSearchParam = useGetSearchParams();
 
-  function useQuery() {
-    const { search } = useLocation();
+  const [tab, setTab] = useState<string>(() => {
+    const param = getSearchParam("location")?.toLocaleLowerCase();
+    const fallback = locations.length ? locations[0].location.toLocaleLowerCase() : "";
+    const res = param ?? fallback;
+    return res;
+  });
 
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-  }
+  useEffect(() => {
+    if (tab === "") {
+      setTab(() => {
+        const param = getSearchParam("location")?.toLocaleLowerCase();
+        const fallback = locations.length ? locations[0].location.toLocaleLowerCase() : "";
+        const res = param ?? fallback;
+        return res;
+      });
+    }
+  }, [locations]);
 
-  const query = useQuery();
-
-  const [tab, setTab] = useState<string>("");
+  useEffect(() => {
+    const loc = getSearchParam("location");
+    if (loc && locations.map((l) => l.location.toLowerCase()).includes(loc)) {
+      setTab(loc);
+      return;
+    }
+  }, [getSearchParam]);
 
   const kommuneTabs = locations.map((val) => (
     <Tab
@@ -39,15 +58,6 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
       label={val.location}
     />
   ));
-
-  useEffect(() => {
-    const location = query.get("location");
-    if (!location && locations.length) {
-      setTab(locations[0].location.toLowerCase());
-      return;
-    }
-    if (location) setTab(location);
-  }, [location, locations]);
 
   const kommuneTabPanels = locations.map((val) => (
     <TabPanel
@@ -65,7 +75,14 @@ const Municipalities: React.FC<Props> = ({ locations }) => {
   return (
     <Container className={classes.sectionContainer}>
       <TabContext value={tab}>
-        <TabList onChange={handleChange} centered>
+        <TabList
+          onChange={handleChange}
+          variant={
+            (isMobile && locations.length > 4) || locations.length > 7 ? "scrollable" : "standard"
+          }
+          centered={(isMobile && locations.length > 4) || locations.length > 7 ? false : true}
+          scrollButtons="auto"
+        >
           {kommuneTabs}
         </TabList>
         {kommuneTabPanels}

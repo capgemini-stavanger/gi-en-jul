@@ -155,6 +155,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             open={open}
             setOpen={setOpen}
             role={role}
+            accessToken={accessToken}
           />
         </Grid>
         <Divider />
@@ -167,6 +168,7 @@ const ManageMunicipalityContainer: React.FC<props> = ({ accessToken, role, assig
             role={role}
             assignedLocation={assignedLocation}
             municipalities={municipalities}
+            accessToken={accessToken}
             updateMunicipalityInformation={updateMunicipalityInformation}
             deleteMunicipalityInformation={deleteMunicipalityInformation}
           />

@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using GiEnJul.Helpers;
 using GiEnJul.Clients;
 using GiEnJul.Utilities;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace GiEnJul.Controllers
 {
@@ -21,13 +23,22 @@ namespace GiEnJul.Controllers
         private readonly IMapper _mapper;
         private readonly IAuth0ManagementClient _managementClient;
         private readonly IAuthorization _authorization;
+        private readonly IMunicipalityBlobClient _municipalityBlobClient;
+        private readonly IContactImagesBlobClient _contactImagesBlobClient;
 
-        public MunicipalityController(IMunicipalityRepository municipalityRepository, IMapper mapper, IAuth0ManagementClient managementClient, IAuthorization authorization)
+        public MunicipalityController(IMunicipalityRepository municipalityRepository,
+                                      IMapper mapper,
+                                      IAuth0ManagementClient managementClient,
+                                      IAuthorization authorization,
+                                      IMunicipalityBlobClient municipalityBlobClient,
+                                      IContactImagesBlobClient contactImagesBlobClient)
         {
             _municipalityRepository = municipalityRepository;
             _mapper = mapper;
             _managementClient = managementClient;
             _authorization = authorization;
+            _municipalityBlobClient = municipalityBlobClient;
+            _contactImagesBlobClient = contactImagesBlobClient;
         }
 
         [HttpDelete]
@@ -62,7 +73,19 @@ namespace GiEnJul.Controllers
         public async Task<List<Dtos.GetMunicipalityDto>> GetAll()
         {
             var municipalities = await _municipalityRepository.GetAll();
-            return _mapper.Map<List<Dtos.GetMunicipalityDto>>(municipalities);
+            var dtos = _mapper.Map<List<Dtos.GetMunicipalityDto>>(municipalities);
+            var images = await _municipalityBlobClient.GetAllImages();
+
+            foreach (var dto in dtos)
+            {
+                dto.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{dto.Name}";
+                if (images.TryGetValue(dto.Name, out var imgs))
+                    dto.Images = imgs ?? new List<string>();
+                else
+                    dto.Images = new List<string>();
+            }
+
+            return dtos;
         }
 
         [HttpGet("active")]
@@ -103,6 +126,7 @@ namespace GiEnJul.Controllers
             var municipalities = await _municipalityRepository.GetAll();
             var active = municipalities.Where(m => m.IsActive).ToList();
             var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(active);
+            contacts.ForEach(c => c.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{c.Name}");
             return contacts;
         }
 
@@ -111,7 +135,9 @@ namespace GiEnJul.Controllers
         public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
         {
             var contact = await _municipalityRepository.GetSingle(municipality);
-            return _mapper.Map<Dtos.GetContactsDto>(contact);
+            var dto = _mapper.Map<Dtos.GetContactsDto>(contact);
+            dto.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{dto.Name}";
+            return dto;
         }
 
         [HttpGet("getSingle")]
@@ -149,6 +175,38 @@ namespace GiEnJul.Controllers
 
             await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
             return Ok();
+        }
+
+        [HttpDelete("image")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<ActionResult> DeleteImage([FromBody] string image)
+        {
+            var imageName = image.Replace($"{_municipalityBlobClient.BlobContainerUrl}/", "");
+            var municipality = imageName.Split('/')[0];
+
+            await _authorization.ThrowIfNotAccessToMunicipality(municipality, User);
+            await _municipalityBlobClient.DeleteImageForMunicipality(imageName);
+
+            return Ok();
+        }
+
+        [HttpPost("image/{municipalityName}")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<string> UploadImage([FromForm] IFormFile file, string municipalityName)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
+            var fileExt = Path.GetExtension(file.FileName);
+            var result = await _municipalityBlobClient.UploadImageForMunicipality(municipalityName, file.OpenReadStream(), fileExt);
+            return result;
+        }
+
+        [HttpPost("contactImage/{municipalityName}")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task<string> UploadContactImage([FromForm] IFormFile file, string municipalityName)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
+            var result = await _contactImagesBlobClient.UpdateProfileImage(municipalityName, file.OpenReadStream());
+            return result;
         }
     }
 }

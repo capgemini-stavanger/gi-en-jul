@@ -1,6 +1,7 @@
 ﻿using GiEnJul.Clients;
 using GiEnJul.Exceptions;
 using GiEnJul.Helpers;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
