@@ -86,6 +86,9 @@ const NavBarPublic = () => {
                 className={classes.drawerContent}
                 label="Kommuner"
               ></Tab>
+              <a href="/#questions">
+                <Tab className={classes.drawerContent} label="FAQs"></Tab>
+              </a>
             </Grid>
             <Grid item className={classes.giverButtonGridItem}>
               {window.location.pathname == "/bedrift" ? (
