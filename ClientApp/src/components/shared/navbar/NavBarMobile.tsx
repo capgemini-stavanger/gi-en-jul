@@ -64,7 +64,12 @@ const NavbarMobile = () => {
                 >
                   Kommuneinformasjon
                 </ListItem>
-                <ListItem
+                <a href="/#questions" style={{ textDecoration: "none" }}>
+                  <ListItem onClick={handleClose} className={classes.drawerContent}>
+                    FAQs
+                  </ListItem>
+                </a>
+                {/* <ListItem
                   onClick={() => {
                     history.push("/startJul");
                   }}
@@ -79,7 +84,7 @@ const NavbarMobile = () => {
                   className={classes.drawerContent}
                 >
                   For bedrifter
-                </ListItem>
+                </ListItem> */}
               </List>
             </Drawer>
             {window.location.pathname == "/bedrift" ? (
