@@ -58,7 +58,7 @@ const AddUser: React.FC<IAddUser> = ({ accessToken }) => {
   }, []);
 
   const deleteUser = async (email: string) => {
-    await apiservice.delete(`user/delete/?email=${email}`, {}).then(() => {
+    await apiservice.delete(`user/delete/?email=${encodeURIComponent(email)}`, {}).then(() => {
       setTimeout(async () => {
         await fetchUsers();
       }, 1000);
