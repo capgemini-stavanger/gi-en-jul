@@ -105,9 +105,9 @@ namespace GiEnJul.Controllers
 
         [HttpDelete("delete")]
         [Authorize(Policy = Policy.SuperAdmin)]
-        public void DeleteUser([FromQuery] string email)
+        public async Task DeleteUser([FromQuery] string email)
         {
-            _auth0ManagementClient.DeleteUser(email);
+            await _auth0ManagementClient.DeleteUser(email);
         }
     }
 }

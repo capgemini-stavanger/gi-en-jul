@@ -23,7 +23,7 @@ namespace GiEnJul.Clients
         Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
         Task<User> CreateUser(CreateUserDto userDto);
         Task<List<User>> GetAllUsers();
-        void DeleteUser(string email);
+        Task DeleteUser(string email);
         Task<User> GetSingleUser(string email);
         Task AddUserRole(User user, string roleId);
         Task UpdateUserRole(User user, List<string> roles);
@@ -120,10 +120,12 @@ namespace GiEnJul.Clients
             return users.Where(u => u.Email == email).SingleOrDefault();
         }
 
-        public async void DeleteUser(string email)
+        public async Task DeleteUser(string email)
         {
             var user = await GetSingleUser(email);
-            await _managementApiClient.Users.DeleteAsync(user.UserId);
+            if (user != null)
+                await _managementApiClient.Users.DeleteAsync(user.UserId);
+            throw new Exception($"Could not find user {email}");
         }
 
         public async Task<User> CreateUser(CreateUserDto userDto)
