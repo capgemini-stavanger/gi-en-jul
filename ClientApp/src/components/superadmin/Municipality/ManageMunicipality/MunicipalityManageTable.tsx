@@ -92,8 +92,8 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
             <TableCell className={classes.tableHeaderText}>Email</TableCell>
             <TableCell className={classes.tableHeaderText}>Telefon</TableCell>
             <TableCell className={classes.tableHeaderText}>Kontaktperson</TableCell>
-            <TableCell className={classes.tableHeaderText}>Facebook</TableCell>
-            <TableCell className={classes.tableHeaderText}>Instagram</TableCell>
+            <TableCell className={classes.tableHeaderText}>Facebook link</TableCell>
+            <TableCell className={classes.tableHeaderText}>Instagram link</TableCell>
             <TableCell className={classes.tableHeaderText}>Kontakt bilde</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
