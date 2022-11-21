@@ -22,7 +22,6 @@ const MunicipalityTableElements: React.FC<props> = ({
   setSelectedMunicipality,
   updateMunicipalityInformation,
   setOpenConfirm,
-  role,
   accessToken,
 }) => {
   const classes = useStyles();
@@ -68,7 +67,7 @@ const MunicipalityTableElements: React.FC<props> = ({
         <TableCell>{municipality.isActive ? "Ja" : "Nei"}</TableCell>
         <TableCell>
           <TextField
-            disabled={openEditForm || role != "SuperAdmin"}
+            disabled={openEditForm}
             placeholder="Fyll inn epost"
             value={updatedMunicipality.email ?? ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +98,7 @@ const MunicipalityTableElements: React.FC<props> = ({
         <TableCell>
           <TextField
             disabled={openEditForm}
-            placeholder="Fyll inn Facebook"
+            placeholder="Fyll inn Facebook link"
             value={updatedMunicipality.facebook ?? ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, facebook: e.target.value });
@@ -109,7 +108,7 @@ const MunicipalityTableElements: React.FC<props> = ({
         <TableCell>
           <TextField
             disabled={openEditForm}
-            placeholder="Fyll inn Instagram"
+            placeholder="Fyll inn Instagram link"
             value={updatedMunicipality.instagram ?? ""}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setUpdatedMunicipality({ ...updatedMunicipality, instagram: e.target.value });
