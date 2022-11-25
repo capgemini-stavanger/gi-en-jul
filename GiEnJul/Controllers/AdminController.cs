@@ -447,5 +447,24 @@ namespace GiEnJul.Controllers
             suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
             return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
         }
+
+        [HttpPost("Giver/Update")]
+        [Authorize(Policy = Policy.UpdateMunicipality)]
+        public async Task UpdateGiver(UpdateGiverDto updateGiver)
+        {
+            await _authorization.ThrowIfNotAccessToMunicipality(updateGiver.Event.Split('_').Last(), User);
+            var giver = await _giverRepository.GetGiverAsync(updateGiver.Event, updateGiver.Id.ToString());
+
+            if (updateGiver.PhoneNumber != null)
+            {
+                giver.PhoneNumber = updateGiver.PhoneNumber;
+            }
+            if (updateGiver.Email != null)
+            {
+                giver.Email = updateGiver.Email;
+            }
+
+            await _giverRepository.InsertOrReplaceAsync(giver);
+        }
     }
 }

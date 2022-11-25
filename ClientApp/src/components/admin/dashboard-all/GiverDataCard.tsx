@@ -9,6 +9,9 @@ import {
   CancelOutlined,
   CheckCircleOutline,
   LinkOutlined,
+  Edit,
+  Check,
+  Cancel,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
@@ -20,6 +23,7 @@ import LinkOffIcon from "@material-ui/icons/LinkOff";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RequestState } from "./OverviewMacroRemake";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import { isEmail, isPhoneNumber } from "components/shared/input-fields/validators/Validators";
 
 type Props = {
   giverData: GiverType;
@@ -53,12 +57,16 @@ const GiverDataCard: React.FC<Props> = ({
 
   const [personExpanded, setPersonExpanded] = useState(false);
   const [comment, setComment] = useState("");
+  const [phoneEdit, setPhoneEdit] = useState(giverData.phoneNumber);
+  const [emailEdit, setEmailEdit] = useState(giverData.email);
 
   const [openMailDialog, setOpenMailDialog] = useState(false);
   const [confirmConnectDialogOpen, setConfirmConnectDialogOpen] = useState(false);
   const [deleteConnectDialogOpen, setDeleteConnectDialogOpen] = useState(false);
   const [deleteGiverDialogOpen, setDeleteGiverDialogOpen] = useState(false);
   const [openConfirmationComment, setOpenConfirmationComment] = useState(false);
+  const [editingEmail, setEditingEmail] = useState(false);
+  const [editingPhone, setEditingPhone] = useState(false);
 
   useEffect(() => {
     setComment(giverData.comment ? giverData.comment : "");
@@ -165,6 +173,58 @@ const GiverDataCard: React.FC<Props> = ({
     }
   };
 
+  const startEditingEmail = () => {
+    setEmailEdit(giverData.email);
+    setEditingEmail(true);
+    setEditingPhone(false);
+  };
+
+  const saveEmail = () => {
+    if (isEmail(emailEdit)) {
+      apiservice
+        .post("admin/giver/update", {
+          email: emailEdit,
+          id: giverData.giverId,
+          event: giverData.event,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+            setEditingEmail(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
+  const startEditingPhone = () => {
+    setPhoneEdit(giverData.phoneNumber);
+    setEditingPhone(true);
+    setEditingEmail(false);
+  };
+
+  const savePhone = () => {
+    if (isPhoneNumber(phoneEdit)) {
+      apiservice
+        .post("admin/giver/update", {
+          phoneNumber: phoneEdit,
+          id: giverData.giverId,
+          event: giverData.event,
+        })
+        .then((resp) => {
+          if (resp.status === 200) {
+            refreshData();
+            setEditingPhone(false);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  };
+
   return (
     <>
       <Box
@@ -239,21 +299,81 @@ const GiverDataCard: React.FC<Props> = ({
             >
               <Grid item>
                 <Grid container direction="row" justifyContent="space-between">
-                  <Grid item xs={6}>
-                    <Typography variant="h6" gutterBottom>
-                      Kontakt
-                    </Typography>
-                    <Typography>{giverData.phoneNumber}</Typography>
-                    <Typography gutterBottom>{giverData.email}</Typography>
-                    <SendIcon />
-                    <Button
-                      className={classes.underlineText}
-                      onClick={() => {
-                        setOpenMailDialog(true);
-                      }}
-                    >
-                      Send epost
-                    </Button>
+                  <Grid item xs={10}>
+                    <Grid container direction="column" alignItems="flex-start">
+                      <Typography variant="h6" gutterBottom>
+                        Kontakt
+                      </Typography>
+                      <Grid item>
+                        {editingPhone ? (
+                          <>
+                            <TextField
+                              value={phoneEdit}
+                              margin={"dense"}
+                              variant={"outlined"}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setPhoneEdit(e.target.value);
+                              }}
+                            ></TextField>
+                            <Button onClick={savePhone} style={{ height: "52px" }}>
+                              <Check />
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setEditingPhone(false);
+                              }}
+                              style={{ height: "52px" }}
+                            >
+                              <Cancel />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button onClick={startEditingPhone} style={{ height: "52px" }}>
+                            <Typography>{giverData.phoneNumber}</Typography>
+                            <Edit />
+                          </Button>
+                        )}
+                      </Grid>
+                      <Grid item>
+                        {editingEmail ? (
+                          <>
+                            <TextField
+                              value={emailEdit}
+                              margin={"dense"}
+                              variant={"outlined"}
+                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                setEmailEdit(e.target.value);
+                              }}
+                            ></TextField>
+                            <Button onClick={saveEmail} style={{ height: "52px" }}>
+                              <Check />
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setEditingEmail(false);
+                              }}
+                              style={{ height: "52px" }}
+                            >
+                              <Cancel />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button onClick={startEditingEmail} style={{ height: "52px" }}>
+                            <Typography gutterBottom>{giverData.email}</Typography>
+                            <Edit />
+                          </Button>
+                        )}
+                      </Grid>
+                      <Button
+                        className={classes.underlineText}
+                        onClick={() => {
+                          setOpenMailDialog(true);
+                        }}
+                      >
+                        <SendIcon />
+                        Send epost
+                      </Button>
+                    </Grid>
                     <SendEmailContent
                       open={openMailDialog}
                       handleClose={() => {
