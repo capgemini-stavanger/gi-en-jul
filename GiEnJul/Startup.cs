@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.WindowsAzure.Storage;
 using Quartz;
 using Serilog;
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GiEnJul
 {
@@ -33,6 +35,14 @@ namespace GiEnJul
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var logger = new LoggerConfiguration()
+                                .MinimumLevel.Verbose()
+                                .WriteTo.Console()
+                                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(Configuration.GetValue<string>("TableConnectionString")),
+                                                       storageTableName: Configuration.GetValue<string>("LogTableName"),
+                                                       writeInBatches: true)
+                                .CreateLogger();
+
             services.AddControllersWithViews().AddNewtonsoftJson();
 
             string domain = $"https://{Configuration["Auth0:Domain"]}/";
@@ -46,6 +56,7 @@ namespace GiEnJul
                 var section = Configuration.GetSection("Auth0");
                 options.Authority = domain;
                 options.Audience = section.GetValue<string>(_env.IsDevelopment() ? "LocalAudience" : "AzureAudience");
+                options.Events = new JwtBearerEvents { OnForbidden = async (ctx) => await OnAuthorizationErrors(ctx, logger) };
             }
             );
 
@@ -124,6 +135,11 @@ namespace GiEnJul
             var culture = new CultureInfo("no-NB");
             CultureInfo.CurrentCulture = culture;
             CultureInfo.CurrentUICulture = culture;
+        }
+
+        public async Task OnAuthorizationErrors(ForbiddenContext ctx, ILogger logger)
+        {
+            await Task.Run(() => logger.Warning("Authorization failed for endpoint {0}", ctx.Request.Path));
         }
     }
 }

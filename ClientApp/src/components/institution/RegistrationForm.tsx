@@ -251,34 +251,31 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       alert: { ...prev.alert, isLoading: true },
     }));
 
-    let goodFetch = false;
     await apiservice
       .post("recipient", JSON.stringify(submit))
       .then((response) => {
         if (response.status === 200) {
-          goodFetch = true;
+          setTimeout(onSuccessSubmit, 10);
         }
       })
       .catch((errorStack) => {
-        if ((errorStack.response.data = formDataState.pid)) {
+        if (errorStack?.response?.data == formDataState?.pid) {
           formDataState.pidError = true;
           formDataState.pidHelperText = "PID/ID for denne familien eksisterer allerede.";
         }
         console.error(errorStack);
+        if (errorStack?.response?.status == 403)
+          setAlert(
+            true,
+            "Brukeren mangler tilgang til å utføre denne aksjonen, vennligst ta kontakt med gienjul i din kommune dersom dette er feil"
+          );
+        else setAlert(true, "En feil oppsto. Vennligst prøv på nytt.", "error");
       });
 
     setState((prev) => ({
       ...prev,
       alert: { ...prev.alert, isLoading: false },
     }));
-
-    if (goodFetch) {
-      setTimeout(onSuccessSubmit, 10);
-    } else {
-      setTimeout(() => {
-        setAlert(true, "En feil oppsto. Vennligst prøv på nytt.", "error");
-      }, 10);
-    }
   };
 
   const resetForm = () => {
@@ -525,6 +522,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                 open={open}
                 text={"Familien har blitt meldt inn"}
                 handleClose={() => handleClose(false)}
+              />
+              <InformationBox
+                open={state.alert.open}
+                text={
+                  state.alert.msg?.toString() ??
+                  "Noe gikk galt med å melde inn familien, vennligst prøv igjen senere"
+                }
+                handleClose={() => setAlert(false)}
               />
             </Grid>
           </Grid>
