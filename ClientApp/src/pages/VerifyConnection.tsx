@@ -8,7 +8,7 @@ import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/register-as-giver/Styles";
 import snowmanFull from "styling/img/snowmanFull.svg";
 import snowDown from "styling/img/snow_down2.svg";
-import { isMobile } from "common/functions/IsMobile";
+import useIsMobile from "hooks/useIsMobile";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -26,6 +26,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
   const apiservice = new ApiService();
   const history = useHistory();
   const classes = useStyles();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     apiservice
@@ -38,7 +39,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                 <Grid item>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
-                {isMobile() ? (
+                {isMobile ? (
                   <Grid item xs={12}>
                     <Container className={classes.verifyDenyConnectionContainer}>
                       <Typography className={classes.headingBold}>
@@ -72,6 +73,45 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
               </Grid>
             </Container>
           );
+        } else if (response.status == 202 && response.data === "Connection already exists") {
+          setContent(
+            <Container className={classes.fillBackground}>
+              <Grid container direction="column" justifyContent="center" alignItems="center">
+                <Grid item>
+                  <img className={classes.imageSnow} src={snowDown}></img>
+                </Grid>
+                {isMobile ? (
+                  <Grid item xs={12}>
+                    <Container className={classes.verifyDenyConnectionContainer}>
+                      <Typography className={classes.headingBold}>
+                        Tusen takk for at du skal Gi en jul! <br />
+                      </Typography>
+                      <Typography className={classes.paragraph}>
+                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
+                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
+                      </Typography>
+                    </Container>
+                  </Grid>
+                ) : (
+                  <Grid item xs={4}>
+                    <Container className={classes.verifyDenyConnectionContainer}>
+                      <Typography className={classes.headingBold}>
+                        Tusen takk for at du skal Gi en jul! <br />
+                      </Typography>
+                      <Typography className={classes.paragraph}>
+                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
+                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
+                      </Typography>
+                    </Container>
+                  </Grid>
+                )}
+
+                <Grid item>
+                  <img className={classes.backgroundImage} src={snowmanFull}></img>
+                </Grid>
+              </Grid>
+            </Container>
+          );
         }
       })
       .catch(() =>
@@ -81,7 +121,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
               <Grid item>
                 <img className={classes.imageSnow} src={snowDown}></img>
               </Grid>
-              {isMobile() ? (
+              {isMobile ? (
                 <Grid item xs={12}>
                   <Container className={classes.verifyDenyConnectionContainer}>
                     <Typography className={classes.headingBold}>

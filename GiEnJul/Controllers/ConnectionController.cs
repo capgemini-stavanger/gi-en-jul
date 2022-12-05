@@ -71,7 +71,7 @@ namespace GiEnJul.Controllers
 
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return BadRequest("Connection already exists");
+                return Accepted(value: "Connection already exists"); 
             }
             if(ConnectionHelper.CanConnect(giver, recipient))
             {
@@ -222,7 +222,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpPost("confirm")]
-        //[Authorize(Policy = Policy.AddConnection)] POLICY SHOULD BE ADMIN 
+        [Authorize(Policy = Policy.AddConnection)] //POLICY SHOULD BE ADMIN 
         public async Task ConfirmConnection(ConfirmConnectionDto connectionDto)
         {
             await VerifyConnection(connectionDto.GiverId, connectionDto.RecipientId, connectionDto.Event);
