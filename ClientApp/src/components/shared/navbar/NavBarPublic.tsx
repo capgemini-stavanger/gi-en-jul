@@ -86,7 +86,7 @@ const NavBarPublic = () => {
                 className={classes.drawerContent}
                 label="Kommuner"
               ></Tab>
-              <a href="/#questions">
+              <a href="/#questions" className={classes.noUnderline}>
                 <Tab className={classes.drawerContent} label="FAQs"></Tab>
               </a>
             </Grid>
