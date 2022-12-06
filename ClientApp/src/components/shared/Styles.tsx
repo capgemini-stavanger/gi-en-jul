@@ -184,4 +184,7 @@ export default () =>
       boxShadow: "none",
       padding: theme.spacing(2),
     },
+    noUnderline: {
+      textDecoration: "none",
+    },
   }))();
