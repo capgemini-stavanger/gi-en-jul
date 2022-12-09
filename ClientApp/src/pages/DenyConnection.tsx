@@ -109,10 +109,9 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                       </Typography>
 
                       <Typography className={classes.paragraph}>
-                        Hvis du ønsker å forbli giver, men få tildelet en annen familie, <br />
-                        vennligst gi en kort tilbakemelding i tekstboksen på hvorfor du ønsket å
-                        avslå forbindelsen. <br />
-                        Så vil vi tildele en ny familie til deg med tilbakemeldingen i betrakning.
+                        Dersom du ønsker en annen størrelse på familien, kommenter det her, men vi
+                        kan ikke garantere en ny familie. Vi kan ikke hensynta ønsker om alder på
+                        barna.
                       </Typography>
                       <Typography className={classes.paragraph}>
                         Ønsker du å trekke deg som giver, kan du krysse av boksen under. <br />
