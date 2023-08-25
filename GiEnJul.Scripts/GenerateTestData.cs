@@ -1,3 +1,4 @@
+using AutoMapper.Configuration.Annotations;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
@@ -13,7 +14,7 @@ public class GenerateTestData
     private static string[] _institutions = new[]{ "NAV", "BV", "CAP", "Staten", "FKT", "NFF"};
 
 
-    [Fact]
+    [Fact(Skip = "Generates Data")]
     public async Task Generate()
     {
         var municipalities = new[] { "Stavanger", "Sandnes", "Sola", "Gjesdal" };
