@@ -68,6 +68,7 @@ namespace GiEnJul
                 { 
                     q.UseMicrosoftDependencyInjectionJobFactory();
                     q.AddScheduledJob<CleanupConnectionsJob>(Configuration);
+                    q.AddScheduledJob<AnonymizeUserDataJob>(Configuration);
                 });
 
             services.AddQuartzHostedService(
