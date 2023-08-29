@@ -17,7 +17,8 @@ namespace GiEnJul.Models
         public string DeliveryGPS { get; set; }
         public string DeliveryTime { get; set; }
         public int GiverLimit { get; set; }
-        
-      
+
+        public bool? Completed { get; set; }
+
     }
 }

@@ -21,6 +21,8 @@ namespace GiEnJul.Repositories
         Task<List<Models.Event>> GetAllEventsAsync();
         Task<string[]> GetAllUniqueEventNames();
         Task<Entities.Event> DeleteEntry(string eventName, string municipality);
+        Task<IEnumerable<Models.Event>> GetExpiredEvents();
+        Task CompleteEvent(Models.Event event_);
     }
 
     public class EventRepository : GenericRepository<Event>, IEventRepository
@@ -127,6 +129,20 @@ namespace GiEnJul.Repositories
             {
                 return null;
             }
+        }
+
+        public async Task<IEnumerable<Models.Event>> GetExpiredEvents()
+        {
+            var events = await GetAllByQueryAsync($"EndDate lt '{DateTime.UtcNow.ToString("O")}'");
+            var mappedEvents = _mapper.Map<IEnumerable<Models.Event>>(events);
+            return mappedEvents;
+        }
+
+        public async Task CompleteEvent(Models.Event event_)
+        {
+            var entity = _mapper.Map<Entities.Event>(event_);
+            entity.Completed = true;
+            await InsertOrReplaceAsync(entity);
         }
     }
 }
