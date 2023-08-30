@@ -9,7 +9,7 @@ export const EventErrors = {
 
 export const EventInputValidators = {
   emptyString: (s: string) => {
-    return s.length > 0;
+    return s === null || s.length > 0;
   },
   // combination is eventName:string + municipality:string
   keyCombinationExists: (combinations: string[], newCombination: string) => {
@@ -27,6 +27,9 @@ export const EventInputValidators = {
   },
   notADate: (maybeDate: string) => {
     return !!Date.parse(maybeDate);
+  },
+  notEmptyOrADate: (maybeDate: string) => {
+    return !maybeDate || !!Date.parse(maybeDate);
   },
   notAPhoneNumber: (maybePhoneNumber: string) => {
     return !!String(maybePhoneNumber)

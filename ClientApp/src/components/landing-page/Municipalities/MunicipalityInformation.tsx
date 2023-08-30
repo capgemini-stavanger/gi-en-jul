@@ -6,7 +6,7 @@ import useIsMobile from "hooks/useIsMobile";
 
 interface Props {
   location: string;
-  information: string;
+  information?: string;
   images: string[];
 }
 
@@ -14,7 +14,7 @@ const MunicipalityInformation: React.FC<Props> = ({ location, information, image
   const classes = useStyles();
   const isMobile = useIsMobile();
 
-  if (information == undefined) {
+  if (!information) {
     information = "Det er ikke lagt til noe informasjon om denne kommunen enda.";
   }
   return (

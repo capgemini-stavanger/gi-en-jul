@@ -314,6 +314,20 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
             giver.
           </Typography>
         </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Du kan velge om du ønsker å sette en påmeldingsfrist, dersom denne er satt vil valget
+            forsvinne fra &#39;bli giver&#39;-siden etter oppgitt dato.
+          </Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography color="error">
+            30 dager etter oppgitt slutt-dato vil data ryddes opp. Det er viktig at slutt dato for
+            eventet settes med god nok margin til at dette ikke vil føre til tap av data.
+          </Typography>
+        </ListItem>
       </List>
 
       <Grid container direction="column" spacing={5}>
@@ -374,11 +388,13 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
               <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
               <TableCell className={classes.tableHeaderText}>Start-dato (åååå-mm-dd)</TableCell>
               <TableCell className={classes.tableHeaderText}>Slutt-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>
+                Påmeldingsfrist (åååå-mm-dd)
+              </TableCell>
               <TableCell className={classes.tableHeaderText}>Leverings-adresse</TableCell>
               <TableCell className={classes.tableHeaderText}>Leverings-dato</TableCell>
               <TableCell className={classes.tableHeaderText}>Leverings-klokkeslett</TableCell>
               <TableCell className={classes.tableHeaderText}>Maks antall givere</TableCell>
-              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableBody>

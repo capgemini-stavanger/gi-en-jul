@@ -77,6 +77,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableHeaderText: {
       color: "white",
+      padding: "16px 8px",
+    },
+    tableCell: {
+      padding: "16px 8px",
     },
     button: {
       color: "white",

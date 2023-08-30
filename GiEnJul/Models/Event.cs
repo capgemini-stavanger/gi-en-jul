@@ -10,8 +10,9 @@ namespace GiEnJul.Models
         // RowKey is the City
         public string Municipality { get; set; }
 
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
+        public DateTimeOffset? EndDate { get; set; }
+        public DateTimeOffset? SignUpDueDate { get; set; }
         public string DeliveryAddress { get; set; }
         public string DeliveryDate { get; set; }
         public string DeliveryGPS { get; set; }
