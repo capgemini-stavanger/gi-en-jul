@@ -4,6 +4,7 @@ export interface EventContent {
   municipality: string; // location
   startDate: string; // YYYY-MM-DDThh:mm:ssZ
   endDate: string; // YYYY-MM-DDThh:mm:ssZ
+  signUpDueDate: string; // YYYY-MM-DDThh:mm:ssZ
   deliveryAddress: string;
   deliveryDate: string;
   // deliveryGPS: string;
@@ -15,6 +16,7 @@ export interface EventContentDto {
   municipality: string; // location
   startDate: string; // YYYY-MM-DDThh:mm:ssZ
   endDate: string; // YYYY-MM-DDThh:mm:ssZ
+  signUpDueDate: string; // YYYY-MM-DDThh:mm:ssZ
   deliveryAddress: string;
   deliveryDate: string;
   // deliveryGPS: string;
@@ -28,6 +30,7 @@ export const EventContentInit = (): EventContent => {
     municipality: "", // location
     startDate: "", // YYYY-MM-DDThh:mm:ssZ
     endDate: "", // YYYY-MM-DDThh:mm:ssZ
+    signUpDueDate: "", // YYYY-MM-DDThh:mm:ssZ
     deliveryAddress: "",
     deliveryDate: "",
     // deliveryGPS: "",
@@ -43,6 +46,9 @@ export const Dto2EventContent = (ecd: EventContentDto): EventContent => {
     giverLimit: ecd.giverLimit.toString(),
     startDate: new Date(ecd.startDate).toISOString().split("T")[0],
     endDate: new Date(ecd.endDate).toISOString().split("T")[0],
+    signUpDueDate: !ecd.signUpDueDate
+      ? ""
+      : new Date(ecd.signUpDueDate).toISOString().split("T")[0],
   };
 };
 
@@ -50,7 +56,5 @@ export const EventContent2Dto = (ec: EventContent) => {
   return {
     ...ec,
     giverLimit: parseInt(ec.giverLimit),
-    startDate: new Date(ec.startDate).toISOString(),
-    endDate: new Date(ec.endDate).toISOString(),
   };
 };

@@ -14,6 +14,8 @@ const getValidators = (field: string) => {
       return [EV.emptyString, EV.notADate];
     case "endDate":
       return [EV.emptyString, EV.notADate];
+    case "dueDate":
+      return [EV.notEmptyOrADate];
     case "deliveryAddress":
       return [EV.emptyString];
     case "deliveryDate":
@@ -32,6 +34,8 @@ const getErrorMessages = (field: string) => {
       return [EE.emptyString, EE.wrongDateFormat];
     case "endDate":
       return [EE.emptyString, EE.wrongDateFormat];
+    case "dueDate":
+      return [EE.wrongDateFormat];
     case "deliveryAddress":
       return [EE.emptyString];
     case "deliveryDate":
@@ -188,6 +192,7 @@ const EventInformation: React.FC<Props> = ({
     // startDate
     <Grid className={classes.eventBox} key={2} item>
       <InputValidator
+        className={classes.dateInput}
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("startDate")}
         setIsValids={getValiditySetter("startDate")}
@@ -205,6 +210,7 @@ const EventInformation: React.FC<Props> = ({
     // endDate
     <Grid className={classes.eventBox} key={3} item>
       <InputValidator
+        className={classes.dateInput}
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("endDate")}
         setIsValids={getValiditySetter("endDate")}
@@ -217,6 +223,24 @@ const EventInformation: React.FC<Props> = ({
         value={formValues.endDate}
         name="endDate"
         label="Slutt-dato  (åååå-mm-dd)"
+      />
+    </Grid>,
+    // endDate
+    <Grid className={classes.eventBox} key={"dueDate"} item>
+      <InputValidator
+        className={classes.dateInput}
+        viewErrorTrigger={viewErrorNumber}
+        validators={getValidators("dueDate")}
+        setIsValids={getValiditySetter("dueDate")}
+        errorMessages={getErrorMessages("dueDate")}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const copy = { ...formValues };
+          copy.signUpDueDate = e.target.value;
+          setFormValues(copy);
+        }}
+        value={formValues.signUpDueDate}
+        name="dueDate"
+        label="påmeldingsfrist  (åååå-mm-dd)"
       />
     </Grid>,
     // deliveryAddress
