@@ -57,8 +57,10 @@ const useUser = () => {
 
   useEffect(() => {
     getAccessTokenSilently({
-      audience: domainEnvUrl,
-      scope: "read:current_user read:users_app_metadata",
+      authorizationParams: {
+        audience: domainEnvUrl,
+        scope: "read:current_user read:users_app_metadata",
+      },
     }).then((response) => {
       dispatch({
         type: ReducerActionType.setManagementAccessToken,

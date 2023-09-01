@@ -80,9 +80,9 @@ const SelectForm: FC<ISelect> = ({
       </InputLabel>
       <Select
         native={isMob}
+        id={id}
         inputProps={{
           name: name,
-          id: id,
         }}
         label={label}
         value={value}
