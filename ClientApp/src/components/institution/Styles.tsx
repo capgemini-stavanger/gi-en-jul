@@ -5,6 +5,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(7),
     maxWidth: theme.breakpoints.values.desktop,
   },
+  mobileRoot: {
+    padding: 0,
+    maxWidth: "100dvw",
+    overflow: "hidden",
+  },
   customTooltip: {
     backgroundColor: "rgb(224, 243, 244)",
     color: "rgba(0, 0, 0, 0.54)",
@@ -18,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
   },
   gridDivider: {
     background: theme.palette.primary.light,
+    minHeight: "1px",
+    minWidth: "1px",
   },
   wholeButton: {
     color: "white",
@@ -55,6 +62,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2em",
     padding: "20px",
   },
+  greenBoxMobile: {
+    backgroundColor: theme.palette.secondary.main,
+    width: "100%",
+    borderRadius: "2em",
+    padding: "8px",
+  },
   formInfoBoxText: {
     fontSize: "1.2rem",
     color: theme.palette.primary.dark,
@@ -81,7 +94,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     marginBottom: "1em",
   },
+  personBoxMobile: {
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "0.5em",
+  },
   numberBox: {
+    marginRight: "-2px",
     width: "100px",
     height: "156px",
     display: "flex",
@@ -92,11 +111,26 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "2px",
     fontSize: "30px",
   },
+  numberBoxMobile: {
+    marginBottom: "-1px",
+    width: "120px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.primary.dark,
+    color: "white",
+    borderRadius: "2px",
+    fontSize: "20px",
+  },
   formBox: {
     flexGrow: 1,
     borderStyle: "solid",
     borderColor: theme.palette.primary.dark,
     position: "relative",
+    borderRadius: "2px",
+  },
+  formBoxMobile: {
+    padding: "8px",
   },
   hideParent: {
     display: "flex",
@@ -106,9 +140,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "right",
   },
   hideButton: {
-    position: "absolute",
-    right: "20px",
-    top: "50px",
+    marginRight: "-15px",
   },
   deleteBox: {
     width: "100px",
@@ -121,10 +153,19 @@ const useStyles = makeStyles((theme) => ({
     height: "150px",
     display: "flex",
     alignItems: "center",
+    flexDirection: "column",
   },
-  formBoxWishes: {},
+  formBoxWishes: {
+    margin: "16px 0 0",
+  },
   wishSpacing: {
     marginBottom: "1em",
+  },
+  wishSpacingMobile: {
+    padding: "8px 0 8px",
+    rowGap: "20px",
+    marginTop: "-2px",
+    borderBottom: "2px solid " + theme.palette.primary.light,
   },
   wishNumberCircle: {
     padding: "3px",
@@ -144,6 +185,10 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.error.main,
     fontSize: "1.5em",
   },
+  redCrossMobile: {
+    color: theme.palette.error.main,
+    fontSize: "1em",
+  },
   boxOverflow: {
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -160,6 +205,22 @@ const useStyles = makeStyles((theme) => ({
   },
   noneIcon: {
     color: "red",
+  },
+  sectionGridItem: {},
+  sectionGridItemMobile: {
+    width: "100%",
+    padding: "12px 4px 16px",
+  },
+  contactInput: {},
+  contactInputMobile: {
+    width: "100%",
+  },
+  foodInput: {
+    height: "100%",
+  },
+  foodInputContainer: {
+    width: "100%",
+    minHeight: "85px",
   },
 }));
 

@@ -44,7 +44,9 @@ export interface IContactState {
   persons: IFormPerson[];
   location: string;
   dinner: IFoodFormData;
+  dinners: string;
   dessert: IFoodFormData;
+  desserts: string;
   specialNeeds: string;
   pid: string;
   pidError: boolean;
@@ -130,7 +132,9 @@ export const initFormDataState: () => IContactState = () => ({
   persons: [getFormPerson()],
   location: "",
   dinner: initFoodFormData,
+  dinners: "",
   dessert: initFoodFormData,
+  desserts: "",
   specialNeeds: "",
   pid: "",
   pidError: false,

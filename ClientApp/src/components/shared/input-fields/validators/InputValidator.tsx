@@ -23,6 +23,7 @@ interface InputValidatorProps {
 
   value: any;
   onChange: (e: any) => void;
+  onBlur?: (e: any) => void;
   label: string;
   name: string;
   type?: string;
@@ -59,6 +60,7 @@ const InputValidator: FC<InputValidatorProps> = ({
   viewErrorTrigger,
   value,
   onChange,
+  onBlur = () => {},
   type,
   label,
   name,
@@ -147,6 +149,7 @@ const InputValidator: FC<InputValidatorProps> = ({
           options={options ? options : [{ value: "", text: "Ingen alternativer tilgjengelige" }]}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           variant={variant}
           disabled={disabled}
           fullWidth={fullWidth}
@@ -171,6 +174,7 @@ const InputValidator: FC<InputValidatorProps> = ({
           name={name}
           value={value}
           onChange={extendedOnChange}
+          onBlur={onBlur}
           id={id}
           className={className}
           disabled={disabled}

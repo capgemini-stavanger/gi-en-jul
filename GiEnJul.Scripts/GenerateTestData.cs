@@ -14,13 +14,15 @@ public class GenerateTestData
     private static string[] _institutions = new[]{ "NAV", "BV", "CAP", "Staten", "FKT", "NFF"};
 
 
-    [Fact(Skip = "Generates Data")]
+    [Fact(
+        Skip = "Generates Data"
+        )]
     public async Task Generate()
     {
-        var municipalities = new[] { "Stavanger", "Sandnes", "Sola", "Gjesdal" };
-        var numberOfEvents = 15;
-        var numberOfGivers = 300;
-        var numberOfFamilies = 200;
+        var municipalities = new[] { "Stavanger"/*, "Sandnes", "Sola", "Gjesdal" */};
+        var numberOfEvents = 1;
+        var numberOfGivers = 250;
+        var numberOfFamilies = 250;
 
         var random = new Random();
         var settings = CreateSettings();
@@ -96,7 +98,7 @@ public class GenerateTestData
             RowKey = recipientId,
             Dinner = "Pinnekjøtt",
             Dessert = "Riskrem",
-            EventName = event_.RowKey,
+            EventName = event_.PartitionKey,
             ContactFullName = contactName,
             ContactEmail = contactName.Replace(" ", ".") + $"@{institution}.no",
             Institution = institution,
@@ -136,7 +138,7 @@ public class GenerateTestData
         var municipality = municipalities[random.Next(municipalities.Length)];
         var giver = new Giver
         {
-            Email = name.Replace(" ", ".") + _mailProviders[random.Next(_mailProviders.Length)],
+            Email = name.Replace(" ", ".") + "@" + _mailProviders[random.Next(_mailProviders.Length)],
             FullName = name,
             MaxReceivers = random.Next(20) switch
             {
@@ -144,7 +146,7 @@ public class GenerateTestData
                 >= 10 => 99,
                 _ => 0
             },
-            EventName = event_.RowKey,
+            EventName = event_.PartitionKey,
             PartitionKey = $"{event_.PartitionKey}_{event_.RowKey}",
             RowKey = Guid.NewGuid().ToString(),
             Location = municipality,

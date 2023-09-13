@@ -19,10 +19,11 @@ import useStyles from "./Styles";
 import FormWish from "./FormWish";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
-import CancelIcon from "@material-ui/icons/Cancel";
 import { IFormPerson, IFormWish, getFormWish } from "./RegistrationFormTypes";
 import getGender from "common/functions/GetGender";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import useIsMobile from "hooks/useIsMobile";
+import { Delete } from "@material-ui/icons";
 
 interface IPersonProps {
   updatePerson: (newPersonData: { [target: string]: unknown }) => void;
@@ -40,6 +41,7 @@ const FormPerson: FC<IPersonProps> = ({
   personIndex,
 }) => {
   const classes = useStyles();
+  const isMobile = useIsMobile();
 
   const [showWishes, setShowWishes] = useState(true);
   const [ageWish, setAgeWish] = useState(false);
@@ -47,9 +49,20 @@ const FormPerson: FC<IPersonProps> = ({
   const onAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let strAge = e.target.value;
     const intAge = Math.floor(parseInt(strAge));
+    const isValidAge = false;
+    strAge = intAge.toString();
+    if (intAge >= 1) {
+      person.months = "1";
+    }
+    updatePerson({ age: strAge, isValidAge: isValidAge });
+  };
+
+  const onAgeBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strAge = e.target.value;
+    const intAge = Math.floor(parseInt(strAge));
     let isValidAge = false;
     strAge = intAge.toString();
-    if (intAge !== NaN) {
+    if (!Number.isNaN(intAge)) {
       if (intAge > 130) {
         strAge = "130";
       } else if (intAge < 0) {
@@ -69,7 +82,14 @@ const FormPerson: FC<IPersonProps> = ({
     let strMonths = e.target.value;
     const intMonths = Math.floor(parseInt(strMonths));
     strMonths = intMonths.toString();
-    if (intMonths !== NaN) {
+    updatePerson({ months: strMonths });
+  };
+
+  const onMonthsBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let strMonths = e.target.value;
+    const intMonths = Math.floor(parseInt(strMonths));
+    strMonths = intMonths.toString();
+    if (!Number.isNaN(intMonths)) {
       if (intMonths > 11) {
         strMonths = "11";
       } else if (intMonths < 1) {
@@ -89,7 +109,7 @@ const FormPerson: FC<IPersonProps> = ({
 
   const onGenderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newGender = parseInt(e.target.value);
-    if (newGender !== NaN && newGender !== Gender.Unspecified) {
+    if (!Number.isNaN(newGender) && newGender !== Gender.Unspecified) {
       updatePerson({ gender: newGender, isValidGender: true });
     }
   };
@@ -116,28 +136,70 @@ const FormPerson: FC<IPersonProps> = ({
     if (newList.length >= 5) return;
     newList.push(getFormWish());
     updatePerson({ wishes: newList });
+    setTimeout(() => {
+      const selectElement = document.getElementById(
+        `wish-category-number-${personIndex}-${person.wishes.length}`
+      );
+      selectElement?.focus();
+    }, 10);
   };
 
+  const indicatorRow = isMobile ? (
+    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box className={classes.numberBoxMobile}>{personIndex + 1}</Box>
+      <Box>
+        <IconButton onClick={deletePerson} style={{ padding: "4px" }} aria-label="fjern person">
+          <Delete className={classes.redCross} />
+        </IconButton>
+      </Box>
+    </Box>
+  ) : (
+    <Box className={classes.numberBox}>{personIndex + 1}</Box>
+  );
+
+  const ageInputSize = isMobile ? 3 : 2;
+  const genderInputSize = isMobile ? 6 : 2;
+  const conainerClasses = isMobile
+    ? `${classes.formBox} ${classes.formBoxMobile}`
+    : classes.formBox;
+
   return (
-    <Box className={classes.personBox}>
-      <Box className={classes.numberBox}>{personIndex + 1}</Box>
-      <Container className={classes.formBox}>
+    <Box className={isMobile ? classes.personBoxMobile : classes.personBox}>
+      {indicatorRow}
+      <Container className={conainerClasses}>
         <Box className={classes.formBoxHeader}>
+          <Grid container direction="row" style={{ justifyContent: "flex-end", height: "40px" }}>
+            {!ageWish && (
+              <Grid item>
+                {showWishes ? (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
+                    <ExpandLessIcon />
+                  </Button>
+                ) : (
+                  <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
+                    <ExpandMoreIcon />
+                  </Button>
+                )}
+              </Grid>
+            )}{" "}
+          </Grid>
           <Grid container direction="row" spacing={2} alignItems="center">
-            <Grid item xs={2}>
+            <Grid item xs={ageInputSize}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isInt]}
+                id={`peson-age-number-${personIndex}`}
                 name="age"
                 type="number"
                 label="Alder"
                 value={person.age || "0"}
                 onChange={onAgeChange}
+                onBlur={onAgeBlur}
                 fullWidth
               />
             </Grid>
             {parseInt(person.age) == 0 && (
-              <Grid item xs={2}>
+              <Grid item xs={ageInputSize}>
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isInt]}
@@ -146,11 +208,12 @@ const FormPerson: FC<IPersonProps> = ({
                   label="Måneder"
                   value={person.months || "0"}
                   onChange={onMonthsChange}
+                  onBlur={onMonthsBlur}
                   fullWidth
                 />
               </Grid>
             )}
-            <Grid item xs={2}>
+            <Grid item xs={genderInputSize}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
@@ -167,7 +230,7 @@ const FormPerson: FC<IPersonProps> = ({
               />
             </Grid>
 
-            <Grid item>
+            <Grid item style={{ padding: "0 8px" }}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -187,20 +250,6 @@ const FormPerson: FC<IPersonProps> = ({
                 <HelpOutlineIcon />
               </Tooltip>
             </Grid>
-
-            {!ageWish && (
-              <Grid item>
-                {showWishes ? (
-                  <Button className={classes.hideButton} onClick={() => setShowWishes(false)}>
-                    <ExpandLessIcon />
-                  </Button>
-                ) : (
-                  <Button className={classes.hideButton} onClick={() => setShowWishes(true)}>
-                    <ExpandMoreIcon />
-                  </Button>
-                )}
-              </Grid>
-            )}
           </Grid>
         </Box>
         {showWishes && (
@@ -216,20 +265,25 @@ const FormPerson: FC<IPersonProps> = ({
                   deleteWish={() => deleteWish(i)}
                   wishObj={wish}
                   wishIndex={i}
+                  personIndex={personIndex}
                 />
               );
             })}
-            <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
-              Legg til gaveønske
-            </Button>
+            <Box sx={{ padding: "8px 0 0" }}>
+              <Button className={classes.hollowButton} variant="outlined" onClick={addWish}>
+                Legg til gaveønske
+              </Button>
+            </Box>
           </Box>
         )}
       </Container>
-      <Box className={classes.deleteBox}>
-        <IconButton onClick={deletePerson}>
-          <CancelIcon className={classes.redCross} />
-        </IconButton>
-      </Box>
+      {!isMobile && (
+        <Box className={classes.deleteBox}>
+          <IconButton onClick={deletePerson} aria-label="fjern person">
+            <Delete className={classes.redCross} />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };

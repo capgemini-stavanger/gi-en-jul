@@ -1,6 +1,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import FormInformationBox from "./FormInformationBox";
 import useStyles from "./Styles";
+import useIsMobile from "hooks/useIsMobile";
 
 const informationList: string[] = [
   "Før du melder inn en familie må familien ha sagt ja til å bli med, og du har all informasjon som trengs nedenfor.",
@@ -11,8 +12,9 @@ const informationList: string[] = [
 
 const RegistrationInfo = () => {
   const classes = useStyles();
+  const isMobile = useIsMobile();
   return (
-    <Grid container direction="column" spacing={5}>
+    <Grid container direction="column" spacing={0}>
       <Grid item>
         <Grid container justifyContent="center">
           <Grid item>
@@ -24,9 +26,9 @@ const RegistrationInfo = () => {
         </Grid>
       </Grid>
       <Grid item>
-        <Grid container direction="row" spacing={4}>
+        <Grid container direction="row" spacing={3}>
           {informationList.map((info, index) => (
-            <Grid key={index} item xs={3}>
+            <Grid key={index} item xs={isMobile ? 6 : 3}>
               <FormInformationBox index={index + 1} info={info} />
             </Grid>
           ))}

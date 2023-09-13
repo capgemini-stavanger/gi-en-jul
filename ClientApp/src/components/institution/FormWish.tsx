@@ -6,6 +6,7 @@ import React from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 import useStyles from "./Styles";
 import { IFormWish, TotalWish, WishCategory } from "./RegistrationFormTypes";
+import useIsMobile from "hooks/useIsMobile";
 
 interface IWishProps {
   viewErrorTrigger: number;
@@ -13,6 +14,7 @@ interface IWishProps {
   deleteWish: () => void;
   wishObj: IFormWish;
   wishIndex: number;
+  personIndex: number;
 }
 
 const InstitutionWish: React.FC<IWishProps> = ({
@@ -21,8 +23,10 @@ const InstitutionWish: React.FC<IWishProps> = ({
   deleteWish,
   wishObj,
   wishIndex,
+  personIndex,
 }) => {
   const classes = useStyles();
+  const isMobile = useIsMobile();
 
   const updateTotalWish = (totalWishIndex: number, newWish: string) => {
     const wishCopy = { ...wishObj };
@@ -82,18 +86,32 @@ const InstitutionWish: React.FC<IWishProps> = ({
     }
   };
 
-  return (
-    <Grid container direction="row" spacing={2} alignItems="center" className={classes.wishSpacing}>
-      <Grid item xs={1}>
-        <Box className={classes.wishNumberCircle}>
-          <Typography className={classes.wishNumber}>{wishIndex + 1}</Typography>
-        </Box>
-      </Grid>
+  const numberGridElement = isMobile ? (
+    <Grid item xs={12}>
+      <Typography color="primary">Ønske nr {wishIndex + 1}</Typography>
+    </Grid>
+  ) : (
+    <Grid item xs={1}>
+      <Box className={classes.wishNumberCircle}>
+        <Typography className={classes.wishNumber}>{wishIndex + 1}</Typography>
+      </Box>
+    </Grid>
+  );
 
-      <Grid item xs={3}>
+  return (
+    <Grid
+      container
+      direction="row"
+      spacing={isMobile ? 1 : 2}
+      alignItems="center"
+      className={isMobile ? classes.wishSpacingMobile : classes.wishSpacing}
+    >
+      {numberGridElement}
+      <Grid item xs={isMobile ? 8 : 3}>
         <InputValidator
           viewErrorTrigger={viewErrorTrigger}
           validators={[isNotNull]}
+          id={`wish-category-number-${personIndex}-${wishIndex}`}
           name="wish"
           type="select"
           label="Kategori *"
@@ -109,7 +127,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
       {wishObj.category >= 0 && (
         <React.Fragment>
           {wishObj.category == WishCategory.Location && (
-            <Grid item xs={7}>
+            <Grid item xs={isMobile ? 8 : 7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
@@ -125,7 +143,22 @@ const InstitutionWish: React.FC<IWishProps> = ({
           )}
           {wishObj.category == WishCategory.Size && (
             <React.Fragment>
-              <Grid item xs={5}>
+              <Grid item xs={isMobile ? 4 : 2}>
+                <InputValidator
+                  viewErrorTrigger={viewErrorTrigger}
+                  validators={[isNotNull]}
+                  name="csize"
+                  id="størrelse"
+                  label="Størrelse *"
+                  placeholder={
+                    wishObj.wish[TotalWish.Category] == "Sko" ? "F.eks: 42" : "F.eks: large"
+                  }
+                  value={wishObj.wish[TotalWish.Size]}
+                  onChange={onSizeChange}
+                  fullWidth
+                ></InputValidator>
+              </Grid>
+              <Grid item xs={isMobile ? 8 : 5}>
                 <InputValidator
                   viewErrorTrigger={viewErrorTrigger}
                   validators={[isNotNull]}
@@ -142,25 +175,10 @@ const InstitutionWish: React.FC<IWishProps> = ({
                   fullWidth
                 ></InputValidator>
               </Grid>
-              <Grid item xs={2}>
-                <InputValidator
-                  viewErrorTrigger={viewErrorTrigger}
-                  validators={[isNotNull]}
-                  name="csize"
-                  id="størrelse"
-                  label="Størrelse *"
-                  placeholder={
-                    wishObj.wish[TotalWish.Category] == "Sko" ? "F.eks: 42" : "F.eks: large"
-                  }
-                  value={wishObj.wish[TotalWish.Size]}
-                  onChange={onSizeChange}
-                  fullWidth
-                ></InputValidator>
-              </Grid>
             </React.Fragment>
           )}
           {wishObj.category == WishCategory.Specifiction && (
-            <Grid item xs={7}>
+            <Grid item xs={isMobile ? 8 : 7}>
               <InputValidator
                 viewErrorTrigger={viewErrorTrigger}
                 validators={[isNotNull]}
@@ -181,7 +199,7 @@ const InstitutionWish: React.FC<IWishProps> = ({
         </React.Fragment>
       )}
       <Grid item xs={1}>
-        <IconButton size="small" onClick={deleteWish}>
+        <IconButton size="small" onClick={deleteWish} aria-label="slett ønske">
           <SvgIcon className={classes.smallRedCross} component={ClearIcon} />
         </IconButton>
       </Grid>

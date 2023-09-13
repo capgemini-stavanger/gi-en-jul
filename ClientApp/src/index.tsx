@@ -159,8 +159,7 @@ ReactDOM.render(
     <Auth0Provider
       domain={domainEnv}
       clientId={clientidEnv}
-      redirectUri={window.location.origin + "/admin"} // this should be changed to a .env var when we have refactured the project and pipeline
-      audience={apiurl}
+      authorizationParams={{ redirect_uri: window.location.origin + "/admin", audience: apiurl }}
     >
       <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey} language="no">
         <Router>
