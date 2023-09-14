@@ -21,6 +21,7 @@ interface IFormDinner {
   name: string;
   header?: string;
   required?: boolean;
+  shouldClear?: boolean;
   onStateChange: (state: string) => void;
   setIsValid?: (isValid: boolean) => void;
 }
@@ -32,18 +33,25 @@ const FormDinners: FC<IFormDinner> = ({
   name,
   header,
   required,
+  shouldClear,
   onStateChange,
   setIsValid,
 }) => {
   const { foodInput: foodInputClass, foodInputContainer: foodInputContainerClass } = useStyles();
   const [comment, setComment] = useState("");
 
-  const [checkedState, setCheckedState] = useState(
-    foods.reduce((prev, current) => {
+  const initializeCheckboxStates = (foods: string[]) => {
+    return foods.reduce((prev, current) => {
       prev[current] = false;
       return prev;
-    }, {} as { [name: string]: boolean })
-  );
+    }, {} as { [name: string]: boolean });
+  };
+  const [checkedState, setCheckedState] = useState(initializeCheckboxStates(foods));
+
+  useEffect(() => {
+    setCheckedState(initializeCheckboxStates(foods));
+    setComment("");
+  }, [shouldClear]);
 
   const handleChange = (event: React.ChangeEvent<any>) => {
     setCheckedState({

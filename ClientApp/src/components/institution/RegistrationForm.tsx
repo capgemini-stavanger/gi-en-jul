@@ -1,4 +1,13 @@
-import { Button, Container, Divider, Grid, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Container,
+  Divider,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import RegistrationInfo from "./RegistrationInfo";
 import useStyles from "./Styles";
@@ -12,12 +21,12 @@ import {
   IContactState,
   initState,
 } from "components/institution/RegistrationFormTypes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUser from "hooks/useUser";
 import {
   isNotNull,
-  isPhoneNumber,
-  isEmail,
+  isPhoneNumberOrEmpty,
+  isEmailOrEmpty,
 } from "components/shared/input-fields/validators/Validators";
 import { DINNERS, DINNER_LABELS } from "common/constants/Dinners";
 import { DESSERTS } from "common/constants/Desserts";
@@ -28,6 +37,7 @@ import InformationBox from "components/shared/InformationBox";
 import FormFoods from "./FormFoods";
 import useIsMobile from "hooks/useIsMobile";
 
+const REMEMBER_CONTACT_INFO_KEY = "Contact_Info";
 interface props {
   accessToken: string;
 }
@@ -36,11 +46,13 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const classes = useStyles();
   const { location, institution } = useUser();
   const apiservice = new ApiService(accessToken);
+  const [rememberContactInfo, setRememberContactInfo] = useState(false);
 
   const [state, setState] = useState(initState);
   const [open, setOpen] = useState<boolean>(false);
-  const [formDataState, setFormDataState] = useState(initFormDataState());
+  const [formDataState, setFormDataState] = useState<IContactState>(initFormDataState());
   const [validFormState, setValidFormState] = useState(initValidFormState);
+  const [shouldClear, setShouldClear] = useState(false);
   const isMobile = useIsMobile();
 
   const nextFormDataState: () => IContactState = () => {
@@ -52,6 +64,22 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     };
     return item;
   };
+
+  useEffect(() => {
+    if (shouldClear) {
+      setShouldClear(false);
+    }
+  }, [shouldClear]);
+
+  useEffect(() => {
+    const formData = initFormDataState();
+    const savedContactInfo = localStorage.getItem(REMEMBER_CONTACT_INFO_KEY);
+    if (savedContactInfo) {
+      formData.contact = JSON.parse(savedContactInfo);
+    }
+    setFormDataState(formData);
+    setRememberContactInfo(!!savedContactInfo);
+  }, []);
 
   // VALIDATION
   const getValiditySetter = (target: string) => (isValid: boolean) => {
@@ -100,6 +128,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       },
     }));
   };
+
+  useEffect(() => {
+    if (rememberContactInfo) {
+      localStorage.setItem(REMEMBER_CONTACT_INFO_KEY, JSON.stringify(formDataState.contact));
+    }
+  }, [formDataState.contact, rememberContactInfo]);
 
   // CONTACT INFO
   const getOnContactChange = (attr: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -209,8 +243,10 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       Note: formDataState.specialNeeds,
       Location: location,
       ContactFullName: formDataState.contact.name,
-      ContactEmail: formDataState.contact.email,
-      ContactPhoneNumber: formDataState.contact.phoneNumber,
+      ContactEmail: formDataState.contact.email.length ? formDataState.contact.email : undefined,
+      ContactPhoneNumber: formDataState.contact.phoneNumber.length
+        ? formDataState.contact.phoneNumber
+        : undefined,
       Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
@@ -252,6 +288,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setState((prev) => ({ ...prev, viewErrorTrigger: 0 }));
     setValidFormState({ ...initValidFormState });
     setFormDataState(nextFormDataState());
+    setShouldClear(true);
   };
   const onSuccessSubmit = () => {
     //sett confirmationbox boolean true here.
@@ -259,9 +296,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
-  //tullete å ha denne som en egen metode
   const handleClose = (open: boolean) => {
     setOpen(open);
+  };
+
+  const onRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setRememberContactInfo(checked);
+    if (checked === false) {
+      localStorage.removeItem(REMEMBER_CONTACT_INFO_KEY);
+    }
   };
 
   return (
@@ -314,12 +357,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                     <Grid item xs={isMobile ? 12 : 3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
-                        validators={[isPhoneNumber, isNotNull]}
-                        setIsValids={getValiditySetter("contactPhoneNumber")}
-                        errorMessages={[
-                          "Telefonnummeret er ikke gyldig",
-                          "Vennligst skriv inn et telefonnummer",
-                        ]}
+                        validators={[isPhoneNumberOrEmpty]}
+                        setIsValids={getValiditySetter("contactPhone")}
+                        errorMessages={["Telefonnummeret er ikke gyldig"]}
                         onChange={getOnContactChange("phoneNumber")}
                         value={formDataState.contact.phoneNumber}
                         name="cphone"
@@ -332,9 +372,9 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                     <Grid item xs={isMobile ? 12 : 3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
-                        validators={[isEmail, isNotNull]}
+                        validators={[isEmailOrEmpty]}
                         setIsValids={getValiditySetter("contactEmail")}
-                        errorMessages={["Eposten er ikke gyldig", "Vennligst skriv inn en epost"]}
+                        errorMessages={["Eposten er ikke gyldig"]}
                         onChange={getOnContactChange("email")}
                         value={formDataState.contact.email}
                         name="cemail"
@@ -342,6 +382,21 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         label="Epost"
                         autoComplete="email"
                         className={isMobile ? classes.contactInputMobile : classes.contactInput}
+                      />
+                    </Grid>
+                    {!isMobile && <Grid item xs={3}></Grid>}
+                    <Grid item xs={isMobile ? 12 : 3}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={onRememberMeChange}
+                            value={rememberContactInfo}
+                            name="Husk meg"
+                            color="primary"
+                            checked={rememberContactInfo}
+                          />
+                        }
+                        label="Husk meg"
                       />
                     </Grid>
                   </Grid>
@@ -402,6 +457,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         header={"Middag"}
                         inputLabel="Kommentar, evt. andre alternaltiver"
                         name="dinner"
+                        shouldClear={shouldClear}
                         onStateChange={onDinnersChange}
                         setIsValid={getValiditySetter("dinner")}
                       />
@@ -420,6 +476,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         header={"Dessert"}
                         inputLabel="Kommentar, evt. andre alternaltiver"
                         name="dessert"
+                        shouldClear={shouldClear}
                         onStateChange={onDessertsChange}
                         setIsValid={getValiditySetter("dessert")}
                       />
