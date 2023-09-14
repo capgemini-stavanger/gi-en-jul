@@ -154,6 +154,6 @@ export const initValidFormState: ValidFormEntry = {
   dinner: false,
   dessert: false,
   contactName: false,
-  contactPhoneNumber: false,
-  contactEmail: false,
+  contactPhone: true,
+  contactEmail: true,
 };

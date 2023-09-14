@@ -16,11 +16,17 @@ export function isPhoneNumber(inputValue: string) {
   inputValue = inputValue.trim();
   return !!validator.isNumeric(inputValue);
 }
-
+export function isPhoneNumberOrEmpty(inputValue: string) {
+  // Returns true if norwegian number or foreign number starting with +{countryCode}
+  inputValue = inputValue.trim();
+  return !inputValue?.length || !!validator.isNumeric(inputValue);
+}
 export function isEmail(inputValue: string) {
   return validator.isEmail(inputValue.trim());
 }
-
+export function isEmailOrEmpty(inputValue: string) {
+  return !inputValue?.length || validator.isEmail(inputValue.trim());
+}
 export function isEqual(inputValue1?: string, inputValue2?: string) {
   return !!(inputValue1?.toLowerCase() == inputValue2?.toLowerCase());
 }
