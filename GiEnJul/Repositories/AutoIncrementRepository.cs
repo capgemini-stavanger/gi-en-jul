@@ -47,18 +47,19 @@ namespace GiEnJul.Repositories
                 if (result == null && attempts == 1)
                 {
                     result = await InsertOrReplaceAsync(new AutoIncrement(name, tableName));
+                    return result.Value.ToString();
                 }
                 else
                 {
                     result.Value += 1;
-                }
 
-                if (await UpdateIfMatch(result)) 
-                    return result.Value.ToString();
-                else
-                {
-                    attempts += 1;
-                    await Task.Delay(50);
+                    if (await UpdateIfMatch(result))
+                        return result.Value.ToString();
+                    else
+                    {
+                        attempts += 1;
+                        await Task.Delay(50);
+                    }
                 }
             }
         }
