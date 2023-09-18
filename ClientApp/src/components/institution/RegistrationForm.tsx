@@ -298,6 +298,15 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
   const handleClose = (open: boolean) => {
     setOpen(open);
+    if (!open) {
+      const familyIdElement = document.getElementById("FamilyId");
+      const familyIdInputElement = document.getElementById("PID");
+      setTimeout(() => {
+        const scrollToY = familyIdElement?.offsetTop ?? 500;
+        scrollTo(0, scrollToY);
+        familyIdInputElement?.focus();
+      }, 100);
+    }
   };
 
   const onRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -407,6 +416,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Grid
               item
               className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="FamilyId"
             >
               {/* FAMILY ID */}
               <Grid container direction="column" spacing={5}>
@@ -440,6 +450,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Grid
               item
               className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="Food"
             >
               {/* FOOD WISHES FORM */}
               <Grid container direction="column" spacing={5}>
@@ -514,6 +525,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Grid
               item
               className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="FamilyMembers"
             >
               {/* FAMILY FORM */}
               <Grid container direction="column" spacing={isMobile ? 0 : 5}>
@@ -584,6 +596,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
             <Grid
               item
               className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="SubmitForm"
             >
               {/* SUBMIT BUTTON */}
               <Grid container justifyContent="center">
