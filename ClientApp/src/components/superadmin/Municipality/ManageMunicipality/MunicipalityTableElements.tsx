@@ -16,7 +16,7 @@ interface props {
   setOpenConfirm: (open: boolean) => void;
   updateMunicipalityInformation: (municipality: IMunicipality) => void;
 }
-
+const API_URL = (process.env.REACT_APP_API_URL + "/") as string;
 const MunicipalityTableElements: React.FC<props> = ({
   municipality,
   setSelectedMunicipality,
@@ -125,7 +125,7 @@ const MunicipalityTableElements: React.FC<props> = ({
             </Grid>
             <Grid item>
               <img
-                src={`${municipality.image}?${time}`}
+                src={`${API_URL}image/contact/${municipality.name}?${time}`}
                 className={classes.smallImage}
                 alt={"Finner ikke bilde.."}
                 onError={({ currentTarget }) => {

@@ -4,6 +4,8 @@ import useStyles from "./Styles";
 import img_placeholder from "styling/img/person.png";
 import { Mail, Phone } from "@material-ui/icons";
 
+const API_URL = (process.env.REACT_APP_API_URL + "/") as string;
+
 export interface ContactData {
   name: string; // municipality name
   contactPerson: string;
@@ -49,7 +51,7 @@ const Contact: React.FC<Props> = ({ contacts }) => {
                 </Box>
                 <Box className={classes.cardInfo}>
                   <img
-                    src={contact.image}
+                    src={`${API_URL}image/contact/${contact.name}`}
                     className={classes.cardImage}
                     alt={"Finner ikke bilde.."}
                     onError={({ currentTarget }) => {
