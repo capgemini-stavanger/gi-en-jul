@@ -1,8 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using GiEnJul.Infrastructure;
-using System;
+using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Clients
@@ -11,7 +12,8 @@ namespace GiEnJul.Clients
     {
         string BlobContainerUrl { get; }
 
-        Task<string> UpdateProfileImage(string municipality, Stream imageData);
+        Task<string> UpdateProfileImage(string municipality, IFormFile file);
+        Task<(Stream, string)> GetProfileImage(string municipality);
     }
 
     public class ContactImagesBlobClient : IContactImagesBlobClient
@@ -30,13 +32,37 @@ namespace GiEnJul.Clients
             BlobContainerUrl = _client.Uri.AbsoluteUri;
         }
 
-        public async Task<string> UpdateProfileImage(string municipality, Stream imageData)
+        public async Task<string> UpdateProfileImage(string municipality, IFormFile file)
         {
-            var blobName = $"{municipality}";
+            var fileExt = Path.GetExtension(file.FileName);
+            var imageData = file.OpenReadStream();
+            var blobName = $"{municipality}{fileExt}";
+            var potentialImages = _client.GetBlobs(prefix: Path.GetFileNameWithoutExtension(municipality));
+            if (potentialImages != null && potentialImages.Any())
+            {
+                var image = potentialImages.First();
+                var oldBlob = _client.GetBlobClient(image.Name);
+                await oldBlob.DeleteIfExistsAsync();
+            }
             var blob = _client.GetBlobClient(blobName);
-            await blob.DeleteIfExistsAsync();
-            await _client.UploadBlobAsync(blobName, imageData);
+            await blob.UploadAsync(imageData, new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = file.ContentType } });
             return $"{_client.Uri.AbsoluteUri}/{blobName}";
+        }
+
+        public async Task<(Stream, string)> GetProfileImage(string municipality)
+        {
+            var potentialImages = _client
+                .GetBlobs(prefix: municipality)
+                .Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == municipality.ToLowerInvariant());
+            if (potentialImages == null || potentialImages.Count() != 1)
+                return (null, "none");
+
+            var image = potentialImages.First();
+            
+            var blob = _client.GetBlobClient(image.Name);
+            var response = await blob.DownloadAsync();
+            
+            return (response.Value.Content, response.Value.Details.ContentType);
         }
     }
 }
