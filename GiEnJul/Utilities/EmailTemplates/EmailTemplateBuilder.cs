@@ -53,7 +53,7 @@ namespace GiEnJul.Utilities
 
 
             // Combine
-            content = $"<!DOCTYPE html><html><table align=center width=600px><tr><td>{imgTag}</td></tr>{content}</table></html>";
+            content = $"<!DOCTYPE html><html style=\"font-family: verdana, sans-serif;\"><table align=center width=600px><tr><td>{imgTag}</td></tr>{content}</table></html>";
 
             foreach (var item in data)
             {
