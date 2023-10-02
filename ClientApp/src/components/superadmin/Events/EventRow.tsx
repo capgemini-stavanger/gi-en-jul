@@ -23,7 +23,7 @@ const getValidators = (field: string) => {
     case "deliveryTime":
       return [EV.emptyString];
     case "giverLimit":
-      return [EV.emptyString, EV.notANumber];
+      return [EV.notANumber];
   }
   return [() => true];
 };
@@ -43,7 +43,7 @@ const getErrorMessages = (field: string) => {
     case "deliveryTime":
       return [EE.emptyString];
     case "giverLimit":
-      return [EE.emptyString, EE.notANumber];
+      return [EE.notANumber];
   }
   return [];
 };
@@ -273,7 +273,7 @@ const EventRow: React.FC<Props> = ({
         disabled={!activeEdit}
       />
     </TableCell>,
-    // endDate
+    // dueDate
     <TableCell key={4} width="140px" className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
@@ -364,6 +364,7 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.giverLimit}
         name="giverLimit"
+        type="number"
         label=""
         disabled={!activeEdit}
       />

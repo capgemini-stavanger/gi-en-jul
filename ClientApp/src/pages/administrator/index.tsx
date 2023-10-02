@@ -27,7 +27,7 @@ const AdminTab: React.FC<IAdminTab> = ({ accessToken, user }) => {
         <TabList onChange={handleChange} centered>
           <Tab label="Oversikt" value="1" />
           <Tab label="Fullførte koblinger" value="2" />
-          <Tab label="Manage" value="3" />
+          <Tab label="Administrer" value="3" />
         </TabList>
         <TabPanel value="1">
           <OverviewMacroRemake user={user} accessToken={accessToken} />
