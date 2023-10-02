@@ -397,8 +397,10 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
                 Påmeldingsfrist (åååå-mm-dd)
               </TableCell>
               <TableCell className={classes.tableHeaderText}>Leverings-adresse</TableCell>
-              <TableCell className={classes.tableHeaderText}>Leverings-dato</TableCell>
-              <TableCell className={classes.tableHeaderText}>Leverings-klokkeslett</TableCell>
+              <TableCell className={classes.tableHeaderText}>Leverings-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>
+                Leverings-klokkeslett (tt:mm)
+              </TableCell>
               <TableCell className={classes.tableHeaderText}>Maks antall givere</TableCell>
               <TableCell></TableCell>
             </TableRow>
