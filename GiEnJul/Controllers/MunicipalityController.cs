@@ -205,7 +205,7 @@ namespace GiEnJul.Controllers
         public async Task<string> UploadContactImage([FromForm] IFormFile file, string municipalityName)
         {
             await _authorization.ThrowIfNotAccessToMunicipality(municipalityName, User);
-            var result = await _contactImagesBlobClient.UpdateProfileImage(municipalityName, file.OpenReadStream());
+            var result = await _contactImagesBlobClient.UpdateProfileImage(municipalityName, file);
             return result;
         }
     }

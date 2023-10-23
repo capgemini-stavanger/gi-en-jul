@@ -1,4 +1,13 @@
-import { Button, Container, Divider, Grid, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  Container,
+  Divider,
+  FormControlLabel,
+  Grid,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import InputValidator from "components/shared/input-fields/validators/InputValidator";
 import RegistrationInfo from "./RegistrationInfo";
 import useStyles from "./Styles";
@@ -12,21 +21,23 @@ import {
   IContactState,
   initState,
 } from "components/institution/RegistrationFormTypes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUser from "hooks/useUser";
 import {
   isNotNull,
-  isPhoneNumber,
-  isEmail,
+  isPhoneNumberOrEmpty,
+  isEmailOrEmpty,
 } from "components/shared/input-fields/validators/Validators";
-import FormFood from "./FormFood";
-import { DINNERS } from "common/constants/Dinners";
+import { DINNERS, DINNER_LABELS } from "common/constants/Dinners";
 import { DESSERTS } from "common/constants/Desserts";
 import FormPerson from "./FormPerson";
 import ApiService from "common/functions/apiServiceClass";
 import FamilyInformationBox from "./FamilyInformationBox";
 import InformationBox from "components/shared/InformationBox";
+import FormFoods from "./FormFoods";
+import useIsMobile from "hooks/useIsMobile";
 
+const REMEMBER_CONTACT_INFO_KEY = "Contact_Info";
 interface props {
   accessToken: string;
 }
@@ -35,11 +46,14 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
   const classes = useStyles();
   const { location, institution } = useUser();
   const apiservice = new ApiService(accessToken);
+  const [rememberContactInfo, setRememberContactInfo] = useState(false);
 
   const [state, setState] = useState(initState);
   const [open, setOpen] = useState<boolean>(false);
-  const [formDataState, setFormDataState] = useState(initFormDataState());
+  const [formDataState, setFormDataState] = useState<IContactState>(initFormDataState());
   const [validFormState, setValidFormState] = useState(initValidFormState);
+  const [shouldClear, setShouldClear] = useState(false);
+  const isMobile = useIsMobile();
 
   const nextFormDataState: () => IContactState = () => {
     const item = initFormDataState();
@@ -50,6 +64,22 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     };
     return item;
   };
+
+  useEffect(() => {
+    if (shouldClear) {
+      setShouldClear(false);
+    }
+  }, [shouldClear]);
+
+  useEffect(() => {
+    const formData = initFormDataState();
+    const savedContactInfo = localStorage.getItem(REMEMBER_CONTACT_INFO_KEY);
+    if (savedContactInfo) {
+      formData.contact = JSON.parse(savedContactInfo);
+    }
+    setFormDataState(formData);
+    setRememberContactInfo(!!savedContactInfo);
+  }, []);
 
   // VALIDATION
   const getValiditySetter = (target: string) => (isValid: boolean) => {
@@ -99,6 +129,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
   };
 
+  useEffect(() => {
+    if (rememberContactInfo) {
+      localStorage.setItem(REMEMBER_CONTACT_INFO_KEY, JSON.stringify(formDataState.contact));
+    }
+  }, [formDataState.contact, rememberContactInfo]);
+
   // CONTACT INFO
   const getOnContactChange = (attr: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormDataState((prev) => ({
@@ -118,42 +154,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     }));
 
   // FOOD WISHES
-  const onDinnerRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onDinnersChange = (d: string) => {
     setFormDataState((prev) => ({
       ...prev,
-      dinner: {
-        ...prev.dinner,
-        input: e.target.value !== "annet" ? "" : prev.dinner.input,
-        radio: e.target.value,
-      },
+      dinners: d,
     }));
   };
-  const onDinnerInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onDessertsChange = (d: string) => {
     setFormDataState((prev) => ({
       ...prev,
-      dinner: {
-        ...prev.dinner,
-        input: e.target.value,
-      },
-    }));
-  };
-  const onDessertRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      dessert: {
-        ...prev.dessert,
-        input: e.target.value !== "annet" ? "" : prev.dessert.input,
-        radio: e.target.value,
-      },
-    }));
-  };
-  const onDessertInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      dessert: {
-        ...prev.dessert,
-        input: e.target.value,
-      },
+      desserts: d,
     }));
   };
   const onSpecialNeedsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,6 +179,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       ...prev,
       persons: [...prev.persons, getFormPerson()],
     }));
+    setTimeout(() => {
+      const newAgeElement = document.getElementById(
+        `peson-age-number-${formDataState.persons.length}`
+      );
+      newAgeElement?.focus();
+    }, 50);
   };
   const updatePerson = (index: number, newPersonData: { [target: string]: unknown }) => {
     setFormDataState((prev) => {
@@ -221,26 +237,16 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
       personsList.push(person1);
     });
 
-    const getDinner = () => {
-      return formDataState.dinner.radio === "annet"
-        ? formDataState.dinner.input
-        : formDataState.dinner.radio;
-    };
-
-    const getDessert = () => {
-      return formDataState.dessert.radio === "annet"
-        ? formDataState.dessert.input
-        : formDataState.dessert.radio;
-    };
-
     const submit: SubmitType = {
-      Dinner: getDinner(),
-      Dessert: getDessert(),
+      Dinner: formDataState.dinners,
+      Dessert: formDataState.desserts,
       Note: formDataState.specialNeeds,
       Location: location,
       ContactFullName: formDataState.contact.name,
-      ContactEmail: formDataState.contact.email,
-      ContactPhoneNumber: formDataState.contact.phoneNumber,
+      ContactEmail: formDataState.contact.email.length ? formDataState.contact.email : undefined,
+      ContactPhoneNumber: formDataState.contact.phoneNumber.length
+        ? formDataState.contact.phoneNumber
+        : undefined,
       Institution: institution,
       ReferenceId: formDataState.pid,
       FamilyMembers: personsList,
@@ -282,6 +288,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     setState((prev) => ({ ...prev, viewErrorTrigger: 0 }));
     setValidFormState({ ...initValidFormState });
     setFormDataState(nextFormDataState());
+    setShouldClear(true);
   };
   const onSuccessSubmit = () => {
     //sett confirmationbox boolean true here.
@@ -289,22 +296,43 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
     resetForm();
   };
 
-  //tullete å ha denne som en egen metode
   const handleClose = (open: boolean) => {
     setOpen(open);
+    if (!open) {
+      const familyIdElement = document.getElementById("FamilyId");
+      const familyIdInputElement = document.getElementById("PID");
+      setTimeout(() => {
+        const scrollToY = familyIdElement?.offsetTop ?? 500;
+        scrollTo(0, scrollToY);
+        familyIdInputElement?.focus();
+      }, 100);
+    }
+  };
+
+  const onRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setRememberContactInfo(checked);
+    if (checked === false) {
+      localStorage.removeItem(REMEMBER_CONTACT_INFO_KEY);
+    }
   };
 
   return (
     <>
-      <Container className={classes.root}>
+      <Container className={isMobile ? classes.mobileRoot : classes.root}>
         <form onSubmit={onSubmitForm}>
-          <Grid container direction="column" spacing={10}>
+          <Grid container direction="column" spacing={isMobile ? 0 : 10}>
             {/* REGISTRATION INFO FORM, NOT A SEPERATE COMPONENT? */}
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+            >
               <RegistrationInfo />
             </Grid>
             <Divider className={classes.gridDivider}></Divider>
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+            >
               {/* CONTACT PERSON FORM */}
               <Grid container direction="column" spacing={5}>
                 <Grid item>
@@ -316,8 +344,12 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Grid container direction="row" spacing={1}>
-                    <Grid item xs={3}>
+                  <Grid
+                    container
+                    direction={isMobile ? "column" : "row"}
+                    spacing={isMobile ? 3 : 1}
+                  >
+                    <Grid item xs={isMobile ? 12 : 3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
                         validators={[isNotNull]}
@@ -328,37 +360,52 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         name="cname"
                         id="kontaktnavn"
                         label="Navn"
+                        className={isMobile ? classes.contactInputMobile : classes.contactInput}
                       />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={isMobile ? 12 : 3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
-                        validators={[isPhoneNumber, isNotNull]}
-                        setIsValids={getValiditySetter("contactPhoneNumber")}
-                        errorMessages={[
-                          "Telefonnummeret er ikke gyldig",
-                          "Vennligst skriv inn et telefonnummer",
-                        ]}
+                        validators={[isPhoneNumberOrEmpty]}
+                        setIsValids={getValiditySetter("contactPhone")}
+                        errorMessages={["Telefonnummeret er ikke gyldig"]}
                         onChange={getOnContactChange("phoneNumber")}
                         value={formDataState.contact.phoneNumber}
                         name="cphone"
                         id="kontaktperson"
                         label="Telefon"
                         autoComplete="tel"
+                        className={isMobile ? classes.contactInputMobile : classes.contactInput}
                       />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={isMobile ? 12 : 3}>
                       <InputValidator
                         viewErrorTrigger={state.viewErrorTrigger}
-                        validators={[isEmail, isNotNull]}
+                        validators={[isEmailOrEmpty]}
                         setIsValids={getValiditySetter("contactEmail")}
-                        errorMessages={["Eposten er ikke gyldig", "Vennligst skriv inn en epost"]}
+                        errorMessages={["Eposten er ikke gyldig"]}
                         onChange={getOnContactChange("email")}
                         value={formDataState.contact.email}
                         name="cemail"
                         id="kontaktepost"
                         label="Epost"
                         autoComplete="email"
+                        className={isMobile ? classes.contactInputMobile : classes.contactInput}
+                      />
+                    </Grid>
+                    {!isMobile && <Grid item xs={3}></Grid>}
+                    <Grid item xs={isMobile ? 12 : 3}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            onChange={onRememberMeChange}
+                            value={rememberContactInfo}
+                            name="Husk meg"
+                            color="primary"
+                            checked={rememberContactInfo}
+                          />
+                        }
+                        label="Husk meg"
                       />
                     </Grid>
                   </Grid>
@@ -366,7 +413,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               </Grid>
             </Grid>
             <Divider className={classes.gridDivider}></Divider>
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="FamilyId"
+            >
               {/* FAMILY ID */}
               <Grid container direction="column" spacing={5}>
                 <Grid item>
@@ -376,7 +427,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Grid container>
+                  <Grid container direction={isMobile ? "column" : "row"}>
                     <Grid item>
                       <TextField
                         variant="outlined"
@@ -388,6 +439,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                         placeholder="PID eller annen ID"
                         error={formDataState.pidError}
                         helperText={formDataState.pidHelperText}
+                        className={isMobile ? classes.contactInputMobile : classes.contactInput}
                       />
                     </Grid>
                   </Grid>
@@ -395,57 +447,74 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               </Grid>
             </Grid>
             <Divider className={classes.gridDivider}></Divider>
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="Food"
+            >
               {/* FOOD WISHES FORM */}
               <Grid container direction="column" spacing={5}>
                 <Grid item>
                   <Typography variant="h5">Matønsker *</Typography>
                   <Typography>Vennligst fyll ut familiens matønsker</Typography>
                 </Grid>
-                <Grid item>
-                  <Grid container direction="row" spacing={3}>
-                    <Grid item xs={4}>
-                      <FormFood
-                        viewErrorTrigger={state.viewErrorTrigger}
-                        onInputChange={onDinnerInputChange}
-                        input={formDataState.dinner.input}
-                        radio={formDataState.dinner.radio}
-                        onRadioChange={onDinnerRadioChange}
+                <Grid item style={{ padding: "2px 20px 12px" }}>
+                  <Grid container direction={isMobile ? "column" : "row"} spacing={1}>
+                    <Grid item xs={isMobile ? 12 : 4}>
+                      <FormFoods
                         foods={DINNERS}
+                        foodLabels={DINNER_LABELS}
                         required
                         header={"Middag"}
-                        inputLabel="Annen middag (ikke fisk)"
-                        setIsValid={getValiditySetter("dinner")}
+                        inputLabel="Kommentar, evt. andre alternaltiver"
                         name="dinner"
+                        shouldClear={shouldClear}
+                        onStateChange={onDinnersChange}
+                        setIsValid={getValiditySetter("dinner")}
                       />
                     </Grid>
-                    <Grid item xs={4}>
-                      <FormFood
-                        viewErrorTrigger={state.viewErrorTrigger}
-                        onInputChange={onDessertInputChange}
-                        input={formDataState.dessert.input}
-                        radio={formDataState.dessert.radio}
-                        onRadioChange={onDessertRadioChange}
+                    <Grid item>
+                      <Divider
+                        className={classes.gridDivider}
+                        orientation={isMobile ? "horizontal" : "vertical"}
+                        style={{ height: "100%" }}
+                      />
+                    </Grid>
+                    <Grid item xs={isMobile ? 12 : 4}>
+                      <FormFoods
                         foods={DESSERTS}
                         required
                         header={"Dessert"}
-                        inputLabel="Annen dessert"
-                        setIsValid={getValiditySetter("dessert")}
+                        inputLabel="Kommentar, evt. andre alternaltiver"
                         name="dessert"
+                        shouldClear={shouldClear}
+                        onStateChange={onDessertsChange}
+                        setIsValid={getValiditySetter("dessert")}
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item>
+                      <Divider
+                        className={classes.gridDivider}
+                        orientation={isMobile ? "horizontal" : "vertical"}
+                        style={{ height: "100%" }}
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      xs={isMobile ? 12 : 3}
+                      style={{ flexGrow: 1, maxWidth: "100%", marginTop: "16px" }}
+                    >
                       <TextField
                         variant="outlined"
                         value={formDataState.specialNeeds}
                         onChange={onSpecialNeedsChange}
                         type="textarea"
                         fullWidth
-                        label="Spesielle behov (Halal, vegetar, allergier)"
+                        style={{ height: "100%" }}
+                        label="Andre behov (Halal, vegetar, allergier)"
                         multiline
                         placeholder="Halal, vegetar, allergier"
-                        minRows="6"
-                        maxRows="6"
+                        minRows={isMobile ? "6" : "16"}
                       />
                     </Grid>
                   </Grid>
@@ -453,23 +522,39 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
               </Grid>
             </Grid>
             <Divider className={classes.gridDivider}></Divider>
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="FamilyMembers"
+            >
               {/* FAMILY FORM */}
-              <Grid container direction="column" spacing={5}>
-                <Grid item>
+              <Grid container direction="column" spacing={isMobile ? 0 : 5}>
+                <Grid
+                  item
+                  className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+                >
                   <Typography variant="h5">Familie *</Typography>
                   <Typography>Vennligst fyll familiens informasjon og gaveønsker</Typography>
                 </Grid>
-                <Grid item>
-                  <Grid container direction="row" justifyContent="space-around" alignItems="center">
-                    <Grid item>
+                <Grid
+                  item
+                  className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+                >
+                  <Grid
+                    container
+                    direction={isMobile ? "column" : "row"}
+                    spacing={1}
+                    justifyContent="space-around"
+                    alignItems="center"
+                  >
+                    <Grid item xs={isMobile}>
                       <FamilyInformationBox
                         header="Detaljerte ønsker"
                         info="Dersom barnet ikke har ønsker kan du skrive noe om interesser, som fotball, hobbyting,
                         turn osv."
                       />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={isMobile}>
                       <FamilyInformationBox
                         header="Tydelige setninger"
                         info="Et sammendrag av familiens info og ønsker blir sendt til giver. Skriv derfor utfyllende og fullstendige setninger."
@@ -508,7 +593,11 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item>
+            <Grid
+              item
+              className={isMobile ? classes.sectionGridItemMobile : classes.sectionGridItem}
+              id="SubmitForm"
+            >
               {/* SUBMIT BUTTON */}
               <Grid container justifyContent="center">
                 <Grid item>

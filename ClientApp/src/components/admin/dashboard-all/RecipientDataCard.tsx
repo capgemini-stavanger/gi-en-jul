@@ -225,29 +225,36 @@ const RecipientDataCard: React.FC<Props> = ({
                 <Grid container direction="row" justifyContent="space-between">
                   <Grid item xs={6}>
                     <Typography variant="h6" gutterBottom>
-                      Kontakt
+                      Kontaktperson
+                    </Typography>
+                    <Typography>
+                      {recipientData.contactFullName} hos {recipientData.institution}
                     </Typography>
                     <Typography>{recipientData.contactPhoneNumber}</Typography>
                     <Typography gutterBottom>{recipientData.contactEmail}</Typography>
-                    <SendIcon />
-                    <Button
-                      className={classes.underlineText}
-                      onClick={() => {
-                        setOpenMailDialog(true);
-                      }}
-                    >
-                      Send epost
-                    </Button>
-                    <SendEmailContent
-                      open={openMailDialog}
-                      handleClose={() => {
-                        setOpenMailDialog(false);
-                      }}
-                      toEmail={recipientData.contactEmail}
-                      fullName={recipientData.contactFullName}
-                      accessToken={accessToken}
-                      user={user}
-                    />
+                    {!!recipientData.contactEmail && (
+                      <>
+                        <SendIcon />
+                        <Button
+                          className={classes.underlineText}
+                          onClick={() => {
+                            setOpenMailDialog(true);
+                          }}
+                        >
+                          Send epost
+                        </Button>
+                        <SendEmailContent
+                          open={openMailDialog}
+                          handleClose={() => {
+                            setOpenMailDialog(false);
+                          }}
+                          toEmail={recipientData.contactEmail}
+                          fullName={recipientData.contactFullName}
+                          accessToken={accessToken}
+                          user={user}
+                        />
+                      </>
+                    )}
                   </Grid>
                   <Grid item xs={6}>
                     <Typography variant="h6" gutterBottom>
@@ -371,7 +378,12 @@ const RecipientDataCard: React.FC<Props> = ({
                           handleClose={() => {
                             setOpenDelFamilyDialog(false);
                           }}
-                          text={`Er du sikker på at du ønsker å slette familie id ${recipientData.familyId} [${recipientData.contactEmail}]?`}
+                          text={`Er du sikker på at du ønsker å slette familie id ${
+                            recipientData.familyId
+                          } [${
+                            recipientData.contactEmail ??
+                            `${recipientData.contactFullName} hos ${recipientData.institution}`
+                          }]?`}
                           handleResponse={deleteRecipient(recipientData)}
                         />
                       </Grid>

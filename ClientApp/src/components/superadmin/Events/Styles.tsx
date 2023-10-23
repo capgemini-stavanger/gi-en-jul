@@ -25,5 +25,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.error.dark,
     },
   },
+  dateInput: {
+    width: "260px",
+  },
 }));
 export default useStyles;

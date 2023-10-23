@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Container, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
+import { Container, Navbar, NavbarBrand } from "reactstrap";
 import LogOutButton from "components/login/LogOutButton";
 import logo from "styling/img/logo_green.svg";
 import "components/shared/navbar/NavBarLoggedIn.css";
@@ -22,7 +22,6 @@ export default class NavBarLoggedIn extends React.PureComponent<
             <NavbarBrand tag={Link} to="/">
               <img className={"logo-small"} src={logo}></img>
             </NavbarBrand>
-            <NavbarToggler onClick={this.toggle} className="mr-2" />
             <LogOutButton />
           </Container>
         </Navbar>

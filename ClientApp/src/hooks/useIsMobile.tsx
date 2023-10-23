@@ -7,6 +7,7 @@ const useIsMobile = () => {
       setIsMobile(window.innerWidth <= 1000);
     };
     window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
   return isMobile;
 };

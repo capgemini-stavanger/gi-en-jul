@@ -6,7 +6,10 @@ const LogOutButton = () => {
   const { logout } = useAuth0();
 
   return (
-    <IconButton edge="start" onClick={() => logout({ returnTo: window.location.origin })}>
+    <IconButton
+      edge="start"
+      onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+    >
       <ExitToApp color="primary" />
       <Typography>Logg ut</Typography>
     </IconButton>

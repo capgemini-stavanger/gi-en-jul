@@ -32,6 +32,13 @@ namespace GiEnJul.Controllers
             return await _eventRepository.GetLocationsWithActiveEventAsync();
         }
 
+        // GET api/Event/SignUpLocations
+        [HttpGet("SignUpLocations")]
+        public async Task<string[]> GetSignUpLocationsAsync()
+        {
+            return await _eventRepository.GetLocationsOpenForSignUpAsync();
+        }
+
         // GET api/Event/GetAll
         [HttpGet("GetAll")]
         [Authorize(Policy = Policy.SuperAdmin)]

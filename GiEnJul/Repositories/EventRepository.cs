@@ -14,6 +14,7 @@ namespace GiEnJul.Repositories
     {
         Task<string> GetActiveEventForLocationAsync(string location);
         Task<string[]> GetLocationsWithActiveEventAsync();
+        Task<string[]> GetLocationsOpenForSignUpAsync();
         Task<string> GetDeliveryAddressForLocationAsync(string location);
         Task<(int, string)> GetGiverLimitAndEventNameForLocationAsync(string location);
         Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
@@ -102,12 +103,22 @@ namespace GiEnJul.Repositories
             return locationArray;
         }
 
+        public async Task<string[]> GetLocationsOpenForSignUpAsync()
+        {
+            var events = await GetAllByQueryAsync(HasActiveDates());
+            events = events.Where(e => !e.SignUpDueDate.HasValue || e.SignUpDueDate > DateTimeOffset.UtcNow);
+
+            var locationArray = events.Select(x => x.RowKey).ToArray();
+            Array.Sort(locationArray);
+            return locationArray;
+        }
+
         private string HasActiveDates()
         {
             // StartDate <= DateTime.Now
-            var startDatePassed = $"StartDate le datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
+            var startDatePassed = $"StartDate le datetime'{DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture)}'";
             // EndDate >= DateTime.Now
-            var endDateNotPassed = $"EndDate gt datetime'{DateTime.Now.ToString("o", CultureInfo.InvariantCulture)}'";
+            var endDateNotPassed = $"EndDate gt datetime'{DateTimeOffset.UtcNow.ToString("o", CultureInfo.InvariantCulture)}'";
 
             return string.Join(" and ", startDatePassed, endDateNotPassed);
         }

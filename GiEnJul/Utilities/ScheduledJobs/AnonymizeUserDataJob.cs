@@ -80,7 +80,8 @@ public class AnonymizeUserDataJob : IJob
                         foreach (var a in (IEnumerable<AnonymizedRecipient>)recipients)
                         {
                             a.Comment = null;
-                            a.ContactEmail = CreateEmailHash(a.ContactEmail);
+                            a.ContactEmail = CreateHash(a.ContactEmail);
+                            a.ContactFullName = CreateHash(a.ContactFullName);
                             await targetClient.UpsertEntityAsync(a);
                             await sourceClient.DeleteEntityAsync(a.PartitionKey, a.RowKey);
                         }
@@ -106,7 +107,7 @@ public class AnonymizeUserDataJob : IJob
                                 {
                                     if (a.RegistrationDate == DateTime.MinValue)
                                         a.RegistrationDate = a.Timestamp.Value.UtcDateTime;
-                                    a.Email = CreateEmailHash(a.Email);
+                                    a.Email = CreateHash(a.Email);
                                     await targetClient.UpsertEntityAsync(a);
                                     await sourceClient.DeleteEntityAsync(a.PartitionKey, a.RowKey);
                                 }
@@ -138,8 +139,12 @@ public class AnonymizeUserDataJob : IJob
         _log.Information("[AnonymizeUserDataJob] Job finished in {0}ms", sw.ElapsedMilliseconds);
     }
 
-    private static string CreateEmailHash(string email)
+    private static string CreateHash(string email)
     {
+        if (string.IsNullOrEmpty(email))
+        {
+            return "";
+        }
         return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(email)));
     }
 

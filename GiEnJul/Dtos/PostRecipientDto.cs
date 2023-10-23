@@ -15,10 +15,8 @@ namespace GiEnJul.Dtos
 
         [Required]
         public string ContactFullName { get; set; }
-        [Required]
         [EmailAddress]
         public string ContactEmail { get; set; }
-        [Required]
         [Phone]
         public string ContactPhoneNumber { get; set; }
 

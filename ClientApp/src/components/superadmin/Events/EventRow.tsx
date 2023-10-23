@@ -14,6 +14,8 @@ const getValidators = (field: string) => {
       return [EV.emptyString, EV.notADate];
     case "endDate":
       return [EV.emptyString, EV.notADate];
+    case "dueDate":
+      return [EV.notEmptyOrADate];
     case "deliveryAddress":
       return [EV.emptyString];
     case "deliveryDate":
@@ -21,7 +23,7 @@ const getValidators = (field: string) => {
     case "deliveryTime":
       return [EV.emptyString];
     case "giverLimit":
-      return [EV.emptyString, EV.notANumber];
+      return [EV.notANumber];
   }
   return [() => true];
 };
@@ -32,6 +34,8 @@ const getErrorMessages = (field: string) => {
       return [EE.emptyString, EE.wrongDateFormat];
     case "endDate":
       return [EE.emptyString, EE.wrongDateFormat];
+    case "dueDate":
+      return [EE.wrongDateFormat];
     case "deliveryAddress":
       return [EE.emptyString];
     case "deliveryDate":
@@ -39,7 +43,7 @@ const getErrorMessages = (field: string) => {
     case "deliveryTime":
       return [EE.emptyString];
     case "giverLimit":
-      return [EE.emptyString, EE.notANumber];
+      return [EE.notANumber];
   }
   return [];
 };
@@ -51,6 +55,7 @@ type ValidEventEntry = {
 const initValidEventState: ValidEventEntry = {
   startDate: false,
   endDate: false,
+  dueDate: false,
   deliveryAddress: false,
   deliveryDate: false,
   deliveryTime: false,
@@ -199,7 +204,7 @@ const EventRow: React.FC<Props> = ({
 
   const tableCells: JSX.Element[] = [
     // eventName
-    <TableCell key={0}>
+    <TableCell key={0} className={classes.tableCell}>
       <SelectForm
         name="Eventnavn"
         variant="outlined"
@@ -214,7 +219,7 @@ const EventRow: React.FC<Props> = ({
         fullWidth
       />
     </TableCell>,
-    <TableCell key={1}>
+    <TableCell key={1} className={classes.tableCell}>
       <SelectForm
         name="Municipality"
         variant="outlined"
@@ -230,7 +235,7 @@ const EventRow: React.FC<Props> = ({
       />
     </TableCell>,
     // startDate
-    <TableCell key={2} width="140px">
+    <TableCell key={2} width="140px" className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("startDate")}
@@ -250,7 +255,7 @@ const EventRow: React.FC<Props> = ({
       />
     </TableCell>,
     // endDate
-    <TableCell key={3} width="140px">
+    <TableCell key={3} width="140px" className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("endDate")}
@@ -268,8 +273,27 @@ const EventRow: React.FC<Props> = ({
         disabled={!activeEdit}
       />
     </TableCell>,
+    // dueDate
+    <TableCell key={4} width="140px" className={classes.tableCell}>
+      <InputValidator
+        viewErrorTrigger={viewErrorNumber}
+        validators={getValidators("dueDate")}
+        setIsValids={getValiditySetter("dueDate")}
+        errorMessages={getErrorMessages("dueDate")}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const copy = { ...formValues };
+          copy.signUpDueDate = e.target.value;
+          setFormValues(copy);
+          incrementErrorNum("dueDate", e.target.value);
+        }}
+        value={formValues.signUpDueDate}
+        name="dueDate"
+        label=""
+        disabled={!activeEdit}
+      />
+    </TableCell>,
     // deliveryAddress
-    <TableCell key={4}>
+    <TableCell key={5} className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryAddress")}
@@ -287,7 +311,7 @@ const EventRow: React.FC<Props> = ({
       />
     </TableCell>,
     // deliveryDate
-    <TableCell key={5} width="140px">
+    <TableCell key={6} width="140px" className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryDate")}
@@ -306,7 +330,7 @@ const EventRow: React.FC<Props> = ({
       />
     </TableCell>,
     // deliveryTime
-    <TableCell key={"deliveryTime"}>
+    <TableCell key={"deliveryTime"} className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("deliveryTime")}
@@ -326,7 +350,7 @@ const EventRow: React.FC<Props> = ({
       />
     </TableCell>,
     //giverLimit
-    <TableCell key={7} width="100px">
+    <TableCell key={7} width="100px" className={classes.tableCell}>
       <InputValidator
         viewErrorTrigger={viewErrorNumber}
         validators={getValidators("giverLimit")}
@@ -340,6 +364,7 @@ const EventRow: React.FC<Props> = ({
         }}
         value={formValues.giverLimit}
         name="giverLimit"
+        type="number"
         label=""
         disabled={!activeEdit}
       />

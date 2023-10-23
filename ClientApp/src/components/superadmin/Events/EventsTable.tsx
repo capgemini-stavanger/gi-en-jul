@@ -14,11 +14,10 @@ import {
 import ApiService from "common/functions/apiServiceClass";
 import { useEffect, useState } from "react";
 import {
-  Dto2EventContent,
   EventContent,
   EventContent2Dto,
   EventContentInit,
-  EventContentDto,
+  ConvertDateToLocalString,
 } from "components/superadmin/Events/EventType";
 import EventDropdown from "./EventDropdown";
 import NewEventBox from "./NewEventBox";
@@ -159,7 +158,7 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
     }
   };
 
-  const handleEventUpdate = (updatedEvent: EventContent, id: string) => {
+  const handleEventUpdate = (updatedEvent: EventContent) => {
     const newId = updatedEvent.eventName + updatedEvent.municipality;
     // either municipality or eventname for the event is updated
     if (updatedEvent.id != newId) {
@@ -167,7 +166,6 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
       if (validUpdate) {
         updatedEvent.id = newId;
         postEventUpdate(updatedEvent); // send updated event to backend
-        postEventDeletion(events.get(id)); // delete old version of the event
       }
     } else {
       // municipality and eventname stayed the same
@@ -277,11 +275,18 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
     apiservice
       .get("Event/GetAll", {})
       .then((resp) => {
-        const fetchedEvents = new Map<string, EventContent>();
-        const eventContents = resp.data.map((event: EventContentDto) => Dto2EventContent(event));
-        eventContents.forEach((event: EventContent) => {
-          fetchedEvents.set(event.id, event);
-        });
+        const fetchedEvents = (resp.data as EventContent[]).reduce((pv, cv) => {
+          const current = {
+            ...cv,
+            startDate: ConvertDateToLocalString(new Date(cv.startDate)),
+            endDate: ConvertDateToLocalString(new Date(cv.endDate)),
+            signUpDueDate: cv.signUpDueDate?.length
+              ? ConvertDateToLocalString(new Date(cv.signUpDueDate))
+              : "",
+          };
+          pv.set(cv.id, current);
+          return pv;
+        }, new Map<string, EventContent>());
         setEvents(fetchedEvents);
       })
       .catch((errorStack) => {
@@ -312,6 +317,20 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
             Når du knytter en kommune opp mot et event, må det settes en start og sluttdato som
             bestemmer når eventet er aktivt, og i hvilken periode det går ann å melde seg opp som
             giver.
+          </Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography>
+            Du kan velge om du ønsker å sette en påmeldingsfrist, dersom denne er satt vil valget
+            forsvinne fra &#39;bli giver&#39;-siden etter oppgitt dato.
+          </Typography>
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>-</ListItemIcon>
+          <Typography color="error">
+            30 dager etter oppgitt slutt-dato vil data ryddes opp. Det er viktig at slutt dato for
+            eventet settes med god nok margin til at dette ikke vil føre til tap av data.
           </Typography>
         </ListItem>
       </List>
@@ -374,11 +393,15 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
               <TableCell className={classes.tableHeaderText}>Kommune</TableCell>
               <TableCell className={classes.tableHeaderText}>Start-dato (åååå-mm-dd)</TableCell>
               <TableCell className={classes.tableHeaderText}>Slutt-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>
+                Påmeldingsfrist (åååå-mm-dd)
+              </TableCell>
               <TableCell className={classes.tableHeaderText}>Leverings-adresse</TableCell>
-              <TableCell className={classes.tableHeaderText}>Leverings-dato</TableCell>
-              <TableCell className={classes.tableHeaderText}>Leverings-klokkeslett</TableCell>
+              <TableCell className={classes.tableHeaderText}>Leverings-dato (åååå-mm-dd)</TableCell>
+              <TableCell className={classes.tableHeaderText}>
+                Leverings-klokkeslett (tt:mm)
+              </TableCell>
               <TableCell className={classes.tableHeaderText}>Maks antall givere</TableCell>
-              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableBody>
