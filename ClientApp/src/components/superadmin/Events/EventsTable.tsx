@@ -229,8 +229,8 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
 
   const buildTable = () => {
     const eventsList: EventContent[] = [];
-    // events.forEach((event) => eventsList.push(event));
     events.forEach((event) => eventsList.push(event));
+    // events.forEach((event) => eventsList.push(event));
     const table = eventsList
       .filter((e) => e.eventName === selectedEventName)
       .map((event) => {
@@ -283,8 +283,9 @@ const EventsTable: React.FC<Props> = ({ accessToken }) => {
             signUpDueDate: cv.signUpDueDate?.length
               ? ConvertDateToLocalString(new Date(cv.signUpDueDate))
               : "",
+            id: cv.id ?? `${cv.eventName}_${cv.municipality}`,
           };
-          pv.set(cv.id, current);
+          pv.set(current.id, current);
           return pv;
         }, new Map<string, EventContent>());
         setEvents(fetchedEvents);
