@@ -22,7 +22,7 @@ const What = () => {
               Dette er foreldre og barn som ikke selv har mulighet til å kjøpe en skikkelig
               julemiddag, julesnop eller julegaver til hverandre. I år kan du melde deg som giver i
               <br />
-              Bodø, Gjesdal, Sandnes, Sola eller Stavanger.
+              Bodø, Gjesdal, Halden, Sandnes, Sola eller Stavanger.
             </Typography>
             <Button
               style={{ marginTop: "1em" }}
