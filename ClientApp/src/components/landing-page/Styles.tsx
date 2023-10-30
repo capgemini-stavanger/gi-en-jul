@@ -201,6 +201,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "50%",
     objectFit: "cover",
   },
+  cardName: {
+    textAlign: "center",
+  },
   iconText: {
     display: "inline",
     color: "black",

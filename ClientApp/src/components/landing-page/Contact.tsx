@@ -59,7 +59,7 @@ const Contact: React.FC<Props> = ({ contacts }) => {
                       currentTarget.src = `${img_placeholder}`;
                     }}
                   />
-                  <Typography> {contact.contactPerson} </Typography>
+                  <Typography className={classes.cardName}> {contact.contactPerson} </Typography>
                 </Box>
                 <Box className={classes.cardInfo}>
                   <Box>
