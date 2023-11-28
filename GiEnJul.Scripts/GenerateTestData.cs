@@ -1,10 +1,5 @@
-using AutoMapper.Configuration.Annotations;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
-using GiEnJul.Infrastructure;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Diagnostics;
 
 namespace GiEnJul.Scripts;
 
@@ -25,7 +20,7 @@ public class GenerateTestData
         var numberOfFamilies = 250;
 
         var random = new Random();
-        var settings = CreateSettings();
+        var settings = ScriptHelpers.CreateSettings();
         var municipalityClient = new TableClient(settings.TableConnectionString, "Municipality");
         await municipalityClient.CreateIfNotExistsAsync();
         foreach (var municipality in municipalities)
@@ -153,15 +148,6 @@ public class GenerateTestData
             RegistrationDate = DateTime.UtcNow,
         };
         return giver;
-    }
-
-    private Settings CreateSettings()
-    {
-        var path = Path.GetFullPath("..\\..\\..\\..\\GiEnJul");
-        var config = new ConfigurationBuilder().SetBasePath(path).AddJsonFile("appsettings.json").Build();
-        
-        var settings = new Settings(config);
-        return settings;
     }
 
     private static string MakeName(string gender = "none")
