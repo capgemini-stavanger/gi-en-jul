@@ -1,11 +1,11 @@
 ﻿using Autofac;
+using Azure.Data.Tables;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
 using Serilog;
 using System.Net.Http;
 
@@ -41,7 +41,7 @@ namespace GiEnJul.Infrastructure
             var logger = new LoggerConfiguration()
                                 .MinimumLevel.Is(settings.LogLevel)
                                 .WriteTo.Console()
-                                .WriteTo.AzureTableStorage(CloudStorageAccount.Parse(settings.TableConnectionString), 
+                                .WriteTo.AzureTableStorage(new TableServiceClient(settings.TableConnectionString), 
                                                         storageTableName: settings.LogTableName, 
                                                         writeInBatches: true)
                                 .CreateLogger();
