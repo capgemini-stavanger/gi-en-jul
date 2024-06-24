@@ -5,10 +5,11 @@ import Home from "pages/landing-page";
 // import StartJul from "components/landing-page/StartJul";
 // import Business from "components/landing-page/Business";
 import RegistrationMacro from "pages/register-as-giver";
-import VerifyConnection from "pages/VerifyConnection";
+import ConnectionAccepted from "pages/ConnectionAccepted";
 import "custom.css";
 import Municipality from "pages/municipality";
-import DenyConnection from "pages/DenyConnection";
+import ConnectionDenied from "pages/ConnectionDenied";
+import VerifyConnection from "pages/VerifyConnection";
 
 const App = () => {
   return (
@@ -21,10 +22,18 @@ const App = () => {
       <Route path="/loading" component={LoadingPage} />
       <Route path="/kommune" component={Municipality} />
       <Route
-        path="/:giverRowKey/:recipientRowKey/:partitionKey/verify"
+        exact
+        path="/:giverRowKey/:recipientRowKey/:partitionKey"
         component={VerifyConnection}
       />
-      <Route path="/:giverRowKey/:recipientRowKey/:partitionKey/deny" component={DenyConnection} />
+      <Route
+        path="/:giverRowKey/:recipientRowKey/:partitionKey/accepted"
+        component={ConnectionAccepted}
+      />
+      <Route
+        path="/:giverRowKey/:recipientRowKey/:partitionKey/denied"
+        component={ConnectionDenied}
+      />
     </>
   );
 };
