@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: '8.0.x'
   PACKAGE_PATH: 'Deploy'
 
 jobs:
@@ -17,12 +17,12 @@ jobs:
 
     steps:
       - name: Checkout Github Action
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: master
 
-      - name: Set up .NET 6
-        uses: actions/setup-dotnet@v1
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -39,7 +39,7 @@ jobs:
         run: dotnet publish GiEnJul -c Release -o ${{env.PACKAGE_PATH}}
 
       - name: Deploy with Azure webapp creds
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: gienjul-app-service-prod
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISH_PROD }}
