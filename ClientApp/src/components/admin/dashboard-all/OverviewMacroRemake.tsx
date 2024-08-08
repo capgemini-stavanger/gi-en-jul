@@ -188,7 +188,12 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) =>
     <>
       <Box className={classes.entireDashboard}>
         <Box className={classes.oversiktBox}>
-          <OverviewStatistics givers={giverData} recipients={recipientData} />
+          <OverviewStatistics
+            givers={giverData}
+            recipients={recipientData}
+            municipality={user.location ?? ""}
+            accessToken={accessToken}
+          />
         </Box>
         <Container>
           <Box className={classes.dashboardBox}>
