@@ -2,6 +2,7 @@
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Repositories;
+using GiEnJul.Services;
 using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,7 @@ public static class ServiceConfiguration
         services.AddScoped<IRecaptchaVerifier, RecaptchaVerifier>();
         services.AddScoped<IEmailTemplateBuilder,  EmailTemplateBuilder>();
         services.AddScoped<IAuthorization, Authorization>();
+        services.AddScoped<IAdminService, AdminService>();
         return services;
 
     }   

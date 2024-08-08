@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClosedXML.Extensions;
+using DocumentFormat.OpenXml.Spreadsheet;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
@@ -8,6 +9,7 @@ using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
+using GiEnJul.Services;
 using GiEnJul.Utilities;
 using GiEnJul.Utilities.EmailTemplates;
 using GiEnJul.Utilities.ExcelClasses;
@@ -37,6 +39,7 @@ namespace GiEnJul.Controllers
         private readonly ISettings _settings;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
         private readonly IAuthorization _authorization;
+        private readonly IAdminService _adminService;
 
         public AdminController(
             IEventRepository eventRepository,
@@ -50,7 +53,8 @@ namespace GiEnJul.Controllers
             IEmailClient emailClient,
             ISettings settings,
             IEmailTemplateBuilder emailTemplateBuilder,
-            IAuthorization authorization)
+            IAuthorization authorization,
+            IAdminService adminService)
         {
             _eventRepository = eventRepository;
             _giverRepository = giverRepository;
@@ -64,6 +68,7 @@ namespace GiEnJul.Controllers
             _settings = settings;
             _emailTemplateBuilder = emailTemplateBuilder;
             _authorization = authorization;
+            _adminService = adminService;
         }
 
         [HttpGet("Overview/Givers")]
@@ -466,5 +471,14 @@ namespace GiEnJul.Controllers
 
             await _giverRepository.InsertOrReplaceAsync(giver);
         }
+
+        [HttpGet("{eventName}/{municipality}/overview")]
+        [Authorize(Policy = Policy.ReadRecipient)]
+        public async Task<FileStreamResult> GetPersonsByEvent(string eventName, string municipality)
+        {
+            var data = await _adminService.GetPersonsDataByEvent(municipality, eventName);
+            using var wb = ExcelGenerator.Generate(data);
+            return wb.Deliver($"oppsummering_{eventName}_{municipality}.xlsx");
+        } 
     }
 }
