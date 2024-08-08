@@ -21,9 +21,9 @@ interface IFeedback {
   feedbackGiver: string;
 }
 
-type VerifyConnection = RouteComponentProps<RouteParameters>;
+type ConnectionDenied = RouteComponentProps<RouteParameters>;
 
-const DenyConnection: React.FC<VerifyConnection> = () => {
+const ConnectionDenied: React.FC<ConnectionDenied> = () => {
   const { giverRowKey, recipientRowKey, partitionKey } = useParams<RouteParameters>();
 
   const [pageLoaded, setPageLoaded] = useState(false);
@@ -58,6 +58,13 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
       .then((response) => {
         if (response.status == 200) {
           setPageLoadedResult(true);
+
+          if (response.data.status !== 3) {
+            setPageLoadedResult(false);
+            console.error(response.data.text);
+            setErrorCheck(true);
+            setErrorText(response.data);
+          }
         }
       })
       .catch((err) => {
@@ -99,9 +106,9 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
             <img className={classes.imageSnow} src={snowDown}></img>
           </Grid>
           {pageLoaded ? (
-            <Grid item>
+            <Grid item xs={4}>
               {pageLoadedResult ? (
-                <Container className={classes.giverForm}>
+                <Container className={classes.verifyDenyConnectionContainer}>
                   {!feedbackSubmitted ? (
                     <React.Fragment>
                       <Typography className={classes.headingBold}>
@@ -164,19 +171,12 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
                   )}
                 </Container>
               ) : (
-                <Container className={classes.giverForm}>
-                  <Typography className={classes.headingBold}>
-                    Tusen takk for innsatsen <br />
-                    du skal gjøre!
-                  </Typography>
+                <Container className={classes.verifyDenyConnectionContainer}>
+                  <Typography className={classes.headingBold}>Det har oppstått en feil</Typography>
                   <Typography className={classes.paragraphBold}>
                     Det har desverre sjedd noe feil i våre systemer. Denne handlingen du prøvde på
                     gikk ikke igjennom. Før du eventuelt tar kontakt med oss, sjekk mailboksen din
                     for en mail fra oss.
-                  </Typography>
-                  <Typography className={classes.paragraph}>
-                    Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                    øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin gave
                   </Typography>
                 </Container>
               )}
@@ -188,7 +188,7 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
           )}
           {!isMobile() && (
             <Grid item>
-              <img src={snowmanFull}></img>
+              <img className={classes.backgroundImage} src={snowmanFull}></img>
             </Grid>
           )}
         </Grid>
@@ -196,4 +196,4 @@ const DenyConnection: React.FC<VerifyConnection> = () => {
     </>
   );
 };
-export default DenyConnection;
+export default ConnectionDenied;

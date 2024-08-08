@@ -21,8 +21,8 @@ public class GenerateTestData
     {
         var municipalities = new[] { "Stavanger"/*, "Sandnes", "Sola", "Gjesdal" */};
         var numberOfEvents = 1;
-        var numberOfGivers = 250;
-        var numberOfFamilies = 250;
+        var numberOfGivers = 50;
+        var numberOfFamilies = 50;
 
         var random = new Random();
         var settings = CreateSettings();
@@ -64,7 +64,7 @@ public class GenerateTestData
             await giverClient.UpsertEntityAsync(giver);
         }
 
-        var recipientsWithPersons = Enumerable.Range(0, numberOfFamilies).Select(i => MakeRecipient(random, events)).ToList();
+        var recipientsWithPersons = Enumerable.Range(0, numberOfFamilies).Select(i => MakeRecipient(random, events, i)).ToList();
         var recipients = recipientsWithPersons.Select(r => r.Item1).ToList();
         var persons = recipientsWithPersons.SelectMany(r => r.Item2).ToList();
 
@@ -83,7 +83,7 @@ public class GenerateTestData
         var all = persons.All(p => recipients.Select(r => r.RowKey).Any(r => r == p.PartitionKey));
     }
 
-    private static (Recipient, IEnumerable<Person>) MakeRecipient(Random random, List<Event> events)
+    private static (Recipient, IEnumerable<Person>) MakeRecipient(Random random, List<Event> events, int number)
     {
         var contactName = MakeName();
         var event_ = events[random.Next(events.Count)];
@@ -105,6 +105,7 @@ public class GenerateTestData
             IsSuggestedMatch = false,
             HasConfirmedMatch = false,
             PersonCount = personCount,
+            FamilyId = number.ToString(),
         };
         var persons = Enumerable.Range(1, personCount).Select(i => MakePerson(recipientId, random));
         return (recipient,  persons);

@@ -7,15 +7,13 @@ namespace GiEnJul.Helpers
     {
         public static Dictionary<string, string> MakeVerifyEmailContent(Models.Giver giver, Models.Recipient recipient, Models.Municipality municipality, string baseUrl)
         {
-            var verifyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/verify";
-            var denyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}/deny";
+            var verifyLink = $"{baseUrl}/{giver.GiverId}/{recipient.RecipientId}/{giver.Event}";
 
             var familyTable = MakeFamilyTable(recipient);
             var emailValuesDict = new Dictionary<string, string>
                 {
                     { "familyTable", familyTable },
                     { "verifyLink", verifyLink },
-                    { "denyLink", denyLink },
                 };
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
             emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
