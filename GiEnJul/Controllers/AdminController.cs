@@ -472,10 +472,12 @@ namespace GiEnJul.Controllers
             await _giverRepository.InsertOrReplaceAsync(giver);
         }
 
-        [HttpGet("{eventName}/{municipality}/overview")]
-        [Authorize(Policy = Policy.ReadRecipient)]
-        public async Task<FileStreamResult> GetPersonsByEvent(string eventName, string municipality)
+        [HttpGet("{municipality}/overview")]
+        [Authorize(Policy = Policy.DownloadDeliveryExcel)]
+        public async Task<FileStreamResult> GetPersonsByEvent(string municipality)
         {
+            await _authorization.ThrowIfNotAccessToMunicipality(municipality, User);
+            var eventName = await _eventRepository.GetActiveEventForLocationAsync(municipality);
             var data = await _adminService.GetPersonsDataByEvent(municipality, eventName);
             using var wb = ExcelGenerator.Generate(data);
             return wb.Deliver($"oppsummering_{eventName}_{municipality}.xlsx");
