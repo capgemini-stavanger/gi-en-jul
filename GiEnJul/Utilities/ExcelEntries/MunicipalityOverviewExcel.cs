@@ -34,7 +34,7 @@ public class MunicipalityOverviewExcel : IExcel
             ["Alder (År)"] = AgeYears,
             ["Alder (Mnd)"] = AgeMonths,
             ["Kjønn"] = Gender,
-            ["Ønsker"] = $"[{string.Join(",", Wishes)}]",
+            ["Ønsker"] = $"['{string.Join("', '", Wishes)}']",
         };
     }
 }
