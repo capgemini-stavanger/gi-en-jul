@@ -84,7 +84,7 @@ const Municipality = () => {
   useEffect(buildLocationData, [activeMunicipalities, municipalityMap]);
 
   return (
-    <>
+    <div style={{ minHeight: "100lvh", display: "flex", flexDirection: "column" }}>
       <NavBarPublic />
       <Container className={classes.rootNavBarPages} maxWidth={false}>
         <Grid container direction="column">
@@ -102,7 +102,7 @@ const Municipality = () => {
         <ScrollToTop maxPagePosition={300} />
       </Container>
       <Footer />
-    </>
+    </div>
   );
 };
 

@@ -81,7 +81,6 @@ export const useStyles = makeStyles((theme) => ({
   },
   oversiktBox: {
     width: "200px",
-    height: "650px",
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     position: "fixed",
     left: "0",

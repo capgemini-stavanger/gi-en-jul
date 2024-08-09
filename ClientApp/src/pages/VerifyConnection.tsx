@@ -1,13 +1,10 @@
-﻿import { Button, Container, Grid, Typography } from "@material-ui/core";
-import { ArrowForwardIos } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { RouteComponentProps, useParams } from "react-router";
-import LoadingPage from "pages/LoadingPage";
-import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/register-as-giver/Styles";
-import snowmanFull from "styling/img/snowmanFull.svg";
 import snowDown from "styling/img/snow_down2.svg";
+import snowmanFull from "styling/img/snowmanFull.svg";
+import { useEffect, useState } from "react";
+import ApiService from "common/functions/apiServiceClass";
 import useIsMobile from "hooks/useIsMobile";
 
 interface RouteParameters {
@@ -15,183 +12,146 @@ interface RouteParameters {
   recipientRowKey: string;
   partitionKey: string;
 }
-
 type VerifyConnection = RouteComponentProps<RouteParameters>;
+
+type ConnectionStatus = "Unknown" | "Connected" | "Disconnected" | "Suggested" | "Mismatch";
 
 const VerifyConnection: React.FC<VerifyConnection> = () => {
   const { giverRowKey, recipientRowKey, partitionKey } = useParams<RouteParameters>();
-
-  const [content, setContent] = useState(<LoadingPage />);
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("Unknown");
 
   const apiservice = new ApiService();
-  const history = useHistory();
-  const classes = useStyles();
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    apiservice
-      .post(`connection/${giverRowKey}/${recipientRowKey}/${partitionKey}/verify`, {})
-      .then((response) => {
-        if (response.status == 200) {
-          setContent(
-            <Container className={classes.fillBackground}>
-              <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item>
-                  <img className={classes.imageSnow} src={snowDown}></img>
-                </Grid>
-                {isMobile ? (
-                  <Grid item xs={12}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
-                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
-                        Hilsen oss i Gi en jul.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                ) : (
-                  <Grid item xs={4}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
-                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
-                        Hilsen oss i Gi en jul.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                )}
-
-                <Grid item>
-                  <img className={classes.backgroundImage} src={snowmanFull}></img>
-                </Grid>
-              </Grid>
-            </Container>
-          );
-        } else if (response.status == 202 && response.data === "Connection already exists") {
-          setContent(
-            <Container className={classes.fillBackground}>
-              <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item>
-                  <img className={classes.imageSnow} src={snowDown}></img>
-                </Grid>
-                {isMobile ? (
-                  <Grid item xs={12}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
-                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                ) : (
-                  <Grid item xs={4}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
-                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                )}
-
-                <Grid item>
-                  <img className={classes.backgroundImage} src={snowmanFull}></img>
-                </Grid>
-              </Grid>
-            </Container>
-          );
-        }
-      })
-      .catch(() =>
-        setContent(
-          <Container className={classes.fillBackground}>
-            <Grid container direction="column" justifyContent="center" alignItems="center">
-              <Grid item>
-                <img className={classes.imageSnow} src={snowDown}></img>
-              </Grid>
-              {isMobile ? (
-                <Grid item xs={12}>
-                  <Container className={classes.verifyDenyConnectionContainer}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen du skal gjøre!
-                    </Typography>
-                    <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
-                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
-                      du tar kontakt med oss.
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
-                      gave
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
-                    </Typography>
-                    <Button
-                      size="large"
-                      endIcon={<ArrowForwardIos />}
-                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                      className={classes.buttonNext}
-                      onClick={() => history.push("/")}
-                    >
-                      Til hjemsiden
-                    </Button>
-                  </Container>
-                </Grid>
-              ) : (
-                <Grid item xs={4}>
-                  <Container className={classes.verifyDenyConnectionContainer}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen du skal gjøre!
-                    </Typography>
-                    <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
-                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
-                      du tar kontakt med oss.
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
-                      gave
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
-                    </Typography>
-                    <Button
-                      size="large"
-                      endIcon={<ArrowForwardIos />}
-                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                      className={classes.buttonNext}
-                      onClick={() => history.push("/")}
-                    >
-                      Til hjemsiden
-                    </Button>
-                  </Container>
-                </Grid>
-              )}
-
-              <Grid item>
-                <img className={classes.backgroundImage} src={snowmanFull}></img>
-              </Grid>
-            </Grid>
-          </Container>
-        )
-      );
+    onLoad();
   }, []);
 
-  return <>{content}</>;
+  const classes = useStyles();
+
+  const linkUrl = `./${giverRowKey}/${recipientRowKey}/${partitionKey}`;
+
+  const onLoad = () => {
+    apiservice
+      .get("connection/connectionStatus", {
+        params: { giverId: giverRowKey, recipientId: recipientRowKey, event: partitionKey },
+      })
+      .then((response) => {
+        if (response.status == 200) {
+          switch (response.data.status) {
+            case 1:
+              setConnectionStatus("Connected");
+              break;
+
+            case 2:
+              setConnectionStatus("Disconnected");
+              break;
+
+            case 3: // Happy Path
+              setConnectionStatus("Suggested");
+              break;
+
+            case 4:
+              setConnectionStatus("Mismatch");
+              break;
+          }
+          setPageLoaded(true);
+        }
+      })
+      .finally(() => {
+        setPageLoaded(true);
+      });
+  };
+
+  const allreadyConnected = (
+    <Container className={classes.verifyDenyConnectionContainer}>
+      <Typography className={classes.headingBold}>
+        Du har Fått tildelt en familie! <br />
+      </Typography>
+
+      <Typography className={classes.paragraph}>
+        Det ser ut som at du allerede har godtatt å gi en jul til denne familien, vennligst sjekk
+        epostinnboksen om du har fått en videre mail om dette.
+      </Typography>
+    </Container>
+  );
+
+  const connectionError = (
+    <Container className={classes.verifyDenyConnectionContainer}>
+      <Typography className={classes.headingBold}>
+        Det har skjedd en feil! <br />
+      </Typography>
+
+      <Typography className={classes.paragraph}>
+        Dette kan forekomme av at du allerede har meldt deg av å gi en jul til denne familien.
+        Dersom du ikke har meldt deg av og ikke får til å godkjenne at du vil gi en jul til
+        familien, ber vi deg ta kontakt med ansvarlig i kommunen du skal gi. Kontaktinfo finnes på{" "}
+        <a href="./#contacts">Hovedsiden</a>
+      </Typography>
+    </Container>
+  );
+
+  return (
+    <>
+      <Container className={classes.fillBackground}>
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+          <Grid item xs={4}>
+            <img className={classes.imageSnow} src={snowDown}></img>
+          </Grid>
+          {pageLoaded && (
+            <Grid item xs={isMobile ? 10 : 4}>
+              {connectionStatus === "Suggested" && (
+                <Container className={classes.verifyDenyConnectionContainer}>
+                  <Typography className={classes.headingBold}>
+                    Du har Fått tildelt en familie! <br />
+                  </Typography>
+
+                  <Typography className={classes.paragraph}>
+                    Vennligst bekreft at du har mulighet til å gi en jul til denne familien ved å
+                    trykke på &ldquo;Bekreft&rdquo;-knappen under. Dersom du ikke har mulighet vil
+                    vi gjerne at du trykker på &ldquo;Avslå&rdquo;-knappen og skriver en liten
+                    kommentar.
+                  </Typography>
+                  <Typography className={classes.spacingBottom}>
+                    {" "}
+                    Merk at dersom du ønsker en ny familie vil du havne bakerst i køen og vi kan
+                    ikke garantere at du vil få tildelt en annen familie.{" "}
+                  </Typography>
+                  <Grid container justifyContent="space-evenly" style={{ width: "100%" }}>
+                    <Grid item>
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        color="primary"
+                        href={`${linkUrl}/accepted`}
+                      >
+                        Bekreft
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button variant="contained" href={`${linkUrl}/denied`}>
+                        Avslå
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Container>
+              )}
+              {connectionStatus === "Connected" && allreadyConnected}
+              {connectionStatus !== "Connected" &&
+                connectionStatus !== "Suggested" &&
+                connectionError}
+            </Grid>
+          )}
+          {!isMobile && (
+            <Grid item>
+              <img className={classes.backgroundImage} src={snowmanFull}></img>
+            </Grid>
+          )}
+        </Grid>
+      </Container>
+    </>
+  );
 };
+
 export default VerifyConnection;

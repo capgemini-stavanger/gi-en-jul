@@ -3,6 +3,7 @@ using GiEnJul.Controllers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
+using GiEnJul.Services;
 using GiEnJul.Utilities;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -56,7 +57,8 @@ namespace GiEnJul.Test.ControllerTests
                                               emailClientMock.Object,
                                               settings,
                                               mockEmailTemplateBuilder.Object,
-                                              AuthMock.Object);
+                                              AuthMock.Object,
+                                              Mock.Of<IAdminService>());
         }
 
         [Fact]

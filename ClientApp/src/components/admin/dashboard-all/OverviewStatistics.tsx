@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { GiverType, RecipientType } from "components/shared/Types";
 import useStyles from "components/admin/dashboard-all/Styles";
@@ -8,10 +8,13 @@ import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PeopleIcon from "@material-ui/icons/People";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import ApiService from "common/functions/apiServiceClass";
 
 type IStatistics = {
   givers: GiverType[];
   recipients: RecipientType[];
+  municipality: string;
+  accessToken: string;
 };
 type StatisticsType = {
   totalGivers: number;
@@ -29,8 +32,15 @@ type StatisticsType = {
   recipientsWithoutGiver: number;
 };
 
-const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
+const OverviewStatistics: React.FC<IStatistics> = ({
+  givers,
+  recipients,
+  municipality,
+  accessToken,
+}) => {
   const [statistics, setStatistics] = useState<StatisticsType>();
+
+  const apiService = new ApiService(accessToken);
 
   const getStatistics = () => {
     setStatistics((prevState) => {
@@ -95,6 +105,15 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
         recipient.familyMembers.length > FAMILY_SIZES[1].value &&
         recipient.familyMembers.length <= FAMILY_SIZES[2].value
     ).length;
+  };
+
+  const downloadExcelOverview = () => {
+    apiService.downloadFile(
+      `admin/${municipality}/overview`,
+      `oppsummering_${municipality}_${new Date().getFullYear()}${(new Date().getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}${new Date().getDate().toString().padStart(2, "0")}.xlsx`
+    );
   };
 
   return (
@@ -203,6 +222,14 @@ const OverviewStatistics: React.FC<IStatistics> = ({ givers, recipients }) => {
           <Grid item>{statistics?.confirmedMatch}</Grid>
         </Grid>
       </Box>
+
+      <Grid container>
+        <Grid item>
+          <Button color="primary" variant="contained" onClick={downloadExcelOverview}>
+            Last ned oversikt
+          </Button>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

@@ -168,6 +168,8 @@ export default () =>
     footer: {
       backgroundColor: theme.palette.secondary.light,
       paddingTop: "5%",
+      flexGrow: 1,
+      justifyContent: "end",
     },
     footerHeadline: {
       color: theme.palette.primary.dark,

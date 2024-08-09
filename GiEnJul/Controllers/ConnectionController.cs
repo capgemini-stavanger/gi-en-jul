@@ -1,20 +1,18 @@
 ﻿using AutoMapper;
+using GiEnJul.Auth;
 using GiEnJul.Clients;
-using GiEnJul.Exceptions;
+using GiEnJul.Dtos;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
+using GiEnJul.Utilities.EmailTemplates;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
-using System.Threading.Tasks;
-using GiEnJul.Utilities.EmailTemplates;
 using System.Collections.Generic;
-using GiEnJul.Dtos;
-using System.Linq;
-using Microsoft.AspNetCore.Authorization;
-using GiEnJul.Auth;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers
 {
@@ -235,21 +233,36 @@ namespace GiEnJul.Controllers
             var giver = await _giverRepository.GetGiverAsync(@event, giverId);
             var recipient = await _recipientRepository.GetRecipientAsync(@event, recipientId);
 
+            var result = new ConnectionStatusResult();
+
             // Check connection
             if (_connectionRepository.ConnectionExists(giver, recipient))
             {
-                return BadRequest("Connection already exists");
+                return Ok(new ConnectionStatusResult
+                {
+                    Status = Status.Connected,
+                    Text = "Already Connected"
+                });
             }
             if (ConnectionHelper.CanConnect(giver, recipient))
             {
-                return BadRequest("Giver and Recipient are disconnected");
+                return Ok(new ConnectionStatusResult
+                {
+                    Status = Status.Disconnected,
+                    Text = "Giver and Recipient are disconnected"
+                });
             }
             if (!ConnectionHelper.MatchingIds(giver, recipient, giverId, recipientId))
             {
-                return BadRequest("Giver or Recipient ID from Front-End does not correspond with Matching ID in Database");
+                return Ok(new ConnectionStatusResult
+                { 
+                    Status = Status.Mismatch,
+                    Text = "Giver or Recipient ID from Front-End does not correspond with Matching ID in Database"
+                });
             }
 
-            return Ok("Godkjent kobling");
+            return Ok(
+                new ConnectionStatusResult{ Status = Status.Suggested, Text = "Godkjent kobling"});
         }
 
     }
