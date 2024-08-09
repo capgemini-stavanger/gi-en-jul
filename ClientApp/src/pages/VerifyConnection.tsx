@@ -3,9 +3,9 @@ import { RouteComponentProps, useParams } from "react-router";
 import useStyles from "components/register-as-giver/Styles";
 import snowDown from "styling/img/snow_down2.svg";
 import snowmanFull from "styling/img/snowmanFull.svg";
-import { isMobile } from "common/functions/IsMobile";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
+import useIsMobile from "hooks/useIsMobile";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -22,6 +22,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>("Unknown");
 
   const apiservice = new ApiService();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     onLoad();
@@ -99,7 +100,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
             <img className={classes.imageSnow} src={snowDown}></img>
           </Grid>
           {pageLoaded && (
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 10 : 4}>
               {connectionStatus === "Suggested" && (
                 <Container className={classes.verifyDenyConnectionContainer}>
                   <Typography className={classes.headingBold}>
@@ -142,7 +143,7 @@ const VerifyConnection: React.FC<VerifyConnection> = () => {
                 connectionError}
             </Grid>
           )}
-          {!isMobile() && (
+          {!isMobile && (
             <Grid item>
               <img className={classes.backgroundImage} src={snowmanFull}></img>
             </Grid>
