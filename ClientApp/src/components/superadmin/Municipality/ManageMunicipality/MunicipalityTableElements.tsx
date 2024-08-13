@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useStyles from "../../Styles";
 import { IMunicipality, initInterfaceMunicipality } from "../ManageMunicipalityContainer";
 import img_placeholder from "styling/img/person.png";
+import { optimizeImage } from "common/functions/imageOptimizer";
 
 interface props {
   municipality: IMunicipality;
@@ -51,15 +52,20 @@ const MunicipalityTableElements: React.FC<props> = ({
     const files = Array.from<File>(event.target.files);
     if (files.length) {
       files.forEach((file: File) => {
-        const formData = new FormData();
-        formData.append("file", file, file.name);
-        apiService.post(`municipality/contactImage/${municipality.name}`, formData).then(() => {
-          setTime(Date.now().toString());
+        optimizeImage(file, 512).then((blob) => {
+          const formData = new FormData();
+          formData.set("file", blob, file.name);
+          apiService
+            .post(`municipality/contactImage/${municipality.name}`, formData, {
+              headers: { "Content-Type": "application/x-www-url-formencoded" },
+            })
+            .then(() => {
+              setTime(Date.now().toString());
+            });
         });
       });
     }
   };
-
   return (
     <>
       <TableRow>
