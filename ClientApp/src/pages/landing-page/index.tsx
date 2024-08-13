@@ -10,7 +10,7 @@ import ApiService from "common/functions/apiServiceClass";
 import NavBarPublic from "components/shared/navbar/NavBarPublic";
 import Questions from "components/landing-page/Questions";
 import What from "components/landing-page/What";
-import bigLandingPagePicture from "styling/img/bigLandingPagePicture.png";
+import bigLandingPagePicture from "styling/img/bigLandingPagePicture.webp";
 import WavedSeperator from "components/shared/WavedSeparator";
 import Snowfall from "react-snowfall";
 import useIsMobile from "hooks/useIsMobile";

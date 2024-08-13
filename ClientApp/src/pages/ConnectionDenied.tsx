@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import { RouteComponentProps, useHistory, useParams } from "react-router";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/register-as-giver/Styles";
-import snowmanFull from "styling/img/snowmanFull.svg";
-import snowDown from "styling/img/snow_down2.svg";
+import snowmanFull from "styling/img/snowmanFull.webp";
+import snowDown from "styling/img/snow_down2.webp";
 import DotLoader from "common/constants/DotLoader";
 import React from "react";
 import { ArrowForwardIos } from "@material-ui/icons";
-import { isMobile } from "common/functions/IsMobile";
+import useIsMobile from "hooks/useIsMobile";
 
 interface RouteParameters {
   giverRowKey: string;
@@ -38,6 +38,7 @@ const ConnectionDenied: React.FC<ConnectionDenied> = () => {
   const apiservice = new ApiService();
   const classes = useStyles();
   const history = useHistory();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     onLoad();
@@ -102,11 +103,11 @@ const ConnectionDenied: React.FC<ConnectionDenied> = () => {
     <>
       <Container className={classes.fillBackground}>
         <Grid container direction="column" justifyContent="center" alignItems="center">
-          <Grid item>
+          <Grid item xs={isMobile ? 12 : 6}>
             <img className={classes.imageSnow} src={snowDown}></img>
           </Grid>
           {pageLoaded ? (
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 10 : 6}>
               {pageLoadedResult ? (
                 <Container className={classes.verifyDenyConnectionContainer}>
                   {!feedbackSubmitted ? (
@@ -186,7 +187,7 @@ const ConnectionDenied: React.FC<ConnectionDenied> = () => {
               <DotLoader />
             </Grid>
           )}
-          {!isMobile() && (
+          {!isMobile && (
             <Grid item>
               <img className={classes.backgroundImage} src={snowmanFull}></img>
             </Grid>

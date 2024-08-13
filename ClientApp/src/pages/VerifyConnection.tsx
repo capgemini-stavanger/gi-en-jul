@@ -1,8 +1,8 @@
 import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { RouteComponentProps, useParams } from "react-router";
 import useStyles from "components/register-as-giver/Styles";
-import snowDown from "styling/img/snow_down2.svg";
-import snowmanFull from "styling/img/snowmanFull.svg";
+import snowDown from "styling/img/snow_down2.webp";
+import snowmanFull from "styling/img/snowmanFull.webp";
 import { useEffect, useState } from "react";
 import ApiService from "common/functions/apiServiceClass";
 import useIsMobile from "hooks/useIsMobile";
