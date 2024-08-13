@@ -34,9 +34,8 @@ namespace GiEnJul.Clients
 
         public async Task<string> UpdateProfileImage(string municipality, IFormFile file)
         {
-            var fileExt = Path.GetExtension(file.FileName);
             var imageData = file.OpenReadStream();
-            var blobName = $"{municipality}{fileExt}";
+            var blobName = $"{municipality}.webp";
             var potentialImages = _client.GetBlobs(prefix: Path.GetFileNameWithoutExtension(municipality));
             if (potentialImages != null && potentialImages.Any())
             {
