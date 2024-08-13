@@ -6,8 +6,8 @@ import { RouteComponentProps, useParams } from "react-router";
 import LoadingPage from "pages/LoadingPage";
 import ApiService from "common/functions/apiServiceClass";
 import useStyles from "components/register-as-giver/Styles";
-import snowmanFull from "styling/img/snowmanFull.svg";
-import snowDown from "styling/img/snow_down2.svg";
+import snowmanFull from "styling/img/snowmanFull.webp";
+import snowDown from "styling/img/snow_down2.webp";
 import useIsMobile from "hooks/useIsMobile";
 
 interface RouteParameters {
@@ -36,40 +36,26 @@ const ConnectionAccepted: React.FC<ConnectionAccepted> = () => {
           setContent(
             <Container className={classes.fillBackground}>
               <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item>
+                <Grid item xs={isMobile ? 8 : 6}>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
-                {isMobile ? (
-                  <Grid item xs={12}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
-                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
-                        Hilsen oss i Gi en jul.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                ) : (
-                  <Grid item xs={4}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Familiene setter utrolig stor pris på det, og det blir mange tårevåte
-                        øyeblikk når de får eskene sine. Håper at du koser deg med handlingen!
-                        Hilsen oss i Gi en jul.
-                      </Typography>
-                    </Container>
+                <Grid item xs={isMobile ? 12 : 6}>
+                  <Container className={classes.verifyDenyConnectionContainer}>
+                    <Typography className={classes.headingBold}>
+                      Tusen takk for at du skal Gi en jul! <br />
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Familiene setter utrolig stor pris på det, og det blir mange tårevåte øyeblikk
+                      når de får eskene sine. Håper at du koser deg med handlingen! Hilsen oss i Gi
+                      en jul.
+                    </Typography>
+                  </Container>
+                </Grid>
+                {!isMobile && (
+                  <Grid item>
+                    <img className={classes.backgroundImage} src={snowmanFull}></img>
                   </Grid>
                 )}
-
-                <Grid item>
-                  <img className={classes.backgroundImage} src={snowmanFull}></img>
-                </Grid>
               </Grid>
             </Container>
           );
@@ -77,38 +63,25 @@ const ConnectionAccepted: React.FC<ConnectionAccepted> = () => {
           setContent(
             <Container className={classes.fillBackground}>
               <Grid container direction="column" justifyContent="center" alignItems="center">
-                <Grid item>
+                <Grid item xs={isMobile ? 8 : 4}>
                   <img className={classes.imageSnow} src={snowDown}></img>
                 </Grid>
-                {isMobile ? (
-                  <Grid item xs={12}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
-                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
-                      </Typography>
-                    </Container>
-                  </Grid>
-                ) : (
-                  <Grid item xs={4}>
-                    <Container className={classes.verifyDenyConnectionContainer}>
-                      <Typography className={classes.headingBold}>
-                        Tusen takk for at du skal Gi en jul! <br />
-                      </Typography>
-                      <Typography className={classes.paragraph}>
-                        Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
-                        en ny epost fra noreply@gienjul.no med mer informasjon om familien.
-                      </Typography>
-                    </Container>
+                <Grid item xs={isMobile ? 12 : 4}>
+                  <Container className={classes.verifyDenyConnectionContainer}>
+                    <Typography className={classes.headingBold}>
+                      Tusen takk for at du skal Gi en jul! <br />
+                    </Typography>
+                    <Typography className={classes.paragraph}>
+                      Det ser ut til at du allerede har bekreftet! Vennlist sjekk om du har mottat
+                      en ny epost fra noreply@gienjul.no med mer informasjon om familien.
+                    </Typography>
+                  </Container>
+                </Grid>
+                {!isMobile && (
+                  <Grid item>
+                    <img className={classes.backgroundImage} src={snowmanFull}></img>
                   </Grid>
                 )}
-
-                <Grid item>
-                  <img className={classes.backgroundImage} src={snowmanFull}></img>
-                </Grid>
               </Grid>
             </Container>
           );
@@ -121,71 +94,39 @@ const ConnectionAccepted: React.FC<ConnectionAccepted> = () => {
               <Grid item>
                 <img className={classes.imageSnow} src={snowDown}></img>
               </Grid>
-              {isMobile ? (
-                <Grid item xs={12}>
-                  <Container className={classes.verifyDenyConnectionContainer}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen du skal gjøre!
-                    </Typography>
-                    <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
-                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
-                      du tar kontakt med oss.
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
-                      gave
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
-                    </Typography>
-                    <Button
-                      size="large"
-                      endIcon={<ArrowForwardIos />}
-                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                      className={classes.buttonNext}
-                      onClick={() => history.push("/")}
-                    >
-                      Til hjemsiden
-                    </Button>
-                  </Container>
-                </Grid>
-              ) : (
-                <Grid item xs={4}>
-                  <Container className={classes.verifyDenyConnectionContainer}>
-                    <Typography className={classes.headingBold}>
-                      Tusen takk for innsatsen du skal gjøre!
-                    </Typography>
-                    <Typography className={classes.paragraphBold}>
-                      Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
-                      gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før
-                      du tar kontakt med oss.
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
-                      øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin
-                      gave
-                    </Typography>
-                    <Typography className={classes.paragraph}>
-                      Du finner kontaktinformasjon for din kommune nederst på hjemsiden
-                    </Typography>
-                    <Button
-                      size="large"
-                      endIcon={<ArrowForwardIos />}
-                      style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                      className={classes.buttonNext}
-                      onClick={() => history.push("/")}
-                    >
-                      Til hjemsiden
-                    </Button>
-                  </Container>
+              <Grid item xs={isMobile ? 8 : 6}>
+                <Container className={classes.verifyDenyConnectionContainer}>
+                  <Typography className={classes.headingBold}>
+                    Tusen takk for innsatsen du skal gjøre!
+                  </Typography>
+                  <Typography className={classes.paragraphBold}>
+                    Det har desverre sjedd noe feil i våre systemer. Denne handlingen kunne ikke
+                    gjennomføres, vennligst sjekk mailboksen din for mulig mail fra Gi en jul før du
+                    tar kontakt med oss.
+                  </Typography>
+                  <Typography className={classes.paragraph}>
+                    Vit at familiene setter utrolig stor pris på dette, og det blir mange tårevåte
+                    øyeblikk når familiene får eskene sine. Håper du koser deg med finne en fin gave
+                  </Typography>
+                  <Typography className={classes.paragraph}>
+                    Du finner kontaktinformasjon for din kommune nederst på hjemsiden
+                  </Typography>
+                  <Button
+                    size="large"
+                    endIcon={<ArrowForwardIos />}
+                    style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                    className={classes.buttonNext}
+                    onClick={() => history.push("/")}
+                  >
+                    Til hjemsiden
+                  </Button>
+                </Container>
+              </Grid>
+              {!isMobile && (
+                <Grid item>
+                  <img className={classes.backgroundImage} src={snowmanFull}></img>
                 </Grid>
               )}
-
-              <Grid item>
-                <img className={classes.backgroundImage} src={snowmanFull}></img>
-              </Grid>
             </Grid>
           </Container>
         )

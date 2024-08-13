@@ -29,7 +29,7 @@ export const optimizeImage = async (file: any, size: number) => {
         else reject("blob was null");
       },
       "image/webp",
-      1
+      0.85
     );
   });
   return promise;

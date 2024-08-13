@@ -146,6 +146,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     width: "100%",
     height: "100%",
+    maxWidth: "75rem",
   },
   imageContainer: {
     height: "100vh",
@@ -157,7 +158,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: -theme.spacing(30),
     objectFit: "none",
     width: "100%",
-    height: "100%",
+    maxWidth: "75rem",
   },
   smallLogo: {
     height: "60px",
