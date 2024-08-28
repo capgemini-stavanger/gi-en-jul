@@ -5,15 +5,17 @@ using GiEnJul.Repositories;
 using GiEnJul.Services;
 using GiEnJul.Utilities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.Net.Http;
 
 namespace GiEnJul.Infrastructure;
 
 public static class ServiceConfiguration
 {
-    public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
     {
         var settings = new Settings(configuration);
         services.AddSingleton<ISettings>(s => settings);
@@ -33,7 +35,9 @@ public static class ServiceConfiguration
         services.AddScoped<IAutoIncrementRepository, AutoIncrementRepository>();
         services.AddScoped<ICmsRepository, CmsRepository>();
         services.AddScoped<IMunicipalityRepository,  MunicipalityRepository>();
-        services.AddScoped<IEmailClient, EmailClient>();
+        if (environment.IsDevelopment())
+            { services.AddScoped<IEmailClient, EmailClient>(); }
+        else { services.AddScoped<IEmailClient, SendGridEmailClient>(); }
         services.AddScoped<IRecaptchaVerifier, RecaptchaVerifier>();
         services.AddScoped<IEmailTemplateBuilder,  EmailTemplateBuilder>();
         services.AddScoped<IAuthorization, Authorization>();

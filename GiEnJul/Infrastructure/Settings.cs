@@ -9,6 +9,7 @@ namespace GiEnJul.Infrastructure
         public string LogTableName { get; }
         public string RecaptchaSecret { get; }
         public string ReactAppUri { get; }
+        public string SendGridApiKey { get; }
         public MailSettings MailSettings { get; }
         public Auth0Settings Auth0Settings { get; }
         public CleanupJob CleanupJob { get; }
@@ -28,6 +29,7 @@ namespace GiEnJul.Infrastructure
         public LogEventLevel LogLevel => _configuration.GetValue("LogLevel", LogEventLevel.Debug);
         public string RecaptchaSecret => _configuration.GetValue<string>("RecaptchaSecret");
         public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri");
+        public string SendGridApiKey => _configuration.GetValue<string>("SendGridApiKey");
 
         public MailSettings MailSettings
         {

@@ -7,83 +7,76 @@ using Microsoft.Extensions.Hosting;
 using MimeKit;
 using Serilog;
 
-namespace GiEnJul.Clients
+namespace GiEnJul.Clients;
+
+public class EmailClient : IEmailClient
 {
-    public interface IEmailClient
+    private MailSettings _mailSettings { get; }
+    private readonly IWebHostEnvironment _env;
+    private readonly ILogger _log;
+
+    public EmailClient(ISettings settings, IWebHostEnvironment env, ILogger log)
     {
-        Task SendEmailAsync(string toMail, string toName, EmailTemplate email);
-        Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email);
+        _mailSettings = settings.MailSettings;
+        _env = env;
+        _log = log;
     }
 
-    public class EmailClient : IEmailClient
+    public async Task SendEmailAsync(string toMail, string toName, EmailTemplate email)
     {
-        private MailSettings _mailSettings { get; }
-        private readonly IWebHostEnvironment _env;
-        private readonly ILogger _log;
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
+        message.To.Add(new MailboxAddress(toName, toMail));
 
-        public EmailClient(ISettings settings, IWebHostEnvironment env, ILogger log)
+        message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
+
+        message.Body = email.Body;
+
+        using (var client = new SmtpClient())
         {
-            _mailSettings = settings.MailSettings;
-            _env = env;
-            _log = log;
-        }
-
-        public async Task SendEmailAsync(string toMail, string toName, EmailTemplate email)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
-            message.To.Add(new MailboxAddress(toName, toMail));
-
-            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
-
-            message.Body = email.Body;
-
-            using (var client = new SmtpClient())
+            if (_env.IsDevelopment())
             {
-                if (_env.IsDevelopment())
-                {
-                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
-                }
-                else
-                {
-                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
-                    await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
-                }
-
-                await client.SendAsync(message);
-                _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
-                await client.DisconnectAsync(true);
+                await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
             }
-        }
-
-        public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email)
-        {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
-            message.To.Add(new MailboxAddress(toName, toMail));
-            message.ReplyTo.Add(new MailboxAddress(fromName, fromMail));
-
-            message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
-
-            message.Body = email.Body;
-
-            using (var client = new SmtpClient())
+            else
             {
-                if (_env.IsDevelopment())
-                {
-                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
-                }
-                else
-                {
-                    await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
-                    await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
-                }
-
-                await client.SendAsync(message);
-                _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
-                await client.DisconnectAsync(true);
+                await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
+                await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
             }
 
+            await client.SendAsync(message);
+            _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
+            await client.DisconnectAsync(true);
         }
+    }
+
+    public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email)
+    {
+        var message = new MimeMessage();
+        message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
+        message.To.Add(new MailboxAddress(toName, toMail));
+        message.ReplyTo.Add(new MailboxAddress(fromName, fromMail));
+
+        message.Subject = _env.IsDevelopment() ? "DEVELOPMENT - " + email.Subject : email.Subject;
+
+        message.Body = email.Body;
+
+        using (var client = new SmtpClient())
+        {
+            if (_env.IsDevelopment())
+            {
+                await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port, false);
+            }
+            else
+            {
+                await client.ConnectAsync(_mailSettings.Host, _mailSettings.Port);
+                await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Password);
+            }
+
+            await client.SendAsync(message);
+            _log.Debug($"Sent mail to {toMail} with subject {email.Subject}");
+            await client.DisconnectAsync(true);
+        }
+
     }
 }
