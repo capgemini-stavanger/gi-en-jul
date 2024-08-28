@@ -1,11 +1,14 @@
-export const optimizeImage = async (file: any, size: number) => {
+export const optimizeImage = async (file: any, size: number, quality?: number) => {
   size ??= 256;
+  if (!quality) quality = 1;
+  if (quality < 0.1) quality = 0.1;
+  if (quality > 1) quality = 1;
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
   if (!ctx)
-    return new Promise<Blob>((resolve, reject) => {
+    return new Promise<Blob>((_resolve, reject) => {
       reject("unable to get context");
     });
 
@@ -29,7 +32,7 @@ export const optimizeImage = async (file: any, size: number) => {
         else reject("blob was null");
       },
       "image/webp",
-      0.85
+      quality
     );
   });
   return promise;

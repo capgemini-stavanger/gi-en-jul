@@ -113,7 +113,7 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
     const files = Array.from<File>(event.target.files);
     if (files.length) {
       files.forEach((file: File) => {
-        optimizeImage(file, 1024).then((blob) => {
+        optimizeImage(file, 1024, 0.9).then((blob) => {
           const formData = new FormData();
           formData.append("file", blob, file.name);
           apiService
