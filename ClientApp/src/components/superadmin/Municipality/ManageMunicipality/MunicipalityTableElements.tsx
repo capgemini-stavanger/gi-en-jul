@@ -52,7 +52,7 @@ const MunicipalityTableElements: React.FC<props> = ({
     const files = Array.from<File>(event.target.files);
     if (files.length) {
       files.forEach((file: File) => {
-        optimizeImage(file, 512).then((blob) => {
+        optimizeImage(file, 512, 0.85).then((blob) => {
           const formData = new FormData();
           formData.set("file", blob, file.name);
           apiService
