@@ -22,7 +22,7 @@ const What = () => {
               Dette er foreldre og barn som ikke selv har mulighet til å kjøpe en skikkelig
               julemiddag, julesnop eller julegaver til hverandre. I år kan du melde deg som giver i
               <br />
-              Bodø, Gjesdal, Halden, Sandnes, Sola eller Stavanger.
+              {formatLocations(process.env.REACT_APP_EVENT_LOCATIONS?.split(",") ?? [])}.
             </Typography>
             <Button
               style={{ marginTop: "1em" }}
@@ -38,6 +38,18 @@ const What = () => {
       </Grid>
     </Container>
   );
+};
+
+const formatLocations = (locations: string[]) => {
+  if (!locations.length) return "";
+
+  if (locations.length == 1) return locations[0];
+
+  let formatString = locations.slice(0, locations.length - 1).join(", ");
+  formatString += " eller ";
+  formatString += locations[locations.length - 1];
+
+  return formatString;
 };
 
 export default What;
