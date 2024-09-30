@@ -95,7 +95,11 @@ const Municipality = () => {
             {activeMunicipalities.length > 0 ? (
               <Municipalities locations={municipalityData} />
             ) : (
-              <Typography>{fallbackText}</Typography>
+              <Grid container direction="row" justifyContent="center">
+                <Grid item>
+                  <Typography>{fallbackText}</Typography>
+                </Grid>
+              </Grid>
             )}
           </Grid>
         </Grid>
