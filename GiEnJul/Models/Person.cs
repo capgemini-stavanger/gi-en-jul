@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace GiEnJul.Models
 {
@@ -19,7 +17,7 @@ namespace GiEnJul.Models
 
         public string ToReadableString()
         {
-            return $"{GetGenderAge()}: {(NoWish ? "  Her du kan selv finne alderstilpasset gave" : String.Join(", ", Wishes))}";
+            return $"{GetGenderAge()}:<br /><pre style=\"display:inline\">&#9;</pre>{(NoWish ? "  Her du kan selv finne alderstilpasset gave" : string.Join($".<br /><pre style=\"display:inline\">&#9;</pre>", Wishes))}.<br /><br />";
         }
 
         public string GetGenderAge()

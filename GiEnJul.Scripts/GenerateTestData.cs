@@ -10,7 +10,7 @@ namespace GiEnJul.Scripts;
 
 public class GenerateTestData
 {
-    private static string[] _mailProviders = new[]{ "gmail.com", "lyse.net", "capgemini.com", "yahoo.com", "hotmail.com", "aol.com", "live.com", "outlook.com"};
+    private static string[] _mailProviders = new[]{ "example.com"};
     private static string[] _institutions = new[]{ "NAV", "BV", "CAP", "Staten", "FKT", "NFF"};
 
 
@@ -19,10 +19,9 @@ public class GenerateTestData
         )]
     public async Task Generate()
     {
-        var municipalities = new[] { "Stavanger"/*, "Sandnes", "Sola", "Gjesdal" */};
-        var numberOfEvents = 1;
-        var numberOfGivers = 50;
-        var numberOfFamilies = 50;
+        var municipalities = new[] { "Stavanger", "Sandnes", "Sola", "Halden"};
+        var numberOfGivers = 20; //per municipality
+        var numberOfFamilies = 50; //per municipality
 
         var random = new Random();
         var settings = CreateSettings();
@@ -39,24 +38,22 @@ public class GenerateTestData
             }
         }
 
-        var events = Enumerable.Range(0, numberOfEvents)
-            .Select(i => municipalities[random.Next(municipalities.Length)])
-            .Select((m, i) => new Event
+        var events = municipalities.Select((m, i) => new Event
             {
                 RowKey = m, 
-                PartitionKey = $"Event{i}", 
+                PartitionKey = $"TestEvent", 
                 StartDate = DateTime.UtcNow.AddDays(-50), 
                 EndDate = DateTime.UtcNow.AddDays(20 + random.Next(50)), 
                 GiverLimit = 200 
-            }).ToList();
+            }).ToDictionary(k => k.RowKey, v => v);
 
         var eventClient = new TableClient(settings.TableConnectionString, "Event");
-        foreach (var event_ in events)
+        foreach (var event_ in events.Values)
         {
             await eventClient.UpsertEntityAsync(event_);
         }
 
-        var givers = Enumerable.Range(0, numberOfGivers).Select(i => MakeGiver(municipalities, random, events));
+        var givers = municipalities.SelectMany(m => Enumerable.Range(0, numberOfGivers).Select(i => MakeGiver(m, random, events[m])));
 
         var giverClient = new TableClient(settings.TableConnectionString, "Giver");
         foreach (var giver in givers)
@@ -64,7 +61,7 @@ public class GenerateTestData
             await giverClient.UpsertEntityAsync(giver);
         }
 
-        var recipientsWithPersons = Enumerable.Range(0, numberOfFamilies).Select(i => MakeRecipient(random, events, i)).ToList();
+        var recipientsWithPersons = municipalities.SelectMany(m => Enumerable.Range(0, numberOfFamilies).Select(i => MakeRecipient(random, events[m], i))).ToList();
         var recipients = recipientsWithPersons.Select(r => r.Item1).ToList();
         var persons = recipientsWithPersons.SelectMany(r => r.Item2).ToList();
 
@@ -83,13 +80,12 @@ public class GenerateTestData
         var all = persons.All(p => recipients.Select(r => r.RowKey).Any(r => r == p.PartitionKey));
     }
 
-    private static (Recipient, IEnumerable<Person>) MakeRecipient(Random random, List<Event> events, int number)
+    private static (Recipient, IEnumerable<Person>) MakeRecipient(Random random, Event event_, int number)
     {
         var contactName = MakeName();
-        var event_ = events[random.Next(events.Count)];
         var municipality = event_.RowKey;
         var institution = _institutions[random.Next(_institutions.Length)];
-        var personCount = random.Next(10);
+        var personCount = random.Next(10)+1;
         var recipientId = Guid.NewGuid().ToString();
         var recipient = new Recipient
         {
@@ -100,7 +96,7 @@ public class GenerateTestData
             Dessert = "Riskrem",
             EventName = event_.PartitionKey,
             ContactFullName = contactName,
-            ContactEmail = contactName.Replace(" ", ".") + $"@{institution}.no",
+            ContactEmail = contactName.Replace(" ", ".") + $"@{institution}.example.com",
             Institution = institution,
             IsSuggestedMatch = false,
             HasConfirmedMatch = false,
@@ -132,11 +128,9 @@ public class GenerateTestData
         return person;
     }
 
-    private static Giver MakeGiver(string[] municipalities, Random random, List<Event> events)
+    private static Giver MakeGiver(string municipality, Random random, Event event_)
     {
         var name = MakeName();
-        var event_ = events[random.Next(events.Count)];
-        var municipality = municipalities[random.Next(municipalities.Length)];
         var giver = new Giver
         {
             Email = name.Replace(" ", ".") + "@" + _mailProviders[random.Next(_mailProviders.Length)],
