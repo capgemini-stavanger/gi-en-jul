@@ -1,8 +1,8 @@
 import { Typography, Container, Grid } from "@material-ui/core";
 import useStyles from "./Styles";
-import step1 from "styling/img/step1.svg";
-import step2 from "styling/img/step2.svg";
-import step3 from "styling/img/step3.svg";
+import step1 from "styling/img/step1.webp";
+import step2 from "styling/img/step2.webp";
+import step3 from "styling/img/step3.webp";
 import { FiberManualRecord } from "@material-ui/icons";
 
 const How = () => {

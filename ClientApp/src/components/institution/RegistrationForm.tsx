@@ -634,14 +634,21 @@ export default RegistrationForm;
 const formatWish = (wishArray: string[]) => {
   return wishArray
     .map((w, i) => {
+      if (i === TotalWish.Category && w) {
+        return `${w}:`;
+      }
       if (i === TotalWish.Size && w) {
-        return `str: ${w}`;
+        return `str ${w}`;
       }
       if (!w) {
         return undefined;
       }
-      return w;
+      // if last, or second to last and last is empty
+      if (i === wishArray.length - 1 || (!wishArray[i + 1] && i === wishArray.length - 2)) {
+        return w;
+      }
+      return `${w},`;
     })
     .filter((w) => w)
-    .join(", ");
+    .join(" ");
 };
