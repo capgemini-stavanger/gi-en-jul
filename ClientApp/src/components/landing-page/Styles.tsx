@@ -116,7 +116,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   stepsImage: {
-    objectFit: "none",
+    objectFit: "contain",
+    maxWidth: "100%",
     width: "346px",
     height: "278px",
     margin: "auto",
