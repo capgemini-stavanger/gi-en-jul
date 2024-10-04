@@ -49,7 +49,7 @@ namespace GiEnJul.Controllers
         }
 
         [HttpGet("GetSingle")]
-        public async Task<IEnumerable> GetSingleContent([FromQuery] string contentType, string index)
+        public async Task<Models.Cms> GetSingleContent([FromQuery] string contentType, string index)
         {
             var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index);
             return content;
@@ -60,13 +60,22 @@ namespace GiEnJul.Controllers
         public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
         {
             if (string.IsNullOrWhiteSpace(content.Index) &&
-                (content.ContentType == "FAQ" || content.ContentType == "Bedrift" 
+                (content.ContentType == "FAQ" || content.ContentType == "Bedrift"
                 || content.ContentType == "HowToStart"))
             {
                 content.Index = Guid.NewGuid().ToString();
             }
 
-            await _cmsRepository.InsertOrReplaceAsync(_mapper.Map<Models.Cms>(content));
+            var newItem = _mapper.Map<Models.Cms>(content);
+            var existing = await _cmsRepository.GetSingleCmsByContentTypeAsync(content.ContentType, content.Index);
+
+            if (existing != null)
+            {
+                newItem.Question = content.Question ?? existing.Question;
+                newItem.Info = content.Info ?? existing.Info;
+            }
+
+            await _cmsRepository.InsertOrReplaceAsync(newItem);
             return Ok();
         }
 

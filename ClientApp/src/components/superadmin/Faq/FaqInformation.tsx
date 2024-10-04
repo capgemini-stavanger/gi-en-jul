@@ -39,8 +39,8 @@ const FaqInformation: React.FC<IFaqInformation> = ({ accessToken, index, getFaqI
         params: { contentType: "FAQ", index: index },
       })
       .then((resp) => {
-        setFaq(resp.data[0].info);
-        setHtml(resp.data[0].info);
+        setFaq(resp.data.info);
+        setHtml(resp.data.info);
       })
       .catch((errorStack) => {
         console.error(errorStack);

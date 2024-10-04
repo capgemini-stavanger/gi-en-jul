@@ -170,6 +170,7 @@ export default () =>
       paddingTop: "5%",
       flexGrow: 1,
       justifyContent: "end",
+      position: "relative",
     },
     footerHeadline: {
       color: theme.palette.primary.dark,
@@ -178,6 +179,17 @@ export default () =>
         color: theme.palette.primary.dark,
       },
       textDecoration: "none",
+    },
+    footerCategoryContainer: {
+      gap: "4rem",
+      position: "relative",
+      zIndex: 1,
+      [theme.breakpoints.up("tablet")]: {
+        gap: "8rem",
+      },
+      [theme.breakpoints.up("laptop")]: {
+        gap: "10rem",
+      },
     },
     navContainerMobile: {
       backgroundColor: "rgba(0, 0, 0, 0)",
@@ -188,5 +200,16 @@ export default () =>
     },
     noUnderline: {
       textDecoration: "none",
+    },
+    blueLine: {
+      position: "absolute",
+      bottom: 0,
+      right: "-1rem",
+      width: "40rem",
+      display: "none",
+      [theme.breakpoints.up("laptop")]: {
+        display: "block",
+      },
+      mask: "linear-gradient(-90deg, black 22lvw, transparent 40lvw)",
     },
   }))();

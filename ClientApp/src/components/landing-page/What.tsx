@@ -3,6 +3,7 @@ import { ArrowForwardIos } from "@material-ui/icons";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import useStyles from "./Styles";
+import img from "../../styling/img/Capgemini_Logo_Color_RGB.svg";
 
 const What = () => {
   const classes = useStyles();
@@ -33,6 +34,12 @@ const What = () => {
             >
               Bli giver
             </Button>
+            <Typography className={classes.paragraph + " " + classes.partnerText}>
+              Med hjertelig støtte fra{" "}
+              <a href={"https://www.capgemini.com/no-no"}>
+                <img className={classes.capLogo} src={img} alt={"Capgemini"} />
+              </a>
+            </Typography>
           </div>
         </div>
       </Grid>
