@@ -31,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: "18em",
     },
   },
+  capLogo: {
+    display: "inline",
+    margin: "-1.3rem",
+    minWidth: "175px",
+    width: "11.3rem",
+  },
   textLink: {
     textDecorationLine: "underline",
     cursor: "pointer",
@@ -132,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("tablet")]: {
       fontSize: "120%",
     },
+  },
+  partnerText: {
+    marginTop: "4rem",
   },
   textContainer: {
     maxWidth: "30em",
