@@ -21,8 +21,8 @@ const Steppers: React.FC<iSteppers> = ({ state }) => {
     return (
       <Box className={classes.stepperBoxMobile}>
         <Stepper className={classes.stepperBackground} activeStep={state - 1}>
-          {steps.map((label) => (
-            <Step key={label}>
+          {steps.map((label, i) => (
+            <Step key={i + "mobile"}>
               <StepLabel></StepLabel>
             </Step>
           ))}
@@ -34,7 +34,7 @@ const Steppers: React.FC<iSteppers> = ({ state }) => {
       <Box className={classes.stepperBox}>
         <Stepper className={classes.stepperBackground} activeStep={state - 1}>
           {steps.map((label, i) => (
-            <Step key={i}>
+            <Step key={i + "large"}>
               <StepLabel></StepLabel>
             </Step>
           ))}
