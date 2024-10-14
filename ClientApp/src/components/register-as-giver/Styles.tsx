@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "evenly",
     maxWidth: "500px",
     minHeight: "calc(100vh - 120px)",
   },
@@ -61,7 +61,8 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%",
     display: "inline-flex",
-    gap: "2rem",
+    gap: ".5rem",
+    marginTop: "3rem",
   },
   buttons: {
     bottom: theme.spacing(2),
