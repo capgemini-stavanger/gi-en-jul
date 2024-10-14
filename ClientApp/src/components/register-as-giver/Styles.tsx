@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "top",
     maxWidth: "500px",
-    height: "100vh",
+    minHeight: "calc(100vh - 120px)",
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
@@ -61,9 +61,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%",
     display: "inline-flex",
-    [theme.breakpoints.up("tablet")]: {
-      height: "30em",
-    },
+    gap: "2rem",
   },
   buttons: {
     bottom: theme.spacing(2),
