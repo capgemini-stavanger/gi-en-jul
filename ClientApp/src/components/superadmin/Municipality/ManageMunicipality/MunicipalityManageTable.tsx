@@ -67,9 +67,6 @@ const MunicipalityManageTable: React.FC<IMunicipalityManageTable> = ({
       <Typography>Liste over kommuner</Typography>
       <List>
         <ListItem>
-          <ListItemIcon>-</ListItemIcon> <Typography>Denne Tabellen viser alle kommuner</Typography>
-        </ListItem>
-        <ListItem>
           <ListItemIcon>-</ListItemIcon>
           <Typography>
             Her kan du redigere kontakt informasjon om kommunen og velge om informasjonen om
