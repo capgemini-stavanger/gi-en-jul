@@ -20,12 +20,11 @@ var logger = new LoggerConfiguration()
                                 .MinimumLevel.Verbose()
                                 .WriteTo.Console()
                                 .WriteTo.AzureTableStorage(new TableServiceClient(builder.Configuration["TableConnectionString"]),
-                                                       storageTableName: builder.Configuration["LogTableName"],
-                                                       writeInBatches: true)
+                                                       storageTableName: builder.Configuration["LogTableName"])
                                 .CreateLogger();
 
 builder.Services.AddSingleton<ILogger>(l => logger);
-builder.Services.ConfigureServices(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration, builder.Environment);
 
 builder.Services.AddControllers().AddNewtonsoftJson();
 

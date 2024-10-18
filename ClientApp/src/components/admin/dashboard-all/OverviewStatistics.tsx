@@ -188,7 +188,7 @@ const OverviewStatistics: React.FC<IStatistics> = ({
           <Grid item>{statistics?.recipientLargeFam}</Grid>
         </Grid>
         <Typography className={classes.textWarning}>
-          {statistics?.recipientsWithoutGiver} uten familie
+          {statistics?.recipientsWithoutGiver} uten giver
         </Typography>
       </Box>
       <Divider />

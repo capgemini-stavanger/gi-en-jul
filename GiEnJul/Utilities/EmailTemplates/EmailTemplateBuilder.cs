@@ -2,6 +2,7 @@
 using MimeKit;
 using MimeKit.Utils;
 using Newtonsoft.Json;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,27 +47,40 @@ namespace GiEnJul.Utilities
             var imageContentId = MimeUtils.GenerateMessageId();
             var imgTag = $"<img src=\"cid:{imageContentId}\" style={imageStyle}/>";
 
+            var imageContent = await File.ReadAllBytesAsync(imagePath);
+            var sendGridAttachment = new Attachment() 
+            { 
+                Content = Convert.ToBase64String(imageContent), 
+                Filename = Path.GetFileName(imagePath), 
+                Type = "image/png", 
+                ContentId = imageContentId,
+                Disposition = "inline"
+            };
 
             var builder = new BodyBuilder();
             var image = builder.LinkedResources.Add(imagePath);
             image.ContentId = imageContentId;
 
-
-            // Combine
-            content = $"<!DOCTYPE html><html style=\"font-family: verdana, sans-serif;\"><table align=center width=600px><tr><td>{imgTag}</td></tr>{content}</table></html>";
-
             foreach (var item in data)
             {
                 content = content.Replace($"{{{item.Key}}}", item.Value);
             }
-            builder.HtmlBody = content;
+
+            // Combine
+            var htmlContent = GetContent(imgTag, content);
+
+            builder.HtmlBody = htmlContent;
 
             return new EmailTemplate
             {
-                Content = content,
+                Content = htmlContent,
                 Subject = resourceManager.GetString(name.ToString()),
-                Body = builder.ToMessageBody()
+                Body = builder.ToMessageBody(),
+                SendGridBody = htmlContent,
+                SendGridAttachment = sendGridAttachment,
             };
         }
+
+        private string GetContent(string imgTag, string content) => $"<!DOCTYPE html><html style=\"font-family: verdana, sans-serif;\"><table align=center width=600px><tr><td>{imgTag}</td></tr>{content}</table></html>";
     }
 }

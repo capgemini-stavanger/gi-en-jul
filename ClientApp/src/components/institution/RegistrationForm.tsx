@@ -20,6 +20,7 @@ import {
   getFormPerson,
   IContactState,
   initState,
+  TotalWish,
 } from "components/institution/RegistrationFormTypes";
 import { useEffect, useState } from "react";
 import useUser from "hooks/useUser";
@@ -221,7 +222,7 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 
       if (!person.noWish) {
         person.wishes.forEach((wishObj) => {
-          wishList.push(wishObj.wish.filter(Boolean).join(", "));
+          wishList.push(formatWish(wishObj.wish));
         });
       } else {
         wishList.push("Alderstilpasset gaveønske");
@@ -629,3 +630,25 @@ const RegistrationForm: React.FC<props> = ({ accessToken }) => {
 };
 
 export default RegistrationForm;
+
+const formatWish = (wishArray: string[]) => {
+  return wishArray
+    .map((w, i) => {
+      if (i === TotalWish.Category && w) {
+        return `${w}:`;
+      }
+      if (i === TotalWish.Size && w) {
+        return `str ${w}`;
+      }
+      if (!w) {
+        return undefined;
+      }
+      // if last, or second to last and last is empty
+      if (i === wishArray.length - 1 || (!wishArray[i + 1] && i === wishArray.length - 2)) {
+        return w;
+      }
+      return `${w},`;
+    })
+    .filter((w) => w)
+    .join(" ");
+};

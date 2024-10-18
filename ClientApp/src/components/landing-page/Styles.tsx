@@ -31,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: "18em",
     },
   },
+  capLogo: {
+    display: "inline",
+    margin: "-1.3rem",
+    minWidth: "175px",
+    width: "11.3rem",
+  },
   textLink: {
     textDecorationLine: "underline",
     cursor: "pointer",
@@ -116,7 +122,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
   },
   stepsImage: {
-    objectFit: "none",
+    objectFit: "contain",
+    maxWidth: "100%",
     width: "346px",
     height: "278px",
     margin: "auto",
@@ -131,6 +138,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("tablet")]: {
       fontSize: "120%",
     },
+  },
+  partnerText: {
+    marginTop: "4rem",
   },
   textContainer: {
     maxWidth: "30em",

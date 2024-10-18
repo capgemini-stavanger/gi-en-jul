@@ -4,6 +4,7 @@ using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -13,20 +14,27 @@ namespace GiEnJul.Repositories
     {
         Task<IEnumerable<Models.Cms>> GetCmsByContentTypeAsync(string contentType);
         Task<Models.Cms> InsertOrReplaceAsync(Models.Cms cms);
-        Task<IEnumerable> GetSingleCmsByContentTypeAsync(string contentType, string index);
+        Task<Models.Cms> GetSingleCmsByContentTypeAsync(string contentType, string index);
         Task<Entities.Cms> DeleteEntry(string contentType, string index);
     }
 
     public class CmsRepository : GenericRepository<Cms>, ICmsRepository
     {
-        public CmsRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Cms") : base(settings, tableName, mapper, log)
-        { }
+        private readonly IMapper _mapper;
 
-        public async Task<IEnumerable> GetSingleCmsByContentTypeAsync(string contentType, string index)
+        public CmsRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Cms") : base(settings, tableName, mapper, log)
+        {
+            _mapper = mapper;
+        }
+
+        public async Task<Models.Cms> GetSingleCmsByContentTypeAsync(string contentType, string index)
         {
             var query = $"PartitionKey eq '{contentType}' and RowKey eq '{index}' ";
-            return await GetAllByQueryAsync(query);
+            var matches = await GetAllByQueryAsync(query);
+            var mappedResponse = _mapper.Map<Models.Cms>(matches.SingleOrDefault());
+            return mappedResponse;
         }
+
         public async Task<IEnumerable<Models.Cms>> GetCmsByContentTypeAsync(string contentType)
         {
             var partitionKeyFiler = $"PartitionKey eq '{contentType}'";

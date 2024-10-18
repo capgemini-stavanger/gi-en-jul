@@ -27,9 +27,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "evenly",
     maxWidth: "500px",
-    height: "100vh",
+    minHeight: "calc(100vh - 120px)",
   },
   summaryDesign: {
     backgroundColor: theme.palette.secondary.light,
@@ -61,9 +61,8 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%",
     display: "inline-flex",
-    [theme.breakpoints.up("tablet")]: {
-      height: "30em",
-    },
+    gap: ".5rem",
+    marginTop: "3rem",
   },
   buttons: {
     bottom: theme.spacing(2),
@@ -146,6 +145,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
     width: "100%",
     height: "100%",
+    maxWidth: "75rem",
   },
   imageContainer: {
     height: "100vh",
@@ -157,7 +157,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: -theme.spacing(30),
     objectFit: "none",
     width: "100%",
-    height: "100%",
+    maxWidth: "75rem",
   },
   smallLogo: {
     height: "60px",

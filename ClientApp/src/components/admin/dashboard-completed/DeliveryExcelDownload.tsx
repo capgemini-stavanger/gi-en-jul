@@ -70,7 +70,7 @@ const DeliveryExcelDownload: React.FC<IDeliveryExcelDownload> = ({ accessToken, 
         onClick={download}
         disabled={!location}
       >
-        Last ned Excel
+        Last ned oversikt
       </Button>
     </>
   );

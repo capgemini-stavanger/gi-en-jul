@@ -75,8 +75,11 @@ namespace GiEnJul.Clients
             if (_client.GetBlobs(prefix: municipality).Count() >= 10)
                 throw new Exception($"Too many images for {municipality}");
 
-            var blobName = $"{municipality}/{Guid.NewGuid()}{(string.IsNullOrWhiteSpace(fileExt) ? "" : $"{fileExt}")}";
-            await _client.UploadBlobAsync(blobName, stream);
+            var blobName = $"{municipality}/{Guid.NewGuid()}.webp";
+            //await _client.UploadBlobAsync(blobName, stream);
+
+            var blob = _client.GetBlobClient(blobName);
+            await blob.UploadAsync(stream, new BlobUploadOptions { HttpHeaders = new BlobHttpHeaders { ContentType = "image/webp" } });
 
             return $"{_client.Uri.AbsoluteUri}/{blobName}";
         }

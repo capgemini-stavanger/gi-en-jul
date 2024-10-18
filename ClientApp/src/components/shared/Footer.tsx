@@ -4,6 +4,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import useStyles from "./Styles";
 import { Link } from "react-router-dom";
+import blueLineImg from "../../styling/img/blue_line.svg";
 
 const Footer: React.FC = () => {
   const classes = useStyles();
@@ -20,8 +21,13 @@ const Footer: React.FC = () => {
   return (
     <Grid container direction="column" className={classes.footer}>
       <Grid item>
-        <Grid container direction="row" justifyContent="space-evenly">
-          <Grid item xs={4}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          className={classes.footerCategoryContainer}
+        >
+          <Grid item>
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h6" className={classes.footerHeadline}>
@@ -51,7 +57,7 @@ const Footer: React.FC = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item>
             <Grid container direction="column">
               <Grid item>
                 <Typography variant="h6" className={classes.footerHeadline}>
@@ -82,6 +88,7 @@ const Footer: React.FC = () => {
           Gi en jul &copy; {new Date().getFullYear()}
         </Typography>
       </Grid>
+      <img src={blueLineImg} className={classes.blueLine} />
     </Grid>
   );
 };

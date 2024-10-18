@@ -8,6 +8,7 @@ import { IMunicipality } from "../ManageMunicipalityContainer";
 import img_placeholder from "styling/img/person.png";
 import { Delete } from "@material-ui/icons";
 import ApiService from "common/functions/apiServiceClass";
+import { optimizeImage } from "common/functions/imageOptimizer";
 
 interface IMunicipalityInformation {
   municipality: IMunicipality;
@@ -112,13 +113,19 @@ const MunicipalityInformation: React.FC<IMunicipalityInformation> = ({
     const files = Array.from<File>(event.target.files);
     if (files.length) {
       files.forEach((file: File) => {
-        const formData = new FormData();
-        formData.append("file", file, file.name);
-        apiService.post(`municipality/image/${municipality.name}`, formData).then((response) => {
-          if (response.data) {
-            setImages([...images, response.data]);
-            municipality.images = [...municipality.images, response.data];
-          }
+        optimizeImage(file, 1024, 0.9).then((blob) => {
+          const formData = new FormData();
+          formData.append("file", blob, file.name);
+          apiService
+            .post(`municipality/image/${municipality.name}`, formData, {
+              headers: { "Content-Type": "application/x-www-url-formencoded" },
+            })
+            .then((response) => {
+              if (response.data) {
+                setImages([...images, response.data]);
+                municipality.images = [...municipality.images, response.data];
+              }
+            });
         });
       });
     }
