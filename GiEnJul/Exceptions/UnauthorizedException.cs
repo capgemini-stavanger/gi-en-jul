@@ -17,9 +17,5 @@ namespace GiEnJul.Exceptions
         public UnauthorizedException(string message, Exception innerException) : base(message, innerException)
         {
         }
-
-        protected UnauthorizedException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

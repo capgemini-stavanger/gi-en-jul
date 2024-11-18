@@ -21,7 +21,7 @@ public class AdminService(IPersonRepository personRepository, IRecipientReposito
         var recipients = await _recipientRepository.GetRecipientsByLocationAsync(eventName, location);
         var recipientIds = recipients.Select(r => r.RecipientId);
         var persons = await _personRepository.GetAllByRecipientIds(recipientIds);
-        var recipientDict = recipients.ToDictionary(k => k.RecipientId, v => v);
+        var recipientDict = recipients.ToDictionary(k => k.RecipientId, v => v)!;
 
         var excelPersons = persons.Select(p => new MunicipalityOverviewExcel
         {

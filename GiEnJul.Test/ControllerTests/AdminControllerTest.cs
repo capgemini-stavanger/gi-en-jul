@@ -113,7 +113,7 @@ namespace GiEnJul.Test.ControllerTests
 
             var list = await _controller.GetUnsuggestedGiversAsync("Stavanger");
 
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
 
             MockEventRepo.Verify(x => x.GetActiveEventForLocationAsync("Stavanger"), Times.Once());
             MockGiverRepo.Verify(x => x.GetUnsuggestedAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);

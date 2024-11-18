@@ -40,7 +40,7 @@ namespace GiEnJul.Repositories
             }
         }
 
-        protected async Task<T> DeleteAsync(T entity)
+        protected async Task<T?> DeleteAsync(T entity)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace GiEnJul.Repositories
             }
         }
 
-        protected async Task<T> DeleteAsync(string partitionKey, string rowKey)
+        protected async Task<T?> DeleteAsync(string partitionKey, string rowKey)
         {
             var entity = await GetAsync(partitionKey, rowKey);
 
@@ -106,7 +106,7 @@ namespace GiEnJul.Repositories
             }
         }
         
-        protected bool TryGet(string partitionKey, string rowKey, out T result)
+        protected bool TryGet(string partitionKey, string rowKey, out T? result)
         {
             result = null;
             try
@@ -130,7 +130,8 @@ namespace GiEnJul.Repositories
 
                 if (!result.IsError)
                     return entity;
-                return null;
+
+                throw new Exception(result.Content.ToString());
             }
             catch (Exception e)
             {

@@ -6,7 +6,7 @@ namespace GiEnJul.Dtos
 {
     public class PostPersonDto
     {
-        public IEnumerable<string> Wishes { get; set; }
+        public IEnumerable<string> Wishes { get; set; } = [];
         [Required]
         public int Age { get; set; }
         public int Months { get; set; }

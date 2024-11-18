@@ -5,37 +5,36 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Utilities
+namespace GiEnJul.Utilities;
+
+public interface IAuthorization
 {
-    public interface IAuthorization
+    Task<bool> HasAccessToMunicipality(string municipality, ClaimsPrincipal user);
+    Task ThrowIfNotAccessToMunicipality(string municipality, ClaimsPrincipal user);
+}
+public class Authorization : IAuthorization
+{
+    private readonly IAuth0ManagementClient _managementClient;
+
+    public Authorization(IAuth0ManagementClient managementClient)
     {
-        Task<bool> HasAccessToMunicipality(string municipality, ClaimsPrincipal user);
-        Task ThrowIfNotAccessToMunicipality(string municipality, ClaimsPrincipal user);
+        _managementClient = managementClient;
     }
-    public class Authorization : IAuthorization
+
+    public async Task<bool> HasAccessToMunicipality(string municipality, ClaimsPrincipal user)
     {
-        private readonly IAuth0ManagementClient _managementClient;
-
-        public Authorization(IAuth0ManagementClient managementClient)
+        var userId = ClaimsHelper.GetUserId(user);
+        var metadata = await _managementClient.GetUserMetadata(userId);
+        if (metadata["role"] == "SuperAdmin")
         {
-            _managementClient = managementClient;
+            return true;
         }
+        return metadata["location"] == municipality;
+    }
 
-        public async Task<bool> HasAccessToMunicipality(string municipality, ClaimsPrincipal user)
-        {
-            var userId = ClaimsHelper.GetUserId(user);
-            var metadata = await _managementClient.GetUserMetadata(userId);
-            if (metadata["role"] == "SuperAdmin")
-            {
-                return true;
-            }
-            return metadata["location"] == municipality;
-        }
-
-        public async Task ThrowIfNotAccessToMunicipality(string municipality, ClaimsPrincipal user)
-        {
-            if (!await HasAccessToMunicipality(municipality, user))
-                throw new UnauthorizedException();
-        }
+    public async Task ThrowIfNotAccessToMunicipality(string municipality, ClaimsPrincipal user)
+    {
+        if (!await HasAccessToMunicipality(municipality, user))
+            throw new UnauthorizedException();
     }
 }

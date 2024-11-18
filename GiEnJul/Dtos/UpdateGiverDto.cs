@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace GiEnJul.Dtos
+namespace GiEnJul.Dtos;
+
+public class UpdateGiverDto
 {
-    public class UpdateGiverDto
-    {
-        public Guid Id { get; set; }
-        public string Event { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-    }
+    public Guid Id { get; set; }
+    public string Event { get; set; } = null!;
+    public string? Email { get; set; }
+    public string? PhoneNumber { get; set; }
 }

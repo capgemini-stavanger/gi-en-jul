@@ -13,7 +13,7 @@ namespace GiEnJul.Clients
         string BlobContainerUrl { get; }
 
         Task<string> UpdateProfileImage(string municipality, IFormFile file);
-        Task<(Stream, string)> GetProfileImage(string municipality);
+        Task<(Stream?, string)> GetProfileImage(string municipality);
     }
 
     public class ContactImagesBlobClient : IContactImagesBlobClient
@@ -48,7 +48,7 @@ namespace GiEnJul.Clients
             return $"{_client.Uri.AbsoluteUri}/{blobName}";
         }
 
-        public async Task<(Stream, string)> GetProfileImage(string municipality)
+        public async Task<(Stream?, string)> GetProfileImage(string municipality)
         {
             var potentialImages = _client
                 .GetBlobs(prefix: municipality)
