@@ -4,66 +4,64 @@ using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Repositories
-{
-    public interface IPersonRepository
-    {
-        Task<Person> DeleteAsync(Models.Person model);
-        Task<int> DeleteBatchAsync(IEnumerable<Models.Person> models);
-        Task<Person> InsertOrReplaceAsync(Models.Person model);
-        Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models);
-        Task<List<Models.Person>> GetAllByRecipientId(string partitionKey);
-        Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds);
-        Task<Models.Person> GetPersonById(string personId);
+namespace GiEnJul.Repositories;
 
+public interface IPersonRepository
+{
+    Task<Person?> DeleteAsync(Models.Person model);
+    Task<int> DeleteBatchAsync(IEnumerable<Models.Person> models);
+    Task<Person> InsertOrReplaceAsync(Models.Person model);
+    Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models);
+    Task<List<Models.Person>> GetAllByRecipientId(string partitionKey);
+    Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds);
+    Task<Models.Person> GetPersonById(string personId);
+
+}
+
+public class PersonRepository : GenericRepository<Person>, IPersonRepository
+{
+    public PersonRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Person") : base(settings, tableName, mapper, log)
+    { }
+
+    public async Task<Person> InsertOrReplaceAsync(Models.Person model)
+    {
+        return await InsertOrReplaceAsync(_mapper.Map<Person>(model));
+    }
+    public async Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models)
+    {
+        return await InsertOrReplaceBatchAsync(_mapper.Map<IEnumerable<Person>>(models));
     }
 
-    public class PersonRepository : GenericRepository<Person>, IPersonRepository
+    public async Task<Person?> DeleteAsync(Models.Person model)
     {
-        public PersonRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Person") : base(settings, tableName, mapper, log)
-        { }
+        return await DeleteAsync(_mapper.Map<Person>(model));
+    }
 
-        public async Task<Person> InsertOrReplaceAsync(Models.Person model)
-        {
-            return await InsertOrReplaceAsync(_mapper.Map<Person>(model));
-        }
-        public async Task<int> InsertOrReplaceBatchAsync(IEnumerable<Models.Person> models)
-        {
-            return await InsertOrReplaceBatchAsync(_mapper.Map<IEnumerable<Person>>(models));
-        }
+    public async Task<int> DeleteBatchAsync(IEnumerable<Models.Person> models)
+    {
+        return await DeleteBatchAsync(_mapper.Map<IEnumerable<Person>>(models));
+    }
 
-        public async Task<Person> DeleteAsync(Models.Person model)
-        {
-            return await DeleteAsync(_mapper.Map<Person>(model));
-        }
+    public async Task<List<Models.Person>> GetAllByRecipientId(string partitionKey)
+    {
+        var query = $"PartitionKey eq '{partitionKey}'";
+        var persons = await GetAllByQueryAsync(query);
+        return _mapper.Map<List<Models.Person>>(persons);
+    }
 
-        public async Task<int> DeleteBatchAsync(IEnumerable<Models.Person> models)
-        {
-            return await DeleteBatchAsync(_mapper.Map<IEnumerable<Person>>(models));
-        }
+    public async Task<Models.Person> GetPersonById(string rowKey)
+    {
+        var query = $"RowKey eq '{rowKey}'";
 
-        public async Task<List<Models.Person>> GetAllByRecipientId(string partitionKey)
-        {
-            var query = $"PartitionKey eq '{partitionKey}'";
-            var persons = await GetAllByQueryAsync(query);
-            return _mapper.Map<List<Models.Person>>(persons);
-        }
+        var persons = await GetAllByQueryAsync(query);
+        return _mapper.Map<Models.Person>(persons.FirstOrDefault());
+    }
 
-        public async Task<Models.Person> GetPersonById(string rowKey)
-        {
-            var query = $"RowKey eq '{rowKey}'";
-
-            var persons = await GetAllByQueryAsync(query);
-            return _mapper.Map<Models.Person>(persons.FirstOrDefault());
-        }
-
-        public async Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds)
-        {
-            var result = await GetAllByPartitionKey(recipientIds);
-            return _mapper.Map<List<Models.Person>>(result);
-        }
+    public async Task<IEnumerable<Models.Person>> GetAllByRecipientIds(IEnumerable<string> recipientIds)
+    {
+        var result = await GetAllByPartitionKey(recipientIds);
+        return _mapper.Map<List<Models.Person>>(result);
     }
 }

@@ -20,11 +20,11 @@ namespace GiEnJul.Clients
     public interface IAuth0ManagementClient
     {
         Task<string> GetTokenAsync();
-        Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false);
+        Task<Dictionary<string, string>> GetUserMetadata(string? userId, bool forceUpdate = false);
         Task<User> CreateUser(CreateUserDto userDto);
         Task<List<User>> GetAllUsers();
         Task DeleteUser(string email);
-        Task<User> GetSingleUser(string email);
+        Task<User?> GetSingleUser(string email);
         Task AddUserRole(User user, string roleId);
         Task UpdateUserRole(User user, List<string> roles);
         Task RemoveUserRole(User user, string roleId);
@@ -67,7 +67,7 @@ namespace GiEnJul.Clients
             if (!resp.IsSuccessStatusCode)
                 throw new Exception($"Could not get token, statusCode: {resp.StatusCode}, message: {tokenResp}");
 
-            var tokenDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenResp);
+            var tokenDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(tokenResp) ?? [];
 
             if (!tokenDict.ContainsKey("access_token"))
                 throw new Exception($"Token response did not contain the access_token key");
@@ -78,7 +78,7 @@ namespace GiEnJul.Clients
             return token;
         }
 
-        public async Task<Dictionary<string, string>> GetUserMetadata(string userId, bool forceUpdate = false)
+        public async Task<Dictionary<string, string>> GetUserMetadata(string? userId, bool forceUpdate = false)
         {
             var cachedMD = (Dictionary<string, string>)_metadataCache.Get(userId);
             if (!forceUpdate && cachedMD != null)
@@ -90,9 +90,9 @@ namespace GiEnJul.Clients
 
             var userMetadata = (JObject)us.UserMetadata;
             var appMetadata = (JObject)us.AppMetadata;
-            var metadataDict = userMetadata.ToObject<Dictionary<string, string>>();
+            var metadataDict = userMetadata.ToObject<Dictionary<string, string>>() ?? [];
 
-            metadataDict.AddDictionary(appMetadata.ToObject<Dictionary<string, string>>(), CombineStrategy.takeFirst);
+            metadataDict.AddDictionary(appMetadata.ToObject<Dictionary<string, string>>() ?? [], CombineStrategy.takeFirst);
             _metadataCache.Add(userId, metadataDict, DateTime.Now.AddMinutes(10));
             return metadataDict;
         }
@@ -114,7 +114,7 @@ namespace GiEnJul.Clients
                 .ToList();
         }
 
-        public async Task<User> GetSingleUser(string email)
+        public async Task<User?> GetSingleUser(string email)
         {
             var users = await GetAllUsers();
             return users.Where(u => u.Email == email).SingleOrDefault();

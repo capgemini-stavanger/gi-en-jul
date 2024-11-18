@@ -67,7 +67,7 @@ namespace GiEnJul.Controllers
             }
 
             var newItem = _mapper.Map<Models.Cms>(content);
-            var existing = await _cmsRepository.GetSingleCmsByContentTypeAsync(content.ContentType, content.Index);
+            var existing = await _cmsRepository.GetSingleCmsByContentTypeAsync(content.ContentType, content.Index!);
 
             if (existing != null)
             {
@@ -83,6 +83,10 @@ namespace GiEnJul.Controllers
         [Authorize(Policy = Policy.SuperAdmin)]
         public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)
         {
+            if (string.IsNullOrWhiteSpace(entity.Index))
+            {
+                return BadRequest("Index can't be null");
+            }
             var content = await _cmsRepository.DeleteEntry(entity.ContentType, entity.Index);
             if (content == null)
             {

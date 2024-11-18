@@ -1,70 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace GiEnJul.Helpers
+namespace GiEnJul.Helpers;
+
+public static class ObjectToDictionaryHelper
 {
-    public static class ObjectToDictionaryHelper
+    public static Dictionary<string, string> MakeStringValueDict(object o, string keyPrefix = "")
     {
-        public static Dictionary<string, string> MakeStringValueDict(object o, string keyPrefix = "")
-        {
-            if (o == null)
-                throw new ArgumentNullException("object","Unable to make dictionary out of a null object");
-            
-            var dict = new Dictionary<string, string>();
+        if (o == null)
+            throw new ArgumentNullException("object","Unable to make dictionary out of a null object");
+        
+        var dict = new Dictionary<string, string>();
 
-            var props = o.GetType().GetProperties();
-            foreach (var prop in props)
+        var props = o.GetType().GetProperties();
+        foreach (var prop in props)
+        {
+            var key = keyPrefix + prop.Name;
+            var value = prop.GetValue(o);
+            if (value == null)
             {
-                var key = keyPrefix + prop.Name;
-                var value = prop.GetValue(o);
-                if (value == null)
+                dict.Add(key, string.Empty);
+                continue;
+            }
+            var valueString = value is DateTime time ? time.ToShortDateString() : value.ToString();
+            dict.Add(key, valueString ?? string.Empty);
+        }
+
+        return dict;
+    }
+
+    /// <summary>
+    /// Adds all non duplikate keys and their values to the dictionary
+    /// </summary>
+    /// <typeparam name="TKey">Dictionary Key</typeparam>
+    /// <typeparam name="TVal">Dictionary Value</typeparam>
+    /// <param name="dict">working dictionary</param>
+    /// <param name="other">dictionary to add non duplicates from</param>
+    public static void AddDictionary<TKey, TVal>(this Dictionary<TKey, TVal> dict, Dictionary<TKey, TVal> other,
+        CombineStrategy combineStrategy = CombineStrategy.error) where TKey : notnull
+    {
+        foreach (var item in other)
+        {
+            if (!dict.ContainsKey(item.Key))
+                dict.Add(item.Key, item.Value);
+            else
+                switch (combineStrategy)
                 {
-                    dict.Add(key, String.Empty);
-                    continue;
+                    case CombineStrategy.error:
+                        throw new InvalidOperationException($"{item.Key} already exists in dictionary");
+                    case CombineStrategy.takeFirst:
+                        break;
+                    case CombineStrategy.takeLast:
+                        dict[item.Key] = item.Value;
+                        break;
+                    default:
+                        break;
                 }
-                var valueString = value is DateTime time ? time.ToShortDateString() : value.ToString();
-                dict.Add(key, valueString);
-            }
-
-            return dict;
-        }
-
-        /// <summary>
-        /// Adds all non duplikate keys and their values to the dictionary
-        /// </summary>
-        /// <typeparam name="TKey">Dictionary Key</typeparam>
-        /// <typeparam name="TVal">Dictionary Value</typeparam>
-        /// <param name="dict">working dictionary</param>
-        /// <param name="other">dictionary to add non duplicates from</param>
-        public static void AddDictionary<TKey, TVal>(this Dictionary<TKey, TVal> dict, Dictionary<TKey, TVal> other,
-            CombineStrategy combineStrategy = CombineStrategy.error)
-        {
-            foreach (var item in other)
-            {
-                if (!dict.ContainsKey(item.Key))
-                    dict.Add(item.Key, item.Value);
-                else
-                    switch (combineStrategy)
-                    {
-                        case CombineStrategy.error:
-                            throw new InvalidOperationException($"{item.Key} already exists in dictionary");
-                        case CombineStrategy.takeFirst:
-                            break;
-                        case CombineStrategy.takeLast:
-                            dict[item.Key] = item.Value;
-                            break;
-                        default:
-                            break;
-                    }
-            }
         }
     }
+}
 
-    public enum CombineStrategy
-    {
-        error,
-        takeFirst,
-        takeLast,
-    }
+public enum CombineStrategy
+{
+    error,
+    takeFirst,
+    takeLast,
 }

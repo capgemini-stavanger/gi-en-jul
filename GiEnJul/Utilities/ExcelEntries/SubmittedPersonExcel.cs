@@ -6,13 +6,13 @@ namespace GiEnJul.Utilities.ExcelClasses
 {
     public class SubmittedPersonExcel : IExcel
     {
-        public string FamilyId { get; set; }
-        public string ReferenceId { get; set; }
-        public string Age{ get; set; }
+        public string? FamilyId { get; set; }
+        public string? ReferenceId { get; set; }
+        public string? Age{ get; set; }
         public Gender Gender { get; set; }
-        public List<string> Wishes { get; set; }
+        public List<string> Wishes { get; set; } = [];
 
-        public string RecipientId { get; set; }
+        public string? RecipientId { get; set; }
 
         public OrderedDictionary AsOrderedDictionary()
         {
