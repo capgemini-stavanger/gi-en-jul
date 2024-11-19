@@ -22,7 +22,7 @@ public class EmailClient : IEmailClient
         _log = log;
     }
 
-    public async Task SendEmailAsync(string toMail, string toName, EmailTemplate email)
+    public async Task SendEmailAsync(string toMail, string? toName, EmailTemplate email, string? giverId = null, string? recipientId = null)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
@@ -50,7 +50,7 @@ public class EmailClient : IEmailClient
         }
     }
 
-    public async Task SendEmailFromUserAsync(string fromMail, string fromName, string toMail, string toName, EmailTemplate email)
+    public async Task SendEmailFromUserAsync(string fromMail, string? fromName, string toMail, string? toName, EmailTemplate email, string? giverId = null, string? recipientId = null)
     {
         var message = new MimeMessage();
         message.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));

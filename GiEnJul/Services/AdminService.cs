@@ -25,16 +25,16 @@ public class AdminService(IPersonRepository personRepository, IRecipientReposito
 
         var excelPersons = persons.Select(p => new MunicipalityOverviewExcel
         {
-            Event = recipientDict[p.RecipientId]?.Event,
-            ContactEmail = recipientDict[p.RecipientId]?.ContactEmail,
-            ContactName = recipientDict[p.RecipientId]?.ContactFullName,
-            ContactPhone = recipientDict[p.RecipientId]?.ContactPhoneNumber,
-            SubmitterInstitution = recipientDict[p.RecipientId]?.Institution,
+            Event = recipientDict[p.RecipientId]!.Event,
+            ContactEmail = recipientDict[p.RecipientId]!.ContactEmail,
+            ContactName = recipientDict[p.RecipientId]!.ContactFullName,
+            ContactPhone = recipientDict[p.RecipientId]!.ContactPhoneNumber,
+            SubmitterInstitution = recipientDict[p.RecipientId]!.Institution,
             IsConnectedMatch = recipientDict[p.RecipientId]?.HasConfirmedMatch ?? false,
             IsSuggestedMatch = recipientDict[p.RecipientId]?.IsSuggestedMatch ?? false,
             AgeYears = p.Age,
             AgeMonths = p.Months,
-            FamilyId = recipientDict[p.RecipientId]?.FamilyId,
+            FamilyId = recipientDict[p.RecipientId]!.FamilyId,
             Gender = p.Gender.ToString(),
             Wishes = p.Wishes,
         }).ToList();

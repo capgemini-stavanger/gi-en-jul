@@ -3,6 +3,7 @@ using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Repositories
@@ -21,6 +22,7 @@ namespace GiEnJul.Repositories
         Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location);
         Task<IEnumerable<Models.Recipient>> GetRecipientsByIdsAsync(IEnumerable<string> ids);
         Task<bool> RecipientDoesExist(string referenceId);
+        Task UpdateEmailStatusWarning(string rowKey, bool warning);
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
@@ -117,6 +119,19 @@ namespace GiEnJul.Repositories
             var recipients = await GetAllByRowKey(ids);
 
             return _mapper.Map<IEnumerable<Models.Recipient>>(recipients);
+        }
+
+        public async Task UpdateEmailStatusWarning(string rowKey, bool warning)
+        {
+            var recipients = await GetAllByRowKey([rowKey]);
+            if (recipients == null || !recipients.Any()) 
+            {
+                return;
+            }
+            var recipient = recipients.First();
+            recipient.EmailStatusWarning = warning;
+
+            await InsertOrReplaceAsync(recipient);
         }
     }
 }

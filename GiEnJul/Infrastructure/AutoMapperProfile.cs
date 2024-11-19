@@ -51,7 +51,8 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.MatchedGiver, opt => opt.Ignore())
                 .ForMember(dest => dest.FamilyId, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonCount, opt => opt.MapFrom(src => src.FamilyMembers.Count))
-                .ForMember(dest => dest.Comment, opt => opt.Ignore());
+                .ForMember(dest => dest.Comment, opt => opt.Ignore())
+                .ForMember(dest => dest.EmailStatusWarning, opt => opt.Ignore());
 
             CreateMap<Dtos.PutRecipientDto, Models.Recipient>()
                 .ForMember(dest => dest.Event, opt => opt.Ignore())
@@ -68,6 +69,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.ContactEmail, opt => opt.Ignore())
                 .ForMember(dest => dest.ContactPhoneNumber, opt => opt.Ignore())
                 .ForMember(dest => dest.Institution, opt => opt.Ignore())
+                .ForMember(dest => dest.EmailStatusWarning, opt => opt.Ignore())
                 .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             CreateMap<Models.Recipient, Entities.Recipient>()
@@ -100,6 +102,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.CancelFeedback, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelDate, opt => opt.Ignore())
                 .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
+                .ForMember(dest => dest.EmailStatusWarning, opt => opt.Ignore())
                 .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
 
@@ -137,6 +140,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.CancelFamilyId, opt => opt.Ignore())
                 .ForMember(dest => dest.Comment, opt => opt.Ignore())
                 .ForMember(dest => dest.SuggestedMatchAt, opt => opt.Ignore())
+                .ForMember(dest => dest.EmailStatusWarning, opt => opt.Ignore())
                 .ForMember(dest => dest.RemindedAt, opt => opt.Ignore());
 
 
@@ -151,6 +155,7 @@ namespace GiEnJul.Infrastructure
                 .ForMember(dest => dest.HasConfirmedMatch, opt => opt.MapFrom(src => true))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.ReceiverLocation))
                 .ForMember(dest => dest.FamilyMembers, opt => opt.Ignore())
+                .ForMember(dest => dest.EmailStatusWarning, opt => opt.Ignore())
                 .ForMember(dest => dest.Comment, opt => opt.Ignore());
 
             //Event mapping

@@ -20,6 +20,7 @@ namespace GiEnJul.Repositories
         Task<int> GetGiversCountByLocationAsync(string eventName, string location);
         Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location);
         Task<IEnumerable<Models.Giver>> GetGiversByQueryAsync(string query);
+        Task UpdateEmailStatusWarning(string rowKey, bool warning);
     }
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
@@ -85,6 +86,18 @@ namespace GiEnJul.Repositories
         {
             var givers = await GetAllByQueryAsync(query);
             return _mapper.Map<IEnumerable<Models.Giver>>(givers);
+        }
+
+        public async Task UpdateEmailStatusWarning(string rowKey, bool warning)
+        {
+            var givers = await GetAllByRowKey([rowKey]);
+            if (givers == null || !givers.Any())
+            {
+                return;
+            }
+            var giver = givers.First();
+            giver.EmailStatusWarning = warning;
+            await InsertOrReplaceAsync(giver);
         }
     }
 }
