@@ -277,9 +277,9 @@ public class AdminController : ControllerBase
 
             var emailValuesDict = EmailDictionaryHelper.MakeVerifyEmailContent(giver, recipient, municipality, baseUrl);
 
-            var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
+            var verifyConnectionEmailTemplate = await _emailTemplateBuilder.GetEmailTemplate(EmailTemplateName.VerifyConnection, emailValuesDict);
 
-            await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
+            await _emailClient.SendEmailAsync(giver.Email, giver.FullName, verifyConnectionEmailTemplate, giver.GiverId);
         }
         catch (Exception e)
         {

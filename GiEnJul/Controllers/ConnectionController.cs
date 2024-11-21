@@ -108,7 +108,7 @@ namespace GiEnJul.Controllers
                         familyTable += " ";
                     }
                 }
-                var emailTemplatename = EmailTemplateName.AssignedFamily;
+                var assignedFamilyEmailTemplateName = EmailTemplateName.AssignedFamily;
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "familyTable", familyTable },
@@ -119,9 +119,9 @@ namespace GiEnJul.Controllers
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+                var assignedFamilyEmailTemplate = await _emailTemplateBuilder.GetEmailTemplate(assignedFamilyEmailTemplateName, emailValuesDict);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, assignedFamilyEmailTemplate, giver.GiverId);
             }
             catch (Exception e)
             {
@@ -189,15 +189,15 @@ namespace GiEnJul.Controllers
 
                 // Noreply email to giver
                 var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
-                var emailTemplatename = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
+                var connectionDeniedEmailTemplateName = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "content", emailContent},
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
+                var connectionDeniedEmailTemplate = await _emailTemplateBuilder.GetEmailTemplate(connectionDeniedEmailTemplateName, emailValuesDict);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, connectionDeniedEmailTemplate, giver.GiverId);
 
             }
             catch (Exception e)

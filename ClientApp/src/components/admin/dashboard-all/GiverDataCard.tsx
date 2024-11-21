@@ -381,6 +381,7 @@ const GiverDataCard: React.FC<Props> = ({
                       }}
                       toEmail={giverData.email}
                       fullName={giverData.fullName}
+                      giverId={giverData.giverId}
                       accessToken={accessToken}
                       user={user}
                     />

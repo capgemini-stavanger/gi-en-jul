@@ -42,4 +42,6 @@ public class Recipient : EntityBase
 
     //Add comment
     public string? Comment { get; set; }
+
+    public bool EmailStatusWarning { get; set; } = false;
 }

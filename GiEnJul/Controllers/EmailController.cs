@@ -54,30 +54,6 @@ public class EmailController : ControllerBase
         return emailTemplate;
     }
 
-    // POST api/email/send
-    [HttpPost("send")]
-    [Authorize(Policy = Policy.PostEmail)]
-    public async Task<ActionResult> SendMail(PostEmailFromUserDto email)
-    {
-        _log.Information("Received email post with data {@0}", email);
-        if (string.IsNullOrWhiteSpace(email.FromName))
-        {
-            email.FromName = email.FromEmail;
-        }
-        try
-        {
-            var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,email.FromEmail);
-            notificationTemplate.Subject = email.Subject;
-            await _emailClient.SendEmailAsync(email.ToEmail, email.ToName ?? email.ToEmail, notificationTemplate);
-        }
-        catch (Exception e)
-        {
-            _log.Error(e, "Could not send mail to {@0}", email.ToEmail);
-            throw;
-        }
-        return Ok();
-    }
-
     [HttpPost("sendFromUser")]
     [Authorize(Policy = Policy.PostEmail)]
     public async Task<ActionResult> SendMailFromUser(PostEmailFromUserDto emailFromUser)
@@ -95,7 +71,7 @@ public class EmailController : ControllerBase
         {
             var notificationTemplate = await NotificationEmailTemplateBuilder(emailFromUser.Content,emailFromUser.FromEmail);
             notificationTemplate.Subject = emailFromUser.Subject;
-            await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, notificationTemplate);
+            await _emailClient.SendEmailFromUserAsync(emailFromUser.FromEmail, emailFromUser.FromName, emailFromUser.ToEmail, emailFromUser.ToName, notificationTemplate, emailFromUser.GiverId, emailFromUser.RecipientId);
         }
         catch (Exception e)
         {

@@ -67,7 +67,7 @@ public class GiverController : ControllerBase
 
         var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
         var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
-        var insertedAsDto = _mapper.Map<PostGiverResultDto>(giverModel);
+        var giverResult = _mapper.Map<PostGiverResultDto>(giverModel);
 
         var familyRange = "6+";
         if (giver.MaxReceivers <= FamilySize.Medium)
@@ -89,7 +89,7 @@ public class GiverController : ControllerBase
 
         try
         {
-            await _emailClient.SendEmailAsync(insertedAsDto.Email, insertedAsDto.FullName, email);
+            await _emailClient.SendEmailAsync(giverResult.Email, giverResult.FullName, email, giverModel.GiverId);
         }
         catch (Exception e)
         {
@@ -98,6 +98,6 @@ public class GiverController : ControllerBase
             throw;
         }
 
-        return CreatedAtAction(nameof(insertedAsDto), insertedAsDto);
+        return CreatedAtAction(nameof(giverResult), giverResult);
     }
 }

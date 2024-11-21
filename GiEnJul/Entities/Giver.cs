@@ -38,4 +38,6 @@ public class Giver : EntityBase
 
     //Add comment on Giver
     public string? Comment { get; set; }
+
+    public bool EmailStatusWarning { get; set; } = false;
 }

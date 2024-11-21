@@ -105,7 +105,7 @@ public class CleanupConnectionsJob : IJob
                 var emailValuesDictionary = EmailDictionaryHelper.MakeDisconnectEmailContent(giver, recipient, municipality);
                 var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.AutomaticDisconnect, emailValuesDictionary);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent, giver.GiverId);
 
                 removedCount++;
             }
@@ -148,7 +148,7 @@ public class CleanupConnectionsJob : IJob
                 var emailValuesDictionary = EmailDictionaryHelper.MakeVerifyEmailContent(giver, matchedRecipient, municipality, baseUrl);
                 var emailContent = await _templateBuilder.GetEmailTemplate(EmailTemplates.EmailTemplateName.ConnectionReminder, emailValuesDictionary);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailContent, giver.GiverId);
                 
                 giver.RemindedAt = DateTime.UtcNow;
                 var reminderComment = $"Påminnelse autmatisk sent {DateTime.Now}";
