@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using GiEnJul.Clients;
+﻿using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Helpers;
-using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
 using GiEnJul.Utilities.Constants;
@@ -23,7 +22,6 @@ public class GiverController : ControllerBase
     private readonly IEventRepository _eventRepository;
     private readonly IEmailClient _emailClient;
     private readonly ILogger _log;
-    private readonly IMapper _mapper;
     private readonly IRecaptchaVerifier _recaptchaVerifier;
     private readonly IEmailTemplateBuilder _emailTemplateBuilder;
     private readonly IMunicipalityRepository _municipalityRepository;
@@ -33,7 +31,6 @@ public class GiverController : ControllerBase
                            IMunicipalityRepository municipalityRepository,
                            IEmailClient emailClient,
                            ILogger log,
-                           IMapper mapper,
                            IRecaptchaVerifier recaptchaVerifier,
                            IEmailTemplateBuilder emailTemplateBuilder)
     {
@@ -42,7 +39,6 @@ public class GiverController : ControllerBase
         _eventRepository = eventRepository;
         _emailClient = emailClient;
         _log = log;
-        _mapper = mapper;
         _recaptchaVerifier = recaptchaVerifier;
         _emailTemplateBuilder = emailTemplateBuilder;
     }
@@ -60,14 +56,15 @@ public class GiverController : ControllerBase
 
         var eventModel = await _eventRepository.GetEventByUserLocationAsync(giverDto.Location);
 
-        var giver = _mapper.Map<Giver>(giverDto);
+        var giver = giverDto.ToModel();
+        giver.Event = $"{eventModel!.EventName}_{giver.Location}";
         giver.EventName = eventModel.EventName;
         giver.Email = giver.Email.Trim();
         giver.RegistrationDate = DateTime.UtcNow;
 
         var giverModel = await _giverRepository.InsertOrReplaceAsync(giver);
         var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
-        var giverResult = _mapper.Map<PostGiverResultDto>(giverModel);
+        var giverResult = giverModel.ToPostGiverResultDto();
 
         var familyRange = "6+";
         if (giver.MaxReceivers <= FamilySize.Medium)

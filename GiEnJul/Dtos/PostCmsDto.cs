@@ -6,7 +6,7 @@ namespace GiEnJul.Dtos
     {
         [Required]
         public string ContentType { get; set; } = null!;
-        public string? Index { get; set; }
+        public string Index { get; set; } = null!;
         public string? Question { get; set; }
         public string? Info { get; set; }
     }

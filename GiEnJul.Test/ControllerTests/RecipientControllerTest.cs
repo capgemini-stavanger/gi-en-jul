@@ -35,7 +35,6 @@ namespace GiEnJul.Test.ControllerTests
                 mockEventRepo.Object, 
                 mockAutoIncrementRepo.Object, 
                 _log, 
-                _mapper,
                 MockAuth0ManagementClient.Object
             );
         }

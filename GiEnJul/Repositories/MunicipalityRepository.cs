@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using GiEnJul.Entities;
+﻿using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
+using GiEnJul.Models.Mappers;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ public interface IMunicipalityRepository
 public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipalityRepository
 {
 
-    public MunicipalityRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Municipality") : base(settings, tableName, mapper, log)
+    public MunicipalityRepository(ISettings settings, ILogger log, string tableName = "Municipality") : base(settings, tableName, log)
     {
     }
 
@@ -41,25 +41,25 @@ public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipa
 
     public async Task<Models.Municipality> InsertOrReplaceAsync(Models.Municipality municipality)
     {
-        var inserted = await InsertOrReplaceAsync(_mapper.Map<Municipality>(municipality));
-        return _mapper.Map<Models.Municipality>(inserted);
+        var inserted = await InsertOrReplaceAsync(municipality.ToEntity());
+        return inserted.ToModel();
     }
 
     public async Task<IEnumerable<Models.Municipality>> GetAll()
     {
         var all = await GetAllAsync();
-        return _mapper.Map<IEnumerable<Models.Municipality>>(all);
+        return all.Select(l => l.ToModel());
     }
 
     public async Task<Models.Municipality> GetSingle(string municipality, string country = "Norge")
     {
         var query = $"PartitionKey eq '{country}' and RowKey eq '{municipality}' ";
         var singleMunicipality = await GetAsync(country, municipality);
-        return _mapper.Map<Models.Municipality>(singleMunicipality);
+        return singleMunicipality.ToModel();
     }
     public async Task<bool> UpdateMunicipality(Models.Municipality municipality)
     {
-        var entityMunicipality = _mapper.Map<Entities.Municipality>(municipality);
+        var entityMunicipality = municipality.ToEntity();
 
         var query = $"PartitionKey eq '{entityMunicipality.PartitionKey}' and RowKey eq '{entityMunicipality.RowKey}' ";
         var matches = await GetAllByQueryAsync(query);
@@ -74,7 +74,7 @@ public class MunicipalityRepository : GenericRepository<Municipality>, IMunicipa
     {
         var query = $"RowKey eq '{location}' ";
         var municipalities = await GetAllByQueryAsync(query);
-        var municipalityMatch = municipalities.FirstOrDefault(); _mapper.Map<Models.Municipality>(municipalities.FirstOrDefault());
+        var municipalityMatch = municipalities.FirstOrDefault();
         if (municipalityMatch == null)
         {
             return null;

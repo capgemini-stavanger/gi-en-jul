@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using GiEnJul.Entities;
+﻿using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
+using GiEnJul.Models.Mappers;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ public interface IEventRepository
     Task<string?> GetDeliveryAddressForLocationAsync(string location);
     Task<(int, string)?> GetGiverLimitAndEventNameForLocationAsync(string location);
     Task<Models.Event> InsertOrReplaceAsync(Models.Event model);
-    Task<Models.Event> GetEventByUserLocationAsync(string location);
+    Task<Models.Event?> GetEventByUserLocationAsync(string location);
     Task<List<Models.Event>> GetAllEventsAsync();
     Task<string[]> GetAllUniqueEventNames();
     Task<Entities.Event?> DeleteEntry(string eventName, string municipality);
@@ -28,14 +28,14 @@ public interface IEventRepository
 
 public class EventRepository : GenericRepository<Event>, IEventRepository
 {
-    public EventRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Event") : base(settings, tableName, mapper, log)
+    public EventRepository(ISettings settings, ILogger log, string tableName = "Event") : base(settings, tableName, log)
     { }
 
-    public async Task<Models.Event> GetEventByUserLocationAsync(string location)
+    public async Task<Models.Event?> GetEventByUserLocationAsync(string location)
     {
         var eventByLocation = await GetEventByLocationAsync(location);
 
-        return _mapper.Map<Models.Event>(eventByLocation);
+        return eventByLocation?.ToModel();
     }
 
     public async Task<string?> GetActiveEventForLocationAsync(string location)
@@ -80,7 +80,7 @@ public class EventRepository : GenericRepository<Event>, IEventRepository
     public async Task<List<Models.Event>> GetAllEventsAsync()
     {
         var events = await GetAllAsync();
-        var modelEvents = _mapper.Map<List<Models.Event>>(events);
+        var modelEvents = events.Select(e => e.ToModel()).ToList();
 
         return modelEvents;
     }
@@ -125,8 +125,8 @@ public class EventRepository : GenericRepository<Event>, IEventRepository
 
     public async Task<Models.Event> InsertOrReplaceAsync(Models.Event model)
     {
-        var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Event>(model));
-        return _mapper.Map<Models.Event>(inserted);
+        var inserted = await InsertOrReplaceAsync(model.ToEntity());
+        return inserted.ToModel();
     }
 
     public async Task<Entities.Event?> DeleteEntry(string eventName, string municipality)
@@ -145,13 +145,13 @@ public class EventRepository : GenericRepository<Event>, IEventRepository
     public async Task<IEnumerable<Models.Event>> GetExpiredEvents()
     {
         var events = await GetAllByQueryAsync($"EndDate lt '{DateTime.UtcNow.ToString("O")}'");
-        var mappedEvents = _mapper.Map<IEnumerable<Models.Event>>(events);
+        var mappedEvents = events.Select(e => e.ToModel());
         return mappedEvents;
     }
 
     public async Task CompleteEvent(Models.Event event_)
     {
-        var entity = _mapper.Map<Entities.Event>(event_);
+        var entity = event_.ToEntity();
         entity.Completed = true;
         await InsertOrReplaceAsync(entity);
     }

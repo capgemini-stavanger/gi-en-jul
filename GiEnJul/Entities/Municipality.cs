@@ -5,7 +5,7 @@ public class Municipality : EntityBase
 
     //PK: country 
     //RK: name of municipality 
-    public string Information { get; set; } = null!;
+    public string? Information { get; set; }
     public bool IsActive { get; set; }
     public string ContactPerson { get; set; } = null!;
     public string Email { get; set; } = null!;

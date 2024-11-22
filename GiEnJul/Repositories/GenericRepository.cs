@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Azure;
+﻿using Azure;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
@@ -17,13 +16,11 @@ namespace GiEnJul.Repositories
 
         private TableClient _client { get; set; }
 
-        protected IMapper _mapper { get; set; }
         protected ILogger _log { get; set; }
 
-        protected GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
+        protected GenericRepository(ISettings settings, string tableName, ILogger log)
         {
             _settings = settings;
-            _mapper = mapper;
             _log = log;
 
             var tableClient = new TableClient(settings.TableConnectionString, tableName);

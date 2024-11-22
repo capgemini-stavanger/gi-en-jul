@@ -1,14 +1,13 @@
-﻿using GiEnJul.Clients;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Auth0.ManagementApi.Models;
-using System;
-using Microsoft.AspNetCore.Authorization;
+﻿using Auth0.ManagementApi.Models;
 using GiEnJul.Auth;
+using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers;
 
@@ -17,13 +16,11 @@ namespace GiEnJul.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IAuth0ManagementClient _auth0ManagementClient;
-    private readonly IMapper _mapper;
     private readonly ISettings _settings;
 
-    public UserController(IAuth0ManagementClient auth0ManagementClient, IMapper mapper, ISettings settings)
+    public UserController(IAuth0ManagementClient auth0ManagementClient, ISettings settings)
     {
         _auth0ManagementClient = auth0ManagementClient;
-        _mapper = mapper;
         _settings = settings;
     }
 

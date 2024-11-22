@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Helpers;
+﻿using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using Serilog;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace GiEnJul.Repositories
 {
     public interface IRecipientRepository
     {
-        Task<Models.Recipient> DeleteAsync(Models.Recipient model);
+        Task<Models.Recipient?> DeleteAsync(Models.Recipient model);
         Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model);
         Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent);
         Task<List<Models.Recipient>> GetAllAsModelAsync();
@@ -26,19 +25,19 @@ namespace GiEnJul.Repositories
     }
     public class RecipientRepository : GenericRepository<Entities.Recipient>, IRecipientRepository
     {
-        public RecipientRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Recipient") : base(settings, tableName, mapper, log)
+        public RecipientRepository(ISettings settings, ILogger log, string tableName = "Recipient") : base(settings, tableName, log)
         { }
 
         public async Task<Models.Recipient> InsertOrReplaceAsync(Models.Recipient model)
         {
-            var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Recipient>(model));
-            return _mapper.Map<Models.Recipient>(inserted);
+            var inserted = await InsertOrReplaceAsync(model.ToEntity());
+            return inserted.ToModel();
         }
 
-        public async Task<Models.Recipient> DeleteAsync(Models.Recipient model)
+        public async Task<Models.Recipient?> DeleteAsync(Models.Recipient model)
         {
-            var deleted = await DeleteAsync(_mapper.Map<Entities.Recipient>(model));
-            return _mapper.Map<Models.Recipient>(deleted);
+            var deleted = await DeleteAsync(model.ToEntity());
+            return deleted?.ToModel();
         }
         public async Task<List<Models.Recipient>> GetUnmatchedRecipientsAsync(string location, string currentEvent)
         {
@@ -46,14 +45,14 @@ namespace GiEnJul.Repositories
                         $"IsMatched eq false";
 
             var recipients = await GetAllByQueryAsync(query);
-            return _mapper.Map<List<Models.Recipient>>(recipients);
+            return recipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<bool> RecipientDoesExist(string referenceId)
         {
             var query = $"ReferenceId eq '{referenceId}'";
             var exists = await GetAllByQueryAsync(query);
-            if (_mapper.Map<List<Models.Recipient>>(exists).Count > 0)
+            if (exists.Count() > 0)
                 return true;
            
             else
@@ -64,13 +63,13 @@ namespace GiEnJul.Repositories
         public async Task<List<Models.Recipient>> GetAllAsModelAsync()
         {
             var allRecipients = await GetAllAsync();
-            return _mapper.Map<List<Models.Recipient>>(allRecipients);
+            return allRecipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<Models.Recipient> GetRecipientAsync(string partitionKey, string rowKey)
         {
             var recipient = await GetAsync(partitionKey, rowKey);
-            return _mapper.Map<Models.Recipient>(recipient);
+            return recipient.ToModel();
         }
 
         public async Task<IList<Models.Recipient>> GetUnsuggestedAsync(string eventName, string location, int quantity)
@@ -79,7 +78,7 @@ namespace GiEnJul.Repositories
 
             var unsuggestedRecipient = await GetAllByQueryAsync(filter);
 
-            return _mapper.Map<IList<Models.Recipient>>(unsuggestedRecipient);
+            return unsuggestedRecipient.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<List<Models.Recipient>> GetSuggestedAsync(string eventName, string location)
@@ -88,14 +87,14 @@ namespace GiEnJul.Repositories
 
             var suggestedRecipient = await GetAllByQueryAsync(filter);
 
-            return _mapper.Map<List<Models.Recipient>>(suggestedRecipient);
+            return suggestedRecipient.Select(r => r.ToModel()).ToList();
         }
         public async Task<List<Models.Recipient>> GetRecipientsByLocationAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
 
             var recipients = await GetAllByQueryAsync(filter);
-            return _mapper.Map<List<Models.Recipient>>(recipients);
+            return recipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAsync(string institution)
@@ -103,7 +102,7 @@ namespace GiEnJul.Repositories
             var filter = $"Institution eq '{institution}'";
             var recipients = await GetAllByQueryAsync(filter);
 
-            return _mapper.Map<List<Models.Recipient>>(recipients);
+            return recipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<List<Models.Recipient>> GetRecipientsByInstitutionAndEventAsync(string institution, string eventName, string location)
@@ -111,14 +110,14 @@ namespace GiEnJul.Repositories
             var query = $"Institution eq '{institution}' and PartitionKey eq '{eventName}_{location}'";
             var recipients = await GetAllByQueryAsync(query);
 
-            return _mapper.Map<List<Models.Recipient>>(recipients);
+            return recipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task<IEnumerable<Models.Recipient>> GetRecipientsByIdsAsync(IEnumerable<string> ids)
         {
             var recipients = await GetAllByRowKey(ids);
 
-            return _mapper.Map<IEnumerable<Models.Recipient>>(recipients);
+            return recipients.Select(r => r.ToModel()).ToList();
         }
 
         public async Task UpdateEmailStatusWarning(string rowKey, bool warning)

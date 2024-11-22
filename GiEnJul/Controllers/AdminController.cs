@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using ClosedXML.Extensions;
+﻿using ClosedXML.Extensions;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models;
@@ -10,7 +10,6 @@ using GiEnJul.Repositories;
 using GiEnJul.Services;
 using GiEnJul.Utilities;
 using GiEnJul.Utilities.EmailTemplates;
-using GiEnJul.Utilities.ExcelClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -32,7 +31,6 @@ public class AdminController : ControllerBase
     private readonly IConnectionRepository _connectionRepository;
     private readonly IMunicipalityRepository _municipalityRepository;
     private readonly ILogger _log;
-    private readonly IMapper _mapper;
     private readonly IEmailClient _emailClient;
     private readonly ISettings _settings;
     private readonly IEmailTemplateBuilder _emailTemplateBuilder;
@@ -47,7 +45,6 @@ public class AdminController : ControllerBase
         IConnectionRepository connectionRepository,
         IMunicipalityRepository municipalityRepository,
         ILogger log,
-        IMapper mapper,
         IEmailClient emailClient,
         ISettings settings,
         IEmailTemplateBuilder emailTemplateBuilder,
@@ -61,7 +58,6 @@ public class AdminController : ControllerBase
         _connectionRepository = connectionRepository;
         _municipalityRepository = municipalityRepository;
         _log = log;
-        _mapper = mapper;
         _emailClient = emailClient;
         _settings = settings;
         _emailTemplateBuilder = emailTemplateBuilder;
@@ -134,7 +130,7 @@ public class AdminController : ControllerBase
         }
 
         var connections = await _connectionRepository.GetAllByLocationEventAsync(location, eventName);
-        using var wb = ExcelGenerator.Generate(_mapper.Map<IEnumerable<DeliveryExcel>>(connections));
+        using var wb = ExcelGenerator.Generate(connections.Select(c => c.ToDeliveryExcel()));
         return wb.Deliver("leveranse_liste.xlsx");
     }
 
@@ -149,7 +145,7 @@ public class AdminController : ControllerBase
             return [];
         }
         var completed = await _connectionRepository.GetAllConnectionsByLocation(eventName, location);
-        var connectionDtos = _mapper.Map<List<GetConnectionDto>>(completed);
+        var connectionDtos = completed.Select(c => c.ToGetConnectionDto()).ToList();
         return connectionDtos;
     }
 
@@ -162,7 +158,7 @@ public class AdminController : ControllerBase
             throw new ArgumentException();
         }
 
-        var eventEntity = _mapper.Map<Event>(eventDto);
+        var eventEntity = eventDto.ToModel();
         await _eventRepository.InsertOrReplaceAsync(eventEntity);
 
         return Ok();
@@ -338,7 +334,7 @@ public class AdminController : ControllerBase
     [Authorize(Policy = Policy.UpdateRecipient)]
     public async Task<ActionResult> PutRecipientAsync([FromBody] PutRecipientDto recipientDto)
     {
-        var recipientNew = _mapper.Map<Recipient>(recipientDto);
+        var recipientNew = recipientDto.ToModel();
         var recipientOld = await _recipientRepository.GetRecipientAsync(recipientDto.Event, recipientDto.RecipientId);
 
         if (recipientOld.IsSuggestedMatch)
@@ -449,7 +445,7 @@ public class AdminController : ControllerBase
             .OrderBy(x => x.MaxReceivers)
             .ToList();
 
-        return _mapper.Map<IList<GiverDataTableDto>>(suggestions);
+        return suggestions.Select(s => s.ToGiverDataTableDto()).ToList();
     }
 
     [HttpGet("Suggestions/Recipient/{quantity}")]
@@ -472,7 +468,7 @@ public class AdminController : ControllerBase
         var persons = await _personRepository.GetAllByRecipientIds(ids);
 
         suggestions.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
-        return _mapper.Map<IList<RecipientDataTableDto>>(suggestions);
+        return suggestions.Select(r => r.ToRecipientDataTableDto()).ToList();
     }
 
     [HttpPost("Giver/Update")]

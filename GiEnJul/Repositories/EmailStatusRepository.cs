@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Entities;
+﻿using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using GiEnJul.Models.Mappers;
 using GiEnJul.Utilities.Constants;
@@ -20,7 +19,7 @@ public interface IEmailStatusRepository
 
 public class EmailStatusRepository : GenericRepository<SentEmail>, IEmailStatusRepository
 {
-    public EmailStatusRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "EmailStatuses") : base(settings, tableName, mapper, log)
+    public EmailStatusRepository(ISettings settings, ILogger log, string tableName = "EmailStatuses") : base(settings, tableName, log)
     {
     }
 
