@@ -43,7 +43,6 @@ namespace GiEnJul.Test.ControllerTests
                 mockMunicipalityRepo.Object,
                 mockEmailClient.Object, 
                 _log, 
-                _mapper, 
                 mockRecaptchaVerifier.Object, 
                 mockEmailTemplateBuilder.Object);
 

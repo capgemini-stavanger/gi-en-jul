@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
+﻿using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Helpers;
@@ -27,7 +26,6 @@ namespace GiEnJul.Controllers
         private readonly IPersonRepository _personRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly ILogger _log;
-        private readonly IMapper _mapper;
         private readonly ISettings _settings;
         private readonly IEmailClient _emailClient;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
@@ -40,7 +38,6 @@ namespace GiEnJul.Controllers
             IPersonRepository personRepository,
             IConnectionRepository connectionRepository,
             ILogger log,
-            IMapper mapper,
             ISettings settings,
             IEmailClient emailClient,
             IEmailTemplateBuilder emailTemplateBuilder)
@@ -52,7 +49,6 @@ namespace GiEnJul.Controllers
             _personRepository = personRepository;
             _connectionRepository = connectionRepository;
             _log = log;
-            _mapper = mapper;
             _settings = settings;
             _emailClient = emailClient;
             _emailTemplateBuilder = emailTemplateBuilder;

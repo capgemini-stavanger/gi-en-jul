@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
+﻿using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Repositories;
 using GiEnJul.Services;
@@ -20,7 +19,6 @@ public static class ServiceConfiguration
         var settings = new Settings(configuration);
         services.AddSingleton<ISettings>(s => settings);
 
-        services.AddSingleton(AutoMapperConfiguration.Initialize());
         services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
         services.AddSingleton(h => new HttpClient());
         services.AddSingleton<IAuth0ManagementClient, Auth0ManagementClient>();
@@ -36,7 +34,7 @@ public static class ServiceConfiguration
         services.AddScoped<ICmsRepository, CmsRepository>();
         services.AddScoped<IMunicipalityRepository,  MunicipalityRepository>();
         services.AddScoped<IEmailStatusRepository, EmailStatusRepository>();
-        if (false && environment.IsDevelopment())
+        if (environment.IsDevelopment())
             { services.AddScoped<IEmailClient, EmailClient>(); }
         else { services.AddScoped<IEmailClient, SendGridEmailClient>(); }
         services.AddScoped<IRecaptchaVerifier, RecaptchaVerifier>();

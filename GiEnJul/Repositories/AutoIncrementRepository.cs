@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Azure;
+﻿using Azure;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Serilog;
@@ -17,10 +16,9 @@ public class AutoIncrementRepository : GenericRepository<AutoIncrement>, IAutoIn
 {
     public AutoIncrementRepository(
         ISettings settings, 
-        IMapper mapper, 
         ILogger log, 
         string tableName = "AutoIncrement"
-    ) : base(settings, tableName, mapper, log)
+    ) : base(settings, tableName, log)
     { }
 
 

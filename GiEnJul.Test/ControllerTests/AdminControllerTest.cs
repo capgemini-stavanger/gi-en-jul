@@ -53,7 +53,6 @@ namespace GiEnJul.Test.ControllerTests
                                               MockConnectionRepo.Object,
                                               MockMunicipalityRepo.Object,
                                               _log,
-                                              _mapper,
                                               emailClientMock.Object,
                                               settings,
                                               mockEmailTemplateBuilder.Object,

@@ -29,4 +29,8 @@
     <ProjectReference Include="..\GiEnJul\GiEnJul.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="InfrastructureTests\" />
+  </ItemGroup>
+
 </Project>

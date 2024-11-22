@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Infrastructure;
+﻿using GiEnJul.Models.Mappers;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -8,11 +7,9 @@ namespace GiEnJul.Test.ModelTests
 {
     public class PersonTest
     {
-        private readonly IMapper _mapper;
 
         public PersonTest()
         {
-            _mapper = AutoMapperConfiguration.Initialize();
         }
 
         [Fact]
@@ -28,7 +25,7 @@ namespace GiEnJul.Test.ModelTests
                     "Setning"
                 }
             };
-            var entityPerson = _mapper.Map<Entities.Person>(modelPerson);
+            var entityPerson = modelPerson.ToEntity();
             modelPerson.Wishes.ToList().ForEach(wish => Assert.Contains(wish, entityPerson.Wishes));
         }
 
@@ -41,7 +38,7 @@ namespace GiEnJul.Test.ModelTests
                 PartitionKey = "1",
                 Wishes = "[\"Test\", \"Setning\"]"
             };
-            var modelPerson = _mapper.Map<Models.Person>(entityPerson);
+            var modelPerson = entityPerson.ToModel();
             modelPerson.Wishes.ToList().ForEach(wish => Assert.Contains(wish, entityPerson.Wishes));
         }
     }

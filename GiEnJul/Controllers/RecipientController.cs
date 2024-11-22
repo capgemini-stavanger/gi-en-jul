@@ -1,13 +1,13 @@
-﻿using AutoMapper;
-using ClosedXML.Extensions;
+﻿using ClosedXML.Extensions;
 using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Helpers;
+using GiEnJul.Infrastructure;
 using GiEnJul.Models;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities;
-using GiEnJul.Utilities.ExcelClasses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -27,7 +27,6 @@ public class RecipientController : ControllerBase
     private readonly IEventRepository _eventRepository;
     private readonly IAutoIncrementRepository _autoIncrementRepository;
     private readonly ILogger _log;
-    private readonly IMapper _mapper;
     private readonly IAuth0ManagementClient _managementClient;
 
     public RecipientController(
@@ -36,7 +35,6 @@ public class RecipientController : ControllerBase
         IEventRepository eventRepository,
         IAutoIncrementRepository autoIncrementRepository,
         ILogger log,
-        IMapper mapper,
         IAuth0ManagementClient managementClient
         )
     {
@@ -45,7 +43,6 @@ public class RecipientController : ControllerBase
         _eventRepository = eventRepository;
         _autoIncrementRepository = autoIncrementRepository;
         _log = log;
-        _mapper = mapper;
         _managementClient = managementClient;
     }
 
@@ -54,7 +51,7 @@ public class RecipientController : ControllerBase
     public async Task<ActionResult<(string? FamilyId,string? ReferenceId)>> PostAsync([FromBody] PostRecipientDto recipientDto)
     {
         var currentEventName = await _eventRepository.GetActiveEventForLocationAsync(recipientDto.Location);
-        var recipient = _mapper.Map<Recipient>(recipientDto);
+        var recipient = recipientDto.ToModel();
         var currentEvent = $"{currentEventName}_{recipient.Location}";
 
         //post mapping as this data must be fetched
@@ -74,7 +71,7 @@ public class RecipientController : ControllerBase
         try
         {
             //Add familymembers to Table Storage
-            var family = _mapper.Map<List<Person>>(recipientDto.FamilyMembers);
+            var family = recipientDto.FamilyMembers.Select(p => p.ToModel()).ToList();
             family.ForEach(person => person.RecipientId = insertedRecipient.RecipientId);
 
             await _personRepository.InsertOrReplaceBatchAsync(family);
@@ -132,8 +129,8 @@ public class RecipientController : ControllerBase
 
         recipients.ForEach(r => r.FamilyMembers = persons.Where(p => p.RecipientId == r.RecipientId).ToList());
 
-        var excelRecipients = _mapper.Map<List<SubmittedFamiliesExcel>>(recipients);
-        var excelPersons = _mapper.Map<List<SubmittedPersonExcel>>(persons.OrderBy(p => p.RecipientId));
+        var excelRecipients = recipients.Select(r => r.ToSubmittedFamiliesExcel());
+        var excelPersons = persons.OrderBy(p => p.RecipientId).Select(p => p.ToSubmittedPersonExcel()).ToList();
         excelPersons.ForEach(p =>
         {
             var recipient = recipients.Single(r => r.RecipientId == p.RecipientId);

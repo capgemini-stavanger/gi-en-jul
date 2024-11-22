@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
+﻿using GiEnJul.Auth;
 using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,89 +10,85 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GiEnJul.Controllers
+namespace GiEnJul.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class CmsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CmsController : ControllerBase
+    private readonly ICmsRepository _cmsRepository;
+   
+    public CmsController(
+        ICmsRepository cmsRepository)
     {
-        private readonly ICmsRepository _cmsRepository;
-        private readonly IMapper _mapper;
-       
-        public CmsController(
-            ICmsRepository cmsRepository,
-            IMapper mapper)
-        {
-            _cmsRepository = cmsRepository;
-            _mapper = mapper;
-        }
+        _cmsRepository = cmsRepository;
+    }
 
-        [HttpGet("GetAll")]
-        public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
+    [HttpGet("GetAll")]
+    public async Task<IEnumerable> GetAllContent([FromQuery] string contentType)
+    {
+        var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
+        if (content.Any())
         {
-            var content = await _cmsRepository.GetCmsByContentTypeAsync(contentType);
-            if (content.Any())
-            {
-                return content;
-            }
-            else
-            {
-                var newContent = await _cmsRepository.InsertOrReplaceAsync(new Models.Cms
-                {
-                    Index = Guid.NewGuid().ToString(),
-                    ContentType = contentType,
-                    Info = String.Empty,
-                    Question = null
-                });
-                return new List<Models.Cms> { newContent };
-            }
-        }
-
-        [HttpGet("GetSingle")]
-        public async Task<Models.Cms> GetSingleContent([FromQuery] string contentType, string index)
-        {
-            var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index);
             return content;
         }
-
-        [HttpPost("Insert")]
-        [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
+        else
         {
-            if (string.IsNullOrWhiteSpace(content.Index) &&
-                (content.ContentType == "FAQ" || content.ContentType == "Bedrift"
-                || content.ContentType == "HowToStart"))
+            var newContent = await _cmsRepository.InsertOrReplaceAsync(new Models.Cms
             {
-                content.Index = Guid.NewGuid().ToString();
-            }
+                Index = Guid.NewGuid().ToString(),
+                ContentType = contentType,
+                Info = string.Empty,
+                Question = null
+            });
+            return new List<Models.Cms> { newContent };
+        }
+    }
 
-            var newItem = _mapper.Map<Models.Cms>(content);
-            var existing = await _cmsRepository.GetSingleCmsByContentTypeAsync(content.ContentType, content.Index!);
+    [HttpGet("GetSingle")]
+    public async Task<Models.Cms> GetSingleContent([FromQuery] string contentType, string index)
+    {
+        var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index);
+        return content;
+    }
 
-            if (existing != null)
-            {
-                newItem.Question = content.Question ?? existing.Question;
-                newItem.Info = content.Info ?? existing.Info;
-            }
-
-            await _cmsRepository.InsertOrReplaceAsync(newItem);
-            return Ok();
+    [HttpPost("Insert")]
+    [Authorize(Policy = Policy.SuperAdmin)]
+    public async Task<ActionResult> PostContent([FromBody] PostCmsDto content)
+    {
+        if (string.IsNullOrWhiteSpace(content.Index) &&
+            (content.ContentType == "FAQ" || content.ContentType == "Bedrift"
+            || content.ContentType == "HowToStart"))
+        {
+            content.Index = Guid.NewGuid().ToString();
         }
 
-        [HttpPost("deleteSingle")]
-        [Authorize(Policy = Policy.SuperAdmin)]
-        public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)
+        var newItem = content.ToModel();
+        var existing = await _cmsRepository.GetSingleCmsByContentTypeAsync(content.ContentType, content.Index!);
+
+        if (existing != null)
         {
-            if (string.IsNullOrWhiteSpace(entity.Index))
-            {
-                return BadRequest("Index can't be null");
-            }
-            var content = await _cmsRepository.DeleteEntry(entity.ContentType, entity.Index);
-            if (content == null)
-            {
-                return BadRequest();
-            }
-            return Ok(content); 
+            newItem.Question = content.Question ?? existing.Question;
+            newItem.Info = content.Info ?? existing.Info;
         }
+
+        await _cmsRepository.InsertOrReplaceAsync(newItem);
+        return Ok();
+    }
+
+    [HttpPost("deleteSingle")]
+    [Authorize(Policy = Policy.SuperAdmin)]
+    public async Task<ActionResult> DeleteSingleContent([FromBody] PostCmsDto entity)
+    {
+        if (string.IsNullOrWhiteSpace(entity.Index))
+        {
+            return BadRequest("Index can't be null");
+        }
+        var content = await _cmsRepository.DeleteEntry(entity.ContentType, entity.Index);
+        if (content == null)
+        {
+            return BadRequest();
+        }
+        return Ok(content); 
     }
 }

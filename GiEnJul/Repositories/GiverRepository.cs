@@ -1,6 +1,6 @@
-using AutoMapper;
 using GiEnJul.Helpers;
 using GiEnJul.Infrastructure;
+using GiEnJul.Models.Mappers;
 using Serilog;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace GiEnJul.Repositories
 {
     public interface IGiverRepository
     {
-        Task<Models.Giver> DeleteAsync(Models.Giver model);
+        Task<Models.Giver?> DeleteAsync(Models.Giver model);
         Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model);
         Task<IEnumerable<Models.Giver>> GetAllAsModelAsync();
         Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey);
@@ -25,30 +25,30 @@ namespace GiEnJul.Repositories
 
     public class GiverRepository : GenericRepository<Entities.Giver>, IGiverRepository
     {
-        public GiverRepository(ISettings settings, IMapper mapper, ILogger logger, string tableName = "Giver") : base(settings, tableName, mapper, logger)
+        public GiverRepository(ISettings settings, ILogger logger, string tableName = "Giver") : base(settings, tableName, logger)
         { }
 
-        public async Task<Models.Giver> DeleteAsync(Models.Giver model)
+        public async Task<Models.Giver?> DeleteAsync(Models.Giver model)
         {
-            var deleted = await DeleteAsync(_mapper.Map<Entities.Giver>(model));
-            return _mapper.Map<Models.Giver>(deleted);
+            var deleted = await DeleteAsync(model.ToEntity());
+            return deleted?.ToModel();
         }
 
         public async Task<Models.Giver> InsertOrReplaceAsync(Models.Giver model)
         {
-            var inserted = await InsertOrReplaceAsync(_mapper.Map<Entities.Giver>(model));
-            return _mapper.Map<Models.Giver>(inserted);
+            var inserted = await InsertOrReplaceAsync(model.ToEntity());
+            return inserted.ToModel();
         }
 
         public async Task<IEnumerable<Models.Giver>> GetAllAsModelAsync()
         {
             var allGivers = await GetAllAsync();
-            return _mapper.Map<IEnumerable<Models.Giver>>(allGivers);
+            return allGivers.Select(g => g.ToModel());
         }
         public async Task<Models.Giver> GetGiverAsync(string partitionKey, string rowKey)
         {
             var giver = await GetAsync(partitionKey, rowKey);
-            return _mapper.Map<Models.Giver>(giver);
+            return giver.ToModel();
         }
 
         public async Task<IList<Models.Giver>> GetUnsuggestedAsync(string eventName, string location, int quantity)
@@ -56,8 +56,8 @@ namespace GiEnJul.Repositories
             var filter = TableQueryFilterHelper.GetUnsuggestedFilter(eventName, location);
 
             var unsuggestedGivers = await GetAllByQueryAsync(filter);
-            
-            return _mapper.Map<List<Models.Giver>>(unsuggestedGivers);
+
+            return unsuggestedGivers.Select(g => g.ToModel()).ToList();
         }
 
         public async Task<List<Models.Giver>> GetSuggestedAsync(string eventName, string location)
@@ -66,14 +66,14 @@ namespace GiEnJul.Repositories
 
             var suggestedGivers = await GetAllByQueryAsync(filter);
 
-            return _mapper.Map<List<Models.Giver>>(suggestedGivers);
+            return suggestedGivers.Select(g => g.ToModel()).ToList();
         }
 
         public async Task<IEnumerable<Models.Giver>> GetGiversByLocationAsync(string eventName, string location)
         {
             var filter = TableQueryFilterHelper.GetAllByActiveEventsFilter(eventName, location);
             var givers = await GetAllByQueryAsync(filter);
-            return _mapper.Map<IEnumerable<Models.Giver>>(givers);
+            return givers.Select(g => g.ToModel()).ToList();
         }
 
         public async Task<int> GetGiversCountByLocationAsync(string eventName, string location)
@@ -85,7 +85,7 @@ namespace GiEnJul.Repositories
         public async Task<IEnumerable<Models.Giver>> GetGiversByQueryAsync(string query)
         {
             var givers = await GetAllByQueryAsync(query);
-            return _mapper.Map<IEnumerable<Models.Giver>>(givers);
+            return givers.Select(g => g.ToModel()).ToList();
         }
 
         public async Task UpdateEmailStatusWarning(string rowKey, bool warning)

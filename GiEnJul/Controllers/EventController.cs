@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
+﻿using GiEnJul.Auth;
 using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +16,11 @@ namespace GiEnJul.Controllers
     {
         private readonly IEventRepository _eventRepository;
         private readonly ILogger _log;
-        private readonly IMapper _mapper;
 
-        public EventController(IEventRepository eventRepository, ILogger log, IMapper mapper)
+        public EventController(IEventRepository eventRepository, ILogger log)
         {
             _eventRepository = eventRepository;
             _log = log;
-            _mapper = mapper;
         }
 
         // GET api/Event/ActiveLocations
@@ -53,7 +51,7 @@ namespace GiEnJul.Controllers
         [Authorize(Policy= Policy.SuperAdmin)]
         public async Task<ActionResult> PostEvent([FromBody] PostEventDto content)
         {
-            var entity = await _eventRepository.InsertOrReplaceAsync(_mapper.Map<Models.Event>(content));
+            var entity = await _eventRepository.InsertOrReplaceAsync(content.ToModel());
             if (entity == null)
             {
                 return BadRequest();

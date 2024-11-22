@@ -8,7 +8,7 @@ public class PutPersonDto
 {
     [Required]
     public string RecipientId { get; set; } = null!;
-    public string? PersonId { get; set; }
+    public string PersonId { get; set; } = null!;
     public IEnumerable<string> Wishes { get; set; } = [];
     [Required]
     public int Age { get; set; }

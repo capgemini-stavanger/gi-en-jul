@@ -1,16 +1,15 @@
-﻿using AutoMapper;
+﻿using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
-using GiEnJul.Auth;
+using GiEnJul.Repositories;
+using GiEnJul.Utilities;
+using GiEnJul.Utilities.EmailTemplates;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
-using GiEnJul.Repositories;
-using GiEnJul.Utilities.EmailTemplates;
 using System.Collections.Generic;
-using GiEnJul.Utilities;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers;
 
@@ -19,7 +18,6 @@ namespace GiEnJul.Controllers;
 public class EmailController : ControllerBase
 {
     private readonly ILogger _log;
-    private readonly IMapper _mapper;
     private readonly IEmailClient _emailClient;
     private readonly IGiverRepository _giverRepository;
     private readonly IEventRepository _eventRepository;
@@ -27,14 +25,12 @@ public class EmailController : ControllerBase
 
     public EmailController(
         ILogger log,
-        IMapper mapper,
         IEmailClient emailClient,
         IGiverRepository giverRepository,
         IEventRepository eventRepository,
         IEmailTemplateBuilder emailTemplateBuilder)
     {
         _log = log;
-        _mapper = mapper;
         _emailClient = emailClient;
         _giverRepository = giverRepository;
         _eventRepository = eventRepository;

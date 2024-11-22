@@ -1,17 +1,17 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
-using GiEnJul.Dtos;
-using GiEnJul.Repositories;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
-using GiEnJul.Helpers;
+﻿using GiEnJul.Auth;
 using GiEnJul.Clients;
+using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
+using GiEnJul.Helpers;
+using GiEnJul.Repositories;
 using GiEnJul.Utilities;
-using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GiEnJul.Controllers;
 
@@ -20,21 +20,18 @@ namespace GiEnJul.Controllers;
 public class MunicipalityController : ControllerBase
 {
     private readonly IMunicipalityRepository _municipalityRepository;
-    private readonly IMapper _mapper;
     private readonly IAuth0ManagementClient _managementClient;
     private readonly IAuthorization _authorization;
     private readonly IMunicipalityBlobClient _municipalityBlobClient;
     private readonly IContactImagesBlobClient _contactImagesBlobClient;
 
     public MunicipalityController(IMunicipalityRepository municipalityRepository,
-                                  IMapper mapper,
                                   IAuth0ManagementClient managementClient,
                                   IAuthorization authorization,
                                   IMunicipalityBlobClient municipalityBlobClient,
                                   IContactImagesBlobClient contactImagesBlobClient)
     {
         _municipalityRepository = municipalityRepository;
-        _mapper = mapper;
         _managementClient = managementClient;
         _authorization = authorization;
         _municipalityBlobClient = municipalityBlobClient;
@@ -47,7 +44,7 @@ public class MunicipalityController : ControllerBase
     {
         try
         {
-            await _municipalityRepository.DeleteEntry(_mapper.Map<Models.Municipality>(content));
+            await _municipalityRepository.DeleteEntry(content.ToModel());
             return Ok();
         }
         catch
@@ -65,7 +62,7 @@ public class MunicipalityController : ControllerBase
         if (names.Where(x => x.Name == content.Name).Any())
             return BadRequest("RowKey already exists, use put request to edit");
 
-        await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+        await _municipalityRepository.InsertOrReplaceAsync(content.ToModel());
         return Ok();
     }
 
@@ -73,7 +70,7 @@ public class MunicipalityController : ControllerBase
     public async Task<List<Dtos.GetMunicipalityDto>> GetAll()
     {
         var municipalities = await _municipalityRepository.GetAll();
-        var dtos = _mapper.Map<List<Dtos.GetMunicipalityDto>>(municipalities);
+        var dtos = municipalities.Select(m => m.ToGetMunicipalityDto()).ToList();
         var images = await _municipalityBlobClient.GetAllImages();
 
         foreach (var dto in dtos)
@@ -125,7 +122,7 @@ public class MunicipalityController : ControllerBase
     {
         var municipalities = await _municipalityRepository.GetAll();
         var active = municipalities.Where(m => m.IsActive).ToList();
-        var contacts = _mapper.Map<List<Dtos.GetContactsDto>>(active);
+        var contacts = active.Select(m => m.ToGetContactsDto()).ToList();
         contacts.ForEach(c => c.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{c.Name}");
         return contacts;
     }
@@ -135,7 +132,7 @@ public class MunicipalityController : ControllerBase
     public async Task<Dtos.GetContactsDto> GetSingleContact([FromQuery] string municipality)
     {
         var contact = await _municipalityRepository.GetSingle(municipality);
-        var dto = _mapper.Map<Dtos.GetContactsDto>(contact);
+        var dto = contact.ToGetContactsDto();
         dto.Image = $"{_contactImagesBlobClient.BlobContainerUrl}/{dto.Name}";
         return dto;
     }
@@ -144,7 +141,7 @@ public class MunicipalityController : ControllerBase
     public async Task<Models.Municipality> GetSingle([FromQuery] string municipality)
     {
         var singelMunicipality = await _municipalityRepository.GetSingle(municipality);
-        return _mapper.Map<Models.Municipality>(singelMunicipality);
+        return singelMunicipality;
     }
    
     [HttpPut("update")]
@@ -169,11 +166,11 @@ public class MunicipalityController : ControllerBase
     {
         await _authorization.ThrowIfNotAccessToMunicipality(content.Name, User);
         var entities = await _municipalityRepository.GetAll();
-        var exsistingMunicipalities = _mapper.Map<List<Models.Municipality>>(entities);
+        var exsistingMunicipalities = entities.ToList();
         if (!exsistingMunicipalities.Any(x => x.Name == content.Name))
             return BadRequest("RowKey does not exists");
 
-        await _municipalityRepository.InsertOrReplaceAsync(_mapper.Map<Models.Municipality>(content));
+        await _municipalityRepository.InsertOrReplaceAsync(content.ToModel());
         return Ok();
     }
 
