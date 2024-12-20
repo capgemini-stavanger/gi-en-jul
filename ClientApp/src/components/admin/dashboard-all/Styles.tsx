@@ -198,13 +198,12 @@ export const useStyles = makeStyles((theme) => ({
   commentBoxButton: {
     marginLeft: "0.5em",
     borderRadius: "0.5em",
-    height: "1.6em",
-    width: "1em",
+    padding: "0em 0.8em",
 
     backgroundColor: theme.palette.primary.main,
     color: "white",
     "&:hover": {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.primary.dark,
     },
   },
   gridBoxLeft: {
@@ -260,6 +259,25 @@ export const useStyles = makeStyles((theme) => ({
   },
   noneIcon: {
     color: "red",
+  },
+
+  emailLogContainer: {
+    padding: "1rem",
+    minHeight: "20rem",
+    maxHeight: "80dvh",
+    minWidth: "50dvw",
+  },
+  emailLogHeader: {
+    width: "100%",
+  },
+  emailLogBody: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
+  },
+  emailLogTable: {
+    maxHeight: "calc(80dvh - 100px)",
   },
 }));
 

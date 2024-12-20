@@ -1,6 +1,9 @@
-﻿using GiEnJul.Dtos;
+﻿using GiEnJul.Auth;
+using GiEnJul.Dtos;
+using GiEnJul.Dtos.Mappers;
 using GiEnJul.Repositories;
 using GiEnJul.Utilities.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +36,9 @@ public class EmailStatusController : ControllerBase
                 return;
             }
             var messageId = postEmailStatusDto.MessageId.Split(".").First();
-            var updatedModel = await _emailStatusRepository.UpdateStatus(messageId, postEmailStatusDto.Email, postEmailStatusDto.Event, postEmailStatusDto.Reason);
+            var updatedModel = await _emailStatusRepository.UpdateStatus(messageId, postEmailStatusDto.Email.ToLower(), postEmailStatusDto.Event, postEmailStatusDto.Reason);
             
-            if (postEmailStatusDto.Event != EmailStatuses.Bounced && postEmailStatusDto.Event != EmailStatuses.Dropped)
+            if (postEmailStatusDto.Event != EmailStatuses.Bounced && postEmailStatusDto.Event != EmailStatuses.Dropped && postEmailStatusDto.Event != EmailStatuses.Deferred)
             {
                 continue;
             }
@@ -44,14 +47,31 @@ public class EmailStatusController : ControllerBase
             {
                 await _giverRepository.UpdateEmailStatusWarning(updatedModel.GiverId, true);
             }
+
             if (!string.IsNullOrWhiteSpace(updatedModel.RecipientId))
             {
-
+                await _recipientRepository.UpdateEmailStatusWarning(updatedModel.RecipientId, true);
             }
         }
     }
 
-    [HttpGet("/giver/{giverId}")]
+    [HttpPost("clearwarning")]
+    [Authorize(Policy = Policy.ReadGiver)]
+    public async Task ClearEmailStatusWarning(PostClearEmailWarningDto clearWarningDto)
+    {
+
+        if (!string.IsNullOrWhiteSpace(clearWarningDto.GiverId))
+        {
+            await _giverRepository.UpdateEmailStatusWarning(clearWarningDto.GiverId, false);
+        }
+        if (!string.IsNullOrWhiteSpace(clearWarningDto.RecipientId))
+        {
+            await _recipientRepository.UpdateEmailStatusWarning(clearWarningDto.RecipientId, false);
+        }
+    }
+
+    [HttpGet("giver/{giverId}")]
+    [Authorize(Policy = Policy.ReadGiver)]
     public async Task<IActionResult> GetEmailStatusesForGiver(string giverId)
     {
         var response = await _emailStatusRepository.GetEmailsByGiverId(giverId);
@@ -60,10 +80,11 @@ public class EmailStatusController : ControllerBase
             return NotFound();
         }
 
-        return Ok(response);
+        return Ok(response.OrderByDescending(r => r.SentAt).Select(r => r.ToResponseDto()));
     }
 
-    [HttpGet("/recipient/{recipientId}")]
+    [HttpGet("recipient/{recipientId}")]
+    [Authorize(Policy = Policy.ReadRecipient)]
     public async Task<IActionResult> GetEmailStatusesForRecipient(string recipientId)
     {
         var response = await _emailStatusRepository.GetEmailsByRecipientId(recipientId);
@@ -72,6 +93,6 @@ public class EmailStatusController : ControllerBase
             return NotFound();
         }
 
-        return Ok(response);
+        return Ok(response.OrderByDescending(r => r.SentAt).Select(r => r.ToResponseDto()));
     }
 }

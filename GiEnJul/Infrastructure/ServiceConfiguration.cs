@@ -34,7 +34,7 @@ public static class ServiceConfiguration
         services.AddScoped<ICmsRepository, CmsRepository>();
         services.AddScoped<IMunicipalityRepository,  MunicipalityRepository>();
         services.AddScoped<IEmailStatusRepository, EmailStatusRepository>();
-        if (environment.IsDevelopment())
+        if (false && environment.IsDevelopment())
             { services.AddScoped<IEmailClient, EmailClient>(); }
         else { services.AddScoped<IEmailClient, SendGridEmailClient>(); }
         services.AddScoped<IRecaptchaVerifier, RecaptchaVerifier>();

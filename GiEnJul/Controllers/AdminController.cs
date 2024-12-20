@@ -10,6 +10,7 @@ using GiEnJul.Repositories;
 using GiEnJul.Services;
 using GiEnJul.Utilities;
 using GiEnJul.Utilities.EmailTemplates;
+using GiEnJul.Utilities.ExcelEntries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
