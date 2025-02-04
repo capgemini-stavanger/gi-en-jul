@@ -1,6 +1,8 @@
 # Gi en jul Client App
 
-## Contents 
+[Main README](/README.md)
+
+## Contents
 
  1. [Introduction](#introduction)
  2. [Setup](#setup)
@@ -11,6 +13,7 @@
  7. [Admin page](#admin-page)
     1. [General admin](#general-admin-page)
     2. [Management](#management-page)
+ 8. [Deployment](#deployment)
 
 ## Introduction
 
@@ -100,3 +103,9 @@ The code is found in 'src/components/superadmin'.
 All admins have access to the management page, but the superadmin accounts have a lot more features available.
 A normal admin can update info about their own municipality, such as the info text displayed on [www.gienjul.no/kommune](https://www.gienjul.no/kommune) or the contact info and image displayed on [www.gienjul.no/#contacts](https://www.gienjul.no/#contacts). They can also set the dates for their municipality's events.
 A superadmin account can create and delete users, update the FAQ and update dates for the events across all municipalities.
+
+## Deployment
+
+The app compiles to a static web app and is served from an azure storage account.
+The deploy pipelines are using SAS-urls to upload to a storage blob container, this url has an expiry date and needs to be updated every year.
+Instructions for creating a new URL can be found here [wiki/Azure#pipeline](https://github.com/capgemini-stavanger/gi-en-jul/wiki/Azure#pipeline)
