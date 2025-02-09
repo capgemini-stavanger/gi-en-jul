@@ -5,6 +5,9 @@
 |---|---|
 [![DEV - Build and Deploy Application to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_backend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_backend.yml) [![DEV Build and Deploy Frontend to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_frontend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/DEV_CD_frontend.yml) | [![PROD - Build and Deploy Application to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_backend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_backend.yml) [![PROD Build and Deploy Frontend to Azure](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_frontend.yml/badge.svg)](https://github.com/capgemini-stavanger/gi-en-jul/actions/workflows/PROD_CD_frontend.yml)
 
+## Docs
+
+[ClientApp docs found here](/ClientApp/README.md)
 
 ## Setup
 
@@ -26,6 +29,7 @@ Either run the backend in Visual Studio or download the SDK https://dotnet.micro
  The api should now be running on localhost:5001
 
 ### FrontEnd
+
 To run the frontend npm of version 7.20.2 or later is recommended, especially since older versions of node will generate a package-log.json of an older version than what we used.
 Link for dowloading node https://nodejs.org/en/download/
 Run to show current npm version:  -npm -v
