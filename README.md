@@ -8,6 +8,7 @@
 ## Docs
 
 [ClientApp docs found here](/ClientApp/README.md)
+[API docs found here](/GiEnJul/README.md)
 
 ## Setup
 
