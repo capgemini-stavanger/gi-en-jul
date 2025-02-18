@@ -8,6 +8,7 @@
 ## Docs
 
 [ClientApp docs found here](/ClientApp/README.md)
+[API docs found here](/GiEnJul/README.md)
 
 ## Setup
 
@@ -23,7 +24,7 @@ Either run the backend in Visual Studio or download the SDK https://dotnet.micro
   2. Make sure the launch setting gi_en_jul is selected
   3. Run the GiEnJul project
 * SDK
-  1. Have the SDK for dotnet 6.0.x or later
+  1. Have the SDK for dotnet 8.0.x or later
   2. Run - dotnet restore "\gienjul\GiEnJul\GiEnJul.csproj"'
   3. Run - dotnet run "\gienjul\GiEnJul\GiEnJul.csproj"
  The api should now be running on localhost:5001
