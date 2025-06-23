@@ -46,7 +46,7 @@ public class CmsController : ControllerBase
     }
 
     [HttpGet("GetSingle")]
-    public async Task<Models.Cms> GetSingleContent([FromQuery] string contentType, string index)
+    public async Task<Models.Cms?> GetSingleContent([FromQuery] string contentType, string index)
     {
         var content = await _cmsRepository.GetSingleCmsByContentTypeAsync(contentType, index);
         return content;

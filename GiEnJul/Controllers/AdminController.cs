@@ -169,6 +169,10 @@ public class AdminController : ControllerBase
     public async Task<ActionResult> PutWishAsync(string personId, [FromBody] IEnumerable<string> wish)  
     {
         var person = await _personRepository.GetPersonById(personId);
+        if (person is null)
+        {
+            return NotFound();
+        }
         person.Wishes = wish.Any() ? wish : [];
 
         await _personRepository.InsertOrReplaceAsync(person);
