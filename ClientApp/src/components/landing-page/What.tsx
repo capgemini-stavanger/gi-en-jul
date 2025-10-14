@@ -34,6 +34,13 @@ const What = () => {
             >
               Bli giver
             </Button>
+            <Typography className={classes.paragraph}>
+              <br />
+              Vi opplever problemer med e-post adresser fra hotmail og live.
+              <br />
+              Benytt gjerne en annen e-post adresse ved registrering.
+              <br />
+            </Typography>
             <Typography className={classes.paragraph + " " + classes.partnerText}>
               Med hjertelig støtte fra{" "}
               <a href={"https://www.capgemini.com/no-no"}>
