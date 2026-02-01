@@ -17,12 +17,12 @@ jobs:
 
     steps:
       - name: Checkout Github Action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: dev
 
       - name: Set up .NET 10
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
