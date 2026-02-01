@@ -4,6 +4,7 @@ using GiEnJul.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Clients
@@ -36,7 +37,7 @@ namespace GiEnJul.Clients
         {
             var imageData = file.OpenReadStream();
             var blobName = $"{municipality}.webp";
-            var potentialImages = _client.GetBlobs(prefix: Path.GetFileNameWithoutExtension(municipality));
+            var potentialImages = _client.GetBlobs(BlobTraits.None, BlobStates.All, Path.GetFileNameWithoutExtension(municipality), CancellationToken.None);
             if (potentialImages != null && potentialImages.Any())
             {
                 var image = potentialImages.First();
@@ -51,7 +52,7 @@ namespace GiEnJul.Clients
         public async Task<(Stream?, string)> GetProfileImage(string municipality)
         {
             var potentialImages = _client
-                .GetBlobs(prefix: municipality)
+                .GetBlobs(BlobTraits.None, BlobStates.All, prefix: municipality, CancellationToken.None)
                 .Where(x => Path.GetFileNameWithoutExtension(x.Name).ToLowerInvariant() == municipality.ToLowerInvariant());
             if (potentialImages == null || potentialImages.Count() != 1)
                 return (null, "none");

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GiEnJul.Clients
@@ -58,7 +59,7 @@ namespace GiEnJul.Clients
 
         public async Task<List<string>> GetImageUrlsForMunicipality(string municipality)
         {
-            var images = _client.GetBlobsAsync(prefix: municipality);
+            var images = _client.GetBlobsAsync(BlobTraits.None, BlobStates.All, prefix: municipality, CancellationToken.None);
 
             var result = new List<string>();
 
@@ -72,7 +73,7 @@ namespace GiEnJul.Clients
 
         public async Task<string> UploadImageForMunicipality(string municipality, Stream stream, string fileExt = "")
         {
-            if (_client.GetBlobs(prefix: municipality).Count() >= 10)
+            if (_client.GetBlobs(BlobTraits.None, BlobStates.All, prefix: municipality, CancellationToken.None).Count() >= 10)
                 throw new Exception($"Too many images for {municipality}");
 
             var blobName = $"{municipality}/{Guid.NewGuid()}.webp";
