@@ -9,12 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Auth0.ManagementApi" Version="7.38.0" />
+    <PackageReference Include="Auth0.ManagementApi" Version="7.44.0" />
     <PackageReference Include="Azure.Data.Tables" Version="12.11.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
     <PackageReference Include="ClosedXML" Version="0.104.2" />
     <PackageReference Include="ClosedXML.Extensions.Mvc" Version="0.5.0" />
-    <PackageReference Include="MailKit" Version="4.12.1" />
+    <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="10.0.2" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.15.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
