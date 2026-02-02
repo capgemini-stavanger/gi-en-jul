@@ -80,6 +80,9 @@ namespace GiEnJul.Clients
 
         public async Task<Dictionary<string, string>> GetUserMetadata(string? userId, bool forceUpdate = false)
         {
+            if (userId is null)
+                return [];
+
             var cachedMD = (Dictionary<string, string>)_metadataCache.Get(userId);
             if (!forceUpdate && cachedMD != null)
                 return cachedMD;
