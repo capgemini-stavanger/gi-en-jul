@@ -260,7 +260,9 @@ export const useStyles = makeStyles((theme) => ({
   noneIcon: {
     color: "red",
   },
-
+  emailLogPaper: {
+    borderRadius: "1em",
+  },
   emailLogContainer: {
     padding: "1rem",
     minHeight: "20rem",

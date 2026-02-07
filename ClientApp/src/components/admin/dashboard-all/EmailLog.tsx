@@ -31,53 +31,7 @@ export const EmailLog = ({ open, handleClose, giverId, recipientId, accessToken,
   const apiservice = new ApiService(accessToken);
   const classes = useStyles();
 
-  const [logData, setLogData] = useState<EmailStatus[]>([
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: true, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: true, title: "MyTestMail" },
-    { email: "ronny.haland@gmail.com", isDelivered: false, hasWarning: false, title: "MyTestMail" },
-  ]);
+  const [logData, setLogData] = useState<EmailStatus[]>([]);
 
   const getEmailLog = useCallback(async () => {
     if (loading) {
@@ -135,7 +89,7 @@ export const EmailLog = ({ open, handleClose, giverId, recipientId, accessToken,
     ));
   }, [logData]);
   return (
-    <Dialog open={open}>
+    <Dialog open={open} PaperProps={{ className: classes.emailLogPaper }}>
       <Grid container direction="column" className={classes.emailLogContainer}>
         <Grid container className={classes.emailLogHeader} justifyContent="space-between">
           <Grid item>

@@ -23,25 +23,26 @@ public static class ServiceConfiguration
         services.AddSingleton(h => new HttpClient());
         services.AddSingleton<IAuth0ManagementClient, Auth0ManagementClient>();
         services.AddSingleton<IMunicipalityBlobClient, MunicipalityBlobClient>();
-        services.AddSingleton<IContactImagesBlobClient, ContactImagesBlobClient>(); 
+        services.AddSingleton<IContactImagesBlobClient, ContactImagesBlobClient>();
 
         services.AddScoped<IPersonRepository, PersonRepository>();
-        services.AddScoped<IGiverRepository, GiverRepository>();    
+        services.AddScoped<IGiverRepository, GiverRepository>();
         services.AddScoped<IConnectionRepository, ConnectionRepository>();
         services.AddScoped<IRecipientRepository, RecipientRepository>();
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<IAutoIncrementRepository, AutoIncrementRepository>();
         services.AddScoped<ICmsRepository, CmsRepository>();
-        services.AddScoped<IMunicipalityRepository,  MunicipalityRepository>();
+        services.AddScoped<IMunicipalityRepository, MunicipalityRepository>();
         services.AddScoped<IEmailStatusRepository, EmailStatusRepository>();
-        if (false && environment.IsDevelopment())
-            { services.AddScoped<IEmailClient, EmailClient>(); }
+        if (configuration.GetValue<string?>("SendGridApiKey") == null && environment.IsDevelopment())
+        { services.AddScoped<IEmailClient, EmailClient>(); }
         else { services.AddScoped<IEmailClient, SendGridEmailClient>(); }
         services.AddScoped<IRecaptchaVerifier, RecaptchaVerifier>();
-        services.AddScoped<IEmailTemplateBuilder,  EmailTemplateBuilder>();
+        services.AddScoped<ISendGridWebhookVerifier, SendGridWebhookVerifier>();
+        services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
         services.AddScoped<IAuthorization, Authorization>();
         services.AddScoped<IAdminService, AdminService>();
         return services;
 
-    }   
+    }
 }
