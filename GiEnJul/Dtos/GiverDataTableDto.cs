@@ -11,4 +11,5 @@ public class GiverDataTableDto
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public string? EventName { get; set; }
+    public bool EmailStatusWarning { get; set; } = false;
 }

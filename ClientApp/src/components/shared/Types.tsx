@@ -17,6 +17,7 @@ export interface GiverType {
   cancelDate: Date;
   cancelFamilyId: string;
   comment: string;
+  emailStatusWarning: boolean;
 }
 
 export interface RecipientType {
@@ -43,7 +44,9 @@ export interface RecipientType {
   location: string;
   matchedGiver?: string;
   comment: string;
+  emailStatusWarning: boolean;
 }
+
 export interface PersonType {
   recipientId: string;
   personId: string;
@@ -65,3 +68,10 @@ export interface User {
   institution?: string;
   email?: string;
 }
+
+export type EmailStatus = {
+  email: string;
+  title: string;
+  hasWarning: boolean;
+  isDelivered: boolean;
+};

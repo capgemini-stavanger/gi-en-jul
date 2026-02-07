@@ -17,5 +17,5 @@ public class SentEmail
     public bool Deferred { get; set; } = false;
     public bool Bounced { get; set; } = false;
     public string? Reason { get; set; }
-    public bool HasError => Dropped || Bounced;
+    public bool HasError => Dropped || Bounced || (Deferred && !Delivered);
 }
