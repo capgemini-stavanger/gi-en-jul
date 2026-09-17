@@ -91,7 +91,7 @@ public class GenerateTestData
             Location = municipality,
             PartitionKey = $"{event_.PartitionKey}_{event_.RowKey}",
             RowKey = recipientId,
-            Dinner = "Pinnekj�tt",
+            Dinner = "Pinnekjøtt",  
             Dessert = "Riskrem",
             EventName = event_.PartitionKey,
             ContactFullName = contactName,
@@ -120,7 +120,7 @@ public class GenerateTestData
             },
             PartitionKey = recipientId,
             RowKey = Guid.NewGuid().ToString(),
-            Wishes = "[\"Alderstilpasset gave�nske\"]",
+            Wishes = "[\"Alderstilpasset gaveønske\"]",
             NoWish = true,
         };
 
