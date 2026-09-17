@@ -11,9 +11,11 @@ public class GenerateTestData
     private static string[] _institutions = new[]{ "NAV", "BV", "CAP", "Staten", "FKT", "NFF"};
 
 
+    
     [Fact(
         Skip = "Generates Data"
         )]
+        
     public async Task Generate()
     {
         var municipalities = new[] { "Stavanger", "Sandnes", "Sola", "Halden"};
@@ -89,7 +91,7 @@ public class GenerateTestData
             Location = municipality,
             PartitionKey = $"{event_.PartitionKey}_{event_.RowKey}",
             RowKey = recipientId,
-            Dinner = "Pinnekjøtt",
+            Dinner = "Pinnekjï¿½tt",
             Dessert = "Riskrem",
             EventName = event_.PartitionKey,
             ContactFullName = contactName,
@@ -118,7 +120,7 @@ public class GenerateTestData
             },
             PartitionKey = recipientId,
             RowKey = Guid.NewGuid().ToString(),
-            Wishes = "[\"Alderstilpasset gaveønske\"]",
+            Wishes = "[\"Alderstilpasset gaveï¿½nske\"]",
             NoWish = true,
         };
 
@@ -149,7 +151,7 @@ public class GenerateTestData
 
     private Settings CreateSettings()
     {
-        var path = Path.GetFullPath("..\\..\\..\\..\\GiEnJul");
+        var path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "GiEnJul"));
         var config = new ConfigurationBuilder().SetBasePath(path).AddJsonFile("appsettings.json").Build();
         
         var settings = new Settings(config);
