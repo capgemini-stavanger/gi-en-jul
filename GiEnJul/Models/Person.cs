@@ -5,11 +5,11 @@ namespace GiEnJul.Models
     public class Person
     {
         //PartitionKey
-        public string RecipientId { get; set; }
+        public string RecipientId { get; set; } = null!;
         //RowKey
-        public string PersonId { get; set; }
+        public string PersonId { get; set; } = null!;
 
-        public IEnumerable<string> Wishes { get; set; }
+        public IEnumerable<string> Wishes { get; set; } = [];
         public int Age { get; set; }
         public int Months {  get; set; }
         public Gender Gender { get; set; }

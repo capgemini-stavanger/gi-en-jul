@@ -106,7 +106,7 @@ public class AnonymizeUserDataJob : IJob
                                 foreach (var a in (IEnumerable<AnonymizedGiver>)items)
                                 {
                                     if (a.RegistrationDate == DateTime.MinValue)
-                                        a.RegistrationDate = a.Timestamp.Value.UtcDateTime;
+                                        a.RegistrationDate = a.Timestamp?.UtcDateTime ?? DateTime.MinValue;
                                     a.Email = CreateHash(a.Email);
                                     await targetClient.UpsertEntityAsync(a);
                                     await sourceClient.DeleteEntityAsync(a.PartitionKey, a.RowKey);
@@ -139,7 +139,7 @@ public class AnonymizeUserDataJob : IJob
         _log.Information("[AnonymizeUserDataJob] Job finished in {0}ms", sw.ElapsedMilliseconds);
     }
 
-    private static string CreateHash(string email)
+    private static string CreateHash(string? email)
     {
         if (string.IsNullOrEmpty(email))
         {

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Azure;
+﻿using Azure;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
@@ -17,13 +16,11 @@ namespace GiEnJul.Repositories
 
         private TableClient _client { get; set; }
 
-        protected IMapper _mapper { get; set; }
         protected ILogger _log { get; set; }
 
-        protected GenericRepository(ISettings settings, string tableName, IMapper mapper, ILogger log)
+        protected GenericRepository(ISettings settings, string tableName, ILogger log)
         {
             _settings = settings;
-            _mapper = mapper;
             _log = log;
 
             var tableClient = new TableClient(settings.TableConnectionString, tableName);
@@ -40,7 +37,7 @@ namespace GiEnJul.Repositories
             }
         }
 
-        protected async Task<T> DeleteAsync(T entity)
+        protected async Task<T?> DeleteAsync(T entity)
         {
             try
             {
@@ -60,7 +57,7 @@ namespace GiEnJul.Repositories
             }
         }
 
-        protected async Task<T> DeleteAsync(string partitionKey, string rowKey)
+        protected async Task<T?> DeleteAsync(string partitionKey, string rowKey)
         {
             var entity = await GetAsync(partitionKey, rowKey);
 
@@ -106,7 +103,7 @@ namespace GiEnJul.Repositories
             }
         }
         
-        protected bool TryGet(string partitionKey, string rowKey, out T result)
+        protected bool TryGet(string partitionKey, string rowKey, out T? result)
         {
             result = null;
             try
@@ -130,7 +127,8 @@ namespace GiEnJul.Repositories
 
                 if (!result.IsError)
                     return entity;
-                return null;
+
+                throw new Exception(result.Content.ToString());
             }
             catch (Exception e)
             {

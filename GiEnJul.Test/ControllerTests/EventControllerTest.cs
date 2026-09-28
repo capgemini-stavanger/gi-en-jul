@@ -15,7 +15,7 @@ namespace GiEnJul.Test.ControllerTests
         public EventControllerTest()
         {
             mockEventRepo = new Mock<IEventRepository>();
-            _controller = new EventController(mockEventRepo.Object, _log, _mapper);
+            _controller = new EventController(mockEventRepo.Object, _log);
         }
 
         public void Dispose()

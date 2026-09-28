@@ -10,7 +10,7 @@ namespace GiEnJul.Utilities
 {
     public interface IRecaptchaVerifier
     {
-        Task<GetRecaptchaDto> VerifyAsync(string token);
+        Task<GetRecaptchaDto?> VerifyAsync(string token);
     }
 
     public class RecaptchaVerifier : IRecaptchaVerifier
@@ -24,7 +24,7 @@ namespace GiEnJul.Utilities
             _httpClient = httpClient;
         }
 
-        public async Task<GetRecaptchaDto> VerifyAsync(string token)
+        public async Task<GetRecaptchaDto?> VerifyAsync(string token)
         {
             if (_secret == "") {  // Skips verification on dev
                 return new GetRecaptchaDto

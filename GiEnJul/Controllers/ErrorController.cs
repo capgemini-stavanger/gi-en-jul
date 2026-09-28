@@ -32,15 +32,15 @@ namespace GiEnJul.Controllers
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
 
             return Problem(
-                detail: context.Error.StackTrace,
-                title: context.Error.Message);
+                detail: context?.Error.StackTrace,
+                title: context?.Error.Message);
         }
 
         [Route("/error")]
         public IActionResult Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            _log.Error(context.Error, "");
+            _log.Error(context?.Error, "");
             return Problem();
         }
     }

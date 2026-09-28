@@ -250,6 +250,7 @@ const RecipientDataCard: React.FC<Props> = ({
                           }}
                           toEmail={recipientData.contactEmail}
                           fullName={recipientData.contactFullName}
+                          recipientId={recipientData.recipientId}
                           accessToken={accessToken}
                           user={user}
                         />

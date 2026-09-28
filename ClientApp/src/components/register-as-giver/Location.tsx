@@ -50,7 +50,7 @@ const Location: React.FC<Props> = ({
         className={classes.form}
       >
         <Grid item>
-          <form onSubmit={nextStep} onError={(errors) => console.error(errors)}>
+          <form onSubmit={nextStep}>
             <InputValidator
               viewErrorTrigger={viewErrorTrigger}
               type="select"

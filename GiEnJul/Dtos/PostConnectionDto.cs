@@ -1,9 +1,13 @@
-namespace GiEnJul.Dtos
+using System.ComponentModel.DataAnnotations;
+
+namespace GiEnJul.Dtos;
+
+public class PostConnectionDto
 {
-    public class PostConnectionDto
-    {
-        public string GiverId { get; set; }
-        public string Event { get; set; }
-        public string RecipientId { get; set; }
-    }
+    [Required]
+    public string GiverId { get; set; } = null!;
+    [Required]
+    public string Event { get; set; } = null!;
+    [Required]
+    public string RecipientId { get; set; } = null!;
 }

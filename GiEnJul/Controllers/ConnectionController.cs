@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using GiEnJul.Auth;
+﻿using GiEnJul.Auth;
 using GiEnJul.Clients;
 using GiEnJul.Dtos;
 using GiEnJul.Helpers;
@@ -27,7 +26,6 @@ namespace GiEnJul.Controllers
         private readonly IPersonRepository _personRepository;
         private readonly IConnectionRepository _connectionRepository;
         private readonly ILogger _log;
-        private readonly IMapper _mapper;
         private readonly ISettings _settings;
         private readonly IEmailClient _emailClient;
         private readonly IEmailTemplateBuilder _emailTemplateBuilder;
@@ -40,7 +38,6 @@ namespace GiEnJul.Controllers
             IPersonRepository personRepository,
             IConnectionRepository connectionRepository,
             ILogger log,
-            IMapper mapper,
             ISettings settings,
             IEmailClient emailClient,
             IEmailTemplateBuilder emailTemplateBuilder)
@@ -52,7 +49,6 @@ namespace GiEnJul.Controllers
             _personRepository = personRepository;
             _connectionRepository = connectionRepository;
             _log = log;
-            _mapper = mapper;
             _settings = settings;
             _emailClient = emailClient;
             _emailTemplateBuilder = emailTemplateBuilder;
@@ -108,20 +104,23 @@ namespace GiEnJul.Controllers
                         familyTable += " ";
                     }
                 }
-                var emailTemplatename = EmailTemplateName.AssignedFamily;
+                var assignedFamilyEmailTemplateName = EmailTemplateName.AssignedFamily;
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "familyTable", familyTable },
                     { "recipientNote", recipientNote },
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
-                emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
+
+                if (eventModel is not null)
+                    emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(eventModel, "eventDto."));
+
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(recipient, "recipient."));
 
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
+                var assignedFamilyEmailTemplate = await _emailTemplateBuilder.GetEmailTemplate(assignedFamilyEmailTemplateName, emailValuesDict);
 
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, assignedFamilyEmailTemplate, giver.GiverId);
             }
             catch (Exception e)
             {
@@ -189,15 +188,15 @@ namespace GiEnJul.Controllers
 
                 // Noreply email to giver
                 var municipalityModel = await _municipalityRepository.GetSingle(giver.Location);
-                var emailTemplatename = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
+                var connectionDeniedEmailTemplateName = EmailTemplateName.ConnectionDenied; // Change to ConnectionDenied
                 var emailValuesDict = new Dictionary<string, string>
                 {
                     { "content", emailContent},
                 };
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(giver, "giver."));
                 emailValuesDict.AddDictionary(ObjectToDictionaryHelper.MakeStringValueDict(municipalityModel, "municipalityDto."));
-                var emailTemplate = await _emailTemplateBuilder.GetEmailTemplate(emailTemplatename, emailValuesDict);
-                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, emailTemplate);
+                var connectionDeniedEmailTemplate = await _emailTemplateBuilder.GetEmailTemplate(connectionDeniedEmailTemplateName, emailValuesDict);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, connectionDeniedEmailTemplate, giver.GiverId);
 
             }
             catch (Exception e)

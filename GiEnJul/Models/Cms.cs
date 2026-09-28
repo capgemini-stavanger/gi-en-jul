@@ -3,12 +3,12 @@
     public class Cms
     {
         // PK
-        public string ContentType { get; set; }
+        public string ContentType { get; set; } = null!;
         //RK
-        public string Index { get; set; }
+        public string Index { get; set; } = null!;
 
-        public string Info { get; set; }
+        public string? Info { get; set; }
 
-        public string Question { get; set; }
+        public string? Question { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-using AutoMapper;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
+using GiEnJul.Models.Mappers;
 using Serilog;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,12 +17,12 @@ namespace GiEnJul.Repositories
     }
     public class ConnectionRepository : GenericRepository<Connection>, IConnectionRepository
     {
-        public ConnectionRepository(ISettings settings, IMapper mapper, ILogger log, string tableName = "Connection") : base(settings, tableName, mapper, log)
+        public ConnectionRepository(ISettings settings, ILogger log, string tableName = "Connection") : base(settings, tableName, log)
         { }
 
         public async Task<(string, string)> InsertOrReplaceAsync(Models.Giver giver, Models.Recipient recipient)
         {
-            var connection = new Connection(_mapper.Map<Giver>(giver), _mapper.Map<Recipient>(recipient));
+            var connection = new Connection(giver.ToEntity(), recipient.ToEntity());
             await InsertOrReplaceAsync(connection);
             return (connection.PartitionKey, connection.RowKey);
         }
@@ -49,8 +49,8 @@ namespace GiEnJul.Repositories
             foreach (var conn in connections)
             {
                 GiverRecipientTuples.Add((
-                    _mapper.Map<Models.Giver>(conn),
-                    _mapper.Map<Models.Recipient>(conn)
+                    conn.ToGiver(),
+                    conn.ToRecipient()
                     ));
             }
             return GiverRecipientTuples;

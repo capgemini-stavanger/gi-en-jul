@@ -22,7 +22,7 @@ public class ImageController : ControllerBase
     {
         var (imageStream, contentType) = await _contactImagesBlobClient.GetProfileImage(municipality);
 
-        if (contentType == "none")
+        if (contentType == "none" || imageStream == null)
             return NotFound();
 
         return File(imageStream, contentType);

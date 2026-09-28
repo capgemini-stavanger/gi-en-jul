@@ -1,20 +1,45 @@
-﻿using AutoMapper;
+﻿using System.Linq;
 
-namespace GiEnJul.Infrastructure
+namespace GiEnJul.Infrastructure;
+
+public static class ExcellMapper
 {
-    public class ExcelProfile : Profile
+    public static Utilities.ExcelClasses.DeliveryExcel ToDeliveryExcel(this Entities.Connection connection)
     {
-        public ExcelProfile()
+        return new Utilities.ExcelClasses.DeliveryExcel
         {
-            CreateMap<Entities.Connection, Utilities.ExcelClasses.DeliveryExcel>()
-                .ForMember(dest => dest.Check, opt => opt.Ignore());
+            FamilyId = connection.FamilyId,
+            ReferenceId = connection.ReferenceId,
+            GiverEmail = connection.GiverEmail,
+            GiverFullName = connection.GiverFullName,
+            GiverPhoneNumber = connection.GiverPhoneNumber,
+            Institution = connection.Institution,
+            SubmitterEmail = connection.SubmitterEmail,
+            SubmitterFullName = connection.SubmitterFullName,
+        };
+    }
 
-            CreateMap<Models.Recipient, Utilities.ExcelClasses.SubmittedFamiliesExcel>();
+    public static Utilities.ExcelClasses.SubmittedFamiliesExcel ToSubmittedFamiliesExcel(this Models.Recipient model)
+    {
+        return new Utilities.ExcelClasses.SubmittedFamiliesExcel
+        {
+            ContactEmail = model.ContactEmail,
+            ContactFullName = model.ContactFullName,
+            ContactPhoneNumber = model.ContactPhoneNumber,
+            FamilyId = model.FamilyId,
+            PersonCount = model.PersonCount,
+            ReferenceId = model.ReferenceId,
+        };
+    }
 
-            CreateMap<Models.Person, Utilities.ExcelClasses.SubmittedPersonExcel>()
-                .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.Age > 0 ? $"{src.Age}" : $"{src.Months} mnd"))
-                .ForMember(dest => dest.FamilyId, opt => opt.Ignore())
-                .ForMember(dest => dest.ReferenceId, opt => opt.Ignore());
-        }
+    public static Utilities.ExcelClasses.SubmittedPersonExcel ToSubmittedPersonExcel(this Models.Person model)
+    {
+        return new Utilities.ExcelClasses.SubmittedPersonExcel
+        {
+            Age = model.Age > 0 ? $"{model.Age}" : $"{model.Age} mnd",
+            Gender = model.Gender,
+            RecipientId = model.RecipientId,
+            Wishes = model.Wishes.ToList(),
+        };
     }
 }

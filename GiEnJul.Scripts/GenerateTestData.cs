@@ -1,10 +1,7 @@
-using AutoMapper.Configuration.Annotations;
 using Azure.Data.Tables;
 using GiEnJul.Entities;
 using GiEnJul.Infrastructure;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Diagnostics;
 
 namespace GiEnJul.Scripts;
 

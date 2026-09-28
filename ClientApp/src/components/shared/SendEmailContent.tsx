@@ -20,6 +20,8 @@ interface ISendSingleEmail {
   handleClose: () => void;
   toEmail: string;
   fullName: string;
+  giverId?: string;
+  recipientId?: string;
   accessToken: string;
   user: User;
 }
@@ -29,6 +31,8 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
   handleClose,
   toEmail,
   fullName,
+  giverId,
+  recipientId,
   accessToken,
   user,
 }) => {
@@ -72,6 +76,8 @@ const SendEmailContent: React.FC<ISendSingleEmail> = ({
           ToEmail: toEmail,
           FromName: "Gi en jul " + user.location,
           ToName: fullName,
+          GiverId: giverId,
+          RecipientId: recipientId,
         })
       )
       .then((response) => {
