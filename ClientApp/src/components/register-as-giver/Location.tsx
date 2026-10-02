@@ -72,16 +72,6 @@ const Location: React.FC<Props> = ({
             />
           </form>
         </Grid>
-        {/* <Grid item>
-          <Link
-            to="/bedrift"
-            onClick={() => {
-              history.push("/bedrift");
-            }}
-          >
-            <Typography align="center">Vil du registrere en bedrift? Trykk her</Typography>
-          </Link>
-        </Grid> */}
         <Grid item>
           <Pager
             onBack={useCallback(() => history.push("/"), [history])}
