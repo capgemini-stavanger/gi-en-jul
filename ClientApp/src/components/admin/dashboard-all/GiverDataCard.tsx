@@ -12,6 +12,7 @@ import {
   Edit,
   Check,
   Cancel,
+  WarningRounded,
 } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
 import ConfirmationBox from "components/shared/ConfirmationBox";
@@ -24,6 +25,7 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RequestState } from "./OverviewMacroRemake";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
 import { isEmail, isPhoneNumber } from "components/shared/input-fields/validators/Validators";
+import { EmailLog } from "./EmailLog";
 
 type Props = {
   giverData: GiverType;
@@ -61,6 +63,7 @@ const GiverDataCard: React.FC<Props> = ({
   const [emailEdit, setEmailEdit] = useState(giverData.email);
 
   const [openMailDialog, setOpenMailDialog] = useState(false);
+  const [openEmailLog, setOpenEmailLog] = useState(false);
   const [confirmConnectDialogOpen, setConfirmConnectDialogOpen] = useState(false);
   const [deleteConnectDialogOpen, setDeleteConnectDialogOpen] = useState(false);
   const [deleteGiverDialogOpen, setDeleteGiverDialogOpen] = useState(false);
@@ -271,6 +274,9 @@ const GiverDataCard: React.FC<Props> = ({
             </Grid>
             <Grid item xs={1}>
               {giverData.comment && <ChatBubbleOutline />}
+              {giverData.emailStatusWarning && (
+                <WarningRounded style={{ color: "rgb(225 150 34)" }} />
+              )}
             </Grid>
             <Grid item xs={1}>
               {giverData.cancelFeedback && <LinkOffIcon />}
@@ -299,7 +305,7 @@ const GiverDataCard: React.FC<Props> = ({
             >
               <Grid item>
                 <Grid container direction="row" justifyContent="space-between">
-                  <Grid item xs={10}>
+                  <Grid item xs={8}>
                     <Grid container direction="column" alignItems="flex-start">
                       <Typography variant="h6" gutterBottom>
                         Kontakt
@@ -384,6 +390,22 @@ const GiverDataCard: React.FC<Props> = ({
                       giverId={giverData.giverId}
                       accessToken={accessToken}
                       user={user}
+                    />
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Button
+                      variant="contained"
+                      className={classes.commentBoxButton}
+                      onClick={() => setOpenEmailLog(true)}
+                    >
+                      epost log {giverData.emailStatusWarning && <WarningRounded />}
+                    </Button>
+                    <EmailLog
+                      open={openEmailLog}
+                      accessToken={accessToken}
+                      handleClose={() => setOpenEmailLog(false)}
+                      giverId={giverData.giverId}
+                      name={giverData.fullName}
                     />
                   </Grid>
                   {giverData.cancelFeedback && (

@@ -1,11 +1,10 @@
 {
     "parser": "@typescript-eslint/parser",
+    "plugins": ["react-hooks"],
     "extends": [
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended"
     ],
-    "plugins": ["react-hooks"],
     "parserOptions": {
         "ecmaVersion": 2020,
         "sourceType": "module",
@@ -19,6 +18,30 @@
             "version" : "detect"
         }
     },
+    "overrides": [
+        {
+            "extends": [
+                "plugin:@typescript-eslint/recommended"
+            ],
+            "files": ["*.tsx", "*.ts"],
+            "rules": {
+                "@typescript-eslint/interface-name-prefix": "off", //Should interfaces have a name Prefix
+                "@typescript-eslint/explicit-function-return-type": "off", // Defined functions should define return type?
+                "@typescript-eslint/no-empty-function": "off", // No empty functions
+                "@typescript-eslint/no-use-before-define": "off", // Use code before define
+                "@typescript-eslint/no-explicit-any": "off", // Is "any" type acceptable at all?
+                "@typescript-eslint/no-unused-vars": "warn", // Declared variabled is not used
+                "@typescript-eslint/array-type": "error", // No dead code
+                "@typescript-eslint/no-extra-non-null-assertion": "error", // Prevents use of extra non-null assertion
+                "@typescript-eslint/no-non-null-asserted-optional-chain": "error", // Prevents use non-null assertion in optional chaining
+                "@typescript-eslint/prefer-optional-chain": "error", // Prefer optional chaining over && expressions
+                "@typescript-eslint/require-array-sort-compare": "error", // If use of sort(), compare function required
+                "@typescript-eslint/default-param-last": "error", // optional and or default should be last"@typescript-eslint/no-unused-expressions": "off", // No unused expressions (dead code) → Turned off due to && expressions errors
+                "@typescript-eslint/camelcase": "off", // default has to be off for the next rule to work
+                "@typescript-eslint/no-unnecessary-type-constraint": "off"
+            }
+        }
+    ],
     "ignorePatterns":[
         // Build and Packages
         "/node_modules/**",

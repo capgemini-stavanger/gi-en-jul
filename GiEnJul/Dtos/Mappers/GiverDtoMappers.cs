@@ -39,6 +39,7 @@ public static class GiverDtoMappers
             Location = model.Location,
             MaxReceivers = model.MaxReceivers,
             PhoneNumber = model.PhoneNumber,
+            EmailStatusWarning = model.EmailStatusWarning,
         };
     }
 }

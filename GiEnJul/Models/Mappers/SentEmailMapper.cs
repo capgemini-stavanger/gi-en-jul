@@ -6,7 +6,7 @@ public static class SentEmailMapper
     {
         return new Entities.SentEmail
         {
-            PartitionKey = model.Email,
+            PartitionKey = model.Email.ToLower(),
             RowKey = model.MessageId,
             GiverId = model.GiverId,
             RecipientId = model.RecipientId,
@@ -26,7 +26,7 @@ public static class SentEmailMapper
     {
         return new Models.SentEmail
         {
-            Email = entity.PartitionKey,
+            Email = entity.PartitionKey.ToLower(),
             MessageId = entity.RowKey,
             GiverId = entity.GiverId,
             RecipientId = entity.RecipientId,

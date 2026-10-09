@@ -38,6 +38,7 @@ public static class RecipientDtoMappers
             Note = recipient.Note,
             RecipientId = recipient.RecipientId,
             ReferenceId = recipient.ReferenceId,
+            EmailStatusWarning = recipient.EmailStatusWarning,
         };
     }
 
