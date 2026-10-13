@@ -81,6 +81,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   oversiktBox: {
     width: "200px",
+    maxHeight: "calc(100vh - 5em)",
+    boxSizing: "border-box",
     backgroundColor: "rgba(0, 0, 0, 0.02)",
     position: "fixed",
     left: "0",
@@ -89,6 +91,7 @@ export const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: "1em",
     borderBottomRightRadius: "1em",
     display: "flex",
+    overflowY: "auto",
   },
   oversiktBoxContent: {
     flexGrow: 1,
