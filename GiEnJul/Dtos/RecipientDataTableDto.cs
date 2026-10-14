@@ -21,6 +21,7 @@ public class RecipientDataTableDto
     public string? ReferenceId { get; set; }
 
     public List<PersonDataTableDto> FamilyMembers { get; set; } = [];
+    public bool EmailStatusWarning { get; set; } = false;
 
     public class PersonDataTableDto
     {

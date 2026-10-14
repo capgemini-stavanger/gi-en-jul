@@ -103,9 +103,9 @@ namespace GiEnJul.Repositories
             }
         }
         
-        protected bool TryGet(string partitionKey, string rowKey, out T? result)
+        protected bool TryGet(string partitionKey, string rowKey, out T result)
         {
-            result = null;
+            result = null!;
             try
             {
                 result = GetAsync(partitionKey, rowKey, false).Result;

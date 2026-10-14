@@ -39,6 +39,7 @@ public class SendGridEmailClient : IEmailClient
             await _emailStatusRepository.AddEmail(new Models.SentEmail
             {
                 Email = toMail,
+                Title = msg.Subject,
                 SentAt = DateTime.UtcNow,
                 GiverId = giverId,
                 RecipientId = recipientId,
@@ -73,6 +74,7 @@ public class SendGridEmailClient : IEmailClient
             await _emailStatusRepository.AddEmail(new Models.SentEmail
             {
                 Email = toMail,
+                Title = msg.Subject,
                 SentAt = DateTime.UtcNow,
                 GiverId = giverId,
                 RecipientId = recipientId,

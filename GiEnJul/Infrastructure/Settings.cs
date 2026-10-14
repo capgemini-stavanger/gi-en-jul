@@ -11,6 +11,7 @@ public interface ISettings
     public string RecaptchaSecret { get; }
     public string ReactAppUri { get; }
     public string SendGridApiKey { get; }
+    public string SendGridWebhookVerificationKey { get; }
     public MailSettings MailSettings { get; }
     public Auth0Settings Auth0Settings { get; }
     public CleanupJob CleanupJob { get; }
@@ -31,6 +32,7 @@ public class Settings : ISettings
     public string RecaptchaSecret => _configuration.GetValue<string>("RecaptchaSecret") ?? throw new ArgumentException("unable to read configuration for {param}", nameof(RecaptchaSecret));
     public string ReactAppUri => _configuration.GetValue<string>("ReactAppUri") ?? throw new ArgumentException("unable to read configuration for {param}", nameof(ReactAppUri));
     public string SendGridApiKey => _configuration.GetValue<string>("SendGridApiKey") ?? throw new ArgumentException("unable to read configuration for {param}", nameof(SendGridApiKey));
+    public string SendGridWebhookVerificationKey => _configuration.GetValue<string>("SendGridWebhookVerificationKey") ?? throw new ArgumentException("unable to read configuration for {param}", nameof(SendGridWebhookVerificationKey));
 
     public MailSettings MailSettings
     {
