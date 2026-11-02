@@ -49,7 +49,9 @@ const SendLocationEmail = ({ accessToken, user, hideHeading = false }: Props) =>
       .catch(() => {
         if (active) setRecipientError("Kunne ikke hente givere. Prøv å åpne fanen på nytt.");
       });
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
   }, [accessToken, location]);
 
   const send = async () => {
@@ -67,7 +69,9 @@ const SendLocationEmail = ({ accessToken, user, hideHeading = false }: Props) =>
       setSubject("");
       setContent("");
     } catch {
-      setError("Utsendingen kunne ikke fullføres. Noen givere kan ha mottatt e-posten. Kontroller før du prøver igjen.");
+      setError(
+        "Utsendingen kunne ikke fullføres. Noen givere kan ha mottatt e-posten. Kontroller før du prøver igjen."
+      );
     } finally {
       setSending(false);
       setConfirmOpen(false);
@@ -85,7 +89,9 @@ const SendLocationEmail = ({ accessToken, user, hideHeading = false }: Props) =>
           E-post til givere
         </Typography>
       )}
-      <Typography color="textSecondary" gutterBottom>{location} - Aktivt arrangement</Typography>
+      <Typography color="textSecondary" gutterBottom>
+        {location} - Aktivt arrangement
+      </Typography>
       {recipientError ? (
         <Alert severity="error">{recipientError}</Alert>
       ) : recipientCount === undefined ? (
@@ -94,8 +100,16 @@ const SendLocationEmail = ({ accessToken, user, hideHeading = false }: Props) =>
         <Typography gutterBottom>{recipientCount} givere</Typography>
       )}
       {recipientCount === 0 && <Alert severity="info">Ingen givere i aktivt arrangement.</Alert>}
-      {error && <Box my={2}><Alert severity="error">{error}</Alert></Box>}
-      {success && <Box my={2}><Alert severity="success">{success}</Alert></Box>}
+      {error && (
+        <Box my={2}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      )}
+      {success && (
+        <Box my={2}>
+          <Alert severity="success">{success}</Alert>
+        </Box>
+      )}
       <Box
         component="form"
         mt={3}
@@ -119,28 +133,51 @@ const SendLocationEmail = ({ accessToken, user, hideHeading = false }: Props) =>
           inputProps={{ maxLength: 200 }}
         />
         <Box mt={3} mb={3} role="group" aria-labelledby="email-message-label">
-          <Typography id="email-message-label" gutterBottom>Melding</Typography>
-          <DefaultEditor value={content} onChange={(event) => setContent(event.target.value)} aria-label="Melding" />
+          <Typography id="email-message-label" gutterBottom>
+            Melding
+          </Typography>
+          <DefaultEditor
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
+            aria-label="Melding"
+          />
         </Box>
-        <Button type="submit" variant="contained" color="primary" startIcon={<SendIcon />} disabled={!canSend || sending}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          startIcon={<SendIcon />}
+          disabled={!canSend || sending}
+        >
           {"Send e-post"}
         </Button>
       </Box>
       <Dialog
         open={confirmOpen}
-        onClose={() => { if (!sending) setConfirmOpen(false); }}
+        onClose={() => {
+          if (!sending) setConfirmOpen(false);
+        }}
         fullWidth
         maxWidth="sm"
         aria-labelledby="confirm-location-email-title"
       >
         <DialogTitle id="confirm-location-email-title">{"Bekreft utsending"}</DialogTitle>
         <DialogContent>
-          <Typography gutterBottom>Send én separat e-post til hver av de {recipientCount} giverne i {location}, aktivt arrangement?</Typography>
-          <Typography variant="subtitle1" gutterBottom style={{ overflowWrap: "anywhere" }}>{subject.trim()}</Typography>
-          <Typography style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{messageText}</Typography>
+          <Typography gutterBottom>
+            Send én separat e-post til hver av de {recipientCount} giverne i {location}, aktivt
+            arrangement?
+          </Typography>
+          <Typography variant="subtitle1" gutterBottom style={{ overflowWrap: "anywhere" }}>
+            {subject.trim()}
+          </Typography>
+          <Typography style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>
+            {messageText}
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} disabled={sending}>Avbryt</Button>
+          <Button onClick={() => setConfirmOpen(false)} disabled={sending}>
+            Avbryt
+          </Button>
           <Button
             onClick={send}
             disabled={sending || !canSend}
