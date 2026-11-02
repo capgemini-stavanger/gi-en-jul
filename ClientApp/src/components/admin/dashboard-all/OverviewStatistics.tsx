@@ -1,6 +1,17 @@
-import { Box, Button, Divider, Grid, Tooltip, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import { GiverType, RecipientType } from "components/shared/Types";
+import { GiverType, RecipientType, User } from "components/shared/Types";
 import useStyles from "components/admin/dashboard-all/Styles";
 import { CheckCircleOutline, CancelOutlined } from "@material-ui/icons";
 import formatFamily from "common/functions/GetFamilySize";
@@ -8,13 +19,17 @@ import { FAMILY_SIZES } from "common/constants/FamilySizes";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import PeopleIcon from "@material-ui/icons/People";
 import QueryBuilderOutlinedIcon from "@material-ui/icons/QueryBuilderOutlined";
+import SendIcon from "@material-ui/icons/Send";
+import CloseIcon from "@material-ui/icons/Close";
 import ApiService from "common/functions/apiServiceClass";
+import SendLocationEmail from "components/admin/SendLocationEmail";
 
 type IStatistics = {
   givers: GiverType[];
   recipients: RecipientType[];
   municipality: string;
   accessToken: string;
+  user: User;
 };
 type StatisticsType = {
   totalGivers: number;
@@ -37,8 +52,10 @@ const OverviewStatistics: React.FC<IStatistics> = ({
   recipients,
   municipality,
   accessToken,
+  user,
 }) => {
   const [statistics, setStatistics] = useState<StatisticsType>();
+  const [sendEmailOpen, setSendEmailOpen] = useState(false);
 
   const apiService = new ApiService(accessToken);
 
@@ -222,7 +239,6 @@ const OverviewStatistics: React.FC<IStatistics> = ({
           <Grid item>{statistics?.confirmedMatch}</Grid>
         </Grid>
       </Box>
-
       <Grid container>
         <Grid item>
           <Button color="primary" variant="contained" onClick={downloadExcelOverview}>
@@ -230,6 +246,44 @@ const OverviewStatistics: React.FC<IStatistics> = ({
           </Button>
         </Grid>
       </Grid>
+      <Divider />
+      <Box className={classes.oversiktBoxSpacing}>
+        <Typography variant="h5" className={classes.semiBoldText} gutterBottom>
+          Send E-post
+        </Typography>
+        <Grid container>
+          <Grid item>
+            <Button
+              color="secondary"
+              variant="contained"
+              startIcon={<SendIcon />}
+              onClick={() => setSendEmailOpen(true)}
+            >
+              Send e-post
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Dialog
+        open={sendEmailOpen}
+        onClose={() => setSendEmailOpen(false)}
+        fullWidth
+        maxWidth="md"
+        aria-labelledby="send-location-email-title"
+      >
+        <DialogTitle id="send-location-email-title">
+          <Grid container justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Send e-post</Typography>
+            <IconButton aria-label="Lukk" onClick={() => setSendEmailOpen(false)}>
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+        </DialogTitle>
+        <DialogContent>
+          {sendEmailOpen && <SendLocationEmail accessToken={accessToken} user={user} hideHeading />}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

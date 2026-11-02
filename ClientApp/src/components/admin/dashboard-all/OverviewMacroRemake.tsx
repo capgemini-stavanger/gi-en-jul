@@ -193,6 +193,7 @@ const OverviewMacroRemake: React.FC<IOverviewMacro> = ({ accessToken, user }) =>
             recipients={recipientData}
             municipality={user.location ?? ""}
             accessToken={accessToken}
+            user={user}
           />
         </Box>
         <Container>
