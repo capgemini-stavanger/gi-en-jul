@@ -34,6 +34,11 @@ public class SendGridEmailClient : IEmailClient
 
         var response = await _client.SendEmailAsync(msg);
 
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException($"SendGrid rejected email with status {(int)response.StatusCode}.");
+        }
+
         if (response.IsSuccessStatusCode)
         {
             await _emailStatusRepository.AddEmail(new Models.SentEmail
