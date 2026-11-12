@@ -23,7 +23,7 @@ public static class PersonDtoMappers
             Months = dto.Months,
             NoWish = dto.NoWish,
             Wishes = dto.Wishes,
-            PersonId = dto.PersonId,
+            PersonId = dto.PersonId ?? string.Empty,
             RecipientId = dto.RecipientId,
         };
     }
