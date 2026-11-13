@@ -22,19 +22,22 @@ public class EmailController : ControllerBase
     private readonly IGiverRepository _giverRepository;
     private readonly IEventRepository _eventRepository;
     private readonly IEmailTemplateBuilder _emailTemplateBuilder;
+    private readonly IAuthorization _authorization;
 
     public EmailController(
         ILogger log,
         IEmailClient emailClient,
         IGiverRepository giverRepository,
         IEventRepository eventRepository,
-        IEmailTemplateBuilder emailTemplateBuilder)
+        IEmailTemplateBuilder emailTemplateBuilder,
+        IAuthorization authorization)
     {
         _log = log;
         _emailClient = emailClient;
         _giverRepository = giverRepository;
         _eventRepository = eventRepository;
         _emailTemplateBuilder = emailTemplateBuilder;
+        _authorization = authorization;
     }
 
     // The notification template is used to wrap content with styling
@@ -80,8 +83,10 @@ public class EmailController : ControllerBase
     // POST api/email/givers/location
     [HttpPost("givers/location")]
     [Authorize(Policy = Policy.PostEmail)]
+    [Authorize(Policy = Policy.ReadGiver)]
     public async Task<ActionResult> SendToGiversInLocation(PostLocationEmailDto email)
     {
+        await _authorization.ThrowIfNotAccessToMunicipality(email.Location, User);
         // Try-Catch for finding users based on location
         string? activeEvent;
         try
@@ -93,7 +98,11 @@ public class EmailController : ControllerBase
             _log.Error(keyError, "Could not find active event with key {@0}", email.Location);
             throw;
         }
-        var giversInLocation = await _giverRepository.GetGiversByLocationAsync(activeEvent!, email.Location);
+        if (string.IsNullOrWhiteSpace(activeEvent))
+        {
+            return Conflict("No active event for this location.");
+        }
+        var giversInLocation = await _giverRepository.GetGiversByLocationAsync(activeEvent, email.Location);
 
         // Try-Catch for sending emails to each user in the given location
         foreach (var giver in giversInLocation)
@@ -102,7 +111,7 @@ public class EmailController : ControllerBase
             {
                 var notificationTemplate = await NotificationEmailTemplateBuilder(email.Content,"");
                 notificationTemplate.Subject = email.Subject;
-                await _emailClient.SendEmailAsync(giver.Email, giver.Email, notificationTemplate);
+                await _emailClient.SendEmailAsync(giver.Email, giver.FullName, notificationTemplate, giver.GiverId);
             }
             catch (Exception e)
             {
